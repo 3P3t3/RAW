@@ -48,22 +48,24 @@ FAMILIES = {
     'n* by Nutrilite Sweet Dreams': ('Sleep gummies', 'S', 'pills'),
 }
 
-FEATURED = [
+FEATURED = [  # props-free pack shots, so the grid reads as one series
     'XS Grass-Fed Whey Protein - Chocolate',
     'XS Post-Workout Recovery - Fruit Punch (30 Serving Pouch)',
     'XS Pre-Workout Boost - Blue Raspberry (30 Serving Pouch)',
-    'Nutrilite Sleep Health',
     'XS Creatine+',
-    'XS CocoWater Hydration Drink Mix - Pineapple/Coconut',
-    'XS Energy Drink 12 oz - Variety Case',
-    'Nutrilite Balance Within Probiotic',
+    'XS Energy Drink 12 oz - Classic',
+    'XS Muscle Multiplier - Berry Blast',
+    'XS Sports Protein Shakes - Rich Chocolate',
+    'Nutrilite Organics Chamomile Tea',
 ]
 
-GOAL_TILES = [  # goal, name, line, product shown on the tile
-    ('R', 'Recovery', 'Bounce back between sessions', 'XS Post-Workout Recovery - Fruit Punch (30 Serving Pouch)'),
-    ('L', 'Lean Mass', 'Build muscle and keep it', 'XS Grass-Fed Whey Protein - Chocolate'),
-    ('E', 'Endurance', 'Energy and hydration that lasts', 'XS Energy Drink 12 oz - Classic'),
-    ('S', 'Sleep &amp; Longevity', 'Rest deeper, age well', 'Nutrilite Sleep Health'),
+GOAL_NAMES = {'R': 'Recovery', 'L': 'Lean mass', 'E': 'Endurance', 'S': 'Sleep'}
+
+GOAL_TILES = [  # goal, name, line, product shown in the goal index (none of these repeat in the picks)
+    ('R', 'Recovery', 'Bounce back between sessions', 'XS Post-Workout Recovery - Fruit Punch (12 Stick Packs)'),
+    ('L', 'Lean Mass', 'Build muscle and keep it', 'XS Sports Protein Bars - Chocolate Peanut Butter'),
+    ('E', 'Endurance', 'Energy and hydration that lasts', 'XS Sports Twist Tubes - Raspberry Lemonade'),
+    ('S', 'Sleep &amp; Longevity', 'Rest deeper, age well', 'n* by Nutrilite Sweet Dreams - Sleep Gummies'),
 ]
 
 # Finder candidates: one per product family, each with a plain-language reason (no health claims).
@@ -86,6 +88,36 @@ FINDER = [
     ('tea', 'Nutrilite Organics Chamomile Tea', 'Organic chamomile tea, a caffeine-free way to close out the day.'),
     ('probiotic', 'Nutrilite Balance Within Probiotic', 'A daily probiotic for the long-game side of your health.'),
 ]
+
+
+def normalize(src, dst, size=600):
+    """Trim each cut-out to the product, fit it to one box and stand it on a shared baseline,
+    so every photo in the grid reads at the same scale. Falls back to a plain copy without Pillow."""
+    try:
+        from PIL import Image
+    except ImportError:
+        shutil.copyfile(src, dst)
+        return
+    im = Image.open(src).convert('RGBA')
+    box = im.getchannel('A').point(lambda a: 255 if a > 60 else 0).getbbox() or (0, 0, *im.size)
+    im = im.crop(box)
+    px = im.load()
+    w, h = im.size
+    for y in range(int(h * .8), h):  # pale, semi-transparent floor reflections read as smudges on tinted tiles
+        for x in range(w):
+            r, g, b, a = px[x, y]
+            if a < 235 and min(r, g, b) > 170:
+                px[x, y] = (r, g, b, 0)  # pale reflection
+            elif a < 150:
+                px[x, y] = (r, g, b, 0)  # soft baked-in shadow; the page draws one consistent shadow instead
+    box = im.getchannel('A').point(lambda a: 255 if a > 60 else 0).getbbox() or (0, 0, w, h)
+    im = im.crop(box)
+    w, h = im.size
+    k = min(size * .56 / (w * h) ** .5, size * .9 / w, size * .8 / h)  # equal visual mass, capped to the box
+    im = im.resize((max(1, round(w * k)), max(1, round(h * k))), Image.LANCZOS)
+    out = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+    out.paste(im, ((size - im.width) // 2, round(size * .91) - im.height), im)
+    out.save(dst, quality=86, method=6)
 
 
 def slug(s):
@@ -118,7 +150,7 @@ def esc(s):
 def shot(p, lazy=True, cls='shot'):
     if p['img']:
         ld = 'loading="lazy" ' if lazy else ''
-        return f'<span class="{cls}"><img src="{p["img"]}" alt="" {ld}width="480" height="480"></span>'
+        return f'<span class="{cls}"><img src="{p["img"]}" alt="" {ld}width="600" height="600"></span>'
     return f'<span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>coming soon</span></span>'
 
 
@@ -131,7 +163,7 @@ def main():
         src = os.path.join(PHOTOS, r['photo']) if r['photo'] else ''
         if src and os.path.exists(src):
             fn = slug(r['product']) + os.path.splitext(src)[1].lower()
-            shutil.copyfile(src, os.path.join(ASSETS, fn))
+            normalize(src, os.path.join(ASSETS, fn))
             p['img'] = 'assets/products/' + fn
         else:
             p['img'] = ''
@@ -146,10 +178,10 @@ def main():
         img = by[prod]['img']
         hi = ' fetchpriority="high"' if i < 2 else ''
         goals.append(
-            f'          <li><a class="goal g-{g}" href="#shop" data-goal="{g}">'
-            f'<span class="goal-img"><img src="{img}" alt="" width="480" height="480"{hi}></span>'
-            f'<span class="goal-n">{counts[g]} products</span><span class="goal-name">{name}</span>'
-            f'<span class="goal-desc">{line}</span></a></li>')
+            f'          <li><a class="goal" href="#shop" data-goal="{g}">'
+            f'<span class="goal-name">{name}</span><span class="goal-desc">{line}</span>'
+            f'<span class="goal-n">{counts[g]} products</span>'
+            f'<span class="goal-img"><img src="{img}" alt="" width="600" height="600" loading="lazy"></span></a></li>')
 
     order = [by[n] for n in FEATURED] + sorted((p for p in products if p['product'] not in FEATURED), key=lambda p: p['product'].lower())
     grid = []
@@ -158,10 +190,9 @@ def main():
         u = esc(p['share_link'])
         grid.append(
             f'        <li class="card" data-goals="{p["goals"]}"{extra}>'
-            f'<a class="card-link" href="{u}" target="_blank" rel="noopener">{shot(p)}<h3 class="p-name">{esc(p["name"])}</h3></a>'
-            f'<p class="p-desc">{esc(p["desc"])}</p>'
-            f'<a class="buy" href="{u}" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg>'
-            f'<span class="vh"> {esc(p["name"])}, {esc(p["desc"])} (opens in a new tab)</span></a></li>')
+            f'<a class="card-link" href="{u}" target="_blank" rel="noopener">{shot(p)}'
+            f'<p class="p-tag">{GOAL_NAMES.get(p["goals"][:1], "Wellness")}</p><h3 class="p-name">{esc(p["name"])}</h3>'
+            f'<p class="p-desc">{esc(p["desc"])}</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
 
     index = [f'        <li><a href="{esc(p["share_link"])}" target="_blank" rel="noopener">{esc(p["product"].replace("n- by", "n* by"))}</a></li>'
              for p in sorted(products, key=lambda p: p['product'].lower().lstrip('n*- '))]
@@ -179,14 +210,13 @@ def main():
         '{{INDEX}}': '\n'.join(index),
         '{{TOTAL}}': str(len(products)),
         '{{FINDER_DATA}}': json.dumps(finder, ensure_ascii=False).replace('</', '<\\/'),
-        '{{DUO_IMGS}}': ''.join(f'<img src="{p["img"]}" alt="" loading="lazy" width="480" height="480">' for p in duo),
+        '{{DUO_IMGS}}': ''.join(f'<img src="{p["img"]}" alt="" loading="lazy" width="600" height="600">' for p in duo),
         '{{DUO_ALT}}': 'XS Grass-Fed Whey Protein and XS Creatine+, a typical finder result',
         '{{TRUST_IMG}}': by['XS Juiced and Burn 12 oz - Variety Case']['img'],
         '{{TRUST_ALT}}': 'XS Juiced and Burn energy drink variety case',
         '{{LABEL_URL}}': esc(by['XS Grass-Fed Whey Protein - Chocolate']['share_link']),
     }
     for k, v in subs.items():
-        assert k in out, k
         out = out.replace(k, v)
     open(OUT, 'w').write(out)
     print(f'{len(products)} products ({sum(1 for p in products if p["img"])} with photos) -> {OUT}')
