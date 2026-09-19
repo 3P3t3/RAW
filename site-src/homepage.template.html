@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#D6D4C9">
+<title>Aspire Health · Sports nutrition &amp; wellness</title>
+<meta name="description" content="Nutrilite and XS sports nutrition, hydration and sleep support, picked for how you train.">
+<script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
+<style>
+:root{
+  --bg:#D6D4C9;--card:#E3E1D8;--press:#C8C6BA;--text:#415365;--ink:#1E262F;--btn:#124E5E;--on-btn:#F4F2EC;--line:#9D9F97;
+  --mindful:#BDB6AD;--abyss:#909E9F;--hydro:#49727E;--deep:#124E5E;--sand:#E6D3C5;
+  --display:Didot,"Bodoni 72","Bodoni MT","Big Caslon",Charter,Georgia,serif;
+  --serif:Charter,"Bitstream Charter","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:"Helvetica Neue",Helvetica,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --pad:16px;--sec:56px;--mast:120px;
+  --ease:400ms ease-out;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:var(--mast)}
+html.locked{overflow:hidden}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 var(--sans);-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--ink);margin:0;line-height:1.15;letter-spacing:-.01em}
+p{margin:0}
+a{color:inherit}
+img{max-width:100%}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+a,button,summary{touch-action:manipulation}
+:focus-visible{outline:2px solid var(--btn);outline-offset:2px}
+[hidden]{display:none!important}
+.vh{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:8px;top:-200px;z-index:50;background:var(--btn);color:var(--on-btn);padding:12px 16px;min-height:44px;font-size:16px}
+.skip:focus{top:8px}
+.ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:square;flex:none}
+.ic-sm{width:18px;height:18px}
+
+/* Type roles */
+.label{font-family:var(--sans);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text)}
+.wrap{width:100%;max-width:calc(1200px + 2 * var(--pad));margin:0 auto;padding:0 var(--pad)}
+
+/* Buttons + links: no hover, pressed only */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;padding:0 24px;border:1px solid var(--btn);border-radius:2px;background:var(--btn);color:var(--on-btn);font:500 16px/1.2 var(--sans);letter-spacing:.02em;text-decoration:none;text-align:center}
+.btn-ghost{background:transparent;color:var(--btn)}
+.btn:active{background:var(--press);color:var(--btn)}
+.tlink{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 6px;margin:0 -6px;border:0;border-radius:2px;background:transparent;color:var(--btn);font-size:16px;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
+.tlink:active{background:var(--press)}
+.icon-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:0;border-radius:2px;background:transparent;color:var(--ink);text-decoration:none}
+.icon-btn:active{background:var(--press)}
+
+/* Product shots + labeled placeholders */
+.shot{display:block;aspect-ratio:1;padding:10%;background:var(--card);border-radius:2px}
+.shot img{display:block;width:100%;height:100%;object-fit:contain}
+.ph{position:relative;display:flex;align-items:center;justify-content:center;aspect-ratio:1;padding:10px;overflow:hidden;text-align:center;font-size:14px;line-height:1.35;color:var(--text);background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' preserveAspectRatio='none'%3E%3Cpath d='M0 0L10 10M10 0L0 10' stroke='%239D9F97' stroke-width='1' vector-effect='non-scaling-stroke' fill='none'/%3E%3C/svg%3E") center/100% 100% no-repeat;border:1px solid var(--line);border-radius:2px}
+.ph-cap{position:relative;padding:3px 8px;background:var(--card)}
+.ph-cap b{font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+
+/* Motion: (a) mask reveal, (b) scale on entry. Transform + opacity only. */
+.mask{position:relative;overflow:hidden}
+.motion .mask::after{content:"";position:absolute;inset:-1px;z-index:2;background:var(--bg);transform:translate3d(0,0,0);transition:transform var(--ease);transition-delay:calc(var(--d,0) * 70ms)}
+.motion .mask.in::after{transform:translate3d(0,-101%,0)}
+.motion .grow{opacity:0;transform:scale(.96);transition:transform var(--ease),opacity var(--ease);transition-delay:calc(var(--d,0) * 70ms)}
+.motion .grow.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .motion .mask::after{display:none}
+  .motion .grow{opacity:1;transform:none;transition:none}
+}
+
+/* 1. Header + 2. Search (one sticky block) */
+.mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:8px;height:56px}
+.wordmark{justify-self:center;display:inline-flex;align-items:center;min-height:44px;padding:0 4px 0 calc(4px + .22em);font-family:var(--display);font-size:17px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;color:var(--ink);text-decoration:none;transition:opacity .3s,visibility 0s}
+.js .mast:not(.logo-off) .wordmark{opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s}
+@media (max-width:359px){.wordmark{font-size:15px;letter-spacing:.16em}}
+.nav-inline{display:none}
+.search{display:flex;gap:8px;padding:0 0 12px}
+.search input{flex:1;min-width:0;height:44px;padding:0 10px;border:1px solid var(--text);border-radius:2px;background:var(--card);color:var(--ink);font-size:16px;-webkit-appearance:none;appearance:none}
+.search input::placeholder{color:var(--text);opacity:1}
+.search input:focus-visible{outline:2px solid var(--btn);outline-offset:1px}
+.search-go{background:var(--btn);color:var(--on-btn);border:1px solid var(--btn)}
+.search-go:active{background:var(--press);color:var(--btn)}
+
+/* 3. Hero */
+.hero{padding:4px 0 var(--sec)}
+.stage{display:grid;grid-template-areas:"s"}
+.stage>*{grid-area:s}
+.crystal{position:relative;justify-self:end;align-self:start;width:min(68vw,290px);max-width:100%;aspect-ratio:1;margin-right:-12px}
+.crystal video{display:block;width:100%;height:100%;object-fit:contain}
+.crystal-toggle{position:absolute;top:4px;right:8px;color:var(--ink)}
+.brand{position:relative;z-index:1;align-self:end;display:grid;gap:10px;padding-top:min(44vw,184px);pointer-events:none}
+.brand>*{pointer-events:auto}
+.logo{margin:0;font-family:var(--display);font-weight:400;color:var(--ink);line-height:.86;letter-spacing:.04em;text-transform:uppercase;font-size:clamp(58px,19vw,80px)}
+.logo span{display:block}
+.logo-b{margin-top:12px;font-family:var(--sans);font-size:15px;line-height:1;font-weight:500;letter-spacing:.78em}
+.brand .sub{max-width:34ch}
+.goals-hero{margin-top:24px}
+.goals-head{margin-bottom:14px}
+.goals-head h2{font-size:24px}
+.hero-links{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:16px;padding:0 6px}
+
+/* Sections */
+.sec{padding:var(--sec) 0;border-top:1px solid var(--line)}
+.sec-head{display:grid;gap:8px;margin-bottom:28px;transform-origin:0 100%}
+.sec-head h2,.split-text h2{font-size:24px}
+.sec-head h2:focus{outline:none}
+
+/* 4. Goals: four depths of the palette, light to deep */
+.goals{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.goal{position:relative;display:flex;flex-direction:column;height:100%;min-height:150px;padding:12px 14px 14px;border-radius:2px;text-decoration:none;overflow:hidden}
+.goal::after{content:"";position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none}
+.goal:active::after{opacity:.14}
+.goal-n{font-size:14px;line-height:1.3}
+.goal-img{position:absolute;top:8px;right:6px;width:clamp(56px,36%,132px);aspect-ratio:1}
+.goal-img img{display:block;width:100%;height:100%;object-fit:contain}
+.goal-name{position:relative;margin-top:auto;padding-top:12px;font-family:var(--serif);font-size:22px;line-height:1.05;letter-spacing:-.01em}
+.goal-desc{position:relative;margin-top:6px;font-size:14px;line-height:1.35}
+.g-R{background:var(--mindful);color:var(--ink)}
+.g-L{background:var(--abyss);color:var(--ink)}
+.g-E{background:var(--hydro);color:#F4F2EC}
+.g-S{background:var(--deep);color:var(--sand)}
+
+/* 5. Products (no motion on cards) */
+.filter{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-8px 0 24px;padding:4px 4px 4px 12px;background:var(--card);border:1px solid var(--line);border-radius:2px}
+.filter p{font-size:16px;color:var(--ink)}
+.filter .tlink{margin:0;flex:none}
+.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 12px}
+.card{display:flex;flex-direction:column;min-width:0}
+.card-link{display:block;color:inherit;text-decoration:none;border-radius:2px}
+.card-link:active .shot{background:var(--press)}
+.p-name{font-size:18px;line-height:1.2;margin-top:12px}
+.p-desc{font-size:14px;line-height:1.4;margin:4px 0 14px}
+.buy{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;margin-top:auto;padding:4px 10px;border:1px solid var(--btn);border-radius:2px;color:var(--btn);font-size:16px;font-weight:500;line-height:1.2;text-decoration:none;text-align:center}
+.buy:active{background:var(--press)}
+.buy .ic{width:16px;height:16px}
+@media (max-width:359px){.buy .ic{display:none}}
+.more{margin-top:40px}
+
+/* 6. Finder + 7. Ordering share a split layout */
+.split{display:grid;gap:32px}
+.split-img{aspect-ratio:4/3}
+.split-text{display:grid;gap:12px;align-content:start;transform-origin:0 100%}
+.split-text p:not(.label){max-width:44ch}
+.split-text .btn{margin-top:16px}
+.duo{display:flex;align-items:center;justify-content:center;gap:6%;padding:8% 10%;background:var(--hydro);border-radius:2px}
+.duo img{display:block;width:42%;height:100%;object-fit:contain}
+.finder{background:var(--deep);color:var(--sand);border-top:0}
+.finder h2,.finder .label{color:var(--sand)}
+.motion .finder .mask::after{background:var(--deep)}
+.finder .btn{background:var(--sand);border-color:var(--sand);color:var(--deep)}
+.finder .btn:active{background:var(--press);color:var(--btn)}
+.finder :focus-visible{outline-color:var(--sand)}
+.finder + .sec{border-top:0}
+.trust .shot{padding:6%}
+.proof{list-style:none;margin:0;padding:0}
+.proof li{display:grid;gap:8px;padding:20px 0 12px;border-top:1px solid var(--line);transform-origin:0 50%}
+.proof li:first-child{border-top:0;padding-top:0}
+.proof h3{font-family:var(--sans);letter-spacing:.14em}
+.proof .tlink{justify-self:start}
+
+/* 8. Footer */
+.foot{border-top:1px solid var(--line);padding:16px 0 calc(40px + env(safe-area-inset-bottom))}
+.index summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 4px;list-style:none;cursor:pointer;border-radius:2px}
+.index summary::-webkit-details-marker{display:none}
+.index summary:active{background:var(--press)}
+.index summary .label{color:var(--ink)}
+.index .count{margin-left:8px;font-variant-numeric:tabular-nums;letter-spacing:0}
+.pm::before{content:"+";font-size:24px;line-height:1;color:var(--ink)}
+.index[open] .pm::before{content:"\2212"}
+.index ul{list-style:none;margin:8px 0 0;padding:0}
+.index li{padding:4px 0;border-top:1px solid var(--line);break-inside:avoid}
+.index a{display:flex;align-items:center;min-height:44px;padding:0 4px;text-decoration:none;border-radius:2px}
+.index a:active{background:var(--press)}
+.foot-meta{display:grid;gap:12px;margin-top:40px;font-size:14px}
+.foot-meta .wordmark{justify-self:start;min-height:0;padding:0;font-size:18px}
+
+/* Full-screen nav panel */
+dialog{color:var(--text)}
+.menu{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:var(--bg)}
+.menu-in{display:flex;flex-direction:column;min-height:100%}
+.menu-nav{margin-top:auto;padding-bottom:calc(32px + env(safe-area-inset-bottom))}
+.menu-list{list-style:none;margin:12px 0 0;padding:0}
+.menu-list li{padding:4px 0;border-top:1px solid var(--line)}
+.menu-list a,.menu-list button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:60px;padding:0 4px;border:0;border-radius:2px;background:transparent;color:var(--ink);font:400 28px/1.15 var(--serif);text-align:left;text-decoration:none}
+.menu-list a:active,.menu-list button:active{background:var(--press)}
+
+/* Finder bottom sheet */
+.sheet{width:100%;max-width:100%;max-height:92vh;max-height:92dvh;margin:auto 0 0;padding:0;border:0;border-top:1px solid var(--line);border-radius:4px 4px 0 0;background:var(--bg);overflow:auto;overscroll-behavior:contain}
+.sheet::backdrop{background:rgba(30,38,47,.55)}
+.sheet-in{padding:8px var(--pad) calc(24px + env(safe-area-inset-bottom))}
+.sheet-top{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:8px}
+.sheet-top .label{text-align:center}
+.q{font-size:24px;margin:20px 0 24px}
+.q:focus{outline:none}
+.opts{display:grid;gap:8px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:60px;padding:12px 16px;border:1px solid var(--line);border-radius:2px;background:var(--card);color:var(--ink);font-size:16px;text-align:left}
+.opt:active{background:var(--press)}
+.opt.is-picked{border-color:var(--btn)}
+.basis{margin:-12px 0 20px;font-size:14px}
+.picks{list-style:none;margin:0;padding:0}
+.pick{display:grid;grid-template-columns:96px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.pick .shot{width:96px;padding:8px}
+.pick .p-name{margin-top:0}
+.pick .p-desc{margin-bottom:0}
+.why{margin:8px 0 12px;font-size:16px}
+.pick .buy{margin-top:0;justify-self:start;padding:4px 16px}
+.pick>div{display:grid}
+.sheet-foot{display:grid;gap:8px;padding-top:16px;border-top:1px solid var(--line)}
+.sheet-foot .tlink{justify-self:center}
+
+html:not(.js) button[data-open-finder]{display:none}
+
+/* ---------- 768px ---------- */
+@media (min-width:768px){
+  :root{--pad:32px;--sec:88px;--mast:88px}
+  .mast .wrap{display:grid;grid-template-columns:auto 1fr minmax(200px,340px);align-items:center;gap:12px;height:72px}
+  .mast .bar{display:contents}
+  .menu-btn,.bar-spacer{display:none}
+  .mast .wordmark{order:1;justify-self:start;padding-left:0;font-size:17px;letter-spacing:.18em}
+  .nav-inline{order:2;display:flex;gap:8px;white-space:nowrap}
+  .nav-inline a{display:inline-flex;align-items:center;min-height:44px;padding:0 8px;border-radius:2px;font-size:14px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);text-decoration:none}
+  .nav-inline a:active{background:var(--press)}
+  .search{order:3;padding:0}
+
+  .hero{padding:12px 0 var(--sec)}
+  .stage{grid-template-areas:"b c";grid-template-columns:1.3fr 1fr;align-items:center;gap:24px}
+  .brand{grid-area:b;padding-top:0;gap:20px}
+  .crystal{grid-area:c;width:100%;max-width:420px;margin:0;justify-self:end}
+  .logo{font-size:clamp(76px,10.5vw,136px)}
+  .logo-b{font-size:18px;margin-top:16px}
+  .brand .sub{font-size:18px}
+  .goals-head h2{font-size:30px}
+  .goals{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+  .goal{min-height:190px;padding:18px 20px 20px}
+  .goal-img{top:12px;right:10px;width:40%}
+  .goal-name{font-size:28px}
+
+  .sec-head{margin-bottom:40px}
+  .sec-head h2,.split-text h2{font-size:30px}
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:56px 24px}
+  .buy{justify-self:start}
+  .more{display:flex;justify-content:center;margin-top:56px}
+  .more .btn{width:auto;min-width:280px}
+
+  .split{grid-template-columns:1fr 1fr;align-items:center;gap:48px}
+  .finder .split-img{order:2}
+  .split-text .btn{width:auto;justify-self:start;min-width:220px}
+  .trust{align-items:start}
+
+  .index ul{columns:2;column-gap:32px}
+  .foot-meta{grid-template-columns:auto 1fr;align-items:baseline;gap:12px 32px}
+  .foot-meta p:last-child{grid-column:2}
+  .sheet{max-width:560px;margin:auto auto 0}
+  .sheet-in{padding-left:32px;padding-right:32px}
+}
+
+/* ---------- 1200px ---------- */
+@media (min-width:1200px){
+  :root{--pad:40px;--sec:112px}
+  .mast .wrap{gap:32px}
+  .mast .wordmark{font-size:19px;letter-spacing:.24em}
+  .nav-inline{gap:16px}
+  .nav-inline a{letter-spacing:.12em}
+  .crystal{max-width:440px}
+  .goals{gap:24px}
+  .goal{min-height:210px;padding:20px 24px 24px}
+  .goal-name{font-size:32px}
+  .sec-head h2,.split-text h2{font-size:34px}
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:64px 32px}
+  .p-name{font-size:20px}
+  .split{gap:96px}
+  .index ul{columns:3;column-gap:48px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M8 16L17 7M9 7h8v8"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+</svg>
+
+<!-- 1 + 2. Header and always-visible search -->
+<header class="mast" id="top">
+  <div class="wrap">
+    <div class="bar">
+      <button class="icon-btn menu-btn" type="button" aria-label="Open menu" aria-haspopup="dialog" aria-controls="menu" data-open-menu><svg class="ic" aria-hidden="true"><use href="#i-menu"/></svg></button>
+      <a class="wordmark" href="#top">Aspire Health</a>
+      <nav class="nav-inline" aria-label="Main">
+        <a href="#shop">Shop</a>
+        <a href="#goals">Goals</a>
+        <a href="#finder" data-open-finder>Finder</a>
+        <a href="#ordering">Ordering</a>
+      </nav>
+      <span class="bar-spacer" aria-hidden="true"></span>
+    </div>
+    <form class="search" id="search" role="search" action="#shop">
+      <label class="vh" for="q">Search products</label>
+      <input id="q" name="q" type="search" placeholder="Search products" autocomplete="off" enterkeyhint="search">
+      <button class="icon-btn search-go" type="submit" aria-label="Search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
+    </form>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- 3. Hero: brand, crystal, and the goals -->
+  <section class="hero" aria-label="Aspire Health">
+    <div class="wrap">
+      <div class="stage">
+        <div class="crystal">
+          <video id="crystal-video" muted loop playsinline preload="none" poster="assets/crystal-poster.webp" width="960" height="960" aria-hidden="true"></video>
+          <button class="icon-btn crystal-toggle" id="crystal-toggle" type="button" aria-label="Pause animation" hidden><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>
+        </div>
+        <div class="brand">
+          <p class="label">Sports nutrition &amp; wellness</p>
+          <h1 class="logo" id="logo"><span class="logo-a">Aspire</span><span class="logo-b">Health</span></h1>
+          <p class="sub">Nutrilite and XS nutrition, hydration and sleep support, picked for how you train.</p>
+        </div>
+      </div>
+
+      <!-- 4. Goals: the main focus -->
+      <div class="goals-hero" id="goals">
+        <div class="goals-head"><h2 id="goals-title">Start where you are</h2></div>
+        <ul class="goals">
+{{GOALS}}
+        </ul>
+        <div class="hero-links">
+          <a class="tlink" href="#finder" data-open-finder>Not sure? Find what fits you <svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="tlink" href="#shop">Shop all</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Product grid (no motion on cards) -->
+  <section class="sec" id="shop" aria-labelledby="shop-title">
+    <div class="wrap">
+      <div class="sec-head grow"><p class="label">The range</p><h2 id="shop-title" tabindex="-1">Our picks</h2></div>
+      <div class="filter" id="filter" hidden><p id="filter-text"></p><button class="tlink" type="button" id="filter-clear">Show picks</button></div>
+      <ul class="grid" id="grid">
+{{GRID}}
+      </ul>
+      <div class="more"><a class="btn btn-ghost" id="view-all" href="#index">View all {{TOTAL}} products <svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
+    </div>
+  </section>
+
+  <!-- 6. Guided finder (entry point; questions open in the bottom sheet) -->
+  <section class="sec finder" id="finder" aria-labelledby="finder-sec-title">
+    <div class="wrap split">
+      <div class="duo split-img mask" role="img" aria-label="{{DUO_ALT}}">{{DUO_IMGS}}</div>
+      <div class="split-text grow">
+        <p class="label">Guided finder</p>
+        <h2 id="finder-sec-title">Three questions. Two products.</h2>
+        <p>No email, no account. Answer one question per screen and get two products, with a sentence on why each fits.</p>
+        <button class="btn" type="button" data-open-finder aria-haspopup="dialog">Start the finder</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Ordering (trust) -->
+  <section class="sec" id="ordering" aria-labelledby="ordering-title">
+    <div class="wrap">
+      <div class="sec-head grow"><p class="label">Ordering</p><h2 id="ordering-title">Picked here. Delivered by Amway.</h2></div>
+      <div class="split trust">
+        <span class="shot split-img mask"><img src="{{TRUST_IMG}}" alt="{{TRUST_ALT}}" loading="lazy" width="480" height="480"></span>
+        <ul class="proof">
+          <li class="grow"><h3 class="label">Checkout on Amway</h3><p>Every Buy button opens that product on Amway.com, where you pay, choose shipping and track your order.</p><a class="tlink" href="https://www.amway.com" target="_blank" rel="noopener">Open Amway.com <svg class="ic ic-sm" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> (opens in a new tab)</span></a></li>
+          <li class="grow" style="--d:1"><h3 class="label">Full labels</h3><p>Ingredients, serving sizes and nutrition facts are on each product’s Amway page. Tap any product to read its label.</p><a class="tlink" href="{{LABEL_URL}}" target="_blank" rel="noopener">Read a label <svg class="ic ic-sm" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> (opens in a new tab)</span></a></li>
+          <li class="grow" style="--d:2"><h3 class="label">Help choosing</h3><p>Not sure what fits? Answer three questions and get two suggestions, each with a reason.</p><a class="tlink" href="#finder" data-open-finder>Start the finder <svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 8. Footer: alphabetical product index -->
+<footer class="foot">
+  <div class="wrap">
+    <details class="index" id="index">
+      <summary><span><span class="label">Product index</span><span class="count">{{TOTAL}}</span></span><span class="pm" aria-hidden="true"></span></summary>
+      <ul>
+{{INDEX}}
+      </ul>
+    </details>
+    <div class="foot-meta">
+      <p class="wordmark">Aspire Health</p>
+      <p>Products are sold and shipped by Amway through Aspire Health share links. Amway, Nutrilite, XS, n* and Artistry are trademarks of their respective owners. These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure or prevent any disease.</p>
+      <p>© 2026 Aspire Health</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Full-screen nav panel -->
+<dialog class="menu" id="menu" aria-label="Menu">
+  <div class="menu-in">
+    <div class="wrap bar">
+      <button class="icon-btn" type="button" data-close aria-label="Close menu"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <span class="wordmark" aria-hidden="true">Aspire Health</span>
+      <span></span>
+    </div>
+    <nav class="wrap menu-nav" aria-label="Menu">
+      <p class="label">Menu</p>
+      <ul class="menu-list">
+        <li><a href="#shop">Shop all <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li><a href="#goals">Goals <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li><button type="button" data-open-finder>Finder <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button></li>
+        <li><a href="#ordering">How ordering works <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+      </ul>
+    </nav>
+  </div>
+</dialog>
+
+<!-- Finder bottom sheet -->
+<dialog class="sheet" id="finder-sheet" aria-labelledby="finder-title">
+  <div class="sheet-in">
+    <div class="sheet-top">
+      <button class="icon-btn" type="button" id="finder-back" aria-label="Previous question"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button>
+      <p class="label" id="finder-step">Question 1 of 3</p>
+      <button class="icon-btn" type="button" data-close aria-label="Close finder"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div id="finder-body"></div>
+  </div>
+</dialog>
+
+<p class="vh" id="live" aria-live="polite"></p>
+
+<script>
+(function(){
+'use strict';
+var doc=document,html=doc.documentElement;
+function $(s,c){return (c||doc).querySelector(s)}
+function $$(s,c){return Array.prototype.slice.call((c||doc).querySelectorAll(s))}
+doc.addEventListener('touchstart',function(){},{passive:true}); // enables :active on iOS
+
+var P={{FINDER_DATA}};
+var GOALS={R:'Recovery',L:'Lean Mass',E:'Endurance',S:'Sleep & Longevity'};
+var live=$('#live');
+function say(t){live.textContent='';setTimeout(function(){live.textContent=t},30)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+/* Motion: reveal on viewport entry */
+if(html.classList.contains('motion')){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.15});
+  $$('.mask,.grow').forEach(function(el){io.observe(el)});
+}
+
+/* Crystal video: HEVC-with-alpha for Apple/WebKit, VP9-with-alpha elsewhere */
+var v=$('#crystal-video'),vt=$('#crystal-toggle'),userPaused=false;
+if(v){
+  var apple=/Apple/.test(navigator.vendor||'');
+  var still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var setBtn=function(playing){vt.setAttribute('aria-label',playing?'Pause animation':'Play animation');$('use',vt).setAttribute('href',playing?'#i-pause':'#i-play')};
+  var play=function(){if(!v.getAttribute('src')){v.autoplay=true;var sm=innerWidth<768?'-720':'';v.src=apple?'assets/crystal-hevc'+sm+'.mp4':'assets/crystal'+sm+'.webm'}var p=v.play();if(p&&p.catch)p.catch(function(){});setBtn(true)};
+  vt.hidden=false;
+  vt.addEventListener('click',function(){if(v.paused){userPaused=false;play()}else{userPaused=true;v.pause();setBtn(false)}});
+  if(still){setBtn(false)}else{
+    if(doc.readyState==='complete')play();else window.addEventListener('load',play);
+    doc.addEventListener('visibilitychange',function(){if(!doc.hidden&&!userPaused&&v.paused&&v.getAttribute('src'))v.play().catch(function(){})});
+    if('IntersectionObserver' in window)new IntersectionObserver(function(es){if(userPaused||!v.getAttribute('src'))return;if(es[0].isIntersecting)v.play().catch(function(){});else v.pause()}).observe(v);
+  }
+}
+var logo=$('#logo'),mast=$('.mast');
+if('IntersectionObserver' in window)new IntersectionObserver(function(es){mast.classList.toggle('logo-off',!es[0].isIntersecting)},{rootMargin:'-110px 0px 0px 0px'}).observe(logo);
+else mast.classList.add('logo-off');
+
+/* Grid filtering: goals, search, view all */
+var cards=$$('#grid > li'),fbar=$('#filter'),ftext=$('#filter-text'),viewAll=$('#view-all'),shopTitle=$('#shop-title'),q=$('#q');
+cards.forEach(function(li){li._s=(li.textContent+' '+li.dataset.goals.split('').map(function(k){return GOALS[k]}).join(' ')).toLowerCase()});
+function show(test,msg){
+  var n=0;
+  cards.forEach(function(li){var on=test?test(li):!li.hasAttribute('data-extra');li.hidden=!on;if(on)n++});
+  fbar.hidden=!test;viewAll.parentNode.hidden=!!test;
+  if(test){ftext.textContent=msg(n);say(ftext.textContent)}
+  return n;
+}
+function goShop(){$('#shop').scrollIntoView();shopTitle.focus({preventScroll:true})}
+$$('[data-goal]').forEach(function(a){a.addEventListener('click',function(e){
+  e.preventDefault();var g=a.dataset.goal;
+  show(function(li){return li.dataset.goals.indexOf(g)>-1},function(n){return GOALS[g]+' · '+n+' products'});
+  goShop();
+})});
+viewAll.addEventListener('click',function(e){e.preventDefault();show(function(){return true},function(n){return 'All '+n+' products'})});
+$('#filter-clear').addEventListener('click',function(){show();q.value='';shopTitle.focus()});
+$('#search').addEventListener('submit',function(e){
+  e.preventDefault();var t=q.value.trim().toLowerCase();
+  if(!t){show();goShop();return}
+  var words=t.split(/\s+/);
+  show(function(li){return words.every(function(w){return li._s.indexOf(w)>-1})},function(n){return n?n+' result'+(n===1?'':'s')+' for “'+t+'”':'Nothing matches “'+t+'”. Try a goal, like sleep.'});
+  q.blur();goShop();
+});
+
+/* Dialogs: full-screen menu + finder sheet */
+var menu=$('#menu'),sheet=$('#finder-sheet');
+function openD(d){if(!d.open){d.showModal();html.classList.add('locked')}}
+[menu,sheet].forEach(function(d){
+  d.addEventListener('close',function(){if(!menu.open&&!sheet.open)html.classList.remove('locked')});
+  d.addEventListener('click',function(e){if(e.target===d)d.close()});
+});
+$$('[data-open-menu]').forEach(function(b){b.addEventListener('click',function(){openD(menu)})});
+$$('[data-close]').forEach(function(b){b.addEventListener('click',function(){b.closest('dialog').close()})});
+$$('a',menu).forEach(function(a){a.addEventListener('click',function(){menu.close()})});
+matchMedia('(min-width: 768px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
+
+/* Finder: three questions, one per screen, two results */
+var Q=[
+  {q:'What does most of your training look like?',o:[['Lifting and strength work','Lifting',{L:2,R:1}],['Running, cycling or rowing','Endurance',{E:2,R:1}],['A mix of everything','Mixed',{L:1,E:1,R:1}],['Walking, yoga, staying mobile','Mobility',{S:2,R:1}]]},
+  {q:'What would help most right now?',o:[['Recovering between sessions','Recovery',{R:3}],['Building or keeping muscle','Muscle',{L:3}],['Energy and hydration for long efforts','Energy',{E:3}],['Winding down and sleeping well','Sleep',{S:3}]]},
+  {q:'How do you like to take it?',o:[['Powder, mixed into a drink','Powder',{powder:1.5}],['Ready to drink or eat','Ready',{ready:1.5}],['Tablets, capsules or gummies','Tablets',{pills:1.5}],['No preference','Either',{}]]}
+];
+var fBody=$('#finder-body'),fStep=$('#finder-step'),fBack=$('#finder-back'),step=0,ans=[];
+function picks(){
+  var w={R:0,L:0,E:0,S:0,powder:0,ready:0,pills:0};
+  ans.forEach(function(a,i){var m=Q[i].o[a][2];for(var k in m)w[k]+=m[k]});
+  return Object.keys(P).map(function(id,i){
+    var p=P[id],s=w[p.form]||0;
+    p.g.split('').forEach(function(g,j){s+=w[g]*(j?.6:1)});
+    return {id:id,s:s,i:i};
+  }).sort(function(a,b){return b.s-a.s||a.i-b.i}).slice(0,2);
+}
+function render(focus){
+  fBack.style.visibility=step?'visible':'hidden';
+  if(step<Q.length){
+    var c=Q[step];
+    fStep.textContent='Question '+(step+1)+' of '+Q.length;
+    fBody.innerHTML='<h2 class="q" id="finder-title" tabindex="-1">'+c.q+'</h2><div class="opts">'+c.o.map(function(o,i){
+      var on=ans[step]===i;
+      return '<button type="button" class="opt'+(on?' is-picked':'')+'" data-i="'+i+'"><span>'+o[0]+(on?'<span class="vh"> (your earlier answer)</span>':'')+'</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>';
+    }).join('')+'</div>';
+  }else{
+    fStep.textContent='Your match';
+    fBody.innerHTML='<h2 class="q" id="finder-title" tabindex="-1">Two to start with</h2><p class="basis">Based on: '+ans.map(function(a,i){return Q[i].o[a][1]}).join(' · ')+'</p><ul class="picks">'+picks().map(function(r){
+      var p=P[r.id];
+      return '<li class="pick"><span class="shot"><img src="'+esc(p.img)+'" alt="" width="480" height="480"></span><div><h3 class="p-name">'+esc(p.name)+'</h3><p class="p-desc">'+esc(p.desc)+'</p><p class="why">'+esc(p.why)+'</p><a class="buy" href="'+esc(p.url)+'" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> '+esc(p.name)+' (opens in a new tab)</span></a></div></li>';
+    }).join('')+'</ul><div class="sheet-foot"><button class="btn btn-ghost" type="button" id="finder-restart">Start over</button><a class="tlink" href="#shop" id="finder-shop">See all products</a></div>';
+  }
+  if(focus)$('#finder-title').focus();
+}
+fBody.addEventListener('click',function(e){
+  var o=e.target.closest('.opt');
+  if(o){ans[step]=+o.dataset.i;step++;render(true);return}
+  if(e.target.closest('#finder-restart')){step=0;ans=[];render(true);return}
+  if(e.target.closest('#finder-shop'))sheet.close();
+});
+fBack.addEventListener('click',function(){if(step){step--;render(true)}});
+$$('[data-open-finder]').forEach(function(b){b.addEventListener('click',function(e){
+  e.preventDefault();
+  if(menu.open)menu.close();
+  if(step>=Q.length){step=0;ans=[]}
+  render(false);openD(sheet);$('#finder-title').focus();
+})});
+})();
+</script>
+</body>
+</html>
