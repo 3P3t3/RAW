@@ -488,8 +488,10 @@ if(v){
   var apple=/Apple/.test(navigator.vendor||'');
   var still=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var setBtn=function(playing){vt.setAttribute('aria-label',playing?'Pause animation':'Play animation');$('use',vt).setAttribute('href',playing?'#i-pause':'#i-play')};
-  var play=function(){if(!v.getAttribute('src')){v.autoplay=true;v.src=apple?'assets/crystal-hevc.mp4':'assets/crystal.webm'}var p=v.play();if(p&&p.catch)p.catch(function(){});setBtn(true)};
+  var play=function(){if(!v.getAttribute('src')){v.autoplay=true;v.src=apple?'assets/crystal-hevc.mov':'assets/crystal.webm'}var p=v.play();if(p&&p.catch)p.catch(function(){setBtn(false)});setBtn(true)};
   vt.hidden=false;
+  /* If the clip can't decode, drop it so the poster still shows the crystal */
+  v.addEventListener('error',function(){v.removeAttribute('src');v.load();vt.hidden=true},true);
   vt.addEventListener('click',function(){if(v.paused){userPaused=false;play()}else{userPaused=true;v.pause();setBtn(false)}});
   if(still){setBtn(false)}else{
     if(document.readyState==='complete')play();else window.addEventListener('load',play);
