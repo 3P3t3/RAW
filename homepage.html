@@ -4,261 +4,285 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#CCB09D">
-<title>Aspire Health · Sports nutrition &amp; peptides</title>
-<meta name="description" content="Single-ingredient sports nutrition and peptides, tested by an independent lab every batch.">
+<meta name="theme-color" content="#003341">
+<title>Aspire Health · Sports nutrition &amp; wellness</title>
+<meta name="description" content="Nutrilite and XS sports nutrition, hydration and sleep support, picked for how you train.">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 <style>
 :root{
-  --bg:#CCB09D;--card:#DCC6B4;--press:#C2A48E;--text:#3A2A1F;--ink:#23180F;--btn:#14100D;--line:#B39680;--esp:#2B1E16;--esp-2:#3A2A20;--latte:#EADBCC;
+  /* Ocean palette */
+  --pearl:#1E262F;--strato:#415365;--prince:#697F93;--jeans:#6D8A92;--hydro:#49727E;--deep:#124E5E;
+  --abyss:#909E9F;--pave:#9D9F97;--mindful:#BDB6AD;--soft:#D6D4C9;--sand:#E6D3C5;--chalk:#F4F2EC;
+  /* Roles */
+  --bg:var(--soft);--card:var(--chalk);--text:var(--strato);--ink:var(--pearl);--btn:var(--deep);--on-btn:var(--chalk);--line:rgba(30,38,47,.16);
+  --press:rgba(30,38,47,.08);
+  /* Tints behind product photos */
+  --t1:#E9DDD2;--t2:#CFD6D5;--t3:#DAD5CC;--t4:#C7D2D5;
+  --lift:0 1px 0 rgba(255,255,255,.55) inset,0 18px 36px -20px rgba(30,38,47,.55),0 4px 10px -6px rgba(30,38,47,.25);
+  --lift-hi:0 30px 60px -28px rgba(8,30,38,.8),0 8px 18px -10px rgba(8,30,38,.5);
+  --r:14px;--r-sm:10px;
   --display:Didot,"Bodoni 72","Bodoni MT","Big Caslon",Charter,Georgia,serif;
   --serif:Charter,"Bitstream Charter","Iowan Old Style","Palatino Linotype",Georgia,serif;
   --sans:"Helvetica Neue",Helvetica,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-  --pad:16px;--sec:56px;--mast:120px;
-  --ease:400ms ease-out;
+  --pad:16px;--sec:64px;--mast:106px;
+  --hero-l:#003341;--hero-r:#DEC4AD; /* sampled from the glass video so the split continues past its edges */
+  --ease:500ms cubic-bezier(.2,.7,.2,1);
 }
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-padding-top:var(--mast)}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:var(--mast);background:var(--hero-l)}
 html.locked{overflow:hidden}
-body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 var(--sans);-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
-h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--ink);margin:0;line-height:1.15;letter-spacing:-.01em}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 var(--sans);-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--ink);margin:0;line-height:1.12;letter-spacing:-.01em;text-wrap:balance}
 p{margin:0}
 a{color:inherit}
+img{max-width:100%}
 button,input{font:inherit;color:inherit}
 button{cursor:pointer}
 a,button,summary{touch-action:manipulation}
-:focus-visible{outline:2px solid var(--btn);outline-offset:2px}
+:focus-visible{outline:2px solid var(--deep);outline-offset:3px}
 [hidden]{display:none!important}
 .vh{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-.skip{position:absolute;left:8px;top:-200px;z-index:50;background:var(--btn);color:var(--bg);padding:12px 16px;min-height:44px;font-size:16px}
+.skip{position:absolute;left:8px;top:-200px;z-index:50;background:var(--sand);color:var(--deep);padding:12px 16px;min-height:44px;font-size:16px;border-radius:var(--r-sm)}
 .skip:focus{top:8px}
 .ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:square;flex:none}
 .ic-sm{width:18px;height:18px}
 
-/* Type roles */
-.label{font-family:var(--sans);font-size:14px;line-height:1.3;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text)}
-.num{font-variant-numeric:tabular-nums lining-nums;font-size:calc(1em + 2px);font-weight:500;color:var(--ink)}
+.label{font-family:var(--sans);font-size:13px;line-height:1.3;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--hydro)}
 .wrap{width:100%;max-width:calc(1200px + 2 * var(--pad));margin:0 auto;padding:0 var(--pad)}
 
-/* Buttons + links: no hover, pressed only */
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;padding:0 24px;border:1px solid var(--btn);border-radius:2px;background:var(--btn);color:var(--bg);font:500 16px/1.2 var(--sans);letter-spacing:.02em;text-decoration:none;text-align:center}
-.btn-ghost{background:transparent;color:var(--btn)}
-.btn:active{background:var(--press);color:var(--btn)}
-.tlink{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 6px;margin:0 -6px;border:0;border-radius:2px;background:transparent;color:var(--btn);font-size:16px;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
+/* Buttons + links */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;padding:0 24px;border:0;border-radius:var(--r-sm);background:var(--btn);color:var(--on-btn);font:600 16px/1.2 var(--sans);letter-spacing:.02em;text-decoration:none;text-align:center;box-shadow:0 12px 24px -14px rgba(18,78,94,.9);transition:transform .15s}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn-ghost{background:transparent;color:var(--btn);box-shadow:inset 0 0 0 1.5px var(--btn)}
+.tlink{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 6px;margin:0 -6px;border:0;border-radius:6px;background:transparent;color:var(--deep);font-size:16px;font-weight:500;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
 .tlink:active{background:var(--press)}
-.icon-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:0;border-radius:2px;background:transparent;color:var(--ink);text-decoration:none}
-.icon-btn:active{background:var(--press)}
+.icon-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:0;border-radius:var(--r-sm);background:transparent;color:inherit;text-decoration:none}
+.icon-btn:active{background:rgba(255,255,255,.12)}
 
-/* Placeholders */
-.ph{position:relative;display:flex;align-items:center;justify-content:center;padding:10px;overflow:hidden;text-align:center;font-size:14px;line-height:1.35;color:var(--text);background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' preserveAspectRatio='none'%3E%3Cpath d='M0 0L10 10M10 0L0 10' stroke='%23B39680' stroke-width='1' vector-effect='non-scaling-stroke' fill='none'/%3E%3C/svg%3E") center/100% 100% no-repeat;border:1px solid var(--line)}
-.ph-cap{position:relative;padding:3px 8px;background:inherit;background-image:none}
-.ph-cap b{font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+/* Product shots + placeholders */
+.shot{position:relative;display:block;aspect-ratio:1;padding:12%;background:var(--t1);border-radius:var(--r-sm);overflow:hidden}
+.shot img{position:relative;display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 14px 14px rgba(30,38,47,.28))}
+.ph{position:relative;display:flex;align-items:center;justify-content:center;aspect-ratio:1;padding:10px;text-align:center;font-size:14px;line-height:1.35;color:var(--text);background:var(--t3);border:1.5px dashed rgba(65,83,101,.35);border-radius:var(--r-sm)}
+.ph-cap b{font-weight:600;letter-spacing:.14em;text-transform:uppercase}
 
-/* Motion: (a) mask reveal, (b) scale on entry. Transform + opacity only. */
-.mask{position:relative;overflow:hidden}
-.motion .mask::after{content:"";position:absolute;inset:-1px;z-index:2;background:var(--bg);transform:translate3d(0,0,0);transition:transform var(--ease);transition-delay:calc(var(--d,0) * 70ms)}
-.motion .mask.in::after{transform:translate3d(0,-101%,0)}
-.motion .grow{opacity:0;transform:scale(.96);transition:transform var(--ease),opacity var(--ease);transition-delay:calc(var(--d,0) * 70ms)}
+/* Motion: rise-in on entry. Transform + opacity only. */
+.motion .grow{opacity:0;transform:translate3d(0,18px,0);transition:transform var(--ease),opacity var(--ease);transition-delay:calc(var(--d,0) * 70ms)}
 .motion .grow.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){
-  .motion .mask::after{display:none}
-  .motion .grow{opacity:1;transform:none;transition:none}
-}
+@media (prefers-reduced-motion:reduce){.motion .grow{opacity:1;transform:none;transition:none}}
 
-/* 1. Header + 2. Search (one sticky block) */
-.mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
-.bar{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:8px;height:56px}
-.wordmark{justify-self:center;display:inline-flex;align-items:center;min-height:44px;padding:0 4px 0 calc(4px + .22em);font-family:var(--display);font-size:17px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;color:var(--ink);text-decoration:none;transition:opacity .3s,visibility 0s}
+/* 1 + 2. Header and search: deep teal, continuous with the hero */
+.mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--hero-l);color:var(--sand);transition:box-shadow .3s}
+.mast.logo-off{box-shadow:0 10px 30px -18px rgba(8,30,38,.9)}
+.bar{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:8px;height:52px}
+.wordmark{justify-self:center;display:inline-flex;align-items:center;min-height:44px;padding:0 4px 0 calc(4px + .22em);font-family:var(--display);font-size:17px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;color:var(--sand);text-decoration:none;transition:opacity .3s,visibility 0s}
 .js .mast:not(.logo-off) .wordmark{opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s}
 @media (max-width:359px){.wordmark{font-size:15px;letter-spacing:.16em}}
 .nav-inline{display:none}
-.badge{position:absolute;top:2px;right:0;min-width:22px;height:22px;padding:0 5px;background:var(--btn);color:var(--bg);font-size:14px;line-height:22px;text-align:center;font-variant-numeric:tabular-nums;border-radius:2px}
-.search{display:flex;gap:8px;padding:0 0 12px}
-.search input{flex:1;min-width:0;height:44px;padding:0 10px;border:1px solid var(--text);border-radius:2px;background:var(--card);color:var(--ink);font-size:16px;-webkit-appearance:none;appearance:none}
-.search input::placeholder{color:var(--text);opacity:1}
-.search input:focus-visible{outline:2px solid var(--btn);outline-offset:1px}
-.search-go{background:var(--btn);color:var(--bg);border:1px solid var(--btn)}
-.search-go:active{background:var(--press);color:var(--btn)}
+.search{display:flex;gap:8px;padding:0 0 10px}
+.search input{flex:1;min-width:0;height:44px;padding:0 14px;border:0;border-radius:var(--r-sm);background:var(--chalk);color:var(--ink);font-size:16px;-webkit-appearance:none;appearance:none;box-shadow:0 8px 20px -12px rgba(0,0,0,.6)}
+.search input::placeholder{color:var(--strato);opacity:.8}
+.search-go{background:var(--sand);color:var(--deep)}
+.search-go:active{background:var(--chalk)}
+.mast :focus-visible,.hero :focus-visible,.finder :focus-visible,.foot :focus-visible,.menu :focus-visible{outline-color:var(--sand)}
 
-/* 3. Hero */
-.hero{padding:4px 0 var(--sec)}
-.stage{display:grid;grid-template-areas:"s"}
-.stage>*{grid-area:s}
-.crystal{position:relative;justify-self:end;align-self:start;width:min(68vw,290px);max-width:100%;aspect-ratio:1;margin-right:-12px}
-.crystal video{display:block;width:100%;height:100%;object-fit:contain}
-.crystal-toggle{position:absolute;top:4px;right:8px;color:var(--ink)}
-.brand{position:relative;z-index:1;align-self:end;display:grid;gap:10px;padding-top:min(46vw,190px);pointer-events:none}
-.brand>*{pointer-events:auto}
-.logo{margin:0;font-family:var(--display);font-weight:400;color:var(--ink);line-height:.86;letter-spacing:.04em;text-transform:uppercase;font-size:clamp(58px,19vw,80px)}
+/* 3. Hero: a frozen explosion of glass over a two-colour split, headline laid over it */
+.hero{--L:var(--hero-l);--R:var(--hero-r);position:relative;z-index:3;overflow:hidden;background:linear-gradient(90deg,var(--L) 0 60%,var(--R) 60% 100%);color:var(--chalk)}
+.hero-in{position:relative;display:grid;align-content:start;min-height:calc(125vw - 30px);padding-top:18px;padding-bottom:120px}
+.crystal{position:absolute;top:0;left:calc(60vw - 62.5vw);width:125vw;aspect-ratio:1;pointer-events:none}
+.crystal video{display:block;width:100%;height:100%;object-fit:cover}
+.brand{position:relative;z-index:2;display:grid;gap:8px;justify-items:start;max-width:60vw;text-align:left}
+/* soft teal haze behind the words so they read over the glass */
+.brand::before{content:"";position:absolute;z-index:-1;inset:-30px 0 -30px -60px;background:radial-gradient(closest-side,rgba(0,51,65,.8),rgba(0,51,65,.5) 55%,rgba(0,51,65,0));pointer-events:none}
+.hero .label{color:#9FC0C8;font-size:12px;letter-spacing:.12em;white-space:nowrap}
+.logo{margin:4px 0 0;font-family:var(--display);font-weight:400;color:var(--chalk);line-height:.9;letter-spacing:.01em;text-transform:uppercase;font-size:clamp(46px,15vw,64px);text-shadow:0 2px 24px rgba(2,30,40,.55)}
 .logo span{display:block}
-.logo-b{margin-top:12px;font-family:var(--sans);font-size:15px;line-height:1;font-weight:500;letter-spacing:.78em}
-.brand .sub{max-width:34ch}
-.goals-hero{margin-top:28px}
-.goals-head{margin-bottom:14px}
-.goals-head h2{font-size:24px}
-.hero-links{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:20px;padding:0 6px}
+.logo-b{margin-top:10px;font-family:var(--sans);font-size:13px;line-height:1;font-weight:600;letter-spacing:.62em}
+.hero .sub{max-width:24ch;margin-top:6px;color:#D7E3E5;font-size:15px;text-shadow:0 1px 14px rgba(2,30,40,.9)}
+.hero-cta{position:absolute;z-index:2;right:var(--pad);bottom:128px;display:none}
+.crystal-toggle{position:absolute;z-index:2;top:8px;right:6px;color:var(--pearl)}
+
+/* 4. Goals: raised tiles that overlap the hero, products breaking out of the top */
+.goals-hero{position:relative;z-index:4;margin-top:-96px}
+.goals-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:22px}
+.goals-head h2{font-size:24px;color:var(--chalk);text-shadow:0 2px 16px rgba(2,30,40,.8)}
+.goals-head .tlink{color:var(--pearl);font-size:15px}
+.goals{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 12px}
+.goal{position:relative;display:flex;flex-direction:column;height:100%;min-height:156px;padding:14px 14px 16px;border-radius:var(--r);text-decoration:none;box-shadow:var(--lift-hi);transition:transform .2s}
+.goal:active{transform:scale(.98)}
+.goal-n{font-size:13px;line-height:1.3;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.goal-img{position:absolute;top:-22px;right:-4px;width:clamp(64px,44%,150px);aspect-ratio:1;pointer-events:none}
+.goal-img img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 14px 12px rgba(8,20,26,.45))}
+.goal-name{position:relative;margin-top:auto;padding-top:14px;font-family:var(--serif);font-size:23px;line-height:1.05;letter-spacing:-.01em}
+.goal-desc{position:relative;margin-top:6px;font-size:14px;line-height:1.35}
+.g-R{background:var(--sand);color:var(--ink)}
+.g-L{background:var(--abyss);color:var(--ink)}
+.g-E{background:var(--hydro);color:var(--chalk)}
+.g-S{background:var(--pearl);color:var(--sand)}
+.hero-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 28px;margin-top:22px}
 
 /* Sections */
-.sec{padding:var(--sec) 0;border-top:1px solid var(--line)}
-.sec-head{display:grid;gap:8px;margin-bottom:28px;transform-origin:0 100%}
-.sec-head h2,.split-text h2{font-size:24px}
+.sec{position:relative;padding:var(--sec) 0}
+.sec-head{display:grid;gap:8px;margin-bottom:28px}
+.sec-head h2,.split-text h2{font-size:28px}
 .sec-head h2:focus{outline:none}
 
-/* 4. Goals */
-.goals{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.goal{display:flex;flex-direction:column;height:100%;min-height:132px;padding:12px 14px 14px;background:var(--card);border:1px solid var(--line);border-radius:2px;color:var(--ink);text-decoration:none}
-.goal:active{background:var(--press)}
-.goal-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
-.goal-top .label{font-size:14px}
-.goal-name{margin-top:auto;padding-top:12px;font-family:var(--serif);font-size:22px;line-height:1.05;letter-spacing:-.01em}
-.goal-desc{margin-top:6px;font-size:14px;line-height:1.35;color:var(--text)}
-
-/* 5. Products */
-.filter{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-8px 0 24px;padding:4px 4px 4px 12px;background:var(--card);border:1px solid var(--line);border-radius:2px}
+/* 5. Products: each one a raised card with its own tinted photo panel */
+.filter{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-8px 0 24px;padding:4px 6px 4px 14px;background:var(--chalk);border-radius:var(--r-sm);box-shadow:var(--lift)}
 .filter p{font-size:16px;color:var(--ink)}
 .filter .tlink{margin:0;flex:none}
-.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 12px}
-.card{display:flex;flex-direction:column;min-width:0}
-.card-link{display:block;color:inherit;text-decoration:none;border-radius:2px}
-.card-link .ph{aspect-ratio:4/5}
-.card-link:active .ph,.card-link:active .ph-cap{background-color:var(--press)}
-.p-name{font-size:18px;line-height:1.2;margin-top:12px}
-.p-desc{font-size:14px;line-height:1.4;margin-top:4px}
-.dose{font-size:14px;line-height:1.4;margin-top:8px}
-.p-buy{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding-top:12px}
-.price{font-size:18px;font-weight:600;color:var(--btn);font-variant-numeric:tabular-nums lining-nums}
-.add{min-width:76px;min-height:44px;padding:0 12px;border:1px solid var(--btn);border-radius:2px;background:transparent;color:var(--btn);font-size:16px;font-weight:500}
-.add:active{background:var(--press)}
-.add.is-added{background:var(--btn);color:var(--bg)}
-.more{margin-top:40px}
+.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px}
+.card{display:flex;flex-direction:column;min-width:0;padding:8px 8px 10px;background:var(--card);border-radius:var(--r);box-shadow:var(--lift)}
+.card:nth-child(4n+2) .shot{background:var(--t2)}
+.card:nth-child(4n+3) .shot{background:var(--t3)}
+.card:nth-child(4n+4) .shot{background:var(--t4)}
+.card-link{display:block;color:inherit;text-decoration:none;border-radius:var(--r-sm)}
+.card-link:active .shot img{transform:scale(.97)}
+.p-name{font-size:17px;line-height:1.2;margin:12px 4px 0}
+.p-desc{font-size:14px;line-height:1.4;margin:4px 4px 12px}
+.buy{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;margin-top:auto;padding:4px 10px;border-radius:var(--r-sm);background:var(--deep);color:var(--chalk);font-size:15px;font-weight:600;line-height:1.2;text-decoration:none;text-align:center}
+.buy:active{background:var(--hydro)}
+.buy .ic{width:16px;height:16px}
+@media (max-width:359px){.buy .ic{display:none}}
+.more{margin-top:36px}
 
-/* 6. Finder + 7. Trust share a split layout */
-.split{display:grid;gap:32px}
-.split-img{aspect-ratio:4/3}
-.split-text{display:grid;gap:12px;align-content:start;transform-origin:0 100%}
+/* 6. Finder band */
+.split{display:grid;grid-template-columns:minmax(0,1fr);gap:36px}
+.split-text{display:grid;gap:12px;align-content:start}
 .split-text p:not(.label){max-width:44ch}
 .split-text .btn{margin-top:16px}
-.finder{background:var(--esp);color:var(--latte);border-top:0}
-.finder h2,.finder .label{color:var(--latte)}
-.finder .ph{background-color:var(--esp-2);color:var(--latte);border-color:#5A4536}
-.motion .finder .mask::after{background:var(--esp)}
-.finder .btn{background:var(--latte);border-color:var(--latte);color:var(--esp)}
-.finder .btn:active{background:var(--press);color:var(--btn)}
-.finder :focus-visible{outline-color:var(--latte)}
-.finder + .sec{border-top:0}
-.proof{list-style:none;margin:0;padding:0}
-.proof li{display:grid;gap:8px;padding:20px 0 12px;border-top:1px solid var(--line);transform-origin:0 50%}
-.proof li:first-child{border-top:0;padding-top:0}
-.proof h3{font-family:var(--sans);letter-spacing:.14em}
+.finder{background:var(--strato);color:#D9DFE0;overflow:hidden}
+.finder h2{color:var(--chalk)}
+.finder .label{color:var(--sand)}
+.finder .btn{background:var(--sand);color:var(--deep);box-shadow:0 14px 28px -16px rgba(0,0,0,.8)}
+.duo{position:relative;display:flex;align-items:flex-end;justify-content:center;gap:4%;aspect-ratio:4/3;padding:0 8% 9%;margin-top:28px;background:var(--hydro);border-radius:var(--r);box-shadow:var(--lift-hi)}
+.duo img{display:block;width:44%;height:118%;object-fit:contain;filter:drop-shadow(0 22px 20px rgba(8,20,26,.5))}
+.duo img:first-child{transform:rotate(-4deg)}
+.duo img:last-child{transform:rotate(3deg) translateY(-4%)}
+
+/* 7. Ordering */
+.proof{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.proof li{display:grid;gap:8px;padding:20px;background:var(--card);border-radius:var(--r);box-shadow:var(--lift)}
+.proof h3{font-family:var(--serif);font-size:21px}
 .proof .tlink{justify-self:start}
+.trust-img{background:var(--t2);padding:10%}
 
 /* 8. Footer */
-.foot{border-top:1px solid var(--line);padding:16px 0 calc(40px + env(safe-area-inset-bottom))}
-.index summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 4px;list-style:none;cursor:pointer;border-radius:2px}
+.foot{background:var(--pearl);color:#B7BFC3;padding:16px 0 calc(40px + env(safe-area-inset-bottom))}
+.foot .label,.foot .pm::before{color:var(--sand)}
+.index summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 4px;list-style:none;cursor:pointer;border-radius:var(--r-sm)}
 .index summary::-webkit-details-marker{display:none}
-.index summary:active{background:var(--press)}
-.index summary .label{color:var(--ink)}
-.index .count{margin-left:8px;font-variant-numeric:tabular-nums;letter-spacing:0}
-.pm::before{content:"+";font-size:24px;line-height:1;color:var(--ink)}
+.index summary:active{background:rgba(255,255,255,.06)}
+.index .count{margin-left:10px;color:#B7BFC3;font-variant-numeric:tabular-nums;letter-spacing:0}
+.pm::before{content:"+";font-size:24px;line-height:1}
 .index[open] .pm::before{content:"\2212"}
 .index ul{list-style:none;margin:8px 0 0;padding:0}
-.index li{padding:4px 0;border-top:1px solid var(--line);break-inside:avoid}
-.index a{display:flex;align-items:center;min-height:44px;padding:0 4px;text-decoration:none;border-radius:2px}
-.index a:active{background:var(--press)}
+.index li{padding:2px 0;border-top:1px solid rgba(255,255,255,.08);break-inside:avoid}
+.index a{display:flex;align-items:center;min-height:44px;padding:0 4px;text-decoration:none;border-radius:6px}
+.index a:active{background:rgba(255,255,255,.06)}
 .foot-meta{display:grid;gap:12px;margin-top:40px;font-size:14px}
 .foot-meta .wordmark{justify-self:start;min-height:0;padding:0;font-size:18px}
 
 /* Full-screen nav panel */
 dialog{color:var(--text)}
-.menu{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:var(--bg)}
+.menu{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:var(--hero-l);color:var(--sand)}
+.menu .wordmark{color:var(--sand)}
 .menu-in{display:flex;flex-direction:column;min-height:100%}
 .menu-nav{margin-top:auto;padding-bottom:calc(32px + env(safe-area-inset-bottom))}
+.menu-nav .label{color:var(--abyss)}
 .menu-list{list-style:none;margin:12px 0 0;padding:0}
-.menu-list li{padding:4px 0;border-top:1px solid var(--line)}
-.menu-list a,.menu-list button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:60px;padding:0 4px;border:0;border-radius:2px;background:transparent;color:var(--ink);font:400 28px/1.15 var(--serif);text-align:left;text-decoration:none}
-.menu-list a:active,.menu-list button:active{background:var(--press)}
+.menu-list li{padding:4px 0;border-top:1px solid rgba(230,211,197,.18)}
+.menu-list a,.menu-list button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:60px;padding:0 4px;border:0;border-radius:var(--r-sm);background:transparent;color:var(--chalk);font:400 30px/1.15 var(--serif);text-align:left;text-decoration:none}
+.menu-list a:active,.menu-list button:active{background:rgba(255,255,255,.08)}
 
 /* Finder bottom sheet */
-.sheet{width:100%;max-width:100%;max-height:92vh;max-height:92dvh;margin:auto 0 0;padding:0;border:0;border-top:1px solid var(--line);border-radius:4px 4px 0 0;background:var(--bg);overflow:auto;overscroll-behavior:contain}
-.sheet::backdrop{background:rgba(20,16,13,.5)}
+.sheet{width:100%;max-width:100%;max-height:92vh;max-height:92dvh;margin:auto 0 0;padding:0;border:0;border-radius:20px 20px 0 0;background:var(--bg);overflow:auto;overscroll-behavior:contain;box-shadow:0 -20px 50px -20px rgba(8,20,26,.6)}
+.sheet::backdrop{background:rgba(18,40,48,.6)}
 .sheet-in{padding:8px var(--pad) calc(24px + env(safe-area-inset-bottom))}
-.sheet-top{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:8px}
+.sheet-top{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:8px;color:var(--ink)}
 .sheet-top .label{text-align:center}
-.q{font-size:24px;margin:20px 0 24px}
+.sheet .icon-btn:active{background:var(--press)}
+.q{font-size:26px;margin:20px 0 24px}
 .q:focus{outline:none}
-.opts{display:grid;gap:8px}
-.opt{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:60px;padding:12px 16px;border:1px solid var(--line);border-radius:2px;background:var(--card);color:var(--ink);font-size:16px;text-align:left}
-.opt:active{background:var(--press)}
-.opt.is-picked{border-color:var(--btn)}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:60px;padding:12px 16px;border:0;border-radius:var(--r-sm);background:var(--card);color:var(--ink);font-size:16px;text-align:left;box-shadow:var(--lift)}
+.opt:active{transform:scale(.99)}
+.opt.is-picked{box-shadow:inset 0 0 0 2px var(--deep),var(--lift)}
 .basis{margin:-12px 0 20px;font-size:14px}
-.picks{list-style:none;margin:0;padding:0}
-.pick{display:grid;grid-template-columns:88px minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--line)}
-.pick .ph{width:88px;height:88px;padding:4px}
-.pick .p-name{margin-top:0}
-.why{margin-top:8px;font-size:16px}
-.pick .p-buy{margin-top:0}
-.sheet-foot{display:grid;gap:8px;padding-top:16px;border-top:1px solid var(--line)}
+.picks{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.pick{display:grid;grid-template-columns:96px minmax(0,1fr);gap:16px;padding:12px;background:var(--card);border-radius:var(--r);box-shadow:var(--lift)}
+.pick .shot{width:96px;padding:8px}
+.pick .p-name{margin:0}
+.pick .p-desc{margin:4px 0 0}
+.why{margin:8px 0 12px;font-size:15px}
+.pick .buy{margin-top:0;justify-self:start;padding:4px 16px}
+.pick>div{display:grid}
+.sheet-foot{display:grid;gap:8px;padding-top:20px}
 .sheet-foot .tlink{justify-self:center}
 
 html:not(.js) button[data-open-finder]{display:none}
 
-/* ---------- 768px: tablet / small desktop ---------- */
+/* ---------- 768px ---------- */
 @media (min-width:768px){
-  :root{--pad:32px;--sec:88px;--mast:88px}
-  .mast .wrap{display:grid;grid-template-columns:auto 1fr minmax(180px,320px) 44px;align-items:center;gap:12px;height:72px}
+  :root{--pad:32px;--sec:96px;--mast:76px}
+  .mast .wrap{display:grid;grid-template-columns:auto 1fr minmax(200px,340px);align-items:center;gap:12px;height:76px}
   .mast .bar{display:contents}
-  .menu-btn{display:none}
+  .menu-btn,.bar-spacer{display:none}
   .mast .wordmark{order:1;justify-self:start;padding-left:0;font-size:17px;letter-spacing:.18em}
-  .nav-inline{order:2;display:flex;gap:8px;white-space:nowrap}
-  .nav-inline a{display:inline-flex;align-items:center;min-height:44px;padding:0 8px;border-radius:2px;font-size:14px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);text-decoration:none}
-  .nav-inline a:active{background:var(--press)}
+  .js .mast:not(.logo-off) .wordmark{opacity:1;visibility:visible}
+  .nav-inline{order:2;display:flex;justify-content:center;gap:8px;white-space:nowrap}
+  .nav-inline a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px;border-radius:var(--r-sm);font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--sand);text-decoration:none}
+  .nav-inline a:active{background:rgba(255,255,255,.1)}
   .search{order:3;padding:0}
-  .cart{order:4}
 
-  .hero{padding:12px 0 var(--sec)}
-  .stage{grid-template-areas:"b c";grid-template-columns:1.3fr 1fr;align-items:center;gap:24px}
-  .brand{grid-area:b;padding-top:0;gap:20px}
-  .crystal{grid-area:c;width:100%;max-width:420px;margin:0;justify-self:end}
-  .logo{font-size:clamp(76px,10.5vw,136px)}
-  .logo-b{font-size:18px;margin-top:16px}
-  .brand .sub{font-size:18px}
-  .goals-hero{margin-top:24px}
-  .goals-head h2{font-size:30px}
-  .goal{min-height:170px;padding:18px 20px 20px}
+  .hero{background:linear-gradient(90deg,var(--L) 0 50%,var(--R) 50% 100%)}
+  .hero-in{min-height:min(84vh,780px);align-content:end;padding-top:40px;padding-bottom:170px}
+  .crystal{top:0;left:50%;width:auto;height:100%;transform:translateX(-50%);-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
+  .brand{max-width:none;gap:12px}
+  .brand::before{display:none}
+  .logo,.hero .sub,.hero .label{text-shadow:0 2px 18px rgba(0,30,40,.7)}
+  .logo{font-size:clamp(84px,11vw,168px)}
+  .logo-b{font-size:17px;margin-top:14px;letter-spacing:.9em}
+  .hero .sub{max-width:34ch;font-size:18px;margin-top:10px}
+  .hero-cta{display:inline-flex;bottom:180px;color:var(--pearl);font-size:18px;font-weight:600}
+  .crystal-toggle{top:16px;right:16px}
+  .goals-hero{margin-top:-128px}
+  .goals-head h2{font-size:32px}
+  .goals{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+  .goal{min-height:200px;padding:20px 20px 22px}
+  .goal-img{top:-34px;right:-8px;width:46%}
   .goal-name{font-size:28px}
 
   .sec-head{margin-bottom:40px}
-  .sec-head h2,.split-text h2{font-size:30px}
-  .goals{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:56px 24px}
-  .more{display:flex;justify-content:center;margin-top:56px}
+  .sec-head h2,.split-text h2{font-size:36px}
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+  .card{padding:10px 10px 12px}
+  .buy{justify-self:start}
+  .more{display:flex;justify-content:center;margin-top:48px}
   .more .btn{width:auto;min-width:280px}
 
-  .split{grid-template-columns:1fr 1fr;align-items:center;gap:48px}
-  .finder .split-img{order:2}
+  .split{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:56px}
+  .duo{margin-top:0}
   .split-text .btn{width:auto;justify-self:start;min-width:220px}
   .trust{align-items:start}
 
   .index ul{columns:2;column-gap:32px}
-  .foot-meta{grid-template-columns:auto 1fr auto;align-items:baseline;gap:32px}
+  .foot-meta{grid-template-columns:auto 1fr;align-items:baseline;gap:12px 32px}
+  .foot-meta p:last-child{grid-column:2}
   .sheet{max-width:560px;margin:auto auto 0}
   .sheet-in{padding-left:32px;padding-right:32px}
 }
 
-/* ---------- 1200px: desktop ---------- */
+/* ---------- 1200px ---------- */
 @media (min-width:1200px){
-  :root{--pad:40px;--sec:112px}
+  :root{--pad:40px;--sec:120px}
   .mast .wrap{gap:32px}
   .mast .wordmark{font-size:19px;letter-spacing:.24em}
-  .nav-inline{gap:16px}
-  .nav-inline a{letter-spacing:.12em}
-  .crystal{max-width:440px}
-  .goal{min-height:190px;padding:20px 24px 24px}
+  .goals{gap:28px}
+  .goal{min-height:220px;padding:22px 24px 24px}
   .goal-name{font-size:32px}
-  .sec-head h2,.split-text h2{font-size:34px}
-  .goals{gap:24px}
-  .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:64px 32px}
-  .p-name{font-size:20px}
+  .sec-head h2,.split-text h2{font-size:40px}
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}
+  .p-name{font-size:19px}
   .split{gap:96px}
   .index ul{columns:3;column-gap:48px}
 }
@@ -270,9 +294,9 @@ html:not(.js) button[data-open-finder]{display:none}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
   <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
-  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M8 16L17 7M9 7h8v8"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></symbol>
   <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
@@ -288,11 +312,11 @@ html:not(.js) button[data-open-finder]{display:none}
         <a href="#shop">Shop</a>
         <a href="#goals">Goals</a>
         <a href="#finder" data-open-finder>Finder</a>
-        <a href="#trust">Testing</a>
+        <a href="#ordering">Ordering</a>
       </nav>
-      <a class="icon-btn cart" id="cart" href="/cart" aria-label="Cart, 0 items"><svg class="ic" aria-hidden="true"><use href="#i-bag"/></svg><span class="badge" id="cart-count" aria-hidden="true" hidden>0</span></a>
+      <span class="bar-spacer" aria-hidden="true"></span>
     </div>
-    <form class="search" id="search" role="search" action="/search">
+    <form class="search" id="search" role="search" action="#shop">
       <label class="vh" for="q">Search products</label>
       <input id="q" name="q" type="search" placeholder="Search products" autocomplete="off" enterkeyhint="search">
       <button class="icon-btn search-go" type="submit" aria-label="Search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
@@ -302,34 +326,34 @@ html:not(.js) button[data-open-finder]{display:none}
 
 <main id="main">
 
-  <!-- 3. Hero: brand + goals (no product on the first screen) -->
+  <!-- 3. Hero: glass explosion over a teal/sand split, headline laid over it -->
   <section class="hero" aria-label="Aspire Health">
-    <div class="wrap">
-      <div class="stage">
-        <div class="crystal">
-          <video id="crystal-video" muted loop playsinline preload="none" poster="assets/crystal-poster.webp" width="640" height="640" aria-hidden="true"></video>
-          <button class="icon-btn crystal-toggle" id="crystal-toggle" type="button" aria-label="Pause animation" hidden><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>
-        </div>
-        <div class="brand">
-          <p class="label">Sports nutrition &amp; peptides</p>
-          <h1 class="logo" id="logo"><span class="logo-a">Aspire</span><span class="logo-b">Health</span></h1>
-          <p class="sub">Measured doses for people who train, tested by an independent lab every batch.</p>
-        </div>
+    <div class="crystal">
+      <video id="crystal-video" muted loop playsinline preload="none" poster="assets/glass-poster.webp" width="1080" height="1080" aria-hidden="true"></video>
+    </div>
+    <button class="icon-btn crystal-toggle" id="crystal-toggle" type="button" aria-label="Pause animation" hidden><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>
+    <div class="wrap hero-in">
+      <div class="brand">
+        <p class="label">Sports nutrition &amp; wellness</p>
+        <h1 class="logo" id="logo"><span>Aspire</span><span class="logo-b">Health</span></h1>
+        <p class="sub">Nutrilite and XS nutrition, hydration and sleep support, picked for how you train.</p>
       </div>
+      <a class="tlink hero-cta" href="#finder" data-open-finder>Find what fits you <svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+  </section>
 
-      <!-- 4. Goals: the main focus -->
-      <div class="goals-hero" id="goals">
-        <div class="goals-head"><h2 id="goals-title">Start where you are</h2></div>
-        <ul class="goals">
-          <li><a class="goal" href="#shop" data-goal="R"><span class="goal-top"><span class="label">6 products</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span><span class="goal-name">Recovery</span><span class="goal-desc">Bounce back between sessions</span></a></li>
-          <li><a class="goal" href="#shop" data-goal="L"><span class="goal-top"><span class="label">4 products</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span><span class="goal-name">Lean Mass</span><span class="goal-desc">Build muscle and keep it</span></a></li>
-          <li><a class="goal" href="#shop" data-goal="E"><span class="goal-top"><span class="label">5 products</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span><span class="goal-name">Endurance</span><span class="goal-desc">Hold your pace for longer</span></a></li>
-          <li><a class="goal" href="#shop" data-goal="S"><span class="goal-top"><span class="label">5 products</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span><span class="goal-name">Sleep &amp; Longevity</span><span class="goal-desc">Rest deeper, age well</span></a></li>
-        </ul>
-        <div class="hero-links">
-          <a class="tlink" href="#finder" data-open-finder>Not sure? Find what fits you <svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-          <a class="tlink" href="#shop">Shop all</a>
-        </div>
+  <!-- 4. Goals: the main focus, overlapping the hero -->
+  <section class="goals-hero" id="goals" aria-labelledby="goals-title">
+    <div class="wrap">
+      <div class="goals-head"><h2 id="goals-title">Start where you are</h2><a class="tlink" href="#shop">Shop all</a></div>
+      <ul class="goals">
+          <li><a class="goal g-R" href="#shop" data-goal="R"><span class="goal-img"><img src="assets/products/xs-post-workout-recovery-fruit-punch-30-serving-pouch.webp" alt="" width="480" height="480" fetchpriority="high"></span><span class="goal-n">17 products</span><span class="goal-name">Recovery</span><span class="goal-desc">Bounce back between sessions</span></a></li>
+          <li><a class="goal g-L" href="#shop" data-goal="L"><span class="goal-img"><img src="assets/products/xs-grass-fed-whey-protein-chocolate.webp" alt="" width="480" height="480" fetchpriority="high"></span><span class="goal-n">24 products</span><span class="goal-name">Lean Mass</span><span class="goal-desc">Build muscle and keep it</span></a></li>
+          <li><a class="goal g-E" href="#shop" data-goal="E"><span class="goal-img"><img src="assets/products/xs-energy-drink-12-oz-classic.webp" alt="" width="480" height="480"></span><span class="goal-n">33 products</span><span class="goal-name">Endurance</span><span class="goal-desc">Energy and hydration that lasts</span></a></li>
+          <li><a class="goal g-S" href="#shop" data-goal="S"><span class="goal-img"><img src="assets/products/nutrilite-sleep-health.webp" alt="" width="480" height="480"></span><span class="goal-n">8 products</span><span class="goal-name">Sleep &amp; Longevity</span><span class="goal-desc">Rest deeper, age well</span></a></li>
+      </ul>
+      <div class="hero-links">
+        <a class="tlink" href="#finder" data-open-finder>Not sure? Answer three questions <svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
     </div>
   </section>
@@ -337,30 +361,83 @@ html:not(.js) button[data-open-finder]{display:none}
   <!-- 5. Product grid (no motion on cards) -->
   <section class="sec" id="shop" aria-labelledby="shop-title">
     <div class="wrap">
-      <div class="sec-head grow"><p class="label">The range</p><h2 id="shop-title" tabindex="-1">The essentials</h2></div>
-      <div class="filter" id="filter" hidden><p id="filter-text"></p><button class="tlink" type="button" id="filter-clear">Show all</button></div>
+      <div class="sec-head grow"><p class="label">The range</p><h2 id="shop-title" tabindex="-1">Our picks</h2></div>
+      <div class="filter" id="filter" hidden><p id="filter-text"></p><button class="tlink" type="button" id="filter-clear">Show picks</button></div>
       <ul class="grid" id="grid">
-        <li class="card" data-goals="R"><a class="card-link" href="/products/collagen-peptides"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>Collagen Peptides</span></span><h3 class="p-name">Collagen Peptides</h3></a><p class="p-desc">Types I &amp; III, unflavored</p><p class="dose"><span class="num">10 g</span> · <span class="num">30</span> servings</p><div class="p-buy"><span class="price">$42</span><button class="add" type="button" data-add="collagen"><span class="add-t">Add</span><span class="vh"> Collagen Peptides to cart</span></button></div></li>
-        <li class="card" data-goals="L"><a class="card-link" href="/products/creatine-monohydrate"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>Creatine Monohydrate</span></span><h3 class="p-name">Creatine Monohydrate</h3></a><p class="p-desc">Micronized, nothing added</p><p class="dose"><span class="num">5 g</span> · <span class="num">60</span> servings</p><div class="p-buy"><span class="price">$34</span><button class="add" type="button" data-add="creatine"><span class="add-t">Add</span><span class="vh"> Creatine Monohydrate to cart</span></button></div></li>
-        <li class="card" data-goals="LR"><a class="card-link" href="/products/whey-peptides"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>Whey Peptides</span></span><h3 class="p-name">Whey Peptides</h3></a><p class="p-desc">Hydrolyzed isolate, fast-digesting</p><p class="dose"><span class="num">25 g</span> · <span class="num">28</span> servings</p><div class="p-buy"><span class="price">$58</span><button class="add" type="button" data-add="whey"><span class="add-t">Add</span><span class="vh"> Whey Peptides to cart</span></button></div></li>
-        <li class="card" data-goals="E"><a class="card-link" href="/products/electrolyte-base"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>Electrolyte Base</span></span><h3 class="p-name">Electrolyte Base</h3></a><p class="p-desc">Sodium-forward, no sugar</p><p class="dose"><span class="num">1,000 mg</span> · <span class="num">40</span> servings</p><div class="p-buy"><span class="price">$30</span><button class="add" type="button" data-add="electrolyte"><span class="add-t">Add</span><span class="vh"> Electrolyte Base to cart</span></button></div></li>
-        <li class="card" data-goals="SR"><a class="card-link" href="/products/magnesium-glycinate"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>Magnesium Glycinate</span></span><h3 class="p-name">Magnesium Glycinate</h3></a><p class="p-desc">Chelated, easy on the stomach</p><p class="dose"><span class="num">400 mg</span> · <span class="num">60</span> servings</p><div class="p-buy"><span class="price">$26</span><button class="add" type="button" data-add="magnesium"><span class="add-t">Add</span><span class="vh"> Magnesium Glycinate to cart</span></button></div></li>
-        <li class="card" data-goals="EL"><a class="card-link" href="/products/l-citrulline"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>L-Citrulline</span></span><h3 class="p-name">L-Citrulline</h3></a><p class="p-desc">Pure, unbuffered</p><p class="dose"><span class="num">6 g</span> · <span class="num">50</span> servings</p><div class="p-buy"><span class="price">$32</span><button class="add" type="button" data-add="citrulline"><span class="add-t">Add</span><span class="vh"> L-Citrulline to cart</span></button></div></li>
-        <li class="card" data-goals="RES"><a class="card-link" href="/products/tart-cherry-extract"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>Tart Cherry Extract</span></span><h3 class="p-name">Tart Cherry Extract</h3></a><p class="p-desc">Montmorency, standardized</p><p class="dose"><span class="num">500 mg</span> · <span class="num">60</span> servings</p><div class="p-buy"><span class="price">$28</span><button class="add" type="button" data-add="cherry"><span class="add-t">Add</span><span class="vh"> Tart Cherry Extract to cart</span></button></div></li>
-        <li class="card" data-goals="S"><a class="card-link" href="/products/glycine"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>Glycine</span></span><h3 class="p-name">Glycine</h3></a><p class="p-desc">An evening amino acid</p><p class="dose"><span class="num">3 g</span> · <span class="num">90</span> servings</p><div class="p-buy"><span class="price">$22</span><button class="add" type="button" data-add="glycine"><span class="add-t">Add</span><span class="vh"> Glycine to cart</span></button></div></li>
-        <li class="card" data-goals="EL" data-extra hidden><a class="card-link" href="/products/beta-alanine"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>Beta-Alanine</span></span><h3 class="p-name">Beta-Alanine</h3></a><p class="p-desc">For repeated hard efforts</p><p class="dose"><span class="num">3.2 g</span> · <span class="num">50</span> servings</p><div class="p-buy"><span class="price">$24</span><button class="add" type="button" data-add="beta"><span class="add-t">Add</span><span class="vh"> Beta-Alanine to cart</span></button></div></li>
-        <li class="card" data-goals="RE" data-extra hidden><a class="card-link" href="/products/bovine-colostrum"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>Bovine Colostrum</span></span><h3 class="p-name">Bovine Colostrum</h3></a><p class="p-desc">First-milking, low heat</p><p class="dose"><span class="num">1,000 mg</span> · <span class="num">60</span> servings</p><div class="p-buy"><span class="price">$44</span><button class="add" type="button" data-add="colostrum"><span class="add-t">Add</span><span class="vh"> Bovine Colostrum to cart</span></button></div></li>
-        <li class="card" data-goals="RS" data-extra hidden><a class="card-link" href="/products/omega-3"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>Omega-3</span></span><h3 class="p-name">Omega-3</h3></a><p class="p-desc">EPA + DHA, triglyceride form</p><p class="dose"><span class="num">2,000 mg</span> · <span class="num">60</span> servings</p><div class="p-buy"><span class="price">$38</span><button class="add" type="button" data-add="omega"><span class="add-t">Add</span><span class="vh"> Omega-3 to cart</span></button></div></li>
-        <li class="card" data-goals="S" data-extra hidden><a class="card-link" href="/products/vitamin-d3-k2"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>Vitamin D3 + K2</span></span><h3 class="p-name">Vitamin D3 + K2</h3></a><p class="p-desc">Daily, with MK-7</p><p class="dose"><span class="num">5,000 IU</span> · <span class="num">90</span> servings</p><div class="p-buy"><span class="price">$20</span><button class="add" type="button" data-add="vitd"><span class="add-t">Add</span><span class="vh"> Vitamin D3 + K2 to cart</span></button></div></li>
+        <li class="card" data-goals="LR"><a class="card-link" href="https://amway.com/share-link/o3K2G9Gau" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-grass-fed-whey-protein-chocolate.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Grass-Fed Whey Protein</h3></a><p class="p-desc">Protein powder · Chocolate</p><a class="buy" href="https://amway.com/share-link/o3K2G9Gau" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Grass-Fed Whey Protein, Protein powder · Chocolate (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="RL"><a class="card-link" href="https://amway.com/share-link/CBN8O~MnX" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-post-workout-recovery-fruit-punch-30-serving-pouch.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Post-Workout Recovery</h3></a><p class="p-desc">Recovery mix · Fruit Punch, 30-serving pouch</p><a class="buy" href="https://amway.com/share-link/CBN8O~MnX" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Post-Workout Recovery, Recovery mix · Fruit Punch, 30-serving pouch (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="EL"><a class="card-link" href="https://amway.com/share-link/ZsJafHG0E" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-pre-workout-boost-blue-raspberry-30-serving-pouch.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Pre-Workout Boost</h3></a><p class="p-desc">Pre-workout mix · Blue Raspberry, 30-serving pouch</p><a class="buy" href="https://amway.com/share-link/ZsJafHG0E" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Pre-Workout Boost, Pre-workout mix · Blue Raspberry, 30-serving pouch (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="S"><a class="card-link" href="https://amway.com/share-link/o8m6KGk53" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/nutrilite-sleep-health.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">Nutrilite Sleep Health</h3></a><p class="p-desc">Nightly supplement</p><a class="buy" href="https://amway.com/share-link/o8m6KGk53" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> Nutrilite Sleep Health, Nightly supplement (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="L"><a class="card-link" href="https://amway.com/share-link/TcFtuhPvJ" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-creatine.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Creatine+</h3></a><p class="p-desc">Creatine powder</p><a class="buy" href="https://amway.com/share-link/TcFtuhPvJ" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Creatine+, Creatine powder (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="ER"><a class="card-link" href="https://amway.com/share-link/enbKVnLlx" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-cocowater-hydration-drink-mix-pineapple-coconut.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS CocoWater Hydration Drink Mix</h3></a><p class="p-desc">Hydration mix · Pineapple/Coconut</p><a class="buy" href="https://amway.com/share-link/enbKVnLlx" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS CocoWater Hydration Drink Mix, Hydration mix · Pineapple/Coconut (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E"><a class="card-link" href="https://amway.com/share-link/KP09m3teD" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-variety-case.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Variety Case</p><a class="buy" href="https://amway.com/share-link/KP09m3teD" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Variety Case (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="S"><a class="card-link" href="https://amway.com/share-link/k5GGxS-5u" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/nutrilite-balance-within-probiotic.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">Nutrilite Balance Within Probiotic</h3></a><p class="p-desc">Daily probiotic</p><a class="buy" href="https://amway.com/share-link/k5GGxS-5u" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> Nutrilite Balance Within Probiotic, Daily probiotic (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="" data-extra hidden><a class="card-link" href="https://amway.com/share-link/hKMa0MHHc" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/artistry-skin-nutrition-renewing-softening-toner.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">Artistry Skin Nutrition Renewing Softening Toner</h3></a><p class="p-desc">Skincare · Toner</p><a class="buy" href="https://amway.com/share-link/hKMa0MHHc" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> Artistry Skin Nutrition Renewing Softening Toner, Skincare · Toner (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="S" data-extra hidden><a class="card-link" href="https://amway.com/share-link/iWAplHgh3" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/artistry-skin-nutrition-sleeping-mask.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">Artistry Skin Nutrition Sleeping Mask</h3></a><p class="p-desc">Skincare · Overnight mask</p><a class="buy" href="https://amway.com/share-link/iWAplHgh3" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> Artistry Skin Nutrition Sleeping Mask, Skincare · Overnight mask (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="" data-extra hidden><a class="card-link" href="https://amway.com/share-link/2Vi-rjqyj" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/artistry-studio-glow-boss-cleanser-exfoliator.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">Artistry Studio Glow Boss Cleanser + Exfoliator</h3></a><p class="p-desc">Skincare · Cleanser + exfoliator</p><a class="buy" href="https://amway.com/share-link/2Vi-rjqyj" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> Artistry Studio Glow Boss Cleanser + Exfoliator, Skincare · Cleanser + exfoliator (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="S" data-extra hidden><a class="card-link" href="https://amway.com/share-link/PVUuzXLQ6" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/n-by-nutrilite-sweet-dreams-sleep-gummies.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">n* by Nutrilite Sweet Dreams</h3></a><p class="p-desc">Sleep gummies · Sleep Gummies</p><a class="buy" href="https://amway.com/share-link/PVUuzXLQ6" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> n* by Nutrilite Sweet Dreams, Sleep gummies · Sleep Gummies (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="S" data-extra hidden><a class="card-link" href="https://amway.com/share-link/FOhn2MdGS" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/nutrilite-begin-daily-gi-primer.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">Nutrilite Begin Daily GI Primer</h3></a><p class="p-desc">Daily digestive powder</p><a class="buy" href="https://amway.com/share-link/FOhn2MdGS" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> Nutrilite Begin Daily GI Primer, Daily digestive powder (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="SR" data-extra hidden><a class="card-link" href="https://amway.com/share-link/ROw2AOp7v" target="_blank" rel="noopener"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>coming soon</span></span><h3 class="p-name">Nutrilite Magnesium</h3></a><p class="p-desc">Mineral supplement</p><a class="buy" href="https://amway.com/share-link/ROw2AOp7v" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> Nutrilite Magnesium, Mineral supplement (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="L" data-extra hidden><a class="card-link" href="https://amway.com/share-link/90MN2VV7h" target="_blank" rel="noopener"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>coming soon</span></span><h3 class="p-name">Nutrilite Organics All-in-One Bars</h3></a><p class="p-desc">Organic nutrition bar · Berries &amp; Seeds</p><a class="buy" href="https://amway.com/share-link/90MN2VV7h" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> Nutrilite Organics All-in-One Bars, Organic nutrition bar · Berries &amp; Seeds (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="L" data-extra hidden><a class="card-link" href="https://amway.com/share-link/195NEh7tP" target="_blank" rel="noopener"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>coming soon</span></span><h3 class="p-name">Nutrilite Organics All-in-One Bars</h3></a><p class="p-desc">Organic nutrition bar · Double Chocolate</p><a class="buy" href="https://amway.com/share-link/195NEh7tP" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> Nutrilite Organics All-in-One Bars, Organic nutrition bar · Double Chocolate (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="L" data-extra hidden><a class="card-link" href="https://amway.com/share-link/WsloZO1TV" target="_blank" rel="noopener"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>coming soon</span></span><h3 class="p-name">Nutrilite Organics All-in-One Bars</h3></a><p class="p-desc">Organic nutrition bar · Peanut Butter</p><a class="buy" href="https://amway.com/share-link/WsloZO1TV" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> Nutrilite Organics All-in-One Bars, Organic nutrition bar · Peanut Butter (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="S" data-extra hidden><a class="card-link" href="https://amway.com/share-link/SMhXOCNJy" target="_blank" rel="noopener"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>coming soon</span></span><h3 class="p-name">Nutrilite Organics Ashwagandha Capsules</h3></a><p class="p-desc">Organic herbal capsules</p><a class="buy" href="https://amway.com/share-link/SMhXOCNJy" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> Nutrilite Organics Ashwagandha Capsules, Organic herbal capsules (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="S" data-extra hidden><a class="card-link" href="https://amway.com/share-link/qe6JKbGxp" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/nutrilite-organics-chamomile-tea.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">Nutrilite Organics Chamomile Tea</h3></a><p class="p-desc">Organic herbal tea</p><a class="buy" href="https://amway.com/share-link/qe6JKbGxp" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> Nutrilite Organics Chamomile Tea, Organic herbal tea (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/s8elwQ-bb" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">Nutrilite Twist Tubes 2GO</h3></a><p class="p-desc">Drink mix tubes · Variety Pack</p><a class="buy" href="https://amway.com/share-link/s8elwQ-bb" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> Nutrilite Twist Tubes 2GO, Drink mix tubes · Variety Pack (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="R" data-extra hidden><a class="card-link" href="https://amway.com/share-link/AwIzUqvC1" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-cbd-cream.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS CBD Cream</h3></a><p class="p-desc">Topical cream</p><a class="buy" href="https://amway.com/share-link/AwIzUqvC1" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS CBD Cream, Topical cream (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="R" data-extra hidden><a class="card-link" href="https://amway.com/share-link/9EXfGTpU-" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-cbd-pro-cream.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS CBD Pro Cream</h3></a><p class="p-desc">Topical cream</p><a class="buy" href="https://amway.com/share-link/9EXfGTpU-" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS CBD Pro Cream, Topical cream (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="ER" data-extra hidden><a class="card-link" href="https://amway.com/share-link/Dts4kqijP" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-cocowater-hydration-drink-mix-strawberry-watermelon.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS CocoWater Hydration Drink Mix</h3></a><p class="p-desc">Hydration mix · Strawberry/Watermelon</p><a class="buy" href="https://amway.com/share-link/Dts4kqijP" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS CocoWater Hydration Drink Mix, Hydration mix · Strawberry/Watermelon (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/gry6-Xg5l" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-elite-focus-energy-drink-peach-mango.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Elite + Focus Energy Drink</h3></a><p class="p-desc">Energy drink · Peach Mango</p><a class="buy" href="https://amway.com/share-link/gry6-Xg5l" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Elite + Focus Energy Drink, Energy drink · Peach Mango (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/tV6oqMvMc" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-burn-12-oz-blue-razz.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy + Burn</h3></a><p class="p-desc">Energy drink · 12 oz · Blue Razz</p><a class="buy" href="https://amway.com/share-link/tV6oqMvMc" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy + Burn, Energy drink · 12 oz · Blue Razz (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/QVgQcE~fm" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-burn-12-oz-kiwi-strawberry.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy + Burn</h3></a><p class="p-desc">Energy drink · 12 oz · Kiwi Strawberry</p><a class="buy" href="https://amway.com/share-link/QVgQcE~fm" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy + Burn, Energy drink · 12 oz · Kiwi Strawberry (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/zFoRkr5eK" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-focus-dietary-supplement-30-tablets.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy + Focus Dietary Supplement</h3></a><p class="p-desc">Energy tablets · 30 tablets</p><a class="buy" href="https://amway.com/share-link/zFoRkr5eK" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy + Focus Dietary Supplement, Energy tablets · 30 tablets (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/EXX8FgRW6" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-focus-dietary-supplement-60-tablets.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy + Focus Dietary Supplement</h3></a><p class="p-desc">Energy tablets · 60 tablets</p><a class="buy" href="https://amway.com/share-link/EXX8FgRW6" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy + Focus Dietary Supplement, Energy tablets · 60 tablets (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/EGaxihDh9" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-black-cherry-cola.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Black Cherry Cola</p><a class="buy" href="https://amway.com/share-link/EGaxihDh9" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Black Cherry Cola (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/bTDU-QSAa" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-caffeine-free-cranberry-grape.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Caffeine Free Cranberry-Grape</p><a class="buy" href="https://amway.com/share-link/bTDU-QSAa" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Caffeine Free Cranberry-Grape (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/xwfpNhDqO" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-citrus.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Citrus</p><a class="buy" href="https://amway.com/share-link/xwfpNhDqO" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Citrus (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/uoKaQD8~a" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-classic.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Classic</p><a class="buy" href="https://amway.com/share-link/uoKaQD8~a" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Classic (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/WUc94jJH-" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-cranberry-grape.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Cranberry-Grape</p><a class="buy" href="https://amway.com/share-link/WUc94jJH-" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Cranberry-Grape (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/xLah3mPV0" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-electric-lemon-limited-edition.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Electric Lemon Limited Edition</p><a class="buy" href="https://amway.com/share-link/xLah3mPV0" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Electric Lemon Limited Edition (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/8ofd6z7Ow" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-naranja.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Naranja</p><a class="buy" href="https://amway.com/share-link/8ofd6z7Ow" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Naranja (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/9vGPxSKNA" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-rocket-blast-limited-edition.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Rocket Blast Limited Edition</p><a class="buy" href="https://amway.com/share-link/9vGPxSKNA" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Rocket Blast Limited Edition (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/bYV674AFp" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-root-beer.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Root Beer</p><a class="buy" href="https://amway.com/share-link/bYV674AFp" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Root Beer (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/b40~kN2GF" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-summit.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Summit</p><a class="buy" href="https://amway.com/share-link/b40~kN2GF" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Summit (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/W~TRQs7BM" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-tamarindo.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Tamarindo</p><a class="buy" href="https://amway.com/share-link/W~TRQs7BM" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Tamarindo (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/odDPLjdVi" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-tropical.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Tropical</p><a class="buy" href="https://amway.com/share-link/odDPLjdVi" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Tropical (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/OLeTQv5LC" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-energy-drink-12-oz-watermelon-lemonade.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Energy Drink</h3></a><p class="p-desc">Energy drink · 12 oz · Watermelon Lemonade</p><a class="buy" href="https://amway.com/share-link/OLeTQv5LC" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Energy Drink, Energy drink · 12 oz · Watermelon Lemonade (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="LR" data-extra hidden><a class="card-link" href="https://amway.com/share-link/LYOT5kyHn" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-grass-fed-whey-protein-strawberry.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Grass-Fed Whey Protein</h3></a><p class="p-desc">Protein powder · Strawberry</p><a class="buy" href="https://amway.com/share-link/LYOT5kyHn" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Grass-Fed Whey Protein, Protein powder · Strawberry (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="LR" data-extra hidden><a class="card-link" href="https://amway.com/share-link/14~vr9fjQ" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-grass-fed-whey-protein-vanilla.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Grass-Fed Whey Protein</h3></a><p class="p-desc">Protein powder · Vanilla</p><a class="buy" href="https://amway.com/share-link/14~vr9fjQ" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Grass-Fed Whey Protein, Protein powder · Vanilla (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="LR" data-extra hidden><a class="card-link" href="https://amway.com/share-link/3i1Nxah8u" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-grass-fed-whey-protein-powder-sachets-chocolate.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Grass-Fed Whey Protein Powder Sachets</h3></a><p class="p-desc">Protein sachets · Chocolate</p><a class="buy" href="https://amway.com/share-link/3i1Nxah8u" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Grass-Fed Whey Protein Powder Sachets, Protein sachets · Chocolate (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="LR" data-extra hidden><a class="card-link" href="https://amway.com/share-link/vTiZNA5QUR" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-grass-fed-whey-protein-powder-sachets-strawberry.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Grass-Fed Whey Protein Powder Sachets</h3></a><p class="p-desc">Protein sachets · Strawberry</p><a class="buy" href="https://amway.com/share-link/vTiZNA5QUR" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Grass-Fed Whey Protein Powder Sachets, Protein sachets · Strawberry (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="LR" data-extra hidden><a class="card-link" href="https://amway.com/share-link/V5QxGP6Xp" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-grass-fed-whey-protein-powder-sachets-vanilla.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Grass-Fed Whey Protein Powder Sachets</h3></a><p class="p-desc">Protein sachets · Vanilla</p><a class="buy" href="https://amway.com/share-link/V5QxGP6Xp" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Grass-Fed Whey Protein Powder Sachets, Protein sachets · Vanilla (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/ZcBRI5loO" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-ignite-powder-moro-blood-orange.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Ignite Powder</h3></a><p class="p-desc">Energy powder · Moro Blood Orange</p><a class="buy" href="https://amway.com/share-link/ZcBRI5loO" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Ignite Powder, Energy powder · Moro Blood Orange (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/DwyiPxiIU" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-juiced-and-burn-12-oz-variety-case.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Juiced and Burn</h3></a><p class="p-desc">Energy drink · 12 oz · Variety Case</p><a class="buy" href="https://amway.com/share-link/DwyiPxiIU" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Juiced and Burn, Energy drink · 12 oz · Variety Case (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="RL" data-extra hidden><a class="card-link" href="https://amway.com/share-link/D2YioWCnT" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-muscle-multiplier-berry-blast.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Muscle Multiplier</h3></a><p class="p-desc">Training drink mix · Berry Blast</p><a class="buy" href="https://amway.com/share-link/D2YioWCnT" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Muscle Multiplier, Training drink mix · Berry Blast (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="RL" data-extra hidden><a class="card-link" href="https://amway.com/share-link/WvhxbGmYf" target="_blank" rel="noopener"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>coming soon</span></span><h3 class="p-name">XS Muscle Multiplier</h3></a><p class="p-desc">Training drink mix · Watermelon</p><a class="buy" href="https://amway.com/share-link/WvhxbGmYf" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Muscle Multiplier, Training drink mix · Watermelon (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="RL" data-extra hidden><a class="card-link" href="https://amway.com/share-link/lrJlYVhGM" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-post-workout-recovery-fruit-punch-12-stick-packs.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Post-Workout Recovery</h3></a><p class="p-desc">Recovery mix · Fruit Punch, 12 stick packs</p><a class="buy" href="https://amway.com/share-link/lrJlYVhGM" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Post-Workout Recovery, Recovery mix · Fruit Punch, 12 stick packs (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="EL" data-extra hidden><a class="card-link" href="https://amway.com/share-link/SattacJ5V" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-pre-workout-boost-blue-raspberry-12-stick-packs.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Pre-Workout Boost</h3></a><p class="p-desc">Pre-workout mix · Blue Raspberry, 12 stick packs</p><a class="buy" href="https://amway.com/share-link/SattacJ5V" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Pre-Workout Boost, Pre-workout mix · Blue Raspberry, 12 stick packs (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="EL" data-extra hidden><a class="card-link" href="https://amway.com/share-link/m5Jg-DMsC" target="_blank" rel="noopener"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>coming soon</span></span><h3 class="p-name">XS Pre-Workout Boost</h3></a><p class="p-desc">Pre-workout mix · Green Apple, 12 stick packs</p><a class="buy" href="https://amway.com/share-link/m5Jg-DMsC" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Pre-Workout Boost, Pre-workout mix · Green Apple, 12 stick packs (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="EL" data-extra hidden><a class="card-link" href="https://amway.com/share-link/Om6-lIl43" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-pre-workout-boost-green-apple-30-serving-pouch.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Pre-Workout Boost</h3></a><p class="p-desc">Pre-workout mix · Green Apple, 30-serving pouch</p><a class="buy" href="https://amway.com/share-link/Om6-lIl43" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Pre-Workout Boost, Pre-workout mix · Green Apple, 30-serving pouch (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="L" data-extra hidden><a class="card-link" href="https://amway.com/share-link/yQu-NHOoT" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-protein-crisps-barbeque.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Protein Crisps</h3></a><p class="p-desc">Protein snack · Barbeque</p><a class="buy" href="https://amway.com/share-link/yQu-NHOoT" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Protein Crisps, Protein snack · Barbeque (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="L" data-extra hidden><a class="card-link" href="https://amway.com/share-link/MVc4sISgs" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-protein-crisps-sriracha-lime.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Protein Crisps</h3></a><p class="p-desc">Protein snack · Sriracha Lime</p><a class="buy" href="https://amway.com/share-link/MVc4sISgs" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Protein Crisps, Protein snack · Sriracha Lime (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/mk5aRggdy" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-sparkling-juiced-energy-12-oz-caffeine-free-mango-pineapple-guava.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Sparkling Juiced Energy</h3></a><p class="p-desc">Sparkling energy drink · 12 oz · Caffeine Free Mango Pineapple Guava</p><a class="buy" href="https://amway.com/share-link/mk5aRggdy" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Sparkling Juiced Energy, Sparkling energy drink · 12 oz · Caffeine Free Mango Pineapple Guava (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/1-vD7GZEx" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-sparkling-juiced-energy-12-oz-mango-pineapple-guava.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Sparkling Juiced Energy</h3></a><p class="p-desc">Sparkling energy drink · 12 oz · Mango Pineapple Guava</p><a class="buy" href="https://amway.com/share-link/1-vD7GZEx" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Sparkling Juiced Energy, Sparkling energy drink · 12 oz · Mango Pineapple Guava (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/JGfJfQ8AB" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-sparkling-juiced-energy-12-oz-pink-grapefruit.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Sparkling Juiced Energy</h3></a><p class="p-desc">Sparkling energy drink · 12 oz · Pink Grapefruit</p><a class="buy" href="https://amway.com/share-link/JGfJfQ8AB" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Sparkling Juiced Energy, Sparkling energy drink · 12 oz · Pink Grapefruit (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="L" data-extra hidden><a class="card-link" href="https://amway.com/share-link/IMXmJE6Fb" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-sports-protein-bars-chocolate-berry.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Sports Protein Bars</h3></a><p class="p-desc">Protein bar · Chocolate Berry</p><a class="buy" href="https://amway.com/share-link/IMXmJE6Fb" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Sports Protein Bars, Protein bar · Chocolate Berry (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="L" data-extra hidden><a class="card-link" href="https://amway.com/share-link/FHubIOB6L" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-sports-protein-bars-chocolate-peanut-butter.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Sports Protein Bars</h3></a><p class="p-desc">Protein bar · Chocolate Peanut Butter</p><a class="buy" href="https://amway.com/share-link/FHubIOB6L" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Sports Protein Bars, Protein bar · Chocolate Peanut Butter (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="LR" data-extra hidden><a class="card-link" href="https://amway.com/share-link/IwkAJiWQ3" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-sports-protein-shakes-rich-chocolate.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Sports Protein Shakes</h3></a><p class="p-desc">Protein shake · Rich Chocolate</p><a class="buy" href="https://amway.com/share-link/IwkAJiWQ3" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Sports Protein Shakes, Protein shake · Rich Chocolate (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="LR" data-extra hidden><a class="card-link" href="https://amway.com/share-link/ofcahKqvN" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-sports-protein-shakes-vanilla-cr-me.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Sports Protein Shakes</h3></a><p class="p-desc">Protein shake · Vanilla Crème</p><a class="buy" href="https://amway.com/share-link/ofcahKqvN" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Sports Protein Shakes, Protein shake · Vanilla Crème (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/XjBUQPtjO" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-sports-twist-tubes-fruit-punch.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Sports Twist Tubes</h3></a><p class="p-desc">Drink mix tubes · Fruit Punch</p><a class="buy" href="https://amway.com/share-link/XjBUQPtjO" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Sports Twist Tubes, Drink mix tubes · Fruit Punch (opens in a new tab)</span></a></li>
+        <li class="card" data-goals="E" data-extra hidden><a class="card-link" href="https://amway.com/share-link/hzkCx98xw" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-sports-twist-tubes-raspberry-lemonade.webp" alt="" loading="lazy" width="480" height="480"></span><h3 class="p-name">XS Sports Twist Tubes</h3></a><p class="p-desc">Drink mix tubes · Raspberry Lemonade</p><a class="buy" href="https://amway.com/share-link/hzkCx98xw" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> XS Sports Twist Tubes, Drink mix tubes · Raspberry Lemonade (opens in a new tab)</span></a></li>
       </ul>
-      <div class="more"><a class="btn btn-ghost" id="view-all" href="/shop">View all 12 products <svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
+      <div class="more"><a class="btn btn-ghost" id="view-all" href="#index">View all 65 products <svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
     </div>
   </section>
 
   <!-- 6. Guided finder (entry point; questions open in the bottom sheet) -->
   <section class="sec finder" id="finder" aria-labelledby="finder-sec-title">
     <div class="wrap split">
-      <div class="ph split-img mask" role="img" aria-label="Photo placeholder: Creatine Monohydrate and Magnesium Glycinate"><span class="ph-cap"><b>Photo</b><br>Creatine + Magnesium, a typical result</span></div>
+      <div class="duo split-img" role="img" aria-label="XS Grass-Fed Whey Protein and XS Creatine+, a typical finder result"><img src="assets/products/xs-grass-fed-whey-protein-chocolate.webp" alt="" loading="lazy" width="480" height="480"><img src="assets/products/xs-creatine.webp" alt="" loading="lazy" width="480" height="480"></div>
       <div class="split-text grow">
         <p class="label">Guided finder</p>
         <h2 id="finder-sec-title">Three questions. Two products.</h2>
@@ -370,16 +447,16 @@ html:not(.js) button[data-open-finder]{display:none}
     </div>
   </section>
 
-  <!-- 7. Trust -->
-  <section class="sec" id="trust" aria-labelledby="trust-title">
+  <!-- 7. Ordering (trust) -->
+  <section class="sec" id="ordering" aria-labelledby="ordering-title">
     <div class="wrap">
-      <div class="sec-head grow"><p class="label">Proof</p><h2 id="trust-title">What’s on the label is what’s in the bag.</h2></div>
+      <div class="sec-head grow"><p class="label">Ordering</p><h2 id="ordering-title">Picked here. Delivered by Amway.</h2></div>
       <div class="split trust">
-        <div class="ph split-img mask" role="img" aria-label="Photo placeholder: Creatine Monohydrate beside its batch certificate"><span class="ph-cap"><b>Photo</b><br>Creatine Monohydrate with batch CM-2609 certificate</span></div>
+        <span class="shot split-img trust-img"><img src="assets/products/xs-juiced-and-burn-12-oz-variety-case.webp" alt="XS Juiced and Burn energy drink variety case" loading="lazy" width="480" height="480"></span>
         <ul class="proof">
-          <li class="grow"><h3 class="label">Batch testing</h3><p>Every batch is tested by an ISO 17025–accredited lab for identity, potency, heavy metals and microbes before it ships.</p><a class="tlink" href="/lab-results">View certificates <svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-          <li class="grow" style="--d:1"><h3 class="label">Sourcing</h3><p>Each raw material is listed with its country of origin and supplier, down to the collagen’s grass-fed herd.</p><a class="tlink" href="/sourcing">View sourcing records <svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-          <li class="grow" style="--d:2"><h3 class="label">Shipping</h3><p>Ships within 1 business day, free over $60. Returns accepted for 60 days, opened or not.</p><a class="tlink" href="/shipping">View shipping terms <svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+          <li class="grow"><h3 class="label">Checkout on Amway</h3><p>Every Buy button opens that product on Amway.com, where you pay, choose shipping and track your order.</p><a class="tlink" href="https://www.amway.com" target="_blank" rel="noopener">Open Amway.com <svg class="ic ic-sm" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> (opens in a new tab)</span></a></li>
+          <li class="grow" style="--d:1"><h3 class="label">Full labels</h3><p>Ingredients, serving sizes and nutrition facts are on each product’s Amway page. Tap any product to read its label.</p><a class="tlink" href="https://amway.com/share-link/o3K2G9Gau" target="_blank" rel="noopener">Read a label <svg class="ic ic-sm" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> (opens in a new tab)</span></a></li>
+          <li class="grow" style="--d:2"><h3 class="label">Help choosing</h3><p>Not sure what fits? Answer three questions and get two suggestions, each with a reason.</p><a class="tlink" href="#finder" data-open-finder>Start the finder <svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         </ul>
       </div>
     </div>
@@ -390,25 +467,78 @@ html:not(.js) button[data-open-finder]{display:none}
 <footer class="foot">
   <div class="wrap">
     <details class="index" id="index">
-      <summary><span><span class="label">Product index</span><span class="count">12</span></span><span class="pm" aria-hidden="true"></span></summary>
+      <summary><span><span class="label">Product index</span><span class="count">65</span></span><span class="pm" aria-hidden="true"></span></summary>
       <ul>
-        <li><a href="/products/beta-alanine">Beta-Alanine</a></li>
-        <li><a href="/products/bovine-colostrum">Bovine Colostrum</a></li>
-        <li><a href="/products/collagen-peptides">Collagen Peptides</a></li>
-        <li><a href="/products/creatine-monohydrate">Creatine Monohydrate</a></li>
-        <li><a href="/products/electrolyte-base">Electrolyte Base</a></li>
-        <li><a href="/products/glycine">Glycine</a></li>
-        <li><a href="/products/l-citrulline">L-Citrulline</a></li>
-        <li><a href="/products/magnesium-glycinate">Magnesium Glycinate</a></li>
-        <li><a href="/products/omega-3">Omega-3</a></li>
-        <li><a href="/products/tart-cherry-extract">Tart Cherry Extract</a></li>
-        <li><a href="/products/vitamin-d3-k2">Vitamin D3 + K2</a></li>
-        <li><a href="/products/whey-peptides">Whey Peptides</a></li>
+        <li><a href="https://amway.com/share-link/hKMa0MHHc" target="_blank" rel="noopener">Artistry Skin Nutrition Renewing Softening Toner</a></li>
+        <li><a href="https://amway.com/share-link/iWAplHgh3" target="_blank" rel="noopener">Artistry Skin Nutrition Sleeping Mask</a></li>
+        <li><a href="https://amway.com/share-link/2Vi-rjqyj" target="_blank" rel="noopener">Artistry Studio Glow Boss Cleanser + Exfoliator</a></li>
+        <li><a href="https://amway.com/share-link/PVUuzXLQ6" target="_blank" rel="noopener">n* by Nutrilite Sweet Dreams - Sleep Gummies</a></li>
+        <li><a href="https://amway.com/share-link/k5GGxS-5u" target="_blank" rel="noopener">Nutrilite Balance Within Probiotic</a></li>
+        <li><a href="https://amway.com/share-link/FOhn2MdGS" target="_blank" rel="noopener">Nutrilite Begin Daily GI Primer</a></li>
+        <li><a href="https://amway.com/share-link/ROw2AOp7v" target="_blank" rel="noopener">Nutrilite Magnesium</a></li>
+        <li><a href="https://amway.com/share-link/90MN2VV7h" target="_blank" rel="noopener">Nutrilite Organics All-in-One Bars - Berries &amp; Seeds</a></li>
+        <li><a href="https://amway.com/share-link/195NEh7tP" target="_blank" rel="noopener">Nutrilite Organics All-in-One Bars - Double Chocolate</a></li>
+        <li><a href="https://amway.com/share-link/WsloZO1TV" target="_blank" rel="noopener">Nutrilite Organics All-in-One Bars - Peanut Butter</a></li>
+        <li><a href="https://amway.com/share-link/SMhXOCNJy" target="_blank" rel="noopener">Nutrilite Organics Ashwagandha Capsules</a></li>
+        <li><a href="https://amway.com/share-link/qe6JKbGxp" target="_blank" rel="noopener">Nutrilite Organics Chamomile Tea</a></li>
+        <li><a href="https://amway.com/share-link/o8m6KGk53" target="_blank" rel="noopener">Nutrilite Sleep Health</a></li>
+        <li><a href="https://amway.com/share-link/s8elwQ-bb" target="_blank" rel="noopener">Nutrilite Twist Tubes 2GO - Variety Pack</a></li>
+        <li><a href="https://amway.com/share-link/AwIzUqvC1" target="_blank" rel="noopener">XS CBD Cream</a></li>
+        <li><a href="https://amway.com/share-link/9EXfGTpU-" target="_blank" rel="noopener">XS CBD Pro Cream</a></li>
+        <li><a href="https://amway.com/share-link/enbKVnLlx" target="_blank" rel="noopener">XS CocoWater Hydration Drink Mix - Pineapple/Coconut</a></li>
+        <li><a href="https://amway.com/share-link/Dts4kqijP" target="_blank" rel="noopener">XS CocoWater Hydration Drink Mix - Strawberry/Watermelon</a></li>
+        <li><a href="https://amway.com/share-link/TcFtuhPvJ" target="_blank" rel="noopener">XS Creatine+</a></li>
+        <li><a href="https://amway.com/share-link/gry6-Xg5l" target="_blank" rel="noopener">XS Elite + Focus Energy Drink - Peach Mango</a></li>
+        <li><a href="https://amway.com/share-link/tV6oqMvMc" target="_blank" rel="noopener">XS Energy + Burn 12 oz - Blue Razz</a></li>
+        <li><a href="https://amway.com/share-link/QVgQcE~fm" target="_blank" rel="noopener">XS Energy + Burn 12 oz - Kiwi Strawberry</a></li>
+        <li><a href="https://amway.com/share-link/zFoRkr5eK" target="_blank" rel="noopener">XS Energy + Focus Dietary Supplement - 30 Tablets</a></li>
+        <li><a href="https://amway.com/share-link/EXX8FgRW6" target="_blank" rel="noopener">XS Energy + Focus Dietary Supplement - 60 Tablets</a></li>
+        <li><a href="https://amway.com/share-link/EGaxihDh9" target="_blank" rel="noopener">XS Energy Drink 12 oz - Black Cherry Cola</a></li>
+        <li><a href="https://amway.com/share-link/bTDU-QSAa" target="_blank" rel="noopener">XS Energy Drink 12 oz - Caffeine Free Cranberry-Grape</a></li>
+        <li><a href="https://amway.com/share-link/xwfpNhDqO" target="_blank" rel="noopener">XS Energy Drink 12 oz - Citrus</a></li>
+        <li><a href="https://amway.com/share-link/uoKaQD8~a" target="_blank" rel="noopener">XS Energy Drink 12 oz - Classic</a></li>
+        <li><a href="https://amway.com/share-link/WUc94jJH-" target="_blank" rel="noopener">XS Energy Drink 12 oz - Cranberry-Grape</a></li>
+        <li><a href="https://amway.com/share-link/xLah3mPV0" target="_blank" rel="noopener">XS Energy Drink 12 oz - Electric Lemon Limited Edition</a></li>
+        <li><a href="https://amway.com/share-link/8ofd6z7Ow" target="_blank" rel="noopener">XS Energy Drink 12 oz - Naranja</a></li>
+        <li><a href="https://amway.com/share-link/9vGPxSKNA" target="_blank" rel="noopener">XS Energy Drink 12 oz - Rocket Blast Limited Edition</a></li>
+        <li><a href="https://amway.com/share-link/bYV674AFp" target="_blank" rel="noopener">XS Energy Drink 12 oz - Root Beer</a></li>
+        <li><a href="https://amway.com/share-link/b40~kN2GF" target="_blank" rel="noopener">XS Energy Drink 12 oz - Summit</a></li>
+        <li><a href="https://amway.com/share-link/W~TRQs7BM" target="_blank" rel="noopener">XS Energy Drink 12 oz - Tamarindo</a></li>
+        <li><a href="https://amway.com/share-link/odDPLjdVi" target="_blank" rel="noopener">XS Energy Drink 12 oz - Tropical</a></li>
+        <li><a href="https://amway.com/share-link/KP09m3teD" target="_blank" rel="noopener">XS Energy Drink 12 oz - Variety Case</a></li>
+        <li><a href="https://amway.com/share-link/OLeTQv5LC" target="_blank" rel="noopener">XS Energy Drink 12 oz - Watermelon Lemonade</a></li>
+        <li><a href="https://amway.com/share-link/o3K2G9Gau" target="_blank" rel="noopener">XS Grass-Fed Whey Protein - Chocolate</a></li>
+        <li><a href="https://amway.com/share-link/LYOT5kyHn" target="_blank" rel="noopener">XS Grass-Fed Whey Protein - Strawberry</a></li>
+        <li><a href="https://amway.com/share-link/14~vr9fjQ" target="_blank" rel="noopener">XS Grass-Fed Whey Protein - Vanilla</a></li>
+        <li><a href="https://amway.com/share-link/3i1Nxah8u" target="_blank" rel="noopener">XS Grass-Fed Whey Protein Powder Sachets - Chocolate</a></li>
+        <li><a href="https://amway.com/share-link/vTiZNA5QUR" target="_blank" rel="noopener">XS Grass-Fed Whey Protein Powder Sachets - Strawberry</a></li>
+        <li><a href="https://amway.com/share-link/V5QxGP6Xp" target="_blank" rel="noopener">XS Grass-Fed Whey Protein Powder Sachets - Vanilla</a></li>
+        <li><a href="https://amway.com/share-link/ZcBRI5loO" target="_blank" rel="noopener">XS Ignite Powder - Moro Blood Orange</a></li>
+        <li><a href="https://amway.com/share-link/DwyiPxiIU" target="_blank" rel="noopener">XS Juiced and Burn 12 oz - Variety Case</a></li>
+        <li><a href="https://amway.com/share-link/D2YioWCnT" target="_blank" rel="noopener">XS Muscle Multiplier - Berry Blast</a></li>
+        <li><a href="https://amway.com/share-link/WvhxbGmYf" target="_blank" rel="noopener">XS Muscle Multiplier - Watermelon</a></li>
+        <li><a href="https://amway.com/share-link/lrJlYVhGM" target="_blank" rel="noopener">XS Post-Workout Recovery - Fruit Punch (12 Stick Packs)</a></li>
+        <li><a href="https://amway.com/share-link/CBN8O~MnX" target="_blank" rel="noopener">XS Post-Workout Recovery - Fruit Punch (30 Serving Pouch)</a></li>
+        <li><a href="https://amway.com/share-link/SattacJ5V" target="_blank" rel="noopener">XS Pre-Workout Boost - Blue Raspberry (12 Stick Packs)</a></li>
+        <li><a href="https://amway.com/share-link/ZsJafHG0E" target="_blank" rel="noopener">XS Pre-Workout Boost - Blue Raspberry (30 Serving Pouch)</a></li>
+        <li><a href="https://amway.com/share-link/m5Jg-DMsC" target="_blank" rel="noopener">XS Pre-Workout Boost - Green Apple (12 Stick Packs)</a></li>
+        <li><a href="https://amway.com/share-link/Om6-lIl43" target="_blank" rel="noopener">XS Pre-Workout Boost - Green Apple (30 Serving Pouch)</a></li>
+        <li><a href="https://amway.com/share-link/yQu-NHOoT" target="_blank" rel="noopener">XS Protein Crisps - Barbeque</a></li>
+        <li><a href="https://amway.com/share-link/MVc4sISgs" target="_blank" rel="noopener">XS Protein Crisps - Sriracha Lime</a></li>
+        <li><a href="https://amway.com/share-link/mk5aRggdy" target="_blank" rel="noopener">XS Sparkling Juiced Energy 12 oz - Caffeine Free Mango Pineapple Guava</a></li>
+        <li><a href="https://amway.com/share-link/1-vD7GZEx" target="_blank" rel="noopener">XS Sparkling Juiced Energy 12 oz - Mango Pineapple Guava</a></li>
+        <li><a href="https://amway.com/share-link/JGfJfQ8AB" target="_blank" rel="noopener">XS Sparkling Juiced Energy 12 oz - Pink Grapefruit</a></li>
+        <li><a href="https://amway.com/share-link/IMXmJE6Fb" target="_blank" rel="noopener">XS Sports Protein Bars - Chocolate Berry</a></li>
+        <li><a href="https://amway.com/share-link/FHubIOB6L" target="_blank" rel="noopener">XS Sports Protein Bars - Chocolate Peanut Butter</a></li>
+        <li><a href="https://amway.com/share-link/IwkAJiWQ3" target="_blank" rel="noopener">XS Sports Protein Shakes - Rich Chocolate</a></li>
+        <li><a href="https://amway.com/share-link/ofcahKqvN" target="_blank" rel="noopener">XS Sports Protein Shakes - Vanilla Crème</a></li>
+        <li><a href="https://amway.com/share-link/XjBUQPtjO" target="_blank" rel="noopener">XS Sports Twist Tubes - Fruit Punch</a></li>
+        <li><a href="https://amway.com/share-link/hzkCx98xw" target="_blank" rel="noopener">XS Sports Twist Tubes - Raspberry Lemonade</a></li>
       </ul>
     </details>
     <div class="foot-meta">
       <p class="wordmark">Aspire Health</p>
-      <p>These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure or prevent any disease.</p>
+      <p>Products are sold and shipped by Amway through Aspire Health share links. Amway, Nutrilite, XS, n* and Artistry are trademarks of their respective owners. These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure or prevent any disease.</p>
       <p>© 2026 Aspire Health</p>
     </div>
   </div>
@@ -428,7 +558,7 @@ html:not(.js) button[data-open-finder]{display:none}
         <li><a href="#shop">Shop all <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="#goals">Goals <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><button type="button" data-open-finder>Finder <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button></li>
-        <li><a href="#trust">Lab testing <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li><a href="#ordering">How ordering works <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ul>
     </nav>
   </div>
@@ -456,64 +586,37 @@ function $(s,c){return (c||doc).querySelector(s)}
 function $$(s,c){return Array.prototype.slice.call((c||doc).querySelectorAll(s))}
 doc.addEventListener('touchstart',function(){},{passive:true}); // enables :active on iOS
 
-/* Catalog (finder + cart) */
-var P={
-  beta:{name:'Beta-Alanine',dose:['3.2 g',50],price:24,g:'EL',form:'powder',why:'Raises muscle carnosine so you can hold output through repeated hard efforts of one to four minutes.'},
-  colostrum:{name:'Bovine Colostrum',dose:['1,000 mg',60],price:44,g:'RE',form:'capsule',why:'Supports gut integrity through heavy training blocks, especially long sessions in the heat.'},
-  collagen:{name:'Collagen Peptides',dose:['10 g',30],price:42,g:'R',form:'powder',why:'Supplies the amino acids tendons and ligaments are built from; take it before you train.'},
-  creatine:{name:'Creatine Monohydrate',dose:['5 g',60],price:34,g:'L',form:'powder',why:'The most-studied supplement for strength and lean mass; five grams a day, any time.'},
-  electrolyte:{name:'Electrolyte Base',dose:['1,000 mg',40],price:30,g:'E',form:'powder',why:'Replaces the sodium you sweat out, which plain water can’t do on long days.'},
-  glycine:{name:'Glycine',dose:['3 g',90],price:22,g:'S',form:'powder',why:'Three grams before bed is linked to falling asleep faster and waking more rested.'},
-  citrulline:{name:'L-Citrulline',dose:['6 g',50],price:32,g:'EL',form:'powder',why:'Raises nitric oxide more reliably than arginine, supporting blood flow through a session.'},
-  magnesium:{name:'Magnesium Glycinate',dose:['400 mg',60],price:26,g:'SR',form:'capsule',why:'Covers a mineral hard trainers often run low on, in a form that’s easy to digest.'},
-  omega:{name:'Omega-3',dose:['2,000 mg',60],price:38,g:'RS',form:'capsule',why:'Two grams of EPA and DHA a day to support recovery across long training blocks.'},
-  cherry:{name:'Tart Cherry Extract',dose:['500 mg',60],price:28,g:'RES',form:'capsule',why:'Montmorency polyphenols, studied for easing soreness in the days after hard sessions.'},
-  vitd:{name:'Vitamin D3 + K2',dose:['5,000 IU',90],price:20,g:'S',form:'capsule',why:'Keeps a baseline most indoor trainers fall short on, with K2 alongside.'},
-  whey:{name:'Whey Peptides',dose:['25 g',28],price:58,g:'LR',form:'powder',why:'Twenty-five grams of fast-digesting protein to hit your post-training target without a meal.'}
-};
+var P={"whey": {"name": "XS Grass-Fed Whey Protein", "desc": "Protein powder · Chocolate", "img": "assets/products/xs-grass-fed-whey-protein-chocolate.webp", "url": "https://amway.com/share-link/o3K2G9Gau", "g": "LR", "form": "powder", "why": "Grass-fed whey protein to help you hit your daily protein, shaken up after training."}, "creatine": {"name": "XS Creatine+", "desc": "Creatine powder", "img": "assets/products/xs-creatine.webp", "url": "https://amway.com/share-link/TcFtuhPvJ", "g": "L", "form": "powder", "why": "Creatine in one simple daily scoop, a staple for strength and power work."}, "recovery": {"name": "XS Post-Workout Recovery", "desc": "Recovery mix · Fruit Punch, 30-serving pouch", "img": "assets/products/xs-post-workout-recovery-fruit-punch-30-serving-pouch.webp", "url": "https://amway.com/share-link/CBN8O~MnX", "g": "RL", "form": "powder", "why": "Made for right after training, when you want to refuel in one drink."}, "multiplier": {"name": "XS Muscle Multiplier", "desc": "Training drink mix · Berry Blast", "img": "assets/products/xs-muscle-multiplier-berry-blast.webp", "url": "https://amway.com/share-link/D2YioWCnT", "g": "RL", "form": "powder", "why": "A flavored mix to sip during or after lifting sessions."}, "preworkout": {"name": "XS Pre-Workout Boost", "desc": "Pre-workout mix · Blue Raspberry, 30-serving pouch", "img": "assets/products/xs-pre-workout-boost-blue-raspberry-30-serving-pouch.webp", "url": "https://amway.com/share-link/ZsJafHG0E", "g": "EL", "form": "powder", "why": "Mixed before a session when you want more drive in your workout."}, "coco": {"name": "XS CocoWater Hydration Drink Mix", "desc": "Hydration mix · Pineapple/Coconut", "img": "assets/products/xs-cocowater-hydration-drink-mix-pineapple-coconut.webp", "url": "https://amway.com/share-link/enbKVnLlx", "g": "ER", "form": "powder", "why": "A hydration mix for long, sweaty sessions and hot days."}, "energy": {"name": "XS Energy Drink", "desc": "Energy drink · 12 oz · Variety Case", "img": "assets/products/xs-energy-drink-12-oz-variety-case.webp", "url": "https://amway.com/share-link/KP09m3teD", "g": "E", "form": "ready", "why": "Zero-sugar energy drinks, cold and ready when you need a lift before training."}, "tablets": {"name": "XS Energy + Focus Dietary Supplement", "desc": "Energy tablets · 30 tablets", "img": "assets/products/xs-energy-focus-dietary-supplement-30-tablets.webp", "url": "https://amway.com/share-link/zFoRkr5eK", "g": "E", "form": "pills", "why": "Energy in tablet form, for when you would rather skip the can."}, "tubes": {"name": "XS Sports Twist Tubes", "desc": "Drink mix tubes · Raspberry Lemonade", "img": "assets/products/xs-sports-twist-tubes-raspberry-lemonade.webp", "url": "https://amway.com/share-link/hzkCx98xw", "g": "E", "form": "powder", "why": "Pocket-size tubes you twist into a water bottle on the go."}, "shake": {"name": "XS Sports Protein Shakes", "desc": "Protein shake · Rich Chocolate", "img": "assets/products/xs-sports-protein-shakes-rich-chocolate.webp", "url": "https://amway.com/share-link/IwkAJiWQ3", "g": "LR", "form": "ready", "why": "Ready-to-drink protein for after training, no shaker needed."}, "bar": {"name": "XS Sports Protein Bars", "desc": "Protein bar · Chocolate Peanut Butter", "img": "assets/products/xs-sports-protein-bars-chocolate-peanut-butter.webp", "url": "https://amway.com/share-link/FHubIOB6L", "g": "L", "form": "ready", "why": "A protein bar that can live in your gym bag."}, "crisps": {"name": "XS Protein Crisps", "desc": "Protein snack · Sriracha Lime", "img": "assets/products/xs-protein-crisps-sriracha-lime.webp", "url": "https://amway.com/share-link/MVc4sISgs", "g": "L", "form": "ready", "why": "A savory, crunchy protein snack between meals."}, "cbd": {"name": "XS CBD Cream", "desc": "Topical cream", "img": "assets/products/xs-cbd-cream.webp", "url": "https://amway.com/share-link/AwIzUqvC1", "g": "R", "form": "topical", "why": "A CBD cream to massage into the spots that feel worked after training."}, "sleep": {"name": "Nutrilite Sleep Health", "desc": "Nightly supplement", "img": "assets/products/nutrilite-sleep-health.webp", "url": "https://amway.com/share-link/o8m6KGk53", "g": "S", "form": "pills", "why": "A nightly supplement from Nutrilite to build into your wind-down routine."}, "gummies": {"name": "n* by Nutrilite Sweet Dreams", "desc": "Sleep gummies · Sleep Gummies", "img": "assets/products/n-by-nutrilite-sweet-dreams-sleep-gummies.webp", "url": "https://amway.com/share-link/PVUuzXLQ6", "g": "S", "form": "pills", "why": "A bedtime gummy for the last step of your evening routine."}, "tea": {"name": "Nutrilite Organics Chamomile Tea", "desc": "Organic herbal tea", "img": "assets/products/nutrilite-organics-chamomile-tea.webp", "url": "https://amway.com/share-link/qe6JKbGxp", "g": "S", "form": "ready", "why": "Organic chamomile tea, a caffeine-free way to close out the day."}, "probiotic": {"name": "Nutrilite Balance Within Probiotic", "desc": "Daily probiotic", "img": "assets/products/nutrilite-balance-within-probiotic.webp", "url": "https://amway.com/share-link/k5GGxS-5u", "g": "S", "form": "powder", "why": "A daily probiotic for the long-game side of your health."}};
 var GOALS={R:'Recovery',L:'Lean Mass',E:'Endurance',S:'Sleep & Longevity'};
 var live=$('#live');
 function say(t){live.textContent='';setTimeout(function(){live.textContent=t},30)}
-function items(n){return n+' item'+(n===1?'':'s')}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 
 /* Motion: reveal on viewport entry */
 if(html.classList.contains('motion')){
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.15});
-  $$('.mask,.grow').forEach(function(el){io.observe(el)});
+  $$('.grow').forEach(function(el){io.observe(el)});
 }
 
-/* Crystal video: HEVC-with-alpha for Apple/WebKit, VP9-with-alpha elsewhere */
+/* Hero glass video: plain H.264, so it plays everywhere; the poster shows until it does */
 var v=$('#crystal-video'),vt=$('#crystal-toggle'),userPaused=false;
 if(v){
-  var apple=/Apple/.test(navigator.vendor||'');
   var still=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var setBtn=function(playing){vt.setAttribute('aria-label',playing?'Pause animation':'Play animation');$('use',vt).setAttribute('href',playing?'#i-pause':'#i-play')};
-  var play=function(){if(!v.getAttribute('src')){v.autoplay=true;v.src=apple?'assets/crystal-hevc.mov':'assets/crystal.webm'}var p=v.play();if(p&&p.catch)p.catch(function(){setBtn(false)});setBtn(true)};
-  vt.hidden=false;
-  /* If the clip can't decode, drop it so the poster still shows the crystal */
+  var play=function(){if(!v.getAttribute('src')){v.autoplay=true;v.src=innerWidth<768?'assets/glass-720.mp4':'assets/glass-1080.mp4'}var p=v.play();if(p&&p.catch)p.catch(function(){})};
+  v.addEventListener('play',function(){setBtn(true)});v.addEventListener('pause',function(){setBtn(false)});
+  vt.hidden=false;setBtn(false);
   v.addEventListener('error',function(){v.removeAttribute('src');v.load();vt.hidden=true},true);
-  vt.addEventListener('click',function(){if(v.paused){userPaused=false;play()}else{userPaused=true;v.pause();setBtn(false)}});
+  vt.addEventListener('click',function(){if(v.paused){userPaused=false;play()}else{userPaused=true;v.pause()}});
   if(still){setBtn(false)}else{
-    if(document.readyState==='complete')play();else window.addEventListener('load',play);
+    if(doc.readyState==='complete')play();else window.addEventListener('load',play);
     doc.addEventListener('visibilitychange',function(){if(!doc.hidden&&!userPaused&&v.paused&&v.getAttribute('src'))v.play().catch(function(){})});
     if('IntersectionObserver' in window)new IntersectionObserver(function(es){if(userPaused||!v.getAttribute('src'))return;if(es[0].isIntersecting)v.play().catch(function(){});else v.pause()}).observe(v);
   }
 }
 var logo=$('#logo'),mast=$('.mast');
-if('IntersectionObserver' in window)new IntersectionObserver(function(es){mast.classList.toggle('logo-off',!es[0].isIntersecting)},{rootMargin:'-110px 0px 0px 0px'}).observe(logo);
+if('IntersectionObserver' in window)new IntersectionObserver(function(es){mast.classList.toggle('logo-off',!es[0].isIntersecting)},{rootMargin:'-60px 0px 0px 0px'}).observe(logo);
 else mast.classList.add('logo-off');
-
-/* Cart */
-var count=0,badge=$('#cart-count'),cart=$('#cart');
-doc.addEventListener('click',function(e){
-  var b=e.target.closest('[data-add]');if(!b)return;
-  var p=P[b.dataset.add];count++;
-  badge.textContent=count;badge.hidden=false;
-  cart.setAttribute('aria-label','Cart, '+items(count));
-  var t=$('.add-t',b);t.textContent='Added';b.classList.add('is-added');
-  clearTimeout(b._t);b._t=setTimeout(function(){t.textContent='Add';b.classList.remove('is-added')},1600);
-  say(p.name+' added. Cart has '+items(count)+'.');
-});
 
 /* Grid filtering: goals, search, view all */
 var cards=$$('#grid > li'),fbar=$('#filter'),ftext=$('#filter-text'),viewAll=$('#view-all'),shopTitle=$('#shop-title'),q=$('#q');
@@ -534,10 +637,10 @@ $$('[data-goal]').forEach(function(a){a.addEventListener('click',function(e){
 viewAll.addEventListener('click',function(e){e.preventDefault();show(function(){return true},function(n){return 'All '+n+' products'})});
 $('#filter-clear').addEventListener('click',function(){show();q.value='';shopTitle.focus()});
 $('#search').addEventListener('submit',function(e){
-  e.preventDefault();var v=q.value.trim().toLowerCase();
-  if(!v){show();goShop();return}
-  var words=v.split(/\s+/);
-  show(function(li){return words.every(function(w){return li._s.indexOf(w)>-1})},function(n){return n?n+' result'+(n===1?'':'s')+' for “'+v+'”':'Nothing matches “'+v+'”. Try a goal, like sleep.'});
+  e.preventDefault();var t=q.value.trim().toLowerCase();
+  if(!t){show();goShop();return}
+  var words=t.split(/\s+/);
+  show(function(li){return words.every(function(w){return li._s.indexOf(w)>-1})},function(n){return n?n+' result'+(n===1?'':'s')+' for “'+t+'”':'Nothing matches “'+t+'”. Try a goal, like sleep.'});
   q.blur();goShop();
 });
 
@@ -556,16 +659,15 @@ matchMedia('(min-width: 768px)').addEventListener('change',function(m){if(m.matc
 /* Finder: three questions, one per screen, two results */
 var Q=[
   {q:'What does most of your training look like?',o:[['Lifting and strength work','Lifting',{L:2,R:1}],['Running, cycling or rowing','Endurance',{E:2,R:1}],['A mix of everything','Mixed',{L:1,E:1,R:1}],['Walking, yoga, staying mobile','Mobility',{S:2,R:1}]]},
-  {q:'What would help most right now?',o:[['Recovering between sessions','Recovery',{R:3}],['Building or keeping muscle','Muscle',{L:3}],['Holding pace late in long efforts','Pace',{E:3}],['Sleeping more deeply','Sleep',{S:3}]]},
-  {q:'How do you prefer to take it?',o:[['Powder, mixed into a drink','Powder',{powder:1.5}],['Capsules','Capsules',{capsule:1.5}],['No preference','Either',{}]]}
+  {q:'What would help most right now?',o:[['Recovering between sessions','Recovery',{R:3}],['Building or keeping muscle','Muscle',{L:3}],['Energy and hydration for long efforts','Energy',{E:3}],['Winding down and sleeping well','Sleep',{S:3}]]},
+  {q:'How do you like to take it?',o:[['Powder, mixed into a drink','Powder',{powder:1.5}],['Ready to drink or eat','Ready',{ready:1.5}],['Tablets, capsules or gummies','Tablets',{pills:1.5}],['No preference','Either',{}]]}
 ];
 var fBody=$('#finder-body'),fStep=$('#finder-step'),fBack=$('#finder-back'),step=0,ans=[];
-function dose(d){return '<span class="num">'+d[0]+'</span> · <span class="num">'+d[1]+'</span> servings'}
 function picks(){
-  var w={R:0,L:0,E:0,S:0,powder:0,capsule:0};
+  var w={R:0,L:0,E:0,S:0,powder:0,ready:0,pills:0};
   ans.forEach(function(a,i){var m=Q[i].o[a][2];for(var k in m)w[k]+=m[k]});
   return Object.keys(P).map(function(id,i){
-    var p=P[id],s=w[p.form];
+    var p=P[id],s=w[p.form]||0;
     p.g.split('').forEach(function(g,j){s+=w[g]*(j?.6:1)});
     return {id:id,s:s,i:i};
   }).sort(function(a,b){return b.s-a.s||a.i-b.i}).slice(0,2);
@@ -583,7 +685,7 @@ function render(focus){
     fStep.textContent='Your match';
     fBody.innerHTML='<h2 class="q" id="finder-title" tabindex="-1">Two to start with</h2><p class="basis">Based on: '+ans.map(function(a,i){return Q[i].o[a][1]}).join(' · ')+'</p><ul class="picks">'+picks().map(function(r){
       var p=P[r.id];
-      return '<li class="pick"><span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b></span></span><div><h3 class="p-name">'+p.name+'</h3><p class="dose">'+dose(p.dose)+'</p><p class="why">'+p.why+'</p><div class="p-buy"><span class="price">$'+p.price+'</span><button class="add" type="button" data-add="'+r.id+'"><span class="add-t">Add</span><span class="vh"> '+p.name+' to cart</span></button></div></div></li>';
+      return '<li class="pick"><span class="shot"><img src="'+esc(p.img)+'" alt="" width="480" height="480"></span><div><h3 class="p-name">'+esc(p.name)+'</h3><p class="p-desc">'+esc(p.desc)+'</p><p class="why">'+esc(p.why)+'</p><a class="buy" href="'+esc(p.url)+'" target="_blank" rel="noopener">Buy on Amway <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span class="vh"> '+esc(p.name)+' (opens in a new tab)</span></a></div></li>';
     }).join('')+'</ul><div class="sheet-foot"><button class="btn btn-ghost" type="button" id="finder-restart">Start over</button><a class="tlink" href="#shop" id="finder-shop">See all products</a></div>';
   }
   if(focus)$('#finder-title').focus();
