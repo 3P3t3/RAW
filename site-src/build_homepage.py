@@ -81,9 +81,10 @@ CAROUSELS = {
     'energy-focus': ('XS Energy Drink 12 oz', 'Pick your flavour', 'The 12 oz range, one can at a time.'),
 }
 
-ISLANDS = {  # the place each shelf lives on
-    'recovery': 'Cabin', 'hydration': 'River', 'energy-focus': 'Lighthouse', 'protein': 'Gym',
-    'fat-loss': 'Lab', 'daily-foundations': 'Farm', 'skin-redefined': 'Glasshouse',
+SHELF_LINE = {  # the line under each shelf name in the ring
+    'recovery': 'After the session', 'hydration': 'Electrolytes', 'energy-focus': 'Cans & capsules',
+    'protein': 'Whey, bars, crisps', 'fat-loss': 'Thermogenic', 'daily-foundations': 'Everyday basics',
+    'skin-redefined': 'Skin & overnight',
 }
 
 CAT_THUMB = {  # the pack shown on the homepage row for each category
@@ -281,12 +282,12 @@ def main():
     isles = []
     for i, (slug_, name, tag, heading, fams) in enumerate(CATEGORIES):
         prio = ' fetchpriority="high"' if i < 3 else ' loading="lazy"'
-        place = ISLANDS[slug_]
+        line = SHELF_LINE[slug_]
         isles.append(
             f'        <li class="isle" style="--i:{i}"><a href="category-{slug_}.html">'
             f'<span class="isle-art"><img src="assets/islands/{slug_}.webp" alt="" width="760" height="760"{prio}></span>'
             f'<span class="isle-label"><span class="isle-name">{name}</span>'
-            f'<span class="isle-place">{place}</span></span></a></li>')
+            f'<span class="isle-note">{line}</span></span></a></li>')
 
     order = sorted(products, key=lambda pr: pr['name'].lower())
     grid = [card(pr, i) for i, pr in enumerate(order)]

@@ -248,7 +248,7 @@ if(arch){
   var measure=function(){
     var w=arch.clientWidth;
     geom.wide=w>=768;
-    geom.base=geom.wide?Math.min(196,w*.165):Math.min(122,w*.30);
+    geom.base=geom.wide?Math.min(212,w*.178):Math.min(140,w*.345);
     geom.rx=geom.wide?w/2-geom.base*.52:w*.60;
     geom.ry=geom.wide?74:46;
     isles.forEach(function(el){el.style.setProperty('--w',Math.round(geom.base)+'px')});  /* size set once, not per frame */
@@ -264,7 +264,7 @@ if(arch){
       el.style.transform='translate3d('+(Math.sin(a)*geom.rx).toFixed(1)+'px,'+y.toFixed(1)+'px,0) scale('+k.toFixed(3)+')';
       el.style.opacity=(.72+.28*f).toFixed(2);
       el.style.zIndex=Math.round(f*100);
-      var lab=Math.max(0,f*f*f*f*1.6-.15).toFixed(2);          /* only the nearest islands name themselves */
+      var lab=Math.max(0,Math.pow(f,6)*1.9-.32).toFixed(2);    /* only the nearest island names itself */
       if(lab!==lastLabel[i]){el.style.setProperty('--label',lab);lastLabel[i]=lab}
     });
   };

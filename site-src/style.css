@@ -104,12 +104,14 @@ html:not(.js) .search-toggle{visibility:hidden}
 .results .sec-bg,.cat-shop .sec-bg{opacity:.34;object-position:50% 78%;
   -webkit-mask-image:linear-gradient(180deg,#000,#000 52%,transparent);
   mask-image:linear-gradient(180deg,#000,#000 52%,transparent)}
-/* Dark bands: the same water, lit from above */
+/* Dark bands: water under the podium, cut glass at dusk behind the finder */
 .podium-sec,.finder{position:relative;isolation:isolate}
-.podium-sec::before,.finder::before{content:"";position:absolute;inset:0;z-index:-2;
-  background:url(assets/bg-deep.webp) 50% 58%/cover;opacity:.85}
+.podium-sec::before,.finder::before{content:"";position:absolute;inset:0;z-index:-2;opacity:.85}
+.podium-sec::before{background:url(assets/bg-deep.webp) 50% 58%/cover}
+.finder::before{background:url(assets/bg-dusk.webp) 72% 72%/cover;opacity:.62}
 .podium-sec::after,.finder::after{content:"";position:absolute;inset:0;z-index:-1;
   background:linear-gradient(180deg,rgba(0,32,42,.78),rgba(0,32,42,.34) 46%,rgba(0,32,42,.9))}
+.finder::after{background:linear-gradient(180deg,rgba(0,32,42,.94),rgba(0,32,42,.58) 45%,rgba(0,32,42,.9))}
 .goals-sec{padding-bottom:0}
 .sec-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 24px;margin-bottom:28px}
 .sec-head>div{display:grid;gap:10px}
@@ -380,7 +382,7 @@ html:not(.js) #results[hidden]{display:block!important}
 /* ---------- Trending: podium ---------- */
 .podium-sec{position:relative;margin-top:96px;padding-top:0;overflow:visible}
 .podium-sec .sec-head{padding-top:var(--sec);margin-bottom:0;align-items:baseline}
-.podium{list-style:none;margin:76px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 12px}
+.podium{list-style:none;margin:76px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 12px;align-items:start}
 .pod{position:relative;perspective:900px}
 .pod .card-link{position:relative;display:grid;color:var(--chalk);text-decoration:none;transform-style:preserve-3d;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
 .pod .shot{margin-top:-30px;filter:drop-shadow(0 34px 26px rgba(0,16,22,.55))}
@@ -390,17 +392,13 @@ html:not(.js) #results[hidden]{display:block!important}
 .pod .p-desc{color:var(--on-dark)}
 .pod-count{margin-top:10px;font-size:14px;color:var(--sand);font-variant-numeric:tabular-nums}
 .pod-num{font:800 22px/1 var(--display);font-stretch:72%;display:inline-block;margin-right:4px}
-.pod-1 .shot{margin-top:-52px}
 @media (hover:hover){.pod .card-link:hover .p-name{text-decoration:underline;text-underline-offset:4px}}
 @media (prefers-reduced-motion:reduce){.pod .card-link{transition:none}}
 
 @media (min-width:768px){
   .podium-sec{margin-top:140px}
-  .podium{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;align-items:end}
+  .podium{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;align-items:start}
   .pod .shot{margin-top:-70px}
-  .pod-1{transform:translateY(-44px)}
-  .pod-1 .shot{margin-top:-104px}
-  .pod-3{transform:translateY(18px)}
   .pod-rank{top:-40px;font-size:140px}
 }
 
@@ -416,7 +414,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .isle-art img{display:block;width:100%;height:auto}
 .isle-label{display:grid;justify-items:center;gap:2px;text-align:center;opacity:var(--label,1);transition:opacity .3s}
 .isle-name{font:800 16px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
-.isle-place{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text);opacity:.7}
+.isle-note{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text);opacity:.7}
 .isle a:focus-visible .isle-name{text-decoration:underline;text-underline-offset:4px}
 @media (hover:hover){.isle a:hover .isle-name{text-decoration:underline;text-underline-offset:4px}}
 .isles-toggle{position:absolute;right:0;bottom:0;color:var(--teal);border:1px solid var(--line)}
@@ -426,5 +424,5 @@ html:not(.js) .isle{position:static;width:auto;margin:0}
 @media (min-width:768px){
   .archipelago{height:540px;margin-top:24px}
   .isle-name{font-size:19px}
-  .isle-place{font-size:12px}
+  .isle-note{font-size:12px}
 }
