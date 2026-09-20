@@ -187,5 +187,49 @@ if(bg&&html.classList.contains('motion')){
     requestAnimationFrame(function(){bg.style.transform='translate3d(0,'+Math.min(scrollY*.18,120)+'px,0) scale(1.08)';ticking=false});
   },{passive:true});
 }
+
+/* Podium: packs tilt toward the pointer, and the week's count counts up */
+var tilts=$$('.tilt');
+if(tilts.length&&html.classList.contains('motion')){
+  var fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if(fine){
+    tilts.forEach(function(el){
+      var box=el.parentNode;
+      box.addEventListener('pointermove',function(e){
+        var r=box.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+        el.style.transform='rotateY('+(x*14).toFixed(2)+'deg) rotateX('+(-y*12).toFixed(2)+'deg) translate3d('+(x*10).toFixed(1)+'px,'+(y*8-6).toFixed(1)+'px,0) scale(1.03)';
+      });
+      box.addEventListener('pointerleave',function(){el.style.transform=''});
+    });
+  }else{
+    /* phones: a slow, shared drift so the packs still feel three-dimensional */
+    var t0=performance.now(),drift=function(){
+      var t=(performance.now()-t0)/1000;
+      tilts.forEach(function(el,i){
+        var a=t*.6+i*2.1;
+        el.style.transform='rotateY('+(Math.sin(a)*5).toFixed(2)+'deg) rotateX('+(Math.cos(a*.8)*3).toFixed(2)+'deg)';
+      });
+      requestAnimationFrame(drift);
+    };
+    var seen=false;
+    if('IntersectionObserver' in window)new IntersectionObserver(function(es){
+      if(es[0].isIntersecting&&!seen){seen=true;drift()}
+    },{threshold:.2}).observe(tilts[0].parentNode);
+  }
+}
+$$('.pod-num').forEach(function(el){
+  var to=+el.dataset.count;
+  if(!to)return;
+  var run=function(){
+    var t0=performance.now(),step=function(){
+      var k=Math.min(1,(performance.now()-t0)/900);
+      el.textContent=Math.round(to*(1-Math.pow(1-k,3)));
+      if(k<1)requestAnimationFrame(step);
+    };step();
+  };
+  if(!html.classList.contains('motion')){el.textContent=to;return}
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es,o){if(es[0].isIntersecting){run();o.disconnect()}},{threshold:.6}).observe(el);
+  else run();
+});
 })();
 </script>

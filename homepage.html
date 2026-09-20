@@ -333,6 +333,33 @@ html:not(.js) button[data-open-finder]{display:none}
   .cat-shop .card{padding-bottom:52px}
   .cat-shop .grid{row-gap:0}
 }
+
+/* ---------- Trending: podium ---------- */
+.podium-sec{position:relative;margin-top:96px;padding-top:0;overflow:visible}
+.podium-sec .sec-head{padding-top:var(--sec);margin-bottom:0;align-items:baseline}
+.podium{list-style:none;margin:76px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 12px}
+.pod{position:relative;perspective:900px}
+.pod .card-link{position:relative;display:grid;color:var(--chalk);text-decoration:none;transform-style:preserve-3d;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.pod .shot{margin-top:-30px;filter:drop-shadow(0 34px 26px rgba(0,16,22,.55))}
+.pod-rank{position:absolute;top:-18px;left:-6px;z-index:-1;font:800 84px/1 var(--display);font-stretch:72%;color:transparent;-webkit-text-stroke:1.5px rgba(230,211,197,.38);letter-spacing:-.02em}
+.pod .p-tag{color:var(--sand)}
+.pod .p-name{color:var(--chalk)}
+.pod .p-desc{color:var(--on-dark)}
+.pod-count{margin-top:10px;font-size:14px;color:var(--sand);font-variant-numeric:tabular-nums}
+.pod-num{font:800 22px/1 var(--display);font-stretch:72%;display:inline-block;margin-right:4px}
+.pod-1 .shot{margin-top:-52px}
+@media (hover:hover){.pod .card-link:hover .p-name{text-decoration:underline;text-underline-offset:4px}}
+@media (prefers-reduced-motion:reduce){.pod .card-link{transition:none}}
+
+@media (min-width:768px){
+  .podium-sec{margin-top:140px}
+  .podium{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;align-items:end}
+  .pod .shot{margin-top:-70px}
+  .pod-1{transform:translateY(-44px)}
+  .pod-1 .shot{margin-top:-104px}
+  .pod-3{transform:translateY(18px)}
+  .pod-rank{top:-40px;font-size:140px}
+}
 </style>
 </head>
 <body>
@@ -408,6 +435,18 @@ html:not(.js) button[data-open-finder]{display:none}
           <li><a class="goal" href="category-fat-loss.html"><span class="goal-name">Fat Loss</span><span class="goal-desc">Thermogenic support to pair with your training.</span><span class="goal-n">1 products</span><span class="goal-img"><img src="assets/products/xs-ignite-powder-moro-blood-orange.webp" alt="" width="600" height="600" loading="lazy"></span></a></li>
           <li><a class="goal" href="category-daily-foundations.html"><span class="goal-name">Daily Foundations</span><span class="goal-desc">The everyday base</span><span class="goal-n">3 products</span><span class="goal-img"><img src="assets/products/xs-creatine.webp" alt="" width="600" height="600" loading="lazy"></span></a></li>
           <li><a class="goal" href="category-skin-redefined.html"><span class="goal-name">Skin Redefined</span><span class="goal-desc">Artistry skincare, for the hours you are not training.</span><span class="goal-n">3 products</span><span class="goal-img"><img src="assets/products/artistry-skin-nutrition-sleeping-mask.webp" alt="" width="600" height="600" loading="lazy"></span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 4b. Trending: three best sellers on a podium, oversized and breaking the band -->
+  <section class="sec podium-sec dark" id="trending" aria-labelledby="trending-title">
+    <div class="wrap">
+      <div class="sec-head grow"><h2 id="trending-title">Trending now</h2><p class="sec-note">What people reorder most</p></div>
+      <ul class="podium">
+        <li class="pod pod-1"><a class="card-link tilt" href="https://amway.com/share-link/TcFtuhPvJ" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">01</span><span class="shot"><img src="assets/cutouts/xs-creatine.webp" alt="" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">XS Creatine+</h3><p class="p-desc">Creatine powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="pod pod-2"><a class="card-link tilt" href="https://amway.com/share-link/FOhn2MdGS" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">02</span><span class="shot"><img src="assets/cutouts/nutrilite-begin-daily-gi-primer.webp" alt="" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Begin Daily GI Primer</h3><p class="p-desc">Daily digestive powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="pod pod-3"><a class="card-link tilt" href="https://amway.com/share-link/gry6-Xg5l" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">03</span><span class="shot"><img src="assets/cutouts/xs-elite-focus-energy-drink-peach-mango.webp" alt="" width="600" height="600"></span><p class="p-tag">Energy &amp; Focus</p><h3 class="p-name">XS Elite + Focus Energy Drink</h3><p class="p-desc">Energy drink · Peach Mango</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
       </ul>
     </div>
   </section>
@@ -824,6 +863,50 @@ if(bg&&html.classList.contains('motion')){
     requestAnimationFrame(function(){bg.style.transform='translate3d(0,'+Math.min(scrollY*.18,120)+'px,0) scale(1.08)';ticking=false});
   },{passive:true});
 }
+
+/* Podium: packs tilt toward the pointer, and the week's count counts up */
+var tilts=$$('.tilt');
+if(tilts.length&&html.classList.contains('motion')){
+  var fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if(fine){
+    tilts.forEach(function(el){
+      var box=el.parentNode;
+      box.addEventListener('pointermove',function(e){
+        var r=box.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+        el.style.transform='rotateY('+(x*14).toFixed(2)+'deg) rotateX('+(-y*12).toFixed(2)+'deg) translate3d('+(x*10).toFixed(1)+'px,'+(y*8-6).toFixed(1)+'px,0) scale(1.03)';
+      });
+      box.addEventListener('pointerleave',function(){el.style.transform=''});
+    });
+  }else{
+    /* phones: a slow, shared drift so the packs still feel three-dimensional */
+    var t0=performance.now(),drift=function(){
+      var t=(performance.now()-t0)/1000;
+      tilts.forEach(function(el,i){
+        var a=t*.6+i*2.1;
+        el.style.transform='rotateY('+(Math.sin(a)*5).toFixed(2)+'deg) rotateX('+(Math.cos(a*.8)*3).toFixed(2)+'deg)';
+      });
+      requestAnimationFrame(drift);
+    };
+    var seen=false;
+    if('IntersectionObserver' in window)new IntersectionObserver(function(es){
+      if(es[0].isIntersecting&&!seen){seen=true;drift()}
+    },{threshold:.2}).observe(tilts[0].parentNode);
+  }
+}
+$$('.pod-num').forEach(function(el){
+  var to=+el.dataset.count;
+  if(!to)return;
+  var run=function(){
+    var t0=performance.now(),step=function(){
+      var k=Math.min(1,(performance.now()-t0)/900);
+      el.textContent=Math.round(to*(1-Math.pow(1-k,3)));
+      if(k<1)requestAnimationFrame(step);
+    };step();
+  };
+  if(!html.classList.contains('motion')){el.textContent=to;return}
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es,o){if(es[0].isIntersecting){run();o.disconnect()}},{threshold:.6}).observe(el);
+  else run();
+});
 })();
 </script>
 </body>

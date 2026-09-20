@@ -320,3 +320,30 @@ html:not(.js) button[data-open-finder]{display:none}
   .cat-shop .card{padding-bottom:52px}
   .cat-shop .grid{row-gap:0}
 }
+
+/* ---------- Trending: podium ---------- */
+.podium-sec{position:relative;margin-top:96px;padding-top:0;overflow:visible}
+.podium-sec .sec-head{padding-top:var(--sec);margin-bottom:0;align-items:baseline}
+.podium{list-style:none;margin:76px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 12px}
+.pod{position:relative;perspective:900px}
+.pod .card-link{position:relative;display:grid;color:var(--chalk);text-decoration:none;transform-style:preserve-3d;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.pod .shot{margin-top:-30px;filter:drop-shadow(0 34px 26px rgba(0,16,22,.55))}
+.pod-rank{position:absolute;top:-18px;left:-6px;z-index:-1;font:800 84px/1 var(--display);font-stretch:72%;color:transparent;-webkit-text-stroke:1.5px rgba(230,211,197,.38);letter-spacing:-.02em}
+.pod .p-tag{color:var(--sand)}
+.pod .p-name{color:var(--chalk)}
+.pod .p-desc{color:var(--on-dark)}
+.pod-count{margin-top:10px;font-size:14px;color:var(--sand);font-variant-numeric:tabular-nums}
+.pod-num{font:800 22px/1 var(--display);font-stretch:72%;display:inline-block;margin-right:4px}
+.pod-1 .shot{margin-top:-52px}
+@media (hover:hover){.pod .card-link:hover .p-name{text-decoration:underline;text-underline-offset:4px}}
+@media (prefers-reduced-motion:reduce){.pod .card-link{transition:none}}
+
+@media (min-width:768px){
+  .podium-sec{margin-top:140px}
+  .podium{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;align-items:end}
+  .pod .shot{margin-top:-70px}
+  .pod-1{transform:translateY(-44px)}
+  .pod-1 .shot{margin-top:-104px}
+  .pod-3{transform:translateY(18px)}
+  .pod-rank{top:-40px;font-size:140px}
+}

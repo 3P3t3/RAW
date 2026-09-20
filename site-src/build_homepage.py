@@ -11,6 +11,7 @@ OUT = os.path.join(ROOT, 'homepage.html')
 PHOTOS = os.path.join(ROOT, 'product-photos')
 STUDIO = os.path.join(ROOT, 'product-shots')  # re-lit studio versions, already framed to one scale
 ASSETS = os.path.join(ROOT, 'assets', 'products')
+CUTS = os.path.join(ROOT, 'assets', 'cutouts')  # transparent versions, for products shown on dark bands
 
 # family prefix -> (type descriptor, goals, format). Longest prefix wins.
 # Goals: R Recovery, L Lean Mass, E Endurance, S Sleep & Longevity (first = primary).
@@ -196,6 +197,13 @@ def shot(p, lazy=True, cls='shot'):
     return f'<span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>coming soon</span></span>'
 
 
+def bestsellers():
+    path = os.path.join(ROOT, 'bestsellers.csv')
+    if not os.path.exists(path):
+        return []
+    return [r for r in csv.DictReader(open(path, newline='')) if r.get('product')]
+
+
 def main():
     rows = list(csv.DictReader(open(os.path.join(ROOT, 'share-links.csv'), newline='')))
     os.makedirs(ASSETS, exist_ok=True)
@@ -238,7 +246,7 @@ def main():
                 f'<p class="p-tag">{tag}</p><h3 class="p-name">{esc(pr["name"])}</h3>'
                 f'<p class="p-desc">{esc(pr["desc"])}</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
 
-    def rows(only=None):
+    def cat_rows(only=None):
         out_ = []
         for slug_, name, tag, heading, fams in CATEGORIES:
             if only and slug_ in only:
@@ -270,9 +278,31 @@ def main():
               '{{ICONS}}': icons, '{{INDEX}}': '\n'.join(index), '{{TOTAL}}': str(len(products)),
               '{{FINDER_DATA}}': finder_json}
 
+    os.makedirs(CUTS, exist_ok=True)
+    podium = []
+    for i, r in enumerate(bestsellers()[:3]):
+        pr = dict(by.get(r['product']) or {})
+        if not pr:
+            raise SystemExit(f"bestsellers.csv: no such product {r['product']!r}")
+        photo = next((row['photo'] for row in rows if row['product'] == r['product']), '')
+        if photo and os.path.exists(os.path.join(PHOTOS, photo)):  # transparent cut-out for the dark band
+            fn = slug(r['product']) + '.webp'
+            normalize(os.path.join(PHOTOS, photo), os.path.join(CUTS, fn))
+            pr['img'] = 'assets/cutouts/' + fn
+            pr['studio'] = False
+        units = (r.get('units_this_week') or '').strip()
+        count = (f'<p class="pod-count"><span class="pod-num" data-count="{units}">0</span> '
+                 f'bought this week</p>') if units.isdigit() else ''
+        podium.append(
+            f'        <li class="pod pod-{i + 1}"><a class="card-link tilt" href="{esc(pr["share_link"])}" target="_blank" rel="noopener">'
+            f'<span class="pod-rank" aria-hidden="true">0{i + 1}</span>'
+            f'{shot(pr, lazy=False)}<p class="p-tag">{names.get(cat_of.get(pr["product"]), "Wellness")}</p>'
+            f'<h3 class="p-name">{esc(pr["name"])}</h3><p class="p-desc">{esc(pr["desc"])}</p>{count}'
+            f'<span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
+
     out = open(SRC).read()
     for k, v in dict(shared, **{'{{HEADER}}': header.replace('{{HOME}}', ''), '{{HOME}}': '',
-                                '{{GOALS}}': rows(), '{{GRID}}': '\n'.join(grid)}).items():
+                                '{{GOALS}}': cat_rows(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium)}).items():
         out = out.replace(k, v)
     open(OUT, 'w').write(out)
 
@@ -309,7 +339,7 @@ def main():
                 '{{HEADER}}': header.replace('{{HOME}}', 'homepage.html'), '{{HOME}}': 'homepage.html',
                 '{{CAT_NAME}}': name, '{{CAT_TAG}}': tag, '{{CAT_HEADING}}': heading,
                 '{{CAT_COUNT}}': str(counts[slug_]), '{{CAT_GRID}}': cgrid, '{{CAROUSEL}}': carousel,
-                '{{CAT_OTHERS}}': rows(only={slug_}), '{{CAT_BG}}': f'assets/bg-{slug_}.webp'}).items():
+                '{{CAT_OTHERS}}': cat_rows(only={slug_}), '{{CAT_BG}}': f'assets/bg-{slug_}.webp'}).items():
             page = page.replace(k, v)
         open(os.path.join(ROOT, f'category-{slug_}.html'), 'w').write(page)
 
