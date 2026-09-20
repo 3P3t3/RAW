@@ -49,6 +49,45 @@ FAMILIES = {
     'n* by Nutrilite Sweet Dreams': ('Sleep gummies', 'S', 'pills'),
 }
 
+# Category pages: slug, name, tagline, heading, family prefixes that belong to it.
+CATEGORIES = [
+    ('recovery', 'Recovery', 'Wind down, repair and sleep: post-workout mixes, magnesium, herbals and topical creams.', 'Everything in Recovery', [
+        'XS Post-Workout Recovery', 'XS Muscle Multiplier', 'XS CBD Cream', 'XS CBD Pro Cream',
+        'Nutrilite Magnesium', 'Nutrilite Organics Ashwagandha Capsules', 'Nutrilite Organics Chamomile Tea',
+        'Nutrilite Sleep Health', 'n* by Nutrilite Sweet Dreams']),
+    ('hydration', 'Hydration', 'Electrolytes and drink mixes for long, hot and sweaty sessions.', 'Everything in Hydration', [
+        'XS Sports Twist Tubes', 'Nutrilite Twist Tubes 2GO', 'XS CocoWater Hydration Drink Mix']),
+    ('energy-focus', 'Energy &amp; Focus', 'Pre-workout, tablets and the full XS energy range.', 'Everything in Energy &amp; Focus', [
+        'XS Pre-Workout Boost', 'XS Energy + Focus Dietary Supplement', 'XS Energy Drink 12 oz',
+        'XS Energy + Burn 12 oz', 'XS Juiced and Burn 12 oz', 'XS Sparkling Juiced Energy 12 oz',
+        'XS Elite + Focus Energy Drink']),
+    ('protein', 'Protein Snack Pack', 'Powders, shakes, bars and crisps to hit your protein for the day.', 'Everything in Protein', [
+        'XS Grass-Fed Whey Protein', 'XS Grass-Fed Whey Protein Powder Sachets', 'XS Sports Protein Bars',
+        'XS Sports Protein Shakes', 'XS Protein Crisps', 'Nutrilite Organics All-in-One Bars']),
+    ('fat-loss', 'Fat Loss', 'Thermogenic support to pair with your training.', 'Everything in Fat Loss', [
+        'XS Ignite Powder']),
+    ('daily-foundations', 'Daily Foundations', 'The everyday base: creatine, gut health and digestion.', 'Everything in Daily Foundations', [
+        'XS Creatine+', 'Nutrilite Begin Daily GI Primer', 'Nutrilite Balance Within Probiotic']),
+    ('skin-redefined', 'Skin Redefined', 'Artistry skincare, for the hours you are not training.', 'Everything in Skin Redefined', [
+        'Artistry Skin Nutrition Renewing Softening Toner', 'Artistry Skin Nutrition Sleeping Mask',
+        'Artistry Studio Glow Boss Cleanser + Exfoliator']),
+]
+
+# The flavour carousel: category slug -> (family prefix to pull, heading, line)
+CAROUSELS = {
+    'energy-focus': ('XS Energy Drink 12 oz', 'Pick your flavour', 'The 12 oz range, one can at a time.'),
+}
+
+CAT_THUMB = {  # the pack shown on the homepage row for each category
+    'recovery': 'XS Post-Workout Recovery - Fruit Punch (12 Stick Packs)',
+    'hydration': 'XS Sports Twist Tubes - Raspberry Lemonade',
+    'energy-focus': 'XS Energy Drink 12 oz - Classic',
+    'protein': 'XS Sports Protein Bars - Chocolate Peanut Butter',
+    'fat-loss': 'XS Ignite Powder - Moro Blood Orange',
+    'daily-foundations': 'XS Creatine+',
+    'skin-redefined': 'Artistry Skin Nutrition Sleeping Mask',
+}
+
 FEATURED = [  # props-free pack shots, so the grid reads as one series
     'XS Grass-Fed Whey Protein - Chocolate',
     'XS Post-Workout Recovery - Fruit Punch (30 Serving Pouch)',
@@ -183,55 +222,99 @@ def main():
     for n in FEATURED + [t[3] for t in GOAL_TILES] + [f[1] for f in FINDER]:
         assert n in by, f'Missing product in CSV: {n}'
 
-    counts = {g: sum(g in p['goals'] for p in products) for g in 'RLES'}
-    goals = []
-    for i, (g, name, line, prod) in enumerate(GOAL_TILES):
-        img = by[prod]['img']
-        hi = ' fetchpriority="high"' if i < 2 else ''
-        goals.append(
-            f'          <li><a class="goal" href="#shop" data-goal="{g}">'
-            f'<span class="goal-name">{name}</span><span class="goal-desc">{line}</span>'
-            f'<span class="goal-n">{counts[g]} products</span>'
-            f'<span class="goal-img"><img src="{img}" alt="" width="600" height="600" loading="lazy"></span></a></li>')
+    cat_of = {}
+    for slug_, name, tag, heading, fams in CATEGORIES:
+        for pr in products:
+            if family(pr['product']) in fams:
+                cat_of[pr['product']] = slug_
+    counts = {c[0]: sum(1 for pr in products if cat_of.get(pr['product']) == c[0]) for c in CATEGORIES}
+    names = {c[0]: c[1] for c in CATEGORIES}
 
-    order = [by[n] for n in FEATURED] + sorted((p for p in products if p['product'] not in FEATURED), key=lambda p: p['product'].lower())
-    grid = []
-    for p in order:
-        extra = '' if p['product'] in FEATURED else ' data-extra hidden'
-        u = esc(p['share_link'])
-        grid.append(
-            f'        <li class="card" data-goals="{p["goals"]}"{extra}>'
-            f'<a class="card-link" href="{u}" target="_blank" rel="noopener">{shot(p)}'
-            f'<p class="p-tag">{GOAL_NAMES.get(p["goals"][:1], "Wellness")}</p><h3 class="p-name">{esc(p["name"])}</h3>'
-            f'<p class="p-desc">{esc(p["desc"])}</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
+    def card(pr, i=0, extra=''):
+        u = esc(pr['share_link'])
+        tag = names.get(cat_of.get(pr['product']), 'Wellness')
+        return (f'        <li class="card grow" style="--d:{i % 4}" data-cat="{cat_of.get(pr["product"], "")}"{extra}>'
+                f'<a class="card-link" href="{u}" target="_blank" rel="noopener">{shot(pr)}'
+                f'<p class="p-tag">{tag}</p><h3 class="p-name">{esc(pr["name"])}</h3>'
+                f'<p class="p-desc">{esc(pr["desc"])}</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
 
-    index = [f'        <li><a href="{esc(p["share_link"])}" target="_blank" rel="noopener">{esc(p["product"].replace("n- by", "n* by"))}</a></li>'
-             for p in sorted(products, key=lambda p: p['product'].lower().lstrip('n*- '))]
+    def rows(only=None):
+        out_ = []
+        for slug_, name, tag, heading, fams in CATEGORIES:
+            if only and slug_ in only:
+                continue
+            img = by[CAT_THUMB[slug_]]['img']
+            out_.append(
+                f'          <li><a class="goal" href="category-{slug_}.html">'
+                f'<span class="goal-name">{name}</span><span class="goal-desc">{tag.split(":")[0]}</span>'
+                f'<span class="goal-n">{counts[slug_]} products</span>'
+                f'<span class="goal-img"><img src="{img}" alt="" width="600" height="600" loading="lazy"></span></a></li>')
+        return '\n'.join(out_)
+
+    order = [by[n] for n in FEATURED] + sorted((pr for pr in products if pr['product'] not in FEATURED), key=lambda pr: pr['product'].lower())
+    grid = [card(pr, i, '' if pr['product'] in FEATURED else ' data-extra hidden') for i, pr in enumerate(order)]
+
+    index = [f'        <li><a href="{esc(pr["share_link"])}" target="_blank" rel="noopener">{esc(pr["product"].replace("n- by", "n* by"))}</a></li>'
+             for pr in sorted(products, key=lambda pr: pr['product'].lower().lstrip('n*- '))]
 
     finder = {}
     for key, name, why in FINDER:
-        p = by[name]
-        finder[key] = dict(name=p['name'], desc=p['desc'], img=p['img'], url=p['share_link'], g=p['goals'], form=p['form'], why=why)
+        pr = by[name]
+        finder[key] = dict(name=pr['name'], desc=pr['desc'], img=pr['img'], url=pr['share_link'], g=pr['goals'], form=pr['form'], why=why)
+    finder_json = json.dumps(finder, ensure_ascii=False).replace('</', '<\\/')
 
-    duo = [by['XS Grass-Fed Whey Protein - Chocolate'], by['XS Creatine+']]
+    part = lambda n: open(os.path.join(ROOT, 'site-src', n)).read()
+    style, header, footer, dialogs, script, icons = (part('style.css'), part('_header.html'), part('_footer.html'),
+                                                     part('_dialogs.html'), part('_script.html'), part('_icons.html'))
+    shared = {'{{STYLE}}': style, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{SCRIPT}}': script,
+              '{{ICONS}}': icons, '{{INDEX}}': '\n'.join(index), '{{TOTAL}}': str(len(products)),
+              '{{FINDER_DATA}}': finder_json}
+
     out = open(SRC).read()
-    subs = {
-        '{{GOALS}}': '\n'.join(goals),
-        '{{GRID}}': '\n'.join(grid),
-        '{{INDEX}}': '\n'.join(index),
-        '{{TOTAL}}': str(len(products)),
-        '{{FINDER_DATA}}': json.dumps(finder, ensure_ascii=False).replace('</', '<\\/'),
-        '{{DUO_IMGS}}': ''.join(f'<img src="{p["img"]}" alt="" loading="lazy" width="600" height="600">' for p in duo),
-        '{{DUO_ALT}}': 'XS Grass-Fed Whey Protein and XS Creatine+, a typical finder result',
-        '{{TRUST_IMG}}': by['XS Juiced and Burn 12 oz - Variety Case']['img'],
-        '{{TRUST_ALT}}': 'XS Juiced and Burn energy drink variety case',
-        '{{LABEL_URL}}': esc(by['XS Grass-Fed Whey Protein - Chocolate']['share_link']),
-    }
-    for k, v in subs.items():
+    for k, v in dict(shared, **{'{{HEADER}}': header.replace('{{HOME}}', ''), '{{HOME}}': '',
+                                '{{GOALS}}': rows(), '{{GRID}}': '\n'.join(grid)}).items():
         out = out.replace(k, v)
     open(OUT, 'w').write(out)
-    print(f'{len(products)} products ({sum(1 for p in products if p["img"])} with photos) -> {OUT}')
-    print('goal counts', counts)
+
+    cat_tpl = open(os.path.join(ROOT, 'site-src', 'category.template.html')).read()
+    for slug_, name, tag, heading, fams in CATEGORIES:
+        items = [pr for pr in products if cat_of.get(pr['product']) == slug_]
+        items.sort(key=lambda pr: (pr['name'].lower(), pr['desc'].lower()))
+        carousel = ''
+        if slug_ in CAROUSELS:
+            fam, chead, cline = CAROUSELS[slug_]
+            flav = [pr for pr in items if family(pr['product']) == fam]
+            items = [pr for pr in items if pr not in flav]
+            slides = '\n'.join(
+                f'          <li class="slide"><a class="card-link" href="{esc(pr["share_link"])}" target="_blank" rel="noopener">'
+                f'{shot(pr)}<h3 class="p-name">{esc(pr["desc"].split(" · ")[-1])}</h3>'
+                f'<span class="vh">{esc(pr["name"])}, buy on Amway (opens in a new tab)</span></a></li>' for pr in flav)
+            carousel = f'''  <!-- Flavour carousel: glides on its own, arrows or swipe to take over -->
+  <section class="sec carousel-sec" aria-labelledby="flavours-title">
+    <div class="wrap">
+      <div class="sec-head grow"><h2 id="flavours-title">{chead}</h2>
+        <div class="car-nav"><button class="icon-btn" type="button" data-car="-1" aria-label="Previous flavour"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button><button class="icon-btn" type="button" data-car="1" aria-label="Next flavour"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button></div>
+      </div>
+      <p class="sec-note">{cline}</p>
+      <ul class="carousel" id="carousel" data-autoplay>
+{slides}
+      </ul>
+    </div>
+  </section>
+
+'''
+        cgrid = '\n'.join(card(pr, i) for i, pr in enumerate(items))
+        page = cat_tpl
+        for k, v in dict(shared, **{
+                '{{HEADER}}': header.replace('{{HOME}}', 'homepage.html'), '{{HOME}}': 'homepage.html',
+                '{{CAT_NAME}}': name, '{{CAT_TAG}}': tag, '{{CAT_HEADING}}': heading,
+                '{{CAT_COUNT}}': str(counts[slug_]), '{{CAT_GRID}}': cgrid, '{{CAROUSEL}}': carousel,
+                '{{CAT_OTHERS}}': rows(only={slug_}), '{{CAT_BG}}': f'assets/bg-{slug_}.webp'}).items():
+            page = page.replace(k, v)
+        open(os.path.join(ROOT, f'category-{slug_}.html'), 'w').write(page)
+
+    print(f'{len(products)} products ({sum(1 for pr in products if pr["img"])} with photos) -> {OUT}')
+    print('categories', counts, 'uncategorised', [pr['product'] for pr in products if pr['product'] not in cat_of])
 
 
 if __name__ == '__main__':

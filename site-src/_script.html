@@ -1,0 +1,191 @@
+<script>
+(function(){
+'use strict';
+var doc=document,html=doc.documentElement;
+function $(s,c){return (c||doc).querySelector(s)}
+function $$(s,c){return Array.prototype.slice.call((c||doc).querySelectorAll(s))}
+doc.addEventListener('touchstart',function(){},{passive:true}); // enables :active on iOS
+
+var P={{FINDER_DATA}};
+var GOALS={R:'Recovery',L:'Lean Mass',E:'Endurance',S:'Sleep & Longevity'};
+var live=$('#live');
+function say(t){live.textContent='';setTimeout(function(){live.textContent=t},30)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+/* Motion: reveal on viewport entry */
+if(html.classList.contains('motion')){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.15});
+  $$('.grow').forEach(function(el){io.observe(el)});
+}
+
+/* Hero glass video: plain H.264, so it plays everywhere; the poster shows until it does */
+var v=$('#glass-video'),vt=$('#glass-toggle'),userPaused=false;
+if(v){
+  var still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var setBtn=function(playing){vt.setAttribute('aria-label',playing?'Pause animation':'Play animation');$('use',vt).setAttribute('href',playing?'#i-pause':'#i-play')};
+  var play=function(){if(!v.getAttribute('src')){v.autoplay=true;v.src=innerWidth<768?'assets/glass-720.mp4':'assets/glass-1080.mp4'}var p=v.play();if(p&&p.catch)p.catch(function(){})};
+  v.addEventListener('play',function(){setBtn(true)});v.addEventListener('pause',function(){setBtn(false)});
+  vt.hidden=false;setBtn(false);
+  v.addEventListener('error',function(){v.removeAttribute('src');v.load();vt.hidden=true},true);
+  vt.addEventListener('click',function(){if(v.paused){userPaused=false;play()}else{userPaused=true;v.pause()}});
+  if(still){setBtn(false)}else{
+    if(doc.readyState==='complete')play();else window.addEventListener('load',play);
+    doc.addEventListener('visibilitychange',function(){if(!doc.hidden&&!userPaused&&v.paused&&v.getAttribute('src'))v.play().catch(function(){})});
+    if('IntersectionObserver' in window)new IntersectionObserver(function(es){if(userPaused||!v.getAttribute('src'))return;if(es[0].isIntersecting)v.play().catch(function(){});else v.pause()}).observe(v);
+  }
+}
+/* Footer link opens the product index */
+$$('[data-open-index]').forEach(function(a){a.addEventListener('click',function(){$('#index').open=true})});
+
+/* Phone search: the icon opens the search row */
+var mast=$('.mast'),st=$('#search-toggle');
+st.addEventListener('click',function(){var o=mast.classList.toggle('s-open');st.setAttribute('aria-expanded',o);if(o)$('#q').focus()});
+
+/* Product grid: search and "view all". Category pages have a grid but no filter bar. */
+var grid=$('#grid'),cards=grid?$$('#grid > li'):[],fbar=$('#filter'),ftext=$('#filter-text'),
+    viewAll=$('#view-all'),shopTitle=$('#shop-title'),q=$('#q');
+cards.forEach(function(li){li._s=li.textContent.toLowerCase()});
+function show(test,msg){
+  var n=0;
+  cards.forEach(function(li){var on=test?test(li):!li.hasAttribute('data-extra');li.hidden=!on;if(on)n++});
+  if(fbar)fbar.hidden=!test;
+  if(viewAll)viewAll.parentNode.hidden=!!test;
+  if(test&&ftext){ftext.textContent=msg(n);say(ftext.textContent)}
+  return n;
+}
+function goShop(){var t=$('#shop')||$('#all');if(t)t.scrollIntoView();if(shopTitle)shopTitle.focus({preventScroll:true})}
+function search(t){
+  var words=t.split(/\s+/);
+  show(function(li){return words.every(function(w){return li._s.indexOf(w)>-1})},
+       function(n){return n?n+' result'+(n===1?'':'s')+' for “'+t+'”':'Nothing matches “'+t+'”. Try a goal, like sleep.'});
+  goShop();
+}
+if(viewAll)viewAll.addEventListener('click',function(e){e.preventDefault();show(function(){return true},function(n){return 'All '+n+' products'})});
+if($('#filter-clear'))$('#filter-clear').addEventListener('click',function(){show();q.value='';if(shopTitle)shopTitle.focus()});
+$('#search').addEventListener('submit',function(e){
+  e.preventDefault();var t=q.value.trim().toLowerCase();
+  if(!t){show();goShop();return}
+  if(!grid||!$('#filter')){location.href='homepage.html?q='+encodeURIComponent(t);return}   /* search lives on the homepage */
+  search(t);q.blur();
+});
+var urlQ=new URLSearchParams(location.search).get('q');
+if(urlQ&&grid&&fbar){q.value=urlQ;search(urlQ.toLowerCase())}
+
+/* Flavour carousel: glides on its own, arrows or a swipe take over */
+var car=$('#carousel');
+if(car){
+  var slideW=function(){var s=car.firstElementChild;return s?s.getBoundingClientRect().width+parseFloat(getComputedStyle(car).columnGap||16):300},
+      auto=null,stop=function(){clearInterval(auto);auto=null},
+      go=function(d){var max=car.scrollWidth-car.clientWidth-4;
+        car.scrollTo({left:car.scrollLeft>=max&&d>0?0:Math.max(0,car.scrollLeft+d*slideW()),behavior:'smooth'})};
+  $$('[data-car]').forEach(function(b){b.addEventListener('click',function(){stop();go(+b.dataset.car)})});
+  var start=function(){if(!auto&&!matchMedia('(prefers-reduced-motion: reduce)').matches)auto=setInterval(function(){go(1)},3600)};
+  ['pointerdown','wheel','focusin'].forEach(function(ev){car.addEventListener(ev,stop,{passive:true})});
+  car.addEventListener('mouseenter',stop);car.addEventListener('mouseleave',start);
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es){es[0].isIntersecting?start():stop()},{threshold:.2}).observe(car);
+  else start();
+}
+
+/* Dialogs: full-screen menu + finder sheet */
+var menu=$('#menu'),sheet=$('#finder-sheet');
+function openD(d){if(!d.open){d.showModal();html.classList.add('locked')}}
+[menu,sheet].forEach(function(d){
+  d.addEventListener('close',function(){if(!menu.open&&!sheet.open)html.classList.remove('locked')});
+  d.addEventListener('click',function(e){if(e.target===d)d.close()});
+});
+$$('[data-open-menu]').forEach(function(b){b.addEventListener('click',function(){openD(menu)})});
+$$('[data-close]').forEach(function(b){b.addEventListener('click',function(){b.closest('dialog').close()})});
+$$('a',menu).forEach(function(a){a.addEventListener('click',function(){menu.close()})});
+matchMedia('(min-width: 768px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
+
+/* Finder: three questions, one per screen, two results */
+var Q=[
+  {q:'What does most of your training look like?',o:[['Lifting and strength work','Lifting',{L:2,R:1}],['Running, cycling or rowing','Endurance',{E:2,R:1}],['A mix of everything','Mixed',{L:1,E:1,R:1}],['Walking, yoga, staying mobile','Mobility',{S:2,R:1}]]},
+  {q:'What would help most right now?',o:[['Recovering between sessions','Recovery',{R:3}],['Building or keeping muscle','Muscle',{L:3}],['Energy and hydration for long efforts','Energy',{E:3}],['Winding down and sleeping well','Sleep',{S:3}]]},
+  {q:'How do you like to take it?',o:[['Powder, mixed into a drink','Powder',{powder:1.5}],['Ready to drink or eat','Ready',{ready:1.5}],['Tablets, capsules or gummies','Tablets',{pills:1.5}],['No preference','Either',{}]]}
+];
+var fBody=$('#finder-body'),fStep=$('#finder-step'),fBack=$('#finder-back'),step=0,ans=[];
+function picks(){
+  var w={R:0,L:0,E:0,S:0,powder:0,ready:0,pills:0};
+  ans.forEach(function(a,i){var m=Q[i].o[a][2];for(var k in m)w[k]+=m[k]});
+  return Object.keys(P).map(function(id,i){
+    var p=P[id],s=w[p.form]||0;
+    p.g.split('').forEach(function(g,j){s+=w[g]*(j?.6:1)});
+    return {id:id,s:s,i:i};
+  }).sort(function(a,b){return b.s-a.s||a.i-b.i}).slice(0,2);
+}
+function render(focus){
+  fBack.style.visibility=step?'visible':'hidden';
+  if(step<Q.length){
+    var c=Q[step];
+    fStep.textContent='Question '+(step+1)+' of '+Q.length;
+    fBody.innerHTML='<h2 class="q" id="finder-title" tabindex="-1">'+c.q+'</h2><div class="opts">'+c.o.map(function(o,i){
+      var on=ans[step]===i;
+      return '<button type="button" class="opt'+(on?' is-picked':'')+'" data-i="'+i+'"><span>'+o[0]+(on?'<span class="vh"> (your earlier answer)</span>':'')+'</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>';
+    }).join('')+'</div>';
+  }else{
+    fStep.textContent='Your match';
+    fBody.innerHTML='<h2 class="q" id="finder-title" tabindex="-1">Two to start with</h2><p class="basis">Based on: '+ans.map(function(a,i){return Q[i].o[a][1]}).join(' · ')+'</p><ul class="picks">'+picks().map(function(r){
+      var p=P[r.id];
+      return '<li class="pick"><span class="shot"><img src="'+esc(p.img)+'" alt="" width="480" height="480"></span><div><h3 class="p-name">'+esc(p.name)+'</h3><p class="p-desc">'+esc(p.desc)+'</p><p class="why">'+esc(p.why)+'</p><a class="buy" href="'+esc(p.url)+'" target="_blank" rel="noopener">Buy on Amway<span class="vh"> '+esc(p.name)+' (opens in a new tab)</span></a></div></li>';
+    }).join('')+'</ul><div class="sheet-foot"><button class="tlink" type="button" id="finder-restart">Start over</button><a class="tlink" href="#shop" id="finder-shop">See all products</a></div>';
+  }
+  if(focus)$('#finder-title').focus();
+}
+fBody.addEventListener('click',function(e){
+  var o=e.target.closest('.opt');
+  if(o){ans[step]=+o.dataset.i;step++;render(true);return}
+  if(e.target.closest('#finder-restart')){step=0;ans=[];render(true);return}
+  if(e.target.closest('#finder-shop'))sheet.close();
+});
+fBack.addEventListener('click',function(){if(step){step--;render(true)}});
+$$('.q-opt').forEach(function(b){b.addEventListener('click',function(){ans=[+b.dataset.first];step=1;render(false);openD(sheet);$('#finder-title').focus()})});
+$$('[data-open-finder]').forEach(function(b){b.addEventListener('click',function(e){
+  e.preventDefault();
+  if(menu.open)menu.close();
+  if(step>=Q.length){step=0;ans=[]}
+  render(false);openD(sheet);$('#finder-title').focus();
+})});
+
+/* Light through glass: a small caustics shader over the category banner */
+$$('[data-caustics]').forEach(function(cv){
+  if(!html.classList.contains('motion'))return;
+  var gl=cv.getContext('webgl');
+  if(!gl)return;
+  var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  var fs='precision mediump float;uniform vec2 r;uniform float t;'+
+    'float n(vec2 p){return sin(p.x)*sin(p.y);}'+
+    'void main(){vec2 u=(gl_FragCoord.xy/r.y)*3.0;float a=0.0;'+
+    'for(int i=0;i<4;i++){float f=float(i)+1.0;'+
+    'a+=n(u*f+vec2(t*0.25*f,t*0.18*f))/f;'+
+    'a+=n(u.yx*f*1.3-vec2(t*0.2*f,t*0.31*f))/f;}'+
+    'float c=smoothstep(0.55,1.25,abs(a)*1.6);'+
+    'gl_FragColor=vec4(vec3(1.0,0.99,0.96),c*0.5);}';
+  function sh(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s}
+  var pr=gl.createProgram();
+  gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));
+  gl.linkProgram(pr);gl.useProgram(pr);
+  var buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  var loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  var uR=gl.getUniformLocation(pr,'r'),uT=gl.getUniformLocation(pr,'t'),run=true,t0=performance.now();
+  function size(){var d=Math.min(devicePixelRatio||1,1.5);cv.width=cv.clientWidth*d;cv.height=cv.clientHeight*d;gl.viewport(0,0,cv.width,cv.height)}
+  addEventListener('resize',size);size();
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es){run=es[0].isIntersecting;if(run)frame()},{threshold:0}).observe(cv);
+  function frame(){if(!run)return;gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,(performance.now()-t0)/1000);
+    gl.drawArrays(gl.TRIANGLES,0,3);requestAnimationFrame(frame)}
+  frame();
+});
+
+/* Banner art drifts a little as the page scrolls */
+var bg=$('.cat-bg');
+if(bg&&html.classList.contains('motion')){
+  var ticking=false;
+  addEventListener('scroll',function(){
+    if(ticking)return;ticking=true;
+    requestAnimationFrame(function(){bg.style.transform='translate3d(0,'+Math.min(scrollY*.18,120)+'px,0) scale(1.08)';ticking=false});
+  },{passive:true});
+}
+})();
+</script>

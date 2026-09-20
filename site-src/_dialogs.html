@@ -1,0 +1,30 @@
+<!-- Full-screen nav panel -->
+<dialog class="menu" id="menu" aria-label="Menu">
+  <div class="menu-in">
+    <div class="wrap bar">
+      <button class="icon-btn" type="button" data-close aria-label="Close menu"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
+      <span class="wordmark" aria-hidden="true"><svg class="mark" viewBox="0 0 13 22" aria-hidden="true"><path d="M6.5 1L1 21h11L6.5 1zM3.6 13.5h5.8"/></svg>Aspire Health</span>
+      <span></span>
+    </div>
+    <nav class="wrap menu-nav" aria-label="Menu">
+      <ul class="menu-list">
+        <li><a href="#shop">Shop all <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li><a href="#goals">Goals <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li><button type="button" data-open-finder>Finder <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button></li>
+      </ul>
+    </nav>
+  </div>
+</dialog>
+
+<!-- Finder bottom sheet -->
+<dialog class="sheet" id="finder-sheet" aria-labelledby="finder-title">
+  <div class="sheet-in">
+    <div class="sheet-top">
+      <button class="icon-btn" type="button" id="finder-back" aria-label="Previous question"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button>
+      <p class="q-step" id="finder-step">Question 1 of 3</p>
+      <button class="icon-btn" type="button" data-close aria-label="Close finder"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div id="finder-body"></div>
+  </div>
+</dialog>
+

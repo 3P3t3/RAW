@@ -1,0 +1,24 @@
+<!-- 8. Footer: alphabetical product index -->
+<footer class="foot dark">
+  <div class="wrap">
+    <div class="foot-top">
+      <p class="wordmark"><svg class="mark" viewBox="0 0 13 22" aria-hidden="true"><path d="M6.5 1L1 21h11L6.5 1zM3.6 13.5h5.8"/></svg>Aspire Health</p>
+      <nav class="foot-cols" aria-label="Footer">
+        <div><p class="foot-h">Shop</p><ul><li><a href="#shop">Our picks</a></li><li><a href="#index" data-open-index>All {{TOTAL}} products</a></li><li><a href="#finder" data-open-finder>Product finder</a></li></ul></div>
+        <div><p class="foot-h">Goals</p><ul><li><a href="#shop" data-goal="R">Recovery</a></li><li><a href="#shop" data-goal="L">Lean Mass</a></li><li><a href="#shop" data-goal="E">Endurance</a></li><li><a href="#shop" data-goal="S">Sleep &amp; Longevity</a></li></ul></div>
+        <div><p class="foot-h">Ordering</p><ul><li><a href="#ordering">How ordering works</a></li><li><a href="https://www.amway.com" target="_blank" rel="noopener">Amway.com<span class="vh"> (opens in a new tab)</span></a></li></ul></div>
+      </nav>
+    </div>
+    <details class="index" id="index">
+      <summary><span><span class="foot-h">Product index</span><span class="count">{{TOTAL}}</span></span><span class="pm" aria-hidden="true"></span></summary>
+      <ul>
+{{INDEX}}
+      </ul>
+    </details>
+    <div class="foot-meta">
+      <p id="ordering">Every product opens on Amway.com, which handles checkout, delivery and returns. Products are sold and shipped by Amway through Aspire Health share links. Amway, Nutrilite, XS, n* and Artistry are trademarks of their respective owners. These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure or prevent any disease.</p>
+      <p>© 2026 Aspire Health</p>
+    </div>
+  </div>
+</footer>
+
