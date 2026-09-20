@@ -13,6 +13,9 @@ STUDIO = os.path.join(ROOT, 'product-shots')  # re-lit studio versions, already 
 ASSETS = os.path.join(ROOT, 'assets', 'products')
 CUTS = os.path.join(ROOT, 'assets', 'cutouts')  # transparent versions, for products shown on dark bands
 STAMP = os.path.join(ROOT, 'assets', '.cut-version')  # fingerprint of normalize(), written once a build finishes
+# one shared stylesheet, linked by every page; it sits beside the pages rather than under assets/ so its
+# url(assets/...) backgrounds resolve against the same folder they did when the css was inlined
+STYLE_OUT = os.path.join(ROOT, 'style.css')
 RECUT = False  # set for the whole run when that fingerprint moved, so every cached cut-out counts as stale
 
 # family prefix -> (type descriptor, goals, format). Longest prefix wins.
@@ -301,7 +304,9 @@ def main():
     part = lambda n: open(os.path.join(ROOT, 'site-src', n)).read()
     style, header, footer, dialogs, script, icons = (part('style.css'), part('_header.html'), part('_footer.html'),
                                                      part('_dialogs.html'), part('_script.html'), part('_icons.html'))
-    shared = {'{{STYLE}}': style, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{SCRIPT}}': script,
+    open(STYLE_OUT, 'w').write(style)  # served once and cached, instead of inlined into all eight pages
+    style_href = 'style.css?v=' + hashlib.sha1(style.encode()).hexdigest()[:8]  # bust the cache when the css moves
+    shared = {'{{STYLE}}': style_href, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{SCRIPT}}': script,
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)), '{{CONSULT_URL}}': CONSULT_URL,
               '{{FINDER_DATA}}': finder_json}
 

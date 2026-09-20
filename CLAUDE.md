@@ -2,8 +2,8 @@
 
 ## Never read the generated pages
 
-`homepage.html` is ~106k chars (~26k tokens). All eight generated pages together are ~600k
-chars (~150k tokens). All nine files in `site-src/` together are ~89k chars (~22k tokens).
+`homepage.html` is ~77k chars (~19k tokens). All eight generated pages together are ~370k
+chars (~93k tokens). All nine files in `site-src/` together are ~89k chars (~22k tokens).
 
 **Reading one generated page costs more than reading the entire source of the site.**
 To check something in a generated page, grep it:
@@ -21,7 +21,9 @@ Source (edit these):
   `FEATURED`, `GOAL_TILES`, `FINDER`, `ISLANDS`, `CAROUSELS` tables
 - `site-src/homepage.template.html`, `site-src/category.template.html`
 - `site-src/_header.html`, `_footer.html`, `_dialogs.html`, `_icons.html`, `_script.html`
-- `site-src/style.css` — inlined into every page via `{{STYLE}}`; there is no served .css
+- `site-src/style.css` — copied to `style.css` at the repo root at build time; every page links it via
+  `{{STYLE}}`, which the build fills in with a content-hash query string. It sits at the root, not under
+  `assets/`, so its `url(assets/...)` backgrounds keep resolving against the page's own folder
 - `share-links.csv` (`product,share_link,photo`) — the product list, 65 rows
 - `bestsellers.csv` (`product,units_this_week`) — top 3 rows become the podium; `product` must
   match a `share-links.csv` name or the build exits. Blank `units_this_week` just hides the count.
@@ -30,7 +32,7 @@ Generated (never hand-edit; the next build overwrites them):
 - `homepage.html`
 - `category-daily-foundations.html`, `-energy-focus.html`, `-fat-loss.html`, `-hydration.html`,
   `-protein.html`, `-recovery.html`, `-skin-redefined.html`
-- `assets/products/`, `assets/cutouts/`, `assets/.cut-version`
+- `style.css`, `assets/products/`, `assets/cutouts/`, `assets/.cut-version`
 
 `index.html` is a hand-written redirect to `homepage.html` and is not generated.
 
