@@ -79,6 +79,11 @@ CAROUSELS = {
     'energy-focus': ('XS Energy Drink 12 oz', 'Pick your flavour', 'The 12 oz range, one can at a time.'),
 }
 
+ISLANDS = {  # the place each shelf lives on
+    'recovery': 'Cabin', 'hydration': 'River', 'energy-focus': 'Lighthouse', 'protein': 'Gym',
+    'fat-loss': 'Lab', 'daily-foundations': 'Farm', 'skin-redefined': 'Glasshouse',
+}
+
 CAT_THUMB = {  # the pack shown on the homepage row for each category
     'recovery': 'XS Post-Workout Recovery - Fruit Punch (12 Stick Packs)',
     'hydration': 'XS Sports Twist Tubes - Raspberry Lemonade',
@@ -251,13 +256,21 @@ def main():
         for slug_, name, tag, heading, fams in CATEGORIES:
             if only and slug_ in only:
                 continue
-            img = by[CAT_THUMB[slug_]]['img']
             out_.append(
                 f'          <li><a class="goal" href="category-{slug_}.html">'
                 f'<span class="goal-name">{name}</span><span class="goal-desc">{tag.split(":")[0]}</span>'
-                f'<span class="goal-n">{counts[slug_]} products</span>'
-                f'<span class="goal-img"><img src="{img}" alt="" width="600" height="600" loading="lazy"></span></a></li>')
+                f'<span class="goal-island"><img src="assets/islands/{slug_}.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>')
         return '\n'.join(out_)
+
+    isles = []
+    for i, (slug_, name, tag, heading, fams) in enumerate(CATEGORIES):
+        prio = ' fetchpriority="high"' if i < 3 else ' loading="lazy"'
+        place = ISLANDS[slug_]
+        isles.append(
+            f'        <li class="isle" style="--i:{i}"><a href="category-{slug_}.html">'
+            f'<span class="isle-art"><img src="assets/islands/{slug_}.webp" alt="" width="760" height="760"{prio}></span>'
+            f'<span class="isle-label"><span class="isle-name">{name}</span>'
+            f'<span class="isle-place">{place}</span></span></a></li>')
 
     order = [by[n] for n in FEATURED] + sorted((pr for pr in products if pr['product'] not in FEATURED), key=lambda pr: pr['product'].lower())
     grid = [card(pr, i, '' if pr['product'] in FEATURED else ' data-extra hidden') for i, pr in enumerate(order)]
@@ -274,7 +287,10 @@ def main():
     part = lambda n: open(os.path.join(ROOT, 'site-src', n)).read()
     style, header, footer, dialogs, script, icons = (part('style.css'), part('_header.html'), part('_footer.html'),
                                                      part('_dialogs.html'), part('_script.html'), part('_icons.html'))
-    shared = {'{{STYLE}}': style, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{SCRIPT}}': script,
+    foot_cats = ('<div><p class="foot-h">Shelves</p><ul>'
+                 + ''.join(f'<li><a href="category-{c[0]}.html">{c[1]}</a></li>' for c in CATEGORIES)
+                 + '</ul></div>')
+    shared = {'{{STYLE}}': style, '{{FOOT_CATS}}': foot_cats, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{SCRIPT}}': script,
               '{{ICONS}}': icons, '{{INDEX}}': '\n'.join(index), '{{TOTAL}}': str(len(products)),
               '{{FINDER_DATA}}': finder_json}
 
@@ -302,7 +318,7 @@ def main():
 
     out = open(SRC).read()
     for k, v in dict(shared, **{'{{HEADER}}': header.replace('{{HOME}}', ''), '{{HOME}}': '',
-                                '{{GOALS}}': cat_rows(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium)}).items():
+                                '{{GOALS}}': cat_rows(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{ISLANDS}}': '\n'.join(isles)}).items():
         out = out.replace(k, v)
     open(OUT, 'w').write(out)
 

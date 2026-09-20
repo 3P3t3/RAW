@@ -67,7 +67,8 @@ a,button,summary{touch-action:manipulation}
 
 /* 1 + 2. Header: menu, wordmark, search. Search opens as a row on phones. */
 .mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--teal);color:var(--sand)}
-.bar{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:8px;height:60px}
+.bar{display:grid;grid-template-columns:44px 1fr auto auto;align-items:center;gap:4px;height:60px}
+.sound-toggle{color:var(--sand)}
 .wordmark{justify-self:center;display:inline-flex;align-items:center;gap:10px;min-height:44px;font-family:var(--sans);font-weight:800;font-stretch:112%;font-size:14px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;color:var(--sand);text-decoration:none}
 .wordmark .mark{width:13px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.4}
 .nav-inline{display:none}
@@ -123,6 +124,8 @@ html:not(.js) .search-toggle{visibility:hidden}
 .goal-desc{grid-area:desc;margin-top:8px;font-size:15px;line-height:1.35;color:var(--text)}
 .goal-n{grid-area:n;margin-top:6px;font-size:15px;font-variant-numeric:tabular-nums;color:var(--text)}
 .goal-img{grid-area:img;display:block;width:88px;aspect-ratio:1;justify-self:end;overflow:hidden}
+.goal-island{grid-area:img;display:flex;align-items:center;justify-content:flex-end;width:96px;height:78px}
+.goal-island img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;filter:drop-shadow(0 10px 10px rgba(30,38,47,.25))}
 .goal-img img{display:block;width:100%;height:100%;object-fit:contain}
 
 /* 5. Products: one backdrop, no chrome */
@@ -233,10 +236,11 @@ html:not(.js) button[data-open-finder]{display:none}
 /* ---------- 768px ---------- */
 @media (min-width:768px){
   :root{--pad:40px;--sec:96px;--mast:76px}
-  .mast .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:24px;height:76px}
+  .mast .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto;align-items:center;gap:24px;height:76px}
   .mast .search{justify-self:end;width:min(100%,300px)}
   .mast .bar{display:contents}
   .menu-btn,.search-toggle{display:none}
+  .mast .sound-toggle{order:4;justify-self:end;margin-left:-6px}
   .mast .wordmark{justify-self:start;font-size:14px}
   .nav-inline{display:flex;justify-content:center;gap:4px;white-space:nowrap}
   .nav-inline a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--sand);text-decoration:none}
@@ -267,6 +271,7 @@ html:not(.js) button[data-open-finder]{display:none}
   .goal-desc{margin-top:0;font-size:17px}
   .goal-n{margin-top:0}
   .goal-img{width:120px}
+  .goal-island{grid-area:auto;grid-column:4;align-self:center;justify-self:end;width:128px;height:104px}
 
   .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:48px 20px}
   .shop .grid{row-gap:0}
@@ -360,6 +365,30 @@ html:not(.js) button[data-open-finder]{display:none}
   .pod-3{transform:translateY(18px)}
   .pod-rank{top:-40px;font-size:140px}
 }
+
+/* ---------- Archipelago: seven floating islands ---------- */
+.isles-sec{overflow:hidden}
+.archipelago{contain:layout paint}
+.archipelago{position:relative;height:clamp(330px,74vw,430px);margin-top:4px}
+.isles{list-style:none;margin:0;padding:0;position:absolute;inset:0}
+.isle{position:absolute;left:50%;top:50%;width:var(--w,150px);margin-left:calc(var(--w,150px) / -2);transition:filter .3s}
+.isle a{display:grid;justify-items:center;gap:6px;color:var(--ink);text-decoration:none}
+.isle-art{display:block;width:100%;filter:drop-shadow(0 24px 22px rgba(30,38,47,.28))}
+.isle-art img{display:block;width:100%;height:auto}
+.isle-label{display:grid;justify-items:center;gap:2px;text-align:center;opacity:var(--label,1);transition:opacity .3s}
+.isle-name{font:800 16px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.isle-place{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text);opacity:.7}
+.isle a:focus-visible .isle-name{text-decoration:underline;text-underline-offset:4px}
+@media (hover:hover){.isle a:hover .isle-name{text-decoration:underline;text-underline-offset:4px}}
+.isles-toggle{position:absolute;right:0;bottom:0;color:var(--teal);border:1px solid var(--line)}
+html:not(.js) .archipelago{height:auto}
+html:not(.js) .isles{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+html:not(.js) .isle{position:static;width:auto;margin:0}
+@media (min-width:768px){
+  .archipelago{height:540px;margin-top:24px}
+  .isle-name{font-size:19px}
+  .isle-place{font-size:12px}
+}
 </style>
 </head>
 <body>
@@ -373,6 +402,8 @@ html:not(.js) button[data-open-finder]{display:none}
   <symbol id="i-out" viewBox="0 0 24 24"><path d="M8 16L17 7M9 7h8v8"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 8.5a5 5 0 010 7"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9.5l4 5M21 9.5l-4 5"/></symbol>
   <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
 </svg>
 
@@ -388,6 +419,7 @@ html:not(.js) button[data-open-finder]{display:none}
         <a href="#goals">Goals</a>
         <a href="#finder" data-open-finder>Finder</a>
       </nav>
+      <button class="icon-btn sound-toggle" id="sound-toggle" type="button" aria-label="Turn interface sounds off" aria-pressed="true" hidden><svg class="ic" aria-hidden="true"><use href="#i-sound"/></svg></button>
       <button class="icon-btn search-toggle" id="search-toggle" type="button" aria-label="Search products" aria-expanded="false" aria-controls="search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
     </div>
     <form class="search" id="search" role="search" action="#shop">
@@ -432,12 +464,12 @@ html:not(.js) button[data-open-finder]{display:none}
     <div class="wrap">
       <div class="sec-head grow"><h2 id="more-title">Keep looking</h2></div>
       <ul class="goal-index">
-          <li><a class="goal" href="category-recovery.html"><span class="goal-name">Recovery</span><span class="goal-desc">Wind down, repair and sleep</span><span class="goal-n">11 products</span><span class="goal-img"><img src="assets/products/xs-post-workout-recovery-fruit-punch-12-stick-packs.webp" alt="" width="600" height="600" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-hydration.html"><span class="goal-name">Hydration</span><span class="goal-desc">Electrolytes and drink mixes for long, hot and sweaty sessions.</span><span class="goal-n">5 products</span><span class="goal-img"><img src="assets/products/xs-sports-twist-tubes-raspberry-lemonade.webp" alt="" width="600" height="600" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-energy-focus.html"><span class="goal-name">Energy &amp; Focus</span><span class="goal-desc">Pre-workout, tablets and the full XS energy range.</span><span class="goal-n">27 products</span><span class="goal-img"><img src="assets/products/xs-energy-drink-12-oz-classic.webp" alt="" width="600" height="600" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-protein.html"><span class="goal-name">Protein Snack Pack</span><span class="goal-desc">Powders, shakes, bars and crisps to hit your protein for the day.</span><span class="goal-n">15 products</span><span class="goal-img"><img src="assets/products/xs-sports-protein-bars-chocolate-peanut-butter.webp" alt="" width="600" height="600" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-fat-loss.html"><span class="goal-name">Fat Loss</span><span class="goal-desc">Thermogenic support to pair with your training.</span><span class="goal-n">1 products</span><span class="goal-img"><img src="assets/products/xs-ignite-powder-moro-blood-orange.webp" alt="" width="600" height="600" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-daily-foundations.html"><span class="goal-name">Daily Foundations</span><span class="goal-desc">The everyday base</span><span class="goal-n">3 products</span><span class="goal-img"><img src="assets/products/xs-creatine.webp" alt="" width="600" height="600" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-recovery.html"><span class="goal-name">Recovery</span><span class="goal-desc">Wind down, repair and sleep</span><span class="goal-island"><img src="assets/islands/recovery.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-hydration.html"><span class="goal-name">Hydration</span><span class="goal-desc">Electrolytes and drink mixes for long, hot and sweaty sessions.</span><span class="goal-island"><img src="assets/islands/hydration.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-energy-focus.html"><span class="goal-name">Energy &amp; Focus</span><span class="goal-desc">Pre-workout, tablets and the full XS energy range.</span><span class="goal-island"><img src="assets/islands/energy-focus.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-protein.html"><span class="goal-name">Protein Snack Pack</span><span class="goal-desc">Powders, shakes, bars and crisps to hit your protein for the day.</span><span class="goal-island"><img src="assets/islands/protein.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-fat-loss.html"><span class="goal-name">Fat Loss</span><span class="goal-desc">Thermogenic support to pair with your training.</span><span class="goal-island"><img src="assets/islands/fat-loss.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-daily-foundations.html"><span class="goal-name">Daily Foundations</span><span class="goal-desc">The everyday base</span><span class="goal-island"><img src="assets/islands/daily-foundations.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>
       </ul>
     </div>
   </section>
@@ -472,7 +504,7 @@ html:not(.js) button[data-open-finder]{display:none}
       <p class="wordmark"><svg class="mark" viewBox="0 0 13 22" aria-hidden="true"><path d="M6.5 1L1 21h11L6.5 1zM3.6 13.5h5.8"/></svg>Aspire Health</p>
       <nav class="foot-cols" aria-label="Footer">
         <div><p class="foot-h">Shop</p><ul><li><a href="#shop">Our picks</a></li><li><a href="#index" data-open-index>All 65 products</a></li><li><a href="#finder" data-open-finder>Product finder</a></li></ul></div>
-        <div><p class="foot-h">Goals</p><ul><li><a href="#shop" data-goal="R">Recovery</a></li><li><a href="#shop" data-goal="L">Lean Mass</a></li><li><a href="#shop" data-goal="E">Endurance</a></li><li><a href="#shop" data-goal="S">Sleep &amp; Longevity</a></li></ul></div>
+        {{FOOT_CATS}}
         <div><p class="foot-h">Ordering</p><ul><li><a href="#ordering">How ordering works</a></li><li><a href="https://www.amway.com" target="_blank" rel="noopener">Amway.com<span class="vh"> (opens in a new tab)</span></a></li></ul></div>
       </nav>
     </div>
@@ -822,6 +854,111 @@ $$('.pod-num').forEach(function(el){
   if('IntersectionObserver' in window)new IntersectionObserver(function(es,o){if(es[0].isIntersecting){run();o.disconnect()}},{threshold:.6}).observe(el);
   else run();
 });
+
+/* The archipelago: islands drift around a slow ellipse, each bobbing on its own */
+var arch=$('#archipelago');
+if(arch){
+  var isles=$$('.isle',arch),tog=$('#isles-toggle'),N=isles.length,ang=0,last=0,paused=false,raf=null;
+  var layout=function(){
+    var w=arch.clientWidth,wide=w>=768,base=wide?Math.min(196,w*.165):Math.min(122,w*.30);
+    var rx=wide?w/2-base*.52:w*.60,ry=wide?74:46;   /* on phones the ring runs off both edges, like a procession */
+    isles.forEach(function(el,i){
+      var a=ang+i*2*Math.PI/N,d=Math.cos(a),f=(d+1)/2,k=.78+.22*f;
+      var bob=Math.sin(performance.now()/1000*.55+i*1.7)*(wide?9:6);
+      el.style.setProperty('--w',Math.round(base*k)+'px');
+      var y=-(base*k)*.52-d*ry+bob;                 /* the ring sits centred in its band */
+      el.style.transform='translate3d('+Math.round(Math.sin(a)*rx)+'px,'+Math.round(y)+'px,0)';
+      el.style.zIndex=Math.round(f*100);
+      el.style.opacity=(.72+.28*f).toFixed(2);
+      el.style.setProperty('--label',Math.max(0,f*f*f*f*1.6-.15).toFixed(2));  /* only the nearest islands name themselves */
+      el.style.filter='saturate('+(.82+.18*f).toFixed(2)+')';
+    });
+  };
+  var frame=function(t){
+    if(!paused){var dt=last?Math.min(t-last,60):16;ang+=dt*0.00007}
+    last=t;layout();raf=requestAnimationFrame(frame);
+  };
+  var stop=function(){paused=true;tog.setAttribute('aria-label','Start the islands');$('use',tog).setAttribute('href','#i-play')};
+  var start=function(){paused=false;tog.setAttribute('aria-label','Pause the islands');$('use',tog).setAttribute('href','#i-pause')};
+  layout();                                   /* place them before the first paint */
+  addEventListener('load',layout);
+  if(html.classList.contains('motion')){
+    tog.hidden=false;
+    tog.addEventListener('click',function(){paused?start():stop()});
+    arch.addEventListener('pointerenter',function(){paused=true});
+    arch.addEventListener('pointerleave',function(){if(tog.getAttribute('aria-label')!=='Start the islands')paused=false});
+    arch.addEventListener('focusin',function(){paused=true});
+    addEventListener('resize',layout);
+    if('IntersectionObserver' in window)new IntersectionObserver(function(es){
+      if(es[0].isIntersecting){if(!raf)raf=requestAnimationFrame(frame)}
+      else if(raf){cancelAnimationFrame(raf);raf=null;last=0}
+    },{threshold:.05}).observe(arch);
+    else raf=requestAnimationFrame(frame);
+  }else{
+    layout();addEventListener('resize',layout);   /* reduced motion: a still archipelago */
+  }
+}
+
+/* Interface sound: short glassy ticks, synthesised here so there is nothing to download */
+(function(){
+  var btn=$('#sound-toggle');
+  if(!btn||!(window.AudioContext||window.webkitAudioContext))return;
+  var KEY='aspire-sound',on=true;
+  try{on=localStorage.getItem(KEY)!=='off'}catch(e){}
+  var ctx=null,bus=null;
+  function wake(){
+    if(!ctx){
+      ctx=new (window.AudioContext||window.webkitAudioContext)();
+      bus=ctx.createGain();bus.gain.value=.5;
+      var hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=220;
+      bus.connect(hp);hp.connect(ctx.destination);
+    }
+    if(ctx.state==='suspended')ctx.resume();
+  }
+  /* one tick = two detuned partials through a soft bandpass, 40-140ms */
+  function tick(f,dur,vol,type){
+    if(!on)return;
+    wake();
+    var t=ctx.currentTime,g=ctx.createGain(),bp=ctx.createBiquadFilter();
+    bp.type='bandpass';bp.frequency.value=f*1.6;bp.Q.value=.8;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol,t+.006);
+    g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    [1,1.503].forEach(function(m,i){
+      var o=ctx.createOscillator();
+      o.type=type||'triangle';
+      o.frequency.setValueAtTime(f*m*(1+(Math.random()-.5)*.02),t);
+      o.frequency.exponentialRampToValueAtTime(f*m*.86,t+dur);
+      var og=ctx.createGain();og.gain.value=i?.35:1;
+      o.connect(og);og.connect(bp);o.start(t);o.stop(t+dur+.02);
+    });
+    bp.connect(g);g.connect(bus);
+  }
+  var sounds={
+    tap:function(){tick(1180,.09,.10)},          /* links, cards, options */
+    go:function(){tick(760,.16,.12,'sine')},      /* primary buttons */
+    isle:function(){tick(430,.22,.13,'sine')},    /* an island opening */
+    soft:function(){tick(1560,.05,.045)}          /* small controls */
+  };
+  doc.addEventListener('pointerdown',function(e){
+    var t=e.target.closest('a,button');
+    if(!t||t.id==='sound-toggle')return;
+    if(t.closest('.isle'))return sounds.isle();
+    if(t.classList.contains('btn'))return sounds.go();
+    if(t.classList.contains('icon-btn')||t.closest('.q-opt,.opt'))return sounds.soft();
+    sounds.tap();
+  },{passive:true});
+  function paint(){
+    btn.setAttribute('aria-pressed',on);
+    btn.setAttribute('aria-label',on?'Turn interface sounds off':'Turn interface sounds on');
+    $('use',btn).setAttribute('href',on?'#i-sound':'#i-mute');
+  }
+  btn.addEventListener('click',function(){
+    on=!on;try{localStorage.setItem(KEY,on?'on':'off')}catch(e){}
+    paint();if(on){wake();sounds.tap()}
+  });
+  btn.hidden=false;paint();
+})();
 })();
 </script>
 </body>

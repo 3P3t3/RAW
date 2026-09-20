@@ -54,7 +54,8 @@ a,button,summary{touch-action:manipulation}
 
 /* 1 + 2. Header: menu, wordmark, search. Search opens as a row on phones. */
 .mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--teal);color:var(--sand)}
-.bar{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:8px;height:60px}
+.bar{display:grid;grid-template-columns:44px 1fr auto auto;align-items:center;gap:4px;height:60px}
+.sound-toggle{color:var(--sand)}
 .wordmark{justify-self:center;display:inline-flex;align-items:center;gap:10px;min-height:44px;font-family:var(--sans);font-weight:800;font-stretch:112%;font-size:14px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;color:var(--sand);text-decoration:none}
 .wordmark .mark{width:13px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.4}
 .nav-inline{display:none}
@@ -110,6 +111,8 @@ html:not(.js) .search-toggle{visibility:hidden}
 .goal-desc{grid-area:desc;margin-top:8px;font-size:15px;line-height:1.35;color:var(--text)}
 .goal-n{grid-area:n;margin-top:6px;font-size:15px;font-variant-numeric:tabular-nums;color:var(--text)}
 .goal-img{grid-area:img;display:block;width:88px;aspect-ratio:1;justify-self:end;overflow:hidden}
+.goal-island{grid-area:img;display:flex;align-items:center;justify-content:flex-end;width:96px;height:78px}
+.goal-island img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;filter:drop-shadow(0 10px 10px rgba(30,38,47,.25))}
 .goal-img img{display:block;width:100%;height:100%;object-fit:contain}
 
 /* 5. Products: one backdrop, no chrome */
@@ -220,10 +223,11 @@ html:not(.js) button[data-open-finder]{display:none}
 /* ---------- 768px ---------- */
 @media (min-width:768px){
   :root{--pad:40px;--sec:96px;--mast:76px}
-  .mast .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:24px;height:76px}
+  .mast .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto;align-items:center;gap:24px;height:76px}
   .mast .search{justify-self:end;width:min(100%,300px)}
   .mast .bar{display:contents}
   .menu-btn,.search-toggle{display:none}
+  .mast .sound-toggle{order:4;justify-self:end;margin-left:-6px}
   .mast .wordmark{justify-self:start;font-size:14px}
   .nav-inline{display:flex;justify-content:center;gap:4px;white-space:nowrap}
   .nav-inline a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--sand);text-decoration:none}
@@ -254,6 +258,7 @@ html:not(.js) button[data-open-finder]{display:none}
   .goal-desc{margin-top:0;font-size:17px}
   .goal-n{margin-top:0}
   .goal-img{width:120px}
+  .goal-island{grid-area:auto;grid-column:4;align-self:center;justify-self:end;width:128px;height:104px}
 
   .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:48px 20px}
   .shop .grid{row-gap:0}
@@ -346,4 +351,28 @@ html:not(.js) button[data-open-finder]{display:none}
   .pod-1 .shot{margin-top:-104px}
   .pod-3{transform:translateY(18px)}
   .pod-rank{top:-40px;font-size:140px}
+}
+
+/* ---------- Archipelago: seven floating islands ---------- */
+.isles-sec{overflow:hidden}
+.archipelago{contain:layout paint}
+.archipelago{position:relative;height:clamp(330px,74vw,430px);margin-top:4px}
+.isles{list-style:none;margin:0;padding:0;position:absolute;inset:0}
+.isle{position:absolute;left:50%;top:50%;width:var(--w,150px);margin-left:calc(var(--w,150px) / -2);transition:filter .3s}
+.isle a{display:grid;justify-items:center;gap:6px;color:var(--ink);text-decoration:none}
+.isle-art{display:block;width:100%;filter:drop-shadow(0 24px 22px rgba(30,38,47,.28))}
+.isle-art img{display:block;width:100%;height:auto}
+.isle-label{display:grid;justify-items:center;gap:2px;text-align:center;opacity:var(--label,1);transition:opacity .3s}
+.isle-name{font:800 16px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.isle-place{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text);opacity:.7}
+.isle a:focus-visible .isle-name{text-decoration:underline;text-underline-offset:4px}
+@media (hover:hover){.isle a:hover .isle-name{text-decoration:underline;text-underline-offset:4px}}
+.isles-toggle{position:absolute;right:0;bottom:0;color:var(--teal);border:1px solid var(--line)}
+html:not(.js) .archipelago{height:auto}
+html:not(.js) .isles{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+html:not(.js) .isle{position:static;width:auto;margin:0}
+@media (min-width:768px){
+  .archipelago{height:540px;margin-top:24px}
+  .isle-name{font-size:19px}
+  .isle-place{font-size:12px}
 }

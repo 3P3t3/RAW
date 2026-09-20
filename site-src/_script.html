@@ -231,5 +231,110 @@ $$('.pod-num').forEach(function(el){
   if('IntersectionObserver' in window)new IntersectionObserver(function(es,o){if(es[0].isIntersecting){run();o.disconnect()}},{threshold:.6}).observe(el);
   else run();
 });
+
+/* The archipelago: islands drift around a slow ellipse, each bobbing on its own */
+var arch=$('#archipelago');
+if(arch){
+  var isles=$$('.isle',arch),tog=$('#isles-toggle'),N=isles.length,ang=0,last=0,paused=false,raf=null;
+  var layout=function(){
+    var w=arch.clientWidth,wide=w>=768,base=wide?Math.min(196,w*.165):Math.min(122,w*.30);
+    var rx=wide?w/2-base*.52:w*.60,ry=wide?74:46;   /* on phones the ring runs off both edges, like a procession */
+    isles.forEach(function(el,i){
+      var a=ang+i*2*Math.PI/N,d=Math.cos(a),f=(d+1)/2,k=.78+.22*f;
+      var bob=Math.sin(performance.now()/1000*.55+i*1.7)*(wide?9:6);
+      el.style.setProperty('--w',Math.round(base*k)+'px');
+      var y=-(base*k)*.52-d*ry+bob;                 /* the ring sits centred in its band */
+      el.style.transform='translate3d('+Math.round(Math.sin(a)*rx)+'px,'+Math.round(y)+'px,0)';
+      el.style.zIndex=Math.round(f*100);
+      el.style.opacity=(.72+.28*f).toFixed(2);
+      el.style.setProperty('--label',Math.max(0,f*f*f*f*1.6-.15).toFixed(2));  /* only the nearest islands name themselves */
+      el.style.filter='saturate('+(.82+.18*f).toFixed(2)+')';
+    });
+  };
+  var frame=function(t){
+    if(!paused){var dt=last?Math.min(t-last,60):16;ang+=dt*0.00007}
+    last=t;layout();raf=requestAnimationFrame(frame);
+  };
+  var stop=function(){paused=true;tog.setAttribute('aria-label','Start the islands');$('use',tog).setAttribute('href','#i-play')};
+  var start=function(){paused=false;tog.setAttribute('aria-label','Pause the islands');$('use',tog).setAttribute('href','#i-pause')};
+  layout();                                   /* place them before the first paint */
+  addEventListener('load',layout);
+  if(html.classList.contains('motion')){
+    tog.hidden=false;
+    tog.addEventListener('click',function(){paused?start():stop()});
+    arch.addEventListener('pointerenter',function(){paused=true});
+    arch.addEventListener('pointerleave',function(){if(tog.getAttribute('aria-label')!=='Start the islands')paused=false});
+    arch.addEventListener('focusin',function(){paused=true});
+    addEventListener('resize',layout);
+    if('IntersectionObserver' in window)new IntersectionObserver(function(es){
+      if(es[0].isIntersecting){if(!raf)raf=requestAnimationFrame(frame)}
+      else if(raf){cancelAnimationFrame(raf);raf=null;last=0}
+    },{threshold:.05}).observe(arch);
+    else raf=requestAnimationFrame(frame);
+  }else{
+    layout();addEventListener('resize',layout);   /* reduced motion: a still archipelago */
+  }
+}
+
+/* Interface sound: short glassy ticks, synthesised here so there is nothing to download */
+(function(){
+  var btn=$('#sound-toggle');
+  if(!btn||!(window.AudioContext||window.webkitAudioContext))return;
+  var KEY='aspire-sound',on=true;
+  try{on=localStorage.getItem(KEY)!=='off'}catch(e){}
+  var ctx=null,bus=null;
+  function wake(){
+    if(!ctx){
+      ctx=new (window.AudioContext||window.webkitAudioContext)();
+      bus=ctx.createGain();bus.gain.value=.5;
+      var hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=220;
+      bus.connect(hp);hp.connect(ctx.destination);
+    }
+    if(ctx.state==='suspended')ctx.resume();
+  }
+  /* one tick = two detuned partials through a soft bandpass, 40-140ms */
+  function tick(f,dur,vol,type){
+    if(!on)return;
+    wake();
+    var t=ctx.currentTime,g=ctx.createGain(),bp=ctx.createBiquadFilter();
+    bp.type='bandpass';bp.frequency.value=f*1.6;bp.Q.value=.8;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol,t+.006);
+    g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    [1,1.503].forEach(function(m,i){
+      var o=ctx.createOscillator();
+      o.type=type||'triangle';
+      o.frequency.setValueAtTime(f*m*(1+(Math.random()-.5)*.02),t);
+      o.frequency.exponentialRampToValueAtTime(f*m*.86,t+dur);
+      var og=ctx.createGain();og.gain.value=i?.35:1;
+      o.connect(og);og.connect(bp);o.start(t);o.stop(t+dur+.02);
+    });
+    bp.connect(g);g.connect(bus);
+  }
+  var sounds={
+    tap:function(){tick(1180,.09,.10)},          /* links, cards, options */
+    go:function(){tick(760,.16,.12,'sine')},      /* primary buttons */
+    isle:function(){tick(430,.22,.13,'sine')},    /* an island opening */
+    soft:function(){tick(1560,.05,.045)}          /* small controls */
+  };
+  doc.addEventListener('pointerdown',function(e){
+    var t=e.target.closest('a,button');
+    if(!t||t.id==='sound-toggle')return;
+    if(t.closest('.isle'))return sounds.isle();
+    if(t.classList.contains('btn'))return sounds.go();
+    if(t.classList.contains('icon-btn')||t.closest('.q-opt,.opt'))return sounds.soft();
+    sounds.tap();
+  },{passive:true});
+  function paint(){
+    btn.setAttribute('aria-pressed',on);
+    btn.setAttribute('aria-label',on?'Turn interface sounds off':'Turn interface sounds on');
+    $('use',btn).setAttribute('href',on?'#i-sound':'#i-mute');
+  }
+  btn.addEventListener('click',function(){
+    on=!on;try{localStorage.setItem(KEY,on?'on':'off')}catch(e){}
+    paint();if(on){wake();sounds.tap()}
+  });
+  btn.hidden=false;paint();
+})();
 })();
 </script>

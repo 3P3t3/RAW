@@ -43,13 +43,16 @@
     </div>
   </section>
 
-  <!-- 4. Goals -->
-  <section class="sec goals-sec" id="goals" aria-labelledby="goals-title">
+  <!-- 4. Goals: seven floating islands, one per shelf. They drift; tap one to land on it. -->
+  <section class="sec isles-sec" id="goals" aria-labelledby="goals-title">
     <div class="wrap">
-      <div class="sec-head grow"><h2 id="goals-title">Shop by goal</h2></div>
-      <ul class="goal-index">
-{{GOALS}}
-      </ul>
+      <div class="sec-head grow"><h2 id="goals-title">Shop by goal</h2><p class="sec-note">Seven places to start. Tap one to open its shelf.</p></div>
+      <div class="archipelago" id="archipelago">
+        <ul class="isles">
+{{ISLANDS}}
+        </ul>
+        <button class="icon-btn isles-toggle" id="isles-toggle" type="button" aria-label="Pause the islands" hidden><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>
+      </div>
     </div>
   </section>
 
