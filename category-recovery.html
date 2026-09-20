@@ -371,9 +371,10 @@ html:not(.js) button[data-open-finder]{display:none}
 .archipelago{contain:layout paint}
 .archipelago{position:relative;height:clamp(330px,74vw,430px);margin-top:4px}
 .isles{list-style:none;margin:0;padding:0;position:absolute;inset:0}
-.isle{position:absolute;left:50%;top:50%;width:var(--w,150px);margin-left:calc(var(--w,150px) / -2);transition:filter .3s}
+.isle{position:absolute;left:50%;top:50%;width:var(--w,150px);margin-left:calc(var(--w,150px) / -2);will-change:transform,opacity;transform-origin:50% 45%}
 .isle a{display:grid;justify-items:center;gap:6px;color:var(--ink);text-decoration:none}
-.isle-art{display:block;width:100%;filter:drop-shadow(0 24px 22px rgba(30,38,47,.28))}
+.isle-art{position:relative;display:block;width:100%}
+.isle-art::after{content:"";position:absolute;left:14%;right:14%;bottom:2%;height:9%;border-radius:50%;background:radial-gradient(closest-side,rgba(30,38,47,.3),rgba(30,38,47,0));z-index:-1}
 .isle-art img{display:block;width:100%;height:auto}
 .isle-label{display:grid;justify-items:center;gap:2px;text-align:center;opacity:var(--label,1);transition:opacity .3s}
 .isle-name{font:800 16px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
@@ -867,43 +868,52 @@ $$('.pod-num').forEach(function(el){
 var arch=$('#archipelago');
 if(arch){
   var isles=$$('.isle',arch),tog=$('#isles-toggle'),N=isles.length,ang=0,last=0,paused=false,raf=null;
+  var geom={base:150,rx:200,ry:70,wide:false};
+  var measure=function(){
+    var w=arch.clientWidth;
+    geom.wide=w>=768;
+    geom.base=geom.wide?Math.min(196,w*.165):Math.min(122,w*.30);
+    geom.rx=geom.wide?w/2-geom.base*.52:w*.60;
+    geom.ry=geom.wide?74:46;
+    isles.forEach(function(el){el.style.setProperty('--w',Math.round(geom.base)+'px')});  /* size set once, not per frame */
+  };
+  var lastLabel=[];
   var layout=function(){
-    var w=arch.clientWidth,wide=w>=768,base=wide?Math.min(196,w*.165):Math.min(122,w*.30);
-    var rx=wide?w/2-base*.52:w*.60,ry=wide?74:46;   /* on phones the ring runs off both edges, like a procession */
+    var now=performance.now();
     isles.forEach(function(el,i){
       var a=ang+i*2*Math.PI/N,d=Math.cos(a),f=(d+1)/2,k=.78+.22*f;
-      var bob=Math.sin(performance.now()/1000*.55+i*1.7)*(wide?9:6);
-      el.style.setProperty('--w',Math.round(base*k)+'px');
-      var y=-(base*k)*.52-d*ry+bob;                 /* the ring sits centred in its band */
-      el.style.transform='translate3d('+Math.round(Math.sin(a)*rx)+'px,'+Math.round(y)+'px,0)';
-      el.style.zIndex=Math.round(f*100);
+      var bob=Math.sin(now/1000*.55+i*1.7)*(geom.wide?9:6);
+      var y=-geom.base*.52*k-d*geom.ry+bob;
+      /* transform and opacity only: both composite, so the ring stays smooth */
+      el.style.transform='translate3d('+(Math.sin(a)*geom.rx).toFixed(1)+'px,'+y.toFixed(1)+'px,0) scale('+k.toFixed(3)+')';
       el.style.opacity=(.72+.28*f).toFixed(2);
-      el.style.setProperty('--label',Math.max(0,f*f*f*f*1.6-.15).toFixed(2));  /* only the nearest islands name themselves */
-      el.style.filter='saturate('+(.82+.18*f).toFixed(2)+')';
+      el.style.zIndex=Math.round(f*100);
+      var lab=Math.max(0,f*f*f*f*1.6-.15).toFixed(2);          /* only the nearest islands name themselves */
+      if(lab!==lastLabel[i]){el.style.setProperty('--label',lab);lastLabel[i]=lab}
     });
   };
   var frame=function(t){
-    if(!paused){var dt=last?Math.min(t-last,60):16;ang+=dt*0.00007}
+    if(!paused){var dt=last?Math.min(t-last,60):16;ang+=dt*0.00021}   /* one lap in about 25s */
     last=t;layout();raf=requestAnimationFrame(frame);
   };
   var stop=function(){paused=true;tog.setAttribute('aria-label','Start the islands');$('use',tog).setAttribute('href','#i-play')};
   var start=function(){paused=false;tog.setAttribute('aria-label','Pause the islands');$('use',tog).setAttribute('href','#i-pause')};
-  layout();                                   /* place them before the first paint */
-  addEventListener('load',layout);
+  measure();layout();                         /* place them before the first paint */
+  addEventListener('load',function(){measure();layout()});
   if(html.classList.contains('motion')){
     tog.hidden=false;
     tog.addEventListener('click',function(){paused?start():stop()});
     arch.addEventListener('pointerenter',function(){paused=true});
     arch.addEventListener('pointerleave',function(){if(tog.getAttribute('aria-label')!=='Start the islands')paused=false});
     arch.addEventListener('focusin',function(){paused=true});
-    addEventListener('resize',layout);
+    addEventListener('resize',function(){measure();layout()});
     if('IntersectionObserver' in window)new IntersectionObserver(function(es){
       if(es[0].isIntersecting){if(!raf)raf=requestAnimationFrame(frame)}
       else if(raf){cancelAnimationFrame(raf);raf=null;last=0}
     },{threshold:.05}).observe(arch);
     else raf=requestAnimationFrame(frame);
   }else{
-    layout();addEventListener('resize',layout);   /* reduced motion: a still archipelago */
+    measure();layout();addEventListener('resize',function(){measure();layout()});   /* reduced motion: a still archipelago */
   }
 }
 
