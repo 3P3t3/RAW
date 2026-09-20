@@ -37,7 +37,7 @@
         <p class="sub">Nutrilite and XS nutrition, hydration and sleep support, chosen by goal.</p>
         <div class="hero-actions">
           <a class="btn" href="#finder" data-open-finder>Find what fits you</a>
-          <a class="tlink" href="#shop">Shop all products</a>
+          <a class="tlink" href="#results" data-all>Shop all products</a>
         </div>
       </div>
     </div>
@@ -45,6 +45,7 @@
 
   <!-- 4. Goals: seven floating islands, one per shelf. They drift; tap one to land on it. -->
   <section class="sec isles-sec" id="goals" aria-labelledby="goals-title">
+    <img class="sec-bg isles-bg" src="assets/bg-sky.webp" alt="" width="1600" height="900" loading="lazy">
     <div class="wrap">
       <div class="sec-head grow"><h2 id="goals-title">Shop by goal</h2><p class="sec-note">Seven places to start. Tap one to open its shelf.</p></div>
       <div class="archipelago" id="archipelago">
@@ -66,15 +67,15 @@
     </div>
   </section>
 
-  <!-- 5. Product grid -->
-  <section class="sec shop" id="shop" aria-labelledby="shop-title">
+  <!-- 5. The full shelf. It stays out of the way until you search or ask for it. -->
+  <section class="sec shop results" id="results" aria-labelledby="shop-title" hidden>
+    <img class="sec-bg" src="assets/bg-haze.webp" alt="" width="1600" height="900" loading="lazy">
     <div class="wrap">
-      <div class="sec-head grow"><h2 id="shop-title" tabindex="-1">Our picks</h2></div>
-      <div class="filter" id="filter" hidden><p id="filter-text"></p><button class="tlink" type="button" id="filter-clear">Show picks</button></div>
+      <div class="sec-head"><h2 id="shop-title" tabindex="-1">All products</h2></div>
+      <div class="filter" id="filter" hidden><p id="filter-text"></p><button class="tlink" type="button" id="filter-clear">Close</button></div>
       <ul class="grid" id="grid">
 {{GRID}}
       </ul>
-      <div class="more"><a class="tlink" id="view-all" href="#index">View all {{TOTAL}} products</a></div>
     </div>
   </section>
 
@@ -96,6 +97,47 @@
           <button type="button" class="q-opt" data-first="3">Walking, yoga, staying mobile</button>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- 7. Consult: four answers first, then a time on my calendar -->
+  <section class="sec consult" id="consult" aria-labelledby="consult-title">
+    <img class="sec-bg consult-bg" src="assets/bg-haze.webp" alt="" width="1600" height="900" loading="lazy">
+    <div class="wrap split">
+      <div class="split-text grow">
+        <p class="label">One to one</p>
+        <h2 id="consult-title"><span>Talk through</span> <span>your stack</span></h2>
+        <p>Twenty-five minutes on a call: your macros, what you already take, and the smallest stack that gets you where you are going. Answer four things first and the call starts on you instead of on catching up.</p>
+        <p class="c-fine">No charge, no pitch. Your answers travel with the booking.</p>
+      </div>
+      <form class="c-card grow" id="consult-form" data-consult="{{CONSULT_URL}}" style="--d:1">
+        <fieldset class="c-q">
+          <legend>What are you trying to accomplish?</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="goal" value="Lose fat"><span>Lose fat</span></label>
+            <label class="chip"><input type="radio" name="goal" value="Build muscle"><span>Build muscle</span></label>
+            <label class="chip"><input type="radio" name="goal" value="More energy"><span>More energy</span></label>
+            <label class="chip"><input type="radio" name="goal" value="Sleep and recovery"><span>Sleep &amp; recovery</span></label>
+            <label class="chip"><input type="radio" name="goal" value="Stay healthy day to day"><span>Stay healthy</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="c-q">
+          <legend>How do you train right now?</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="training" value="Lifting"><span>Lifting</span></label>
+            <label class="chip"><input type="radio" name="training" value="Endurance"><span>Endurance</span></label>
+            <label class="chip"><input type="radio" name="training" value="A mix"><span>A mix</span></label>
+            <label class="chip"><input type="radio" name="training" value="Walking and mobility"><span>Walking, yoga</span></label>
+            <label class="chip"><input type="radio" name="training" value="Not training yet"><span>Not yet</span></label>
+          </div>
+        </fieldset>
+        <div class="c-field"><label for="c-stack">What are you taking at the moment?</label>
+          <input id="c-stack" name="stack" type="text" autocomplete="off" placeholder="Whey, creatine, a multivitamin…"></div>
+        <div class="c-field"><label for="c-note">Anything you want covered? <span>Optional</span></label>
+          <input id="c-note" name="note" type="text" autocomplete="off" placeholder="Eating around shift work…"></div>
+        <button class="btn" type="submit">Pick a time</button>
+        <p class="c-sum" id="consult-sum" aria-live="polite">Twenty-five minutes, on video or by phone.</p>
+      </form>
     </div>
   </section>
 

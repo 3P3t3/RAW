@@ -3,7 +3,7 @@
 Run from the project folder:  python3 site-src/build_homepage.py
 Edit share-links.csv (product, share_link, photo) and re-run to update the site.
 """
-import csv, html, json, os, re, shutil
+import csv, hashlib, html, inspect, json, os, re, shutil
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, 'site-src', 'homepage.template.html')
@@ -12,6 +12,8 @@ PHOTOS = os.path.join(ROOT, 'product-photos')
 STUDIO = os.path.join(ROOT, 'product-shots')  # re-lit studio versions, already framed to one scale
 ASSETS = os.path.join(ROOT, 'assets', 'products')
 CUTS = os.path.join(ROOT, 'assets', 'cutouts')  # transparent versions, for products shown on dark bands
+STAMP = os.path.join(ROOT, 'assets', '.cut-version')  # fingerprint of normalize(), written once a build finishes
+RECUT = False  # set for the whole run when that fingerprint moved, so every cached cut-out counts as stale
 
 # family prefix -> (type descriptor, goals, format). Longest prefix wins.
 # Goals: R Recovery, L Lean Mass, E Endurance, S Sleep & Longevity (first = primary).
@@ -94,6 +96,10 @@ CAT_THUMB = {  # the pack shown on the homepage row for each category
     'skin-redefined': 'Artistry Skin Nutrition Sleeping Mask',
 }
 
+# Calendly (or any booking) link for the consult section. The four answers ride along as a1-a4;
+# leave it empty and the form says the calendar is not connected yet instead of opening a dead page.
+CONSULT_URL = ''
+
 FEATURED = [  # props-free pack shots, so the grid reads as one series
     'XS Grass-Fed Whey Protein - Chocolate',
     'XS Post-Workout Recovery - Fruit Punch (30 Serving Pouch)',
@@ -139,6 +145,10 @@ FINDER = [
 def normalize(src, dst, size=600):
     """Trim each cut-out to the product, fit it to one box and stand it on a shared baseline,
     so every photo in the grid reads at the same scale. Falls back to a plain copy without Pillow."""
+    # the cache keys on the source photo's mtime and on the text of this function: edit the trimming or
+    # scaling below and the fingerprint stops matching assets/.cut-version, which re-cuts everything.
+    if not RECUT and os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src):
+        return
     try:
         from PIL import Image
     except ImportError:
@@ -164,6 +174,10 @@ def normalize(src, dst, size=600):
     out = Image.new('RGBA', (size, size), (0, 0, 0, 0))
     out.paste(im, ((size - im.width) // 2, round(size * .91) - im.height), im)
     out.save(dst, quality=86, method=6)
+
+
+def cut_version():
+    return hashlib.sha1(inspect.getsource(normalize).encode()).hexdigest()[:12]
 
 
 def slug(s):
@@ -210,6 +224,8 @@ def bestsellers():
 
 
 def main():
+    global RECUT
+    RECUT = not os.path.exists(STAMP) or open(STAMP).read().strip() != cut_version()
     rows = list(csv.DictReader(open(os.path.join(ROOT, 'share-links.csv'), newline='')))
     os.makedirs(ASSETS, exist_ok=True)
     products = []
@@ -272,11 +288,8 @@ def main():
             f'<span class="isle-label"><span class="isle-name">{name}</span>'
             f'<span class="isle-place">{place}</span></span></a></li>')
 
-    order = [by[n] for n in FEATURED] + sorted((pr for pr in products if pr['product'] not in FEATURED), key=lambda pr: pr['product'].lower())
-    grid = [card(pr, i, '' if pr['product'] in FEATURED else ' data-extra hidden') for i, pr in enumerate(order)]
-
-    index = [f'        <li><a href="{esc(pr["share_link"])}" target="_blank" rel="noopener">{esc(pr["product"].replace("n- by", "n* by"))}</a></li>'
-             for pr in sorted(products, key=lambda pr: pr['product'].lower().lstrip('n*- '))]
+    order = sorted(products, key=lambda pr: pr['name'].lower())
+    grid = [card(pr, i) for i, pr in enumerate(order)]
 
     finder = {}
     for key, name, why in FINDER:
@@ -287,11 +300,8 @@ def main():
     part = lambda n: open(os.path.join(ROOT, 'site-src', n)).read()
     style, header, footer, dialogs, script, icons = (part('style.css'), part('_header.html'), part('_footer.html'),
                                                      part('_dialogs.html'), part('_script.html'), part('_icons.html'))
-    foot_cats = ('<div><p class="foot-h">Shelves</p><ul>'
-                 + ''.join(f'<li><a href="category-{c[0]}.html">{c[1]}</a></li>' for c in CATEGORIES)
-                 + '</ul></div>')
-    shared = {'{{STYLE}}': style, '{{FOOT_CATS}}': foot_cats, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{SCRIPT}}': script,
-              '{{ICONS}}': icons, '{{INDEX}}': '\n'.join(index), '{{TOTAL}}': str(len(products)),
+    shared = {'{{STYLE}}': style, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{SCRIPT}}': script,
+              '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)), '{{CONSULT_URL}}': CONSULT_URL,
               '{{FINDER_DATA}}': finder_json}
 
     os.makedirs(CUTS, exist_ok=True)
@@ -359,6 +369,7 @@ def main():
             page = page.replace(k, v)
         open(os.path.join(ROOT, f'category-{slug_}.html'), 'w').write(page)
 
+    open(STAMP, 'w').write(cut_version())  # last, so a crash leaves the old stamp and the next run re-cuts
     print(f'{len(products)} products ({sum(1 for pr in products if pr["img"])} with photos) -> {OUT}')
     print('categories', counts, 'uncategorised', [pr['product'] for pr in products if pr['product'] not in cat_of])
 

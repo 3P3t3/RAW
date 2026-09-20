@@ -34,42 +34,50 @@ if(v){
     if('IntersectionObserver' in window)new IntersectionObserver(function(es){if(userPaused||!v.getAttribute('src'))return;if(es[0].isIntersecting)v.play().catch(function(){});else v.pause()}).observe(v);
   }
 }
-/* Footer link opens the product index */
-$$('[data-open-index]').forEach(function(a){a.addEventListener('click',function(){$('#index').open=true})});
-
 /* Phone search: the icon opens the search row */
 var mast=$('.mast'),st=$('#search-toggle');
 st.addEventListener('click',function(){var o=mast.classList.toggle('s-open');st.setAttribute('aria-expanded',o);if(o)$('#q').focus()});
 
-/* Product grid: search and "view all". Category pages have a grid but no filter bar. */
+/* The full shelf: hidden until you search or ask for it. Category pages have a grid but no filter bar. */
 var grid=$('#grid'),cards=grid?$$('#grid > li'):[],fbar=$('#filter'),ftext=$('#filter-text'),
-    viewAll=$('#view-all'),shopTitle=$('#shop-title'),q=$('#q');
+    results=$('#results'),shopTitle=$('#shop-title'),q=$('#q');
 cards.forEach(function(li){li._s=li.textContent.toLowerCase()});
 function show(test,msg){
   var n=0;
-  cards.forEach(function(li){var on=test?test(li):!li.hasAttribute('data-extra');li.hidden=!on;if(on)n++});
-  if(fbar)fbar.hidden=!test;
-  if(viewAll)viewAll.parentNode.hidden=!!test;
-  if(test&&ftext){ftext.textContent=msg(n);say(ftext.textContent)}
+  cards.forEach(function(li){var on=!test||test(li);li.hidden=!on;if(on)n++});
+  if(fbar&&msg){fbar.hidden=false;ftext.textContent=msg(n);say(ftext.textContent)}
   return n;
 }
-function goShop(){var t=$('#shop')||$('#all');if(t)t.scrollIntoView();if(shopTitle)shopTitle.focus({preventScroll:true})}
+function goShop(){
+  if(results)results.hidden=false;
+  var t=results||$('#all');if(t)t.scrollIntoView();
+  if(shopTitle)shopTitle.focus({preventScroll:true});
+}
+function showAll(){show(null,function(n){return 'All '+n+' products'});goShop()}
 function search(t){
   var words=t.split(/\s+/);
   show(function(li){return words.every(function(w){return li._s.indexOf(w)>-1})},
        function(n){return n?n+' result'+(n===1?'':'s')+' for “'+t+'”':'Nothing matches “'+t+'”. Try a goal, like sleep.'});
   goShop();
 }
-if(viewAll)viewAll.addEventListener('click',function(e){e.preventDefault();show(function(){return true},function(n){return 'All '+n+' products'})});
-if($('#filter-clear'))$('#filter-clear').addEventListener('click',function(){show();q.value='';if(shopTitle)shopTitle.focus()});
+$$('[data-all]').forEach(function(a){a.addEventListener('click',function(e){
+  if(!results)return;                      /* category pages just follow the link home */
+  e.preventDefault();if(menu&&menu.open)menu.close();showAll();
+})});
+if($('#filter-clear'))$('#filter-clear').addEventListener('click',function(){
+  q.value='';show();if(results)results.hidden=true;
+  var g=$('#goals');if(g)g.scrollIntoView();
+});
 $('#search').addEventListener('submit',function(e){
   e.preventDefault();var t=q.value.trim().toLowerCase();
-  if(!t){show();goShop();return}
-  if(!grid||!$('#filter')){location.href='homepage.html?q='+encodeURIComponent(t);return}   /* search lives on the homepage */
+  if(!t){showAll();return}
+  if(!grid||!fbar){location.href='homepage.html?q='+encodeURIComponent(t);return}   /* search lives on the homepage */
   search(t);q.blur();
 });
 var urlQ=new URLSearchParams(location.search).get('q');
 if(urlQ&&grid&&fbar){q.value=urlQ;search(urlQ.toLowerCase())}
+else if(results&&location.hash==='#results')showAll();          /* arrived from another page */
+var ALL_HREF=results?'#results':'homepage.html#results';
 
 /* Flavour carousel: glides on its own, arrows or a swipe take over */
 var car=$('#carousel');
@@ -128,7 +136,7 @@ function render(focus){
     fBody.innerHTML='<h2 class="q" id="finder-title" tabindex="-1">Two to start with</h2><p class="basis">Based on: '+ans.map(function(a,i){return Q[i].o[a][1]}).join(' · ')+'</p><ul class="picks">'+picks().map(function(r){
       var p=P[r.id];
       return '<li class="pick"><span class="shot"><img src="'+esc(p.img)+'" alt="" width="480" height="480"></span><div><h3 class="p-name">'+esc(p.name)+'</h3><p class="p-desc">'+esc(p.desc)+'</p><p class="why">'+esc(p.why)+'</p><a class="buy" href="'+esc(p.url)+'" target="_blank" rel="noopener">Buy on Amway<span class="vh"> '+esc(p.name)+' (opens in a new tab)</span></a></div></li>';
-    }).join('')+'</ul><div class="sheet-foot"><button class="tlink" type="button" id="finder-restart">Start over</button><a class="tlink" href="#shop" id="finder-shop">See all products</a></div>';
+    }).join('')+'</ul><div class="sheet-foot"><button class="tlink" type="button" id="finder-restart">Start over</button><a class="tlink" href="'+ALL_HREF+'" id="finder-shop">See all products</a></div>';
   }
   if(focus)$('#finder-title').focus();
 }
@@ -136,7 +144,7 @@ fBody.addEventListener('click',function(e){
   var o=e.target.closest('.opt');
   if(o){ans[step]=+o.dataset.i;step++;render(true);return}
   if(e.target.closest('#finder-restart')){step=0;ans=[];render(true);return}
-  if(e.target.closest('#finder-shop'))sheet.close();
+  if(e.target.closest('#finder-shop')){sheet.close();if(results){e.preventDefault();showAll()}}
 });
 fBack.addEventListener('click',function(){if(step){step--;render(true)}});
 $$('.q-opt').forEach(function(b){b.addEventListener('click',function(){ans=[+b.dataset.first];step=1;render(false);openD(sheet);$('#finder-title').focus()})});
@@ -261,7 +269,7 @@ if(arch){
     });
   };
   var frame=function(t){
-    if(!paused){var dt=last?Math.min(t-last,60):16;ang+=dt*0.00021}   /* one lap in about 25s */
+    if(!paused){var dt=last?Math.min(t-last,60):16;ang+=dt*0.00042}   /* one lap in about 12s */
     last=t;layout();raf=requestAnimationFrame(frame);
   };
   var stop=function(){paused=true;tog.setAttribute('aria-label','Start the islands');$('use',tog).setAttribute('href','#i-play')};
@@ -283,6 +291,31 @@ if(arch){
   }else{
     measure();layout();addEventListener('resize',function(){measure();layout()});   /* reduced motion: a still archipelago */
   }
+}
+
+/* Consult: the four answers ride along to the booking page as a1-a4 */
+var cform=$('#consult-form');
+if(cform){
+  var csum=$('#consult-sum'),
+      val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()};
+  var line=function(){
+    var g=val('goal'),t=val('training');
+    if(!g&&!t)return 'Twenty-five minutes, on video or by phone.';
+    return 'Twenty-five minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'.';
+  };
+  cform.addEventListener('change',function(){csum.textContent=line()});
+  cform.addEventListener('submit',function(e){
+    e.preventDefault();
+    var url=cform.dataset.consult;
+    if(!url){                                   /* no calendar connected yet: say so rather than open a dead page */
+      csum.textContent='Your answers are ready. The booking calendar connects here shortly.';
+      return;
+    }
+    var a=[val('goal'),val('training'),val('stack'),val('note')],
+        qs=a.map(function(v,i){return 'a'+(i+1)+'='+encodeURIComponent(v)}).join('&');
+    window.open(url+(url.indexOf('?')>-1?'&':'?')+qs,'_blank','noopener');
+    csum.textContent='Opening the calendar with your answers.';
+  });
 }
 
 /* Interface sound: short glassy ticks, synthesised here so there is nothing to download */
@@ -327,11 +360,11 @@ if(arch){
     soft:function(){tick(1560,.05,.045)}          /* small controls */
   };
   doc.addEventListener('pointerdown',function(e){
-    var t=e.target.closest('a,button');
+    var t=e.target.closest('a,button,.chip');
     if(!t||t.id==='sound-toggle')return;
     if(t.closest('.isle'))return sounds.isle();
     if(t.classList.contains('btn'))return sounds.go();
-    if(t.classList.contains('icon-btn')||t.closest('.q-opt,.opt'))return sounds.soft();
+    if(t.classList.contains('icon-btn')||t.classList.contains('chip')||t.closest('.q-opt,.opt'))return sounds.soft();
     sounds.tap();
   },{passive:true});
   function paint(){
