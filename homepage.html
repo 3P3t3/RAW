@@ -212,7 +212,7 @@
       <div class="split-text grow">
         <p class="label">One to one</p>
         <h2 id="consult-title"><span>Talk through</span> <span>your stack</span></h2>
-        <p>Fifteen minutes on a call: your macros, what you already take, and the smallest stack that gets you where you are going. Answer four things first and the call starts on you instead of on catching up.</p>
+        <p>Fifteen minutes on a call: your macros, what you already take, and the smallest stack that gets you where you are going. The slot holds a half hour; we rarely need it. Answer four things first and the call starts on you instead of on catching up.</p>
         <p class="c-fine">No charge, no pitch. Your answers travel with the booking.</p>
       </div>
       <form class="c-card grow" id="consult-form" data-consult="https://calendly.com/3pete/explore" style="--d:1">
@@ -241,7 +241,7 @@
         <div class="c-field"><label for="c-note">Anything you want covered? <span>Optional</span></label>
           <input id="c-note" name="note" type="text" autocomplete="off" placeholder="Eating around shift work…"></div>
         <button class="btn" type="submit">Pick a time</button>
-        <p class="c-sum" id="consult-sum" aria-live="polite">Fifteen minutes, on video or by phone.</p>
+        <p class="c-sum" id="consult-sum" aria-live="polite">Fifteen minutes, on video or by phone. The slot holds a half hour.</p>
       </form>
       <!-- the calendar mounts here in place of the form, once someone has answered -->
       <div class="c-embed" id="consult-embed" hidden></div>
@@ -612,8 +612,8 @@ if(cform){
       val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()};
   var line=function(){
     var g=val('goal'),t=val('training');
-    if(!g&&!t)return 'Fifteen minutes, on video or by phone.';
-    return 'Fifteen minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'.';
+    if(!g&&!t)return 'Fifteen minutes, on video or by phone. The slot holds a half hour.';
+    return 'Fifteen minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'. The slot holds a half hour.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
   /* widget.js is only fetched on submit, once, so nobody who never books pays for it */

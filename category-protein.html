@@ -495,8 +495,8 @@ if(cform){
       val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()};
   var line=function(){
     var g=val('goal'),t=val('training');
-    if(!g&&!t)return 'Fifteen minutes, on video or by phone.';
-    return 'Fifteen minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'.';
+    if(!g&&!t)return 'Fifteen minutes, on video or by phone. The slot holds a half hour.';
+    return 'Fifteen minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'. The slot holds a half hour.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
   /* widget.js is only fetched on submit, once, so nobody who never books pays for it */
