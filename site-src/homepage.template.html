@@ -113,7 +113,7 @@ html:not(.js) .search-toggle{visibility:hidden}
 .goal:active{opacity:.7}
 
 @media (hover:hover){.goal:hover .goal-name{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px}.goal:hover .goal-n{text-decoration:underline;text-underline-offset:4px}.card-link:hover .p-name{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}.tlink:hover{text-decoration-thickness:2.5px}}
-.goal-name{grid-area:name;font:800 28px/.95 var(--display);font-stretch:72%;text-transform:uppercase}
+.goal-name{grid-area:name;font:800 24px/1 var(--display);font-stretch:72%;text-transform:uppercase}
 .goal-index{counter-reset:goal}
 
 .goal-desc{grid-area:desc;margin-top:8px;font-size:15px;line-height:1.35;color:var(--text)}
@@ -128,11 +128,12 @@ html:not(.js) .search-toggle{visibility:hidden}
 .card{display:flex;flex-direction:column;min-width:0}
 .card-link{display:block;color:inherit;text-decoration:none}
 .shot{position:relative;display:block;aspect-ratio:6/5;padding:0 6% 4%}
+.shot-studio{aspect-ratio:1;padding:0}
 .shot img{position:relative;display:block;width:100%;height:100%;object-fit:contain;object-position:50% 100%}
 .card-link:active .shot{opacity:.85}
 .ph{display:flex;align-items:center;justify-content:center;aspect-ratio:1;padding:10px;text-align:center;font-size:13px;line-height:1.35;color:var(--text);background:var(--tile);border-radius:var(--r)}
 .ph-cap b{font-weight:600;letter-spacing:.14em;text-transform:uppercase}
-.p-tag{margin-top:10px;font:600 12px/1.3 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--text)}
+.p-tag{margin-top:10px;font:400 13px/1.3 var(--sans);color:var(--text)}
 .p-name{margin-top:4px;font:500 16px/1.3 var(--sans);color:var(--ink)}
 .card-link{display:grid}
 .p-desc{margin-top:3px;font-size:14px;line-height:1.4}
@@ -154,18 +155,23 @@ html:not(.js) .search-toggle{visibility:hidden}
 .split-text{display:grid;gap:14px;align-content:start;justify-items:start}
 .split-text p:not(.label){max-width:42ch}
 .q-card{display:grid;gap:14px;color:var(--chalk)}
+.q-prog{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:220px}
+.q-prog span{height:3px;background:rgba(230,211,197,.25)}
+.q-prog span:first-child{background:var(--sand)}
 .q-step{font-size:14px;color:var(--on-dark)}
 .sheet .q-step{color:var(--text)}
 .q-card-q{font:600 22px/1.25 var(--sans);color:var(--chalk)}
 .q-card-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.q-opt{display:flex;align-items:flex-end;min-height:112px;padding:14px;border:1px solid rgba(230,211,197,.35);background:transparent;color:var(--chalk);font:600 16px/1.25 var(--sans);text-align:left;transition:background .15s,color .15s}
+.q-opt::before{content:"";width:18px;height:18px;flex:none;margin-right:12px;border:1.5px solid rgba(230,211,197,.6);border-radius:50%}
+.q-opt:hover::before,.q-opt:active::before{border-color:var(--teal);box-shadow:inset 0 0 0 4px var(--teal)}
+.q-opt{display:flex;align-items:center;min-height:64px;padding:12px 14px;border:1px solid rgba(230,211,197,.35);background:transparent;color:var(--chalk);font:600 16px/1.25 var(--sans);text-align:left;transition:background .15s,color .15s}
 .q-opt:active{background:var(--sand);color:var(--teal)}
 @media (hover:hover){.q-opt:hover{background:var(--sand);color:var(--teal)}}
 .q-opt:active{opacity:.6}
 html:not(.js) .q-card{display:none}
 
 /* 8. Footer */
-.foot{background:var(--pearl);color:#C3CACD;padding:56px 0 calc(40px + env(safe-area-inset-bottom))}
+.foot{background:#00222C;color:#C3CACD;padding:56px 0 calc(40px + env(safe-area-inset-bottom))}
 .foot-h{margin-bottom:8px;font-weight:600;color:var(--sand)}
 .foot .wordmark{justify-self:start;align-self:start;min-height:0;padding:0;font-size:13px;color:var(--sand)}
 .foot-top{display:grid;gap:36px;padding-bottom:36px}
@@ -249,11 +255,11 @@ html:not(.js) button[data-open-finder]{display:none}
 
   .sec-head{margin-bottom:48px}
   .sec-head h2,.split-text h2{font-size:52px}
-  .goal{grid-template-areas:none;padding:18px 0}
-  .goal-name{grid-area:auto;grid-column:1 / 6;font-size:36px;white-space:nowrap}
-  .goal-desc{grid-area:auto;grid-column:6 / 9}
-  .goal-n{grid-area:auto;grid-column:9 / 11}
-  .goal-img{grid-area:auto;grid-column:11 / 13}
+  .goal{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:none;column-gap:24px;padding:18px 0}
+  .goal-name{grid-area:auto;grid-column:1;font-size:30px;white-space:nowrap}
+  .goal-desc{grid-area:auto;grid-column:2}
+  .goal-n{grid-area:auto;grid-column:3}
+  .goal-img{grid-area:auto;grid-column:4}
   .goal-desc{margin-top:0;font-size:17px}
   .goal-n{margin-top:0}
   .goal-img{width:120px}
@@ -267,7 +273,7 @@ html:not(.js) button[data-open-finder]{display:none}
   .split-text{grid-column:1 / 6}
   .split-text h2{max-width:none}
   .q-card{grid-column:7 / 13}
-  .q-opt{min-height:140px;padding:18px;font-size:18px}
+  .q-opt{min-height:72px;padding:14px 18px;font-size:17px}
   .q-card-q{font-size:24px}
   .ordering .split{align-items:start}
 
@@ -374,6 +380,7 @@ html:not(.js) button[data-open-finder]{display:none}
       </div>
       <div class="q-card grow" style="--d:1">
         <p class="q-step">Question 1 of 3</p>
+        <div class="q-prog" aria-hidden="true"><span></span><span></span><span></span></div>
         <h3 class="q-card-q">What does most of your training look like?</h3>
         <div class="q-card-opts">
           <button type="button" class="q-opt" data-first="0">Lifting and strength work</button>

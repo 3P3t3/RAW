@@ -9,6 +9,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, 'site-src', 'homepage.template.html')
 OUT = os.path.join(ROOT, 'homepage.html')
 PHOTOS = os.path.join(ROOT, 'product-photos')
+STUDIO = os.path.join(ROOT, 'product-shots')  # re-lit studio versions, already framed to one scale
 ASSETS = os.path.join(ROOT, 'assets', 'products')
 
 # family prefix -> (type descriptor, goals, format). Longest prefix wins.
@@ -65,7 +66,7 @@ GOAL_TILES = [  # goal, name, line, product shown in the goal index (none of the
     ('R', 'Recovery', 'Bounce back between sessions', 'XS Post-Workout Recovery - Fruit Punch (12 Stick Packs)'),
     ('L', 'Lean Mass', 'Build muscle and keep it', 'XS Sports Protein Bars - Chocolate Peanut Butter'),
     ('E', 'Endurance', 'Energy and hydration that lasts', 'XS Sports Twist Tubes - Raspberry Lemonade'),
-    ('S', 'Sleep &amp; Longevity', 'Rest deeper, age well', 'n* by Nutrilite Sweet Dreams - Sleep Gummies'),
+    ('S', 'Sleep &amp; Longevity', 'Rest deeper, age well', 'Nutrilite Sleep Health'),
 ]
 
 # Finder candidates: one per product family, each with a plain-language reason (no health claims).
@@ -148,6 +149,8 @@ def esc(s):
 
 
 def shot(p, lazy=True, cls='shot'):
+    if p.get('studio'):
+        cls += ' shot-studio'
     if p['img']:
         ld = 'loading="lazy" ' if lazy else ''
         return f'<span class="{cls}"><img src="{p["img"]}" alt="" {ld}width="600" height="600"></span>'
@@ -161,6 +164,14 @@ def main():
     for r in rows:
         p = describe(r)
         src = os.path.join(PHOTOS, r['photo']) if r['photo'] else ''
+        studio = os.path.join(STUDIO, slug(r['product']) + '.webp')
+        if os.path.exists(studio):
+            fn = slug(r['product']) + '.webp'
+            shutil.copyfile(studio, os.path.join(ASSETS, fn))
+            p['img'] = 'assets/products/' + fn
+            p['studio'] = True
+            products.append(p)
+            continue
         if src and os.path.exists(src):
             fn = slug(r['product']) + os.path.splitext(src)[1].lower()
             normalize(src, os.path.join(ASSETS, fn))
