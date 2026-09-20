@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=590ee636">
+<link rel="stylesheet" href="style.css?v=36ab8b94">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -59,8 +59,6 @@
 
   <!-- 3. Hero -->
   <section class="hero" aria-labelledby="hero-title">
-    <img class="hero-bg" src="assets/bg-home.webp" alt="" width="1600" height="900" fetchpriority="high">
-    <canvas class="caustics hero-caustics" data-caustics aria-hidden="true"></canvas>
     <div class="wrap hero-in">
       <div class="glass">
         <video id="glass-video" muted loop playsinline preload="none" poster="assets/glass-poster.webp" width="1080" height="1080" aria-hidden="true"></video>
@@ -82,7 +80,7 @@
   <section class="sec isles-sec" id="goals" aria-labelledby="goals-title">
     <img class="sec-bg isles-bg" src="assets/bg-sky.webp" alt="" width="1600" height="900" loading="lazy">
     <div class="wrap">
-      <div class="sec-head grow"><h2 id="goals-title">What are we <span>maximizing?</span></h2><p class="sec-note">Seven shelves. Tap one to open it.</p></div>
+      <div class="sec-head grow"><h2 id="goals-title">What are we <span>maximizing?</span></h2></div>
       <div class="archipelago" id="archipelago">
         <ul class="isles">
         <li class="isle" style="--i:0"><a href="category-recovery.html"><span class="isle-art"><img src="assets/islands/recovery.webp" alt="" width="760" height="760" fetchpriority="high"></span><span class="isle-label"><span class="isle-name">Recovery</span><span class="isle-note">After the session</span></span></a></li>
@@ -95,13 +93,14 @@
         </ul>
         <button class="icon-btn isles-toggle" id="isles-toggle" type="button" aria-label="Pause the islands" hidden><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>
       </div>
+      <p class="isle-caption" id="isle-caption" aria-hidden="true"><span class="isle-name"></span><span class="isle-note"></span></p>
     </div>
   </section>
 
   <!-- 4b. Trending: three best sellers on a podium, oversized and breaking the band -->
   <section class="sec podium-sec dark" id="trending" aria-labelledby="trending-title">
     <div class="wrap">
-      <div class="sec-head grow"><h2 id="trending-title">Trending now</h2><p class="sec-note">What people reorder most</p></div>
+      <div class="sec-head grow"><h2 id="trending-title">Trending now</h2></div>
       <ul class="podium">
         <li class="pod pod-1"><a class="card-link tilt" href="https://amway.com/share-link/TcFtuhPvJ" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">01</span><span class="shot"><img src="assets/cutouts/xs-creatine.webp" alt="" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">XS Creatine+</h3><p class="p-desc">Creatine powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
         <li class="pod pod-2"><a class="card-link tilt" href="https://amway.com/share-link/FOhn2MdGS" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">02</span><span class="shot"><img src="assets/cutouts/nutrilite-begin-daily-gi-primer.webp" alt="" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Begin Daily GI Primer</h3><p class="p-desc">Daily digestive powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
@@ -187,7 +186,7 @@
   </section>
 
   <!-- 6. Guided finder: the first question is answered right here -->
-  <section class="sec dark finder" id="finder" aria-labelledby="finder-sec-title">
+  <section class="sec finder" id="finder" aria-labelledby="finder-sec-title">
     <div class="wrap split">
       <div class="split-text grow">
         <h2 id="finder-sec-title"><span>Not sure where</span> <span>to start?</span></h2>
@@ -209,7 +208,6 @@
 
   <!-- 7. Consult: four answers first, then a time on my calendar -->
   <section class="sec consult" id="consult" aria-labelledby="consult-title">
-    <img class="sec-bg consult-bg" src="assets/bg-haze.webp" alt="" width="1600" height="900" loading="lazy">
     <div class="wrap split">
       <div class="split-text grow">
         <p class="label">One to one</p>
@@ -556,25 +554,30 @@ if(arch){
   var measure=function(){
     var w=arch.clientWidth;
     geom.wide=w>=768;
-    geom.base=geom.wide?Math.min(212,w*.178):Math.min(140,w*.345);
-    geom.rx=geom.wide?w/2-geom.base*.52:w*.60;
-    geom.ry=geom.wide?74:46;
+    geom.base=geom.wide?Math.min(216,w*.18):Math.min(158,w*.38);
+    geom.rx=geom.wide?w/2-geom.base*.55:w*.40;       /* the ring stays inside the frame: nothing is sliced */
+    geom.ry=geom.wide?66:38;
     isles.forEach(function(el){el.style.setProperty('--w',Math.round(geom.base)+'px')});  /* size set once, not per frame */
   };
-  var lastLabel=[];
+  var cap=$('#isle-caption'),capName=cap&&$('.isle-name',cap),capNote=cap&&$('.isle-note',cap),front=-1;
   var layout=function(){
-    var now=performance.now();
+    var now=performance.now(),best=0,bestF=-1;
     isles.forEach(function(el,i){
-      var a=ang+i*2*Math.PI/N,d=Math.cos(a),f=(d+1)/2,k=.78+.22*f;
+      var a=ang+i*2*Math.PI/N,d=Math.cos(a),f=(d+1)/2,
+          k=(geom.wide?.70:.55)+(geom.wide?.30:.45)*f;   /* depth: the far side reads as background */
+      if(f>bestF){bestF=f;best=i}
       var bob=Math.sin(now/1000*.55+i*1.7)*(geom.wide?9:6);
       var y=-geom.base*.52*k-d*geom.ry+bob;
       /* transform and opacity only: both composite, so the ring stays smooth */
       el.style.transform='translate3d('+(Math.sin(a)*geom.rx).toFixed(1)+'px,'+y.toFixed(1)+'px,0) scale('+k.toFixed(3)+')';
-      el.style.opacity=(.72+.28*f).toFixed(2);
+      el.style.opacity=((geom.wide?.62:.5)+(geom.wide?.38:.5)*f).toFixed(2);
       el.style.zIndex=Math.round(f*100);
-      var lab=Math.max(0,Math.pow(f,6)*1.9-.32).toFixed(2);    /* only the nearest island names itself */
-      if(lab!==lastLabel[i]){el.style.setProperty('--label',lab);lastLabel[i]=lab}
     });
+    if(cap&&best!==front){                       /* one caption, for whichever shelf is in front */
+      front=best;
+      capName.textContent=$('.isle-name',isles[best]).textContent;
+      capNote.textContent=$('.isle-note',isles[best]).textContent;
+    }
   };
   var frame=function(t){
     if(!paused){var dt=last?Math.min(t-last,60):16;ang+=dt*0.00042}   /* one lap in about 12s */

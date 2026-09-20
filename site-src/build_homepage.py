@@ -358,7 +358,6 @@ def main():
       <div class="sec-head grow"><h2 id="flavours-title">{chead}</h2>
         <div class="car-nav"><button class="icon-btn" type="button" data-car="-1" aria-label="Previous flavour"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button><button class="icon-btn" type="button" data-car="1" aria-label="Next flavour"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button></div>
       </div>
-      <p class="sec-note">{cline}</p>
       <ul class="carousel" id="carousel" data-autoplay>
 {slides}
       </ul>

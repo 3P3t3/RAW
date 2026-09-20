@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=590ee636">
+<link rel="stylesheet" href="style.css?v=36ab8b94">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -99,7 +99,7 @@
   </section>
 
   <!-- Finder -->
-  <section class="sec dark finder" aria-labelledby="finder-sec-title">
+  <section class="sec finder" aria-labelledby="finder-sec-title">
     <div class="wrap split">
       <div class="split-text grow">
         <h2 id="finder-sec-title"><span>Not sure where</span> <span>to start?</span></h2>
@@ -425,25 +425,30 @@ if(arch){
   var measure=function(){
     var w=arch.clientWidth;
     geom.wide=w>=768;
-    geom.base=geom.wide?Math.min(212,w*.178):Math.min(140,w*.345);
-    geom.rx=geom.wide?w/2-geom.base*.52:w*.60;
-    geom.ry=geom.wide?74:46;
+    geom.base=geom.wide?Math.min(216,w*.18):Math.min(158,w*.38);
+    geom.rx=geom.wide?w/2-geom.base*.55:w*.40;       /* the ring stays inside the frame: nothing is sliced */
+    geom.ry=geom.wide?66:38;
     isles.forEach(function(el){el.style.setProperty('--w',Math.round(geom.base)+'px')});  /* size set once, not per frame */
   };
-  var lastLabel=[];
+  var cap=$('#isle-caption'),capName=cap&&$('.isle-name',cap),capNote=cap&&$('.isle-note',cap),front=-1;
   var layout=function(){
-    var now=performance.now();
+    var now=performance.now(),best=0,bestF=-1;
     isles.forEach(function(el,i){
-      var a=ang+i*2*Math.PI/N,d=Math.cos(a),f=(d+1)/2,k=.78+.22*f;
+      var a=ang+i*2*Math.PI/N,d=Math.cos(a),f=(d+1)/2,
+          k=(geom.wide?.70:.55)+(geom.wide?.30:.45)*f;   /* depth: the far side reads as background */
+      if(f>bestF){bestF=f;best=i}
       var bob=Math.sin(now/1000*.55+i*1.7)*(geom.wide?9:6);
       var y=-geom.base*.52*k-d*geom.ry+bob;
       /* transform and opacity only: both composite, so the ring stays smooth */
       el.style.transform='translate3d('+(Math.sin(a)*geom.rx).toFixed(1)+'px,'+y.toFixed(1)+'px,0) scale('+k.toFixed(3)+')';
-      el.style.opacity=(.72+.28*f).toFixed(2);
+      el.style.opacity=((geom.wide?.62:.5)+(geom.wide?.38:.5)*f).toFixed(2);
       el.style.zIndex=Math.round(f*100);
-      var lab=Math.max(0,Math.pow(f,6)*1.9-.32).toFixed(2);    /* only the nearest island names itself */
-      if(lab!==lastLabel[i]){el.style.setProperty('--label',lab);lastLabel[i]=lab}
     });
+    if(cap&&best!==front){                       /* one caption, for whichever shelf is in front */
+      front=best;
+      capName.textContent=$('.isle-name',isles[best]).textContent;
+      capNote.textContent=$('.isle-note',isles[best]).textContent;
+    }
   };
   var frame=function(t){
     if(!paused){var dt=last?Math.min(t-last,60):16;ang+=dt*0.00042}   /* one lap in about 12s */
