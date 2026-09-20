@@ -100,9 +100,10 @@ CAT_THUMB = {  # the pack shown on the homepage row for each category
     'skin-redefined': 'Artistry Skin Nutrition Sleeping Mask',
 }
 
-# Calendly (or any booking) link for the consult section. The four answers ride along as a1-a4;
-# leave it empty and the form says the calendar is not connected yet instead of opening a dead page.
-CONSULT_URL = ''
+# Calendly link for the consult section; it embeds inline on submit rather than opening a tab.
+# The four answers ride along as a1-a4, onto the event type's four custom questions in order;
+# leave it empty and the form says the calendar is not connected yet instead of embedding nothing.
+CONSULT_URL = 'https://calendly.com/3pete/explore'
 
 FEATURED = [  # props-free pack shots, so the grid reads as one series
     'XS Grass-Fed Whey Protein - Chocolate',
@@ -279,7 +280,7 @@ def main():
             out_.append(
                 f'          <li><a class="goal" href="category-{slug_}.html">'
                 f'<span class="goal-name">{name}</span><span class="goal-desc">{tag.split(":")[0]}</span>'
-                f'<span class="goal-island"><img src="assets/islands/{slug_}.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>')
+                f'<span class="goal-island"><img src="assets/thumbs/{slug_}.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>')
         return '\n'.join(out_)
 
     isles = []

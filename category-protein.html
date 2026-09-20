@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=1f56c020">
+<link rel="stylesheet" href="style.css?v=590ee636">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -100,12 +100,12 @@
     <div class="wrap">
       <div class="sec-head grow"><h2 id="more-title">Keep looking</h2></div>
       <ul class="goal-index">
-          <li><a class="goal" href="category-recovery.html"><span class="goal-name">Recovery</span><span class="goal-desc">Wind down, repair and sleep</span><span class="goal-island"><img src="assets/islands/recovery.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-hydration.html"><span class="goal-name">Hydration</span><span class="goal-desc">Electrolytes and drink mixes for long, hot and sweaty sessions.</span><span class="goal-island"><img src="assets/islands/hydration.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-energy-focus.html"><span class="goal-name">Energy &amp; Focus</span><span class="goal-desc">Pre-workout, tablets and the full XS energy range.</span><span class="goal-island"><img src="assets/islands/energy-focus.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-fat-loss.html"><span class="goal-name">Fat Loss</span><span class="goal-desc">Thermogenic support to pair with your training.</span><span class="goal-island"><img src="assets/islands/fat-loss.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-daily-foundations.html"><span class="goal-name">Daily Foundations</span><span class="goal-desc">The everyday base</span><span class="goal-island"><img src="assets/islands/daily-foundations.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-skin-redefined.html"><span class="goal-name">Skin Redefined</span><span class="goal-desc">Artistry skincare, for the hours you are not training.</span><span class="goal-island"><img src="assets/islands/skin-redefined.webp" alt="" width="760" height="760" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-recovery.html"><span class="goal-name">Recovery</span><span class="goal-desc">Wind down, repair and sleep</span><span class="goal-island"><img src="assets/thumbs/recovery.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-hydration.html"><span class="goal-name">Hydration</span><span class="goal-desc">Electrolytes and drink mixes for long, hot and sweaty sessions.</span><span class="goal-island"><img src="assets/thumbs/hydration.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-energy-focus.html"><span class="goal-name">Energy &amp; Focus</span><span class="goal-desc">Pre-workout, tablets and the full XS energy range.</span><span class="goal-island"><img src="assets/thumbs/energy-focus.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-fat-loss.html"><span class="goal-name">Fat Loss</span><span class="goal-desc">Thermogenic support to pair with your training.</span><span class="goal-island"><img src="assets/thumbs/fat-loss.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-daily-foundations.html"><span class="goal-name">Daily Foundations</span><span class="goal-desc">The everyday base</span><span class="goal-island"><img src="assets/thumbs/daily-foundations.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-skin-redefined.html"><span class="goal-name">Skin Redefined</span><span class="goal-desc">Artistry skincare, for the hours you are not training.</span><span class="goal-island"><img src="assets/thumbs/skin-redefined.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
       </ul>
     </div>
   </section>
@@ -482,28 +482,59 @@ if(arch){
   }
 }
 
-/* Consult: the four answers ride along to the booking page as a1-a4 */
+/* Consult: the calendar embeds in place of the form, the four answers prefilled as a1-a4
+   (Calendly maps those positionally onto the event type's custom questions) */
 var cform=$('#consult-form');
 if(cform){
-  var csum=$('#consult-sum'),
+  var csum=$('#consult-sum'),cbox=$('#consult-embed'),
       val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()};
   var line=function(){
     var g=val('goal'),t=val('training');
-    if(!g&&!t)return 'Twenty-five minutes, on video or by phone.';
-    return 'Twenty-five minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'.';
+    if(!g&&!t)return 'Fifteen minutes, on video or by phone.';
+    return 'Fifteen minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
+  /* widget.js is only fetched on submit, once, so nobody who never books pays for it */
+  var wjs=0,wq=[];
+  var withCalendly=function(fn,fail){
+    if(window.Calendly)return fn();
+    wq.push(fn);
+    if(wjs)return;
+    wjs=1;
+    var sc=doc.createElement('script');
+    sc.src='https://assets.calendly.com/assets/external/widget.js';
+    sc.async=true;
+    sc.onload=function(){wq.splice(0).forEach(function(f){f()})};
+    sc.onerror=function(){wjs=0;wq.length=0;fail()};
+    doc.head.appendChild(sc);
+  };
   cform.addEventListener('submit',function(e){
     e.preventDefault();
     var url=cform.dataset.consult;
-    if(!url){                                   /* no calendar connected yet: say so rather than open a dead page */
+    if(!url){                                   /* no calendar connected yet: say so rather than embed nothing */
       csum.textContent='Your answers are ready. The booking calendar connects here shortly.';
       return;
     }
-    var a=[val('goal'),val('training'),val('stack'),val('note')],
-        qs=a.map(function(v,i){return 'a'+(i+1)+'='+encodeURIComponent(v)}).join('&');
-    window.open(url+(url.indexOf('?')>-1?'&':'?')+qs,'_blank','noopener');
-    csum.textContent='Opening the calendar with your answers.';
+    /* a1-a4 go in the embed url itself; widget.js drops a prefill object for custom answers */
+    var qs=[];
+    [val('goal'),val('training'),val('stack'),val('note')].forEach(function(v,i){
+      if(v)qs.push('a'+(i+1)+'='+encodeURIComponent(v));
+    });
+    csum.textContent='Loading the calendar with your answers.';
+    withCalendly(function(){
+      cbox.hidden=false;
+      /* colours lifted from style.css: --chalk, --ink, --teal */
+      window.Calendly.initInlineWidget({
+        url:url+(url.indexOf('?')>-1?'&':'?')+
+            'hide_gdpr_banner=1&background_color=f4f2ec&text_color=1e262f&primary_color=002e3b'+
+            (qs.length?'&'+qs.join('&'):''),
+        parentElement:cbox
+      });
+      cform.hidden=true;
+      say('Calendar loaded. Pick a time.');
+    },function(){
+      csum.textContent='The calendar did not load. Try again in a moment.';
+    });
   });
 }
 

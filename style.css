@@ -224,6 +224,9 @@ html:not(.js) .q-card{display:none}
 .c-field input:focus{outline:none;border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
 .c-card .btn{width:100%}
 .c-sum{font-size:14px;color:var(--text);margin-top:-12px}
+/* the calendly iframe takes the card's slot, so it reads as the card rather than a white box */
+.c-embed{min-height:700px;background:rgba(244,242,236,.7);
+  box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 40px 60px -40px rgba(0,30,39,.55)}
 
 /* 8. Footer */
 .foot{background:#00222C;color:#C3CACD;padding:56px 0 calc(40px + env(safe-area-inset-bottom))}
@@ -329,7 +332,8 @@ html:not(.js) #results[hidden]{display:block!important}
   .foot-top{align-items:center}
   .foot-top .wordmark{grid-column:1 / 5}
   .foot-links{grid-column:5 / 13;justify-content:flex-end;gap:0 36px}
-  .c-card{grid-column:7 / 13;padding:32px}
+  .c-card,.c-embed{grid-column:7 / 13}
+  .c-card{padding:32px}
   .sheet{max-width:560px;margin:auto auto 0}
   .sheet-in{padding-left:32px;padding-right:32px}
 }

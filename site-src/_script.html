@@ -293,28 +293,59 @@ if(arch){
   }
 }
 
-/* Consult: the four answers ride along to the booking page as a1-a4 */
+/* Consult: the calendar embeds in place of the form, the four answers prefilled as a1-a4
+   (Calendly maps those positionally onto the event type's custom questions) */
 var cform=$('#consult-form');
 if(cform){
-  var csum=$('#consult-sum'),
+  var csum=$('#consult-sum'),cbox=$('#consult-embed'),
       val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()};
   var line=function(){
     var g=val('goal'),t=val('training');
-    if(!g&&!t)return 'Twenty-five minutes, on video or by phone.';
-    return 'Twenty-five minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'.';
+    if(!g&&!t)return 'Fifteen minutes, on video or by phone.';
+    return 'Fifteen minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
+  /* widget.js is only fetched on submit, once, so nobody who never books pays for it */
+  var wjs=0,wq=[];
+  var withCalendly=function(fn,fail){
+    if(window.Calendly)return fn();
+    wq.push(fn);
+    if(wjs)return;
+    wjs=1;
+    var sc=doc.createElement('script');
+    sc.src='https://assets.calendly.com/assets/external/widget.js';
+    sc.async=true;
+    sc.onload=function(){wq.splice(0).forEach(function(f){f()})};
+    sc.onerror=function(){wjs=0;wq.length=0;fail()};
+    doc.head.appendChild(sc);
+  };
   cform.addEventListener('submit',function(e){
     e.preventDefault();
     var url=cform.dataset.consult;
-    if(!url){                                   /* no calendar connected yet: say so rather than open a dead page */
+    if(!url){                                   /* no calendar connected yet: say so rather than embed nothing */
       csum.textContent='Your answers are ready. The booking calendar connects here shortly.';
       return;
     }
-    var a=[val('goal'),val('training'),val('stack'),val('note')],
-        qs=a.map(function(v,i){return 'a'+(i+1)+'='+encodeURIComponent(v)}).join('&');
-    window.open(url+(url.indexOf('?')>-1?'&':'?')+qs,'_blank','noopener');
-    csum.textContent='Opening the calendar with your answers.';
+    /* a1-a4 go in the embed url itself; widget.js drops a prefill object for custom answers */
+    var qs=[];
+    [val('goal'),val('training'),val('stack'),val('note')].forEach(function(v,i){
+      if(v)qs.push('a'+(i+1)+'='+encodeURIComponent(v));
+    });
+    csum.textContent='Loading the calendar with your answers.';
+    withCalendly(function(){
+      cbox.hidden=false;
+      /* colours lifted from style.css: --chalk, --ink, --teal */
+      window.Calendly.initInlineWidget({
+        url:url+(url.indexOf('?')>-1?'&':'?')+
+            'hide_gdpr_banner=1&background_color=f4f2ec&text_color=1e262f&primary_color=002e3b'+
+            (qs.length?'&'+qs.join('&'):''),
+        parentElement:cbox
+      });
+      cform.hidden=true;
+      say('Calendar loaded. Pick a time.');
+    },function(){
+      csum.textContent='The calendar did not load. Try again in a moment.';
+    });
   });
 }
 

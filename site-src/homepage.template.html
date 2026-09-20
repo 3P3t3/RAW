@@ -107,7 +107,7 @@
       <div class="split-text grow">
         <p class="label">One to one</p>
         <h2 id="consult-title"><span>Talk through</span> <span>your stack</span></h2>
-        <p>Twenty-five minutes on a call: your macros, what you already take, and the smallest stack that gets you where you are going. Answer four things first and the call starts on you instead of on catching up.</p>
+        <p>Fifteen minutes on a call: your macros, what you already take, and the smallest stack that gets you where you are going. Answer four things first and the call starts on you instead of on catching up.</p>
         <p class="c-fine">No charge, no pitch. Your answers travel with the booking.</p>
       </div>
       <form class="c-card grow" id="consult-form" data-consult="{{CONSULT_URL}}" style="--d:1">
@@ -136,8 +136,10 @@
         <div class="c-field"><label for="c-note">Anything you want covered? <span>Optional</span></label>
           <input id="c-note" name="note" type="text" autocomplete="off" placeholder="Eating around shift work…"></div>
         <button class="btn" type="submit">Pick a time</button>
-        <p class="c-sum" id="consult-sum" aria-live="polite">Twenty-five minutes, on video or by phone.</p>
+        <p class="c-sum" id="consult-sum" aria-live="polite">Fifteen minutes, on video or by phone.</p>
       </form>
+      <!-- the calendar mounts here in place of the form, once someone has answered -->
+      <div class="c-embed" id="consult-embed" hidden></div>
     </div>
   </section>
 
