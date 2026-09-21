@@ -74,8 +74,18 @@
     </div>
   </section>
 
-  <!-- 6. Guided finder: the first question is answered right here -->
-  <section class="sec finder" id="finder" aria-labelledby="finder-sec-title">
+  <!-- 6. Guided finder: the first question is answered right here.
+       Its ground carries on from the pour: the full glass, fizzing, drains away as you
+       scroll, down to the page's own chalk by the time the consult arrives. Scenery only;
+       with reduced motion the glass stands still and ends on a still waterline. -->
+  <section class="sec finder fizz-sec" id="finder" aria-labelledby="finder-sec-title">
+    <div class="fizz-bg" id="fizz-bg" aria-hidden="true">
+      <div class="fizz-stage">
+        <img class="fizz-still" data-src="assets/pour/sm/0150.webp" data-srcset="assets/pour/sm/0150.webp 618w, assets/pour/big/0150.webp 810w" sizes="100vw" alt="" decoding="async">
+        <canvas class="fizz-film" id="fizz-film"></canvas>
+      </div>
+      <svg class="fizz-shore" viewBox="0 0 1200 100" preserveAspectRatio="none" focusable="false"><path d="M0 22C90 12 170 30 270 24S450 8 560 18 760 34 870 22 1060 10 1200 20V100H0Z"/></svg>
+    </div>
     <div class="wrap split">
       <div class="split-text grow">
         <h2 id="finder-sec-title"><span>Not sure where</span> <span>to start?</span></h2>
@@ -93,6 +103,7 @@
         </div>
       </div>
     </div>
+    <div class="fizz-run" aria-hidden="true"></div>
   </section>
 
   <!-- 7. Consult: four answers first, then a time on my calendar -->

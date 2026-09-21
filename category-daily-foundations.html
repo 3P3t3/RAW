@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=312d1952">
+<link rel="stylesheet" href="style.css?v=bbd3d9e6">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -763,6 +763,152 @@ if(cform){
     if(!es[0].isIntersecting)return;
     o.disconnect();load();onScroll();
   },{rootMargin:'400px 0px'}).observe(run);
+})();
+
+/* The glass under the fizz, the pour's last frame: asked for only as the band nears, as
+   the pour's own frames are, whatever the motion setting. Without script the band is teal. */
+(function(){
+  var im=$('.fizz-still');
+  if(!im)return;
+  function go(){im.srcset=im.getAttribute('data-srcset');im.src=im.getAttribute('data-src')}
+  if(!('IntersectionObserver' in window))return go();
+  new IntersectionObserver(function(es,o){
+    if(!es[0].isIntersecting)return;
+    o.disconnect();go();
+  },{rootMargin:'400px 0px'}).observe(im.closest('section'));
+})();
+
+/* The fizz: the full glass behind the finder, bubbling, drains away as you scroll. The
+   level is a pure function of scroll (eased a touch, so it pours rather than jumps), so
+   scrolling back up refills it. It starts as the band's top reaches the top of the window
+   and is empty by the time the stage lets go, just before the consult shows. Above the
+   surface the canvas is chalk; below it, the glass shows through and bubbles rise to the
+   surface and pop there. One canvas, redrawn each frame while the band is on screen. */
+(function(){
+  var run=$('#fizz-bg');
+  if(!run||!html.classList.contains('motion'))return;
+  var stage=$('.fizz-stage',run),cv=$('#fizz-film'),sec=run.parentNode;
+  var ctx=cv.getContext('2d');
+  var CHALK='#F4F2EC',EDGE=26;      /* EDGE: how far the waves and the wet band reach */
+  var w=0,h=0,r=1,bub=null,step=16;
+  var bubbles=[],MAX=120,spawn=0,lastY=scrollY,kick=0,t0=0,t=0,raf=0,on=false;
+  var level=0,target=0,slosh=0,settled=false;
+
+  function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+
+  /* one bubble, drawn once and stamped at every size */
+  function makeBubble(){
+    var c=doc.createElement('canvas'),S=64,g=c.getContext('2d');
+    c.width=c.height=S;
+    var rg=g.createRadialGradient(S*.5,S*.5,S*.3,S*.5,S*.5,S*.5);
+    rg.addColorStop(0,'rgba(255,255,255,0)');rg.addColorStop(.8,'rgba(255,255,255,.10)');rg.addColorStop(1,'rgba(255,255,255,.55)');
+    g.fillStyle=rg;g.beginPath();g.arc(S/2,S/2,S/2-1,0,7);g.fill();
+    g.fillStyle='rgba(255,255,255,.85)';g.beginPath();g.ellipse(S*.36,S*.33,S*.1,S*.06,-.7,0,7);g.fill();
+    return c;
+  }
+  function size(){
+    w=stage.offsetWidth;h=stage.offsetHeight;
+    r=Math.min(devicePixelRatio||1,w<600?1.5:2);   /* soft shapes: a phone does not need 3x */
+    cv.width=Math.round(w*r);cv.height=Math.round(h*r);
+    MAX=w<600?40:120;step=w<600?13:18;
+    if(!bub)bub=makeBubble();
+    settled=false;draw();
+  }
+
+  /* How empty the glass should be, 0..1: 0 while the band's top is below the window's top,
+     1 once its bottom is at the stage's bottom, where the stage stops sticking. The last
+     few percent of the run are spare, so it is dry a moment before the consult arrives. */
+  function drained(){
+    var b=sec.getBoundingClientRect();
+    return clamp(-b.top/Math.max(1,b.height-h)/.92,0,1);
+  }
+  /* The surface at x: the level, a tilt while it is moving, and three slow swells that
+     grow a little with the slosh. Never a ruler: a few pixels of unevenness at rest. */
+  function surf(Y,x){
+    var a=1+Math.min(2.2,Math.abs(slosh)*.06);
+    return Y+slosh*(x/w-.5)*.35
+      +a*(3.2*Math.sin(x*.011+t*1.1)+1.8*Math.sin(x*.027-t*1.7+1.3)+.9*Math.sin(x*.063+t*2.6+.4));
+  }
+  function trace(Y,dy){
+    for(var x=0;x<w+step;x+=step)ctx.lineTo(Math.min(x,w),surf(Y,Math.min(x,w))+dy);
+  }
+
+  function draw(){
+    /* the level runs from just above the top of the stage to just below its bottom */
+    var Y=-EDGE+(h+EDGE*2)*level;
+    ctx.setTransform(r,0,0,r,0,0);
+    ctx.clearRect(0,0,w,h);
+    /* bubbles, only inside what is left of the drink; they fade as they reach the top */
+    for(var i=0;i<bubbles.length;i++){
+      var b=bubbles[i],sy=surf(Y,b.x),f=clamp((b.y-sy)/14,0,1);
+      if(f<=0)continue;
+      ctx.globalAlpha=b.a*f;ctx.drawImage(bub,b.x-b.s,b.y-b.s,b.s*2,b.s*2);
+    }
+    ctx.globalAlpha=1;
+    if(Y<=-EDGE+.5)return;                       /* full: no surface on screen */
+    if(Y>=h+EDGE-.5){ctx.fillStyle=CHALK;ctx.fillRect(0,0,w,h);return}   /* empty */
+    /* the meniscus: a thin bright line just under the surface, and a faint glow below it */
+    ctx.lineJoin='round';
+    ctx.beginPath();ctx.moveTo(0,surf(Y,0)+6);trace(Y,6);
+    ctx.strokeStyle='rgba(255,236,210,.10)';ctx.lineWidth=10;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,surf(Y,0)+1.5);trace(Y,1.5);
+    ctx.strokeStyle='rgba(255,244,228,.45)';ctx.lineWidth=1.6;ctx.stroke();
+    /* the wet edge, then the dry page above it */
+    ctx.fillStyle=CHALK;
+    ctx.globalAlpha=.35;
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,surf(Y,0)+3);trace(Y,3);ctx.lineTo(w,0);ctx.closePath();ctx.fill();
+    ctx.globalAlpha=1;
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,surf(Y,0));trace(Y,0);ctx.lineTo(w,0);ctx.closePath();ctx.fill();
+  }
+
+  /* Bubbles: a steady fizz from the depth that is left, and scrolling shakes more loose. */
+  function tick(now){
+    raf=0;
+    var dt=Math.min(.05,(now-(t0||now))/1000);t0=now;t+=dt;
+    var y=scrollY,v=y-lastY;lastY=y;
+    kick=kick*.9+Math.min(60,Math.abs(v))*.1;
+    target=drained();
+    var d=target-level;
+    level=Math.abs(d)<.0005?target:level+d*Math.min(1,dt*7);
+    /* slosh: the surface leans against the way it is going, then settles */
+    slosh+=((target-level)*h*1.4-slosh)*Math.min(1,dt*5);
+    var Y=-EDGE+(h+EDGE*2)*level,deep=clamp((h-Y)/h,0,1);
+    spawn+=dt*(6+kick*2.4)*deep*(MAX/120);
+    while(spawn>=1&&bubbles.length<MAX){
+      spawn--;
+      var s=1.5+Math.pow(Math.random(),2.2)*7,top=Math.max(Y+EDGE,h*.55);
+      bubbles.push({x:Math.random()*w,y:top+Math.random()*(h+10-top),s:s,vy:28+s*14+Math.random()*20,
+        ph:Math.random()*6,wob:.4+Math.random()*1.2,a:.35+Math.random()*.5});
+    }
+    if(spawn>1)spawn=1;
+    var push=Math.max(0,v)*.6;   /* scrolling down lifts them a little faster */
+    for(var i=bubbles.length-1;i>=0;i--){
+      var b=bubbles[i];
+      b.y-=b.vy*dt+push*(b.s/6);
+      b.ph+=dt*3;b.x+=Math.sin(b.ph)*b.wob*.5;
+      if(b.y<surf(Y,b.x))bubbles.splice(i,1);    /* popped at the surface */
+    }
+    /* dry and still: one last chalk frame, then nothing until the next scroll */
+    var dry=level>=1&&target>=1&&!bubbles.length&&Math.abs(slosh)<.5;
+    if(!(dry&&settled))draw();
+    settled=dry;
+    if(on&&!dry)raf=requestAnimationFrame(tick);
+  }
+  function wake(){if(on&&!raf){raf=requestAnimationFrame(tick)}}
+
+  size();
+  addEventListener('resize',function(){
+    /* height-only changes (mobile Safari's toolbar) must not re-size the stage */
+    if(stage.offsetWidth===w&&stage.offsetHeight===h)return;
+    size();
+  });
+  addEventListener('scroll',wake,{passive:true});
+  /* only animate while the band is on screen; arriving by a jump, start at the right level */
+  new IntersectionObserver(function(es){
+    on=es[0].isIntersecting;
+    if(on){level=target=drained();slosh=0;t0=0;lastY=scrollY;settled=false;wake()}
+    else{bubbles.length=0;level=target=drained();slosh=0;draw()}
+  }).observe(run);
 })();
 
 /* Interface sound: short glassy ticks, synthesised here so there is nothing to download */

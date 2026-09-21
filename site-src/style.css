@@ -454,6 +454,38 @@ html:not(.js) #results[hidden]{display:block!important}
 .pour-bg::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(rgba(0,20,27,.88) 0,rgba(0,20,27,.7) 18%,rgba(0,20,27,.7) 82%,rgba(0,20,27,.88) 100%)}
 
+/* ---------- The fizz: the finder band carries on from the pour ---------- */
+/* The full glass under the same scrim as the pour, and one transparent canvas above it
+   for the bubbles and the drain: everything above the falling surface it fills with chalk,
+   the consult's ground, so the band ends on the colour the next one starts on.
+   The text sits on chalk cards at .9. Over the chalk above the surface a card is the page
+   itself; over the darkest glass it is still light enough to hold the finder's own ink and
+   teal above 4.5:1, and the bubbles only ever lighten what is under it. */
+.finder.fizz-sec{position:relative;isolation:isolate;background:var(--teal)}
+.fizz-sec .split-text,.fizz-sec .q-card{background:rgba(244,242,236,.9);padding:24px 20px}
+.fizz-bg{position:absolute;inset:0;z-index:-1;background:var(--teal)}
+.fizz-stage{position:sticky;top:0;height:100vh;max-height:100%}
+@supports (height:100lvh){.fizz-stage{height:100lvh}}
+.fizz-still,.fizz-film{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.fizz-stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(rgba(0,20,27,.88) 0,rgba(0,20,27,.7) 18%,rgba(0,20,27,.7) 100%)}
+.fizz-film{z-index:1}
+/* The drain's run: room below the cards to scroll the glass empty in. Its end is where
+   the stage lets go of the window, so the band is chalk before the consult shows. */
+.fizz-run{display:none}
+html.motion .fizz-run{display:block;height:80vh}
+@supports (height:100lvh){html.motion .fizz-run{height:80lvh}}
+/* Reduced motion (and no script): no canvas. The glass stands still and a still
+   waterline below the cards gives way to chalk at the band's foot. */
+.fizz-shore{position:absolute;left:0;right:0;bottom:0;z-index:1;display:block;width:100%;height:88px;fill:var(--chalk)}
+html.motion .fizz-shore{display:none}
+html:not(.motion) .fizz-sec{padding-bottom:calc(var(--sec) + 56px)}
+@media (min-width:768px){
+  .fizz-sec .split-text,.fizz-sec .q-card{padding:36px 32px}
+  html.motion .fizz-run{height:115vh}      /* the cards sit side by side: less band to drain behind */
+  @supports (height:100lvh){html.motion .fizz-run{height:115lvh}}
+}
+
 /* ---------- Archipelago: seven floating islands ---------- */
 .isles-sec{overflow:hidden;padding-bottom:40px}
 .isles-sec .sec-head{margin-bottom:20px}
