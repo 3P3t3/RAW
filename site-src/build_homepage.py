@@ -86,7 +86,7 @@ CAROUSELS = {
 
 # 'strip' is the tabbed goal strip; 'ring' brings back the rotating archipelago.
 # Both are built from the same shelf data, so switching is this one word plus a rebuild.
-SHELF_VIEW = 'strip'
+SHELF_VIEW = 'ring'
 
 SHELF_LINE = {  # the line under each shelf name
     'recovery': 'After the session', 'hydration': 'Electrolytes', 'energy-focus': 'Cans & capsules',
@@ -298,7 +298,6 @@ def main():
                 f'<span class="isle-note">{SHELF_LINE[slug_]}</span></span></a></li>')
         return ('  <!-- Shelves as a rotating ring; tap one to open it -->\n'
                 '  <section class="sec isles-sec" id="goals" aria-labelledby="goals-title">\n'
-                '    <img class="sec-bg isles-bg" src="assets/bg-sky.webp" alt="" width="1600" height="900" loading="lazy">\n'
                 '    <div class="wrap">\n'
                 '      <div class="sec-head grow"><h2 id="goals-title">What are we <span>maximizing?</span></h2></div>\n'
                 '      <div class="archipelago" id="archipelago">\n        <ul class="isles">\n'

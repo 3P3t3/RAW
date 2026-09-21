@@ -110,11 +110,7 @@ html:not(.js) .search-toggle{visibility:hidden}
   text-decoration-thickness:1.5px;text-underline-offset:6px}
 @media (hover:hover){.shelf-link:hover .shelf-go{text-decoration-thickness:2.5px}}
 /* Generated backdrops: one image per band, masked so it dissolves into the ground */
-.sec-bg{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;pointer-events:none}
 .isles-sec,.results,.consult,.cat-shop{position:relative;isolation:isolate}
-.isles-bg{opacity:.9;object-position:50% 64%;
-  -webkit-mask-image:linear-gradient(180deg,transparent,#000 18%,#000 74%,transparent);
-  mask-image:linear-gradient(180deg,transparent,#000 18%,#000 74%,transparent)}
 /* Dark bands: flat, at two depths, so neither reads as a repeat of the other */
 .podium-sec{background:var(--teal)}
 /* Finder: the sand band. Its options are the same pill as the consult form's chips. */
@@ -401,7 +397,7 @@ html:not(.js) #results[hidden]{display:block!important}
 }
 
 /* ---------- Trending: podium ---------- */
-.podium-sec{position:relative;margin-top:96px;padding-top:0;overflow:visible}
+.podium-sec{position:relative;margin-top:56px;padding-top:0;overflow:visible}
 .podium-sec .sec-head{padding-top:var(--sec);margin-bottom:0;align-items:baseline}
 .podium{list-style:none;margin:56px 0 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:44px;align-items:start}
 .pod{position:relative;perspective:900px}
@@ -419,7 +415,7 @@ html:not(.js) #results[hidden]{display:block!important}
 @media (prefers-reduced-motion:reduce){.pod .card-link{transition:none}}
 
 @media (min-width:768px){
-  .podium-sec{margin-top:140px}
+  .podium-sec{margin-top:88px}
   .podium{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;align-items:start;margin-top:76px}
   .pod .shot{margin-top:-70px}
 
