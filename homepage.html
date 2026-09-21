@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=f23f3b99">
+<link rel="stylesheet" href="style.css?v=0b613960">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -926,7 +926,7 @@ if(cform){
 (function(){
   var run=$('#fizz-bg');
   if(!run||!html.classList.contains('motion'))return;
-  var stage=$('.fizz-stage',run),cv=$('#fizz-film'),content=$('#fizz-content');
+  var stage=$('.fizz-stage',run),cv=$('#fizz-film'),content=$('#fizz-content'),sec=run.parentNode;
   var ctx=cv.getContext('2d');
   var CHALK='#F4F2EC';
   var w=0,h=0,vh=0,r=1,towel=null,bub=null,tw=0,th=0;
@@ -950,7 +950,7 @@ if(cform){
   /* The towel, drawn once per size: a folded terry pad, loops for texture, two stripes
      in the can's blue and the teal, a hem, and a darker folded edge along the top. */
   function makeTowel(){
-    tw=Math.round(clamp(w*.24,150,320));th=Math.round(Math.min(h/3*1.1,tw*.72));
+    th=Math.round(H*1.2);tw=Math.round(Math.min(th*1.3,w*.42));
     var c=doc.createElement('canvas'),g=c.getContext('2d'),R=Math.min(r,2);
     c.width=Math.round(tw*R);c.height=Math.round(th*R);g.scale(R,R);
     function rr(x,y,W,H,k){g.beginPath();g.moveTo(x+k,y);g.arcTo(x+W,y,x+W,y+H,k);g.arcTo(x+W,y+H,x,y+H,k);g.arcTo(x,y+H,x,y,k);g.arcTo(x,y,x+W,y,k);g.closePath()}
@@ -962,10 +962,10 @@ if(cform){
     g.fillStyle='#3340B8';g.fillRect(sx,0,tw*.07,th);
     g.fillStyle='#002E3B';g.fillRect(sx+tw*.1,0,tw*.03,th);
     /* terry loops: tiny arcs, dark and light, dense enough to read as pile */
-    var n=Math.round(tw*th/9);
+    var n=Math.round(tw*th/14);
     for(var i=0;i<n;i++){
-      var x=Math.random()*tw,y=Math.random()*th,k=.8+Math.random()*1.3;
-      g.strokeStyle=Math.random()<.55?'rgba(40,40,30,.10)':'rgba(255,255,255,.7)';
+      var x=Math.random()*tw,y=Math.random()*th,k=.7+Math.random()*1.1;
+      g.strokeStyle=Math.random()<.6?'rgba(40,40,30,.055)':'rgba(255,255,255,.28)';
       g.lineWidth=.8;g.beginPath();g.arc(x,y,k,Math.random()*6,Math.random()*6+3.5);g.stroke();
     }
     /* the fold along the top, and the hem */
@@ -977,27 +977,39 @@ if(cform){
     return c;
   }
 
+  /* Where the wipe may go. Once the band's bottom reaches the window's bottom the stage
+     stops sticking and rides up with the content, so the content's bottom then sits at a
+     fixed height on the stage, Y0. Only the stage below Y0 is ever cleaned, in two strips
+     of height H: nothing is wiped from under text, and the band's bottom edge is clean by
+     the time the consult shows beneath it. */
+  var Y0=0,H=1;
+  function geometry(){
+    var dist=sec.getBoundingClientRect().bottom-content.getBoundingClientRect().bottom;
+    Y0=Math.max(h*.25,h-dist+24);H=(h-Y0)/PASSES;
+  }
   function size(){
     r=Math.min(devicePixelRatio||1,2);
     w=stage.offsetWidth;h=stage.offsetHeight;vh=innerHeight||h;
+    geometry();
     cv.width=Math.round(w*r);cv.height=Math.round(h*r);
     MAX=w<600?40:120;
     towel=makeTowel();if(!bub)bub=makeBubble();
     draw();
   }
 
-  /* How far the wipe has got, 0..1 over one window-height of scroll. It starts when the
-     content's bottom edge is 62% of the way down the window. Three passes of a third
-     each: bottom strip, middle, top. The last few percent carry the towel off the edge. */
+  /* How far the wipe has got, 0..1, read off where the content's bottom edge is. The
+     bottom pass starts once the content has cleared that strip (towel and all), the top
+     pass once it has cleared Y0, and each pass takes one strip-height of scroll, so the
+     towel moves at about the speed of the page. The last few percent carry it off. */
+  var PASSES=2,OUT=.08;
   function wipe(){
-    var cb=content.getBoundingClientRect().bottom;
-    return clamp((vh*.62-cb)/(vh*1.0),0,1);
+    var cb=content.getBoundingClientRect().bottom,start=Y0+H*.9;
+    return clamp((start-cb)/(H*PASSES*1.05)*(1-OUT),0,1);
   }
-  var PASSES=3,OUT=.08;
   function towelAt(p){
     var q=clamp(p/(1-OUT),0,1)*PASSES,k=Math.min(PASSES-1,Math.floor(q)),f=q-k;
     if(p>=1-OUT){k=PASSES-1;f=1}
-    var H=h/PASSES,span=w*1.1+tw*.2,dirR=k%2===0;
+    var span=w*1.1+tw*.2,dirR=k%2===0;
     /* 85% of a pass is the sweep, the last 15% climbs to the next strip at the edge */
     var sweep=easeIO(clamp(f/.85,0,1)),climb=easeIO(clamp((f-.85)/.15,0,1));
     var x=-w*.05+span*(dirR?sweep:1-sweep);
@@ -1007,6 +1019,8 @@ if(cform){
   }
 
   function draw(){
+    var oh=H;geometry();
+    if(Math.abs(H-oh)>20)towel=makeTowel();     /* the layout moved: the fonts, or the shelf opening */
     var p=wipe(),T=towelAt(p);
     ctx.setTransform(r,0,0,r,0,0);
     ctx.clearRect(0,0,w,h);
@@ -1022,13 +1036,23 @@ if(cform){
     /* the clean: whole strips for passes already made, and the current strip up to the
        towel, with a soft wet edge that wobbles a little down its height */
     ctx.fillStyle=CHALK;
-    var H=T.H,pad=6;
-    for(var s=0;s<T.k;s++)ctx.fillRect(0,h-H*(s+1)-pad,w,H+pad*2);
+    var pad=6;
+    /* a strip's top is never ruled: it rides the towel's path, a little uneven */
+    function wavyTop(x0,x1,y,k){
+      var d=x1>x0?12:-12;
+      for(var x=x0;d>0?x<x1:x>x1;x+=d)ctx.lineTo(x,y+Math.sin(x*.013+k*2)*5+Math.sin(x*.041+k)*2.5);
+      ctx.lineTo(x1,y+Math.sin(x1*.013+k*2)*5+Math.sin(x1*.041+k)*2.5);
+    }
+    for(var s=0;s<T.k;s++){
+      var st=h-H*(s+1)-pad;
+      ctx.beginPath();ctx.moveTo(0,h-H*s+pad);wavyTop(0,w,st,s);ctx.lineTo(w,h-H*s+pad);ctx.closePath();ctx.fill();
+    }
     var top=h-H*(T.k+1)-pad,bot=h-H*T.k+pad,edge=T.x;
-    if(p>=1-OUT){ctx.fillRect(0,top,w,bot-top)}
+    if(p>=1-OUT){ctx.beginPath();ctx.moveTo(0,bot);wavyTop(0,w,top,T.k);ctx.lineTo(w,bot);ctx.closePath();ctx.fill()}
     else{
       ctx.beginPath();
-      if(T.dirR){ctx.moveTo(0,top);ctx.lineTo(edge,top)}else{ctx.moveTo(w,top);ctx.lineTo(edge,top)}
+      if(T.dirR){ctx.moveTo(0,bot);ctx.lineTo(0,top);wavyTop(0,Math.min(w,edge),top,T.k)}
+      else{ctx.moveTo(w,bot);ctx.lineTo(w,top);wavyTop(w,Math.max(0,edge),top,T.k)}
       for(var yy=top;yy<=bot;yy+=8)ctx.lineTo(edge+(T.dirR?-1:1)*(Math.sin(yy*.09+T.k)*4+Math.sin(yy*.023)*6),yy);
       ctx.lineTo(edge,bot);ctx.lineTo(T.dirR?0:w,bot);ctx.closePath();ctx.fill();
       /* streaks the towel leaves, fading the further behind it they are */

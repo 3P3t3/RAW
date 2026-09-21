@@ -474,8 +474,8 @@ html:not(.js) #results[hidden]{display:block!important}
 .fizz-film{z-index:1}
 /* the towel's run: only when there is a towel */
 .fizz-run{display:none}
-html.motion .fizz-run{display:block;height:75vh}
-@supports (height:100lvh){html.motion .fizz-run{height:75lvh}}
+html.motion .fizz-run{display:block;height:36vh}
+@supports (height:100lvh){html.motion .fizz-run{height:36lvh}}
 
 /* ---------- Archipelago: seven floating islands ---------- */
 .isles-sec{overflow:hidden;padding-bottom:40px}
