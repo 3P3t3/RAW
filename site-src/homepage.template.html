@@ -74,9 +74,18 @@
     </div>
   </section>
 
-  <!-- 6. Guided finder: the first question is answered right here -->
-  <section class="sec finder" id="finder" aria-labelledby="finder-sec-title">
-    <div class="wrap split">
+  <!-- 6. Guided finder: the first question is answered right here.
+       Its ground carries on from the pour: the full glass, fizzing as you scroll, then a
+       towel wipes it back to the page's own chalk on the way into the consult. Scenery
+       only; with reduced motion it is the still glass and no wipe. -->
+  <section class="sec finder fizz-sec" id="finder" aria-labelledby="finder-sec-title">
+    <div class="fizz-bg" id="fizz-bg" aria-hidden="true">
+      <div class="fizz-stage">
+        <img class="fizz-still" src="assets/pour/sm/0150.webp" srcset="assets/pour/sm/0150.webp 618w, assets/pour/big/0150.webp 810w" sizes="100vw" alt="" loading="lazy" decoding="async">
+        <canvas class="fizz-film" id="fizz-film"></canvas>
+      </div>
+    </div>
+    <div class="wrap split" id="fizz-content">
       <div class="split-text grow">
         <h2 id="finder-sec-title"><span>Not sure where</span> <span>to start?</span></h2>
         <p>Three quick questions about how you train, then two suggestions with a line on why each one fits. No email or account needed.</p>
@@ -93,6 +102,7 @@
         </div>
       </div>
     </div>
+    <div class="fizz-run" aria-hidden="true"></div>
   </section>
 
   <!-- 7. Consult: four answers first, then a time on my calendar -->

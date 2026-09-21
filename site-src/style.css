@@ -454,6 +454,29 @@ html:not(.js) #results[hidden]{display:block!important}
 .pour-bg::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(rgba(0,20,27,.88) 0,rgba(0,20,27,.7) 18%,rgba(0,20,27,.7) 82%,rgba(0,20,27,.88) 100%)}
 
+/* ---------- The fizz: the finder band carries on from the pour ---------- */
+/* The full glass under the same scrim as the pour, bubbles and the towel on a canvas above
+   it. The canvas is transparent: what the towel has cleaned it fills with chalk, which is
+   the consult's ground, so the band ends on the colour the next one starts on. */
+.finder.fizz-sec{position:relative;isolation:isolate;background:var(--teal);color:var(--on-dark)}
+.fizz-sec h2,.fizz-sec .q-card-q,.fizz-sec .q-card{color:var(--chalk)}
+.fizz-sec .q-step,.fizz-sec .split-text p{color:var(--on-dark)}
+.fizz-sec .q-prog span{background:rgba(230,211,197,.25)}
+.fizz-sec .q-prog span:first-child{background:var(--sand)}
+.fizz-sec .q-opt{background:rgba(244,242,236,.94);border-color:transparent}
+.fizz-sec :focus-visible{outline-color:var(--sand)}
+.fizz-bg{position:absolute;inset:0;z-index:-1;background:var(--teal)}
+.fizz-stage{position:sticky;top:0;height:100vh;max-height:100%}
+@supports (height:100lvh){.fizz-stage{height:100lvh}}
+.fizz-still,.fizz-film{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.fizz-stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(rgba(0,20,27,.88) 0,rgba(0,20,27,.7) 18%,rgba(0,20,27,.7) 100%)}
+.fizz-film{z-index:1}
+/* the towel's run: only when there is a towel */
+.fizz-run{display:none}
+html.motion .fizz-run{display:block;height:75vh}
+@supports (height:100lvh){html.motion .fizz-run{height:75lvh}}
+
 /* ---------- Archipelago: seven floating islands ---------- */
 .isles-sec{overflow:hidden;padding-bottom:40px}
 .isles-sec .sec-head{margin-bottom:20px}
