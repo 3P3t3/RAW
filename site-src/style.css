@@ -115,7 +115,7 @@ html:not(.js) .search-toggle{visibility:hidden}
 @media (hover:hover){.shelf-link:hover .shelf-go{text-decoration-thickness:2.5px}}
 /* Generated backdrops: one image per band, masked so it dissolves into the ground */
 .isles-sec,.results,.consult,.cat-shop{position:relative;isolation:isolate}
-/* Dark bands: flat, at two depths, so neither reads as a repeat of the other */
+/* Dark bands: the trending band carries the pour film, the rest stay flat */
 .podium-sec{background:var(--teal)}
 /* Finder: the sand band. Its options are the same pill as the consult form's chips. */
 .finder{background:var(--sand);color:var(--text)}
@@ -412,7 +412,7 @@ html:not(.js) #results[hidden]{display:block!important}
 }
 
 /* ---------- Trending: podium ---------- */
-.podium-sec{position:relative;margin-top:56px;padding-top:0;overflow:visible}
+.podium-sec{position:relative;isolation:isolate;margin-top:56px;padding-top:0;overflow:visible}
 .podium-sec .sec-head{padding-top:var(--sec);margin-bottom:0;align-items:baseline}
 .podium{list-style:none;margin:56px 0 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:44px;align-items:start}
 .pod{position:relative;perspective:900px}
@@ -436,35 +436,23 @@ html:not(.js) #results[hidden]{display:block!important}
 
 }
 
-/* ---------- The pour: a scroll-scrubbed film ---------- */
-/* The stage is sized to the large viewport: mobile Safari's toolbar coming back
-   must not resize it mid-scrub. The script makes the run tall enough to scrub in. */
-.pour-sec{--stage:100vh;background:var(--teal);color:var(--chalk)}
-@supports (height:100lvh){.pour-sec{--stage:100lvh}}
-.pour-run{position:relative;height:var(--stage)}
-.pour-stage{position:sticky;top:0;height:var(--stage);overflow:hidden;background:var(--teal)}
+/* ---------- The pour: a scroll-scrubbed film behind the trending band ---------- */
+/* The stage is sized to the large viewport: mobile Safari's toolbar coming back must not
+   resize it mid-scrub. Sticky keeps it over whatever slice of the band is on screen, and
+   max-height keeps it inside a band shorter than the viewport, so it never needs clipping
+   (an overflow:hidden parent would stop the sticking). Teal underneath, so a band whose
+   frames are still coming, or never come, is still a band. */
+.pour-bg{position:absolute;inset:0;z-index:-1;background:var(--teal)}
+.pour-stage{position:sticky;top:0;height:100vh;max-height:100%}
+@supports (height:100lvh){.pour-stage{height:100lvh}}
 .pour-film,.pour-still{display:block;width:100%;height:100%;object-fit:cover}
 .pour-still{position:absolute;inset:0}
-/* a scrim so the type keeps contrast, whatever the frame under it is doing */
-.pour-stage::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(rgba(0,20,27,.62) 0,rgba(0,20,27,.14) 34%,rgba(0,20,27,0) 54%),
-    linear-gradient(0deg,rgba(0,20,27,.62) 0,rgba(0,20,27,.16) 28%,rgba(0,20,27,0) 56%)}
-.pour-copy{position:absolute;inset:calc(var(--mast) + 28px) 0 0;z-index:2;pointer-events:none}
-.pour-head{color:var(--chalk);font-size:40px;text-shadow:0 2px 24px rgba(0,12,18,.4)}
-.pour-head span{display:block;margin-top:12px;font:600 12px/1.3 var(--sans);letter-spacing:.16em;color:var(--sand);font-stretch:100%}
-.pour-cue{position:absolute;left:var(--pad);right:var(--pad);top:46%;margin:0;max-width:14ch;
-  font:800 34px/.96 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--chalk);
-  opacity:0;text-shadow:0 2px 24px rgba(0,12,18,.4)}
-.pour-cue small{display:block;margin-top:10px;font:600 12px/1.3 var(--sans);letter-spacing:.16em;color:var(--chalk)}
-.pour-cap{position:absolute;left:0;right:0;bottom:36px;margin:0;text-align:center;
-  font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--sand)}
-html:not(.js) .pour-cap{display:none}
-@media (prefers-reduced-motion:reduce){.pour-cap{display:none}}
-@media (min-width:768px){
-  .pour-head{font-size:52px}
-  .pour-cue{font-size:46px}
-  .pour-copy{inset:calc(var(--mast) + 44px) 0 0}
-}
+/* The scrim. The podium sits on top of this, and the film runs to near-white where the
+   drink fills the frame, so it is heavy on purpose: .7 holds every text colour on the
+   band above 4.5:1 against a white pixel, and the ends go darker still for the heading
+   and for the edges the band shares with the light sections. */
+.pour-bg::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(rgba(0,20,27,.88) 0,rgba(0,20,27,.7) 18%,rgba(0,20,27,.7) 82%,rgba(0,20,27,.88) 100%)}
 
 /* ---------- Archipelago: seven floating islands ---------- */
 .isles-sec{overflow:hidden;padding-bottom:40px}

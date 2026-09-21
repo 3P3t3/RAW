@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=559b1bf5">
+<link rel="stylesheet" href="style.css?v=312d1952">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -621,13 +621,13 @@ if(cform){
   });
 }
 
-/* The pour: 150 frames of the can going into the glass, scrubbed by scroll position.
-   Nothing is fetched until the section comes near, and reduced motion gets one still. */
+/* The pour: 150 frames of the can going into the glass, scrubbed by scroll position,
+   running as the ground of the trending band. Nothing is fetched until the band comes
+   near, and reduced motion gets one still. */
 (function(){
-  var run=$('#pour-run');
+  var run=$('#pour-bg');
   if(!run)return;
-  var stage=$('.pour-stage',run),cv=$('#pour-film'),still=$('#pour-still'),
-      head=$('.pour-head',run),cap=$('.pour-cap',run),cues=$$('.pour-cue',run);
+  var stage=$('.pour-stage',run),cv=$('#pour-film'),still=$('#pour-still');
   /* phones take the light set, big screens the tall one; picked when the first
      frame is actually wanted, so the window has been laid out by then */
   var DIR='assets/pour/sm';
@@ -635,15 +635,14 @@ if(cform){
     var big=innerWidth>900||((devicePixelRatio||1)>2&&innerWidth>480);
     DIR='assets/pour/'+(big?'big':'sm');
   }
-  var FRAMES=150,PPF=12,CACHE=28,AHEAD=10;
+  var FRAMES=150,CACHE=28,AHEAD=10;
   var MAXSTEP=3;     /* frames per display frame at most: a flick plays, never cuts */
   var STILL=59;      /* the one frame reduced motion shows: the can mid-pour */
   function url(i){return DIR+'/'+('000'+(i+1)).slice(-4)+'.webp'}
 
   /* one frame, no scrub, and none of the other 149 fetched */
   function poster(){
-    pick();still.alt=cv.getAttribute('aria-label');still.src=url(STILL);
-    still.hidden=false;cv.hidden=true;if(cap)cap.hidden=true;
+    pick();still.src=url(STILL);still.hidden=false;cv.hidden=true;
   }
   var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var gate='IntersectionObserver' in window;
@@ -728,12 +727,15 @@ if(cform){
     cv.width=Math.round(w*r);cv.height=Math.round(h*r);
     ctx.setTransform(r,0,0,r,0,0);
     ctx.imageSmoothingQuality='high';
-    run.style.height=(h+FRAMES*PPF)+'px';             /* the scroll the film is scrubbed by */
+    ctx.fillStyle='#002E3B';ctx.fillRect(0,0,w,h);    /* teal until a frame lands, and if none ever does */
     drawn='';paint(true);
   }
-  /* measured live: the sections above this one change height as the shelf opens */
+  /* The band is its own scroll run: the film starts as the band's top reaches the bottom
+     of the window and ends as its bottom leaves the top. Measured live, since the band's
+     height and the sections above it both move as the shelf opens. */
   function progress(){
-    return Math.min(1,Math.max(0,-run.getBoundingClientRect().top/(FRAMES*PPF)));
+    var r=run.getBoundingClientRect(),vh=innerHeight||1;
+    return Math.min(1,Math.max(0,(vh-r.top)/(r.height+vh)));
   }
   /* The playhead eases toward the scroll position instead of jumping to it, so a
      flick of the thumb plays through frames rather than cutting. */
@@ -743,13 +745,6 @@ if(cform){
     if(Math.abs(d)<0.01)pos=target;
     else{dir=d>0?1:-1;var v=d*0.22;pos+=Math.max(-MAXSTEP,Math.min(MAXSTEP,v))}
     paint(false);
-    var p=pos/(FRAMES-1);
-    if(head)head.style.opacity=String(Math.max(0,1-p*3));    /* the title clears early */
-    if(cap)cap.style.opacity=String(Math.max(0,1-p*8));
-    for(var c=0;c<cues.length;c++){                          /* captions ride the scrub */
-      var a=+cues[c].dataset.a,b=+cues[c].dataset.b,e=0.06;
-      cues[c].style.opacity=String(Math.max(0,Math.min(1,(p-a)/e,(b-p)/e)));
-    }
     if(pos!==target)raf=requestAnimationFrame(step);
   }
   function onScroll(){
