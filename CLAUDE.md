@@ -1,5 +1,39 @@
 # Aspire Health — static site, built by one Python script
 
+## Team: who works where, and who pushes
+
+Several Claude sessions work on this site at once, each in its own git worktree on its own branch:
+
+| Session | Folder | Branch |
+|---|---|---|
+| RAW 0: EM | `~/Desktop/Raw` | `main` — the live site |
+| RAW 1: General | `~/Desktop/Raw-worktrees/raw` | `raw/work` |
+| RAW 2: Backgrounds | `~/Desktop/Raw-worktrees/raw2-fizz` | `prototype/fizz-and-wipe` |
+| RAW 3: Logos | `~/Desktop/Raw-worktrees/logo` | `logo/design` |
+
+Every session except RAW 0: EM:
+- Works only in its own worktree and commits only to its own branch. Commit as often as you like.
+- **Never pushes.** `main` deploys straight to the live site on GitHub Pages, so only RAW 0: EM pushes,
+  and only after Peter says go.
+- Never checks out, commits to, or merges into `main`.
+- To pick up what has shipped, merges `main` into its own branch.
+- Messages RAW 0: EM when a piece is ready. It merges it into `main`, rebuilds, checks it and reports.
+
+A new session gets its worktree from RAW 0: EM: `Raw-worktrees/rawN-<topic>` on branch `rawN/<topic>`.
+
+**The first build in a fresh worktree takes ~50s**: checkout leaves the cut photos no newer than
+their sources, so every photo is re-cut. The output is byte-identical and git sees no change. Later
+builds are ~0.05s again.
+
+## Merging: never merge the generated pages
+
+`.gitattributes` marks `homepage.html`, `category-*.html` and the root `style.css` as `merge=ours`, so
+two branches that both rebuilt never conflict on them. A post-merge hook then rebuilds them from the
+merged source; commit what it rebuilt. The `ours` driver is local git config
+(`git config merge.ours.driver true`) — set it in any fresh clone, or git falls back to a normal
+merge and those files conflict. If a merge stops on a conflict in *source*, the hook does not run:
+resolve the source, run the build, then commit.
+
 ## Never read the generated pages
 
 `homepage.html` is ~77k chars (~19k tokens). All eight generated pages together are ~370k
