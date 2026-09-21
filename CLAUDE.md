@@ -15,6 +15,9 @@ Every session except RAW 0: EM:
 - Works only in its own worktree and commits only to its own branch. Commit as often as you like.
 - **Never pushes.** `main` deploys straight to the live site on GitHub Pages, so only RAW 0: EM pushes,
   and only after Peter says go.
+- Never publishes the private preview artifact (claude.ai/artifact/KgFJMrNRkPX2ukMEsSQ8Ek). RAW 0: EM
+  publishes it. Every publish includes `style.css` or the pages ship unstyled, and the 300 pour frames
+  exceed the 255-file limit per publish, so they go up in a second call.
 - Never checks out, commits to, or merges into `main`.
 - To pick up what has shipped, merges `main` into its own branch.
 - Messages RAW 0: EM when a piece is ready. It merges it into `main`, rebuilds, checks it and reports.
