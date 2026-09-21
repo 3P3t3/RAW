@@ -2,14 +2,18 @@
 
 ## Team: who works where, and who pushes
 
-Several Claude sessions work on this site at once, each in its own git worktree on its own branch:
+RAW 0: EM is Peter's main thread for this site. It takes requests, runs helper agents in parallel —
+each in its own worktree — and does all merging, pushing and publishing. Other sessions each keep
+their own git worktree and branch:
 
-| Session | Folder | Branch |
-|---|---|---|
-| RAW 0: EM | `~/Desktop/Raw` | `main` — the live site |
-| RAW 1: General | `~/Desktop/Raw-worktrees/raw` | `raw/work` |
-| RAW 2: Backgrounds | `~/Desktop/Raw-worktrees/raw2-fizz` | `prototype/fizz-and-wipe` |
-| RAW 3: Logos | `~/Desktop/Raw-worktrees/logo` | `logo/design` |
+| Session | Folder | Branch | Status |
+|---|---|---|---|
+| RAW 0: EM | `~/Desktop/Raw` | `main` — the live site | main thread |
+| RAW 3: Logos | `~/Desktop/Raw-worktrees/logo` | `logo/design` | active: logo direction |
+| RAW 1: General | `~/Desktop/Raw-worktrees/raw` | `raw/work` | parked; its work is in `main` |
+| RAW 2: Backgrounds | `~/Desktop/Raw-worktrees/raw2-fizz` | `prototype/fizz-and-wipe` | parked; fizz-and-wipe prototype kept on its branch |
+
+A parked session starts no new work unless Peter restarts it.
 
 Every session except RAW 0: EM:
 - Works only in its own worktree and commits only to its own branch. Commit as often as you like.
