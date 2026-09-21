@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=0b613960">
+<link rel="stylesheet" href="style.css?v=bbd3d9e6">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -763,22 +763,35 @@ if(cform){
   },{rootMargin:'400px 0px'}).observe(run);
 })();
 
-/* The fizz: bubbles over the full glass behind the finder, then a towel wipes the band
-   back to chalk in three passes, bottom third first. Bubbles run on time and get a kick
-   from scrolling; the wipe is a pure function of scroll, so scrolling back un-wipes it.
-   The wipe is driven by where the finder's content has got to, and a pass only starts
-   once the content has cleared the strip it cleans, so no text is ever left on chalk. */
+/* The glass under the fizz, the pour's last frame: asked for only as the band nears, as
+   the pour's own frames are, whatever the motion setting. Without script the band is teal. */
+(function(){
+  var im=$('.fizz-still');
+  if(!im)return;
+  function go(){im.srcset=im.getAttribute('data-srcset');im.src=im.getAttribute('data-src')}
+  if(!('IntersectionObserver' in window))return go();
+  new IntersectionObserver(function(es,o){
+    if(!es[0].isIntersecting)return;
+    o.disconnect();go();
+  },{rootMargin:'400px 0px'}).observe(im.closest('section'));
+})();
+
+/* The fizz: the full glass behind the finder, bubbling, drains away as you scroll. The
+   level is a pure function of scroll (eased a touch, so it pours rather than jumps), so
+   scrolling back up refills it. It starts as the band's top reaches the top of the window
+   and is empty by the time the stage lets go, just before the consult shows. Above the
+   surface the canvas is chalk; below it, the glass shows through and bubbles rise to the
+   surface and pop there. One canvas, redrawn each frame while the band is on screen. */
 (function(){
   var run=$('#fizz-bg');
   if(!run||!html.classList.contains('motion'))return;
-  var stage=$('.fizz-stage',run),cv=$('#fizz-film'),content=$('#fizz-content'),sec=run.parentNode;
+  var stage=$('.fizz-stage',run),cv=$('#fizz-film'),sec=run.parentNode;
   var ctx=cv.getContext('2d');
-  var CHALK='#F4F2EC';
-  var w=0,h=0,vh=0,r=1,towel=null,bub=null,tw=0,th=0;
-  var bubbles=[],MAX=120,spawn=0,lastY=scrollY,kick=0,t0=0,raf=0,on=false;
-  var tx=0,ty=0,lean=0;
+  var CHALK='#F4F2EC',EDGE=26;      /* EDGE: how far the waves and the wet band reach */
+  var w=0,h=0,r=1,bub=null,step=16;
+  var bubbles=[],MAX=120,spawn=0,lastY=scrollY,kick=0,t0=0,t=0,raf=0,on=false;
+  var level=0,target=0,slosh=0,settled=false;
 
-  function easeIO(x){return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2}
   function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
 
   /* one bubble, drawn once and stamped at every size */
@@ -791,151 +804,78 @@ if(cform){
     g.fillStyle='rgba(255,255,255,.85)';g.beginPath();g.ellipse(S*.36,S*.33,S*.1,S*.06,-.7,0,7);g.fill();
     return c;
   }
-
-  /* The towel, drawn once per size: a folded terry pad, loops for texture, two stripes
-     in the can's blue and the teal, a hem, and a darker folded edge along the top. */
-  function makeTowel(){
-    th=Math.round(H*1.2);tw=Math.round(Math.min(th*1.3,w*.42));
-    var c=doc.createElement('canvas'),g=c.getContext('2d'),R=Math.min(r,2);
-    c.width=Math.round(tw*R);c.height=Math.round(th*R);g.scale(R,R);
-    function rr(x,y,W,H,k){g.beginPath();g.moveTo(x+k,y);g.arcTo(x+W,y,x+W,y+H,k);g.arcTo(x+W,y+H,x,y+H,k);g.arcTo(x,y+H,x,y,k);g.arcTo(x,y,x+W,y,k);g.closePath()}
-    rr(0,0,tw,th,16);g.save();g.clip();
-    var lg=g.createLinearGradient(0,0,0,th);
-    lg.addColorStop(0,'#E9E6DE');lg.addColorStop(.14,'#FDFCF9');lg.addColorStop(.8,'#F7F5F0');lg.addColorStop(1,'#E4E0D7');
-    g.fillStyle=lg;g.fillRect(0,0,tw,th);
-    var sx=tw*.72;
-    g.fillStyle='#3340B8';g.fillRect(sx,0,tw*.07,th);
-    g.fillStyle='#002E3B';g.fillRect(sx+tw*.1,0,tw*.03,th);
-    /* terry loops: tiny arcs, dark and light, dense enough to read as pile */
-    var n=Math.round(tw*th/14);
-    for(var i=0;i<n;i++){
-      var x=Math.random()*tw,y=Math.random()*th,k=.7+Math.random()*1.1;
-      g.strokeStyle=Math.random()<.6?'rgba(40,40,30,.055)':'rgba(255,255,255,.28)';
-      g.lineWidth=.8;g.beginPath();g.arc(x,y,k,Math.random()*6,Math.random()*6+3.5);g.stroke();
-    }
-    /* the fold along the top, and the hem */
-    var fg=g.createLinearGradient(0,0,0,th*.2);
-    fg.addColorStop(0,'rgba(0,0,0,.16)');fg.addColorStop(1,'rgba(0,0,0,0)');
-    g.fillStyle=fg;g.fillRect(0,0,tw,th*.2);
-    g.restore();
-    g.strokeStyle='rgba(0,0,0,.07)';g.lineWidth=1.5;g.setLineDash([3,3]);rr(7,7,tw-14,th-14,11);g.stroke();
-    return c;
-  }
-
-  /* Where the wipe may go. Once the band's bottom reaches the window's bottom the stage
-     stops sticking and rides up with the content, so the content's bottom then sits at a
-     fixed height on the stage, Y0. Only the stage below Y0 is ever cleaned, in two strips
-     of height H: nothing is wiped from under text, and the band's bottom edge is clean by
-     the time the consult shows beneath it. */
-  var Y0=0,H=1;
-  function geometry(){
-    var dist=sec.getBoundingClientRect().bottom-content.getBoundingClientRect().bottom;
-    Y0=Math.max(h*.25,h-dist+24);H=(h-Y0)/PASSES;
-  }
   function size(){
-    r=Math.min(devicePixelRatio||1,2);
-    w=stage.offsetWidth;h=stage.offsetHeight;vh=innerHeight||h;
-    geometry();
+    w=stage.offsetWidth;h=stage.offsetHeight;
+    r=Math.min(devicePixelRatio||1,w<600?1.5:2);   /* soft shapes: a phone does not need 3x */
     cv.width=Math.round(w*r);cv.height=Math.round(h*r);
-    MAX=w<600?40:120;
-    towel=makeTowel();if(!bub)bub=makeBubble();
-    draw();
+    MAX=w<600?40:120;step=w<600?13:18;
+    if(!bub)bub=makeBubble();
+    settled=false;draw();
   }
 
-  /* How far the wipe has got, 0..1, read off where the content's bottom edge is. The
-     bottom pass starts once the content has cleared that strip (towel and all), the top
-     pass once it has cleared Y0, and each pass takes one strip-height of scroll, so the
-     towel moves at about the speed of the page. The last few percent carry it off. */
-  var PASSES=2,OUT=.08;
-  function wipe(){
-    var cb=content.getBoundingClientRect().bottom,start=Y0+H*.9;
-    return clamp((start-cb)/(H*PASSES*1.05)*(1-OUT),0,1);
+  /* How empty the glass should be, 0..1: 0 while the band's top is below the window's top,
+     1 once its bottom is at the stage's bottom, where the stage stops sticking. The last
+     few percent of the run are spare, so it is dry a moment before the consult arrives. */
+  function drained(){
+    var b=sec.getBoundingClientRect();
+    return clamp(-b.top/Math.max(1,b.height-h)/.92,0,1);
   }
-  function towelAt(p){
-    var q=clamp(p/(1-OUT),0,1)*PASSES,k=Math.min(PASSES-1,Math.floor(q)),f=q-k;
-    if(p>=1-OUT){k=PASSES-1;f=1}
-    var span=w*1.1+tw*.2,dirR=k%2===0;
-    /* 85% of a pass is the sweep, the last 15% climbs to the next strip at the edge */
-    var sweep=easeIO(clamp(f/.85,0,1)),climb=easeIO(clamp((f-.85)/.15,0,1));
-    var x=-w*.05+span*(dirR?sweep:1-sweep);
-    var y=h-H*(k+.5)-(k<PASSES-1?H*climb:0);
-    if(p>1-OUT){var o=(p-(1-OUT))/OUT;x+=(dirR?1:-1)*tw*1.4*o;y-=H*.3*o}
-    return {k:k,f:sweep,x:x,y:y,dirR:dirR,H:H,live:p>0&&p<1};
+  /* The surface at x: the level, a tilt while it is moving, and three slow swells that
+     grow a little with the slosh. Never a ruler: a few pixels of unevenness at rest. */
+  function surf(Y,x){
+    var a=1+Math.min(2.2,Math.abs(slosh)*.06);
+    return Y+slosh*(x/w-.5)*.35
+      +a*(3.2*Math.sin(x*.011+t*1.1)+1.8*Math.sin(x*.027-t*1.7+1.3)+.9*Math.sin(x*.063+t*2.6+.4));
+  }
+  function trace(Y,dy){
+    for(var x=0;x<w+step;x+=step)ctx.lineTo(Math.min(x,w),surf(Y,Math.min(x,w))+dy);
   }
 
   function draw(){
-    var oh=H;geometry();
-    if(Math.abs(H-oh)>20)towel=makeTowel();     /* the layout moved: the fonts, or the shelf opening */
-    var p=wipe(),T=towelAt(p);
+    /* the level runs from just above the top of the stage to just below its bottom */
+    var Y=-EDGE+(h+EDGE*2)*level;
     ctx.setTransform(r,0,0,r,0,0);
     ctx.clearRect(0,0,w,h);
-
-    /* bubbles first, so the clean chalk covers them */
+    /* bubbles, only inside what is left of the drink; they fade as they reach the top */
     for(var i=0;i<bubbles.length;i++){
-      var b=bubbles[i];
-      ctx.globalAlpha=b.a;ctx.drawImage(bub,b.x-b.s,b.y-b.s,b.s*2,b.s*2);
+      var b=bubbles[i],sy=surf(Y,b.x),f=clamp((b.y-sy)/14,0,1);
+      if(f<=0)continue;
+      ctx.globalAlpha=b.a*f;ctx.drawImage(bub,b.x-b.s,b.y-b.s,b.s*2,b.s*2);
     }
     ctx.globalAlpha=1;
-    if(p<=0){ctx.globalAlpha=1;return}
-
-    /* the clean: whole strips for passes already made, and the current strip up to the
-       towel, with a soft wet edge that wobbles a little down its height */
+    if(Y<=-EDGE+.5)return;                       /* full: no surface on screen */
+    if(Y>=h+EDGE-.5){ctx.fillStyle=CHALK;ctx.fillRect(0,0,w,h);return}   /* empty */
+    /* the meniscus: a thin bright line just under the surface, and a faint glow below it */
+    ctx.lineJoin='round';
+    ctx.beginPath();ctx.moveTo(0,surf(Y,0)+6);trace(Y,6);
+    ctx.strokeStyle='rgba(255,236,210,.10)';ctx.lineWidth=10;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,surf(Y,0)+1.5);trace(Y,1.5);
+    ctx.strokeStyle='rgba(255,244,228,.45)';ctx.lineWidth=1.6;ctx.stroke();
+    /* the wet edge, then the dry page above it */
     ctx.fillStyle=CHALK;
-    var pad=6;
-    /* a strip's top is never ruled: it rides the towel's path, a little uneven */
-    function wavyTop(x0,x1,y,k){
-      var d=x1>x0?12:-12;
-      for(var x=x0;d>0?x<x1:x>x1;x+=d)ctx.lineTo(x,y+Math.sin(x*.013+k*2)*5+Math.sin(x*.041+k)*2.5);
-      ctx.lineTo(x1,y+Math.sin(x1*.013+k*2)*5+Math.sin(x1*.041+k)*2.5);
-    }
-    for(var s=0;s<T.k;s++){
-      var st=h-H*(s+1)-pad;
-      ctx.beginPath();ctx.moveTo(0,h-H*s+pad);wavyTop(0,w,st,s);ctx.lineTo(w,h-H*s+pad);ctx.closePath();ctx.fill();
-    }
-    var top=h-H*(T.k+1)-pad,bot=h-H*T.k+pad,edge=T.x;
-    if(p>=1-OUT){ctx.beginPath();ctx.moveTo(0,bot);wavyTop(0,w,top,T.k);ctx.lineTo(w,bot);ctx.closePath();ctx.fill()}
-    else{
-      ctx.beginPath();
-      if(T.dirR){ctx.moveTo(0,bot);ctx.lineTo(0,top);wavyTop(0,Math.min(w,edge),top,T.k)}
-      else{ctx.moveTo(w,bot);ctx.lineTo(w,top);wavyTop(w,Math.max(0,edge),top,T.k)}
-      for(var yy=top;yy<=bot;yy+=8)ctx.lineTo(edge+(T.dirR?-1:1)*(Math.sin(yy*.09+T.k)*4+Math.sin(yy*.023)*6),yy);
-      ctx.lineTo(edge,bot);ctx.lineTo(T.dirR?0:w,bot);ctx.closePath();ctx.fill();
-      /* streaks the towel leaves, fading the further behind it they are */
-      var sg=ctx.createLinearGradient(edge,0,edge+(T.dirR?-1:1)*w*.35,0);
-      sg.addColorStop(0,'rgba(0,46,59,.07)');sg.addColorStop(1,'rgba(0,46,59,0)');
-      ctx.fillStyle=sg;
-      for(var j=0;j<7;j++){
-        var ly=top+pad+(bot-top-pad*2)*(j+.5)/7+Math.sin(j*2.3)*4;
-        var x0=T.dirR?Math.max(0,edge-w*.35):edge,x1=T.dirR?edge:Math.min(w,edge+w*.35);
-        ctx.fillRect(x0,ly,x1-x0,1+(j%3===0?1:0));
-      }
-    }
-
-    /* the towel: it leans into the direction it is going and bunches a touch mid-sweep */
-    if(T.live){
-      var want=(T.dirR?1:-1)*.07*Math.sin(Math.PI*T.f);
-      lean+=(want-lean)*.25;
-      ctx.save();
-      ctx.translate(T.x,T.y);ctx.rotate(lean);ctx.scale(1-.05*Math.sin(Math.PI*T.f),1);
-      ctx.shadowColor='rgba(0,10,15,.35)';ctx.shadowBlur=26;ctx.shadowOffsetY=12;
-      ctx.drawImage(towel,-tw/2,-th/2,tw,th);
-      ctx.restore();
-    }
+    ctx.globalAlpha=.35;
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,surf(Y,0)+3);trace(Y,3);ctx.lineTo(w,0);ctx.closePath();ctx.fill();
+    ctx.globalAlpha=1;
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,surf(Y,0));trace(Y,0);ctx.lineTo(w,0);ctx.closePath();ctx.fill();
   }
 
-  /* Bubbles: a steady fizz while the glass is on screen, and scrolling shakes more loose.
-     The fizz dies down as the wipe gets going. */
+  /* Bubbles: a steady fizz from the depth that is left, and scrolling shakes more loose. */
   function tick(now){
     raf=0;
-    var dt=Math.min(.05,(now-(t0||now))/1000);t0=now;
+    var dt=Math.min(.05,(now-(t0||now))/1000);t0=now;t+=dt;
     var y=scrollY,v=y-lastY;lastY=y;
     kick=kick*.9+Math.min(60,Math.abs(v))*.1;
-    var p=wipe(),calm=1-clamp(p*1.6,0,1);
-    spawn+=dt*(6+kick*2.4)*calm*(MAX/120);
+    target=drained();
+    var d=target-level;
+    level=Math.abs(d)<.0005?target:level+d*Math.min(1,dt*7);
+    /* slosh: the surface leans against the way it is going, then settles */
+    slosh+=((target-level)*h*1.4-slosh)*Math.min(1,dt*5);
+    var Y=-EDGE+(h+EDGE*2)*level,deep=clamp((h-Y)/h,0,1);
+    spawn+=dt*(6+kick*2.4)*deep*(MAX/120);
     while(spawn>=1&&bubbles.length<MAX){
       spawn--;
-      var s=1.5+Math.pow(Math.random(),2.2)*7;
-      bubbles.push({x:Math.random()*w,y:h*(.55+Math.random()*.5),s:s,vy:28+s*14+Math.random()*20,
+      var s=1.5+Math.pow(Math.random(),2.2)*7,top=Math.max(Y+EDGE,h*.55);
+      bubbles.push({x:Math.random()*w,y:top+Math.random()*(h+10-top),s:s,vy:28+s*14+Math.random()*20,
         ph:Math.random()*6,wob:.4+Math.random()*1.2,a:.35+Math.random()*.5});
     }
     if(spawn>1)spawn=1;
@@ -944,24 +884,28 @@ if(cform){
       var b=bubbles[i];
       b.y-=b.vy*dt+push*(b.s/6);
       b.ph+=dt*3;b.x+=Math.sin(b.ph)*b.wob*.5;
-      if(b.y<h*.08)b.a-=dt*1.5;          /* they pop near the top */
-      if(b.y<-20||b.a<=0)bubbles.splice(i,1);
+      if(b.y<surf(Y,b.x))bubbles.splice(i,1);    /* popped at the surface */
     }
-    draw();
-    if(on)raf=requestAnimationFrame(tick);
+    /* dry and still: one last chalk frame, then nothing until the next scroll */
+    var dry=level>=1&&target>=1&&!bubbles.length&&Math.abs(slosh)<.5;
+    if(!(dry&&settled))draw();
+    settled=dry;
+    if(on&&!dry)raf=requestAnimationFrame(tick);
   }
+  function wake(){if(on&&!raf){raf=requestAnimationFrame(tick)}}
 
   size();
   addEventListener('resize',function(){
+    /* height-only changes (mobile Safari's toolbar) must not re-size the stage */
     if(stage.offsetWidth===w&&stage.offsetHeight===h)return;
     size();
   });
-  addEventListener('scroll',function(){if(!on)return;if(!raf)raf=requestAnimationFrame(tick)},{passive:true});
-  /* only animate while the band is on screen */
+  addEventListener('scroll',wake,{passive:true});
+  /* only animate while the band is on screen; arriving by a jump, start at the right level */
   new IntersectionObserver(function(es){
     on=es[0].isIntersecting;
-    if(on&&!raf){t0=0;lastY=scrollY;raf=requestAnimationFrame(tick)}
-    if(!on){bubbles.length=0;draw()}
+    if(on){level=target=drained();slosh=0;t0=0;lastY=scrollY;settled=false;wake()}
+    else{bubbles.length=0;level=target=drained();slosh=0;draw()}
   }).observe(run);
 })();
 
