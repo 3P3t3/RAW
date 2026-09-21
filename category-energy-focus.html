@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=527cfdbe">
+<link rel="stylesheet" href="style.css?v=70844647">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -40,7 +40,7 @@
         <a href="homepage.html#goals">Goals</a>
         <a href="homepage.html#results" data-all>Products</a>
         <a href="homepage.html#finder" data-open-finder>Finder</a>
-        <a href="homepage.html#consult">Consult</a>
+        <a class="btn btn-sm" href="homepage.html#consult">Consult</a>
       </nav>
       <button class="icon-btn sound-toggle" id="sound-toggle" type="button" aria-label="Turn interface sounds off" aria-pressed="true" hidden><svg class="ic" aria-hidden="true"><use href="#i-sound"/></svg></button>
       <button class="icon-btn search-toggle" id="search-toggle" type="button" aria-label="Search products" aria-expanded="false" aria-controls="search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
@@ -187,8 +187,9 @@
         <li><a href="homepage.html#goals">Goals <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="homepage.html#results" data-all>All products <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><button type="button" data-open-finder>Finder <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button></li>
-        <li><a href="homepage.html#consult">Book a consult <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ul>
+      <!-- the consult leaves the list and becomes the one filled thing here, as in the mast -->
+      <a class="btn menu-cta" href="homepage.html#consult">Book a consult</a>
     </nav>
   </div>
 </dialog>
@@ -346,7 +347,8 @@ function openD(d){if(!d.open){d.showModal();html.classList.add('locked')}}
 $$('[data-open-menu]').forEach(function(b){b.addEventListener('click',function(){openD(menu)})});
 $$('[data-close]').forEach(function(b){b.addEventListener('click',function(){b.closest('dialog').close()})});
 $$('a',menu).forEach(function(a){a.addEventListener('click',function(){menu.close()})});
-matchMedia('(min-width: 768px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
+/* the menu button survives to 1024 now, so only close the panel where the inline nav takes over */
+matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
 
 /* Finder: three questions, one per screen, two results */
 var Q=[

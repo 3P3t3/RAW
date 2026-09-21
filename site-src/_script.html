@@ -135,7 +135,8 @@ function openD(d){if(!d.open){d.showModal();html.classList.add('locked')}}
 $$('[data-open-menu]').forEach(function(b){b.addEventListener('click',function(){openD(menu)})});
 $$('[data-close]').forEach(function(b){b.addEventListener('click',function(){b.closest('dialog').close()})});
 $$('a',menu).forEach(function(a){a.addEventListener('click',function(){menu.close()})});
-matchMedia('(min-width: 768px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
+/* the menu button survives to 1024 now, so only close the panel where the inline nav takes over */
+matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
 
 /* Finder: three questions, one per screen, two results */
 var Q=[
