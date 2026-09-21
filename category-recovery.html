@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=70844647">
+<link rel="stylesheet" href="style.css?v=559b1bf5">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -264,15 +264,14 @@ if(urlQ&&grid&&fbar){q.value=urlQ;search(urlQ.toLowerCase())}
 else if(results&&location.hash==='#results')showAll();          /* arrived from another page */
 var ALL_HREF=results?'#results':'homepage.html#results';
 
-/* Flavour carousel: a continuous glide that wraps, until the arrows or a swipe take over */
+/* Flavour carousel: a continuous loop. It drifts on its own, a swipe or the arrows take the
+   wheel, and it picks the drift back up once the reader stops. There is no end to reach: a
+   second copy of the flavours sits after the first, and the scroll position wraps by one lap. */
 var car=$('#carousel');
 if(car){
   var slideW=function(){var s=car.firstElementChild;return s?s.getBoundingClientRect().width+parseFloat(getComputedStyle(car).columnGap||16):300},
-      go=function(d){var max=car.scrollWidth-car.clientWidth-4;
-        car.scrollTo({left:car.scrollLeft>=max&&d>0?0:Math.max(0,car.scrollLeft+d*slideW()),behavior:'smooth'})};
-  var still=matchMedia('(prefers-reduced-motion: reduce)').matches,
-      raf=null,last=0,hold=false,taken=still;   /* taken: the reader is driving, so the glide stays off */
-  /* a second copy of the flavours, so the wrap has nothing to give it away */
+      still=matchMedia('(prefers-reduced-motion: reduce)').matches,
+      raf=null,last=0,hold=false,idle=null;
   if(!still){
     $$('.slide',car).forEach(function(li){
       var c=li.cloneNode(true);
@@ -282,29 +281,34 @@ if(car){
     });
   }
   var lap=function(){return car.scrollWidth/2};
+  var wrap=function(){                       /* the seam is between two identical copies */
+    var l=lap();
+    if(l<8)return;
+    if(car.scrollLeft>=l)car.scrollLeft-=l;
+    else if(car.scrollLeft<1)car.scrollLeft=l-1;   /* one short of the seam, so it cannot bounce back */
+  };
   var frame=function(t){
     var dt=last?Math.min(t-last,60):16;
     last=t;
-    if(!hold){
-      car.scrollLeft+=dt*0.048;                 /* about 48px a second: one flavour every six or so */
-      if(car.scrollLeft>=lap())car.scrollLeft-=lap();
-    }
+    if(!hold){car.scrollLeft+=dt*0.048;wrap()}   /* about 48px a second */
     raf=requestAnimationFrame(frame);
   };
-  var glide=function(){
-    if(taken||raf)return;
-    car.classList.add('gliding');               /* snap points fight a continuous scroll */
-    last=0;raf=requestAnimationFrame(frame);
+  var glide=function(){if(still||raf)return;last=0;raf=requestAnimationFrame(frame)};
+  var park=function(){if(!raf)return;cancelAnimationFrame(raf);raf=null};
+  var rest=function(){                        /* hand back after the reader stops */
+    clearTimeout(idle);
+    idle=setTimeout(function(){hold=false},2600);
   };
-  var park=function(){
-    if(!raf)return;
-    cancelAnimationFrame(raf);raf=null;
-    car.classList.remove('gliding');
+  var take=function(){hold=true;rest()};
+  var go=function(d){
+    take();
+    car.scrollBy({left:d*slideW(),behavior:'smooth'});
   };
-  var handOver=function(){taken=true;park()};   /* once they steer, it stays theirs */
-  $$('[data-car]').forEach(function(b){b.addEventListener('click',function(){handOver();go(+b.dataset.car)})});
-  ['pointerdown','wheel','focusin'].forEach(function(ev){car.addEventListener(ev,handOver,{passive:true})});
-  car.addEventListener('mouseenter',function(){hold=true});
+  $$('[data-car]').forEach(function(b){b.addEventListener('click',function(){go(+b.dataset.car)})});
+  ['pointerdown','wheel','touchstart','focusin'].forEach(function(ev){car.addEventListener(ev,take,{passive:true})});
+  ['pointerup','touchend','pointercancel'].forEach(function(ev){car.addEventListener(ev,rest,{passive:true})});
+  car.addEventListener('scroll',wrap,{passive:true});
+  car.addEventListener('mouseenter',function(){hold=true;clearTimeout(idle)});
   car.addEventListener('mouseleave',function(){hold=false});
   if('IntersectionObserver' in window)new IntersectionObserver(function(es){es[0].isIntersecting?glide():park()},{threshold:.2}).observe(car);
   else glide();
@@ -486,7 +490,8 @@ if(tablist){
 /* The archipelago: islands drift around a slow ellipse, each bobbing on its own */
 var arch=$('#archipelago');
 if(arch){
-  var isles=$$('.isle',arch),tog=$('#isles-toggle'),N=isles.length,ang=0,last=0,paused=false,raf=null;
+  var isles=$$('.isle',arch),tog=$('#isles-toggle'),N=isles.length,ang=0,last=0,paused=false,raf=null,
+      vel=0,drag=null,swallow=false;   /* vel: the throw left over from a swipe */
   var geom={base:150,rx:200,ry:70,wide:false};
   var measure=function(){
     var w=arch.clientWidth;
@@ -517,9 +522,36 @@ if(arch){
     }
   };
   var frame=function(t){
-    if(!paused){var dt=last?Math.min(t-last,60):16;ang+=dt*0.00042}   /* one lap in about 12s */
+    var dt=last?Math.min(t-last,60):16;
+    if(!paused)ang+=dt*0.00042;          /* one lap in about 12s */
+    if(vel){ang+=vel*dt;vel*=Math.exp(-dt/260);if(Math.abs(vel)<1e-6)vel=0}
     last=t;layout();raf=requestAnimationFrame(frame);
   };
+
+  /* Swipe or drag the ring: a pixel of travel is a fixed slice of the turn, and the throw carries */
+  var SENS=0.0045;
+  arch.addEventListener('pointerdown',function(e){
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    drag={x:e.clientX,t:performance.now(),moved:0,id:e.pointerId};
+    vel=0;paused=true;arch.classList.add('dragging');
+  });
+  arch.addEventListener('pointermove',function(e){
+    if(!drag||e.pointerId!==drag.id)return;
+    var now=performance.now(),dx=e.clientX-drag.x,dt=Math.max(8,now-drag.t);
+    drag.moved+=Math.abs(dx);
+    ang+=dx*SENS;vel=dx*SENS/dt;
+    drag.x=e.clientX;drag.t=now;
+    layout();
+  });
+  var release=function(){
+    if(!drag)return;
+    var moved=drag.moved;
+    drag=null;arch.classList.remove('dragging');
+    if(tog.getAttribute('aria-label')!=='Start the islands')paused=false;
+    if(moved>8){swallow=true;setTimeout(function(){swallow=false},80)}  /* a drag is not a tap */
+  };
+  ['pointerup','pointercancel','pointerleave'].forEach(function(ev){arch.addEventListener(ev,release)});
+  arch.addEventListener('click',function(e){if(swallow){e.preventDefault();e.stopPropagation()}},true);
   var stop=function(){paused=true;tog.setAttribute('aria-label','Start the islands');$('use',tog).setAttribute('href','#i-play')};
   var start=function(){paused=false;tog.setAttribute('aria-label','Pause the islands');$('use',tog).setAttribute('href','#i-pause')};
   measure();layout();                         /* place them before the first paint */
@@ -527,8 +559,8 @@ if(arch){
   if(html.classList.contains('motion')){
     tog.hidden=false;
     tog.addEventListener('click',function(){paused?start():stop()});
-    arch.addEventListener('pointerenter',function(){paused=true});
-    arch.addEventListener('pointerleave',function(){if(tog.getAttribute('aria-label')!=='Start the islands')paused=false});
+    arch.addEventListener('pointerenter',function(e){if(e.pointerType==='mouse')paused=true});
+    arch.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse'&&tog.getAttribute('aria-label')!=='Start the islands')paused=false});
     arch.addEventListener('focusin',function(){paused=true});
     addEventListener('resize',function(){measure();layout()});
     if('IntersectionObserver' in window)new IntersectionObserver(function(es){

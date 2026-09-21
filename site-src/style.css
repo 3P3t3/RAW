@@ -393,7 +393,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .sec-head>.car-nav{display:flex;gap:4px}
 .car-nav .icon-btn{border:1px solid var(--line);color:var(--teal)}
 .car-nav .icon-btn:active{background:var(--press)}
-.carousel{list-style:none;display:grid;grid-auto-flow:column;grid-auto-columns:60%;gap:16px;margin:20px calc(-1 * var(--pad)) 0;padding:0 var(--pad);overflow-x:auto;contain:paint;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x}
+.carousel{list-style:none;display:grid;grid-auto-flow:column;grid-auto-columns:60%;gap:16px;margin:20px calc(-1 * var(--pad)) 0;padding:0 var(--pad);overflow-x:auto;contain:paint;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 .carousel::-webkit-scrollbar{display:none}
 .slide{scroll-snap-align:none}
 .slide .card-link{display:grid;color:inherit;text-decoration:none}
