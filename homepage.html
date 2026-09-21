@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=22d5198a">
+<link rel="stylesheet" href="style.css?v=527cfdbe">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -405,19 +405,50 @@ if(urlQ&&grid&&fbar){q.value=urlQ;search(urlQ.toLowerCase())}
 else if(results&&location.hash==='#results')showAll();          /* arrived from another page */
 var ALL_HREF=results?'#results':'homepage.html#results';
 
-/* Flavour carousel: glides on its own, arrows or a swipe take over */
+/* Flavour carousel: a continuous glide that wraps, until the arrows or a swipe take over */
 var car=$('#carousel');
 if(car){
   var slideW=function(){var s=car.firstElementChild;return s?s.getBoundingClientRect().width+parseFloat(getComputedStyle(car).columnGap||16):300},
-      auto=null,stop=function(){clearInterval(auto);auto=null},
       go=function(d){var max=car.scrollWidth-car.clientWidth-4;
         car.scrollTo({left:car.scrollLeft>=max&&d>0?0:Math.max(0,car.scrollLeft+d*slideW()),behavior:'smooth'})};
-  $$('[data-car]').forEach(function(b){b.addEventListener('click',function(){stop();go(+b.dataset.car)})});
-  var start=function(){if(!auto&&!matchMedia('(prefers-reduced-motion: reduce)').matches)auto=setInterval(function(){go(1)},3600)};
-  ['pointerdown','wheel','focusin'].forEach(function(ev){car.addEventListener(ev,stop,{passive:true})});
-  car.addEventListener('mouseenter',stop);car.addEventListener('mouseleave',start);
-  if('IntersectionObserver' in window)new IntersectionObserver(function(es){es[0].isIntersecting?start():stop()},{threshold:.2}).observe(car);
-  else start();
+  var still=matchMedia('(prefers-reduced-motion: reduce)').matches,
+      raf=null,last=0,hold=false,taken=still;   /* taken: the reader is driving, so the glide stays off */
+  /* a second copy of the flavours, so the wrap has nothing to give it away */
+  if(!still){
+    $$('.slide',car).forEach(function(li){
+      var c=li.cloneNode(true);
+      c.setAttribute('aria-hidden','true');
+      $$('a',c).forEach(function(a){a.tabIndex=-1});
+      car.appendChild(c);
+    });
+  }
+  var lap=function(){return car.scrollWidth/2};
+  var frame=function(t){
+    var dt=last?Math.min(t-last,60):16;
+    last=t;
+    if(!hold){
+      car.scrollLeft+=dt*0.048;                 /* about 48px a second: one flavour every six or so */
+      if(car.scrollLeft>=lap())car.scrollLeft-=lap();
+    }
+    raf=requestAnimationFrame(frame);
+  };
+  var glide=function(){
+    if(taken||raf)return;
+    car.classList.add('gliding');               /* snap points fight a continuous scroll */
+    last=0;raf=requestAnimationFrame(frame);
+  };
+  var park=function(){
+    if(!raf)return;
+    cancelAnimationFrame(raf);raf=null;
+    car.classList.remove('gliding');
+  };
+  var handOver=function(){taken=true;park()};   /* once they steer, it stays theirs */
+  $$('[data-car]').forEach(function(b){b.addEventListener('click',function(){handOver();go(+b.dataset.car)})});
+  ['pointerdown','wheel','focusin'].forEach(function(ev){car.addEventListener(ev,handOver,{passive:true})});
+  car.addEventListener('mouseenter',function(){hold=true});
+  car.addEventListener('mouseleave',function(){hold=false});
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es){es[0].isIntersecting?glide():park()},{threshold:.2}).observe(car);
+  else glide();
 }
 
 /* Dialogs: full-screen menu + finder sheet */

@@ -375,12 +375,13 @@ html:not(.js) #results[hidden]{display:block!important}
 
 /* Flavour carousel */
 .carousel-sec .sec-head{align-items:center}
-.car-nav{display:flex;gap:4px}
+.sec-head>.car-nav{display:flex;gap:4px}
 .car-nav .icon-btn{border:1px solid var(--line);color:var(--teal)}
 .car-nav .icon-btn:active{background:var(--press)}
 .carousel{list-style:none;display:grid;grid-auto-flow:column;grid-auto-columns:60%;gap:16px;margin:20px calc(-1 * var(--pad)) 0;padding:0 var(--pad);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
 .carousel::-webkit-scrollbar{display:none}
 .slide{scroll-snap-align:start}
+.carousel.gliding{scroll-snap-type:none}
 .slide .card-link{display:grid;color:inherit;text-decoration:none}
 .slide .shot{aspect-ratio:1}
 .slide .p-name{min-height:2.6em;margin-top:8px;font:600 15px/1.3 var(--sans);color:var(--ink)}
