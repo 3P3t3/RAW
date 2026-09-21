@@ -84,7 +84,11 @@ CAROUSELS = {
     'energy-focus': ('XS Energy Drink 12 oz', 'Pick your flavour', 'The 12 oz range, one can at a time.'),
 }
 
-SHELF_LINE = {  # the line under each shelf name in the ring
+# 'strip' is the tabbed goal strip; 'ring' brings back the rotating archipelago.
+# Both are built from the same shelf data, so switching is this one word plus a rebuild.
+SHELF_VIEW = 'strip'
+
+SHELF_LINE = {  # the line under each shelf name
     'recovery': 'After the session', 'hydration': 'Electrolytes', 'energy-focus': 'Cans & capsules',
     'protein': 'Whey, bars, crisps', 'fat-loss': 'Thermogenic', 'daily-foundations': 'Everyday basics',
     'skin-redefined': 'Skin & overnight',
@@ -283,15 +287,60 @@ def main():
                 f'<span class="goal-island"><img src="assets/thumbs/{slug_}.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>')
         return '\n'.join(out_)
 
-    isles = []
-    for i, (slug_, name, tag, heading, fams) in enumerate(CATEGORIES):
-        prio = ' fetchpriority="high"' if i < 3 else ' loading="lazy"'
-        line = SHELF_LINE[slug_]
-        isles.append(
-            f'        <li class="isle" style="--i:{i}"><a href="category-{slug_}.html">'
-            f'<span class="isle-art"><img src="assets/islands/{slug_}.webp" alt="" width="760" height="760"{prio}></span>'
-            f'<span class="isle-label"><span class="isle-name">{name}</span>'
-            f'<span class="isle-note">{line}</span></span></a></li>')
+    def ring_section():
+        isles = []
+        for i, (slug_, name, tag, heading, fams) in enumerate(CATEGORIES):
+            prio = ' fetchpriority="high"' if i < 3 else ' loading="lazy"'
+            isles.append(
+                f'          <li class="isle" style="--i:{i}"><a href="category-{slug_}.html">'
+                f'<span class="isle-art"><img src="assets/islands/{slug_}.webp" alt="" width="760" height="760"{prio}></span>'
+                f'<span class="isle-label"><span class="isle-name">{name}</span>'
+                f'<span class="isle-note">{SHELF_LINE[slug_]}</span></span></a></li>')
+        return ('  <!-- Shelves as a rotating ring; tap one to open it -->\n'
+                '  <section class="sec isles-sec" id="goals" aria-labelledby="goals-title">\n'
+                '    <img class="sec-bg isles-bg" src="assets/bg-sky.webp" alt="" width="1600" height="900" loading="lazy">\n'
+                '    <div class="wrap">\n'
+                '      <div class="sec-head grow"><h2 id="goals-title">What are we <span>maximizing?</span></h2></div>\n'
+                '      <div class="archipelago" id="archipelago">\n        <ul class="isles">\n'
+                + '\n'.join(isles) +
+                '\n        </ul>\n'
+                '        <button class="icon-btn isles-toggle" id="isles-toggle" type="button" aria-label="Pause the shelves" hidden>'
+                '<svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>\n'
+                '      </div>\n'
+                '      <p class="isle-caption" id="isle-caption" aria-hidden="true"><span class="isle-name"></span><span class="isle-note"></span></p>\n'
+                '    </div>\n  </section>')
+
+    def strip_section():
+        tabs, panels = [], []
+        for i, (slug_, name, tag, heading, fams) in enumerate(CATEGORIES):
+            on = 'true' if i == 0 else 'false'
+            prio = ' fetchpriority="high"' if i == 0 else ' loading="lazy"'
+            tabs.append(
+                f'          <button class="shelf-tab" type="button" role="tab" id="tab-{slug_}" aria-controls="panel-{slug_}" '
+                f'aria-selected="{on}" tabindex="{0 if i == 0 else -1}">{name}</button>')
+            picks = sorted({pr['name'] for pr in products if cat_of.get(pr['product']) == slug_})[:3]
+            panels.append(
+                f'        <div class="shelf-panel" role="tabpanel" id="panel-{slug_}" aria-labelledby="tab-{slug_}"'
+                f'{"" if i == 0 else " hidden"}>\n'
+                f'          <a class="shelf-link" href="category-{slug_}.html">\n'
+                f'            <span class="shelf-art"><img src="assets/shelf/{slug_}.webp" alt="" width="760" height="760"{prio}></span>\n'
+                f'            <span class="shelf-copy"><span class="label">{SHELF_LINE[slug_]}</span>'
+                f'<span class="shelf-name">{name}</span>'
+                f'<span class="shelf-desc">{tag.split(":")[0]}</span>'
+                f'<span class="shelf-picks">{esc(" · ".join(picks))}</span>'
+                f'<span class="shelf-go">Open the shelf</span></span>\n'
+                f'          </a>\n        </div>')
+        return ('  <!-- Shelves as a goal strip: one tab each, one pack per goal -->\n'
+                '  <section class="sec shelves-sec" id="goals" aria-labelledby="goals-title">\n'
+                '    <div class="wrap">\n'
+                '      <div class="sec-head grow"><h2 id="goals-title">What are we <span>maximizing?</span></h2></div>\n'
+                '      <div class="shelf-tabs" role="tablist" aria-label="Shelves">\n'
+                + '\n'.join(tabs) +
+                '\n      </div>\n      <div class="shelf-panels">\n'
+                + '\n'.join(panels) +
+                '\n      </div>\n    </div>\n  </section>')
+
+    shelves = ring_section() if SHELF_VIEW == 'ring' else strip_section()
 
     order = sorted(products, key=lambda pr: pr['name'].lower())
     grid = [card(pr, i) for i, pr in enumerate(order)]
@@ -335,7 +384,7 @@ def main():
 
     out = open(SRC).read()
     for k, v in dict(shared, **{'{{HEADER}}': header.replace('{{HOME}}', ''), '{{HOME}}': '',
-                                '{{GOALS}}': cat_rows(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{ISLANDS}}': '\n'.join(isles)}).items():
+                                '{{GOALS}}': cat_rows(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves}).items():
         out = out.replace(k, v)
     open(OUT, 'w').write(out)
 

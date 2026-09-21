@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=4cce9318">
+<link rel="stylesheet" href="style.css?v=e861b364">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -425,6 +425,32 @@ $$('.pod-num').forEach(function(el){
   else run();
 });
 
+/* Shelves, strip view: tabs switch panels. The ring below is the other view of the same data. */
+var tablist=$('.shelf-tabs');
+if(tablist){
+  var tabs=$$('.shelf-tab',tablist);
+  var pick=function(i,focus){
+    tabs.forEach(function(t,j){
+      var on=i===j;
+      t.setAttribute('aria-selected',on);
+      t.tabIndex=on?0:-1;
+      var panel=$('#'+t.getAttribute('aria-controls'));
+      if(panel)panel.hidden=!on;
+    });
+    if(focus)tabs[i].focus();
+    tabs[i].scrollIntoView({block:'nearest',inline:'nearest'});
+  };
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){pick(i)});
+    t.addEventListener('keydown',function(e){
+      var n=tabs.length,k=e.key,
+          j=k==='ArrowRight'?(i+1)%n:k==='ArrowLeft'?(i+n-1)%n:k==='Home'?0:k==='End'?n-1:-1;
+      if(j<0)return;
+      e.preventDefault();pick(j,true);
+    });
+  });
+}
+
 /* The archipelago: islands drift around a slow ellipse, each bobbing on its own */
 var arch=$('#archipelago');
 if(arch){
@@ -491,8 +517,8 @@ if(cform){
       val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()};
   var line=function(){
     var g=val('goal'),t=val('training');
-    if(!g&&!t)return 'Fifteen minutes, on video or by phone. The slot holds a half hour.';
-    return 'Fifteen minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'. The slot holds a half hour.';
+    if(!g&&!t)return 'On video or by phone.';
+    return 'Fifteen minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
   /* widget.js is only fetched on submit, once, so nobody who never books pays for it */

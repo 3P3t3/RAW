@@ -41,20 +41,7 @@
     </div>
   </section>
 
-  <!-- 4. Goals: seven floating islands, one per shelf. They drift; tap one to land on it. -->
-  <section class="sec isles-sec" id="goals" aria-labelledby="goals-title">
-    <img class="sec-bg isles-bg" src="assets/bg-sky.webp" alt="" width="1600" height="900" loading="lazy">
-    <div class="wrap">
-      <div class="sec-head grow"><h2 id="goals-title">What are we <span>maximizing?</span></h2></div>
-      <div class="archipelago" id="archipelago">
-        <ul class="isles">
-{{ISLANDS}}
-        </ul>
-        <button class="icon-btn isles-toggle" id="isles-toggle" type="button" aria-label="Pause the islands" hidden><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>
-      </div>
-      <p class="isle-caption" id="isle-caption" aria-hidden="true"><span class="isle-name"></span><span class="isle-note"></span></p>
-    </div>
-  </section>
+{{SHELVES}}
 
   <!-- 4b. Trending: three best sellers on a podium, oversized and breaking the band -->
   <section class="sec podium-sec dark" id="trending" aria-labelledby="trending-title">
@@ -106,6 +93,11 @@
         <p class="label">One to one</p>
         <h2 id="consult-title"><span>Talk through</span> <span>your stack</span></h2>
         <p>Fifteen minutes on a call: your macros, what you already take, and the smallest stack that gets you where you are going. The slot holds a half hour; we rarely need it. Answer four things first and the call starts on you instead of on catching up.</p>
+        <ul class="c-list">
+          <li>Your macros, and whether the split is worth changing</li>
+          <li>What you already take, and what it is doing</li>
+          <li>The smallest stack that moves the goal, and what to drop</li>
+        </ul>
         <p class="c-fine">No charge, no pitch. Your answers travel with the booking.</p>
       </div>
       <form class="c-card grow" id="consult-form" data-consult="{{CONSULT_URL}}" style="--d:1">
@@ -134,7 +126,7 @@
         <div class="c-field"><label for="c-note">Anything you want covered? <span>Optional</span></label>
           <input id="c-note" name="note" type="text" autocomplete="off" placeholder="Eating around shift work…"></div>
         <button class="btn" type="submit">Pick a time</button>
-        <p class="c-sum" id="consult-sum" aria-live="polite">Fifteen minutes, on video or by phone. The slot holds a half hour.</p>
+        <p class="c-sum" id="consult-sum" aria-live="polite">On video or by phone.</p>
       </form>
       <!-- the calendar mounts here in place of the form, once someone has answered -->
       <div class="c-embed" id="consult-embed" hidden></div>

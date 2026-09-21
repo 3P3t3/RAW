@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<link rel="stylesheet" href="style.css?v=4cce9318">
+<link rel="stylesheet" href="style.css?v=e861b364">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -76,24 +76,63 @@
     </div>
   </section>
 
-  <!-- 4. Goals: seven floating islands, one per shelf. They drift; tap one to land on it. -->
-  <section class="sec isles-sec" id="goals" aria-labelledby="goals-title">
-    <img class="sec-bg isles-bg" src="assets/bg-sky.webp" alt="" width="1600" height="900" loading="lazy">
+  <!-- Shelves as a goal strip: one tab each, one pack per goal -->
+  <section class="sec shelves-sec" id="goals" aria-labelledby="goals-title">
     <div class="wrap">
       <div class="sec-head grow"><h2 id="goals-title">What are we <span>maximizing?</span></h2></div>
-      <div class="archipelago" id="archipelago">
-        <ul class="isles">
-        <li class="isle" style="--i:0"><a href="category-recovery.html"><span class="isle-art"><img src="assets/islands/recovery.webp" alt="" width="760" height="760" fetchpriority="high"></span><span class="isle-label"><span class="isle-name">Recovery</span><span class="isle-note">After the session</span></span></a></li>
-        <li class="isle" style="--i:1"><a href="category-hydration.html"><span class="isle-art"><img src="assets/islands/hydration.webp" alt="" width="760" height="760" fetchpriority="high"></span><span class="isle-label"><span class="isle-name">Hydration</span><span class="isle-note">Electrolytes</span></span></a></li>
-        <li class="isle" style="--i:2"><a href="category-energy-focus.html"><span class="isle-art"><img src="assets/islands/energy-focus.webp" alt="" width="760" height="760" fetchpriority="high"></span><span class="isle-label"><span class="isle-name">Energy &amp; Focus</span><span class="isle-note">Cans & capsules</span></span></a></li>
-        <li class="isle" style="--i:3"><a href="category-protein.html"><span class="isle-art"><img src="assets/islands/protein.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Protein Snack Pack</span><span class="isle-note">Whey, bars, crisps</span></span></a></li>
-        <li class="isle" style="--i:4"><a href="category-fat-loss.html"><span class="isle-art"><img src="assets/islands/fat-loss.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Fat Loss</span><span class="isle-note">Thermogenic</span></span></a></li>
-        <li class="isle" style="--i:5"><a href="category-daily-foundations.html"><span class="isle-art"><img src="assets/islands/daily-foundations.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Daily Foundations</span><span class="isle-note">Everyday basics</span></span></a></li>
-        <li class="isle" style="--i:6"><a href="category-skin-redefined.html"><span class="isle-art"><img src="assets/islands/skin-redefined.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Skin Redefined</span><span class="isle-note">Skin & overnight</span></span></a></li>
-        </ul>
-        <button class="icon-btn isles-toggle" id="isles-toggle" type="button" aria-label="Pause the islands" hidden><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>
+      <div class="shelf-tabs" role="tablist" aria-label="Shelves">
+          <button class="shelf-tab" type="button" role="tab" id="tab-recovery" aria-controls="panel-recovery" aria-selected="true" tabindex="0">Recovery</button>
+          <button class="shelf-tab" type="button" role="tab" id="tab-hydration" aria-controls="panel-hydration" aria-selected="false" tabindex="-1">Hydration</button>
+          <button class="shelf-tab" type="button" role="tab" id="tab-energy-focus" aria-controls="panel-energy-focus" aria-selected="false" tabindex="-1">Energy &amp; Focus</button>
+          <button class="shelf-tab" type="button" role="tab" id="tab-protein" aria-controls="panel-protein" aria-selected="false" tabindex="-1">Protein Snack Pack</button>
+          <button class="shelf-tab" type="button" role="tab" id="tab-fat-loss" aria-controls="panel-fat-loss" aria-selected="false" tabindex="-1">Fat Loss</button>
+          <button class="shelf-tab" type="button" role="tab" id="tab-daily-foundations" aria-controls="panel-daily-foundations" aria-selected="false" tabindex="-1">Daily Foundations</button>
+          <button class="shelf-tab" type="button" role="tab" id="tab-skin-redefined" aria-controls="panel-skin-redefined" aria-selected="false" tabindex="-1">Skin Redefined</button>
       </div>
-      <p class="isle-caption" id="isle-caption" aria-hidden="true"><span class="isle-name"></span><span class="isle-note"></span></p>
+      <div class="shelf-panels">
+        <div class="shelf-panel" role="tabpanel" id="panel-recovery" aria-labelledby="tab-recovery">
+          <a class="shelf-link" href="category-recovery.html">
+            <span class="shelf-art"><img src="assets/shelf/recovery.webp" alt="" width="760" height="760" fetchpriority="high"></span>
+            <span class="shelf-copy"><span class="label">After the session</span><span class="shelf-name">Recovery</span><span class="shelf-desc">Wind down, repair and sleep</span><span class="shelf-picks">Nutrilite Magnesium · Nutrilite Organics Ashwagandha Capsules · Nutrilite Organics Chamomile Tea</span><span class="shelf-go">Open the shelf</span></span>
+          </a>
+        </div>
+        <div class="shelf-panel" role="tabpanel" id="panel-hydration" aria-labelledby="tab-hydration" hidden>
+          <a class="shelf-link" href="category-hydration.html">
+            <span class="shelf-art"><img src="assets/shelf/hydration.webp" alt="" width="760" height="760" loading="lazy"></span>
+            <span class="shelf-copy"><span class="label">Electrolytes</span><span class="shelf-name">Hydration</span><span class="shelf-desc">Electrolytes and drink mixes for long, hot and sweaty sessions.</span><span class="shelf-picks">Nutrilite Twist Tubes 2GO · XS CocoWater Hydration Drink Mix · XS Sports Twist Tubes</span><span class="shelf-go">Open the shelf</span></span>
+          </a>
+        </div>
+        <div class="shelf-panel" role="tabpanel" id="panel-energy-focus" aria-labelledby="tab-energy-focus" hidden>
+          <a class="shelf-link" href="category-energy-focus.html">
+            <span class="shelf-art"><img src="assets/shelf/energy-focus.webp" alt="" width="760" height="760" loading="lazy"></span>
+            <span class="shelf-copy"><span class="label">Cans & capsules</span><span class="shelf-name">Energy &amp; Focus</span><span class="shelf-desc">Pre-workout, tablets and the full XS energy range.</span><span class="shelf-picks">XS Elite + Focus Energy Drink · XS Energy + Burn · XS Energy + Focus Dietary Supplement</span><span class="shelf-go">Open the shelf</span></span>
+          </a>
+        </div>
+        <div class="shelf-panel" role="tabpanel" id="panel-protein" aria-labelledby="tab-protein" hidden>
+          <a class="shelf-link" href="category-protein.html">
+            <span class="shelf-art"><img src="assets/shelf/protein.webp" alt="" width="760" height="760" loading="lazy"></span>
+            <span class="shelf-copy"><span class="label">Whey, bars, crisps</span><span class="shelf-name">Protein Snack Pack</span><span class="shelf-desc">Powders, shakes, bars and crisps to hit your protein for the day.</span><span class="shelf-picks">Nutrilite Organics All-in-One Bars · XS Grass-Fed Whey Protein · XS Grass-Fed Whey Protein Powder Sachets</span><span class="shelf-go">Open the shelf</span></span>
+          </a>
+        </div>
+        <div class="shelf-panel" role="tabpanel" id="panel-fat-loss" aria-labelledby="tab-fat-loss" hidden>
+          <a class="shelf-link" href="category-fat-loss.html">
+            <span class="shelf-art"><img src="assets/shelf/fat-loss.webp" alt="" width="760" height="760" loading="lazy"></span>
+            <span class="shelf-copy"><span class="label">Thermogenic</span><span class="shelf-name">Fat Loss</span><span class="shelf-desc">Thermogenic support to pair with your training.</span><span class="shelf-picks">XS Ignite Powder</span><span class="shelf-go">Open the shelf</span></span>
+          </a>
+        </div>
+        <div class="shelf-panel" role="tabpanel" id="panel-daily-foundations" aria-labelledby="tab-daily-foundations" hidden>
+          <a class="shelf-link" href="category-daily-foundations.html">
+            <span class="shelf-art"><img src="assets/shelf/daily-foundations.webp" alt="" width="760" height="760" loading="lazy"></span>
+            <span class="shelf-copy"><span class="label">Everyday basics</span><span class="shelf-name">Daily Foundations</span><span class="shelf-desc">The everyday base</span><span class="shelf-picks">Nutrilite Balance Within Probiotic · Nutrilite Begin Daily GI Primer · XS Creatine+</span><span class="shelf-go">Open the shelf</span></span>
+          </a>
+        </div>
+        <div class="shelf-panel" role="tabpanel" id="panel-skin-redefined" aria-labelledby="tab-skin-redefined" hidden>
+          <a class="shelf-link" href="category-skin-redefined.html">
+            <span class="shelf-art"><img src="assets/shelf/skin-redefined.webp" alt="" width="760" height="760" loading="lazy"></span>
+            <span class="shelf-copy"><span class="label">Skin & overnight</span><span class="shelf-name">Skin Redefined</span><span class="shelf-desc">Artistry skincare, for the hours you are not training.</span><span class="shelf-picks">Artistry Skin Nutrition Renewing Softening Toner · Artistry Skin Nutrition Sleeping Mask · Artistry Studio Glow Boss Cleanser + Exfoliator</span><span class="shelf-go">Open the shelf</span></span>
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -213,6 +252,11 @@
         <p class="label">One to one</p>
         <h2 id="consult-title"><span>Talk through</span> <span>your stack</span></h2>
         <p>Fifteen minutes on a call: your macros, what you already take, and the smallest stack that gets you where you are going. The slot holds a half hour; we rarely need it. Answer four things first and the call starts on you instead of on catching up.</p>
+        <ul class="c-list">
+          <li>Your macros, and whether the split is worth changing</li>
+          <li>What you already take, and what it is doing</li>
+          <li>The smallest stack that moves the goal, and what to drop</li>
+        </ul>
         <p class="c-fine">No charge, no pitch. Your answers travel with the booking.</p>
       </div>
       <form class="c-card grow" id="consult-form" data-consult="https://calendly.com/3pete/explore" style="--d:1">
@@ -241,7 +285,7 @@
         <div class="c-field"><label for="c-note">Anything you want covered? <span>Optional</span></label>
           <input id="c-note" name="note" type="text" autocomplete="off" placeholder="Eating around shift work…"></div>
         <button class="btn" type="submit">Pick a time</button>
-        <p class="c-sum" id="consult-sum" aria-live="polite">Fifteen minutes, on video or by phone. The slot holds a half hour.</p>
+        <p class="c-sum" id="consult-sum" aria-live="polite">On video or by phone.</p>
       </form>
       <!-- the calendar mounts here in place of the form, once someone has answered -->
       <div class="c-embed" id="consult-embed" hidden></div>
@@ -546,6 +590,32 @@ $$('.pod-num').forEach(function(el){
   else run();
 });
 
+/* Shelves, strip view: tabs switch panels. The ring below is the other view of the same data. */
+var tablist=$('.shelf-tabs');
+if(tablist){
+  var tabs=$$('.shelf-tab',tablist);
+  var pick=function(i,focus){
+    tabs.forEach(function(t,j){
+      var on=i===j;
+      t.setAttribute('aria-selected',on);
+      t.tabIndex=on?0:-1;
+      var panel=$('#'+t.getAttribute('aria-controls'));
+      if(panel)panel.hidden=!on;
+    });
+    if(focus)tabs[i].focus();
+    tabs[i].scrollIntoView({block:'nearest',inline:'nearest'});
+  };
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){pick(i)});
+    t.addEventListener('keydown',function(e){
+      var n=tabs.length,k=e.key,
+          j=k==='ArrowRight'?(i+1)%n:k==='ArrowLeft'?(i+n-1)%n:k==='Home'?0:k==='End'?n-1:-1;
+      if(j<0)return;
+      e.preventDefault();pick(j,true);
+    });
+  });
+}
+
 /* The archipelago: islands drift around a slow ellipse, each bobbing on its own */
 var arch=$('#archipelago');
 if(arch){
@@ -612,8 +682,8 @@ if(cform){
       val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()};
   var line=function(){
     var g=val('goal'),t=val('training');
-    if(!g&&!t)return 'Fifteen minutes, on video or by phone. The slot holds a half hour.';
-    return 'Fifteen minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'. The slot holds a half hour.';
+    if(!g&&!t)return 'On video or by phone.';
+    return 'Fifteen minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
   /* widget.js is only fetched on submit, once, so nobody who never books pays for it */
