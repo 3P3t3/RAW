@@ -380,6 +380,155 @@ if(cform){
   });
 }
 
+/* The pour: 150 frames of the can going into the glass, scrubbed by scroll position.
+   Nothing is fetched until the section comes near, and reduced motion gets one still. */
+(function(){
+  var run=$('#pour-run');
+  if(!run)return;
+  var stage=$('.pour-stage',run),cv=$('#pour-film'),still=$('#pour-still'),
+      head=$('.pour-head',run),cap=$('.pour-cap',run),cues=$$('.pour-cue',run);
+  /* phones take the light set, big screens the tall one; picked when the first
+     frame is actually wanted, so the window has been laid out by then */
+  var DIR='assets/pour/sm';
+  function pick(){
+    var big=innerWidth>900||((devicePixelRatio||1)>2&&innerWidth>480);
+    DIR='assets/pour/'+(big?'big':'sm');
+  }
+  var FRAMES=150,PPF=12,CACHE=28,AHEAD=10;
+  var MAXSTEP=3;     /* frames per display frame at most: a flick plays, never cuts */
+  var STILL=59;      /* the one frame reduced motion shows: the can mid-pour */
+  function url(i){return DIR+'/'+('000'+(i+1)).slice(-4)+'.webp'}
+
+  /* one frame, no scrub, and none of the other 149 fetched */
+  function poster(){
+    pick();still.alt=cv.getAttribute('aria-label');still.src=url(STILL);
+    still.hidden=false;cv.hidden=true;if(cap)cap.hidden=true;
+  }
+  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var gate='IntersectionObserver' in window;
+  if(!gate||!window.createImageBitmap){poster();return}   /* no gate, no bulk fetch */
+  if(reduced){
+    new IntersectionObserver(function(es,o){if(es[0].isIntersecting){poster();o.disconnect()}},
+      {rootMargin:'200px 0px'}).observe(run);
+    return;
+  }
+
+  var ctx=cv.getContext('2d',{alpha:false});
+  var blobs=new Array(FRAMES),bmps=new Array(FRAMES),used=[];
+  var w=0,h=0,pos=0,target=0,dir=1,raf=0,drawn='';
+
+  /* Load coarse to fine: every 8th frame first, then 4th, 2nd, the rest. A quick
+     scroll on a slow connection plays a rougher pour instead of stalling. */
+  function order(){
+    var seen={},out=[];
+    [8,4,2,1].forEach(function(s){for(var i=0;i<FRAMES;i+=s)if(!seen[i]){seen[i]=1;out.push(i)}});
+    if(!seen[FRAMES-1])out.splice(1,0,FRAMES-1);
+    return out;
+  }
+  function load(){
+    pick();
+    var queue=order(),live=0;
+    (function pump(){
+      while(live<4&&queue.length){                    /* a few requests in flight */
+        var k=queue.shift();live++;
+        (function(k){
+          fetch(url(k)).then(function(r){return r.blob()}).then(function(bl){
+            blobs[k]=bl;if(Math.abs(k-pos)<=AHEAD)decode(k);
+          }).catch(function(){}).then(function(){live--;pump()});
+        })(k);
+      }
+    })();
+  }
+
+  /* Decoded frames are big; keep a window around the playhead, not the whole clip. */
+  function decode(i){
+    if(i<0||i>=FRAMES||bmps[i]||!blobs[i])return;
+    bmps[i]='pending';
+    createImageBitmap(blobs[i]).then(function(bm){
+      bmps[i]=bm;used.push(i);
+      while(used.length>CACHE){                       /* drop the frame furthest away */
+        var far=0;
+        for(var j=1;j<used.length;j++)
+          if(Math.abs(used[j]-pos)>Math.abs(used[far]-pos))far=j;
+        var gone=used.splice(far,1)[0];
+        if(bmps[gone]&&bmps[gone].close)bmps[gone].close();
+        bmps[gone]=null;
+      }
+      paint(true);
+    }).catch(function(){bmps[i]=null});
+  }
+  function ready(i){return bmps[i]&&bmps[i]!=='pending'}
+  function nearest(i){
+    for(var d=0;d<FRAMES;d++){if(ready(i-d))return i-d;if(ready(i+d))return i+d}
+    return -1;
+  }
+  function blit(bm,alpha){
+    var s=Math.max(w/bm.width,h/bm.height),dw=bm.width*s,dh=bm.height*s;
+    ctx.globalAlpha=alpha;ctx.drawImage(bm,(w-dw)/2,(h-dh)/2,dw,dh);ctx.globalAlpha=1;
+  }
+  /* Draw the playhead between two frames: the next one fades over the first by the
+     fraction in between, so scroll positions between frames become motion. */
+  function paint(force){
+    var i=Math.floor(pos),f=pos-i,key;
+    for(var k=1;k<=AHEAD;k++)decode(i+k*dir);
+    decode(i);decode(i+1);decode(i-dir);
+    var a=ready(i)?i:nearest(i);
+    if(a<0)return;
+    var b=a===i&&f>0.02&&ready(i+1)?i+1:-1;
+    key=a+':'+(b<0?0:Math.round(f*20));
+    if(key===drawn&&!force)return;
+    drawn=key;
+    blit(bmps[a],1);
+    if(b>=0)blit(bmps[b],f);
+  }
+  function size(){
+    var r=Math.min(devicePixelRatio||1,2);
+    w=stage.offsetWidth;h=stage.offsetHeight;
+    cv.width=Math.round(w*r);cv.height=Math.round(h*r);
+    ctx.setTransform(r,0,0,r,0,0);
+    ctx.imageSmoothingQuality='high';
+    run.style.height=(h+FRAMES*PPF)+'px';             /* the scroll the film is scrubbed by */
+    drawn='';paint(true);
+  }
+  /* measured live: the sections above this one change height as the shelf opens */
+  function progress(){
+    return Math.min(1,Math.max(0,-run.getBoundingClientRect().top/(FRAMES*PPF)));
+  }
+  /* The playhead eases toward the scroll position instead of jumping to it, so a
+     flick of the thumb plays through frames rather than cutting. */
+  function step(){
+    raf=0;
+    var d=target-pos;
+    if(Math.abs(d)<0.01)pos=target;
+    else{dir=d>0?1:-1;var v=d*0.22;pos+=Math.max(-MAXSTEP,Math.min(MAXSTEP,v))}
+    paint(false);
+    var p=pos/(FRAMES-1);
+    if(head)head.style.opacity=String(Math.max(0,1-p*3));    /* the title clears early */
+    if(cap)cap.style.opacity=String(Math.max(0,1-p*8));
+    for(var c=0;c<cues.length;c++){                          /* captions ride the scrub */
+      var a=+cues[c].dataset.a,b=+cues[c].dataset.b,e=0.06;
+      cues[c].style.opacity=String(Math.max(0,Math.min(1,(p-a)/e,(b-p)/e)));
+    }
+    if(pos!==target)raf=requestAnimationFrame(step);
+  }
+  function onScroll(){
+    target=progress()*(FRAMES-1);
+    if(!raf)raf=requestAnimationFrame(step);
+  }
+  size();
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',function(){
+    /* height-only changes (mobile Safari's toolbar) must not re-size the stage */
+    if(stage.offsetWidth===w&&stage.offsetHeight===h)return;
+    size();onScroll();
+  });
+  /* the gate: the first frame request happens here, not on page load */
+  new IntersectionObserver(function(es,o){
+    if(!es[0].isIntersecting)return;
+    o.disconnect();load();onScroll();
+  },{rootMargin:'400px 0px'}).observe(run);
+})();
+
 /* Interface sound: short glassy ticks, synthesised here so there is nothing to download */
 (function(){
   var btn=$('#sound-toggle');
