@@ -64,6 +64,14 @@ a,button,summary{touch-action:manipulation}
 .wordmark{justify-self:center;display:inline-flex;align-items:center;gap:10px;min-height:44px;font-family:var(--sans);font-weight:800;font-stretch:112%;font-size:14px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;color:var(--sand);text-decoration:none}
 /* the wave: 4.11:1, filled rather than stroked, so it needs a wide slot of its own */
 .wordmark .mark{width:103px;height:25px;flex:none;fill:currentColor;stroke:none}
+/* the wave carries thin slivers between its strands. At 1x they land on about one device
+   pixel and grey out, so 1x screens get the build with the slivers closed; from 2x up,
+   where they are 2-3 device pixels, the drawing is shown as drawn. */
+.wordmark .mark .m-full{display:none}
+@media (min-resolution:2dppx),(-webkit-min-device-pixel-ratio:2){
+  .wordmark .mark .m-full{display:inline}
+  .wordmark .mark .m-solid{display:none}
+}
 /* under ~360 the wordmark's tracking alone shoves the search toggle off the bar */
 /* under ~360 the wave alone carries the bar: the name is still read by screen readers,
    and the mark gets the width it needs to read as a wave rather than a smear */
