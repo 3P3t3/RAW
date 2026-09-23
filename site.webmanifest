@@ -1,0 +1,13 @@
+{
+  "name": "Aspire Health",
+  "short_name": "Aspire",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#002E3B",
+  "background_color": "#F4F2EC",
+  "icons": [
+    { "src": "assets/logo/favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "assets/logo/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "assets/logo/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -62,9 +62,14 @@ a,button,summary{touch-action:manipulation}
 .bar{display:grid;grid-template-columns:44px 1fr auto auto;align-items:center;gap:4px;height:60px}
 .sound-toggle{color:var(--sand)}
 .wordmark{justify-self:center;display:inline-flex;align-items:center;gap:10px;min-height:44px;font-family:var(--sans);font-weight:800;font-stretch:112%;font-size:14px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;color:var(--sand);text-decoration:none}
-.wordmark .mark{width:13px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.4}
+/* the wave: 4.11:1, filled rather than stroked, so it needs a wide slot of its own */
+.wordmark .mark{width:103px;height:25px;flex:none;fill:currentColor;stroke:none}
 /* under ~360 the wordmark's tracking alone shoves the search toggle off the bar */
-@media (max-width:360px){.mast .wordmark{gap:6px;font-size:11px;letter-spacing:.08em}}
+/* under ~360 the wave alone carries the bar: the name is still read by screen readers,
+   and the mark gets the width it needs to read as a wave rather than a smear */
+@media (max-width:360px){.mast .wordmark{gap:0}
+  .mast .wordmark .wm-name{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .mast .wordmark .mark{width:130px;height:32px}}
 .nav-inline{display:none}
 .search{display:flex;gap:8px;padding:0 0 14px}
 .js .mast:not(.s-open) .search{display:none}
@@ -360,6 +365,7 @@ html:not(.js) #results[hidden]{display:block!important}
   .menu-btn,.search-toggle{display:none}
   .mast .sound-toggle{order:4;justify-self:end;margin-left:-6px}
   .mast .wordmark{justify-self:start;font-size:14px}
+  .mast .wordmark .mark{width:120px;height:29px}
   .nav-inline{display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
   .nav-inline a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--sand);text-decoration:none}
   .nav-inline a:active{opacity:.7}

@@ -109,6 +109,12 @@ CAT_THUMB = {  # the pack shown on the homepage row for each category
 # leave it empty and the form says the calendar is not connected yet instead of embedding nothing.
 CONSULT_URL = 'https://calendly.com/3pete/explore'
 
+# Where the site actually lives. Everything else on the site is linked relatively; this is
+# only for the absolute URLs that Open Graph and Twitter cards require. GitHub Pages serves
+# the repo from a subpath, so the trailing slash matters. Move to a custom domain and this
+# one line is the whole change — nothing else hardcodes the host.
+BASE = 'https://3p3t3.github.io/RAW/'
+
 FEATURED = [  # props-free pack shots, so the grid reads as one series
     'XS Grass-Fed Whey Protein - Chocolate',
     'XS Post-Workout Recovery - Fruit Punch (30 Serving Pouch)',
@@ -357,6 +363,7 @@ def main():
     style_href = 'style.css?v=' + hashlib.sha1(style.encode()).hexdigest()[:8]  # bust the cache when the css moves
     shared = {'{{STYLE}}': style_href, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{SCRIPT}}': script,
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)), '{{CONSULT_URL}}': CONSULT_URL,
+              '{{BASE}}': BASE,
               '{{FINDER_DATA}}': finder_json}
 
     os.makedirs(CUTS, exist_ok=True)
@@ -383,6 +390,7 @@ def main():
 
     out = open(SRC).read()
     for k, v in dict(shared, **{'{{HEADER}}': header.replace('{{HOME}}', ''), '{{HOME}}': '',
+                                '{{PAGE_URL}}': BASE + 'homepage.html',
                                 '{{GOALS}}': cat_rows(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves}).items():
         out = out.replace(k, v)
     open(OUT, 'w').write(out)
@@ -417,6 +425,7 @@ def main():
         page = cat_tpl
         for k, v in dict(shared, **{
                 '{{HEADER}}': header.replace('{{HOME}}', 'homepage.html'), '{{HOME}}': 'homepage.html',
+                '{{PAGE_URL}}': BASE + f'category-{slug_}.html',
                 '{{CAT_NAME}}': name, '{{CAT_TAG}}': tag, '{{CAT_HEADING}}': heading,
                 '{{CAT_COUNT}}': str(counts[slug_]), '{{CAT_GRID}}': cgrid, '{{CAROUSEL}}': carousel,
                 '{{CAT_OTHERS}}': cat_rows(only={slug_}), '{{CAT_BG}}': f'assets/bg-{slug_}.webp'}).items():
