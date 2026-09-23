@@ -4,8 +4,10 @@
   --teal:#002E3B;--pearl:#1E262F;--beige:#E2C8AE;--sand:#E6D3C5;--soft:#D6D4C9;--tile:#E2DFD7;--chalk:#F4F2EC;--mindful:#BDB6AD;
   --text:#415365;--ink:#1E262F;--line:rgba(30,38,47,.18);--on-dark:#C4D2D4;
   --r:0px;
-  --display:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --sans:"Archivo","Helvetica Neue",Helvetica,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  /* Bricolage Grotesque, variable. Its width axis spans 75-100 only: the 72% below
+     clamps to 75% (imperceptible) and .wordmark cannot stretch past 100%. */
+  --display:"Bricolage Grotesque","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --sans:"Bricolage Grotesque","Helvetica Neue",Helvetica,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   --blue:#3340B8; /* lifted from the XS can */
   --hero:#033246; /* the dark half of the hero video, so the panel and the film share one edge */
   --pad:20px;--sec:72px;--mast:60px;
