@@ -94,3 +94,12 @@ That is expected, not a hang. Deleting `assets/.cut-version` does the same.
 
 `product-shots/<slug>.webp` (already-lit studio shots, 15 of them) wins over `product-photos/` and
 is copied straight through without any cutting.
+
+## Absolute URLs
+
+Everything on the site is linked relatively, because it is served from a subpath
+(`3p3t3.github.io/RAW/`), not a domain root. The only exception is Open Graph and Twitter
+cards, which scrapers require to be absolute: those come from `BASE` in
+`site-src/build_homepage.py`, substituted as `{{BASE}}` and `{{PAGE_URL}}`. Moving to a
+custom domain means editing `BASE` and nothing else. `site.webmanifest` uses `start_url: "."`
+for the same reason — `"/"` would point at the wrong site.
