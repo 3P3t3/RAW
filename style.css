@@ -359,8 +359,10 @@ html:not(.js) #results[hidden]{display:block!important}
    button at the foot of the menu panel instead. */
 @media (min-width:1024px){
   :root{--mast:76px}
-  .mast .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto;align-items:center;gap:24px;height:76px}
-  .mast .search{justify-self:end;width:min(100%,300px)}
+  /* the wordmark column may not shrink below its own width: with the wave in it the block
+     is ~277px, and a minmax(0,1fr) track let it overflow into the nav at 1024 */
+  .mast .wrap{display:grid;grid-template-columns:minmax(auto,1fr) auto minmax(0,1fr) auto;align-items:center;gap:24px;height:76px}
+  .mast .search{justify-self:end;width:min(100%,300px);min-width:150px}
   .mast .bar{display:contents}
   .menu-btn,.search-toggle{display:none}
   .mast .sound-toggle{order:4;justify-self:end;margin-left:-6px}
