@@ -359,7 +359,11 @@ def main():
     part = lambda n: open(os.path.join(ROOT, 'site-src', n)).read()
     style, header, footer, dialogs, script, icons = (part('style.css'), part('_header.html'), part('_footer.html'),
                                                      part('_dialogs.html'), part('_script.html'), part('_icons.html'))
-    intro = part('_intro.html')  # the opening curtain: homepage only, so it is not in `shared`
+    # the opening curtain: homepage only, so it is not in `shared`. The glow build of the
+    # mark stays a file of its own and is handed to the script as a string, so none of it
+    # lands in the markup and a visitor without JS is served none of its 15KB.
+    intro = part('_intro.html').replace(
+        '{{GLOW_SVG}}', json.dumps(part('mark-glow.svg').strip()).replace('</', '<\\/'))
     open(STYLE_OUT, 'w').write(style)  # served once and cached, instead of inlined into all eight pages
     style_href = 'style.css?v=' + hashlib.sha1(style.encode()).hexdigest()[:8]  # bust the cache when the css moves
     shared = {'{{STYLE}}': style_href, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{SCRIPT}}': script,

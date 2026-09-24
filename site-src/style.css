@@ -579,15 +579,17 @@ html:not(.js) .isle{position:static;width:auto;margin:0}
 }
 
 /* ── Opening curtain ───────────────────────────────────────────────────────────
-   Homepage only, once a session. Nothing here paints on its own: site-src/_intro.html
+   Homepage only, every load. Nothing here paints on its own: site-src/_intro.html
    inserts .intro at run time, so there is no curtain in the markup and none without
    JS. The halves are SVG so the seam can follow the wave's own centre line; only their
    transform ever changes. The guard at the bottom is a second lock on reduced motion,
    after the one in the script. */
 .intro{position:fixed;inset:0;z-index:100;overflow:hidden;contain:layout paint;
-  font-family:var(--sans);color:var(--chalk)}
-.intro-sheet{position:absolute;inset:0;background:var(--teal)}
-.intro-half{position:absolute;inset:0;display:block;width:100%;height:100%;fill:var(--teal);
+  font-family:var(--sans);color:var(--chalk);--curtain:#000}   /* black, not the teal: the lit
+     build of the wave was drawn on black, and on teal its bloom flattens and its outer
+     edges melt into the ground. The page it parts to reveal is the page, unchanged. */
+.intro-sheet{position:absolute;inset:0;background:var(--curtain)}
+.intro-half{position:absolute;inset:0;display:block;width:100%;height:100%;fill:var(--curtain);
   will-change:transform}
 .intro-stage{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;
   padding:0 var(--pad);text-align:center}
@@ -598,9 +600,19 @@ html:not(.js) .isle{position:static;width:auto;margin:0}
 .intro-sp{display:block;width:.5em}
 .intro-tag{margin:1.4em 0 0;opacity:0;color:var(--sand);
   font:600 clamp(9px,2.4vw,12px)/1 var(--sans);letter-spacing:.34em;text-transform:uppercase}
+/* The wave, in layers. Only the divs ever move: .intro-wave carries the flight into the
+   masthead, .intro-sweep the arrival, and .intro-lit/.intro-flat the cross-fade between
+   the two builds. The SVGs take no transform and no opacity of their own, so the lit
+   build's two filters are rasterised once and from then on only the result is moved —
+   transform a filtered element itself and some engines redraw the filter every frame. */
 .intro-wave{position:absolute;transform-origin:0 0;will-change:transform}
-.intro-wave svg{position:absolute;inset:0;display:block;width:100%;height:100%;opacity:0;
-  fill:var(--sand);stroke:none;transform-origin:50% 50%;will-change:transform,opacity}
-/* which build of the wave the curtain shows is settled in _intro.html, on the clone
-   itself: the losing path is thrown away rather than hidden, so no query has to match. */
+.intro-sweep{position:absolute;inset:0;opacity:0;transform-origin:50% 50%;
+  will-change:transform,opacity}
+.intro-lit,.intro-flat{position:absolute;inset:0;will-change:opacity}  /* promoted up front:
+     the cross-fade is the one moment that would otherwise have to rasterise the lit
+     build's filters, and it is the one moment with nothing else to spare */
+.intro-lit{opacity:1}
+.intro-flat{opacity:0}
+.intro-wave svg{position:absolute;inset:0;display:block;width:100%;height:100%}
+.intro-flat svg{fill:var(--sand);stroke:none}   /* the masthead's own colour, so it lands into it */
 @media (prefers-reduced-motion:reduce){.intro{display:none}}
