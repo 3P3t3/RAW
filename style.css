@@ -72,12 +72,22 @@ a,button,summary{touch-action:manipulation}
   .wordmark .mark .m-full{display:inline}
   .wordmark .mark .m-solid{display:none}
 }
+/* 361-479: the compact bar cannot carry the 103px wave beside the wordmark at full size.
+   The content is 404px wide; with the page's 40px of side padding it needs a 444px
+   viewport, so below that the name takes the compact setting and the mark 84x20. Measured,
+   not guessed: at 390 this was 404px of content in a 350px bar, and the search toggle was
+   clipped off the page entirely. */
+@media (max-width:479px){.mast .wordmark{gap:6px;font-size:11px;letter-spacing:.08em}
+  .mast .wordmark .mark{width:84px;height:20px}}
+/* narrower still: 84px overruns the bar once a classic scrollbar takes 15px of the
+   viewport, so 361-419 gets 68x17. Both steps keep the wave's 4.11:1. */
+@media (max-width:419px){.mast .wordmark .mark{width:56px;height:14px}}
 /* under ~360 the wordmark's tracking alone shoves the search toggle off the bar */
 /* under ~360 the wave alone carries the bar: the name is still read by screen readers,
    and the mark gets the width it needs to read as a wave rather than a smear */
 @media (max-width:360px){.mast .wordmark{gap:0}
   .mast .wordmark .wm-name{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-  .mast .wordmark .mark{width:130px;height:32px}}
+  .mast .wordmark .mark{flex:0 0 auto;width:112px;height:27px;min-width:0;aspect-ratio:auto}}
 .nav-inline{display:none}
 .search{display:flex;gap:8px;padding:0 0 14px}
 .js .mast:not(.s-open) .search{display:none}
