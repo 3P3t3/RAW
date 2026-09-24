@@ -444,6 +444,173 @@ if(cform){
   });
 }
 
+/* Macros: seven questions, one per screen, then the numbers and a call. Homepage only.
+   Without script style.css hides the quiz and leaves the fallback line, so the band is
+   never a husk. Answers live in localStorage: the curtain replays on every load, and
+   losing half-entered answers to a reload would be maddening. */
+
+/* mc:calc — the arithmetic, exactly as the calculator Peter uses does it. The two weight
+   conversions are deliberately not reciprocals, protein is rounded before the calorie
+   bookkeeping, and fat rounds twice (calories, then grams off the rounded calories).
+   Peter's two departures are the 1100 floor and the flags; both are said out loud below,
+   never applied quietly. */
+function mcCalc(v){
+  var wKg=v.weightLb*0.453592,
+      hIn=v.ft*12+v.inch,
+      hCm=hIn*2.54,
+      bmr=10*wKg+6.25*hCm-5*v.age+(v.sex==='male'?5:-161),   /* mifflin-st jeor, total bodyweight */
+      tdee=bmr*v.activity,
+      target=v.goal==='loss'?tdee*v.loss:v.goal==='recomp'?tdee*0.92:v.goal==='gain'?tdee*1.12:tdee,
+      floored=false;
+  if(target<1100){target=1100;floored=true}      /* the source calculator has no floor at all */
+  var over=Math.max(hIn-60,0),                   /* devine, clamped at 5'0" */
+      ibwLb=((v.sex==='male'?50:45.5)+2.3*over)*2.20462,   /* not 1/0.453592; do not tidy */
+      proteinG=v.basis==='standard'?Math.round(ibwLb):
+               v.basis==='better'?Math.round(ibwLb*v.frame*1.15):
+               Math.round(v.weightLb*v.trained),
+      fatCal=Math.round(target*0.30),
+      fatG=Math.round(fatCal/9),                 /* grams off the rounded calories, not the raw ones */
+      proteinCal=proteinG*4,                     /* the rounded grams, not the raw */
+      spare=target-proteinCal-fatCal,            /* carbs are whatever is left */
+      carbCal=Math.max(spare,0);
+  return {tdee:Math.round(tdee),target:Math.round(target),
+          proteinG:proteinG,proteinCal:proteinCal,
+          fatG:fatG,fatCal:fatCal,
+          carbG:Math.round(carbCal/4),carbCal:Math.round(carbCal),
+          floored:floored,clamped:spare<0};
+}
+/* mc:end */
+
+var mcForm=$('#mc-form');
+if(mcForm){
+  var mcSteps=$$('.mc-step',mcForm),mcQuiz=$('#mc-quiz'),mcRes=$('#mc-res'),
+      mcCount=$('#mc-step-n'),mcBars=$$('#mc-prog span'),mcErr=$('#mc-err'),
+      mcBack=$('#mc-back'),mcNext=$('#mc-next'),mcNotes=$('#mc-notes'),
+      MCKEY='aspire-macros',MCFIELDS='sex age weight ft inch activity basis frame trained goal loss'.split(' '),
+      mcAt=0,mcDone=false,mcSum='';
+  var MCBASIS={
+    standard:'General population, new clients, non-lifters.',
+    better:'Active, consistent gym-goers, not yet multi-year trained lifters.',
+    trained:'Real training history, tracks intake, known lean mass. Uses your actual bodyweight.'
+  };
+  var MCGOAL={
+    loss:'Reassess in two to three weeks. If the trend has stalled for a fortnight, take another 5 to 10% off.',
+    recomp:'A small deficit while you lift heavy. Expect the scale to barely move: judge it on photos and measurements. Reassess in three to four weeks.',
+    gain:'Reassess in three to four weeks. Slow gain is the point; if it is coming on fast, trim 5 to 10%.',
+    maint:'Reassess in three to four weeks, or whenever the goal changes.'
+  };
+  var mcGet=function(n){var el=mcForm.elements[n];return el?String(el.value||'').trim():''},
+      mcSet=function(n,v){var el=mcForm.elements[n];if(el&&v)el.value=v},
+      mcNum=function(n){return +mcGet(n)||0},
+      mcCal=function(n){return n.toLocaleString('en-US')};
+
+  function mcSave(){
+    var d={v:1,at:mcAt,done:mcDone};
+    MCFIELDS.forEach(function(n){d[n]=mcGet(n)});
+    try{localStorage.setItem(MCKEY,JSON.stringify(d))}catch(e){}
+  }
+  function mcLoad(){
+    var d=null;
+    try{d=JSON.parse(localStorage.getItem(MCKEY)||'null')}catch(e){}
+    if(!d||d.v!==1)return;
+    MCFIELDS.forEach(function(n){mcSet(n,d[n])});
+    mcAt=Math.max(0,Math.min(mcSteps.length-1,d.at|0));
+    mcDone=!!d.done;
+  }
+  /* the three controls that only apply to one answer above them */
+  function mcSubs(){
+    $('#mc-frame').hidden=mcGet('basis')!=='better';
+    $('#mc-trained').hidden=mcGet('basis')!=='trained';
+    $('#mc-loss').hidden=mcGet('goal')!=='loss';
+    $('#mc-basis-note').textContent=MCBASIS[mcGet('basis')]||'';
+  }
+  /* one message per step, and only for what that step asks */
+  function mcMiss(){
+    if(mcAt===0&&!mcGet('sex'))return 'Pick one so the formula knows which constant to use.';
+    if(mcAt===1&&!(mcNum('age')>0))return 'Enter your age in whole years.';
+    if(mcAt===2&&!(mcNum('weight')>0))return 'Enter your weight in pounds.';
+    if(mcAt===3&&!(mcNum('ft')*12+mcNum('inch')>0))return 'Enter your height: feet, inches, or both.';
+    return '';
+  }
+  function mcStep(focus){
+    mcSteps.forEach(function(el,i){el.hidden=i!==mcAt});
+    mcCount.textContent='Step '+(mcAt+1)+' of '+mcSteps.length;
+    mcBars.forEach(function(b,i){b.className=i<=mcAt?'is-on':''});
+    mcBack.hidden=!mcAt;
+    mcNext.textContent=mcAt===mcSteps.length-1?'See my numbers':'Continue';
+    mcErr.textContent='';mcErr.hidden=true;
+    mcSubs();
+    var s=mcSteps[mcAt];
+    s.classList.remove('mc-in');void s.offsetWidth;s.classList.add('mc-in');   /* restart the fade */
+    if(focus)$('.mc-q',s).focus();
+  }
+  function mcShow(){mcQuiz.hidden=mcDone;mcRes.hidden=!mcDone}
+
+  function mcRender(focus){
+    var r=mcCalc({sex:mcGet('sex'),age:mcNum('age'),weightLb:mcNum('weight'),
+                  ft:mcNum('ft'),inch:mcNum('inch'),activity:mcNum('activity'),
+                  basis:mcGet('basis'),frame:mcNum('frame'),trained:mcNum('trained'),
+                  goal:mcGet('goal'),loss:mcNum('loss')});
+    $('#mc-tdee').textContent=mcCal(r.tdee)+' cal';
+    $('#mc-target').textContent=mcCal(r.target)+' cal';
+    $('#mc-p').textContent=r.proteinG+'g';$('#mc-pc').textContent=r.proteinCal+' cal';
+    $('#mc-f').textContent=r.fatG+'g';$('#mc-fc').textContent=r.fatCal+' cal';
+    $('#mc-c').textContent=r.carbG+'g';$('#mc-cc').textContent=r.carbCal+' cal';
+    var notes=[];
+    /* the numbers stand as calculated; what they do not add up to is said, not fixed */
+    if(r.clamped)notes.push(['mc-warn','Protein and fat alone come to '+mcCal(r.proteinCal+r.fatCal)+
+      ' cal, more than this '+mcCal(r.target)+' cal target, so carbs land at zero. Nothing above has '+
+      'been adjusted to hide that. The two levers are the protein basis, where Standard reads protein '+
+      'off your height instead, and the deficit, where Moderate takes 15% rather than 25%. Ease one or '+
+      'both until the carbs have room.']);
+    if(r.floored)notes.push(['mc-warn','Held at 1,100 cal. The formula asked for less than that, and '+
+      'this calculator does not go below it. A gentler deficit is the better way down.']);
+    notes.push(['mc-note',MCGOAL[mcGet('goal')]||'']);
+    mcNotes.textContent='';
+    notes.forEach(function(n){
+      var p=doc.createElement('p');p.className=n[0];p.textContent=n[1];mcNotes.appendChild(p);
+    });
+    mcSum='Macros: '+mcCal(r.target)+' cal a day, '+r.proteinG+'g protein, '+r.fatG+'g fat, '+r.carbG+'g carbs.';
+    if(focus){
+      $('#mc-res-t').focus();
+      say('Your targets: '+mcCal(r.target)+' calories, '+r.proteinG+' grams protein, '+
+          r.fatG+' grams fat, '+r.carbG+' grams carbs.');
+    }
+  }
+
+  mcForm.addEventListener('change',function(){mcSubs();mcSave()});
+  mcForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    var miss=mcMiss();
+    /* shown first, then filled: a role=alert that is revealed and written in that order is
+       announced; one written while still hidden often is not */
+    if(miss){mcErr.hidden=false;mcErr.textContent=miss;return}
+    if(mcAt<mcSteps.length-1){mcAt++;mcStep(true);mcSave();return}
+    mcDone=true;mcShow();mcRender(true);mcSave();
+  });
+  mcBack.addEventListener('click',function(){if(mcAt){mcAt--;mcStep(true);mcSave()}});
+  $('#mc-edit').addEventListener('click',function(){mcDone=false;mcShow();mcStep(true);mcSave()});
+  $('#mc-again').addEventListener('click',function(){
+    mcForm.reset();mcAt=0;mcDone=false;mcShow();mcStep(true);
+    try{localStorage.removeItem(MCKEY)}catch(e){}
+  });
+  /* the one action under the numbers: the consult's own form, with the targets already in it */
+  $('#mc-book').addEventListener('click',function(e){
+    if(!cform)return;                            /* no consult here: just follow the anchor */
+    e.preventDefault();
+    var g={loss:'Lose fat',recomp:'Lose fat',gain:'Build muscle',maint:'Stay healthy day to day'}[mcGet('goal')];
+    if(g&&cform.elements.goal)cform.elements.goal.value=g;
+    if(cform.elements.note&&!cform.elements.note.value)cform.elements.note.value=mcSum;
+    cform.dispatchEvent(new Event('change'));
+    $('#consult').scrollIntoView();
+    var t=$('#consult-title');
+    t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
+  });
+
+  mcLoad();mcShow();mcStep(false);
+  if(mcDone)mcRender(false);
+}
+
 /* The pour: 150 frames of the can going into the glass, scrubbed by scroll position,
    running as the ground of the trending band. Nothing is fetched until the band comes
    near, and reduced motion gets one still. */
