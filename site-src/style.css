@@ -79,6 +79,11 @@ a,button,summary{touch-action:manipulation}
    clipped off the page entirely. */
 @media (max-width:479px){.mast .wordmark{gap:6px;font-size:11px;letter-spacing:.08em}
   .mast .wordmark .mark{width:84px;height:20px}}
+/* the menu bar carries only the close button and the wordmark, so the wave keeps its
+   103px there; under 420 the name takes the compact setting, as 260px of wordmark
+   overruns a 320px panel by 23px. */
+.menu .wordmark .mark{width:103px;height:25px}
+@media (max-width:419px){.menu .wordmark{gap:6px;font-size:11px;letter-spacing:.08em}}
 /* 419 and down the wave alone carries the bar. Beside the name it could only be 56px
    there, which is not really the mark; with the name out of the way the bar has room for
    140. The name stays in the accessibility tree and in the page title. */
@@ -266,6 +271,7 @@ html:not(.js) .q-card{display:none}
 .foot{background:#00222C;color:#C3CACD;padding:56px 0 calc(40px + env(safe-area-inset-bottom))}
 .foot-h{margin-bottom:8px;font-weight:600;color:var(--sand)}
 .foot .wordmark{justify-self:start;align-self:start;min-height:0;padding:0;font-size:13px;color:var(--sand)}
+.foot .wordmark .mark{width:84px;height:20px}
 .foot-top{display:grid;gap:14px;padding-bottom:28px;border-bottom:1px solid rgba(230,211,197,.18)}
 .foot-links{display:grid;justify-items:start;gap:0}
 .foot-links a{display:inline-flex;align-items:center;min-height:44px;color:var(--chalk);text-decoration:none}
