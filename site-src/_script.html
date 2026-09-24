@@ -794,5 +794,19 @@ if(cform){
   });
   btn.hidden=false;paint();
 })();
+
+/* The footer horizon: Peter's wave along the top edge of the footer. It is below the fold on
+   every page, so it is asked for only as the footer nears, the way the fizz still is. Without
+   script it is never asked for at all and the footer is plain black. */
+(function(){
+  var im=$('.foot-glow img');
+  if(!im)return;
+  function go(){im.src=im.getAttribute('data-src')}
+  if(!('IntersectionObserver' in window))return go();
+  new IntersectionObserver(function(es,o){
+    if(!es[0].isIntersecting)return;
+    o.disconnect();go();
+  },{rootMargin:'400px 0px'}).observe(im.closest('footer'));
+})();
 })();
 </script>
