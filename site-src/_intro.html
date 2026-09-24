@@ -1,14 +1,12 @@
 <!-- Opening curtain. A black sheet, the wordmark rises out of its mask letter by letter,
-     the wave arrives lit — the glow build, which is drawn to read on black — and settles.
-     It cools into the flat mark, and then the screen parts along the wave's own centre
-     line — top half up, bottom half down — onto the page that has been loading behind it
-     all along, while the flat mark travels into the header and becomes the masthead logo.
+     the wave arrives lit — Peter's own render, which wants a black ground — and settles.
+     The screen parts along the wave's own centre line, top half up and bottom half down,
+     onto the page that has been loading behind it all along; and on the frame the wave
+     starts for the masthead, the render is cut for the flat mark, which is what the
+     header keeps. The cut is under movement because the two are not the same wave.
 
-     The glow carries two static SVG filters. Nothing that carries a filter is ever
-     transformed or faded: the sweep, the flight and the cross-fade all run on plain
-     wrapper divs around it, so each engine rasterises the filtered art once and then
-     only moves the result. The glow is also taken out of the tree the moment it has
-     faded, so it is not along for the flight.
+     Everything that moves is a plain wrapper div: the render is never transformed and
+     never faded, only swapped, and it leaves the tree before the flight.
 
      Everything here is built at run time, so there is no curtain anywhere in the markup
      and no curtain at all without JS. The build substitutes this only into the homepage
@@ -18,7 +16,11 @@
 <script>
 (function(){
 'use strict';
-var doc=document,win=window,SPAN=2560,GLOW={{GLOW_SVG}};
+/* The choreography was cut at 2560ms and is played four tenths slower. T is the only
+   knob: every delay and every duration below is a beat's share of that original cut,
+   so stretching the piece cannot change its proportions. The font wait is not in here
+   — it is a load guard, not a beat. */
+var doc=document,win=window,T=1.4,D=function(ms){return Math.round(ms*T)},SPAN=D(2560);
 if(!doc.body||!('animate' in Element.prototype))return;
 if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;   /* no curtain, not even for a frame */
 if(location.hash)return;                                            /* they asked for a place, not a show */
@@ -28,7 +30,7 @@ var MID=[18.1,17.41,17.03,17.01,17.29,17.43,17.77,18.16,18.51,18.68,18.57,18.22,
          16.16,15.26,14.28,13.27,11.95,10.55,9.06,7.58,6.78,7.46,8.65,10.15,11.98,13.93,15.66,
          16.91,17.51,17.51,17.09,16.74,15.93,15.32,15.0,14.99,15.38,16.17,17.36];
 
-var anims=[],done=false,started=false,timer=0,i,
+var anims=[],done=false,started=false,timer=0,litely=0,i,
     ov=doc.createElement('div'),word='ASPIRE HEALTH',cells='';
 for(i=0;i<word.length;i++)cells+=word.charAt(i)===' '?'<span class="intro-sp"></span>'
   :'<span class="intro-l"><span>'+word.charAt(i)+'</span></span>';
@@ -37,6 +39,20 @@ ov.setAttribute('aria-hidden','true');   /* decorative: no focus goes in, none c
 ov.innerHTML='<div class="intro-sheet"></div><div class="intro-stage"><div class="intro-word">'+cells
   +'</div><p class="intro-tag">Fuel a higher you</p></div>';
 doc.body.appendChild(ov);                /* so the first paint is the curtain, never the page */
+
+/* Peter's own render of the wave, lit. Asked for here, after the curtain is already up,
+   so it is never in the way of the first paint; it has the parse, the font wait and the
+   whole of the wordmark — about a second and a half — to arrive. If it has not arrived
+   and decoded by the time the wave is due, the curtain shows the flat mark for the whole
+   arrival instead and the cut below becomes a no-op. Nothing waits on it, and a hole is
+   never on screen. */
+var art=new Image(),artOK=false,asked=false;
+art.decoding='async';art.alt='';
+art.onload=function(){ (art.decode?art.decode():Promise.resolve()).then(
+  function(){artOK=true},function(){artOK=true}) };   /* decoded, so the sweep cannot stall on it */
+function fetchArt(){if(!asked){asked=true;art.src='assets/intro-glow.webp'}}
+requestAnimationFrame(fetchArt);   /* strictly after the curtain's own first paint */
+setTimeout(fetchArt,200);          /* unless there is no frame coming — a hidden tab */
 
 /* ── Leaving ─────────────────────────────────────────────────────────────── */
 var EV=['pointerdown','mousedown','touchstart','keydown','wheel','scroll','click'];
@@ -55,7 +71,7 @@ function swallow(){
 }
 function finish(){
   if(done)return;
-  done=true;bind(false);clearTimeout(timer);
+  done=true;bind(false);clearTimeout(timer);clearTimeout(litely);
   for(var k=0;k<anims.length;k++){try{anims[k].cancel()}catch(e){}}
   if(ov.parentNode)ov.parentNode.removeChild(ov);   /* gone this frame: no fade to sit through */
 }
@@ -105,18 +121,18 @@ function start(){
       +seam(pts,-.8)+'L'+(W+BL)+' '+(H+BL)+' L'+(-BL)+' '+(H+BL)+'Z"/></svg>');
   ov.removeChild(ov.firstChild);                             /* the flat sheet hands over */
 
-  /* The wave, in two builds on top of each other: the lit one the curtain shows, and the
-     flat one the masthead keeps, cloned straight off it so the same paths land that were
-     already there. Their geometry is the same to the byte, so the cross-fade cannot slip.
-     Every layer that moves is a plain div; the SVGs themselves never take a transform. */
+  /* The wave, in two builds stacked: the render the curtain shows, and the flat mark the
+     masthead keeps, cloned straight off it so the very paths that are already there are
+     the ones that land. Every layer that moves is a plain div; neither build is ever
+     transformed itself. The render is placed by the fit below, not by eye. */
   var slot=doc.createElement('div'),mk=src.cloneNode(true),sweep,lit,flat;
   mk.removeAttribute('class');
   slot.className='intro-wave';
   slot.style.cssText='left:'+x0+'px;top:'+y0+'px;width:'+Wm+'px;height:'+Hm+'px';
-  slot.innerHTML='<div class="intro-sweep"><div class="intro-lit">'+GLOW
-                +'</div><div class="intro-flat"></div></div>';
+  slot.innerHTML='<div class="intro-sweep"><div class="intro-lit"></div>'
+                +'<div class="intro-flat"></div></div>';
   sweep=slot.firstChild;lit=sweep.firstChild;flat=sweep.lastChild;
-  flat.appendChild(mk);
+  lit.appendChild(art);flat.appendChild(mk);
   ov.appendChild(slot);
 
   var r=src.getBoundingClientRect(),
@@ -128,32 +144,41 @@ function start(){
   /* 1. the wordmark rises out of its mask, letter by letter */
   for(i=0;i<L.length;i++)
     A(L[i],[{transform:'translateY(118%)'},{transform:'translateY(0)'}],
-          {duration:360,delay:30+i*28,easing:rise,fill:'both'});
-  A(tag,[{opacity:0},{opacity:.75}],{duration:280,delay:260,easing:'ease-out',fill:'both'});
-  A(tag,[{opacity:.75},{opacity:0}],{duration:200,delay:820,easing:'ease-in',fill:'forwards'});
+          {duration:D(360),delay:D(30)+i*D(28),easing:rise,fill:'both'});
+  A(tag,[{opacity:0},{opacity:.75}],{duration:D(280),delay:D(260),easing:'ease-out',fill:'both'});
+  A(tag,[{opacity:.75},{opacity:0}],{duration:D(200),delay:D(820),easing:'ease-in',fill:'forwards'});
   /* 2. the letters clear away and the wave sweeps in lit, and settles. The sweep runs on
         the wrapper, so the filtered art underneath is rasterised once and only moved. */
   for(i=0;i<L.length;i++)
     A(L[i],[{transform:'translateY(0)'},{transform:'translateY(-118%)'}],
-          {duration:260,delay:860+i*11,easing:'cubic-bezier(.5,0,.75,0)',fill:'forwards'});
+          {duration:D(260),delay:D(860)+i*D(11),easing:'cubic-bezier(.5,0,.75,0)',fill:'forwards'});
   A(sweep,[{transform:'translateX(-13%) scale(1.06)',opacity:0},{transform:'none',opacity:1}],
-       {duration:560,delay:1110,easing:'cubic-bezier(.16,.84,.3,1)',fill:'both'});
-  /* 2b. it holds lit for a beat, then cools into the flat mark. The flat one leads the
-         fade so the two never thin out together; then the lit one leaves the tree, and
-         the filters are gone well before anything scales. */
-  A(flat,[{opacity:0},{opacity:1}],{duration:110,delay:1760,easing:'ease-out',fill:'forwards'});
-  A(lit,[{opacity:1},{opacity:0}],{duration:110,delay:1770,easing:'ease-in',fill:'forwards'})
-    .onfinish=function(){lit.style.display='none'};
+       {duration:D(560),delay:D(1110),easing:'cubic-bezier(.16,.84,.3,1)',fill:'both'});
+  /* 2b. The render and the flat mark are not the same wave: best fit leaves a mean of
+         0.38 and a worst of 1.21 of the mark's 100 units, about 4px at phone size. A
+         dissolve would show that as a slide, so the two are never on screen together —
+         the swap is a cut, on the exact frame the wave starts moving to the masthead,
+         where the motion covers it. Which build is on show is settled just before the
+         wave is due, when the render has had every millisecond it is going to get. */
+  litely=setTimeout(function(){
+    if(!artOK)return;                       /* not here yet: the flat mark carries the arrival */
+    lit.style.opacity='1';flat.style.opacity='0';
+  },D(1110));
+  /* step-start: the end value holds for the whole interval, so no frame can ever catch
+     these two part way and show one through the other */
+  A(flat,[{opacity:0},{opacity:1}],{duration:D(60),delay:D(1890),easing:'step-start',fill:'forwards'});
+  A(lit,[{opacity:1},{opacity:0}],{duration:D(60),delay:D(1890),easing:'step-start',fill:'forwards'})
+    .onfinish=function(){lit.style.display='none'};   /* the render leaves before the flight */
   /* 3. the screen parts along that same curve */
   A(ov.querySelector('.intro-top'),[{transform:'translateY(0)'},{transform:'translateY(-101%)'}],
-       {duration:740,delay:1800,easing:door,fill:'forwards'});
+       {duration:D(740),delay:D(1800),easing:door,fill:'forwards'});
   A(ov.querySelector('.intro-bot'),[{transform:'translateY(0)'},{transform:'translateY(101%)'}],
-       {duration:740,delay:1800,easing:door,fill:'forwards'});
+       {duration:D(740),delay:D(1800),easing:door,fill:'forwards'});
   /* 4. and the flat mark goes home to the masthead */
   if(lands)A(slot,[{transform:'none'},{transform:'translate('+(r.left-x0).toFixed(2)+'px,'
         +(r.top-y0).toFixed(2)+'px) scale('+(r.width/Wm).toFixed(5)+')'}],
-       {duration:620,delay:1890,easing:'cubic-bezier(.5,0,.2,1)',fill:'forwards'});
-  else A(sweep,[{opacity:1},{opacity:0}],{duration:400,delay:1950,easing:'ease-in',fill:'forwards'});
+       {duration:D(620),delay:D(1890),easing:'cubic-bezier(.5,0,.2,1)',fill:'forwards'});
+  else A(sweep,[{opacity:1},{opacity:0}],{duration:D(400),delay:D(1950),easing:'ease-in',fill:'forwards'});
 
   timer=setTimeout(finish,SPAN);
 }
