@@ -601,18 +601,23 @@ html:not(.js) .isle{position:static;width:auto;margin:0}
 .intro-tag{margin:1.4em 0 0;opacity:0;color:var(--sand);
   font:600 clamp(9px,2.4vw,12px)/1 var(--sans);letter-spacing:.34em;text-transform:uppercase}
 /* The wave, in layers. Only the divs ever move: .intro-wave carries the flight into the
-   masthead, .intro-sweep the arrival, and .intro-lit/.intro-flat the cross-fade between
-   the two builds. The SVGs take no transform and no opacity of their own, so the lit
-   build's two filters are rasterised once and from then on only the result is moved —
-   transform a filtered element itself and some engines redraw the filter every frame. */
+   masthead and .intro-sweep the arrival, while .intro-lit and .intro-flat only ever swap,
+   on one frame, under that movement. Neither build is transformed itself. */
 .intro-wave{position:absolute;transform-origin:0 0;will-change:transform}
 .intro-sweep{position:absolute;inset:0;opacity:0;transform-origin:50% 50%;
   will-change:transform,opacity}
-.intro-lit,.intro-flat{position:absolute;inset:0;will-change:opacity}  /* promoted up front:
-     the cross-fade is the one moment that would otherwise have to rasterise the lit
-     build's filters, and it is the one moment with nothing else to spare */
-.intro-lit{opacity:1}
-.intro-flat{opacity:0}
+.intro-lit,.intro-flat{position:absolute;inset:0;will-change:opacity}
+/* the flat mark is what shows by default, so a render that has not arrived costs the
+   curtain its lighting and nothing else; the script raises .intro-lit only once the
+   render has decoded */
+.intro-lit{opacity:0}
+.intro-flat{opacity:1}
 .intro-wave svg{position:absolute;inset:0;display:block;width:100%;height:100%}
 .intro-flat svg{fill:var(--sand);stroke:none}   /* the masthead's own colour, so it lands into it */
+/* Peter's render is a different wave from the drawn mark — best fit over its centre line
+   leaves a mean of 0.38 and a worst of 1.21 of the mark's 100 units. These four numbers
+   are that fit, as percentages of the mark's own box, so the lit wave sits as nearly on
+   the flat one as it can; the rest is why the swap is a cut and not a dissolve. */
+.intro-lit img{position:absolute;left:.686%;top:-27.116%;width:102.820%;height:141.954%;
+  display:block;max-width:none}
 @media (prefers-reduced-motion:reduce){.intro{display:none}}
