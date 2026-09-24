@@ -59,7 +59,7 @@ the source that produced it — the template, `style.css`, `_script.html`, or `b
 
 Source (edit these):
 - `site-src/build_homepage.py` — all layout logic, plus the `FAMILIES`, `CATEGORIES`,
-  `FEATURED`, `GOAL_TILES`, `FINDER`, `ISLANDS`, `CAROUSELS` tables
+  `FEATURED`, `GOAL_TILES`, `ISLANDS`, `CAROUSELS` tables
 - `site-src/homepage.template.html`, `site-src/category.template.html`
 - `site-src/_header.html`, `_footer.html`, `_dialogs.html`, `_icons.html`, `_script.html`, `_intro.html`
 - `site-src/mark-glow.svg` — the lit wave the opening curtain arrives on. JSON-encoded into the
