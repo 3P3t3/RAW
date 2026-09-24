@@ -10,23 +10,10 @@
       <ul class="menu-list">
         <li><a href="{{HOME}}#goals">Goals <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="{{HOME}}#results" data-all>All products <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-        <li><button type="button" data-open-finder>Finder <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button></li>
+        <li><a href="{{HOME}}#macros">Macros <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ul>
       <!-- the consult leaves the list and becomes the one filled thing here, as in the mast -->
       <a class="btn menu-cta" href="{{HOME}}#consult">Book a consult</a>
     </nav>
   </div>
 </dialog>
-
-<!-- Finder bottom sheet -->
-<dialog class="sheet" id="finder-sheet" aria-labelledby="finder-title">
-  <div class="sheet-in">
-    <div class="sheet-top">
-      <button class="icon-btn" type="button" id="finder-back" aria-label="Previous question"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button>
-      <p class="q-step" id="finder-step">Question 1 of 3</p>
-      <button class="icon-btn" type="button" data-close aria-label="Close finder"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
-    </div>
-    <div id="finder-body"></div>
-  </div>
-</dialog>
-

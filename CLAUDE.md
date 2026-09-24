@@ -77,6 +77,9 @@ Generated (never hand-edit; the next build overwrites them):
   `-protein.html`, `-recovery.html`, `-skin-redefined.html`
 - `style.css`, `assets/products/`, `assets/cutouts/`, `assets/.cut-version`
 
+`docs/macro-calculator.md` records the homepage macro calculator: where the maths came from, every
+formula and rounding in `mcCalc` in `_script.html`, and worked examples. Read it before touching them.
+
 `index.html` is a hand-written redirect to `homepage.html` and is not generated.
 
 `assets/wave-horizon.webp` is the footer's horizon: Peter's lit wave, cropped to the wave band

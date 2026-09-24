@@ -3,7 +3,7 @@
 Run from the project folder:  python3 site-src/build_homepage.py
 Edit share-links.csv (product, share_link, photo) and re-run to update the site.
 """
-import csv, hashlib, html, inspect, json, os, re, shutil
+import csv, hashlib, html, inspect, os, re, shutil
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, 'site-src', 'homepage.template.html')
@@ -89,8 +89,8 @@ CAROUSELS = {
 SHELF_VIEW = 'ring'
 
 SHELF_LINE = {  # the line under each shelf name
-    'recovery': 'After the session', 'hydration': 'Electrolytes', 'energy-focus': 'Cans & capsules',
-    'protein': 'Whey, bars, crisps', 'fat-loss': 'Thermogenic', 'daily-foundations': 'Everyday basics',
+    'recovery': 'After the session', 'hydration': 'Long, hot sessions', 'energy-focus': 'Before the session',
+    'protein': 'Hitting your protein', 'fat-loss': 'Training to lean out', 'daily-foundations': 'Everyday basics',
     'skin-redefined': 'Skin & overnight',
 }
 
@@ -128,32 +128,11 @@ FEATURED = [  # props-free pack shots, so the grid reads as one series
 
 GOAL_NAMES = {'R': 'Recovery', 'L': 'Lean mass', 'E': 'Endurance', 'S': 'Sleep'}
 
-GOAL_TILES = [  # goal, name, line, product shown in the goal index (none of these repeat in the picks)
+GOAL_TILES = [  # goal, name, line, product shown in the goal index
     ('R', 'Recovery', 'Bounce back between sessions', 'XS Post-Workout Recovery - Fruit Punch (12 Stick Packs)'),
     ('L', 'Lean Mass', 'Build muscle and keep it', 'XS Sports Protein Bars - Chocolate Peanut Butter'),
     ('E', 'Endurance', 'Energy and hydration that lasts', 'XS Sports Twist Tubes - Raspberry Lemonade'),
     ('S', 'Sleep &amp; Longevity', 'Rest deeper, age well', 'Nutrilite Sleep Health'),
-]
-
-# Finder candidates: one per product family, each with a plain-language reason (no health claims).
-FINDER = [
-    ('whey', 'XS Grass-Fed Whey Protein - Chocolate', 'Grass-fed whey protein to help you hit your daily protein, shaken up after training.'),
-    ('creatine', 'XS Creatine+', 'Creatine in one simple daily scoop, a staple for strength and power work.'),
-    ('recovery', 'XS Post-Workout Recovery - Fruit Punch (30 Serving Pouch)', 'Made for right after training, when you want to refuel in one drink.'),
-    ('multiplier', 'XS Muscle Multiplier - Berry Blast', 'A flavored mix to sip during or after lifting sessions.'),
-    ('preworkout', 'XS Pre-Workout Boost - Blue Raspberry (30 Serving Pouch)', 'Mixed before a session when you want more drive in your workout.'),
-    ('coco', 'XS CocoWater Hydration Drink Mix - Pineapple/Coconut', 'A hydration mix for long, sweaty sessions and hot days.'),
-    ('energy', 'XS Energy Drink 12 oz - Variety Case', 'Zero-sugar energy drinks, cold and ready when you need a lift before training.'),
-    ('tablets', 'XS Energy + Focus Dietary Supplement - 30 Tablets', 'Energy in tablet form, for when you would rather skip the can.'),
-    ('tubes', 'XS Sports Twist Tubes - Raspberry Lemonade', 'Pocket-size tubes you twist into a water bottle on the go.'),
-    ('shake', 'XS Sports Protein Shakes - Rich Chocolate', 'Ready-to-drink protein for after training, no shaker needed.'),
-    ('bar', 'XS Sports Protein Bars - Chocolate Peanut Butter', 'A protein bar that can live in your gym bag.'),
-    ('crisps', 'XS Protein Crisps - Sriracha Lime', 'A savory, crunchy protein snack between meals.'),
-    ('cbd', 'XS CBD Cream', 'A CBD cream to massage into the spots that feel worked after training.'),
-    ('sleep', 'Nutrilite Sleep Health', 'A nightly supplement from Nutrilite to build into your wind-down routine.'),
-    ('gummies', 'n* by Nutrilite Sweet Dreams - Sleep Gummies', 'A bedtime gummy for the last step of your evening routine.'),
-    ('tea', 'Nutrilite Organics Chamomile Tea', 'Organic chamomile tea, a caffeine-free way to close out the day.'),
-    ('probiotic', 'Nutrilite Balance Within Probiotic', 'A daily probiotic for the long-game side of your health.'),
 ]
 
 
@@ -263,7 +242,7 @@ def main():
             p['img'] = ''
         products.append(p)
     by = {p['product']: p for p in products}
-    for n in FEATURED + [t[3] for t in GOAL_TILES] + [f[1] for f in FINDER]:
+    for n in FEATURED + [t[3] for t in GOAL_TILES]:
         assert n in by, f'Missing product in CSV: {n}'
 
     cat_of = {}
@@ -350,12 +329,6 @@ def main():
     order = sorted(products, key=lambda pr: pr['name'].lower())
     grid = [card(pr, i) for i, pr in enumerate(order)]
 
-    finder = {}
-    for key, name, why in FINDER:
-        pr = by[name]
-        finder[key] = dict(name=pr['name'], desc=pr['desc'], img=pr['img'], url=pr['share_link'], g=pr['goals'], form=pr['form'], why=why)
-    finder_json = json.dumps(finder, ensure_ascii=False).replace('</', '<\\/')
-
     part = lambda n: open(os.path.join(ROOT, 'site-src', n)).read()
     style, header, footer, dialogs, script, icons = (part('style.css'), part('_header.html'), part('_footer.html'),
                                                      part('_dialogs.html'), part('_script.html'), part('_icons.html'))
@@ -364,8 +337,7 @@ def main():
     style_href = 'style.css?v=' + hashlib.sha1(style.encode()).hexdigest()[:8]  # bust the cache when the css moves
     shared = {'{{STYLE}}': style_href, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{SCRIPT}}': script,
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)), '{{CONSULT_URL}}': CONSULT_URL,
-              '{{BASE}}': BASE,
-              '{{FINDER_DATA}}': finder_json}
+              '{{BASE}}': BASE}
 
     os.makedirs(CUTS, exist_ok=True)
     podium = []

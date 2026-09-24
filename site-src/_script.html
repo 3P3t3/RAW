@@ -6,11 +6,8 @@ function $(s,c){return (c||doc).querySelector(s)}
 function $$(s,c){return Array.prototype.slice.call((c||doc).querySelectorAll(s))}
 doc.addEventListener('touchstart',function(){},{passive:true}); // enables :active on iOS
 
-var P={{FINDER_DATA}};
-var GOALS={R:'Recovery',L:'Lean Mass',E:'Endurance',S:'Sleep & Longevity'};
 var live=$('#live');
 function say(t){live.textContent='';setTimeout(function(){live.textContent=t},30)}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 
 /* Motion: reveal on viewport entry */
 if(html.classList.contains('motion')){
@@ -77,7 +74,6 @@ $('#search').addEventListener('submit',function(e){
 var urlQ=new URLSearchParams(location.search).get('q');
 if(urlQ&&grid&&fbar){q.value=urlQ;search(urlQ.toLowerCase())}
 else if(results&&location.hash==='#results')showAll();          /* arrived from another page */
-var ALL_HREF=results?'#results':'homepage.html#results';
 
 /* Flavour carousel: a continuous loop. It drifts on its own, a swipe or the arrows take the
    wheel, and it picks the drift back up once the reader stops. There is no end to reach: a
@@ -129,67 +125,16 @@ if(car){
   else glide();
 }
 
-/* Dialogs: full-screen menu + finder sheet */
-var menu=$('#menu'),sheet=$('#finder-sheet');
+/* Dialogs: the full-screen menu */
+var menu=$('#menu');
 function openD(d){if(!d.open){d.showModal();html.classList.add('locked')}}
-[menu,sheet].forEach(function(d){
-  d.addEventListener('close',function(){if(!menu.open&&!sheet.open)html.classList.remove('locked')});
-  d.addEventListener('click',function(e){if(e.target===d)d.close()});
-});
+menu.addEventListener('close',function(){html.classList.remove('locked')});
+menu.addEventListener('click',function(e){if(e.target===menu)menu.close()});
 $$('[data-open-menu]').forEach(function(b){b.addEventListener('click',function(){openD(menu)})});
 $$('[data-close]').forEach(function(b){b.addEventListener('click',function(){b.closest('dialog').close()})});
 $$('a',menu).forEach(function(a){a.addEventListener('click',function(){menu.close()})});
 /* the menu button survives to 1024 now, so only close the panel where the inline nav takes over */
 matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
-
-/* Finder: three questions, one per screen, two results */
-var Q=[
-  {q:'What does most of your training look like?',o:[['Lifting and strength work','Lifting',{L:2,R:1}],['Running, cycling or rowing','Endurance',{E:2,R:1}],['A mix of everything','Mixed',{L:1,E:1,R:1}],['Walking, yoga, staying mobile','Mobility',{S:2,R:1}]]},
-  {q:'What would help most right now?',o:[['Recovering between sessions','Recovery',{R:3}],['Building or keeping muscle','Muscle',{L:3}],['Energy and hydration for long efforts','Energy',{E:3}],['Winding down and sleeping well','Sleep',{S:3}]]},
-  {q:'How do you like to take it?',o:[['Powder, mixed into a drink','Powder',{powder:1.5}],['Ready to drink or eat','Ready',{ready:1.5}],['Tablets, capsules or gummies','Tablets',{pills:1.5}],['No preference','Either',{}]]}
-];
-var fBody=$('#finder-body'),fStep=$('#finder-step'),fBack=$('#finder-back'),step=0,ans=[];
-function picks(){
-  var w={R:0,L:0,E:0,S:0,powder:0,ready:0,pills:0};
-  ans.forEach(function(a,i){var m=Q[i].o[a][2];for(var k in m)w[k]+=m[k]});
-  return Object.keys(P).map(function(id,i){
-    var p=P[id],s=w[p.form]||0;
-    p.g.split('').forEach(function(g,j){s+=w[g]*(j?.6:1)});
-    return {id:id,s:s,i:i};
-  }).sort(function(a,b){return b.s-a.s||a.i-b.i}).slice(0,2);
-}
-function render(focus){
-  fBack.style.visibility=step?'visible':'hidden';
-  if(step<Q.length){
-    var c=Q[step];
-    fStep.textContent='Question '+(step+1)+' of '+Q.length;
-    fBody.innerHTML='<h2 class="q" id="finder-title" tabindex="-1">'+c.q+'</h2><div class="opts">'+c.o.map(function(o,i){
-      var on=ans[step]===i;
-      return '<button type="button" class="opt'+(on?' is-picked':'')+'" data-i="'+i+'"><span>'+o[0]+(on?'<span class="vh"> (your earlier answer)</span>':'')+'</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>';
-    }).join('')+'</div>';
-  }else{
-    fStep.textContent='Your match';
-    fBody.innerHTML='<h2 class="q" id="finder-title" tabindex="-1">Two to start with</h2><p class="basis">Based on: '+ans.map(function(a,i){return Q[i].o[a][1]}).join(' · ')+'</p><ul class="picks">'+picks().map(function(r){
-      var p=P[r.id];
-      return '<li class="pick"><span class="shot"><img src="'+esc(p.img)+'" alt="" width="480" height="480"></span><div><h3 class="p-name">'+esc(p.name)+'</h3><p class="p-desc">'+esc(p.desc)+'</p><p class="why">'+esc(p.why)+'</p><a class="buy" href="'+esc(p.url)+'" target="_blank" rel="noopener">Buy on Amway<span class="vh"> '+esc(p.name)+' (opens in a new tab)</span></a></div></li>';
-    }).join('')+'</ul><div class="sheet-foot"><button class="tlink" type="button" id="finder-restart">Start over</button><a class="tlink" href="'+ALL_HREF+'" id="finder-shop">See all products</a></div>';
-  }
-  if(focus)$('#finder-title').focus();
-}
-fBody.addEventListener('click',function(e){
-  var o=e.target.closest('.opt');
-  if(o){ans[step]=+o.dataset.i;step++;render(true);return}
-  if(e.target.closest('#finder-restart')){step=0;ans=[];render(true);return}
-  if(e.target.closest('#finder-shop')){sheet.close();if(results){e.preventDefault();showAll()}}
-});
-fBack.addEventListener('click',function(){if(step){step--;render(true)}});
-$$('.q-opt').forEach(function(b){b.addEventListener('click',function(){ans=[+b.dataset.first];step=1;render(false);openD(sheet);$('#finder-title').focus()})});
-$$('[data-open-finder]').forEach(function(b){b.addEventListener('click',function(e){
-  e.preventDefault();
-  if(menu.open)menu.close();
-  if(step>=Q.length){step=0;ans=[]}
-  render(false);openD(sheet);$('#finder-title').focus();
-})});
 
 /* Light through glass: a small caustics shader over the category banner */
 $$('[data-caustics]').forEach(function(cv){
@@ -396,7 +341,7 @@ if(cform){
       val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()};
   var line=function(){
     var g=val('goal'),t=val('training');
-    if(!g&&!t)return 'On video or by phone.';
+    if(!g&&!t)return 'I call you.';
     return 'Fifteen minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
@@ -489,9 +434,9 @@ if(mcForm){
       MCKEY='aspire-macros',MCFIELDS='sex age weight ft inch activity basis frame trained goal loss'.split(' '),
       mcAt=0,mcDone=false,mcSum='';
   var MCBASIS={
-    standard:'General population, new clients, non-lifters.',
-    better:'Active, consistent gym-goers, not yet multi-year trained lifters.',
-    trained:'Real training history, tracks intake, known lean mass. Uses your actual bodyweight.'
+    standard:'New to training, or coming back to it.',
+    better:'In the gym consistently, without years behind you.',
+    trained:'Years of training, and you track what you eat.'
   };
   var MCGOAL={
     loss:'Reassess in two to three weeks. If the trend has stalled for a fortnight, take another 5 to 10% off.',
@@ -766,12 +711,13 @@ if(mcForm){
   },{rootMargin:'400px 0px'}).observe(im.closest('section'));
 })();
 
-/* The fizz: the full glass behind the finder, bubbling, drains away as you scroll. The
+/* The fizz: the full glass behind the hydration line, bubbling, drains away as you scroll. The
    level is a pure function of scroll (eased a touch, so it pours rather than jumps), so
    scrolling back up refills it. It starts as the band's top reaches the top of the window
    and is empty by the time the stage lets go, just before the consult shows. Above the
    surface the canvas is chalk; below it, the glass shows through and bubbles rise to the
-   surface and pop there. One canvas, redrawn each frame while the band is on screen. */
+   surface and pop there. One canvas, redrawn each frame while the band is on screen.
+   The cup rides the same level: see rise() below. */
 (function(){
   var run=$('#fizz-bg');
   if(!run||!html.classList.contains('motion'))return;
@@ -781,6 +727,7 @@ if(mcForm){
   var w=0,h=0,r=1,bub=null,step=16;
   var bubbles=[],MAX=120,spawn=0,lastY=scrollY,kick=0,t0=0,t=0,raf=0,on=false;
   var level=0,target=0,slosh=0,settled=false;
+  var cup=$('#hy-cup'),tide=$('.hy-tide',sec),rip=$('.hy-ripple',sec),risen=-1;
 
   function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
 
@@ -800,7 +747,7 @@ if(mcForm){
     cv.width=Math.round(w*r);cv.height=Math.round(h*r);
     MAX=w<600?40:120;step=w<600?13:18;
     if(!bub)bub=makeBubble();
-    settled=false;draw();
+    settled=false;draw();rise();
   }
 
   /* How empty the glass should be, 0..1: 0 while the band's top is below the window's top,
@@ -878,11 +825,30 @@ if(mcForm){
     }
     /* dry and still: one last chalk frame, then nothing until the next scroll */
     var dry=level>=1&&target>=1&&!bubbles.length&&Math.abs(slosh)<.5;
-    if(!(dry&&settled))draw();
+    if(!(dry&&settled)){draw();rise()}
     settled=dry;
     if(on&&!dry)raf=requestAnimationFrame(tick);
   }
   function wake(){if(on&&!raf){raf=requestAnimationFrame(tick)}}
+
+  /* The cup: nothing until the falling surface has cleared the tide line at the foot of its
+     well, then it comes up through that line and is all the way up as the glass runs dry.
+     It rides the eased level, so it can never be ahead of the water. Rects are read first,
+     then transform and opacity are written: no layout. */
+  function rise(){
+    if(!cup)return;
+    var s=stage.getBoundingClientRect().top,
+        line=tide.getBoundingClientRect().bottom-s+4,         /* just under the tide, in stage terms: a margin for the waves */
+        Y=-EDGE+(h+EDGE*2)*level,end=h+EDGE,
+        p=level>=1?1:end-line<1?0:clamp((Y-line)/(end-line),0,1);
+    p=Math.round(p*p*(3-2*p)*1000)/1000;                   /* eased in and out */
+    if(p===risen)return;
+    risen=p;
+    cup.style.transform='translate3d(0,'+((1-p)*105).toFixed(2)+'%,0)';
+    tide.style.opacity=Math.min(1,p*6).toFixed(3);          /* the mark shows as the water leaves it */
+    rip.style.opacity=(Math.sin(Math.PI*p)*.9).toFixed(3);  /* rings only while it breaks the surface */
+    rip.style.transform='scaleX('+(.8+.5*p).toFixed(3)+')';
+  }
 
   size();
   addEventListener('resize',function(){
@@ -894,8 +860,8 @@ if(mcForm){
   /* only animate while the band is on screen; arriving by a jump, start at the right level */
   new IntersectionObserver(function(es){
     on=es[0].isIntersecting;
-    if(on){level=target=drained();slosh=0;t0=0;lastY=scrollY;settled=false;wake()}
-    else{bubbles.length=0;level=target=drained();slosh=0;draw()}
+    if(on){level=target=drained();slosh=0;t0=0;lastY=scrollY;settled=false;rise();wake()}
+    else{bubbles.length=0;level=target=drained();slosh=0;draw();rise()}
   }).observe(run);
 })();
 
@@ -945,7 +911,7 @@ if(mcForm){
     if(!t||t.id==='sound-toggle')return;
     if(t.closest('.isle'))return sounds.isle();
     if(t.classList.contains('btn'))return sounds.go();
-    if(t.classList.contains('icon-btn')||t.classList.contains('chip')||t.closest('.q-opt,.opt'))return sounds.soft();
+    if(t.classList.contains('icon-btn')||t.classList.contains('chip'))return sounds.soft();
     sounds.tap();
   },{passive:true});
   function paint(){
