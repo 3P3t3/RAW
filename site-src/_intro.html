@@ -99,15 +99,8 @@ function start(){
   ov.removeChild(ov.firstChild);                             /* the flat sheet hands over */
 
   /* the mark itself, cloned straight off the masthead: the same paths, never redrawn */
-  var slot=doc.createElement('div'),mk=src.cloneNode(true),cut;
+  var slot=doc.createElement('div'),mk=src.cloneNode(true);
   mk.removeAttribute('class');
-  /* The masthead carries both builds of the wave and swaps them on a resolution query,
-     because at 1x its slivers land on about one device pixel and grey out. Here the
-     choice is made on the clone itself, by throwing the other build away: a query that
-     fails to match for any reason would leave the curtain's mark reading as a solid
-     slab, and at the 3-7x the intro draws it there is nothing subtle left to protect. */
-  cut=mk.querySelector((win.devicePixelRatio||1)>=1.5?'.m-solid':'.m-full');
-  if(cut)cut.parentNode.removeChild(cut);
   slot.className='intro-wave';
   slot.style.cssText='left:'+x0+'px;top:'+y0+'px;width:'+Wm+'px;height:'+Hm+'px';
   slot.appendChild(mk);
