@@ -319,8 +319,8 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <div class="split-text grow">
         <p class="label">Your numbers</p>
         <h2 id="macros-title"><span>Work out</span> <span>your macros</span></h2>
-        <p>Seven questions, one at a time, then your calories for the day and how they split across protein, fat and carbs. No email and no account: the numbers are on screen the moment you finish.</p>
-        <p class="c-fine">Your answers stay in this browser, so you can wander off and come back to them.</p>
+        <p>Seven questions. Your exact numbers. No email, no catch.</p>
+        <p class="c-fine">Step away anytime. We'll hold your place.</p>
       </div>
       <form class="mc-card grow" id="mc-form" style="--d:1" novalidate>
         <p class="mc-nojs">This one needs JavaScript to do the arithmetic. <a class="tlink" href="#consult">Book a call</a> and we will work your macros out together instead.</p>
@@ -1244,13 +1244,11 @@ if(mcForm){
     $('#mc-c').textContent=r.carbG+'g';$('#mc-cc').textContent=r.carbCal+' cal';
     var notes=[];
     /* the numbers stand as calculated; what they do not add up to is said, not fixed */
-    if(r.clamped)notes.push(['mc-warn','Protein and fat alone come to '+mcCal(r.proteinCal+r.fatCal)+
-      ' cal, more than this '+mcCal(r.target)+' cal target, so carbs land at zero. Nothing above has '+
-      'been adjusted to hide that. The two levers are the protein basis, where Standard reads protein '+
-      'off your height instead, and the deficit, where Moderate takes 15% rather than 25%. Ease one or '+
-      'both until the carbs have room.']);
-    if(r.floored)notes.push(['mc-warn','Held at 1,100 cal. The formula asked for less than that, and '+
-      'this calculator does not go below it. A gentler deficit is the better way down.']);
+    if(r.clamped)notes.push(['mc-warn','Hold it — the math isn’t mathing. Your protein and fat already use '+
+      mcCal(r.proteinCal+r.fatCal)+' of your '+mcCal(r.target)+' calories, leaving nothing for carbs. '+
+      'This isn’t sustainable. Ease the deficit or the protein setting and try again.']);
+    if(r.floored)notes.push(['mc-warn','Floor reached. We don’t go below 1,100 calories — '+
+      'a gentler deficit is the better way down.']);
     notes.push(['mc-note',MCGOAL[mcGet('goal')]||'']);
     mcNotes.textContent='';
     notes.forEach(function(n){
