@@ -113,7 +113,7 @@
       <div class="split-text grow">
         <p class="label">Your numbers</p>
         <h2 id="cat-macros-title"><span>Not sure where</span> <span>to start?</span></h2>
-        <p>Start with your numbers. Seven questions, then your calories, protein, fat and carbs for the day.</p>
+        <p>The math behind a higher you.</p>
         <a class="btn" href="homepage.html#macros">Work out your macros</a>
       </div>
     </div>
@@ -513,7 +513,7 @@ if(cform){
       val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()};
   var line=function(){
     var g=val('goal'),t=val('training');
-    if(!g&&!t)return 'On video or by phone.';
+    if(!g&&!t)return 'I call you.';
     return 'Fifteen minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
@@ -606,9 +606,9 @@ if(mcForm){
       MCKEY='aspire-macros',MCFIELDS='sex age weight ft inch activity basis frame trained goal loss'.split(' '),
       mcAt=0,mcDone=false,mcSum='';
   var MCBASIS={
-    standard:'General population, new clients, non-lifters.',
-    better:'Active, consistent gym-goers, not yet multi-year trained lifters.',
-    trained:'Real training history, tracks intake, known lean mass. Uses your actual bodyweight.'
+    standard:'New to training, or coming back to it.',
+    better:'In the gym consistently, without years behind you.',
+    trained:'Years of training, and you track what you eat.'
   };
   var MCGOAL={
     loss:'Reassess in two to three weeks. If the trend has stalled for a fortnight, take another 5 to 10% off.',

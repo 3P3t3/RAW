@@ -44,7 +44,7 @@
       <div class="hero-copy">
         <p class="label">Sports nutrition &amp; wellness</p>
         <h1 id="hero-title"><span>Picked</span> <span>for how</span> <span>you train.</span></h1>
-        <p class="sub">Nutrilite and XS nutrition, hydration and sleep support, chosen by goal.</p>
+        
         <div class="hero-actions">
           <a class="btn" href="#macros">Work out your macros</a>
           <a class="tlink" href="#results" data-all>Shop all products</a>
@@ -76,8 +76,7 @@
           <div class="mc-prog" id="mc-prog" aria-hidden="true"><span class="is-on"></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
           <fieldset class="mc-step">
-            <legend class="mc-q" tabindex="-1">Which line of the formula applies to you?</legend>
-            <p class="mc-help">Mifflin&#8211;St Jeor adds 5 calories for male and takes 161 off for female. This is the only place it is used.</p>
+            <legend class="mc-q" tabindex="-1">Male or female?</legend>
             <div class="mc-opts cols">
               <label class="mc-opt"><input type="radio" name="sex" value="female"><span>Female</span></label>
               <label class="mc-opt"><input type="radio" name="sex" value="male"><span>Male</span></label>
@@ -117,12 +116,12 @@
           </fieldset>
 
           <fieldset class="mc-step" hidden>
-            <legend class="mc-q" tabindex="-1">How should we set your protein?</legend>
-            <p class="mc-help">Standard and Better read protein off your height, not your weight, so two people the same height get the same protein target. Trained uses your actual bodyweight.</p>
+            <legend class="mc-q" tabindex="-1">Where are you at with training?</legend>
+            
             <div class="mc-opts">
-              <label class="mc-opt"><input type="radio" name="basis" value="standard" checked><span>Standard</span></label>
-              <label class="mc-opt"><input type="radio" name="basis" value="better"><span>Better</span></label>
-              <label class="mc-opt"><input type="radio" name="basis" value="trained"><span>Trained</span></label>
+              <label class="mc-opt"><input type="radio" name="basis" value="standard" checked><span>New to this</span></label>
+              <label class="mc-opt"><input type="radio" name="basis" value="better"><span>Training regularly</span></label>
+              <label class="mc-opt"><input type="radio" name="basis" value="trained"><span>Years in</span></label>
             </div>
             <p class="mc-note" id="mc-basis-note"></p>
             <fieldset class="mc-sub" id="mc-frame" hidden>
@@ -134,7 +133,7 @@
               </div>
             </fieldset>
             <fieldset class="mc-sub" id="mc-trained" hidden>
-              <legend>Training history</legend>
+              <legend>Protein target</legend>
               <div class="mc-opts cols">
                 <label class="mc-opt"><input type="radio" name="trained" value="1" checked><span>1&#8202;g per lb of bodyweight</span></label>
                 <label class="mc-opt"><input type="radio" name="trained" value="1.2"><span>1.2&#8202;g per lb of bodyweight</span></label>
@@ -266,13 +265,13 @@
       <div class="split-text grow">
         <p class="label">One to one</p>
         <h2 id="consult-title"><span>Talk through</span> <span>your stack</span></h2>
-        <p>Fifteen minutes on a call: your macros, what you already take, and the smallest stack that gets you where you are going. The slot holds a half hour; we rarely need it. Answer four things first and the call starts on you instead of on catching up.</p>
+        <p>Fifteen minutes, one to one. Answer four things first and we skip the catching up.</p>
         <ul class="c-list">
           <li>Your macros, and whether the split is worth changing</li>
           <li>What you already take, and what it is doing</li>
           <li>The smallest stack that moves the goal, and what to drop</li>
         </ul>
-        <p class="c-fine">Your answers travel with the booking.</p>
+        
       </div>
       <form class="c-card grow" id="consult-form" data-consult="{{CONSULT_URL}}" style="--d:1">
         <fieldset class="c-q">
@@ -300,7 +299,7 @@
         <div class="c-field"><label for="c-note">Anything you want covered? <span>Optional</span></label>
           <input id="c-note" name="note" type="text" autocomplete="off" placeholder="Eating around shift work…"></div>
         <button class="btn" type="submit">Pick a time</button>
-        <p class="c-sum" id="consult-sum" aria-live="polite">On video or by phone.</p>
+        <p class="c-sum" id="consult-sum" aria-live="polite">I call you.</p>
       </form>
       <!-- the calendar mounts here in place of the form, once someone has answered -->
       <div class="c-embed" id="consult-embed" hidden></div>

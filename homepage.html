@@ -279,7 +279,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <div class="hero-copy">
         <p class="label">Sports nutrition &amp; wellness</p>
         <h1 id="hero-title"><span>Picked</span> <span>for how</span> <span>you train.</span></h1>
-        <p class="sub">Nutrilite and XS nutrition, hydration and sleep support, chosen by goal.</p>
+        
         <div class="hero-actions">
           <a class="btn" href="#macros">Work out your macros</a>
           <a class="tlink" href="#results" data-all>Shop all products</a>
@@ -295,10 +295,10 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <div class="archipelago" id="archipelago">
         <ul class="isles">
           <li class="isle" style="--i:0"><a href="category-recovery.html"><span class="isle-art"><img src="assets/islands/recovery.webp" alt="" width="760" height="760" fetchpriority="high"></span><span class="isle-label"><span class="isle-name">Recovery</span><span class="isle-note">After the session</span></span></a></li>
-          <li class="isle" style="--i:1"><a href="category-hydration.html"><span class="isle-art"><img src="assets/islands/hydration.webp" alt="" width="760" height="760" fetchpriority="high"></span><span class="isle-label"><span class="isle-name">Hydration</span><span class="isle-note">Electrolytes</span></span></a></li>
-          <li class="isle" style="--i:2"><a href="category-energy-focus.html"><span class="isle-art"><img src="assets/islands/energy-focus.webp" alt="" width="760" height="760" fetchpriority="high"></span><span class="isle-label"><span class="isle-name">Energy &amp; Focus</span><span class="isle-note">Cans & capsules</span></span></a></li>
-          <li class="isle" style="--i:3"><a href="category-protein.html"><span class="isle-art"><img src="assets/islands/protein.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Protein Snack Pack</span><span class="isle-note">Whey, bars, crisps</span></span></a></li>
-          <li class="isle" style="--i:4"><a href="category-fat-loss.html"><span class="isle-art"><img src="assets/islands/fat-loss.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Fat Loss</span><span class="isle-note">Thermogenic</span></span></a></li>
+          <li class="isle" style="--i:1"><a href="category-hydration.html"><span class="isle-art"><img src="assets/islands/hydration.webp" alt="" width="760" height="760" fetchpriority="high"></span><span class="isle-label"><span class="isle-name">Hydration</span><span class="isle-note">Long, hot sessions</span></span></a></li>
+          <li class="isle" style="--i:2"><a href="category-energy-focus.html"><span class="isle-art"><img src="assets/islands/energy-focus.webp" alt="" width="760" height="760" fetchpriority="high"></span><span class="isle-label"><span class="isle-name">Energy &amp; Focus</span><span class="isle-note">Before the session</span></span></a></li>
+          <li class="isle" style="--i:3"><a href="category-protein.html"><span class="isle-art"><img src="assets/islands/protein.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Protein Snack Pack</span><span class="isle-note">Hitting your protein</span></span></a></li>
+          <li class="isle" style="--i:4"><a href="category-fat-loss.html"><span class="isle-art"><img src="assets/islands/fat-loss.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Fat Loss</span><span class="isle-note">Training to lean out</span></span></a></li>
           <li class="isle" style="--i:5"><a href="category-daily-foundations.html"><span class="isle-art"><img src="assets/islands/daily-foundations.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Daily Foundations</span><span class="isle-note">Everyday basics</span></span></a></li>
           <li class="isle" style="--i:6"><a href="category-skin-redefined.html"><span class="isle-art"><img src="assets/islands/skin-redefined.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Skin Redefined</span><span class="isle-note">Skin & overnight</span></span></a></li>
         </ul>
@@ -329,8 +329,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           <div class="mc-prog" id="mc-prog" aria-hidden="true"><span class="is-on"></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
           <fieldset class="mc-step">
-            <legend class="mc-q" tabindex="-1">Which line of the formula applies to you?</legend>
-            <p class="mc-help">Mifflin&#8211;St Jeor adds 5 calories for male and takes 161 off for female. This is the only place it is used.</p>
+            <legend class="mc-q" tabindex="-1">Male or female?</legend>
             <div class="mc-opts cols">
               <label class="mc-opt"><input type="radio" name="sex" value="female"><span>Female</span></label>
               <label class="mc-opt"><input type="radio" name="sex" value="male"><span>Male</span></label>
@@ -370,12 +369,12 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           </fieldset>
 
           <fieldset class="mc-step" hidden>
-            <legend class="mc-q" tabindex="-1">How should we set your protein?</legend>
-            <p class="mc-help">Standard and Better read protein off your height, not your weight, so two people the same height get the same protein target. Trained uses your actual bodyweight.</p>
+            <legend class="mc-q" tabindex="-1">Where are you at with training?</legend>
+            
             <div class="mc-opts">
-              <label class="mc-opt"><input type="radio" name="basis" value="standard" checked><span>Standard</span></label>
-              <label class="mc-opt"><input type="radio" name="basis" value="better"><span>Better</span></label>
-              <label class="mc-opt"><input type="radio" name="basis" value="trained"><span>Trained</span></label>
+              <label class="mc-opt"><input type="radio" name="basis" value="standard" checked><span>New to this</span></label>
+              <label class="mc-opt"><input type="radio" name="basis" value="better"><span>Training regularly</span></label>
+              <label class="mc-opt"><input type="radio" name="basis" value="trained"><span>Years in</span></label>
             </div>
             <p class="mc-note" id="mc-basis-note"></p>
             <fieldset class="mc-sub" id="mc-frame" hidden>
@@ -387,7 +386,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
               </div>
             </fieldset>
             <fieldset class="mc-sub" id="mc-trained" hidden>
-              <legend>Training history</legend>
+              <legend>Protein target</legend>
               <div class="mc-opts cols">
                 <label class="mc-opt"><input type="radio" name="trained" value="1" checked><span>1&#8202;g per lb of bodyweight</span></label>
                 <label class="mc-opt"><input type="radio" name="trained" value="1.2"><span>1.2&#8202;g per lb of bodyweight</span></label>
@@ -585,13 +584,13 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <div class="split-text grow">
         <p class="label">One to one</p>
         <h2 id="consult-title"><span>Talk through</span> <span>your stack</span></h2>
-        <p>Fifteen minutes on a call: your macros, what you already take, and the smallest stack that gets you where you are going. The slot holds a half hour; we rarely need it. Answer four things first and the call starts on you instead of on catching up.</p>
+        <p>Fifteen minutes, one to one. Answer four things first and we skip the catching up.</p>
         <ul class="c-list">
           <li>Your macros, and whether the split is worth changing</li>
           <li>What you already take, and what it is doing</li>
           <li>The smallest stack that moves the goal, and what to drop</li>
         </ul>
-        <p class="c-fine">Your answers travel with the booking.</p>
+        
       </div>
       <form class="c-card grow" id="consult-form" data-consult="https://calendly.com/3pete/explore" style="--d:1">
         <fieldset class="c-q">
@@ -619,7 +618,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <div class="c-field"><label for="c-note">Anything you want covered? <span>Optional</span></label>
           <input id="c-note" name="note" type="text" autocomplete="off" placeholder="Eating around shift work…"></div>
         <button class="btn" type="submit">Pick a time</button>
-        <p class="c-sum" id="consult-sum" aria-live="polite">On video or by phone.</p>
+        <p class="c-sum" id="consult-sum" aria-live="polite">I call you.</p>
       </form>
       <!-- the calendar mounts here in place of the form, once someone has answered -->
       <div class="c-embed" id="consult-embed" hidden></div>
@@ -1021,7 +1020,7 @@ if(cform){
       val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()};
   var line=function(){
     var g=val('goal'),t=val('training');
-    if(!g&&!t)return 'On video or by phone.';
+    if(!g&&!t)return 'I call you.';
     return 'Fifteen minutes on '+(g?g.toLowerCase():'your goal')+(t?', training '+t.toLowerCase():'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
@@ -1114,9 +1113,9 @@ if(mcForm){
       MCKEY='aspire-macros',MCFIELDS='sex age weight ft inch activity basis frame trained goal loss'.split(' '),
       mcAt=0,mcDone=false,mcSum='';
   var MCBASIS={
-    standard:'General population, new clients, non-lifters.',
-    better:'Active, consistent gym-goers, not yet multi-year trained lifters.',
-    trained:'Real training history, tracks intake, known lean mass. Uses your actual bodyweight.'
+    standard:'New to training, or coming back to it.',
+    better:'In the gym consistently, without years behind you.',
+    trained:'Years of training, and you track what you eat.'
   };
   var MCGOAL={
     loss:'Reassess in two to three weeks. If the trend has stalled for a fortnight, take another 5 to 10% off.',

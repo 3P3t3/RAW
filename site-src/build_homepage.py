@@ -89,8 +89,8 @@ CAROUSELS = {
 SHELF_VIEW = 'ring'
 
 SHELF_LINE = {  # the line under each shelf name
-    'recovery': 'After the session', 'hydration': 'Electrolytes', 'energy-focus': 'Cans & capsules',
-    'protein': 'Whey, bars, crisps', 'fat-loss': 'Thermogenic', 'daily-foundations': 'Everyday basics',
+    'recovery': 'After the session', 'hydration': 'Long, hot sessions', 'energy-focus': 'Before the session',
+    'protein': 'Hitting your protein', 'fat-loss': 'Training to lean out', 'daily-foundations': 'Everyday basics',
     'skin-redefined': 'Skin & overnight',
 }
 
