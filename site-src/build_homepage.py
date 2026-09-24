@@ -79,9 +79,9 @@ CATEGORIES = [
         'Artistry Studio Glow Boss Cleanser + Exfoliator']),
 ]
 
-# The flavour carousel: category slug -> (family prefix to pull, heading, line)
+# The flavor carousel: category slug -> (family prefix to pull, heading, line)
 CAROUSELS = {
-    'energy-focus': ('XS Energy Drink 12 oz', 'Pick your flavour', 'The 12 oz range, one can at a time.'),
+    'energy-focus': ('XS Energy Drink 12 oz', 'Pick your flavor', 'The 12 oz range, one can at a time.'),
 }
 
 # 'strip' is the tabbed goal strip; 'ring' brings back the rotating archipelago.
@@ -195,6 +195,17 @@ def describe(p):
     variant = re.sub(r'^(\d+) Tablets$', r'\1 tablets', variant)
     desc = kind + (' · ' + variant if variant else '')
     return dict(p, name=display, desc=desc, goals=goals, form=form)
+
+
+def plural(n, noun, zero=None):
+    """`1 product`, `2 products`, and something that reads at 0.
+
+    Every count on the site goes through here, so the noun is never written out beside a
+    number by hand and the next single-product shelf pluralizes itself.
+    """
+    if n == 0:
+        return zero if zero is not None else f'no {noun}s'
+    return f'{n} {noun}' if n == 1 else f'{n} {noun}s'
 
 
 def esc(s):
@@ -336,7 +347,8 @@ def main():
     open(STYLE_OUT, 'w').write(style)  # served once and cached, instead of inlined into all eight pages
     style_href = 'style.css?v=' + hashlib.sha1(style.encode()).hexdigest()[:8]  # bust the cache when the css moves
     shared = {'{{STYLE}}': style_href, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{SCRIPT}}': script,
-              '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)), '{{CONSULT_URL}}': CONSULT_URL,
+              '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)),
+              '{{TOTAL_PRODUCTS}}': plural(len(products), 'product', zero='products'), '{{CONSULT_URL}}': CONSULT_URL,
               '{{BASE}}': BASE}
 
     os.makedirs(CUTS, exist_ok=True)
@@ -381,11 +393,11 @@ def main():
                 f'          <li class="slide"><a class="card-link" href="{esc(pr["share_link"])}" target="_blank" rel="noopener">'
                 f'{shot(pr)}<h3 class="p-name">{esc(pr["desc"].split(" · ")[-1])}</h3>'
                 f'<span class="vh">{esc(pr["name"])}, buy on Amway (opens in a new tab)</span></a></li>' for pr in flav)
-            carousel = f'''  <!-- Flavour carousel: glides on its own, arrows or swipe to take over -->
-  <section class="sec carousel-sec" aria-labelledby="flavours-title">
+            carousel = f'''  <!-- Flavor carousel: glides on its own, arrows or swipe to take over -->
+  <section class="sec carousel-sec" aria-labelledby="flavors-title">
     <div class="wrap">
-      <div class="sec-head grow"><h2 id="flavours-title">{chead}</h2>
-        <div class="car-nav"><button class="icon-btn" type="button" data-car="-1" aria-label="Previous flavour"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button><button class="icon-btn" type="button" data-car="1" aria-label="Next flavour"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button></div>
+      <div class="sec-head grow"><h2 id="flavors-title">{chead}</h2>
+        <div class="car-nav"><button class="icon-btn" type="button" data-car="-1" aria-label="Previous flavor"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button><button class="icon-btn" type="button" data-car="1" aria-label="Next flavor"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button></div>
       </div>
       <ul class="carousel" id="carousel" data-autoplay>
 {slides}
@@ -400,7 +412,7 @@ def main():
                 '{{HEADER}}': header.replace('{{HOME}}', 'homepage.html'), '{{HOME}}': 'homepage.html',
                 '{{PAGE_URL}}': BASE + f'category-{slug_}.html',
                 '{{CAT_NAME}}': name, '{{CAT_TAG}}': tag, '{{CAT_HEADING}}': heading,
-                '{{CAT_COUNT}}': str(counts[slug_]), '{{CAT_GRID}}': cgrid, '{{CAROUSEL}}': carousel,
+                '{{CAT_COUNT}}': plural(counts[slug_], 'product', zero='No products yet'), '{{CAT_GRID}}': cgrid, '{{CAROUSEL}}': carousel,
                 '{{CAT_OTHERS}}': cat_rows(only={slug_}), '{{CAT_BG}}': f'assets/bg-{slug_}.webp'}).items():
             page = page.replace(k, v)
         open(os.path.join(ROOT, f'category-{slug_}.html'), 'w').write(page)
