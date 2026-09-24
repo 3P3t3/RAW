@@ -359,6 +359,7 @@ def main():
     part = lambda n: open(os.path.join(ROOT, 'site-src', n)).read()
     style, header, footer, dialogs, script, icons = (part('style.css'), part('_header.html'), part('_footer.html'),
                                                      part('_dialogs.html'), part('_script.html'), part('_icons.html'))
+    intro = part('_intro.html')  # the opening curtain: homepage only, so it is not in `shared`
     open(STYLE_OUT, 'w').write(style)  # served once and cached, instead of inlined into all eight pages
     style_href = 'style.css?v=' + hashlib.sha1(style.encode()).hexdigest()[:8]  # bust the cache when the css moves
     shared = {'{{STYLE}}': style_href, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{SCRIPT}}': script,
@@ -390,7 +391,7 @@ def main():
 
     out = open(SRC).read()
     for k, v in dict(shared, **{'{{HEADER}}': header.replace('{{HOME}}', ''), '{{HOME}}': '',
-                                '{{PAGE_URL}}': BASE + 'homepage.html',
+                                '{{PAGE_URL}}': BASE + 'homepage.html', '{{INTRO}}': intro,
                                 '{{GOALS}}': cat_rows(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves}).items():
         out = out.replace(k, v)
     open(OUT, 'w').write(out)
