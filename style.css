@@ -54,7 +54,7 @@
 html{-webkit-text-size-adjust:100%;scroll-padding-top:var(--mast);background:var(--teal)}
 html.locked{overflow:hidden}
 body::before{content:"";position:fixed;inset:0;z-index:9;pointer-events:none;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.055'/%3E%3C/svg%3E");background-size:160px 160px}
-body{margin:0;background:var(--chalk);color:var(--text);font:16px/1.55 var(--sans);font-optical-sizing:auto;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{margin:0;background:var(--chalk);color:var(--text);font:16px/1.55 var(--sans);font-optical-sizing:auto;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
 h1,h2{font-family:var(--display);font-weight:800;font-stretch:72%;text-transform:uppercase;color:var(--teal);margin:0;line-height:.92;letter-spacing:-.005em;text-wrap:balance}
 h3{font:600 17px/1.3 var(--sans);color:var(--ink);margin:0}
 p{margin:0}
@@ -209,7 +209,13 @@ html:not(.js) .search-toggle{visibility:hidden}
 
 /* 5. Products: one backdrop, no chrome */
 .filter{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-8px 0 24px;padding:8px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.filter p{color:var(--ink)}
+/* The filter line echoes whatever was typed into the search box, so its longest token is
+   a stranger's, not Peter's: "Nothing matches “zzzz…”" is as wide as the reader cares to
+   make it. As a flex item this p had min-width:auto, so it grew to the token's min-content
+   width (403px at 320) and shoved the Close button off the page. min-width:0 lets it
+   shrink, anywhere lets the token break, and Close keeps its own width. */
+.filter p{min-width:0;overflow-wrap:anywhere;color:var(--ink)}
+.filter .tlink{flex:none}
 .grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 12px}
 .card{display:flex;flex-direction:column;min-width:0}
 .card-link{display:block;color:inherit;text-decoration:none}
@@ -229,6 +235,15 @@ html:not(.js) .search-toggle{visibility:hidden}
 .p-name{margin-top:4px;font:500 16px/1.3 var(--sans);color:var(--ink)}
 .card-link{display:grid}
 .p-desc{margin-top:3px;font-size:14px;line-height:1.45;color:var(--text)}
+/* Product copy is Peter's, straight out of share-links.csv, and a flavour can arrive as one
+   unbreakable token: "Strawberry/Watermelon" is 21 characters and no line-break opportunity,
+   because a solidus is not one. At 320 that token is 160px wide in a 127px card and printed
+   over its neighbour. `anywhere` lets it break mid-token as a last resort -- and, unlike
+   break-word, it also drops the token out of the min-content width, so a card in a
+   percentage or auto track cannot be forced wide by it either. Every place a product name
+   or description is printed uses these three classes: both grids, the carousel slides, the
+   podium and the finder's two picks. Guard the class, not the one row in the CSV. */
+.p-tag,.p-name,.p-desc{overflow-wrap:anywhere}
 /* rows share text heights: each card spans three subgrid rows. Both grids also need an
    explicit single column: with only grid-template-rows set, the card's one column is auto,
    and an auto track takes the min-content width of its item. .shot carries aspect-ratio, so
