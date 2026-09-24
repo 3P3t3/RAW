@@ -17,7 +17,7 @@ published at <https://macro-calculator-xi.vercel.app/>, **with that friend's exp
 permission**. It is a single hand-written HTML file with one inline `<script>` and one
 `calculate()` function — no bundler, no API. Imperial units only, and no body-fat input.
 
-Aspire's version reproduces that maths deliberately and digit for digit, with four
+Aspire's version reproduces that maths deliberately and digit for digit, with five
 departures that are listed below.
 
 **This document is a record, not a licence.** It states what was done and that permission
@@ -35,9 +35,9 @@ Read out of `mcCalc` itself. Names below are the code's own.
 | Input | Values | Where they come from |
 |---|---|---|
 | `sex` | `male`, `female` | radio, **no default** |
-| `age` | whole years | number field |
-| `weightLb` | pounds | number field |
-| `ft`, `inch` | feet and inches | two number fields, either may be blank |
+| `age` | whole years, **13 to 100** | number field |
+| `weightLb` | pounds, **50 to 700** | number field |
+| `ft`, `inch` | feet **3 to 8**, inches **0 to 11**; total height must land between 36 and 96 inches | two number fields; inches may be blank, feet in practice cannot, because inches alone can no longer reach three feet |
 | `activity` | 1.2, 1.375, 1.55, 1.725 | radio, default **1.55** |
 | `basis` | `standard`, `better`, `trained` | radio, default **standard** |
 | `frame` | 0.95, 1, 1.15 (small / medium / large) | only used when `basis` is `better`, default 1 |
@@ -87,6 +87,20 @@ Then Peter's floor, which the source does not have:
 
 The comparison is against the unrounded target, so a target of 1,099.6 is floored even
 though it would have displayed as 1,100.
+
+The floor can land level with, or above, maintenance: a small, older, sedentary person can
+have a TDEE under 1,100, and then every deficit setting floors to the same 1,100 and the
+card would be showing a "target" above maintenance on a fat-loss goal. `noRoom` names that
+state:
+
+    noRoom = (goal === 'loss' || goal === 'recomp') && target >= tdee * 0.97
+
+`target` here is the floored figure. The 0.97 catches the neighbouring case as well — a
+"deficit" of under 3% of maintenance, which the floor can also produce (the widest such gap
+is 34 calories) and which is not a deficit in any useful sense. Only the floor can set
+`noRoom`: the goal factors are 0.85 at their gentlest and 0.92 for recomp, both below 0.97,
+so an unfloored target can never reach it. **`noRoom` changes no number.** It only changes
+what the page says; see departure 5.
 
 ### 5. Ideal bodyweight — Devine, clamped at 5'0"
 
@@ -182,10 +196,11 @@ columns are not guaranteed to sum to the displayed target. In practice they usua
 
 | # | Departure | Reason |
 |---|---|---|
-| 1 | **A 1,100-calorie floor.** `if (target < 1100) { target = 1100; floored = true }`, and the page says so: "Floor reached. We don't go below 1,100 calories — a gentler deficit is the better way down." | The source has no floor at all. A small, older person on an aggressive deficit can be handed a number in the 700s with nothing said about it. Verified: profile 6 below gets 806 calories from the source. |
+| 1 | **A 1,100-calorie floor.** `if (target < 1100) { target = 1100; floored = true }`, and the page says so: "Floor reached. We don't go below 1,100 calories — a gentler deficit is the better way down." That note is suppressed when `noRoom` is set, because at that point a gentler deficit is not a way down either (departure 5). | The source has no floor at all. A small, older person on an aggressive deficit can be handed a number in the 700s with nothing said about it. Verified: profile 6 below gets 806 calories from the source. |
 | 2 | **A warning when protein and fat alone exceed the target**, instead of a quiet adjustment. `clamped` is set when `spare < 0`, and the page prints: "Hold it — the math isn't mathing. Your protein and fat already use X of your Y calories, leaving nothing for carbs. This isn't sustainable. Ease the deficit or the protein setting and try again." **The numbers stand exactly as calculated** — carbs show 0 g, and nothing is silently reduced to make the arithmetic close. | Adjusting the inputs behind someone's back would hide the fact that their answers do not add up. The source shows `0g` carbs and says nothing. |
 | 3 | **No body-fat input.** | The source has none either, so protein is derived from ideal bodyweight rather than measured lean mass. This is a departure from what a fuller calculator would do, not from the source; it is recorded here so nobody adds a body-fat field assuming the maths can use it. It cannot — nothing in `mcCalc` takes one. |
 | 4 | **Sex is not pre-selected.** Neither radio carries `checked`, and step 1 will not advance without an answer: "Pick one so the formula knows which constant to use." | The source defaults to Female (`let sex = 'female'`, and the Female button ships with `class="active"`). Someone who skims past that question gets a silently wrong BMR constant — 166 calories before the activity multiplier, more after it. Every other question keeps the source's own default (activity 1.55, basis standard, frame medium, 1 g/lb, goal maintain, 15% deficit). |
+| 5 | **`noRoom`: a deficit goal the floor has flattened is not presented as a deficit.** When the flag is set the card prints one warning — "This one doesn't look right — worth talking it through with one of our experts." — with *one of our experts* as a link into the consult, carrying the same goal and macro line the "Take these to a call" button carries. The floor note and the goal note are both dropped in this state: the floor note recommends a gentler deficit and the fat-loss goal note says to "take another 5 to 10% off", and with the target already at or above maintenance both are advice against the arithmetic on the same card. Numbers, again, are not touched. | Before this, a 70-year-old woman at 95 lb and 4'10", sedentary, was shown "Maintenance 1,009 cal" and "Your target 1,100 cal" on a fat-loss goal, then told to cut a further 5 to 10%. The calculator cannot serve that person, and the honest move is to say so and hand her to a conversation rather than to a number. |
 
 ## Worked examples
 
@@ -199,8 +214,8 @@ driving the rendered page in a real browser and reading the printed results. Bot
 `calculate()` matched the constants documented above line for line.
 
 Coverage: both sexes; all four goals; all three protein bases including both `trained`
-rates and the small and large `frame` settings; the Devine 5'0" clamp (7 vs 8); and the
-1,100-calorie floor (6).
+rates and the small and large `frame` settings; the Devine 5'0" clamp (7 vs 8); the
+1,100-calorie floor (6); and the floor landing above maintenance (10).
 
 | # | Sex | Age | Weight | Height | Activity | Basis | Goal | Maintenance | Target | Protein | Fat | Carbs | Flag | vs. live source |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -209,10 +224,11 @@ rates and the small and large `frame` settings; the Devine 5'0" clamp (7 vs 8); 
 | 3 | F | 28 | 135 lb | 5'2" | 1.725 | better, small (0.95) | muscle gain | 2,235 cal | 2,503 cal | 121 g / 484 cal | 83 g / 751 cal | 317 g / 1,268 cal | — | identical |
 | 4 | M | 30 | 185 lb | 5'10" | 1.55 | better, large (1.15) | recomp | 2,798 cal | 2,574 cal | 213 g / 852 cal | 86 g / 772 cal | 238 g / 950 cal | — | identical |
 | 5 | F | 60 | 250 lb | 5'0" | 1.2 | trained, 1.2 g/lb | fat loss, 25% (0.75) | 1,951 cal | 1,463 cal | 300 g / 1,200 cal | 49 g / 439 cal | **0 g / 0 cal** | warning (`clamped`) | identical numbers; the source prints the same 0 g with no warning |
-| 6 | F | 70 | 100 lb | 5'0" | 1.2 | standard | fat loss, 25% (0.75) | 1,074 cal | **1,100 cal** | 100 g / 400 cal | 37 g / 330 cal | 93 g / 370 cal | floor (`floored`) | **differs by design** — source: 806 cal target, 27 g / 242 cal fat, 41 g / 164 cal carbs. Protein and maintenance identical. |
+| 6 | F | 70 | 100 lb | 5'0" | 1.2 | standard | fat loss, 25% (0.75) | 1,074 cal | **1,100 cal** | 100 g / 400 cal | 37 g / 330 cal | 93 g / 370 cal | floor (`floored`, and `noRoom`) | **differs by design** — source: 806 cal target, 27 g / 242 cal fat, 41 g / 164 cal carbs. Protein and maintenance identical. |
 | 7 | F | 30 | 120 lb | 4'11" | 1.2 | standard | maintain | 1,404 cal | 1,404 cal | 100 g / 400 cal | 47 g / 421 cal | 146 g / 583 cal | — | identical |
 | 8 | F | 30 | 120 lb | 5'0" | 1.2 | standard | maintain | 1,423 cal | 1,423 cal | 100 g / 400 cal | 47 g / 427 cal | 149 g / 596 cal | — | identical |
 | 9 | M | 30 | 240 lb | 5'10" | 1.55 | standard | maintain | 3,185 cal | 3,185 cal | 161 g / 644 cal | 106 g / 956 cal | 396 g / 1,585 cal | — | identical |
+| 10 | F | 70 | 95 lb | 4'10" | 1.2 | standard | fat loss, 15% (0.85) | 1,009 cal | **1,100 cal** | 100 g / 400 cal | 37 g / 330 cal | 93 g / 370 cal | floor (`floored`) **and `noRoom`** | not re-checked against the live source; the floor and the flags are ours, and nothing shared with the source changed |
 
 Reading the two edge cases:
 
@@ -220,13 +236,18 @@ Reading the two edge cases:
   maintenance figures differ (1,404 vs 1,423) because BMR still uses the real height, but
   the protein target is **100 g in both** — Devine has stopped at five feet.
 - **6 is the floor.** Maintenance is 1,074; a 25% deficit asks for 806. Peter's version
-  lifts the target to 1,100, recalculates fat and carbs from that lifted figure, and says
-  "Floor reached" on the page. The source hands over 806 calories silently. This is the
-  one row in the table that is *supposed* to differ.
+  lifts the target to 1,100, recalculates fat and carbs from that lifted figure, and flags
+  it. The source hands over 806 calories silently. This is the one row in the table that is
+  *supposed* to differ.
+- **6 and 10 are both above maintenance.** The lifted target (1,100) is higher than
+  maintenance (1,074 and 1,009), so both set `noRoom` as well as `floored`, and the card
+  prints the one warning from departure 5 instead of "Floor reached" and the fat-loss goal
+  note. 10 is the case that was reported from the live site.
 
-Eight of the nine profiles match the live source digit for digit, across every returned
-field. The ninth differs only in the target and the two macros derived from it, and only
-because of departure 1.
+Eight of the first nine profiles match the live source digit for digit, across every
+returned field. The ninth differs only in the target and the two macros derived from it,
+and only because of departure 1. Profile 10 was added later, from `mcCalc` alone, and has
+not been put through the source.
 
 ## Known sharp edges
 
@@ -239,7 +260,7 @@ they are carrying, is the point. The `trained` basis is the one that uses actual
 bodyweight. Anyone tempted to "fix" this should read this paragraph first — it is a
 decision, not an oversight.
 
-**The source has no floor and no warning.** Departures 1 and 2 exist only here. A number
+**The source has no floor and no warnings.** Departures 1, 2 and 5 exist only here. A number
 checked against the source at a low target or an over-committed macro split will not
 match, and should not. Every other comparison should match exactly; if one does not, the
 implementation has drifted and the table above is the regression test.
@@ -257,10 +278,14 @@ document did not. This is a reconstruction, written by reading the shipped code 
 re-verifying it against the live source, and it lives in the repository so it cannot be
 lost the same way.
 
-`mcCalc`'s body is byte-identical across every commit in which it has existed — three of
-them, `20a17a3`, `ca4b185` and `24defd5` — and to the copy in the working tree
-(sha1 of the block, `4abab7f8…`). Nothing in the copy pass that is in flight alongside
-this document touches it.
+`mcCalc`'s body was byte-identical across the first three commits in which it existed —
+`20a17a3`, `ca4b185` and `24defd5`, sha1 of the block `4abab7f8…`. It has been edited once
+since, on branch `raw4/calculator`, to add the `noRoom` flag and the comment above it: the
+block is now sha1 `34d0faf1…`. **No arithmetic changed in that edit**, and it was checked
+that way rather than asserted — the old and new blocks were both extracted and run over
+426,240 input combinations (both sexes, every whole inch from 4'0" to 7'0", eight weights,
+five ages, all four activity levels, all six protein-basis settings, all four goals with
+all three deficit settings), and every returned field except `noRoom` matched on every one.
 
 ## Re-verifying this
 
@@ -275,7 +300,9 @@ The whole check is repeatable without any test infrastructure:
    `onclick` handlers and `data-val` attributes, so calling `.onclick()` sets its state
    the way a click would. Then call `calculate()` and read the output elements'
    `textContent`.
-3. Run both over the nine profiles above and compare every field as a string.
+3. Run both over profiles 1 to 9 above and compare every field as a string. `floored`,
+   `clamped` and `noRoom` have no counterpart in the source; they are Peter's, and they are
+   not part of that comparison.
 
 If the live site is unreachable or has changed, say so rather than presenting the table
 as re-verified. The numbers in the table are true of `mcCalc` regardless — that half can
