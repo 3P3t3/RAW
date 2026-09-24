@@ -642,3 +642,6 @@ html:not(.js) .isle{position:static;width:auto;margin:0}
 .intro-lit img{position:absolute;left:.686%;top:-27.116%;width:102.820%;height:141.954%;
   display:block;max-width:none}
 @media (prefers-reduced-motion:reduce){.intro{display:none}}
+
+/* the FDA sentence sits under the vendor line, quieter but still legible */
+.foot-fda{margin:10px 0 0;font-size:12px;line-height:1.5;color:var(--on-dark);opacity:.72;max-width:66ch}
