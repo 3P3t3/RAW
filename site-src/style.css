@@ -542,3 +542,30 @@ html:not(.js) .isle{position:static;width:auto;margin:0}
   .isle-name{font-size:19px}
   .isle-note{font-size:12px}
 }
+
+/* ── Opening curtain ───────────────────────────────────────────────────────────
+   Homepage only, once a session. Nothing here paints on its own: site-src/_intro.html
+   inserts .intro at run time, so there is no curtain in the markup and none without
+   JS. The halves are SVG so the seam can follow the wave's own centre line; only their
+   transform ever changes. The guard at the bottom is a second lock on reduced motion,
+   after the one in the script. */
+.intro{position:fixed;inset:0;z-index:100;overflow:hidden;contain:layout paint;
+  font-family:var(--sans);color:var(--chalk)}
+.intro-sheet{position:absolute;inset:0;background:var(--teal)}
+.intro-half{position:absolute;inset:0;display:block;width:100%;height:100%;fill:var(--teal);
+  will-change:transform}
+.intro-stage{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;
+  padding:0 var(--pad);text-align:center}
+.intro-word{display:flex;justify-content:center;margin-right:-.14em;font-weight:800;font-stretch:100%;
+  font-size:clamp(21px,7vw,58px);line-height:1;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.intro-l{display:block;overflow:hidden;padding:.05em 0 .1em}      /* the mask the letters rise out of */
+.intro-l > span{display:block;transform:translateY(118%)}
+.intro-sp{display:block;width:.5em}
+.intro-tag{margin:1.4em 0 0;opacity:0;color:var(--sand);
+  font:600 clamp(9px,2.4vw,12px)/1 var(--sans);letter-spacing:.34em;text-transform:uppercase}
+.intro-wave{position:absolute;transform-origin:0 0;will-change:transform}
+.intro-wave svg{position:absolute;inset:0;display:block;width:100%;height:100%;opacity:0;
+  fill:var(--sand);stroke:none;transform-origin:50% 50%;will-change:transform,opacity}
+/* which build of the wave the curtain shows is settled in _intro.html, on the clone
+   itself: the losing path is thrown away rather than hidden, so no query has to match. */
+@media (prefers-reduced-motion:reduce){.intro{display:none}}

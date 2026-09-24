@@ -22,11 +22,176 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap">
-<link rel="stylesheet" href="style.css?v=e082211e">
+<link rel="stylesheet" href="style.css?v=232c5a1f">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+
+<!-- Opening curtain. A teal sheet, the wordmark rises out of its mask letter by letter,
+     the wave arrives and settles, then the screen parts along the wave's own centre line
+     — top half up, bottom half down — onto the page that has been loading behind it all
+     along, while the wave travels into the header and becomes the masthead logo.
+
+     Everything here is built at run time, so there is no curtain anywhere in the markup
+     and no curtain at all without JS. The build substitutes this only into the homepage
+     template, so category pages never carry it. It plays on every load, never with
+     reduced motion, and never when the page was opened at an anchor. Any tap, click,
+     key, wheel or scroll ends it on the spot. Only transform and opacity move. -->
+<script>
+(function(){
+'use strict';
+var doc=document,win=window,SPAN=2560;
+if(!doc.body||!('animate' in Element.prototype))return;
+if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;   /* no curtain, not even for a frame */
+if(location.hash)return;                                            /* they asked for a place, not a show */
+
+/* The wave's own centre line, sampled every 2.5 of the mark's 100 units. This is the seam. */
+var MID=[18.1,17.41,17.03,17.01,17.29,17.43,17.77,18.16,18.51,18.68,18.57,18.22,17.65,16.96,
+         16.16,15.26,14.28,13.27,11.95,10.55,9.06,7.58,6.78,7.46,8.65,10.15,11.98,13.93,15.66,
+         16.91,17.51,17.51,17.09,16.74,15.93,15.32,15.0,14.99,15.38,16.17,17.36];
+
+var anims=[],done=false,started=false,timer=0,i,
+    ov=doc.createElement('div'),word='ASPIRE HEALTH',cells='';
+for(i=0;i<word.length;i++)cells+=word.charAt(i)===' '?'<span class="intro-sp"></span>'
+  :'<span class="intro-l"><span>'+word.charAt(i)+'</span></span>';
+ov.className='intro';
+ov.setAttribute('aria-hidden','true');   /* decorative: no focus goes in, none comes out */
+ov.innerHTML='<div class="intro-sheet"></div><div class="intro-stage"><div class="intro-word">'+cells
+  +'</div><p class="intro-tag">Fuel a higher you</p></div>';
+doc.body.appendChild(ov);                /* so the first paint is the curtain, never the page */
+
+/* ── Leaving ─────────────────────────────────────────────────────────────── */
+var EV=['pointerdown','mousedown','touchstart','keydown','wheel','scroll','click'];
+function bind(on){for(var k=0;k<EV.length;k++)
+  on?win.addEventListener(EV[k],hit,{capture:true,passive:true}):win.removeEventListener(EV[k],hit,true)}
+function hit(e){
+  var t=e.type;
+  if(!done&&(t==='pointerdown'||t==='mousedown'||t==='touchstart'))swallow();
+  finish();
+}
+/* a tap that dismisses the curtain must not also press whatever was under it */
+function swallow(){
+  var off=setTimeout(function(){win.removeEventListener('click',eat,true)},600);
+  function eat(e){e.preventDefault();e.stopPropagation();clearTimeout(off);win.removeEventListener('click',eat,true)}
+  win.addEventListener('click',eat,true);
+}
+function finish(){
+  if(done)return;
+  done=true;bind(false);clearTimeout(timer);
+  for(var k=0;k<anims.length;k++){try{anims[k].cancel()}catch(e){}}
+  if(ov.parentNode)ov.parentNode.removeChild(ov);   /* gone this frame: no fade to sit through */
+}
+bind(true);
+win.addEventListener('orientationchange',finish,{once:true});
+
+/* ── The seam: a smooth curve through the sampled centre line ─────────────── */
+function seam(p,dy){
+  var d='M'+p[0][0].toFixed(1)+' '+(p[0][1]+dy).toFixed(2),n=p.length,a,b,c,e;
+  for(var k=0;k<n-1;k++){
+    a=p[k-1]||p[k];b=p[k];c=p[k+1];e=p[k+2]||c;
+    d+='C'+(b[0]+(c[0]-a[0])/6).toFixed(1)+' '+(b[1]+(c[1]-a[1])/6+dy).toFixed(2)
+      +' '+(c[0]-(e[0]-b[0])/6).toFixed(1)+' '+(c[1]-(e[1]-b[1])/6+dy).toFixed(2)
+      +' '+c[0].toFixed(1)+' '+(c[1]+dy).toFixed(2);
+  }
+  return d;
+}
+function A(el,frames,opts){var a=el.animate(frames,opts);anims.push(a);return a}
+
+/* ── The timeline ─────────────────────────────────────────────────────────── */
+function start(){
+  if(done||started)return;
+  started=true;
+  /* the layout viewport, which is what the page is centred on; the curtain's own box can
+     be a little wider (a classic scrollbar, a zoomed pane), and the halves stretch to it */
+  var W=Math.min(ov.clientWidth,doc.documentElement.clientWidth),
+      H=Math.min(ov.clientHeight,doc.documentElement.clientHeight),
+      src=doc.querySelector('.mast .wordmark .mark');
+  if(!src||!W||!H){finish();return}
+  var stage=ov.querySelector('.intro-stage');
+  stage.style.width=W+'px';stage.style.height=H+'px';
+
+  var Wm=Math.min(W*.86,720),s=Wm/100,Hm=24.31*s,x0=(W-Wm)/2,y0=(H-Hm)/2,step=2.5*s,
+      pts=[],k,n,BL=8;
+  n=Math.ceil(x0/step)+1;                                   /* level run out to the left edge */
+  for(k=n;k>0;k--)pts.push([x0-k*step,y0+MID[0]*s]);
+  for(k=0;k<MID.length;k++)pts.push([x0+k*step,y0+MID[k]*s]);
+  n=Math.ceil((W-x0-Wm)/step)+1;                             /* and out to the right */
+  for(k=1;k<=n;k++)pts.push([x0+Wm+k*step,y0+MID[40]*s]);
+  pts[0][0]=-BL;pts[pts.length-1][0]=W+BL;                   /* bleed past both edges */
+
+  /* the two halves meet with a hair of overlap, so the seam never shows as a light line */
+  ov.firstChild.insertAdjacentHTML('afterend',
+    '<svg class="intro-half intro-top" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-hidden="true"><path d="'
+      +seam(pts,.8)+'L'+(W+BL)+' '+(-BL)+' L'+(-BL)+' '+(-BL)+'Z"/></svg>'
+   +'<svg class="intro-half intro-bot" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" aria-hidden="true"><path d="'
+      +seam(pts,-.8)+'L'+(W+BL)+' '+(H+BL)+' L'+(-BL)+' '+(H+BL)+'Z"/></svg>');
+  ov.removeChild(ov.firstChild);                             /* the flat sheet hands over */
+
+  /* the mark itself, cloned straight off the masthead: the same paths, never redrawn */
+  var slot=doc.createElement('div'),mk=src.cloneNode(true),cut;
+  mk.removeAttribute('class');
+  /* The masthead carries both builds of the wave and swaps them on a resolution query,
+     because at 1x its slivers land on about one device pixel and grey out. Here the
+     choice is made on the clone itself, by throwing the other build away: a query that
+     fails to match for any reason would leave the curtain's mark reading as a solid
+     slab, and at the 3-7x the intro draws it there is nothing subtle left to protect. */
+  cut=mk.querySelector((win.devicePixelRatio||1)>=1.5?'.m-solid':'.m-full');
+  if(cut)cut.parentNode.removeChild(cut);
+  slot.className='intro-wave';
+  slot.style.cssText='left:'+x0+'px;top:'+y0+'px;width:'+Wm+'px;height:'+Hm+'px';
+  slot.appendChild(mk);
+  ov.appendChild(slot);
+
+  var r=src.getBoundingClientRect(),
+      lands=r.width>8&&r.height>4&&r.top>=0&&r.top<H*.4,   /* the header is where we think it is */
+      L=ov.querySelectorAll('.intro-l > span'),
+      tag=ov.querySelector('.intro-tag'),
+      rise='cubic-bezier(.16,.9,.28,1)',door='cubic-bezier(.66,0,.24,1)';
+
+  /* 1. the wordmark rises out of its mask, letter by letter */
+  for(i=0;i<L.length;i++)
+    A(L[i],[{transform:'translateY(118%)'},{transform:'translateY(0)'}],
+          {duration:360,delay:30+i*28,easing:rise,fill:'both'});
+  A(tag,[{opacity:0},{opacity:.75}],{duration:280,delay:260,easing:'ease-out',fill:'both'});
+  A(tag,[{opacity:.75},{opacity:0}],{duration:200,delay:820,easing:'ease-in',fill:'forwards'});
+  /* 2. the letters clear away and the wave sweeps in and settles. Nothing trails it: a
+        second copy of the mark at any opacity fills the slivers it is there to show. */
+  for(i=0;i<L.length;i++)
+    A(L[i],[{transform:'translateY(0)'},{transform:'translateY(-118%)'}],
+          {duration:260,delay:860+i*11,easing:'cubic-bezier(.5,0,.75,0)',fill:'forwards'});
+  A(mk,[{transform:'translateX(-13%) scale(1.06)',opacity:0},{transform:'none',opacity:1}],
+       {duration:560,delay:1110,easing:'cubic-bezier(.16,.84,.3,1)',fill:'both'});
+  /* 3. the screen parts along that same curve */
+  A(ov.querySelector('.intro-top'),[{transform:'translateY(0)'},{transform:'translateY(-101%)'}],
+       {duration:740,delay:1800,easing:door,fill:'forwards'});
+  A(ov.querySelector('.intro-bot'),[{transform:'translateY(0)'},{transform:'translateY(101%)'}],
+       {duration:740,delay:1800,easing:door,fill:'forwards'});
+  /* 4. and the wave goes home to the masthead */
+  if(lands)A(slot,[{transform:'none'},{transform:'translate('+(r.left-x0).toFixed(2)+'px,'
+        +(r.top-y0).toFixed(2)+'px) scale('+(r.width/Wm).toFixed(5)+')'}],
+       {duration:680,delay:1820,easing:'cubic-bezier(.5,0,.2,1)',fill:'forwards'});
+  else A(mk,[{opacity:1},{opacity:0}],{duration:400,delay:1900,easing:'ease-in',fill:'forwards'});
+
+  timer=setTimeout(finish,SPAN);
+}
+
+/* Wait for the markup the curtain measures, and for the face it is set in — but never
+   for long: the curtain is already up, and the page keeps loading behind it either way. */
+function raise(){
+  if(done)return;
+  var fired=false,go=function(){if(!fired){fired=true;start()}};
+  try{
+    if(doc.fonts&&!doc.fonts.check('800 40px "Bricolage Grotesque"')){
+      setTimeout(go,250);
+      doc.fonts.load('800 40px "Bricolage Grotesque"').then(go,go);
+    }else go();
+  }catch(e){go()}
+}
+if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{once:true});else raise();
+})();
+</script>
+
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></symbol>
