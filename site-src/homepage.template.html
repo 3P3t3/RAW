@@ -46,7 +46,7 @@
         <h1 id="hero-title"><span>Picked</span> <span>for how</span> <span>you train.</span></h1>
         <p class="sub">Nutrilite and XS nutrition, hydration and sleep support, chosen by goal.</p>
         <div class="hero-actions">
-          <a class="btn" href="#finder" data-open-finder>Find what fits you</a>
+          <a class="btn" href="#macros">Work out your macros</a>
           <a class="tlink" href="#results" data-all>Shop all products</a>
         </div>
       </div>
@@ -59,7 +59,7 @@
        It sits third, straight after the shelves: early enough to be the way in, and behind
        the shelves rather than in front of them, so the seven islands stay the first thing
        after the hero and nothing here gates them. It cannot go any further down either —
-       the pour, the fizz and the drain run unbroken from #trending through #finder to
+       the pour, the fizz and the drain run unbroken from #trending through #hydrate to
        #consult, and a band dropped inside that run would cut the liquid in half. -->
   <section class="sec macros-sec" id="macros" aria-labelledby="macros-title">
     <div class="wrap split">
@@ -220,11 +220,12 @@
     </div>
   </section>
 
-  <!-- 6. Guided finder: the first question is answered right here.
-       Its ground carries on from the pour: the full glass, fizzing, drains away as you
-       scroll, down to the page's own chalk by the time the consult arrives. Scenery only;
-       with reduced motion the glass stands still and ends on a still waterline. -->
-  <section class="sec finder fizz-sec" id="finder" aria-labelledby="finder-sec-title">
+  <!-- 6. Hydration: the third beat of the drink. The pour fills the glass behind #trending;
+       here it fizzes and drains to the page's chalk, and as the water leaves, a cup comes
+       up through the line it left behind. The line is content; the glass, the fizz and the
+       cup are scenery. The beat holds on screen while the glass drains behind it. With
+       reduced motion, or no script, the cup stands fully risen and nothing moves. -->
+  <section class="sec hydrate fizz-sec" id="hydrate" aria-labelledby="hydrate-title">
     <div class="fizz-bg" id="fizz-bg" aria-hidden="true">
       <div class="fizz-stage">
         <img class="fizz-still" data-src="assets/pour/sm/0150.webp" data-srcset="assets/pour/sm/0150.webp 618w, assets/pour/big/0150.webp 810w" sizes="100vw" alt="" decoding="async">
@@ -232,21 +233,28 @@
       </div>
       <svg class="fizz-shore" viewBox="0 0 1200 100" preserveAspectRatio="none" focusable="false"><path d="M0 22C90 12 170 30 270 24S450 8 560 18 760 34 870 22 1060 10 1200 20V100H0Z"/></svg>
     </div>
-    <div class="wrap split">
-      <div class="split-text grow">
-        <h2 id="finder-sec-title"><span>Not sure where</span> <span>to start?</span></h2>
-        <p>Three quick questions about how you train, then two suggestions with a line on why each one fits. No email or account needed.</p>
+    <div class="wrap split hy-beat">
+      <!-- Peter's line, word for word: the question quiet, the answer the statement. One
+           heading, so it is read as he wrote it, question first, and names the band. -->
+      <div class="split-text hy-line grow">
+        <h2 id="hydrate-title"><span class="hy-q">Not sure how much water is enough?</span> <span class="hy-a">Athletes aim for one ounce per pound of bodyweight.</span></h2>
       </div>
-      <div class="q-card grow" style="--d:1">
-        <p class="q-step">Question 1 of 3</p>
-        <div class="q-prog" aria-hidden="true"><span></span><span></span><span></span></div>
-        <h3 class="q-card-q">What does most of your training look like?</h3>
-        <div class="q-card-opts">
-          <button type="button" class="q-opt" data-first="0">Lifting and strength work</button>
-          <button type="button" class="q-opt" data-first="1">Running, cycling or rowing</button>
-          <button type="button" class="q-opt" data-first="2">A mix of everything</button>
-          <button type="button" class="q-opt" data-first="3">Walking, yoga, staying mobile</button>
+      <div class="hy-well grow" style="--d:1" aria-hidden="true">
+        <div class="hy-clip">
+          <div class="hy-cup" id="hy-cup">
+            <svg viewBox="0 0 200 232" focusable="false">
+              <path class="hy-water" d="M52 92C68 86 84 97 100 92S133 86 148 92L141 217H59Z"/>
+              <path class="hy-surf" d="M52 92C68 86 84 97 100 92S133 86 148 92"/>
+              <g class="hy-bubbles"><circle cx="86" cy="196" r="3.4"/><circle cx="117" cy="178" r="2.5"/><circle cx="97" cy="152" r="1.9"/><circle cx="124" cy="126" r="2.7"/><circle cx="80" cy="120" r="1.7"/></g>
+              <path class="hy-ticks" d="M56 120h11M57 140h6M59 160h11M60 180h6M62 200h11"/>
+              <path class="hy-shine" d="M137 40 128 200"/>
+              <path class="hy-glass" d="M44 18H156L140 230H60Z"/>
+              <path class="hy-base" d="M60 217H140"/>
+            </svg>
+          </div>
         </div>
+        <svg class="hy-ripple" viewBox="0 0 400 24" preserveAspectRatio="none" focusable="false"><path d="M62 13C84 6 110 7 124 12M276 12C290 7 316 6 338 13"/></svg>
+        <svg class="hy-tide" viewBox="0 0 400 24" preserveAspectRatio="none" focusable="false"><path d="M0 12C30 8 57 15 90 12S150 5 187 9 253 16 290 11 353 7 400 11"/></svg>
       </div>
     </div>
     <div class="fizz-run" aria-hidden="true"></div>

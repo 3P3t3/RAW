@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=1dc4df03">
+<link rel="stylesheet" href="style.css?v=ff2797e4">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -251,7 +251,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <nav class="nav-inline" aria-label="Main">
         <a href="#goals">Goals</a>
         <a href="#results" data-all>Products</a>
-        <a href="#finder" data-open-finder>Finder</a>
+        <a href="#macros">Macros</a>
         <a class="btn btn-sm" href="#consult">Consult</a>
       </nav>
       <button class="icon-btn sound-toggle" id="sound-toggle" type="button" aria-label="Turn interface sounds off" aria-pressed="true" hidden><svg class="ic" aria-hidden="true"><use href="#i-sound"/></svg></button>
@@ -281,7 +281,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <h1 id="hero-title"><span>Picked</span> <span>for how</span> <span>you train.</span></h1>
         <p class="sub">Nutrilite and XS nutrition, hydration and sleep support, chosen by goal.</p>
         <div class="hero-actions">
-          <a class="btn" href="#finder" data-open-finder>Find what fits you</a>
+          <a class="btn" href="#macros">Work out your macros</a>
           <a class="tlink" href="#results" data-all>Shop all products</a>
         </div>
       </div>
@@ -312,7 +312,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
        It sits third, straight after the shelves: early enough to be the way in, and behind
        the shelves rather than in front of them, so the seven islands stay the first thing
        after the hero and nothing here gates them. It cannot go any further down either —
-       the pour, the fizz and the drain run unbroken from #trending through #finder to
+       the pour, the fizz and the drain run unbroken from #trending through #hydrate to
        #consult, and a band dropped inside that run would cut the liquid in half. -->
   <section class="sec macros-sec" id="macros" aria-labelledby="macros-title">
     <div class="wrap split">
@@ -539,11 +539,12 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     </div>
   </section>
 
-  <!-- 6. Guided finder: the first question is answered right here.
-       Its ground carries on from the pour: the full glass, fizzing, drains away as you
-       scroll, down to the page's own chalk by the time the consult arrives. Scenery only;
-       with reduced motion the glass stands still and ends on a still waterline. -->
-  <section class="sec finder fizz-sec" id="finder" aria-labelledby="finder-sec-title">
+  <!-- 6. Hydration: the third beat of the drink. The pour fills the glass behind #trending;
+       here it fizzes and drains to the page's chalk, and as the water leaves, a cup comes
+       up through the line it left behind. The line is content; the glass, the fizz and the
+       cup are scenery. The beat holds on screen while the glass drains behind it. With
+       reduced motion, or no script, the cup stands fully risen and nothing moves. -->
+  <section class="sec hydrate fizz-sec" id="hydrate" aria-labelledby="hydrate-title">
     <div class="fizz-bg" id="fizz-bg" aria-hidden="true">
       <div class="fizz-stage">
         <img class="fizz-still" data-src="assets/pour/sm/0150.webp" data-srcset="assets/pour/sm/0150.webp 618w, assets/pour/big/0150.webp 810w" sizes="100vw" alt="" decoding="async">
@@ -551,21 +552,28 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       </div>
       <svg class="fizz-shore" viewBox="0 0 1200 100" preserveAspectRatio="none" focusable="false"><path d="M0 22C90 12 170 30 270 24S450 8 560 18 760 34 870 22 1060 10 1200 20V100H0Z"/></svg>
     </div>
-    <div class="wrap split">
-      <div class="split-text grow">
-        <h2 id="finder-sec-title"><span>Not sure where</span> <span>to start?</span></h2>
-        <p>Three quick questions about how you train, then two suggestions with a line on why each one fits. No email or account needed.</p>
+    <div class="wrap split hy-beat">
+      <!-- Peter's line, word for word: the question quiet, the answer the statement. One
+           heading, so it is read as he wrote it, question first, and names the band. -->
+      <div class="split-text hy-line grow">
+        <h2 id="hydrate-title"><span class="hy-q">Not sure how much water is enough?</span> <span class="hy-a">Athletes aim for one ounce per pound of bodyweight.</span></h2>
       </div>
-      <div class="q-card grow" style="--d:1">
-        <p class="q-step">Question 1 of 3</p>
-        <div class="q-prog" aria-hidden="true"><span></span><span></span><span></span></div>
-        <h3 class="q-card-q">What does most of your training look like?</h3>
-        <div class="q-card-opts">
-          <button type="button" class="q-opt" data-first="0">Lifting and strength work</button>
-          <button type="button" class="q-opt" data-first="1">Running, cycling or rowing</button>
-          <button type="button" class="q-opt" data-first="2">A mix of everything</button>
-          <button type="button" class="q-opt" data-first="3">Walking, yoga, staying mobile</button>
+      <div class="hy-well grow" style="--d:1" aria-hidden="true">
+        <div class="hy-clip">
+          <div class="hy-cup" id="hy-cup">
+            <svg viewBox="0 0 200 232" focusable="false">
+              <path class="hy-water" d="M52 92C68 86 84 97 100 92S133 86 148 92L141 217H59Z"/>
+              <path class="hy-surf" d="M52 92C68 86 84 97 100 92S133 86 148 92"/>
+              <g class="hy-bubbles"><circle cx="86" cy="196" r="3.4"/><circle cx="117" cy="178" r="2.5"/><circle cx="97" cy="152" r="1.9"/><circle cx="124" cy="126" r="2.7"/><circle cx="80" cy="120" r="1.7"/></g>
+              <path class="hy-ticks" d="M56 120h11M57 140h6M59 160h11M60 180h6M62 200h11"/>
+              <path class="hy-shine" d="M137 40 128 200"/>
+              <path class="hy-glass" d="M44 18H156L140 230H60Z"/>
+              <path class="hy-base" d="M60 217H140"/>
+            </svg>
+          </div>
         </div>
+        <svg class="hy-ripple" viewBox="0 0 400 24" preserveAspectRatio="none" focusable="false"><path d="M62 13C84 6 110 7 124 12M276 12C290 7 316 6 338 13"/></svg>
+        <svg class="hy-tide" viewBox="0 0 400 24" preserveAspectRatio="none" focusable="false"><path d="M0 12C30 8 57 15 90 12S150 5 187 9 253 16 290 11 353 7 400 11"/></svg>
       </div>
     </div>
     <div class="fizz-run" aria-hidden="true"></div>
@@ -633,7 +641,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <p class="foot-place">Founded in Lincoln CA</p>
       </div>
       <nav class="foot-links" aria-label="Footer">
-        <a href="#finder" data-open-finder>Product finder</a>
+        <a href="#macros">Macro calculator</a>
         <a href="#consult">Book a consult</a>
         <a href="#results" data-all>All 65 products</a>
       </nav>
@@ -659,26 +667,13 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <ul class="menu-list">
         <li><a href="#goals">Goals <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="#results" data-all>All products <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-        <li><button type="button" data-open-finder>Finder <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button></li>
+        <li><a href="#macros">Macros <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ul>
       <!-- the consult leaves the list and becomes the one filled thing here, as in the mast -->
       <a class="btn menu-cta" href="#consult">Book a consult</a>
     </nav>
   </div>
 </dialog>
-
-<!-- Finder bottom sheet -->
-<dialog class="sheet" id="finder-sheet" aria-labelledby="finder-title">
-  <div class="sheet-in">
-    <div class="sheet-top">
-      <button class="icon-btn" type="button" id="finder-back" aria-label="Previous question"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg></button>
-      <p class="q-step" id="finder-step">Question 1 of 3</p>
-      <button class="icon-btn" type="button" data-close aria-label="Close finder"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
-    </div>
-    <div id="finder-body"></div>
-  </div>
-</dialog>
-
 
 
 <p class="vh" id="live" aria-live="polite"></p>
@@ -691,11 +686,8 @@ function $(s,c){return (c||doc).querySelector(s)}
 function $$(s,c){return Array.prototype.slice.call((c||doc).querySelectorAll(s))}
 doc.addEventListener('touchstart',function(){},{passive:true}); // enables :active on iOS
 
-var P={"whey": {"name": "XS Grass-Fed Whey Protein", "desc": "Protein powder · Chocolate", "img": "assets/products/xs-grass-fed-whey-protein-chocolate.webp", "url": "https://amway.com/share-link/o3K2G9Gau", "g": "LR", "form": "powder", "why": "Grass-fed whey protein to help you hit your daily protein, shaken up after training."}, "creatine": {"name": "XS Creatine+", "desc": "Creatine powder", "img": "assets/products/xs-creatine.webp", "url": "https://amway.com/share-link/TcFtuhPvJ", "g": "L", "form": "powder", "why": "Creatine in one simple daily scoop, a staple for strength and power work."}, "recovery": {"name": "XS Post-Workout Recovery", "desc": "Recovery mix · Fruit Punch, 30-serving pouch", "img": "assets/products/xs-post-workout-recovery-fruit-punch-30-serving-pouch.webp", "url": "https://amway.com/share-link/CBN8O~MnX", "g": "RL", "form": "powder", "why": "Made for right after training, when you want to refuel in one drink."}, "multiplier": {"name": "XS Muscle Multiplier", "desc": "Training drink mix · Berry Blast", "img": "assets/products/xs-muscle-multiplier-berry-blast.webp", "url": "https://amway.com/share-link/D2YioWCnT", "g": "RL", "form": "powder", "why": "A flavored mix to sip during or after lifting sessions."}, "preworkout": {"name": "XS Pre-Workout Boost", "desc": "Pre-workout mix · Blue Raspberry, 30-serving pouch", "img": "assets/products/xs-pre-workout-boost-blue-raspberry-30-serving-pouch.webp", "url": "https://amway.com/share-link/ZsJafHG0E", "g": "EL", "form": "powder", "why": "Mixed before a session when you want more drive in your workout."}, "coco": {"name": "XS CocoWater Hydration Drink Mix", "desc": "Hydration mix · Pineapple/Coconut", "img": "assets/products/xs-cocowater-hydration-drink-mix-pineapple-coconut.webp", "url": "https://amway.com/share-link/enbKVnLlx", "g": "ER", "form": "powder", "why": "A hydration mix for long, sweaty sessions and hot days."}, "energy": {"name": "XS Energy Drink", "desc": "Energy drink · 12 oz · Variety Case", "img": "assets/products/xs-energy-drink-12-oz-variety-case.webp", "url": "https://amway.com/share-link/KP09m3teD", "g": "E", "form": "ready", "why": "Zero-sugar energy drinks, cold and ready when you need a lift before training."}, "tablets": {"name": "XS Energy + Focus Dietary Supplement", "desc": "Energy tablets · 30 tablets", "img": "assets/products/xs-energy-focus-dietary-supplement-30-tablets.webp", "url": "https://amway.com/share-link/zFoRkr5eK", "g": "E", "form": "pills", "why": "Energy in tablet form, for when you would rather skip the can."}, "tubes": {"name": "XS Sports Twist Tubes", "desc": "Drink mix tubes · Raspberry Lemonade", "img": "assets/products/xs-sports-twist-tubes-raspberry-lemonade.webp", "url": "https://amway.com/share-link/hzkCx98xw", "g": "E", "form": "powder", "why": "Pocket-size tubes you twist into a water bottle on the go."}, "shake": {"name": "XS Sports Protein Shakes", "desc": "Protein shake · Rich Chocolate", "img": "assets/products/xs-sports-protein-shakes-rich-chocolate.webp", "url": "https://amway.com/share-link/IwkAJiWQ3", "g": "LR", "form": "ready", "why": "Ready-to-drink protein for after training, no shaker needed."}, "bar": {"name": "XS Sports Protein Bars", "desc": "Protein bar · Chocolate Peanut Butter", "img": "assets/products/xs-sports-protein-bars-chocolate-peanut-butter.webp", "url": "https://amway.com/share-link/FHubIOB6L", "g": "L", "form": "ready", "why": "A protein bar that can live in your gym bag."}, "crisps": {"name": "XS Protein Crisps", "desc": "Protein snack · Sriracha Lime", "img": "assets/products/xs-protein-crisps-sriracha-lime.webp", "url": "https://amway.com/share-link/MVc4sISgs", "g": "L", "form": "ready", "why": "A savory, crunchy protein snack between meals."}, "cbd": {"name": "XS CBD Cream", "desc": "Topical cream", "img": "assets/products/xs-cbd-cream.webp", "url": "https://amway.com/share-link/AwIzUqvC1", "g": "R", "form": "topical", "why": "A CBD cream to massage into the spots that feel worked after training."}, "sleep": {"name": "Nutrilite Sleep Health", "desc": "Nightly supplement", "img": "assets/products/nutrilite-sleep-health.webp", "url": "https://amway.com/share-link/o8m6KGk53", "g": "S", "form": "pills", "why": "A nightly supplement from Nutrilite to build into your wind-down routine."}, "gummies": {"name": "n* by Nutrilite Sweet Dreams", "desc": "Sleep gummies · Sleep Gummies", "img": "assets/products/n-by-nutrilite-sweet-dreams-sleep-gummies.webp", "url": "https://amway.com/share-link/PVUuzXLQ6", "g": "S", "form": "pills", "why": "A bedtime gummy for the last step of your evening routine."}, "tea": {"name": "Nutrilite Organics Chamomile Tea", "desc": "Organic herbal tea", "img": "assets/products/nutrilite-organics-chamomile-tea.webp", "url": "https://amway.com/share-link/qe6JKbGxp", "g": "S", "form": "ready", "why": "Organic chamomile tea, a caffeine-free way to close out the day."}, "probiotic": {"name": "Nutrilite Balance Within Probiotic", "desc": "Daily probiotic", "img": "assets/products/nutrilite-balance-within-probiotic.webp", "url": "https://amway.com/share-link/k5GGxS-5u", "g": "S", "form": "powder", "why": "A daily probiotic for the long-game side of your health."}};
-var GOALS={R:'Recovery',L:'Lean Mass',E:'Endurance',S:'Sleep & Longevity'};
 var live=$('#live');
 function say(t){live.textContent='';setTimeout(function(){live.textContent=t},30)}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 
 /* Motion: reveal on viewport entry */
 if(html.classList.contains('motion')){
@@ -762,7 +754,6 @@ $('#search').addEventListener('submit',function(e){
 var urlQ=new URLSearchParams(location.search).get('q');
 if(urlQ&&grid&&fbar){q.value=urlQ;search(urlQ.toLowerCase())}
 else if(results&&location.hash==='#results')showAll();          /* arrived from another page */
-var ALL_HREF=results?'#results':'homepage.html#results';
 
 /* Flavour carousel: a continuous loop. It drifts on its own, a swipe or the arrows take the
    wheel, and it picks the drift back up once the reader stops. There is no end to reach: a
@@ -814,67 +805,16 @@ if(car){
   else glide();
 }
 
-/* Dialogs: full-screen menu + finder sheet */
-var menu=$('#menu'),sheet=$('#finder-sheet');
+/* Dialogs: the full-screen menu */
+var menu=$('#menu');
 function openD(d){if(!d.open){d.showModal();html.classList.add('locked')}}
-[menu,sheet].forEach(function(d){
-  d.addEventListener('close',function(){if(!menu.open&&!sheet.open)html.classList.remove('locked')});
-  d.addEventListener('click',function(e){if(e.target===d)d.close()});
-});
+menu.addEventListener('close',function(){html.classList.remove('locked')});
+menu.addEventListener('click',function(e){if(e.target===menu)menu.close()});
 $$('[data-open-menu]').forEach(function(b){b.addEventListener('click',function(){openD(menu)})});
 $$('[data-close]').forEach(function(b){b.addEventListener('click',function(){b.closest('dialog').close()})});
 $$('a',menu).forEach(function(a){a.addEventListener('click',function(){menu.close()})});
 /* the menu button survives to 1024 now, so only close the panel where the inline nav takes over */
 matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
-
-/* Finder: three questions, one per screen, two results */
-var Q=[
-  {q:'What does most of your training look like?',o:[['Lifting and strength work','Lifting',{L:2,R:1}],['Running, cycling or rowing','Endurance',{E:2,R:1}],['A mix of everything','Mixed',{L:1,E:1,R:1}],['Walking, yoga, staying mobile','Mobility',{S:2,R:1}]]},
-  {q:'What would help most right now?',o:[['Recovering between sessions','Recovery',{R:3}],['Building or keeping muscle','Muscle',{L:3}],['Energy and hydration for long efforts','Energy',{E:3}],['Winding down and sleeping well','Sleep',{S:3}]]},
-  {q:'How do you like to take it?',o:[['Powder, mixed into a drink','Powder',{powder:1.5}],['Ready to drink or eat','Ready',{ready:1.5}],['Tablets, capsules or gummies','Tablets',{pills:1.5}],['No preference','Either',{}]]}
-];
-var fBody=$('#finder-body'),fStep=$('#finder-step'),fBack=$('#finder-back'),step=0,ans=[];
-function picks(){
-  var w={R:0,L:0,E:0,S:0,powder:0,ready:0,pills:0};
-  ans.forEach(function(a,i){var m=Q[i].o[a][2];for(var k in m)w[k]+=m[k]});
-  return Object.keys(P).map(function(id,i){
-    var p=P[id],s=w[p.form]||0;
-    p.g.split('').forEach(function(g,j){s+=w[g]*(j?.6:1)});
-    return {id:id,s:s,i:i};
-  }).sort(function(a,b){return b.s-a.s||a.i-b.i}).slice(0,2);
-}
-function render(focus){
-  fBack.style.visibility=step?'visible':'hidden';
-  if(step<Q.length){
-    var c=Q[step];
-    fStep.textContent='Question '+(step+1)+' of '+Q.length;
-    fBody.innerHTML='<h2 class="q" id="finder-title" tabindex="-1">'+c.q+'</h2><div class="opts">'+c.o.map(function(o,i){
-      var on=ans[step]===i;
-      return '<button type="button" class="opt'+(on?' is-picked':'')+'" data-i="'+i+'"><span>'+o[0]+(on?'<span class="vh"> (your earlier answer)</span>':'')+'</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>';
-    }).join('')+'</div>';
-  }else{
-    fStep.textContent='Your match';
-    fBody.innerHTML='<h2 class="q" id="finder-title" tabindex="-1">Two to start with</h2><p class="basis">Based on: '+ans.map(function(a,i){return Q[i].o[a][1]}).join(' · ')+'</p><ul class="picks">'+picks().map(function(r){
-      var p=P[r.id];
-      return '<li class="pick"><span class="shot"><img src="'+esc(p.img)+'" alt="" width="480" height="480"></span><div><h3 class="p-name">'+esc(p.name)+'</h3><p class="p-desc">'+esc(p.desc)+'</p><p class="why">'+esc(p.why)+'</p><a class="buy" href="'+esc(p.url)+'" target="_blank" rel="noopener">Buy on Amway<span class="vh"> '+esc(p.name)+' (opens in a new tab)</span></a></div></li>';
-    }).join('')+'</ul><div class="sheet-foot"><button class="tlink" type="button" id="finder-restart">Start over</button><a class="tlink" href="'+ALL_HREF+'" id="finder-shop">See all products</a></div>';
-  }
-  if(focus)$('#finder-title').focus();
-}
-fBody.addEventListener('click',function(e){
-  var o=e.target.closest('.opt');
-  if(o){ans[step]=+o.dataset.i;step++;render(true);return}
-  if(e.target.closest('#finder-restart')){step=0;ans=[];render(true);return}
-  if(e.target.closest('#finder-shop')){sheet.close();if(results){e.preventDefault();showAll()}}
-});
-fBack.addEventListener('click',function(){if(step){step--;render(true)}});
-$$('.q-opt').forEach(function(b){b.addEventListener('click',function(){ans=[+b.dataset.first];step=1;render(false);openD(sheet);$('#finder-title').focus()})});
-$$('[data-open-finder]').forEach(function(b){b.addEventListener('click',function(e){
-  e.preventDefault();
-  if(menu.open)menu.close();
-  if(step>=Q.length){step=0;ans=[]}
-  render(false);openD(sheet);$('#finder-title').focus();
-})});
 
 /* Light through glass: a small caustics shader over the category banner */
 $$('[data-caustics]').forEach(function(cv){
@@ -1451,12 +1391,13 @@ if(mcForm){
   },{rootMargin:'400px 0px'}).observe(im.closest('section'));
 })();
 
-/* The fizz: the full glass behind the finder, bubbling, drains away as you scroll. The
+/* The fizz: the full glass behind the hydration line, bubbling, drains away as you scroll. The
    level is a pure function of scroll (eased a touch, so it pours rather than jumps), so
    scrolling back up refills it. It starts as the band's top reaches the top of the window
    and is empty by the time the stage lets go, just before the consult shows. Above the
    surface the canvas is chalk; below it, the glass shows through and bubbles rise to the
-   surface and pop there. One canvas, redrawn each frame while the band is on screen. */
+   surface and pop there. One canvas, redrawn each frame while the band is on screen.
+   The cup rides the same level: see rise() below. */
 (function(){
   var run=$('#fizz-bg');
   if(!run||!html.classList.contains('motion'))return;
@@ -1466,6 +1407,7 @@ if(mcForm){
   var w=0,h=0,r=1,bub=null,step=16;
   var bubbles=[],MAX=120,spawn=0,lastY=scrollY,kick=0,t0=0,t=0,raf=0,on=false;
   var level=0,target=0,slosh=0,settled=false;
+  var cup=$('#hy-cup'),tide=$('.hy-tide',sec),rip=$('.hy-ripple',sec),risen=-1;
 
   function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
 
@@ -1485,7 +1427,7 @@ if(mcForm){
     cv.width=Math.round(w*r);cv.height=Math.round(h*r);
     MAX=w<600?40:120;step=w<600?13:18;
     if(!bub)bub=makeBubble();
-    settled=false;draw();
+    settled=false;draw();rise();
   }
 
   /* How empty the glass should be, 0..1: 0 while the band's top is below the window's top,
@@ -1563,11 +1505,30 @@ if(mcForm){
     }
     /* dry and still: one last chalk frame, then nothing until the next scroll */
     var dry=level>=1&&target>=1&&!bubbles.length&&Math.abs(slosh)<.5;
-    if(!(dry&&settled))draw();
+    if(!(dry&&settled)){draw();rise()}
     settled=dry;
     if(on&&!dry)raf=requestAnimationFrame(tick);
   }
   function wake(){if(on&&!raf){raf=requestAnimationFrame(tick)}}
+
+  /* The cup: nothing until the falling surface has cleared the tide line at the foot of its
+     well, then it comes up through that line and is all the way up as the glass runs dry.
+     It rides the eased level, so it can never be ahead of the water. Rects are read first,
+     then transform and opacity are written: no layout. */
+  function rise(){
+    if(!cup)return;
+    var s=stage.getBoundingClientRect().top,
+        line=tide.getBoundingClientRect().bottom-s+4,         /* just under the tide, in stage terms: a margin for the waves */
+        Y=-EDGE+(h+EDGE*2)*level,end=h+EDGE,
+        p=level>=1?1:end-line<1?0:clamp((Y-line)/(end-line),0,1);
+    p=Math.round(p*p*(3-2*p)*1000)/1000;                   /* eased in and out */
+    if(p===risen)return;
+    risen=p;
+    cup.style.transform='translate3d(0,'+((1-p)*105).toFixed(2)+'%,0)';
+    tide.style.opacity=Math.min(1,p*6).toFixed(3);          /* the mark shows as the water leaves it */
+    rip.style.opacity=(Math.sin(Math.PI*p)*.9).toFixed(3);  /* rings only while it breaks the surface */
+    rip.style.transform='scaleX('+(.8+.5*p).toFixed(3)+')';
+  }
 
   size();
   addEventListener('resize',function(){
@@ -1579,8 +1540,8 @@ if(mcForm){
   /* only animate while the band is on screen; arriving by a jump, start at the right level */
   new IntersectionObserver(function(es){
     on=es[0].isIntersecting;
-    if(on){level=target=drained();slosh=0;t0=0;lastY=scrollY;settled=false;wake()}
-    else{bubbles.length=0;level=target=drained();slosh=0;draw()}
+    if(on){level=target=drained();slosh=0;t0=0;lastY=scrollY;settled=false;rise();wake()}
+    else{bubbles.length=0;level=target=drained();slosh=0;draw();rise()}
   }).observe(run);
 })();
 
@@ -1630,7 +1591,7 @@ if(mcForm){
     if(!t||t.id==='sound-toggle')return;
     if(t.closest('.isle'))return sounds.isle();
     if(t.classList.contains('btn'))return sounds.go();
-    if(t.classList.contains('icon-btn')||t.classList.contains('chip')||t.closest('.q-opt,.opt'))return sounds.soft();
+    if(t.classList.contains('icon-btn')||t.classList.contains('chip'))return sounds.soft();
     sounds.tap();
   },{passive:true});
   function paint(){
