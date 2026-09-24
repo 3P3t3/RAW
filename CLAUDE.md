@@ -61,7 +61,9 @@ Source (edit these):
 - `site-src/build_homepage.py` — all layout logic, plus the `FAMILIES`, `CATEGORIES`,
   `FEATURED`, `GOAL_TILES`, `FINDER`, `ISLANDS`, `CAROUSELS` tables
 - `site-src/homepage.template.html`, `site-src/category.template.html`
-- `site-src/_header.html`, `_footer.html`, `_dialogs.html`, `_icons.html`, `_script.html`
+- `site-src/_header.html`, `_footer.html`, `_dialogs.html`, `_icons.html`, `_script.html`, `_intro.html`
+- `site-src/mark-glow.svg` — the lit wave the opening curtain arrives on. JSON-encoded into the
+  script as `{{GLOW_SVG}}`, so it never reaches the markup and a no-JS visitor is served none of it
 - `site-src/style.css` — copied to `style.css` at the repo root at build time; every page links it via
   `{{STYLE}}`, which the build fills in with a content-hash query string. It sits at the root, not under
   `assets/`, so its `url(assets/...)` backgrounds keep resolving against the page's own folder
