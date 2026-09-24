@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap">
-<link rel="stylesheet" href="style.css?v=1eda75ee">
+<link rel="stylesheet" href="style.css?v=232c5a1f">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -35,17 +35,16 @@
 
      Everything here is built at run time, so there is no curtain anywhere in the markup
      and no curtain at all without JS. The build substitutes this only into the homepage
-     template, so category pages never carry it. It runs once per session, never with
+     template, so category pages never carry it. It plays on every load, never with
      reduced motion, and never when the page was opened at an anchor. Any tap, click,
      key, wheel or scroll ends it on the spot. Only transform and opacity move. -->
 <script>
 (function(){
 'use strict';
-var doc=document,win=window,KEY='ah-intro-v1',SPAN=2560;
+var doc=document,win=window,SPAN=2560;
 if(!doc.body||!('animate' in Element.prototype))return;
 if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;   /* no curtain, not even for a frame */
 if(location.hash)return;                                            /* they asked for a place, not a show */
-try{if(sessionStorage.getItem(KEY))return;sessionStorage.setItem(KEY,'1')}catch(e){}
 
 /* The wave's own centre line, sampled every 2.5 of the mark's 100 units. This is the seam. */
 var MID=[18.1,17.41,17.03,17.01,17.29,17.43,17.77,18.16,18.51,18.68,18.57,18.22,17.65,16.96,
@@ -130,12 +129,18 @@ function start(){
   ov.removeChild(ov.firstChild);                             /* the flat sheet hands over */
 
   /* the mark itself, cloned straight off the masthead: the same paths, never redrawn */
-  var slot=doc.createElement('div'),mk=src.cloneNode(true),gh;
+  var slot=doc.createElement('div'),mk=src.cloneNode(true),cut;
   mk.removeAttribute('class');
-  gh=mk.cloneNode(true);
+  /* The masthead carries both builds of the wave and swaps them on a resolution query,
+     because at 1x its slivers land on about one device pixel and grey out. Here the
+     choice is made on the clone itself, by throwing the other build away: a query that
+     fails to match for any reason would leave the curtain's mark reading as a solid
+     slab, and at the 3-7x the intro draws it there is nothing subtle left to protect. */
+  cut=mk.querySelector((win.devicePixelRatio||1)>=1.5?'.m-solid':'.m-full');
+  if(cut)cut.parentNode.removeChild(cut);
   slot.className='intro-wave';
   slot.style.cssText='left:'+x0+'px;top:'+y0+'px;width:'+Wm+'px;height:'+Hm+'px';
-  slot.appendChild(gh);slot.appendChild(mk);
+  slot.appendChild(mk);
   ov.appendChild(slot);
 
   var r=src.getBoundingClientRect(),
@@ -150,16 +155,13 @@ function start(){
           {duration:360,delay:30+i*28,easing:rise,fill:'both'});
   A(tag,[{opacity:0},{opacity:.75}],{duration:280,delay:260,easing:'ease-out',fill:'both'});
   A(tag,[{opacity:.75},{opacity:0}],{duration:200,delay:820,easing:'ease-in',fill:'forwards'});
-  /* 2. the letters clear away and the wave sweeps in, a strand ahead of itself, and settles */
+  /* 2. the letters clear away and the wave sweeps in and settles. Nothing trails it: a
+        second copy of the mark at any opacity fills the slivers it is there to show. */
   for(i=0;i<L.length;i++)
     A(L[i],[{transform:'translateY(0)'},{transform:'translateY(-118%)'}],
           {duration:260,delay:860+i*11,easing:'cubic-bezier(.5,0,.75,0)',fill:'forwards'});
-  A(gh,[{transform:'translateX(-22%) scale(1.10)',opacity:0,offset:0},
-        {transform:'translateX(-7%) scale(1.03)',opacity:.3,offset:.45},
-        {transform:'none',opacity:0,offset:1}],
-       {duration:600,delay:1100,easing:rise,fill:'both'});
   A(mk,[{transform:'translateX(-13%) scale(1.06)',opacity:0},{transform:'none',opacity:1}],
-       {duration:540,delay:1120,easing:'cubic-bezier(.16,.84,.3,1)',fill:'both'});
+       {duration:560,delay:1110,easing:'cubic-bezier(.16,.84,.3,1)',fill:'both'});
   /* 3. the screen parts along that same curve */
   A(ov.querySelector('.intro-top'),[{transform:'translateY(0)'},{transform:'translateY(-101%)'}],
        {duration:740,delay:1800,easing:door,fill:'forwards'});
