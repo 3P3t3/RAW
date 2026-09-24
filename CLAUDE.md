@@ -79,6 +79,10 @@ Generated (never hand-edit; the next build overwrites them):
 
 `index.html` is a hand-written redirect to `homepage.html` and is not generated.
 
+`assets/wave-horizon.webp` is the footer's horizon: Peter's lit wave, cropped to the wave band
+alone (his artwork carries the lockup type under it, which must never reach the page). It is
+placed by hand, not generated, so the build never rewrites it and nothing cleans it up.
+
 ## Build
 
     python3 site-src/build_homepage.py     # from the repo root
