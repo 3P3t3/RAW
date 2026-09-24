@@ -313,6 +313,22 @@ html:not(.js) .q-card{display:none}
 @media (hover:hover){.foot-links a:hover{text-decoration:underline;text-underline-offset:5px}}
 .foot-meta{display:grid;gap:12px;margin-top:24px;max-width:70ch;font-size:14px;line-height:1.6}
 
+/* 8b. Footer horizon. Peter's lit wave laid along the top edge of the footer, the light
+   where the page ends. The shipped asset is the wave band cropped out of his artwork, so
+   the lockup type that sits under the wave there can never enter the frame. The ground
+   under it goes black, the image is screened onto it and its lower edge is masked away, so
+   there is no rectangle where the picture stops. The band owns its own strip: the footer's
+   top padding is the band's height plus its usual 36px, so no text ever sits on the glow.
+   Kept as one block, after the footer's own, so it merges in one piece. */
+.foot{--horizon:clamp(96px,22vw,260px);position:relative;isolation:isolate;
+  background:#000;padding-top:calc(var(--horizon) + 36px)}
+.foot-glow{position:absolute;left:0;top:0;width:100%;height:var(--horizon);pointer-events:none;
+  mix-blend-mode:screen;
+  -webkit-mask-image:linear-gradient(#000 50%,rgba(0,0,0,.4) 80%,transparent 100%);
+          mask-image:linear-gradient(#000 50%,rgba(0,0,0,.4) 80%,transparent 100%)}
+.foot-glow img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0}
+.foot .wrap{position:relative;z-index:1}
+
 /* Full-screen nav panel */
 dialog{color:var(--text)}
 .menu{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:var(--teal);color:var(--sand)}
