@@ -72,12 +72,21 @@ a,button,summary{touch-action:manipulation}
   .wordmark .mark .m-full{display:inline}
   .wordmark .mark .m-solid{display:none}
 }
-/* under ~360 the wordmark's tracking alone shoves the search toggle off the bar */
-/* under ~360 the wave alone carries the bar: the name is still read by screen readers,
-   and the mark gets the width it needs to read as a wave rather than a smear */
-@media (max-width:360px){.mast .wordmark{gap:0}
+/* 361-479: the compact bar cannot carry the 103px wave beside the wordmark at full size.
+   The content is 404px wide; with the page's 40px of side padding it needs a 444px
+   viewport, so below that the name takes the compact setting and the mark 84x20. Measured,
+   not guessed: at 390 this was 404px of content in a 350px bar, and the search toggle was
+   clipped off the page entirely. */
+@media (max-width:479px){.mast .wordmark{gap:6px;font-size:11px;letter-spacing:.08em}
+  .mast .wordmark .mark{width:84px;height:20px}}
+/* 419 and down the wave alone carries the bar. Beside the name it could only be 56px
+   there, which is not really the mark; with the name out of the way the bar has room for
+   140. The name stays in the accessibility tree and in the page title. */
+@media (max-width:419px){.mast .wordmark{gap:0}
   .mast .wordmark .wm-name{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-  .mast .wordmark .mark{width:130px;height:32px}}
+  .mast .wordmark .mark{width:140px;height:34px}}
+/* the smallest phones: 140 overruns once a classic scrollbar takes 15px, so 320-360 gets 112 */
+@media (max-width:360px){.mast .wordmark .mark{width:112px;height:27px}}
 .nav-inline{display:none}
 .search{display:flex;gap:8px;padding:0 0 14px}
 .js .mast:not(.s-open) .search{display:none}
