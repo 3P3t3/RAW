@@ -136,10 +136,10 @@ $$('a',menu).forEach(function(a){a.addEventListener('click',function(){menu.clos
 /* the menu button survives to 1024 now, so only close the panel where the inline nav takes over */
 matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
 
-/* The macro calculator tab: shown only while nothing it could cover is in view. That is the
-   calculator and the consult on the homepage (their buttons and the calendar), the hero's
-   own two links, which sit where the tab does on a phone and one of which goes to the same
-   place, the band that sends you to the calculator on a category page, and the footer,
+/* The tab, the calculator and the call as one: shown only while nothing it could cover is
+   in view. That is the calculator and the consult on the homepage (their buttons and the
+   calendar), the hero's own two links, which sit where the tab does on a phone and go to the
+   same places, the band that sends you to the calculator on a category page, and the footer,
    which is the end of every page and so could never be scrolled out from under it. It also
    waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
 (function(){

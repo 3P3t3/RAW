@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=17cf270f">
+<link rel="stylesheet" href="style.css?v=8c281078">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -62,10 +62,12 @@
     </form>
   </div>
 </header>
-<!-- The macro calculator, one tap from anywhere. It sits at the foot of the window and the
-     script shows it only while nothing it could cover is in view (see the tab block in the
-     script), never under the curtain or the menu. Without script it never shows. -->
-<a class="mtab" id="mtab" href="homepage.html#macros">Macro calculator</a>
+<!-- The calculator and the call, one tap from anywhere. The pair sits at the foot of the
+     window and shows or hides as one: the script shows it only while nothing it could cover
+     is in view (see the tab block in the script), never under the curtain or the menu, and
+     without script it never shows. From 1024 up the mast carries "Free call", so the tab
+     drops its own and there is still only one. -->
+<div class="mtab" id="mtab"><a class="mtab-calc" href="homepage.html#macros">Macro calculator</a><a class="mtab-call" href="homepage.html#consult">Free call</a></div>
 
 
 
@@ -326,10 +328,10 @@ $$('a',menu).forEach(function(a){a.addEventListener('click',function(){menu.clos
 /* the menu button survives to 1024 now, so only close the panel where the inline nav takes over */
 matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
 
-/* The macro calculator tab: shown only while nothing it could cover is in view. That is the
-   calculator and the consult on the homepage (their buttons and the calendar), the hero's
-   own two links, which sit where the tab does on a phone and one of which goes to the same
-   place, the band that sends you to the calculator on a category page, and the footer,
+/* The tab, the calculator and the call as one: shown only while nothing it could cover is
+   in view. That is the calculator and the consult on the homepage (their buttons and the
+   calendar), the hero's own two links, which sit where the tab does on a phone and go to the
+   same places, the band that sends you to the calculator on a category page, and the footer,
    which is the end of every page and so could never be scrolled out from under it. It also
    waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
 (function(){

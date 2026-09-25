@@ -134,21 +134,28 @@ a,button,summary{touch-action:manipulation}
 .search-go{position:absolute;right:0;top:0;color:var(--sand)}
 html:not(.js) .search-toggle{visibility:hidden}
 
-/* The macro calculator tab: the mast's teal and its micro-type, hung from the foot of the
-   window. Off screen and out of the tab order until the script adds .on, which it does only
+/* The tab: the calculator and the call, hung from the foot of the window. The pair moves as
+   one: off screen and out of the tab order until the script adds .on, which it does only
    while nothing it could cover is in view and the curtain is gone (the tab block in the
-   script lists what); the open menu (html.locked) sends it away again. No script, no tab. */
-.mtab{position:fixed;left:0;right:0;bottom:0;z-index:19;width:max-content;margin:0 auto;
-  display:flex;align-items:center;min-height:calc(44px + env(safe-area-inset-bottom,0px));
-  padding:0 22px env(safe-area-inset-bottom,0px);border:1px solid rgba(230,211,197,.3);border-bottom:0;
-  border-radius:var(--r);background:var(--teal);color:var(--sand);
-  font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;text-decoration:none;
+   script lists what); the open menu (html.locked) sends it away again. No script, no tab.
+   The calculator wears the mast's teal and micro-type; the call is the filled blue of every
+   primary button, because it is the one that matters. Each half runs down into the safe
+   area, so its colour reaches the edge of the glass. */
+.mtab{position:fixed;left:0;right:0;bottom:0;z-index:19;width:max-content;max-width:100%;margin:0 auto;
+  display:flex;border:1px solid rgba(230,211,197,.3);border-bottom:0;border-radius:var(--r);background:var(--teal);
   transform:translateY(calc(100% + 2px));visibility:hidden;
   transition:transform var(--ease),visibility 0s linear 520ms}
 .mtab.on{transform:none;visibility:visible;transition:transform var(--ease),visibility 0s}
 html.locked .mtab{transform:translateY(calc(100% + 2px));visibility:hidden}
-.mtab:active{opacity:.85}
-.mtab:focus-visible{outline:2px solid var(--sand);outline-offset:-6px}
+.mtab a{display:flex;align-items:center;justify-content:center;min-height:calc(44px + env(safe-area-inset-bottom,0px));
+  padding:0 18px env(safe-area-inset-bottom,0px);font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;
+  white-space:nowrap;text-decoration:none}
+.mtab-calc{color:var(--sand)}
+.mtab-call{background:var(--blue);color:#fff}
+.mtab a:active{opacity:.85}
+.mtab a:focus-visible{outline:2px solid var(--sand);outline-offset:-6px}
+/* 1024 and up the mast shows its own "Free call"; one call button on screen, never two */
+@media (min-width:1024px){.mtab-call{display:none!important}}
 html:not(.js) .mtab{display:none}
 @media (prefers-reduced-motion:reduce){.mtab,.mtab.on{transition:none}}
 
