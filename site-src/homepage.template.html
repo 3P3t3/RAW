@@ -279,12 +279,16 @@
           <img class="c-fam" src="assets/peter/family-320.webp" width="320" height="400" loading="lazy" decoding="async" alt="Peter with his wife and baby daughter">
           <!-- PETER-COPY --><p>I'm Peter, a Lincoln local with a baby girl and a wife who's as obsessed with biohacking and longevity as I am. Happy to grab a call. No promises I can solve every issue, but I'd bet we can optimize at least a few of them.</p><!-- /PETER-COPY -->
         </div>
-        <!-- the before and after: front first, a swipe for the side and the back -->
+        <!-- the before and after: all three views stacked, nothing to swipe. The three files
+             share one crop, so the seam between before and after sits at 50% in each: the
+             befores line up down the left, the afters down the right, and one pair of
+             headings on that same 50% line labels the whole stack. -->
         <figure class="c-proof">
-          <div class="c-strip" tabindex="0" role="region" aria-label="Before and after">
-            <img src="assets/peter/front-640.webp" srcset="assets/peter/front-640.webp 640w, assets/peter/front-960.webp 960w" sizes="(min-width:1280px) 428px, (min-width:768px) 35vw, calc(88vw - 36px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the front">
-            <img src="assets/peter/side-640.webp" srcset="assets/peter/side-640.webp 640w, assets/peter/side-960.webp 960w" sizes="(min-width:1280px) 428px, (min-width:768px) 35vw, calc(88vw - 36px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the side">
-            <img src="assets/peter/back-640.webp" srcset="assets/peter/back-640.webp 640w, assets/peter/back-960.webp 960w" sizes="(min-width:1280px) 428px, (min-width:768px) 35vw, calc(88vw - 36px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the back">
+          <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
+          <div class="c-stack">
+            <img src="assets/peter/front-640.webp" srcset="assets/peter/front-640.webp 640w, assets/peter/front-960.webp 960w" sizes="(min-width:1280px) 486px, (min-width:768px) 38vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the front">
+            <img src="assets/peter/side-640.webp" srcset="assets/peter/side-640.webp 640w, assets/peter/side-960.webp 960w" sizes="(min-width:1280px) 486px, (min-width:768px) 38vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the side">
+            <img src="assets/peter/back-640.webp" srcset="assets/peter/back-640.webp 640w, assets/peter/back-960.webp 960w" sizes="(min-width:1280px) 486px, (min-width:768px) 38vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the back">
           </div>
           <!-- PETER-COPY --><figcaption>Same guy, 15 months apart.</figcaption><!-- /PETER-COPY -->
         </figure>

@@ -289,23 +289,25 @@ html:not(.js) .mtab{display:none}
 .split-text p:not(.label){max-width:42ch}
 
 /* 7. Consult: four answers, then a time on the calendar */
-.consult{overflow:hidden;color:var(--text)}
+.consult{overflow:hidden;overflow:clip;color:var(--text)}  /* clip, not hidden: hidden would make this a scroll box and kill the sticky card below */
 .consult .split-text p:not(.label){max-width:40ch}
 .c-fine{font-size:14px;color:var(--text)}
 .c-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:10px;max-width:40ch}
 .c-list li{position:relative;padding-left:20px;font-size:16px;color:var(--text)}
 .c-list li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:1px;background:var(--teal)}
 /* Peter, met before the questions: who he is (the family, small, beside his line), then the
-   proof (the before and after, one frame wide, the side and back a swipe away). Every img
-   carries its width and height, so nothing jumps when the lazy files land. */
+   proof (the before and after, all three views stacked, nothing to swipe). Every img carries
+   its width and height, so nothing jumps when the lazy files land. */
 .c-who{display:grid;grid-template-columns:112px minmax(0,1fr);gap:16px;align-items:start;width:100%;margin-top:12px}
 .c-fam{display:block;width:100%;height:auto;background:var(--tile)}
 .c-proof{display:grid;gap:10px;width:100%;min-width:0;margin:4px 0 0}
-.c-strip{display:grid;grid-auto-flow:column;grid-auto-columns:88%;gap:8px;overflow-x:auto;
-  scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;
-  margin:0 calc(-1 * var(--pad));padding:0 var(--pad);scroll-padding:0 var(--pad)}
-.c-strip::-webkit-scrollbar{display:none}
-.c-strip img{display:block;width:100%;height:auto;scroll-snap-align:start;background:var(--tile)}
+/* the three files share one crop, so a 1fr 1fr row above the stack puts the two headings on
+   the very 50% line every image splits on: one pair labels all three. */
+.c-cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.c-cols span{font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--text);opacity:.62;text-align:center}
+.c-stack{display:grid;gap:8px;min-width:0}
+.c-stack img{display:block;width:100%;height:auto;background:var(--tile)}
 .c-proof figcaption{font-size:14px;color:var(--text)}
 .c-card{display:grid;gap:22px;padding:24px 20px 26px;background:rgba(244,242,236,.86);
   box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 40px 60px -40px rgba(0,30,39,.55)}
@@ -438,8 +440,11 @@ html:not(.js) #results[hidden]{display:block!important}
   .foot-top .foot-brand{grid-column:1 / 5}
   .foot-links{grid-column:5 / 13;grid-auto-flow:column;justify-content:flex-end;gap:0 36px}
   .c-card,.c-embed{grid-column:7 / 13}
+  /* the proof stacks three deep in the left column, so the card rides beside it rather than
+     stranding the questions at the top of a tall band. Only where the window is tall enough
+     that a stuck card still reaches its own button. */
+  @media (min-height:1000px){.c-card,.c-embed{position:sticky;top:calc(var(--mast) + 24px)}}
   .c-who{grid-template-columns:140px minmax(0,1fr);gap:20px}
-  .c-strip{margin:0;padding:0;scroll-padding:0}
   .c-card{padding:32px}
 }
 
@@ -449,6 +454,10 @@ html:not(.js) #results[hidden]{display:block!important}
    button at the foot of the menu panel instead. */
 @media (min-width:1024px){
   :root{--mast:76px}
+  /* Peter's proof is a tall wall down the left column; the card rides beside it on the same
+     sticky beat as .hy-beat, so the four questions are never scrolled away from the proof.
+     Held back on short viewports, where a stuck card could outrun its own button. */
+  @media (min-height:760px){.c-card,.c-embed{position:sticky;top:calc(var(--mast) + 24px)}}
   /* the wordmark column may not shrink below its own width: with the wave in it the block
      is ~277px, and a minmax(0,1fr) track let it overflow into the nav at 1024 */
   .mast .wrap{display:grid;grid-template-columns:minmax(auto,1fr) auto minmax(0,1fr) auto;align-items:center;gap:24px;height:76px}
