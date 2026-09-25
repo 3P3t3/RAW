@@ -12,8 +12,14 @@
         <li><a href="{{HOME}}#results" data-all>All products <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="{{HOME}}#macros">Macros <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ul>
+      <!-- every shelf, straight to its page. Generated from CATEGORIES in build_homepage.py,
+           so a new shelf appears here without anyone touching this file. -->
+      <p class="label menu-shelves-t" id="menu-shelves-t">Shelves</p>
+      <ul class="menu-shelves" aria-labelledby="menu-shelves-t">
+{{MENU_SHELVES}}
+      </ul>
       <!-- the consult leaves the list and becomes the one filled thing here, as in the mast -->
-      <a class="btn menu-cta" href="{{HOME}}#consult">Book a consult</a>
+      <a class="btn menu-cta" href="{{HOME}}#consult">Book a free call</a>
     </nav>
   </div>
 </dialog>

@@ -134,6 +134,24 @@ a,button,summary{touch-action:manipulation}
 .search-go{position:absolute;right:0;top:0;color:var(--sand)}
 html:not(.js) .search-toggle{visibility:hidden}
 
+/* The macro calculator tab: the mast's teal and its micro-type, hung from the foot of the
+   window. Off screen and out of the tab order until the script adds .on, which it does only
+   while nothing it could cover is in view and the curtain is gone (the tab block in the
+   script lists what); the open menu (html.locked) sends it away again. No script, no tab. */
+.mtab{position:fixed;left:0;right:0;bottom:0;z-index:19;width:max-content;margin:0 auto;
+  display:flex;align-items:center;min-height:calc(44px + env(safe-area-inset-bottom,0px));
+  padding:0 22px env(safe-area-inset-bottom,0px);border:1px solid rgba(230,211,197,.3);border-bottom:0;
+  border-radius:var(--r);background:var(--teal);color:var(--sand);
+  font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;text-decoration:none;
+  transform:translateY(calc(100% + 2px));visibility:hidden;
+  transition:transform var(--ease),visibility 0s linear 520ms}
+.mtab.on{transform:none;visibility:visible;transition:transform var(--ease),visibility 0s}
+html.locked .mtab{transform:translateY(calc(100% + 2px));visibility:hidden}
+.mtab:active{opacity:.85}
+.mtab:focus-visible{outline:2px solid var(--sand);outline-offset:-6px}
+html:not(.js) .mtab{display:none}
+@media (prefers-reduced-motion:reduce){.mtab,.mtab.on{transition:none}}
+
 /* 3. Hero: headline on solid teal, the glass explosion to the right over a teal/beige split */
 .hero{position:relative;isolation:isolate;overflow:hidden;background:var(--hero);color:var(--on-dark)}
 .hero-copy{position:relative;z-index:2;min-width:0;display:grid;gap:16px;justify-items:start;padding-top:28px;padding-bottom:12px}
@@ -270,6 +288,18 @@ html:not(.js) .search-toggle{visibility:hidden}
 .c-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:10px;max-width:40ch}
 .c-list li{position:relative;padding-left:20px;font-size:16px;color:var(--text)}
 .c-list li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:1px;background:var(--teal)}
+/* Peter, met before the questions: who he is (the family, small, beside his line), then the
+   proof (the before and after, one frame wide, the side and back a swipe away). Every img
+   carries its width and height, so nothing jumps when the lazy files land. */
+.c-who{display:grid;grid-template-columns:112px minmax(0,1fr);gap:16px;align-items:start;width:100%;margin-top:12px}
+.c-fam{display:block;width:100%;height:auto;background:var(--tile)}
+.c-proof{display:grid;gap:10px;width:100%;min-width:0;margin:4px 0 0}
+.c-strip{display:grid;grid-auto-flow:column;grid-auto-columns:88%;gap:8px;overflow-x:auto;
+  scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;
+  margin:0 calc(-1 * var(--pad));padding:0 var(--pad);scroll-padding:0 var(--pad)}
+.c-strip::-webkit-scrollbar{display:none}
+.c-strip img{display:block;width:100%;height:auto;scroll-snap-align:start;background:var(--tile)}
+.c-proof figcaption{font-size:14px;color:var(--text)}
 .c-card{display:grid;gap:22px;padding:24px 20px 26px;background:rgba(244,242,236,.86);
   box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 40px 60px -40px rgba(0,30,39,.55)}
 @supports (backdrop-filter:blur(6px)){.c-card{backdrop-filter:blur(10px);background:rgba(244,242,236,.7)}}
@@ -342,6 +372,11 @@ dialog{color:var(--text)}
 .menu-list li{border-top:1px solid rgba(230,211,197,.2)}
 .menu-list a,.menu-list button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:64px;padding:0;border:0;background:transparent;color:var(--chalk);font:800 36px/1 var(--display);font-stretch:72%;text-transform:uppercase;text-align:left;text-decoration:none}
 .menu-cta{width:100%;margin-top:28px}
+/* the shelves: every category page, in the nav's small type, two to a row */
+.menu-shelves-t{margin-top:24px}
+.menu-shelves{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}
+.menu-shelves a{display:flex;align-items:center;min-height:44px;border-top:1px solid rgba(230,211,197,.2);color:var(--chalk);font:600 15px/1.2 var(--sans);text-decoration:none}
+.menu-shelves a:active{opacity:.7}
 
 /* without JS nothing can reveal the shelf, so it is simply open */
 html:not(.js) #results[hidden]{display:block!important}
@@ -396,6 +431,8 @@ html:not(.js) #results[hidden]{display:block!important}
   .foot-top .foot-brand{grid-column:1 / 5}
   .foot-links{grid-column:5 / 13;grid-auto-flow:column;justify-content:flex-end;gap:0 36px}
   .c-card,.c-embed{grid-column:7 / 13}
+  .c-who{grid-template-columns:140px minmax(0,1fr);gap:20px}
+  .c-strip{margin:0;padding:0;scroll-padding:0}
   .c-card{padding:32px}
 }
 
@@ -726,8 +763,6 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
 /* the spinners cost width the 320px card has not got, and nobody nudges their height by 1in */
 .mc-field input::-webkit-outer-spin-button,.mc-field input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .mc-field input[type=number]{-moz-appearance:textfield}
-/* the browser default placeholder grey is 4.0:1 here; this one is 5.3:1 */
-.mc-field input::placeholder{color:#5B6A7B;opacity:1}
 .mc-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 
 .mc-nav{display:flex;flex-wrap:wrap;align-items:center;gap:12px}

@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=ff2797e4">
+<link rel="stylesheet" href="style.css?v=17cf270f">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -252,7 +252,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <a href="#goals">Goals</a>
         <a href="#results" data-all>Products</a>
         <a href="#macros">Macros</a>
-        <a class="btn btn-sm" href="#consult">Consult</a>
+        <a class="btn btn-sm" href="#consult">Free call</a>
       </nav>
       <button class="icon-btn sound-toggle" id="sound-toggle" type="button" aria-label="Turn interface sounds off" aria-pressed="true" hidden><svg class="ic" aria-hidden="true"><use href="#i-sound"/></svg></button>
       <button class="icon-btn search-toggle" id="search-toggle" type="button" aria-label="Search products" aria-expanded="false" aria-controls="search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
@@ -264,6 +264,10 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     </form>
   </div>
 </header>
+<!-- The macro calculator, one tap from anywhere. It sits at the foot of the window and the
+     script shows it only while nothing it could cover is in view (see the tab block in the
+     script), never under the curtain or the menu. Without script it never shows. -->
+<a class="mtab" id="mtab" href="#macros">Macro calculator</a>
 
 
 
@@ -282,7 +286,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         
         <div class="hero-actions">
           <a class="btn" href="#macros">Work out your macros</a>
-          <a class="tlink" href="#results" data-all>Shop all products</a>
+          <a class="tlink" href="#consult">Book a free call</a>
         </div>
       </div>
     </div>
@@ -322,7 +326,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <p>The math behind a higher you.</p>
       </div>
       <form class="mc-card grow" id="mc-form" style="--d:1" novalidate>
-        <p class="mc-nojs">This one needs JavaScript to do the arithmetic. <a class="tlink" href="#consult">Book a call</a> and we will work your macros out together instead.</p>
+        <p class="mc-nojs">This one needs JavaScript to do the arithmetic. <a class="tlink" href="#consult">Book a free call</a> and we will work your macros out together instead.</p>
 
         <div class="mc-quiz" id="mc-quiz">
           <p class="mc-count" id="mc-step-n">Step 1 of 7</p>
@@ -339,22 +343,22 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           <fieldset class="mc-step" hidden>
             <legend class="mc-q" tabindex="-1">How old are you?</legend>
             <div class="mc-field"><label for="mc-age">Age in years</label>
-              <input id="mc-age" name="age" type="number" inputmode="numeric" min="13" max="100" step="1" autocomplete="off" placeholder="35"></div>
+              <input id="mc-age" name="age" type="number" inputmode="numeric" min="13" max="100" step="1" autocomplete="off"></div>
           </fieldset>
 
           <fieldset class="mc-step" hidden>
             <legend class="mc-q" tabindex="-1">What do you weigh?</legend>
             <div class="mc-field"><label for="mc-weight">Weight in pounds</label>
-              <input id="mc-weight" name="weight" type="number" inputmode="decimal" min="50" max="700" step="any" autocomplete="off" placeholder="150"></div>
+              <input id="mc-weight" name="weight" type="number" inputmode="decimal" min="50" max="700" step="any" autocomplete="off"></div>
           </fieldset>
 
           <fieldset class="mc-step" hidden>
             <legend class="mc-q" tabindex="-1">How tall are you?</legend>
             <div class="mc-pair">
               <div class="mc-field"><label for="mc-ft">Feet</label>
-                <input id="mc-ft" name="ft" type="number" inputmode="numeric" min="3" max="8" step="1" autocomplete="off" placeholder="5"></div>
+                <input id="mc-ft" name="ft" type="number" inputmode="numeric" min="3" max="8" step="1" autocomplete="off"></div>
               <div class="mc-field"><label for="mc-in">Inches</label>
-                <input id="mc-in" name="inch" type="number" inputmode="numeric" min="0" max="11" step="1" autocomplete="off" placeholder="5"></div>
+                <input id="mc-in" name="inch" type="number" inputmode="numeric" min="0" max="11" step="1" autocomplete="off"></div>
             </div>
           </fieldset>
 
@@ -431,7 +435,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
             <li><span class="mc-g" id="mc-c">&#8212;</span><span class="mc-lab">Carbs</span><span class="mc-kc" id="mc-cc">&#8212;</span></li>
           </ul>
           <div class="mc-notes" id="mc-notes"></div>
-          <a class="btn" id="mc-book" href="#consult">Take these to a call</a>
+          <a class="btn" id="mc-book" href="#consult">Take these to a free call</a>
           <div class="mc-foot">
             <button class="tlink" type="button" id="mc-edit">Change an answer</button>
             <button class="tlink" type="button" id="mc-again">Start over</button>
@@ -584,13 +588,29 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <div class="split-text grow">
         <p class="label">One to one</p>
         <h2 id="consult-title"><span>Talk through</span> <span>your stack</span></h2>
-        <p>Thirty minutes, one to one. Answer four things first and we skip the catching up.</p>
+        <!-- PETER-COPY --><p>Complimentary call, 1:1, to talk about how to optimize your health for this season: macros, sleep, what to add to your supplement stack, and what to leave behind.</p><!-- /PETER-COPY -->
         <ul class="c-list">
           <li>Your macros, and whether the split is worth changing</li>
           <li>What you already take, and what it is doing</li>
           <li>The smallest stack that moves the goal, and what to drop</li>
         </ul>
-        
+        <!-- Who is on the call, then the proof, both met before the four questions. Every photo is
+             asked for only as the band nears (loading=lazy), so none of them costs the first paint.
+             The files in assets/peter/ are placed by hand, cut from Peter's originals; the build
+             never writes them. -->
+        <div class="c-who">
+          <img class="c-fam" src="assets/peter/family-320.webp" width="320" height="400" loading="lazy" decoding="async" alt="Peter with his wife and baby daughter">
+          <!-- PETER-COPY --><p>I'm Peter, a Lincoln local with a baby girl and a wife who's as obsessed with biohacking and longevity as I am. Happy to grab a call. No promises I can solve every issue, but I'd bet we can optimize at least a few of them.</p><!-- /PETER-COPY -->
+        </div>
+        <!-- the before and after: front first, a swipe for the side and the back -->
+        <figure class="c-proof">
+          <div class="c-strip" tabindex="0" role="region" aria-label="Before and after">
+            <img src="assets/peter/front-640.webp" srcset="assets/peter/front-640.webp 640w, assets/peter/front-960.webp 960w" sizes="(min-width:1280px) 428px, (min-width:768px) 35vw, calc(88vw - 36px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the front">
+            <img src="assets/peter/side-640.webp" srcset="assets/peter/side-640.webp 640w, assets/peter/side-960.webp 960w" sizes="(min-width:1280px) 428px, (min-width:768px) 35vw, calc(88vw - 36px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the side">
+            <img src="assets/peter/back-640.webp" srcset="assets/peter/back-640.webp 640w, assets/peter/back-960.webp 960w" sizes="(min-width:1280px) 428px, (min-width:768px) 35vw, calc(88vw - 36px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the back">
+          </div>
+          <!-- PETER-COPY --><figcaption>Same guy, 15 months apart.</figcaption><!-- /PETER-COPY -->
+        </figure>
       </div>
       <form class="c-card grow" id="consult-form" data-consult="https://calendly.com/3pete/explore" style="--d:1">
         <fieldset class="c-q">
@@ -641,7 +661,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       </div>
       <nav class="foot-links" aria-label="Footer">
         <a href="#macros">Macro calculator</a>
-        <a href="#consult">Book a consult</a>
+        <a href="#consult">Book a free call</a>
         <a href="#results" data-all>All 65 products</a>
       </nav>
     </div>
@@ -668,8 +688,20 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <li><a href="#results" data-all>All products <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="#macros">Macros <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ul>
+      <!-- every shelf, straight to its page. Generated from CATEGORIES in build_homepage.py,
+           so a new shelf appears here without anyone touching this file. -->
+      <p class="label menu-shelves-t" id="menu-shelves-t">Shelves</p>
+      <ul class="menu-shelves" aria-labelledby="menu-shelves-t">
+        <li><a href="category-recovery.html">Recovery</a></li>
+        <li><a href="category-hydration.html">Hydration</a></li>
+        <li><a href="category-energy-focus.html">Energy &amp; Focus</a></li>
+        <li><a href="category-protein.html">Protein Snack Pack</a></li>
+        <li><a href="category-fat-loss.html">Fat Loss</a></li>
+        <li><a href="category-daily-foundations.html">Daily Foundations</a></li>
+        <li><a href="category-skin-redefined.html">Skin Redefined</a></li>
+      </ul>
       <!-- the consult leaves the list and becomes the one filled thing here, as in the mast -->
-      <a class="btn menu-cta" href="#consult">Book a consult</a>
+      <a class="btn menu-cta" href="#consult">Book a free call</a>
     </nav>
   </div>
 </dialog>
@@ -814,6 +846,27 @@ $$('[data-close]').forEach(function(b){b.addEventListener('click',function(){b.c
 $$('a',menu).forEach(function(a){a.addEventListener('click',function(){menu.close()})});
 /* the menu button survives to 1024 now, so only close the panel where the inline nav takes over */
 matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
+
+/* The macro calculator tab: shown only while nothing it could cover is in view. That is the
+   calculator and the consult on the homepage (their buttons and the calendar), the hero's
+   own two links, which sit where the tab does on a phone and one of which goes to the same
+   place, the band that sends you to the calculator on a category page, and the footer,
+   which is the end of every page and so could never be scrolled out from under it. It also
+   waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
+(function(){
+  var tab=$('#mtab');
+  if(!tab||!('IntersectionObserver' in window))return;
+  var zones=$$('#macros,#consult,.hero-actions,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+      curtain=function(){return !!$('body > .intro')},
+      paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){inView[zones.indexOf(e.target)]=e.isIntersecting});
+    paint();
+  });
+  zones.forEach(function(z){io.observe(z)});
+  if(curtain())new MutationObserver(function(m,o){if(!curtain()){o.disconnect();paint()}})
+    .observe(doc.body,{childList:true});
+})();
 
 /* Light through glass: a small caustics shader over the category banner */
 $$('[data-caustics]').forEach(function(cv){

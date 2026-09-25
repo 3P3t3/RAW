@@ -136,6 +136,27 @@ $$('a',menu).forEach(function(a){a.addEventListener('click',function(){menu.clos
 /* the menu button survives to 1024 now, so only close the panel where the inline nav takes over */
 matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
 
+/* The macro calculator tab: shown only while nothing it could cover is in view. That is the
+   calculator and the consult on the homepage (their buttons and the calendar), the hero's
+   own two links, which sit where the tab does on a phone and one of which goes to the same
+   place, the band that sends you to the calculator on a category page, and the footer,
+   which is the end of every page and so could never be scrolled out from under it. It also
+   waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
+(function(){
+  var tab=$('#mtab');
+  if(!tab||!('IntersectionObserver' in window))return;
+  var zones=$$('#macros,#consult,.hero-actions,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+      curtain=function(){return !!$('body > .intro')},
+      paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){inView[zones.indexOf(e.target)]=e.isIntersecting});
+    paint();
+  });
+  zones.forEach(function(z){io.observe(z)});
+  if(curtain())new MutationObserver(function(m,o){if(!curtain()){o.disconnect();paint()}})
+    .observe(doc.body,{childList:true});
+})();
+
 /* Light through glass: a small caustics shader over the category banner */
 $$('[data-caustics]').forEach(function(cv){
   if(!html.classList.contains('motion'))return;

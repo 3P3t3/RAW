@@ -346,7 +346,10 @@ def main():
     intro = part('_intro.html')  # the opening curtain: homepage only, so it is not in `shared`
     open(STYLE_OUT, 'w').write(style)  # served once and cached, instead of inlined into all eight pages
     style_href = 'style.css?v=' + hashlib.sha1(style.encode()).hexdigest()[:8]  # bust the cache when the css moves
-    shared = {'{{STYLE}}': style_href, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{SCRIPT}}': script,
+    # the menu sheet lists every shelf; it follows {{DIALOGS}} in this dict so it fills the menu once it is in
+    menu_shelves = '\n'.join(f'        <li><a href="category-{s}.html">{n}</a></li>' for s, n, *_ in CATEGORIES)
+    shared = {'{{STYLE}}': style_href, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{MENU_SHELVES}}': menu_shelves,
+              '{{SCRIPT}}': script,
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)),
               '{{TOTAL_PRODUCTS}}': plural(len(products), 'product', zero='products'), '{{CONSULT_URL}}': CONSULT_URL,
               '{{BASE}}': BASE}

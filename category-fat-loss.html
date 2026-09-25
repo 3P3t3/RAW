@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=ff2797e4">
+<link rel="stylesheet" href="style.css?v=17cf270f">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -50,7 +50,7 @@
         <a href="homepage.html#goals">Goals</a>
         <a href="homepage.html#results" data-all>Products</a>
         <a href="homepage.html#macros">Macros</a>
-        <a class="btn btn-sm" href="homepage.html#consult">Consult</a>
+        <a class="btn btn-sm" href="homepage.html#consult">Free call</a>
       </nav>
       <button class="icon-btn sound-toggle" id="sound-toggle" type="button" aria-label="Turn interface sounds off" aria-pressed="true" hidden><svg class="ic" aria-hidden="true"><use href="#i-sound"/></svg></button>
       <button class="icon-btn search-toggle" id="search-toggle" type="button" aria-label="Search products" aria-expanded="false" aria-controls="search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
@@ -62,6 +62,10 @@
     </form>
   </div>
 </header>
+<!-- The macro calculator, one tap from anywhere. It sits at the foot of the window and the
+     script shows it only while nothing it could cover is in view (see the tab block in the
+     script), never under the curtain or the menu. Without script it never shows. -->
+<a class="mtab" id="mtab" href="homepage.html#macros">Macro calculator</a>
 
 
 
@@ -132,7 +136,7 @@
       </div>
       <nav class="foot-links" aria-label="Footer">
         <a href="homepage.html#macros">Macro calculator</a>
-        <a href="homepage.html#consult">Book a consult</a>
+        <a href="homepage.html#consult">Book a free call</a>
         <a href="homepage.html#results" data-all>All 65 products</a>
       </nav>
     </div>
@@ -159,8 +163,20 @@
         <li><a href="homepage.html#results" data-all>All products <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="homepage.html#macros">Macros <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ul>
+      <!-- every shelf, straight to its page. Generated from CATEGORIES in build_homepage.py,
+           so a new shelf appears here without anyone touching this file. -->
+      <p class="label menu-shelves-t" id="menu-shelves-t">Shelves</p>
+      <ul class="menu-shelves" aria-labelledby="menu-shelves-t">
+        <li><a href="category-recovery.html">Recovery</a></li>
+        <li><a href="category-hydration.html">Hydration</a></li>
+        <li><a href="category-energy-focus.html">Energy &amp; Focus</a></li>
+        <li><a href="category-protein.html">Protein Snack Pack</a></li>
+        <li><a href="category-fat-loss.html">Fat Loss</a></li>
+        <li><a href="category-daily-foundations.html">Daily Foundations</a></li>
+        <li><a href="category-skin-redefined.html">Skin Redefined</a></li>
+      </ul>
       <!-- the consult leaves the list and becomes the one filled thing here, as in the mast -->
-      <a class="btn menu-cta" href="homepage.html#consult">Book a consult</a>
+      <a class="btn menu-cta" href="homepage.html#consult">Book a free call</a>
     </nav>
   </div>
 </dialog>
@@ -305,6 +321,27 @@ $$('[data-close]').forEach(function(b){b.addEventListener('click',function(){b.c
 $$('a',menu).forEach(function(a){a.addEventListener('click',function(){menu.close()})});
 /* the menu button survives to 1024 now, so only close the panel where the inline nav takes over */
 matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
+
+/* The macro calculator tab: shown only while nothing it could cover is in view. That is the
+   calculator and the consult on the homepage (their buttons and the calendar), the hero's
+   own two links, which sit where the tab does on a phone and one of which goes to the same
+   place, the band that sends you to the calculator on a category page, and the footer,
+   which is the end of every page and so could never be scrolled out from under it. It also
+   waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
+(function(){
+  var tab=$('#mtab');
+  if(!tab||!('IntersectionObserver' in window))return;
+  var zones=$$('#macros,#consult,.hero-actions,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+      curtain=function(){return !!$('body > .intro')},
+      paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){inView[zones.indexOf(e.target)]=e.isIntersecting});
+    paint();
+  });
+  zones.forEach(function(z){io.observe(z)});
+  if(curtain())new MutationObserver(function(m,o){if(!curtain()){o.disconnect();paint()}})
+    .observe(doc.body,{childList:true});
+})();
 
 /* Light through glass: a small caustics shader over the category banner */
 $$('[data-caustics]').forEach(function(cv){
