@@ -89,9 +89,19 @@ placed by hand, not generated, so the build never rewrites it and nothing cleans
 `assets/peter/` holds Peter's photos for the consult section: `family-320.webp` (Peter, his wife and
 daughter) and his before/after composites `front-`, `side-`, `back-` at `640.webp` and `960.webp`.
 They are cut from his originals in `~/Desktop/aspiree/assets/rooms/` and placed by hand, so the
-build never touches them. Edits to them are honest only: crop, exposure, white balance. They are
-proof photos, so never retouch, smooth or AI-fill them. Peter chose to make them public; the repo
-is public because Pages requires it.
+build never touches them. Peter chose to make them public; the repo is public because Pages
+requires it.
+
+**What may be edited, and what may not.** Crop, exposure and white balance are always fine. Peter
+has also allowed extending BACKGROUND at the edges when framing needs it (2026-09-25) — plain wall
+or door panel only, never across an object and never near his outline. **His body is evidence and
+is never retouched, smoothed, slimmed or reshaped.** As shipped, nothing is synthesised: all six
+halves are straight crops. The one exception is the back BEFORE half, which carries a half-strength
+row-wise horizontal rescale that Peter chose to straighten the room's converging door frames; it
+widens his waistband ~4.9%, which makes the transformation read slightly larger than it was. Never
+increase that without asking him. The three pairs share one framing spec measured on his body, and
+the seam must stay at exactly 50% with befores on the left, or the page's Before/After headings
+stop aligning.
 
 ## Build
 
