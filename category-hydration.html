@@ -876,6 +876,7 @@ if(mcForm){
     if(miss){mcErr.hidden=false;mcErr.textContent=miss;return}
     if(mcAt<mcSteps.length-1){mcAt++;mcStep(true);mcSave();return}
     mcDone=true;mcShow();mcRender(true);mcSave();
+    if(!mcFilled&&mcInView())mcFill(false);   /* already on screen: no intersection left to wait for */
   });
   mcBack.addEventListener('click',function(){if(mcAt){mcAt--;mcStep(true);mcSave()}});
   $('#mc-edit').addEventListener('click',function(){mcDone=false;mcShow();mcStep(true);mcSave()});
@@ -886,9 +887,14 @@ if(mcForm){
   /* the targets go to the consult's own form. The button under the numbers carries them; so
      does scrolling to the form, which is what most people do instead. The button, being asked
      for, sets the goal outright; the scroll only fills what is still empty, and only once, so
-     nothing anyone has typed or cleared is overwritten. */
+     nothing anyone has typed or cleared is overwritten.
+     The consult sits directly under the calculator now, so the form can already be in view
+     when the last answer lands. There is then no new intersection for the observer to report
+     — it went true while the quiz was still up, and mcFill turned back at !mcDone — so the
+     seventh answer asks the geometry itself and fills it on the spot instead. Measured rather
+     than remembered: the observer's last word can still be in flight when the button is hit. */
   var MCTOC={loss:'Lose fat',recomp:'Lose fat',gain:'Build muscle',maint:'Stay healthy day to day'},
-      mcFilled=false;
+      mcFilled=false,mcSec=$('#consult');
   function mcFill(force){
     if(!cform||!mcDone||cform.hidden)return;     /* nothing to carry, or the calendar has the form */
     var g=MCTOC[mcGet('goal')],moved=false,note=cform.elements.note,goal=cform.elements.goal;
@@ -896,6 +902,11 @@ if(mcForm){
     if(note&&!note.value&&mcSum){note.value=mcSum;moved=true}
     mcFilled=true;
     if(moved)cform.dispatchEvent(new Event('change'));
+  }
+  function mcInView(){
+    if(!mcSec)return false;
+    var r=mcSec.getBoundingClientRect();
+    return r.top<(innerHeight||0)&&r.bottom>0;
   }
   function mcGo(e){
     if(!cform)return;                            /* no consult here: just follow the anchor */
@@ -906,7 +917,6 @@ if(mcForm){
     t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
   }
   $('#mc-book').addEventListener('click',mcGo);
-  var mcSec=$('#consult');
   if(cform&&mcSec&&'IntersectionObserver' in window)
     new IntersectionObserver(function(es){if(es[0].isIntersecting&&!mcFilled)mcFill(false)}).observe(mcSec);
 
@@ -1077,7 +1087,7 @@ if(mcForm){
 /* The fizz: the full glass behind the hydration line, bubbling, drains away as you scroll. The
    level is a pure function of scroll (eased a touch, so it pours rather than jumps), so
    scrolling back up refills it. It starts as the band's top reaches the top of the window
-   and is empty by the time the stage lets go, just before the consult shows. Above the
+   and is empty by the time the stage lets go, just before the footer shows. Above the
    surface the canvas is chalk; below it, the glass shows through and bubbles rise to the
    surface and pop there. One canvas, redrawn each frame while the band is on screen.
    The cup rides the same level: see rise() below. */
@@ -1115,7 +1125,7 @@ if(mcForm){
 
   /* How empty the glass should be, 0..1: 0 while the band's top is below the window's top,
      1 once its bottom is at the stage's bottom, where the stage stops sticking. The last
-     few percent of the run are spare, so it is dry a moment before the consult arrives. */
+     few percent of the run are spare, so it is dry a moment before the band ends. */
   function drained(){
     var b=sec.getBoundingClientRect();
     return clamp(-b.top/Math.max(1,b.height-h)/.92,0,1);
