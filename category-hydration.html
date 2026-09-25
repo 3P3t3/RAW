@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=2b14c9a0">
+<link rel="stylesheet" href="style.css?v=9387f80b">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -642,11 +642,12 @@ if(cform){
      in the sentence. A new chip needs a line here or it falls back to 'your goal'. */
   var CGOAL={'Lose fat':'losing fat','Build muscle':'building muscle','More energy':'more energy',
              'Sleep and recovery':'sleep and recovery','Stay healthy day to day':'staying healthy day to day'},
-      CTRAIN={'Weight lifting':'while you lift','Endurance':'while you train endurance',
-              'HIIT':'around your HIIT sessions',
-              'Occasional walks':'starting from the walks you already take',
-              'Used to, but it’s been a crazy season':'and getting back into it after a crazy season',
-              'I’m lost at the gym — HELP':'starting with a plan for the gym'};
+      CTRAIN={'Weight lifting with progressive overload':'while you push the lifts',
+              'Endurance focus (running, swimming, biking etc)':'while you train endurance',
+              'Crossfit till I die (or the injuries get me)':'around your CrossFit',
+              'It’s been a while… I need to get back into a routine':'and getting you back into a routine',
+              'Just the occasional walk':'starting from the walks you already take',
+              'I don’t even know where to start, HELP':'starting from scratch'};
   var line=function(){
     var g=val('goal'),t=val('training');
     if(!g&&!t)return '';                        /* nothing picked: no sentence, and :empty pulls the line out of the layout */

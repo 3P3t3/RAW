@@ -58,9 +58,10 @@
   <!-- 4a. Macros: seven questions, one per screen, then the numbers and one action.
        It sits third, straight after the shelves: early enough to be the way in, and behind
        the shelves rather than in front of them, so the seven islands stay the first thing
-       after the hero and nothing here gates them. It cannot go any further down either —
-       the pour, the fizz and the drain run unbroken from #trending through #hydrate to
-       #consult, and a band dropped inside that run would cut the liquid in half. -->
+       after the hero and nothing here gates them. The consult follows it directly, so the
+       numbers are answered by the call and not by three bands of scenery in between. The
+       pour, the fizz and the drain still run unbroken from #trending through #hydrate, and
+       no band may be dropped inside that run or it would cut the liquid in half. -->
   <section class="sec macros-sec" id="macros" aria-labelledby="macros-title">
     <div class="wrap split">
       <div class="split-text grow">
@@ -188,83 +189,14 @@
     </div>
   </section>
 
-  <!-- 4b. Trending: three best sellers on a podium, oversized and breaking the band.
-       The band's ground is a 150-frame film of the pour, scrubbed by scroll. It is
-       scenery, not content: frames come only as the band nears, and reduced motion
-       gets one still. -->
-  <section class="sec podium-sec dark" id="trending" aria-labelledby="trending-title">
-    <div class="pour-bg" id="pour-bg" aria-hidden="true">
-      <div class="pour-stage">
-        <canvas class="pour-film" id="pour-film"></canvas>
-        <img class="pour-still" id="pour-still" alt="" decoding="async" hidden>
-        <noscript><img class="pour-still" src="assets/pour/sm/0060.webp" alt=""></noscript>
-      </div>
-    </div>
-    <div class="wrap">
-      <div class="sec-head grow"><h2 id="trending-title">Trending now</h2></div>
-      <ul class="podium">
-{{PODIUM}}
-      </ul>
-    </div>
-  </section>
-
-  <!-- 5. The full shelf. It stays out of the way until you search or ask for it. -->
-  <section class="sec shop results" id="results" aria-labelledby="shop-title" hidden>
-    <div class="wrap">
-      <div class="sec-head"><h2 id="shop-title" tabindex="-1">All products</h2></div>
-      <div class="filter" id="filter" hidden><p id="filter-text"></p><button class="tlink" type="button" id="filter-clear">Close</button></div>
-      <ul class="grid" id="grid">
-{{GRID}}
-      </ul>
-    </div>
-  </section>
-
-  <!-- 6. Hydration: the third beat of the drink. The pour fills the glass behind #trending;
-       here it fizzes and drains to the page's chalk, and as the water leaves, a cup comes
-       up through the line it left behind. The line is content; the glass, the fizz and the
-       cup are scenery. The beat holds on screen while the glass drains behind it. With
-       reduced motion, or no script, the cup stands fully risen and nothing moves. -->
-  <section class="sec hydrate fizz-sec" id="hydrate" aria-labelledby="hydrate-title">
-    <div class="fizz-bg" id="fizz-bg" aria-hidden="true">
-      <div class="fizz-stage">
-        <img class="fizz-still" data-src="assets/pour/sm/0150.webp" data-srcset="assets/pour/sm/0150.webp 618w, assets/pour/big/0150.webp 810w" sizes="100vw" alt="" decoding="async">
-        <canvas class="fizz-film" id="fizz-film"></canvas>
-      </div>
-      <svg class="fizz-shore" viewBox="0 0 1200 100" preserveAspectRatio="none" focusable="false"><path d="M0 22C90 12 170 30 270 24S450 8 560 18 760 34 870 22 1060 10 1200 20V100H0Z"/></svg>
-    </div>
-    <div class="wrap split hy-beat">
-      <!-- Peter's line, word for word: the question quiet, the answer the statement. One
-           heading, so it is read as he wrote it, question first, and names the band. -->
-      <div class="split-text hy-line grow">
-        <h2 id="hydrate-title"><span class="hy-q">Not sure how much water is enough?</span> <span class="hy-a">Athletes aim for one ounce per pound of bodyweight.</span></h2>
-      </div>
-      <div class="hy-well grow" style="--d:1" aria-hidden="true">
-        <div class="hy-clip">
-          <div class="hy-cup" id="hy-cup">
-            <svg viewBox="0 0 200 232" focusable="false">
-              <path class="hy-water" d="M52 92C68 86 84 97 100 92S133 86 148 92L141 217H59Z"/>
-              <path class="hy-surf" d="M52 92C68 86 84 97 100 92S133 86 148 92"/>
-              <g class="hy-bubbles"><circle cx="86" cy="196" r="3.4"/><circle cx="117" cy="178" r="2.5"/><circle cx="97" cy="152" r="1.9"/><circle cx="124" cy="126" r="2.7"/><circle cx="80" cy="120" r="1.7"/></g>
-              <path class="hy-ticks" d="M56 120h11M57 140h6M59 160h11M60 180h6M62 200h11"/>
-              <path class="hy-shine" d="M137 40 128 200"/>
-              <path class="hy-glass" d="M44 18H156L140 230H60Z"/>
-              <path class="hy-base" d="M60 217H140"/>
-            </svg>
-          </div>
-        </div>
-        <svg class="hy-ripple" viewBox="0 0 400 24" preserveAspectRatio="none" focusable="false"><path d="M62 13C84 6 110 7 124 12M276 12C290 7 316 6 338 13"/></svg>
-        <svg class="hy-tide" viewBox="0 0 400 24" preserveAspectRatio="none" focusable="false"><path d="M0 12C30 8 57 15 90 12S150 5 187 9 253 16 290 11 353 7 400 11"/></svg>
-      </div>
-    </div>
-    <div class="fizz-run" aria-hidden="true"></div>
-  </section>
-
-  <!-- 7. Consult: four answers first, then a time on my calendar -->
+  <!-- 4b. Consult: four answers first, then a time on my calendar. It sits directly under
+       the calculator, so whoever finished seven questions is asked for something while the
+       numbers are still on screen. -->
   <section class="sec consult" id="consult" aria-labelledby="consult-title">
     <div class="wrap split">
       <div class="split-text grow">
         <p class="label">One to one</p>
-        <h2 id="consult-title"><span>Talk through</span> <span>your stack</span></h2>
+        <h2 id="consult-title"><span>What’s worth</span> <span>taking</span></h2>
         <!-- PETER-COPY --><p>Complimentary call, 1:1, to talk about how to optimize your health for this season: macros, sleep, what to add to your supplement stack, and what to leave behind.</p><!-- /PETER-COPY -->
         <ul class="c-list">
           <li>Your macros, and whether the split is worth changing</li>
@@ -313,12 +245,12 @@
                is the phrase the visitor actually read; _script.html's CTRAIN turns each one
                into the clause the summary sentence needs. -->
           <div class="chips">
-            <label class="chip"><input type="radio" name="training" value="Weight lifting"><span>Weight lifting</span></label>
-            <label class="chip"><input type="radio" name="training" value="Endurance"><span>Endurance</span></label>
-            <label class="chip"><input type="radio" name="training" value="HIIT"><span>HIIT</span></label>
-            <label class="chip"><input type="radio" name="training" value="Occasional walks"><span>Occasional walks</span></label>
-            <label class="chip"><input type="radio" name="training" value="Used to, but it’s been a crazy season"><span>Used to, but it’s been a crazy season</span></label>
-            <label class="chip"><input type="radio" name="training" value="I’m lost at the gym — HELP"><span>I’m lost at the gym — HELP</span></label>
+            <label class="chip"><input type="radio" name="training" value="Weight lifting with progressive overload"><span>Weight lifting with progressive overload</span></label>
+            <label class="chip"><input type="radio" name="training" value="Endurance focus (running, swimming, biking etc)"><span>Endurance focus (running, swimming, biking etc)</span></label>
+            <label class="chip"><input type="radio" name="training" value="Crossfit till I die (or the injuries get me)"><span>Crossfit till I die (or the injuries get me)</span></label>
+            <label class="chip"><input type="radio" name="training" value="It’s been a while… I need to get back into a routine"><span>It’s been a while… I need to get back into a routine</span></label>
+            <label class="chip"><input type="radio" name="training" value="Just the occasional walk"><span>Just the occasional walk</span></label>
+            <label class="chip"><input type="radio" name="training" value="I don’t even know where to start, HELP"><span>I don’t even know where to start, HELP</span></label>
           </div>
         </fieldset>
         <div class="c-field"><label for="c-stack">What are you taking at the moment?</label>
@@ -333,6 +265,77 @@
       <!-- the calendar mounts here in place of the form, once someone has answered -->
       <div class="c-embed" id="consult-embed" hidden></div>
     </div>
+  </section>
+
+  <!-- 5. Trending: three best sellers on a podium, oversized and breaking the band.
+       The band's ground is a 150-frame film of the pour, scrubbed by scroll. It is
+       scenery, not content: frames come only as the band nears, and reduced motion
+       gets one still. -->
+  <section class="sec podium-sec dark" id="trending" aria-labelledby="trending-title">
+    <div class="pour-bg" id="pour-bg" aria-hidden="true">
+      <div class="pour-stage">
+        <canvas class="pour-film" id="pour-film"></canvas>
+        <img class="pour-still" id="pour-still" alt="" decoding="async" hidden>
+        <noscript><img class="pour-still" src="assets/pour/sm/0060.webp" alt=""></noscript>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="sec-head grow"><h2 id="trending-title">Trending now</h2></div>
+      <ul class="podium">
+{{PODIUM}}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 6. The full shelf. It stays out of the way until you search or ask for it. -->
+  <section class="sec shop results" id="results" aria-labelledby="shop-title" hidden>
+    <div class="wrap">
+      <div class="sec-head"><h2 id="shop-title" tabindex="-1">All products</h2></div>
+      <div class="filter" id="filter" hidden><p id="filter-text"></p><button class="tlink" type="button" id="filter-clear">Close</button></div>
+      <ul class="grid" id="grid">
+{{GRID}}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7. Hydration: the third beat of the drink. The pour fills the glass behind #trending;
+       here it fizzes and drains to the page's chalk, and as the water leaves, a cup comes
+       up through the line it left behind. The line is content; the glass, the fizz and the
+       cup are scenery. The beat holds on screen while the glass drains behind it. With
+       reduced motion, or no script, the cup stands fully risen and nothing moves. -->
+  <section class="sec hydrate fizz-sec" id="hydrate" aria-labelledby="hydrate-title">
+    <div class="fizz-bg" id="fizz-bg" aria-hidden="true">
+      <div class="fizz-stage">
+        <img class="fizz-still" data-src="assets/pour/sm/0150.webp" data-srcset="assets/pour/sm/0150.webp 618w, assets/pour/big/0150.webp 810w" sizes="100vw" alt="" decoding="async">
+        <canvas class="fizz-film" id="fizz-film"></canvas>
+      </div>
+      <svg class="fizz-shore" viewBox="0 0 1200 100" preserveAspectRatio="none" focusable="false"><path d="M0 22C90 12 170 30 270 24S450 8 560 18 760 34 870 22 1060 10 1200 20V100H0Z"/></svg>
+    </div>
+    <div class="wrap split hy-beat">
+      <!-- Peter's line, word for word: the question quiet, the answer the statement. One
+           heading, so it is read as he wrote it, question first, and names the band. -->
+      <div class="split-text hy-line grow">
+        <h2 id="hydrate-title"><span class="hy-q">Not sure how much water is enough?</span> <span class="hy-a">Athletes aim for one ounce per pound of bodyweight.</span></h2>
+      </div>
+      <div class="hy-well grow" style="--d:1" aria-hidden="true">
+        <div class="hy-clip">
+          <div class="hy-cup" id="hy-cup">
+            <svg viewBox="0 0 200 232" focusable="false">
+              <path class="hy-water" d="M52 92C68 86 84 97 100 92S133 86 148 92L141 217H59Z"/>
+              <path class="hy-surf" d="M52 92C68 86 84 97 100 92S133 86 148 92"/>
+              <g class="hy-bubbles"><circle cx="86" cy="196" r="3.4"/><circle cx="117" cy="178" r="2.5"/><circle cx="97" cy="152" r="1.9"/><circle cx="124" cy="126" r="2.7"/><circle cx="80" cy="120" r="1.7"/></g>
+              <path class="hy-ticks" d="M56 120h11M57 140h6M59 160h11M60 180h6M62 200h11"/>
+              <path class="hy-shine" d="M137 40 128 200"/>
+              <path class="hy-glass" d="M44 18H156L140 230H60Z"/>
+              <path class="hy-base" d="M60 217H140"/>
+            </svg>
+          </div>
+        </div>
+        <svg class="hy-ripple" viewBox="0 0 400 24" preserveAspectRatio="none" focusable="false"><path d="M62 13C84 6 110 7 124 12M276 12C290 7 316 6 338 13"/></svg>
+        <svg class="hy-tide" viewBox="0 0 400 24" preserveAspectRatio="none" focusable="false"><path d="M0 12C30 8 57 15 90 12S150 5 187 9 253 16 290 11 353 7 400 11"/></svg>
+      </div>
+    </div>
+    <div class="fizz-run" aria-hidden="true"></div>
   </section>
 
 </main>

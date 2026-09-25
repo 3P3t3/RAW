@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=2b14c9a0">
+<link rel="stylesheet" href="style.css?v=9387f80b">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -403,9 +403,10 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
   <!-- 4a. Macros: seven questions, one per screen, then the numbers and one action.
        It sits third, straight after the shelves: early enough to be the way in, and behind
        the shelves rather than in front of them, so the seven islands stay the first thing
-       after the hero and nothing here gates them. It cannot go any further down either —
-       the pour, the fizz and the drain run unbroken from #trending through #hydrate to
-       #consult, and a band dropped inside that run would cut the liquid in half. -->
+       after the hero and nothing here gates them. The consult follows it directly, so the
+       numbers are answered by the call and not by three bands of scenery in between. The
+       pour, the fizz and the drain still run unbroken from #trending through #hydrate, and
+       no band may be dropped inside that run or it would cut the liquid in half. -->
   <section class="sec macros-sec" id="macros" aria-labelledby="macros-title">
     <div class="wrap split">
       <div class="split-text grow">
@@ -533,7 +534,85 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     </div>
   </section>
 
-  <!-- 4b. Trending: three best sellers on a podium, oversized and breaking the band.
+  <!-- 4b. Consult: four answers first, then a time on my calendar. It sits directly under
+       the calculator, so whoever finished seven questions is asked for something while the
+       numbers are still on screen. -->
+  <section class="sec consult" id="consult" aria-labelledby="consult-title">
+    <div class="wrap split">
+      <div class="split-text grow">
+        <p class="label">One to one</p>
+        <h2 id="consult-title"><span>What’s worth</span> <span>taking</span></h2>
+        <!-- PETER-COPY --><p>Complimentary call, 1:1, to talk about how to optimize your health for this season: macros, sleep, what to add to your supplement stack, and what to leave behind.</p><!-- /PETER-COPY -->
+        <ul class="c-list">
+          <li>Your macros, and whether the split is worth changing</li>
+          <li>What you already take, and what it is doing</li>
+          <li>The smallest stack that moves the goal, and what to drop</li>
+        </ul>
+        <!-- Who is on the call, then the proof, both met before the four questions. Every photo is
+             asked for only as the band nears (loading=lazy), so none of them costs the first paint.
+             The files in assets/peter/ are placed by hand, cut from Peter's originals; the build
+             never writes them. -->
+        <div class="c-who">
+          <img class="c-fam" src="assets/peter/family-320.webp" width="320" height="400" loading="lazy" decoding="async" alt="Peter with his wife and baby daughter">
+          <!-- PETER-COPY --><p>I'm Peter, a Lincoln local with a baby girl and a wife who's as obsessed with biohacking and longevity as I am. Happy to grab a call. No promises I can solve every issue, but I'd bet we can optimize at least a few of them.</p><!-- /PETER-COPY -->
+        </div>
+        <!-- the before and after: all three views stacked, nothing to swipe. The three files
+             share one crop, so the seam between before and after sits at 50% in each: the
+             befores line up down the left, the afters down the right, and one pair of
+             headings on that same 50% line labels the whole stack. -->
+        <figure class="c-proof">
+          <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
+          <div class="c-stack">
+            <img src="assets/peter/front-640.webp" srcset="assets/peter/front-640.webp 640w, assets/peter/front-960.webp 960w" sizes="(min-width:1280px) 486px, (min-width:768px) 38vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the front">
+            <img src="assets/peter/side-640.webp" srcset="assets/peter/side-640.webp 640w, assets/peter/side-960.webp 960w" sizes="(min-width:1280px) 486px, (min-width:768px) 38vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the side">
+            <img src="assets/peter/back-640.webp" srcset="assets/peter/back-640.webp 640w, assets/peter/back-960.webp 960w" sizes="(min-width:1280px) 486px, (min-width:768px) 38vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the back">
+          </div>
+          <!-- PETER-COPY --><figcaption>Same guy, 15 months apart.</figcaption><!-- /PETER-COPY -->
+        </figure>
+      </div>
+      <form class="c-card grow" id="consult-form" data-consult="https://calendly.com/3pete/explore" style="--d:1">
+        <fieldset class="c-q">
+          <legend>What are you trying to accomplish?</legend>
+          <!-- the emblem lives inside the span, not beside it: the pill is styled as
+               `input:checked + span`, and anything between the input and the span would
+               break that. It is decorative, so the label text stays the accessible name. -->
+          <div class="chips">
+            <label class="chip"><input type="radio" name="goal" value="Lose fat"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-flame"/></svg>Lose fat</span></label>
+            <label class="chip"><input type="radio" name="goal" value="Build muscle"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-bell"/></svg>Build muscle</span></label>
+            <label class="chip"><input type="radio" name="goal" value="More energy"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-bolt"/></svg>More energy</span></label>
+            <label class="chip"><input type="radio" name="goal" value="Sleep and recovery"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-moon"/></svg>Sleep &amp; recovery</span></label>
+            <label class="chip"><input type="radio" name="goal" value="Stay healthy day to day"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-shield"/></svg>Stay healthy</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="c-q">
+          <legend>How do you train right now?</legend>
+          <!-- Peter's own six. The visible label is the value, so what arrives in the booking
+               is the phrase the visitor actually read; _script.html's CTRAIN turns each one
+               into the clause the summary sentence needs. -->
+          <div class="chips">
+            <label class="chip"><input type="radio" name="training" value="Weight lifting with progressive overload"><span>Weight lifting with progressive overload</span></label>
+            <label class="chip"><input type="radio" name="training" value="Endurance focus (running, swimming, biking etc)"><span>Endurance focus (running, swimming, biking etc)</span></label>
+            <label class="chip"><input type="radio" name="training" value="Crossfit till I die (or the injuries get me)"><span>Crossfit till I die (or the injuries get me)</span></label>
+            <label class="chip"><input type="radio" name="training" value="It’s been a while… I need to get back into a routine"><span>It’s been a while… I need to get back into a routine</span></label>
+            <label class="chip"><input type="radio" name="training" value="Just the occasional walk"><span>Just the occasional walk</span></label>
+            <label class="chip"><input type="radio" name="training" value="I don’t even know where to start, HELP"><span>I don’t even know where to start, HELP</span></label>
+          </div>
+        </fieldset>
+        <div class="c-field"><label for="c-stack">What are you taking at the moment?</label>
+          <input id="c-stack" name="stack" type="text" autocomplete="off" placeholder="Whey, creatine, a multivitamin…"></div>
+        <div class="c-field"><label for="c-note">Anything you want covered? <span>Optional</span></label>
+          <input id="c-note" name="note" type="text" autocomplete="off" placeholder="Eating around shift work…"></div>
+        <button class="btn" type="submit">Pick a time</button>
+        <!-- empty until a chip is picked, and `:empty` in style.css takes it out of the card's
+             grid entirely while it is, so nothing holds a blank row open -->
+        <p class="c-sum" id="consult-sum" aria-live="polite"></p>
+      </form>
+      <!-- the calendar mounts here in place of the form, once someone has answered -->
+      <div class="c-embed" id="consult-embed" hidden></div>
+    </div>
+  </section>
+
+  <!-- 5. Trending: three best sellers on a podium, oversized and breaking the band.
        The band's ground is a 150-frame film of the pour, scrubbed by scroll. It is
        scenery, not content: frames come only as the band nears, and reduced motion
        gets one still. -->
@@ -555,7 +634,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     </div>
   </section>
 
-  <!-- 5. The full shelf. It stays out of the way until you search or ask for it. -->
+  <!-- 6. The full shelf. It stays out of the way until you search or ask for it. -->
   <section class="sec shop results" id="results" aria-labelledby="shop-title" hidden>
     <div class="wrap">
       <div class="sec-head"><h2 id="shop-title" tabindex="-1">All products</h2></div>
@@ -630,7 +709,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     </div>
   </section>
 
-  <!-- 6. Hydration: the third beat of the drink. The pour fills the glass behind #trending;
+  <!-- 7. Hydration: the third beat of the drink. The pour fills the glass behind #trending;
        here it fizzes and drains to the page's chalk, and as the water leaves, a cup comes
        up through the line it left behind. The line is content; the glass, the fizz and the
        cup are scenery. The beat holds on screen while the glass drains behind it. With
@@ -668,82 +747,6 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       </div>
     </div>
     <div class="fizz-run" aria-hidden="true"></div>
-  </section>
-
-  <!-- 7. Consult: four answers first, then a time on my calendar -->
-  <section class="sec consult" id="consult" aria-labelledby="consult-title">
-    <div class="wrap split">
-      <div class="split-text grow">
-        <p class="label">One to one</p>
-        <h2 id="consult-title"><span>Talk through</span> <span>your stack</span></h2>
-        <!-- PETER-COPY --><p>Complimentary call, 1:1, to talk about how to optimize your health for this season: macros, sleep, what to add to your supplement stack, and what to leave behind.</p><!-- /PETER-COPY -->
-        <ul class="c-list">
-          <li>Your macros, and whether the split is worth changing</li>
-          <li>What you already take, and what it is doing</li>
-          <li>The smallest stack that moves the goal, and what to drop</li>
-        </ul>
-        <!-- Who is on the call, then the proof, both met before the four questions. Every photo is
-             asked for only as the band nears (loading=lazy), so none of them costs the first paint.
-             The files in assets/peter/ are placed by hand, cut from Peter's originals; the build
-             never writes them. -->
-        <div class="c-who">
-          <img class="c-fam" src="assets/peter/family-320.webp" width="320" height="400" loading="lazy" decoding="async" alt="Peter with his wife and baby daughter">
-          <!-- PETER-COPY --><p>I'm Peter, a Lincoln local with a baby girl and a wife who's as obsessed with biohacking and longevity as I am. Happy to grab a call. No promises I can solve every issue, but I'd bet we can optimize at least a few of them.</p><!-- /PETER-COPY -->
-        </div>
-        <!-- the before and after: all three views stacked, nothing to swipe. The three files
-             share one crop, so the seam between before and after sits at 50% in each: the
-             befores line up down the left, the afters down the right, and one pair of
-             headings on that same 50% line labels the whole stack. -->
-        <figure class="c-proof">
-          <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
-          <div class="c-stack">
-            <img src="assets/peter/front-640.webp" srcset="assets/peter/front-640.webp 640w, assets/peter/front-960.webp 960w" sizes="(min-width:1280px) 486px, (min-width:768px) 38vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the front">
-            <img src="assets/peter/side-640.webp" srcset="assets/peter/side-640.webp 640w, assets/peter/side-960.webp 960w" sizes="(min-width:1280px) 486px, (min-width:768px) 38vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the side">
-            <img src="assets/peter/back-640.webp" srcset="assets/peter/back-640.webp 640w, assets/peter/back-960.webp 960w" sizes="(min-width:1280px) 486px, (min-width:768px) 38vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the back">
-          </div>
-          <!-- PETER-COPY --><figcaption>Same guy, 15 months apart.</figcaption><!-- /PETER-COPY -->
-        </figure>
-      </div>
-      <form class="c-card grow" id="consult-form" data-consult="https://calendly.com/3pete/explore" style="--d:1">
-        <fieldset class="c-q">
-          <legend>What are you trying to accomplish?</legend>
-          <!-- the emblem lives inside the span, not beside it: the pill is styled as
-               `input:checked + span`, and anything between the input and the span would
-               break that. It is decorative, so the label text stays the accessible name. -->
-          <div class="chips">
-            <label class="chip"><input type="radio" name="goal" value="Lose fat"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-flame"/></svg>Lose fat</span></label>
-            <label class="chip"><input type="radio" name="goal" value="Build muscle"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-bell"/></svg>Build muscle</span></label>
-            <label class="chip"><input type="radio" name="goal" value="More energy"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-bolt"/></svg>More energy</span></label>
-            <label class="chip"><input type="radio" name="goal" value="Sleep and recovery"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-moon"/></svg>Sleep &amp; recovery</span></label>
-            <label class="chip"><input type="radio" name="goal" value="Stay healthy day to day"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-shield"/></svg>Stay healthy</span></label>
-          </div>
-        </fieldset>
-        <fieldset class="c-q">
-          <legend>How do you train right now?</legend>
-          <!-- Peter's own six. The visible label is the value, so what arrives in the booking
-               is the phrase the visitor actually read; _script.html's CTRAIN turns each one
-               into the clause the summary sentence needs. -->
-          <div class="chips">
-            <label class="chip"><input type="radio" name="training" value="Weight lifting"><span>Weight lifting</span></label>
-            <label class="chip"><input type="radio" name="training" value="Endurance"><span>Endurance</span></label>
-            <label class="chip"><input type="radio" name="training" value="HIIT"><span>HIIT</span></label>
-            <label class="chip"><input type="radio" name="training" value="Occasional walks"><span>Occasional walks</span></label>
-            <label class="chip"><input type="radio" name="training" value="Used to, but it’s been a crazy season"><span>Used to, but it’s been a crazy season</span></label>
-            <label class="chip"><input type="radio" name="training" value="I’m lost at the gym — HELP"><span>I’m lost at the gym — HELP</span></label>
-          </div>
-        </fieldset>
-        <div class="c-field"><label for="c-stack">What are you taking at the moment?</label>
-          <input id="c-stack" name="stack" type="text" autocomplete="off" placeholder="Whey, creatine, a multivitamin…"></div>
-        <div class="c-field"><label for="c-note">Anything you want covered? <span>Optional</span></label>
-          <input id="c-note" name="note" type="text" autocomplete="off" placeholder="Eating around shift work…"></div>
-        <button class="btn" type="submit">Pick a time</button>
-        <!-- empty until a chip is picked, and `:empty` in style.css takes it out of the card's
-             grid entirely while it is, so nothing holds a blank row open -->
-        <p class="c-sum" id="consult-sum" aria-live="polite"></p>
-      </form>
-      <!-- the calendar mounts here in place of the form, once someone has answered -->
-      <div class="c-embed" id="consult-embed" hidden></div>
-    </div>
   </section>
 
 </main>
@@ -1176,11 +1179,12 @@ if(cform){
      in the sentence. A new chip needs a line here or it falls back to 'your goal'. */
   var CGOAL={'Lose fat':'losing fat','Build muscle':'building muscle','More energy':'more energy',
              'Sleep and recovery':'sleep and recovery','Stay healthy day to day':'staying healthy day to day'},
-      CTRAIN={'Weight lifting':'while you lift','Endurance':'while you train endurance',
-              'HIIT':'around your HIIT sessions',
-              'Occasional walks':'starting from the walks you already take',
-              'Used to, but it’s been a crazy season':'and getting back into it after a crazy season',
-              'I’m lost at the gym — HELP':'starting with a plan for the gym'};
+      CTRAIN={'Weight lifting with progressive overload':'while you push the lifts',
+              'Endurance focus (running, swimming, biking etc)':'while you train endurance',
+              'Crossfit till I die (or the injuries get me)':'around your CrossFit',
+              'It’s been a while… I need to get back into a routine':'and getting you back into a routine',
+              'Just the occasional walk':'starting from the walks you already take',
+              'I don’t even know where to start, HELP':'starting from scratch'};
   var line=function(){
     var g=val('goal'),t=val('training');
     if(!g&&!t)return '';                        /* nothing picked: no sentence, and :empty pulls the line out of the layout */

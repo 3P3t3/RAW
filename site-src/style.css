@@ -610,7 +610,7 @@ html:not(.js) #results[hidden]{display:block!important}
 /* ---------- The fizz: the hydration band carries on from the pour ---------- */
 /* The full glass under the same scrim as the pour, and one transparent canvas above it
    for the bubbles and the drain: everything above the falling surface it fills with chalk,
-   the consult's ground, so the band ends on the colour the next one starts on.
+   the page's own ground, so the band ends on the colour it is laid on.
    The line sits on a chalk card at .9. Over the chalk above the surface the card is the
    page itself; over the darkest glass it is still light enough to hold its ink and teal
    above 4.5:1, and the bubbles only ever lighten what is under it. */
@@ -624,7 +624,7 @@ html:not(.js) #results[hidden]{display:block!important}
   background:linear-gradient(rgba(0,20,27,.88) 0,rgba(0,20,27,.7) 18%,rgba(0,20,27,.7) 100%)}
 .fizz-film{z-index:1}
 /* The drain's run: room below the line to scroll the glass empty in. Its end is where
-   the stage lets go of the window, so the band is chalk before the consult shows. */
+   the stage lets go of the window, so the band is chalk before the footer shows. */
 .fizz-run{display:none}
 html.motion .fizz-run{display:block;height:80vh}
 @supports (height:100lvh){html.motion .fizz-run{height:80lvh}}
