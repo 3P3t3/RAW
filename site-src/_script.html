@@ -364,12 +364,14 @@ if(cform){
      in the sentence. A new chip needs a line here or it falls back to 'your goal'. */
   var CGOAL={'Lose fat':'losing fat','Build muscle':'building muscle','More energy':'more energy',
              'Sleep and recovery':'sleep and recovery','Stay healthy day to day':'staying healthy day to day'},
-      CTRAIN={'Lifting':'while you lift','Endurance':'while you train endurance',
-              'A mix':'while you train a mix','Walking and mobility':'while you walk and stretch',
-              'Not training yet':'before the training starts'};
+      CTRAIN={'Weight lifting':'while you lift','Endurance':'while you train endurance',
+              'HIIT':'around your HIIT sessions',
+              'Occasional walks':'starting from the walks you already take',
+              'Used to, but it’s been a crazy season':'and getting back into it after a crazy season',
+              'I’m lost at the gym — HELP':'starting with a plan for the gym'};
   var line=function(){
     var g=val('goal'),t=val('training');
-    if(!g&&!t)return 'I call you.';
+    if(!g&&!t)return '';                        /* nothing picked: no sentence, and :empty pulls the line out of the layout */
     return 'Thirty minutes on '+(CGOAL[g]||'your goal')+(CTRAIN[t]?', '+CTRAIN[t]:'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});

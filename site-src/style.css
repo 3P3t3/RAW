@@ -315,15 +315,56 @@ html:not(.js) .mtab{display:none}
 .c-q{margin:0;padding:0;border:0;min-width:0}
 .c-q legend{display:block;padding:0;margin-bottom:10px;font:600 15px/1.3 var(--sans);color:var(--ink)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-/* the label wraps a hidden radio; the span is the pill, so :checked styles a sibling */
-.chip{position:relative;display:inline-flex;cursor:pointer}
+/* the label wraps a hidden radio; the span is the pill, so :checked styles a sibling.
+   max-width keeps the two long training answers inside the card at 320px: the pill shrinks
+   and its text wraps to a second line rather than pushing the row wider than the screen. */
+.chip{position:relative;display:inline-flex;max-width:100%;min-width:0;cursor:pointer}
 .chip input{position:absolute;width:1px;height:1px;opacity:0;margin:0}
-.chip span{display:inline-flex;align-items:center;min-height:44px;padding:0 15px;
+.chip span{position:relative;display:inline-flex;align-items:center;gap:9px;overflow:hidden;
+  min-height:44px;padding:9px 13px;
   border:1px solid var(--line);background:rgba(255,255,255,.5);color:var(--ink);
-  font:600 15px/1.2 var(--sans);transition:background .15s,color .15s,border-color .15s}
-.chip input:checked + span{background:var(--teal);border-color:var(--teal);color:var(--chalk)}
+  font:600 15px/1.25 var(--sans);
+  --sheen:rgba(0,46,59,.14);                 /* the sweep, dark on the pale pill */
+  transition:background .15s,color .15s,border-color .15s,box-shadow .18s,transform .18s cubic-bezier(.2,.7,.2,1)}
+/* a selected chip is picked up off the card: it lifts, casts a shadow, and holds a lit inner
+   edge along its top. All three survive greyscale, so selection never rests on colour alone. */
+.chip input:checked + span{background:var(--teal);border-color:var(--teal);color:var(--chalk);
+  transform:translateY(-2px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 0 0 1px rgba(255,255,255,.14),
+             0 10px 16px -10px rgba(0,30,39,.85);
+  --sheen:rgba(255,255,255,.5)}               /* and light on the teal one */
 .chip input:focus-visible + span{outline:2px solid var(--teal);outline-offset:3px}
-@media (hover:hover){.chip:hover span{border-color:var(--teal)}}
+@media (hover:hover){
+  .chip:hover span{border-color:var(--teal);transform:translateY(-1px)}
+  .chip input:checked + span{transform:translateY(-2px)}
+}
+/* The emblems: 22px objects, forward when their chip is chosen. Decorative — the pill's own
+   text is the accessible name, and each svg carries aria-hidden in the markup. */
+.em{width:22px;height:22px;flex:none;overflow:visible;
+  transition:transform .18s cubic-bezier(.2,.7,.2,1),filter .18s}
+.chip input:checked + span .em{transform:translateY(-1px) scale(1.1);
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.45))}
+/* The shimmer: one specular sweep, fired by the act of choosing (and on hover, where there is
+   a pointer to hover with). Not an idle loop — five pills glinting on their own next to a
+   submit button is exactly the skeleton-loader look, and it would pull against the CTA.
+   Tied to the choice instead, it reads as the chip acknowledging the tap, which is also the
+   only version a phone ever gets to see. */
+.chip span::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;
+  background:linear-gradient(104deg,transparent 38%,var(--sheen) 50%,transparent 62%)}
+.chip input:checked + span::after{animation:chip-sheen 620ms cubic-bezier(.35,.6,.25,1)}
+@media (hover:hover){.chip:hover span::after{animation:chip-sheen 760ms cubic-bezier(.35,.6,.25,1)}}
+@keyframes chip-sheen{
+  from{opacity:1;transform:translate3d(-120%,0,0)}
+  to{opacity:1;transform:translate3d(120%,0,0)}
+}
+/* reduced motion: no sweep and nothing moves. The teal fill, the lit inner edge and the cast
+   shadow stay, so a selected chip is still unmistakable. */
+@media (prefers-reduced-motion:reduce){
+  .chip span,.em{transition:none}
+  .chip span::after{display:none}
+  .chip:hover span,.chip input:checked + span{transform:none}
+  .chip input:checked + span .em{transform:none}
+}
 .c-field{display:grid;gap:8px}
 .c-field label{font:600 15px/1.3 var(--sans);color:var(--ink)}
 .c-field label span{font-weight:400;color:var(--text)}
@@ -332,6 +373,9 @@ html:not(.js) .mtab{display:none}
 .c-field input:focus{outline:none;border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
 .c-card .btn{width:100%}
 .c-sum{font-size:14px;color:var(--text);margin-top:-12px}
+/* nothing chosen yet, nothing to say: the line leaves the card's grid entirely rather than
+   holding a blank row and its 22px gap open under the button */
+.c-sum:empty{display:none}
 /* the calendly iframe takes the card's slot, so it reads as the card rather than a white box */
 .c-embed{height:700px;background:rgba(244,242,236,.7);
   box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 40px 60px -40px rgba(0,30,39,.55)}

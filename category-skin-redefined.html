@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=05318fea">
+<link rel="stylesheet" href="style.css?v=2b14c9a0">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -37,6 +37,92 @@
   <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 8.5a5 5 0 010 7"/></symbol>
   <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9.5l4 5M21 9.5l-4 5"/></symbol>
   <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+
+  <!-- Consult goal emblems. `e-` not `i-`, because these are filled objects, not the stroke
+       glyphs above: `.ic` (fill:none;stroke:currentColor) would render them as empty outlines.
+       They are sized by `.em` in style.css and used only inside .chip.
+       Each one is the same three passes, which is what gives it weight at 22px: the silhouette
+       dropped 1.1px in a dark wash (the shadow it casts on the pill), the shape itself on a
+       gradient lit from the upper left, and the same path once more as a hairline stroke that
+       fades out below the midline (the lit edge). Mid-tone gradients throughout, so every
+       emblem holds on the chalk pill and on the teal one it becomes when selected. -->
+  <defs>
+    <!-- the lit edge: white along the top, gone by the middle. Shared by all five. -->
+    <linearGradient id="e-lit" x1="0" y1="0" x2=".25" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".85"/>
+      <stop offset=".45" stop-color="#fff" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="e-flame-g" cx=".38" cy=".82" r=".95">
+      <stop offset="0" stop-color="#FFC963"/><stop offset=".55" stop-color="#F4771B"/>
+      <stop offset="1" stop-color="#C6380F"/>
+    </radialGradient>
+    <radialGradient id="e-flame-c" cx=".5" cy=".85" r=".9">
+      <stop offset="0" stop-color="#FFF6D2"/><stop offset="1" stop-color="#FFAF23"/>
+    </radialGradient>
+    <linearGradient id="e-bolt-g" x1=".1" y1="0" x2=".9" y2="1">
+      <stop offset="0" stop-color="#FFEFA8"/><stop offset=".5" stop-color="#FFC22E"/>
+      <stop offset="1" stop-color="#DE8B03"/>
+    </linearGradient>
+    <radialGradient id="e-moon-g" cx=".3" cy=".26" r=".95">
+      <stop offset="0" stop-color="#FFFDF2"/><stop offset=".6" stop-color="#E3E1D2"/>
+      <stop offset="1" stop-color="#A9B2AC"/>
+    </radialGradient>
+    <radialGradient id="e-bell-g" cx=".33" cy=".26" r=".92">
+      <stop offset="0" stop-color="#B9CCD6"/><stop offset=".52" stop-color="#6A8593"/>
+      <stop offset="1" stop-color="#26404D"/>
+    </radialGradient>
+    <linearGradient id="e-bell-h" x1=".2" y1="0" x2=".8" y2="1">
+      <stop offset="0" stop-color="#9FB6C1"/><stop offset="1" stop-color="#2C4753"/>
+    </linearGradient>
+    <radialGradient id="e-shield-g" cx=".32" cy=".22" r="1">
+      <stop offset="0" stop-color="#F6E3CC"/><stop offset=".55" stop-color="#D9B693"/>
+      <stop offset="1" stop-color="#8E653C"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Lose fat: a flame, with a brighter core inside the body so it reads as burning -->
+  <symbol id="e-flame" viewBox="0 0 24 24">
+    <path d="M12 2.4c4.1 3.7 6.5 6.9 6.5 10.5a6.5 6.5 0 0 1-13 0c0-2.8 1.5-5.1 3.2-7-.2 2.1.3 3.5 1.4 4.2.7-2.8.9-5.2 1.9-7.7z" transform="translate(0 1.1)" fill="#0A1C24" fill-opacity=".26"/>
+    <path d="M12 2.4c4.1 3.7 6.5 6.9 6.5 10.5a6.5 6.5 0 0 1-13 0c0-2.8 1.5-5.1 3.2-7-.2 2.1.3 3.5 1.4 4.2.7-2.8.9-5.2 1.9-7.7z" fill="url(#e-flame-g)"/>
+    <path d="M12 10.3c2 1.9 3.1 3.3 3.1 5a3.1 3.1 0 0 1-6.2 0c0-1.6 1-3 3.1-5z" fill="url(#e-flame-c)"/>
+    <path d="M12 2.4c4.1 3.7 6.5 6.9 6.5 10.5a6.5 6.5 0 0 1-13 0c0-2.8 1.5-5.1 3.2-7-.2 2.1.3 3.5 1.4 4.2.7-2.8.9-5.2 1.9-7.7z" fill="none" stroke="url(#e-lit)" stroke-width="1"/>
+  </symbol>
+
+  <!-- More energy: a struck bolt. Left edge lit, right side falling into the gradient's dark -->
+  <symbol id="e-bolt" viewBox="0 0 24 24">
+    <path d="M14 2.2 6.3 13.6h4.3L9.5 21.8l8.2-11.7h-4.5z" transform="translate(0 1.1)" fill="#0A1C24" fill-opacity=".26"/>
+    <path d="M14 2.2 6.3 13.6h4.3L9.5 21.8l8.2-11.7h-4.5z" fill="url(#e-bolt-g)"/>
+    <path d="M14 2.2 6.3 13.6h4.3L9.5 21.8l8.2-11.7h-4.5z" fill="none" stroke="url(#e-lit)" stroke-width="1"/>
+  </symbol>
+
+  <!-- Sleep and recovery: a crescent. It carries a faint dark contour as well, because its own
+       gradient is the palest of the five and would otherwise thin out on the chalk pill -->
+  <symbol id="e-moon" viewBox="0 0 24 24">
+    <path d="M12 2.6a6.6 6.6 0 0 0 9.4 9.4 9.7 9.7 0 1 1-9.4-9.4z" transform="translate(0 1.1)" fill="#0A1C24" fill-opacity=".26"/>
+    <path d="M12 2.6a6.6 6.6 0 0 0 9.4 9.4 9.7 9.7 0 1 1-9.4-9.4z" fill="url(#e-moon-g)" stroke="#0A1C24" stroke-opacity=".22" stroke-width=".7"/>
+    <path d="M12 2.6a6.6 6.6 0 0 0 9.4 9.4 9.7 9.7 0 1 1-9.4-9.4z" fill="none" stroke="url(#e-lit)" stroke-width="1"/>
+  </symbol>
+
+  <!-- Build muscle: a kettlebell. A ball and a handle survive 22px where a flexed arm or a
+       plated barbell turn to mud, and a sphere is the one shape a radial gradient makes
+       unmistakably solid — the specular dot says "object" before the outline does -->
+  <symbol id="e-bell" viewBox="0 0 24 24">
+    <circle cx="12" cy="15.6" r="6.4" transform="translate(0 1.1)" fill="#0A1C24" fill-opacity=".26"/>
+    <path d="M7.4 10.8a4.6 4.6 0 0 1 9.2 0" fill="none" stroke="url(#e-bell-h)" stroke-width="2.9" stroke-linecap="round"/>
+    <circle cx="12" cy="15.6" r="6.4" fill="url(#e-bell-g)"/>
+    <ellipse cx="9.6" cy="13.1" rx="1.9" ry="1.3" transform="rotate(-32 9.6 13.1)" fill="#fff" fill-opacity=".5"/>
+    <circle cx="12" cy="15.6" r="6.4" fill="none" stroke="url(#e-lit)" stroke-width="1"/>
+  </symbol>
+
+  <!-- Stay healthy: a shield. A heart would have read as cardio beside the bolt, and a leaf as
+       a plant extract; a shield is the one that says kept well, day after day. Its broad face
+       is also the best of the five at carrying a gradient down to 20px -->
+  <symbol id="e-shield" viewBox="0 0 24 24">
+    <path d="M12 2.3 19.3 5v6.3c0 4.6-3 8.1-7.3 10.4-4.3-2.3-7.3-5.8-7.3-10.4V5z" transform="translate(0 1.1)" fill="#0A1C24" fill-opacity=".26"/>
+    <path d="M12 2.3 19.3 5v6.3c0 4.6-3 8.1-7.3 10.4-4.3-2.3-7.3-5.8-7.3-10.4V5z" fill="url(#e-shield-g)"/>
+    <path d="M12 2.3 19.3 5v6.3c0 4.6-3 8.1-7.3 10.4-4.3-2.3-7.3-5.8-7.3-10.4V5z" fill="none" stroke="url(#e-lit)" stroke-width="1"/>
+  </symbol>
 </svg>
 
 
@@ -554,12 +640,14 @@ if(cform){
      in the sentence. A new chip needs a line here or it falls back to 'your goal'. */
   var CGOAL={'Lose fat':'losing fat','Build muscle':'building muscle','More energy':'more energy',
              'Sleep and recovery':'sleep and recovery','Stay healthy day to day':'staying healthy day to day'},
-      CTRAIN={'Lifting':'while you lift','Endurance':'while you train endurance',
-              'A mix':'while you train a mix','Walking and mobility':'while you walk and stretch',
-              'Not training yet':'before the training starts'};
+      CTRAIN={'Weight lifting':'while you lift','Endurance':'while you train endurance',
+              'HIIT':'around your HIIT sessions',
+              'Occasional walks':'starting from the walks you already take',
+              'Used to, but it’s been a crazy season':'and getting back into it after a crazy season',
+              'I’m lost at the gym — HELP':'starting with a plan for the gym'};
   var line=function(){
     var g=val('goal'),t=val('training');
-    if(!g&&!t)return 'I call you.';
+    if(!g&&!t)return '';                        /* nothing picked: no sentence, and :empty pulls the line out of the layout */
     return 'Thirty minutes on '+(CGOAL[g]||'your goal')+(CTRAIN[t]?', '+CTRAIN[t]:'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});

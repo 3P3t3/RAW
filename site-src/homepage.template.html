@@ -296,22 +296,29 @@
       <form class="c-card grow" id="consult-form" data-consult="{{CONSULT_URL}}" style="--d:1">
         <fieldset class="c-q">
           <legend>What are you trying to accomplish?</legend>
+          <!-- the emblem lives inside the span, not beside it: the pill is styled as
+               `input:checked + span`, and anything between the input and the span would
+               break that. It is decorative, so the label text stays the accessible name. -->
           <div class="chips">
-            <label class="chip"><input type="radio" name="goal" value="Lose fat"><span>Lose fat</span></label>
-            <label class="chip"><input type="radio" name="goal" value="Build muscle"><span>Build muscle</span></label>
-            <label class="chip"><input type="radio" name="goal" value="More energy"><span>More energy</span></label>
-            <label class="chip"><input type="radio" name="goal" value="Sleep and recovery"><span>Sleep &amp; recovery</span></label>
-            <label class="chip"><input type="radio" name="goal" value="Stay healthy day to day"><span>Stay healthy</span></label>
+            <label class="chip"><input type="radio" name="goal" value="Lose fat"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-flame"/></svg>Lose fat</span></label>
+            <label class="chip"><input type="radio" name="goal" value="Build muscle"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-bell"/></svg>Build muscle</span></label>
+            <label class="chip"><input type="radio" name="goal" value="More energy"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-bolt"/></svg>More energy</span></label>
+            <label class="chip"><input type="radio" name="goal" value="Sleep and recovery"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-moon"/></svg>Sleep &amp; recovery</span></label>
+            <label class="chip"><input type="radio" name="goal" value="Stay healthy day to day"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-shield"/></svg>Stay healthy</span></label>
           </div>
         </fieldset>
         <fieldset class="c-q">
           <legend>How do you train right now?</legend>
+          <!-- Peter's own six. The visible label is the value, so what arrives in the booking
+               is the phrase the visitor actually read; _script.html's CTRAIN turns each one
+               into the clause the summary sentence needs. -->
           <div class="chips">
-            <label class="chip"><input type="radio" name="training" value="Lifting"><span>Lifting</span></label>
+            <label class="chip"><input type="radio" name="training" value="Weight lifting"><span>Weight lifting</span></label>
             <label class="chip"><input type="radio" name="training" value="Endurance"><span>Endurance</span></label>
-            <label class="chip"><input type="radio" name="training" value="A mix"><span>A mix</span></label>
-            <label class="chip"><input type="radio" name="training" value="Walking and mobility"><span>Walking, yoga</span></label>
-            <label class="chip"><input type="radio" name="training" value="Not training yet"><span>Not yet</span></label>
+            <label class="chip"><input type="radio" name="training" value="HIIT"><span>HIIT</span></label>
+            <label class="chip"><input type="radio" name="training" value="Occasional walks"><span>Occasional walks</span></label>
+            <label class="chip"><input type="radio" name="training" value="Used to, but it’s been a crazy season"><span>Used to, but it’s been a crazy season</span></label>
+            <label class="chip"><input type="radio" name="training" value="I’m lost at the gym — HELP"><span>I’m lost at the gym — HELP</span></label>
           </div>
         </fieldset>
         <div class="c-field"><label for="c-stack">What are you taking at the moment?</label>
@@ -319,7 +326,9 @@
         <div class="c-field"><label for="c-note">Anything you want covered? <span>Optional</span></label>
           <input id="c-note" name="note" type="text" autocomplete="off" placeholder="Eating around shift work…"></div>
         <button class="btn" type="submit">Pick a time</button>
-        <p class="c-sum" id="consult-sum" aria-live="polite">I call you.</p>
+        <!-- empty until a chip is picked, and `:empty` in style.css takes it out of the card's
+             grid entirely while it is, so nothing holds a blank row open -->
+        <p class="c-sum" id="consult-sum" aria-live="polite"></p>
       </form>
       <!-- the calendar mounts here in place of the form, once someone has answered -->
       <div class="c-embed" id="consult-embed" hidden></div>
