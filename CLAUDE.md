@@ -86,6 +86,13 @@ formula and rounding in `mcCalc` in `_script.html`, and worked examples. Read it
 alone (his artwork carries the lockup type under it, which must never reach the page). It is
 placed by hand, not generated, so the build never rewrites it and nothing cleans it up.
 
+`assets/peter/` holds Peter's photos for the consult section: `family-320.webp` (Peter, his wife and
+daughter) and his before/after composites `front-`, `side-`, `back-` at `640.webp` and `960.webp`.
+They are cut from his originals in `~/Desktop/aspiree/assets/rooms/` and placed by hand, so the
+build never touches them. Edits to them are honest only: crop, exposure, white balance. They are
+proof photos, so never retouch, smooth or AI-fill them. Peter chose to make them public; the repo
+is public because Pages requires it.
+
 ## Build
 
     python3 site-src/build_homepage.py     # from the repo root
