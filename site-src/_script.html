@@ -954,7 +954,7 @@ if(mcForm){
           kin=i?clamp((x-at[i]+T)/T):clamp(arrive),      /* 0..1 through the change into this beat */
           kout=i<N-1?clamp((x-at[i]-h)/T):0,             /* 0..1 through the change out of it */
           vis=kout<1&&kin>0;
-      if(vis!==p.vis){p.vis=vis;p.b.style.opacity=vis?'':'0'}   /* opacity, not visibility: its link stays reachable by Tab */
+      if(vis!==p.vis){p.vis=vis;p.b.style.opacity=vis?'1':'0'}   /* opacity, not visibility: its link stays reachable by Tab */
       if(!vis)return;
       /* the words: out in the first part of a change, in at the end of it, never both at once */
       var ce=i?smooth(clamp((kin-.6)/.4)):smooth(clamp(x/.35)),   /* the first words wait for the stage to hold */
