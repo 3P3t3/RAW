@@ -640,8 +640,8 @@ html:not(.js) #results[hidden]{display:block!important}
 /* the after's tag sits on its own side, so mid-wipe the frame reads before | after, as the pair does */
 .st-wipe .st-tag{left:auto;right:8px}
 .st-copy{display:grid;gap:12px;justify-items:start;width:100%}
-.st-copy p{max-width:36ch}   /* measured in each line's own type, so the display lines run wider */
-.st-copy .st-line{max-width:18ch}
+.st-copy p{max-width:36ch}   /* measured in each line's own type */
+.st-copy .st-line{max-width:none}   /* the display lines take the column */
 .st-line{font:800 clamp(30px,8.6vw,40px)/.95 var(--display);font-stretch:72%;text-transform:uppercase;
   letter-spacing:-.005em;text-wrap:balance;color:var(--teal)}
 .st-dark .st-line{color:var(--chalk)}
