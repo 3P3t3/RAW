@@ -425,15 +425,20 @@ $$('a',menu).forEach(function(a){a.addEventListener('click',function(){menu.clos
 matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.matches&&menu.open)menu.close()});
 
 /* The tab, the calculator and the call as one: shown only while nothing it could cover is
-   in view. That is the calculator and the consult on the homepage (their buttons and the
-   calendar), the hero's own two links, which sit where the tab does on a phone and go to the
-   same places, the band that sends you to the calculator on a category page, and the footer,
+   in view. That is the calculator and the consult's booking UI on the homepage — the form
+   and, once it takes the form's place, the calendar. Not the whole consult section: it is
+   ~2,500px tall and sits directly under the calculator, so watching all of it left the tab
+   suppressed across the whole stretch where the bio and the before/after stack are read, which
+   is exactly where the visitor decides. The form is hidden (no box, so no intersection) once
+   the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
+   which sit where the tab does on a phone and go to the same places, the band that sends you
+   to the calculator on a category page, and the footer,
    which is the end of every page and so could never be scrolled out from under it. It also
    waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult,.hero-actions,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-form,#consult-embed,.hero-actions,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -719,7 +724,9 @@ if(cform){
    Peter's two departures are the 1100 floor and the flags; both are said out loud below,
    never applied quietly. The floor can land at or above maintenance for a small, older,
    sedentary person, and then a deficit goal has no deficit left in it: noRoom says so, and
-   the page stops calling that number a cut. */
+   the page stops calling that number a cut. offScale and overProtein are the same move at the
+   top end, where there was no guardrail at all: above 350 lb, or above 250 g of protein, the
+   card hands over instead of coaching. None of the three flags changes a single number. */
 function mcCalc(v){
   var wKg=v.weightLb*0.453592,
       hIn=v.ft*12+v.inch,
@@ -746,7 +753,16 @@ function mcCalc(v){
           floored:floored,clamped:spare<0,
           /* a deficit goal whose target is at, above, or within 3% of maintenance: nothing
              was cut, whatever the setting said. Only the floor can cause it. */
-          noRoom:(v.goal==='loss'||v.goal==='recomp')&&target>=tdee*0.97};
+          noRoom:(v.goal==='loss'||v.goal==='recomp')&&target>=tdee*0.97,
+          /* the other end, and a different reason: above 350 lb this maths is out of its
+             range whatever the goal, so the card hands over instead of coaching. Peter's
+             rule, strictly greater than. Kept separate from noRoom so a later reader can
+             see which of the two fired; the page prints one warning for either. */
+          offScale:v.weightLb>350,
+          /* and the same again on the protein side, which the weight rule does not cover: the
+             ideal-bodyweight bases can hand a 350 lb visitor well under 250 g, while 1.2 g/lb
+             passes 250 g at 209 lb. Strictly greater than, on the rounded grams. */
+          overProtein:proteinG>250};
 }
 /* mc:end */
 
@@ -845,13 +861,17 @@ if(mcForm){
     if(r.clamped)notes.push(['mc-warn','Hold it — the math isn’t mathing. Your protein and fat already use '+
       mcCal(r.proteinCal+r.fatCal)+' of your '+mcCal(r.target)+' calories, leaving nothing for carbs. '+
       'This isn’t sustainable. Ease the deficit or the protein setting and try again.']);
-    /* when the floor lands at or beside maintenance there is no deficit to describe, so the
-       floor note and the goal note — both of which talk about cutting further — are dropped */
-    if(r.noRoom)notes.push(['mc-warn','This one doesn’t look right — worth talking it through with ',
+    /* Three states hand the card to the call rather than coach it: the floor landing at or
+       beside maintenance (noRoom), a weight this maths cannot serve (offScale), and a protein
+       figure past 250 g (overProtein). Any of them prints the same single warning — never
+       two, however many are true — and all of them drop the floor note and the goal note,
+       which talk about cutting further and would argue with the arithmetic on the same card. */
+    var handoff=r.noRoom||r.offScale||r.overProtein;
+    if(handoff)notes.push(['mc-warn','This one doesn’t look right — worth talking it through with ',
       'one of our experts','.']);
     else if(r.floored)notes.push(['mc-warn','Floor reached. We don’t go below 1,100 calories — '+
       'a gentler deficit is the better way down.']);
-    if(!r.noRoom)notes.push(['mc-note',MCGOAL[mcGet('goal')]||'']);
+    if(!handoff)notes.push(['mc-note',MCGOAL[mcGet('goal')]||'']);
     mcNotes.textContent='';
     notes.forEach(function(n){
       var p=doc.createElement('p');p.className=n[0];
