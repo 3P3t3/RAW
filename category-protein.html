@@ -1250,7 +1250,7 @@ if(mcForm){
     x=f(Math.cos(a)*R+k.rx*w/100,1);y=f(Math.sin(a)*R*.55,1);s*=k.rs;
     put(p,k.img,'i'+i,'translate3d('+x+'px,'+y+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotateY('+
       f(ry,2)+'deg) rotate('+f(rot,2)+'deg) scale('+f(s,3)+')',f(op,3));
-    put(p,k.shade,'s'+i,'translate3d('+x+'px,'+y+'px,0) scale('+f(s,3)+')',f(Math.min(1-m,1-q),3));
+    put(p,k.shade,'s'+i,'translate3d('+x+'px,'+y+'px,0) scale('+f(s,3)+')',f((1-m)*(1-m)*(1-q),3));   /* the shadow comes up only in the last of the landing, never under a pack still high in its swirl */
     return (1-m)*(1-q);
   }
   function measure(){w=stage.offsetWidth;sh=stage.offsetHeight}
