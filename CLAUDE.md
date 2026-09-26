@@ -89,8 +89,10 @@ formula and rounding in `mcCalc` in `_script.html`, and worked examples. Read it
 alone (his artwork carries the lockup type under it, which must never reach the page). It is
 placed by hand, not generated, so the build never rewrites it and nothing cleans it up.
 
-`assets/peter/` holds Peter's photos for the consult section: `family-320.webp` (Peter, his wife and
-daughter) and his before/after composites `front-`, `side-`, `back-` at `640.webp` and `960.webp`.
+`assets/peter/` holds Peter's photos for the story and the proof wall: `family-320.webp` (Peter, his
+wife and daughter), his before/after composites `front-`, `side-`, `back-` at `640.webp` and `960.webp`,
+and `front-before-480.webp` / `front-after-480.webp`, the two halves of the front pair cut at its
+seam (crop only) for the story's before-becomes-after wipe.
 They are cut from his originals in `~/Desktop/aspiree/assets/rooms/` and placed by hand, so the
 build never touches them. Peter chose to make them public; the repo is public because Pages
 requires it.
@@ -105,6 +107,27 @@ widens his waistband ~4.9%, which makes the transformation read slightly larger 
 increase that without asking him. The three pairs share one framing spec measured on his body, and
 the seam must stay at exactly 50% with befores on the left, or the page's Before/After headings
 stop aligning.
+
+## The story (`#story`)
+
+The homepage runs hero → shelves → `#trending` (the scroll-scrubbed can pour) → `#story` →
+`#macros` → `#consult`. `#story` is a sticky, scroll-scrubbed stage telling Peter's 15 months in
+beats: his before, five product beats (each linking to a shelf), the before becoming the after,
+"That's what this call is for" with a "Book a free call" button, his family, then the three-pair
+proof wall. It replaced the old `#hydrate` band (its water line now lives in the hydration beat).
+Peter's lines inside it are his, verbatim, in PETER-COPY markers.
+
+Its pace lives in two places: the `HOLD` table and `T` in the story block of `_script.html`, and the
+run height (900lvh) in `style.css`. The stage renders from an eased copy of the scroll position with
+a speed cap and a backlog clamp, so a fast flick still plays each swirl; it is still a pure function
+of scroll, so scrolling back plays it backwards. Transforms and opacity only (a full scrub costs 0
+layouts); keep it that way. Reduced motion and no JavaScript get the same beats as a plain vertical
+sequence. It was tuned over four Fable review rounds; the rounds are tagged `story-round-0` to
+`story-round-3`, and `PRE-STORYBOARD` is the site before it.
+
+A product can sit on more than one shelf: a shelf page lists everything its own `CATEGORIES` entry
+names, while `cat_of` stays each product's single home shelf (its card tag). XS Creatine+ is on both
+Daily Foundations and Hydration.
 
 ## Build
 
