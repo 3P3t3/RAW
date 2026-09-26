@@ -293,7 +293,7 @@ html:not(.js) .mtab{display:none}
 .split-text p:not(.label){max-width:42ch}
 
 /* 7. Consult: four answers, then a time on the calendar */
-.consult{overflow:hidden;overflow:clip;color:var(--text)}  /* clip, not hidden: hidden would make this a scroll box and kill the sticky card below */
+.consult{overflow:hidden;overflow:clip;color:var(--text)}  /* clip, not hidden: hidden would make this a scroll box, and nothing sticky inside it could stick */
 .consult .split-text p:not(.label){max-width:40ch}
 .c-fine{font-size:14px;color:var(--text)}
 /* the calculator's numbers, carried into the consult after "See my numbers": the card's
@@ -306,11 +306,8 @@ html:not(.js) .mtab{display:none}
 .c-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:10px;max-width:40ch}
 .c-list li{position:relative;padding-left:20px;font-size:16px;color:var(--text)}
 .c-list li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:1px;background:var(--teal)}
-/* Peter, met before the questions: who he is (the family, small, beside his line), then the
-   proof (the before and after, all three views stacked, nothing to swipe). Every img carries
-   its width and height, so nothing jumps when the lazy files land. */
-.c-who{display:grid;grid-template-columns:112px minmax(0,1fr);gap:16px;align-items:start;width:100%;margin-top:12px}
-.c-fam{display:block;width:100%;height:auto;background:var(--tile)}
+/* Peter's proof, which closes #story: the before and after, all three views stacked, nothing
+   to swipe. Every img carries its width and height, so nothing jumps when the lazy files land. */
 .c-proof{display:grid;gap:10px;width:100%;min-width:0;margin:4px 0 0}
 /* the three files share one crop, so a 1fr 1fr row above the stack puts the two headings on
    the very 50% line every image splits on: one pair labels all three. */
@@ -495,11 +492,6 @@ html:not(.js) #results[hidden]{display:block!important}
   .foot-top .foot-brand{grid-column:1 / 5}
   .foot-links{grid-column:5 / 13;grid-auto-flow:column;justify-content:flex-end;gap:0 36px}
   .c-card,.c-embed{grid-column:7 / 13}
-  /* the proof stacks three deep in the left column, so the card rides beside it rather than
-     stranding the questions at the top of a tall band. Only where the window is tall enough
-     that a stuck card still reaches its own button. */
-  @media (min-height:1000px){.c-card,.c-embed{position:sticky;top:calc(var(--mast) + 24px)}}
-  .c-who{grid-template-columns:140px minmax(0,1fr);gap:20px}
   .c-card{padding:32px}
 }
 
@@ -509,10 +501,6 @@ html:not(.js) #results[hidden]{display:block!important}
    button at the foot of the menu panel instead. */
 @media (min-width:1024px){
   :root{--mast:76px}
-  /* Peter's proof is a tall wall down the left column; the card rides beside it on the same
-     sticky beat as .hy-beat, so the four questions are never scrolled away from the proof.
-     Held back on short viewports, where a stuck card could outrun its own button. */
-  @media (min-height:760px){.c-card,.c-embed{position:sticky;top:calc(var(--mast) + 24px)}}
   /* the wordmark column may not shrink below its own width: with the wave in it the block
      is ~277px, and a minmax(0,1fr) track let it overflow into the nav at 1024 */
   .mast .wrap{display:grid;grid-template-columns:minmax(auto,1fr) auto minmax(0,1fr) auto;align-items:center;gap:24px;height:76px}
@@ -618,88 +606,98 @@ html:not(.js) #results[hidden]{display:block!important}
 .pour-bg::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(rgba(0,20,27,.88) 0,rgba(0,20,27,.7) 18%,rgba(0,20,27,.7) 82%,rgba(0,20,27,.88) 100%)}
 
-/* ---------- The fizz: the hydration band carries on from the pour ---------- */
-/* The full glass under the same scrim as the pour, and one transparent canvas above it
-   for the bubbles and the drain: everything above the falling surface it fills with chalk,
-   the page's own ground, so the band ends on the colour it is laid on.
-   The line sits on a chalk card at .9. Over the chalk above the surface the card is the
-   page itself; over the darkest glass it is still light enough to hold its ink and teal
-   above 4.5:1, and the bubbles only ever lighten what is under it. */
-.fizz-sec{position:relative;isolation:isolate;background:var(--teal)}
-.fizz-sec .split-text{background:rgba(244,242,236,.9);padding:24px 20px}
-.fizz-bg{position:absolute;inset:0;z-index:-1;background:var(--teal)}
-.fizz-stage{position:sticky;top:0;height:100vh;max-height:100%}
-@supports (height:100lvh){.fizz-stage{height:100lvh}}
-.fizz-still,.fizz-film{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
-.fizz-stage::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(rgba(0,20,27,.88) 0,rgba(0,20,27,.7) 18%,rgba(0,20,27,.7) 100%)}
-.fizz-film{z-index:1}
-/* The drain's run: room below the line to scroll the glass empty in. Its end is where
-   the stage lets go of the window, so the band is chalk before the calculator's sand
-   band below it shows. */
-.fizz-run{display:none}
-html.motion .fizz-run{display:block;height:80vh}
-@supports (height:100lvh){html.motion .fizz-run{height:80lvh}}
-/* Reduced motion (and no script): no canvas. The glass stands still and a still
-   waterline below the line gives way to chalk at the band's foot. */
-.fizz-shore{position:absolute;left:0;right:0;bottom:0;z-index:1;display:block;width:100%;height:88px;fill:var(--chalk)}
-html.motion .fizz-shore{display:none}
-html:not(.motion) .fizz-sec{padding-bottom:calc(var(--sec) + 56px)}
-@media (min-width:768px){
-  .fizz-sec .split-text{padding:36px 32px}
-  html.motion .fizz-run{height:115vh}      /* the columns sit side by side: less band to drain behind */
-  @supports (height:100lvh){html.motion .fizz-run{height:115lvh}}
-}
+/* ---------- Peter's story: a storyboard after the pour ---------- */
+/* Nine beats in reading order. As plain content (reduced motion, no script) they stand one
+   under another, each on its own tone, dark to light. When the script takes the section over
+   (.is-live) the stage sticks for the length of the run, the beats stack inside it, and the
+   script moves each one with transform and opacity only, as a pure function of how far the
+   run has scrolled. The ground is the pour band's teal with the sand and the chalk faded in
+   over it, so it warms without ever being a colour the site does not use. */
+.story{position:relative;background:var(--chalk)}
+.st-beats{list-style:none;margin:0;padding:0}
+.st-bg{display:none}
+.st-beat{display:flex;flex-direction:column;align-items:center;gap:24px;padding:56px var(--pad)}
+.st-dark{background:var(--teal);color:var(--on-dark)}
+.st-warm{background:var(--sand);color:var(--ink)}
+.st-light{background:var(--chalk);color:var(--ink)}
+.st-dark :focus-visible{outline-color:var(--sand)}
+.st-hero{display:flex;align-items:center;justify-content:center;width:100%;min-width:0}
+.st-art{position:relative;flex:none;width:min(66vw,300px);aspect-ratio:1}
+.st-art img{display:block;width:100%;height:100%;object-fit:contain;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+/* his photos: the frame is the photo's own shape, and a crop of it never shows */
+.st-photo{width:auto;height:min(56vh,420px);aspect-ratio:3/4;overflow:hidden;background:var(--tile)}
+.st-photo img{object-fit:cover}
+.st-fam .st-photo{height:min(40vh,300px);aspect-ratio:4/5}
+/* the hydration stack arrives as a pair: one high on the left, one low on the right */
+.st-pair{width:min(86vw,380px);aspect-ratio:5/4}
+.st-pair img{position:absolute;width:64%;height:auto;aspect-ratio:1;top:0;left:0}
+.st-pair img+img{top:auto;left:auto;right:0;bottom:0}
+/* the turn: without the stage only the after stands; the stage lays the before under it */
+.st-was{display:none}
+.st-wipe,.st-wipe-in{position:absolute;inset:0;overflow:hidden}
+.st-tag{position:absolute;left:8px;top:8px;padding:6px 8px;background:rgba(244,242,236,.9);color:var(--ink);
+  font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.st-copy{display:grid;gap:12px;justify-items:start;width:100%;max-width:36ch}
+.st-line{font:800 clamp(30px,8.6vw,40px)/.95 var(--display);font-stretch:72%;text-transform:uppercase;
+  letter-spacing:-.005em;text-wrap:balance;color:var(--teal)}
+.st-dark .st-line{color:var(--chalk)}
+.st-say{font:500 19px/1.45 var(--sans);text-wrap:pretty}
+.st-dark .st-say{color:var(--chalk)}
+.st-note{font-size:15px;line-height:1.45;color:var(--text)}
+.st-dark .st-note{color:var(--on-dark)}
+.st-go .ic{margin-left:8px}
+.st-dark .st-go{color:var(--sand)}
+.st-solo .st-say{font-size:clamp(22px,6.2vw,30px);line-height:1.3;font-weight:600}
+/* the proof the stage lets go into: the three pairs, stacked */
+.st-proof{padding-top:48px;padding-bottom:var(--sec)}
+.st-proof .c-proof{max-width:680px;margin:0 auto}
 
-/* ---------- Hydration: a cup comes up where the glass emptied ---------- */
-/* The third beat of the drink. The line and the cup hold on screen while the glass drains
-   behind them; once the falling surface has passed the tide line at the foot of the well,
-   the cup rises through it, and it is all the way up as the glass runs dry. The script
-   moves it with transform and opacity only. With reduced motion, or no script, it stands
-   fully risen on a chalk card and nothing moves. The drawing is the site's own line: teal
-   strokes that stay the same weight at any size, on chalk. */
-.hydrate{--wh:clamp(180px,32vh,300px)}        /* the well's height; the cup and its ripple are sized off it */
-.hy-beat{row-gap:20px}
-html.motion .hy-beat{position:sticky;top:calc(var(--mast) + 16px)}
-/* The band keeps the length the quiz band had, so the glass drains over the same stretch of
-   scroll as before (about 600px at every width). The line is shorter than the quiz was on a
-   phone, so the run makes up the difference; on wider screens the well is the taller column
-   and the run gives back what it adds. */
-html.motion .hy-beat + .fizz-run{margin-top:170px}
-.hy-line h2 span{display:block}
-.hy-q{margin-bottom:12px;font:600 18px/1.35 var(--sans);font-stretch:100%;text-transform:none;letter-spacing:0;color:var(--ink)}
-.hy-a{font-size:36px}
-/* the well clips: the ripple is wider than a phone's column, and nothing here may widen the page */
-.hy-well{--tide:8px;position:relative;order:-1;height:var(--wh);overflow:hidden}
-html:not(.motion) .hy-well{--tide:26px;background:rgba(244,242,236,.9)}
-.hy-clip{position:absolute;left:0;right:0;top:0;bottom:var(--tide);overflow:hidden}
-.hy-cup{position:absolute;left:0;right:0;bottom:3px;height:88%;display:flex;justify-content:center}
-.hy-cup svg{display:block;height:100%;width:auto;overflow:visible}
-.hy-cup path,.hy-cup circle{vector-effect:non-scaling-stroke;fill:none;stroke:var(--teal);stroke-linecap:round;stroke-linejoin:round}
-.hy-glass{stroke-width:2px}
-.hy-base{stroke-width:2px}
-.hy-cup .hy-water{fill:rgba(0,46,59,.1);stroke:none}
-.hy-surf{stroke-width:1.5px}
-.hy-bubbles circle{stroke-width:1.25px;opacity:.7}
-.hy-ticks{stroke-width:1.5px;opacity:.45}
-.hy-cup .hy-shine{stroke:#fff;stroke-width:3px;opacity:.8}
-.hy-tide,.hy-ripple{position:absolute;display:block;height:16px;bottom:calc(var(--tide) - 8px);overflow:visible;pointer-events:none}
-.hy-tide{left:0;width:100%;-webkit-mask-image:linear-gradient(90deg,transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(90deg,transparent,#000 16%,#000 84%,transparent)}
-/* the ripple is sized off the well's height, as the cup is, so its arcs meet the glass */
-.hy-ripple{left:50%;width:calc(var(--wh) * 1.21);margin-left:calc(var(--wh) * -.605);opacity:0}
-.hy-tide path,.hy-ripple path{vector-effect:non-scaling-stroke;fill:none;stroke:var(--teal);stroke-width:1.5px;stroke-linecap:round}
-.hy-tide path{opacity:.55}
-/* motion: the cup starts below the line, the line itself not yet left behind */
-html.motion .hy-cup{transform:translate3d(0,105%,0);will-change:transform}
-html.motion .hy-tide{opacity:0}
+/* the stage. Sized to the large viewport so mobile Safari's toolbar cannot resize it
+   mid-scrub, as the pour's is; the beats inside it to the small one, so a line and its link
+   are never under the toolbar. Each beat clears the masthead at the top and the tab at the
+   foot. Only the beat whose line is up can be tapped. */
+.story.is-live .st-run{height:900vh}
+@supports (height:100lvh){.story.is-live .st-run{height:900lvh}}
+.story.is-live .st-stage{position:sticky;top:0;height:100vh;overflow:hidden;overflow:clip}
+@supports (height:100lvh){.story.is-live .st-stage{height:100lvh}}
+.story.is-live .st-bg{display:block;position:absolute;inset:0;background:var(--teal)}
+.st-bg span{position:absolute;inset:0;opacity:0}
+.st-sand{background:var(--sand)}
+.st-chalk{background:var(--chalk)}
+.story.is-live .st-beats{position:absolute;left:0;right:0;top:0;height:100vh}
+@supports (height:100svh){.story.is-live .st-beats{height:100svh}}
+.story.is-live .st-beat{position:absolute;inset:0;justify-content:flex-end;gap:22px;background:none;
+  padding:calc(var(--mast) + 16px) var(--pad) calc(72px + env(safe-area-inset-bottom,0px));
+  visibility:hidden;pointer-events:none}
+.story.is-live .st-beat.is-on{pointer-events:auto}
+.story.is-live .st-hero{flex:1 1 0;min-height:0}
+.story.is-live .st-art{height:100%;width:auto;max-width:100%;max-height:min(92vw,380px);will-change:transform,opacity}
+.story.is-live .st-photo{max-height:440px}
+.story.is-live .st-fam .st-photo{max-height:340px}
+.story.is-live .st-pair{max-height:min(74vw,320px)}
+.story.is-live .st-was{display:block}
+.story.is-live .st-copy{will-change:transform,opacity}
+.story.is-live .st-solo{justify-content:center}
+
 @media (min-width:768px){
-  .hy-beat{align-items:center}
-  html.motion .hy-beat{top:calc(var(--mast) + 40px)}
-  .hy-q{margin-bottom:16px;font-size:22px}
-  .hy-a{font-size:52px}
-  .hydrate{--wh:clamp(300px,44vh,400px)}
-  .hy-well{grid-column:7 / 13;order:0}
-  html.motion .hy-beat + .fizz-run{margin-top:calc(310px - var(--wh))}
+  .st-beat{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;align-items:center;align-content:center;
+    padding:88px max(var(--pad),calc((100% - 1200px) / 2))}
+  .st-hero{grid-column:7 / 13;grid-row:1}
+  .st-copy{grid-column:1 / 7;grid-row:1}
+  .st-solo .st-copy{grid-column:2 / 12;max-width:30ch}
+  .st-art{width:min(38vw,420px)}
+  .st-photo{width:auto;height:min(64vh,520px)}
+  .st-fam .st-photo{height:min(52vh,400px)}
+  .st-pair{width:min(46vw,520px)}
+  .st-line{font-size:clamp(44px,5vw,64px)}
+  .st-say{font-size:22px}
+  .st-solo .st-say{font-size:clamp(30px,3.2vw,40px)}
+  .story.is-live .st-beat{padding-top:calc(var(--mast) + 24px);padding-bottom:40px}
+  .story.is-live .st-hero{height:min(66vh,560px)}
+  .story.is-live .st-art{max-height:420px}
+  .story.is-live .st-photo{max-height:520px}
+  .story.is-live .st-fam .st-photo{max-height:420px}
+  .story.is-live .st-pair{max-height:416px}
 }
 
 /* ---------- Archipelago: seven floating islands ---------- */

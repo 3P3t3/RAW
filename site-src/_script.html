@@ -138,10 +138,10 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
 
 /* The tab, the calculator and the call as one: shown only while nothing it could cover is
    in view. That is the calculator and the consult's booking UI on the homepage — the form
-   and, once it takes the form's place, the calendar. Not the whole consult section: it is
-   ~2,500px tall and sits directly under the calculator, so watching all of it left the tab
-   suppressed across the whole stretch where the bio and the before/after stack are read, which
-   is exactly where the visitor decides. The form is hidden (no box, so no intersection) once
+   and, once it takes the form's place, the calendar. Not the whole consult section: it sits
+   directly under the calculator, so watching all of it would put the tab away across the
+   offer and the disclosure, which is where the visitor decides. Peter's story (#story) is
+   not watched either: the tab rides over it. The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
    which sit where the tab does on a phone and go to the same places, the band that sends you
    to the calculator on a category page, and the footer,
@@ -891,171 +891,113 @@ if(mcForm){
   },{rootMargin:'400px 0px'}).observe(run);
 })();
 
-/* The glass under the fizz, the pour's last frame: asked for only as the band nears, as
-   the pour's own frames are, whatever the motion setting. Without script the band is teal. */
+/* Peter's story: nine beats on one stage that holds the window for the length of the run.
+   Where each beat is, and how far in or out of its turn, is a pure function of how far the
+   run has scrolled, as the pour is: scrolling back up plays it backwards. The script takes
+   the section over (.is-live) only when motion is allowed; otherwise, and until it does, the
+   beats are a plain vertical sequence. Everything written per frame is transform or opacity.
+   A pack shot swirls in, turning and tilted, settles upright and still while its line is
+   read, and spins away as the next one comes in. It is a flat picture, so it only ever turns
+   in its own plane and tilts well short of edge-on: it is never seen from behind or mirrored.
+   The photos of Peter do not spin: they rise in and fall away, and at the turn the after
+   wipes in over the before. */
 (function(){
-  var im=$('.fizz-still');
-  if(!im)return;
-  function go(){im.srcset=im.getAttribute('data-srcset');im.src=im.getAttribute('data-src')}
-  if(!('IntersectionObserver' in window))return go();
-  new IntersectionObserver(function(es,o){
-    if(!es[0].isIntersecting)return;
-    o.disconnect();go();
-  },{rootMargin:'400px 0px'}).observe(im.closest('section'));
-})();
-
-/* The fizz: the full glass behind the hydration line, bubbling, drains away as you scroll. The
-   level is a pure function of scroll (eased a touch, so it pours rather than jumps), so
-   scrolling back up refills it. It starts as the band's top reaches the top of the window
-   and is empty by the time the stage lets go, just before the calculator's band shows. Above the
-   surface the canvas is chalk; below it, the glass shows through and bubbles rise to the
-   surface and pop there. One canvas, redrawn each frame while the band is on screen.
-   The cup rides the same level: see rise() below. */
-(function(){
-  var run=$('#fizz-bg');
+  var run=$('#st-run');
   if(!run||!html.classList.contains('motion'))return;
-  var stage=$('.fizz-stage',run),cv=$('#fizz-film'),sec=run.parentNode;
-  var ctx=cv.getContext('2d');
-  var CHALK='#F4F2EC',EDGE=26;      /* EDGE: how far the waves and the wet band reach */
-  var w=0,h=0,r=1,bub=null,step=16;
-  var bubbles=[],MAX=120,spawn=0,lastY=scrollY,kick=0,t0=0,t=0,raf=0,on=false;
-  var level=0,target=0,slosh=0,settled=false;
-  var cup=$('#hy-cup'),tide=$('.hy-tide',sec),rip=$('.hy-ripple',sec),risen=-1;
-
-  function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
-
-  /* one bubble, drawn once and stamped at every size */
-  function makeBubble(){
-    var c=doc.createElement('canvas'),S=64,g=c.getContext('2d');
-    c.width=c.height=S;
-    var rg=g.createRadialGradient(S*.5,S*.5,S*.3,S*.5,S*.5,S*.5);
-    rg.addColorStop(0,'rgba(255,255,255,0)');rg.addColorStop(.8,'rgba(255,255,255,.10)');rg.addColorStop(1,'rgba(255,255,255,.55)');
-    g.fillStyle=rg;g.beginPath();g.arc(S/2,S/2,S/2-1,0,7);g.fill();
-    g.fillStyle='rgba(255,255,255,.85)';g.beginPath();g.ellipse(S*.36,S*.33,S*.1,S*.06,-.7,0,7);g.fill();
-    return c;
-  }
-  function size(){
-    w=stage.offsetWidth;h=stage.offsetHeight;
-    r=Math.min(devicePixelRatio||1,w<600?1.5:2);   /* soft shapes: a phone does not need 3x */
-    cv.width=Math.round(w*r);cv.height=Math.round(h*r);
-    MAX=w<600?40:120;step=w<600?13:18;
-    if(!bub)bub=makeBubble();
-    settled=false;draw();rise();
-  }
-
-  /* How empty the glass should be, 0..1: 0 while the band's top is below the window's top,
-     1 once its bottom is at the stage's bottom, where the stage stops sticking. The last
-     few percent of the run are spare, so it is dry a moment before the band ends. */
-  function drained(){
-    var b=sec.getBoundingClientRect();
-    return clamp(-b.top/Math.max(1,b.height-h)/.92,0,1);
-  }
-  /* The surface at x: the level, a tilt while it is moving, and three slow swells that
-     grow a little with the slosh. Never a ruler: a few pixels of unevenness at rest. */
-  function surf(Y,x){
-    var a=1+Math.min(2.2,Math.abs(slosh)*.06);
-    return Y+slosh*(x/w-.5)*.35
-      +a*(3.2*Math.sin(x*.011+t*1.1)+1.8*Math.sin(x*.027-t*1.7+1.3)+.9*Math.sin(x*.063+t*2.6+.4));
-  }
-  function trace(Y,dy){
-    for(var x=0;x<w+step;x+=step)ctx.lineTo(Math.min(x,w),surf(Y,Math.min(x,w))+dy);
-  }
-
-  function draw(){
-    /* the level runs from just above the top of the stage to just below its bottom */
-    var Y=-EDGE+(h+EDGE*2)*level;
-    ctx.setTransform(r,0,0,r,0,0);
-    ctx.clearRect(0,0,w,h);
-    /* bubbles, only inside what is left of the drink; they fade as they reach the top */
-    for(var i=0;i<bubbles.length;i++){
-      var b=bubbles[i],sy=surf(Y,b.x),f=clamp((b.y-sy)/14,0,1);
-      if(f<=0)continue;
-      ctx.globalAlpha=b.a*f;ctx.drawImage(bub,b.x-b.s,b.y-b.s,b.s*2,b.s*2);
-    }
-    ctx.globalAlpha=1;
-    if(Y<=-EDGE+.5)return;                       /* full: no surface on screen */
-    if(Y>=h+EDGE-.5){ctx.fillStyle=CHALK;ctx.fillRect(0,0,w,h);return}   /* empty */
-    /* the meniscus: a thin bright line just under the surface, and a faint glow below it */
-    ctx.lineJoin='round';
-    ctx.beginPath();ctx.moveTo(0,surf(Y,0)+6);trace(Y,6);
-    ctx.strokeStyle='rgba(255,236,210,.10)';ctx.lineWidth=10;ctx.stroke();
-    ctx.beginPath();ctx.moveTo(0,surf(Y,0)+1.5);trace(Y,1.5);
-    ctx.strokeStyle='rgba(255,244,228,.45)';ctx.lineWidth=1.6;ctx.stroke();
-    /* the wet edge, then the dry page above it */
-    ctx.fillStyle=CHALK;
-    ctx.globalAlpha=.35;
-    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,surf(Y,0)+3);trace(Y,3);ctx.lineTo(w,0);ctx.closePath();ctx.fill();
-    ctx.globalAlpha=1;
-    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,surf(Y,0));trace(Y,0);ctx.lineTo(w,0);ctx.closePath();ctx.fill();
-  }
-
-  /* Bubbles: a steady fizz from the depth that is left, and scrolling shakes more loose. */
-  function tick(now){
-    raf=0;
-    var dt=Math.min(.05,(now-(t0||now))/1000);t0=now;t+=dt;
-    var y=scrollY,v=y-lastY;lastY=y;
-    kick=kick*.9+Math.min(60,Math.abs(v))*.1;
-    target=drained();
-    var d=target-level;
-    level=Math.abs(d)<.0005?target:level+d*Math.min(1,dt*7);
-    /* slosh: the surface leans against the way it is going, then settles */
-    slosh+=((target-level)*h*1.4-slosh)*Math.min(1,dt*5);
-    var Y=-EDGE+(h+EDGE*2)*level,deep=clamp((h-Y)/h,0,1);
-    spawn+=dt*(6+kick*2.4)*deep*(MAX/120);
-    while(spawn>=1&&bubbles.length<MAX){
-      spawn--;
-      var s=1.5+Math.pow(Math.random(),2.2)*7,top=Math.max(Y+EDGE,h*.55);
-      bubbles.push({x:Math.random()*w,y:top+Math.random()*(h+10-top),s:s,vy:28+s*14+Math.random()*20,
-        ph:Math.random()*6,wob:.4+Math.random()*1.2,a:.35+Math.random()*.5});
-    }
-    if(spawn>1)spawn=1;
-    var push=Math.max(0,v)*.6;   /* scrolling down lifts them a little faster */
-    for(var i=bubbles.length-1;i>=0;i--){
-      var b=bubbles[i];
-      b.y-=b.vy*dt+push*(b.s/6);
-      b.ph+=dt*3;b.x+=Math.sin(b.ph)*b.wob*.5;
-      if(b.y<surf(Y,b.x))bubbles.splice(i,1);    /* popped at the surface */
-    }
-    /* dry and still: one last chalk frame, then nothing until the next scroll */
-    var dry=level>=1&&target>=1&&!bubbles.length&&Math.abs(slosh)<.5;
-    if(!(dry&&settled)){draw();rise()}
-    settled=dry;
-    if(on&&!dry)raf=requestAnimationFrame(tick);
-  }
-  function wake(){if(on&&!raf){raf=requestAnimationFrame(tick)}}
-
-  /* The cup: nothing until the falling surface has cleared the tide line at the foot of its
-     well, then it comes up through that line and is all the way up as the glass runs dry.
-     It rides the eased level, so it can never be ahead of the water. Rects are read first,
-     then transform and opacity are written: no layout. */
-  function rise(){
-    if(!cup)return;
-    var s=stage.getBoundingClientRect().top,
-        line=tide.getBoundingClientRect().bottom-s+4,         /* just under the tide, in stage terms: a margin for the waves */
-        Y=-EDGE+(h+EDGE*2)*level,end=h+EDGE,
-        p=level>=1?1:end-line<1?0:clamp((Y-line)/(end-line),0,1);
-    p=Math.round(p*p*(3-2*p)*1000)/1000;                   /* eased in and out */
-    if(p===risen)return;
-    risen=p;
-    cup.style.transform='translate3d(0,'+((1-p)*105).toFixed(2)+'%,0)';
-    tide.style.opacity=Math.min(1,p*6).toFixed(3);          /* the mark shows as the water leaves it */
-    rip.style.opacity=(Math.sin(Math.PI*p)*.9).toFixed(3);  /* rings only while it breaks the surface */
-    rip.style.transform='scaleX('+(.8+.5*p).toFixed(3)+')';
-  }
-
-  size();
-  addEventListener('resize',function(){
-    /* height-only changes (mobile Safari's toolbar) must not re-size the stage */
-    if(stage.offsetWidth===w&&stage.offsetHeight===h)return;
-    size();
+  var sec=run.parentNode,stage=$('.st-stage',run),beats=$$('.st-beat',run),N=beats.length,
+      sand=$('.st-sand',run),chalk=$('.st-chalk',run);
+  /* How long each beat holds, and each change between two beats (T), in one unit. The run's
+     height in style.css sets the pace; this sets the rhythm. The turn (the before becoming the
+     after) holds longest, since the wipe happens while it is up; the family closes on a long
+     hold before the stage lets go into the proof. */
+  var HOLD=[1,.8,.8,1,.8,.9,1.7,1,1.3],T=1,at=[],L=0;
+  beats.forEach(function(b,i){at.push(L);L+=(HOLD[i]||1)+(i<N-1?T:0)});
+  var TURN=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('turn'),
+      SAND=beats.indexOf($('.st-warm',run));        /* the first beat on the sand */
+  var parts=beats.map(function(b){
+    return {b:b,kind:b.getAttribute('data-kind'),art:$('.st-art',b),copy:$('.st-copy',b),
+            wipe:$('.st-wipe',b),win:$('.st-wipe-in',b),vis:null,on:null,keys:{}};
   });
+  var w=0,sh=0,raf=0,near=false,D=Math.PI/180;
+  function clamp(x){return x<0?0:x>1?1:x}
+  function smooth(x){return x*x*(3-2*x)}
+  function out3(x){return 1-Math.pow(1-x,3)}
+  function f(n,d){return n.toFixed(d)}
+  function put(p,el,name,tf,op){        /* write only what changed */
+    if(!el)return;
+    var k=tf+'|'+op;
+    if(p.keys[name]===k)return;
+    p.keys[name]=k;el.style.transform=tf;el.style.opacity=op;
+  }
+  /* The swirl. m: how far from settled on the way in (1 far, 0 home); q: how far gone on the
+     way out. Clockwise, on a flattened ring: in from the upper right, round through the right
+     into the middle; out through the left and away up the other side, so the one leaving and
+     the one arriving are always on opposite sides of the stage. */
+  function swirl(m,q){
+    var rad=Math.min(w*.95,900),a,R,rot,rx,ry,s;
+    if(q>0){R=rad*q;a=(140+80*q)*D;rot=130*q;rx=-12*q;ry=24*q;s=1-.5*q}
+    else{R=rad*m;a=(40-80*m)*D;rot=-130*m;rx=12*m;ry=-24*m;s=1-.6*m}
+    return 'translate3d('+f(Math.cos(a)*R,1)+'px,'+f(Math.sin(a)*R*.55,1)+'px,0) perspective(900px) rotateX('+
+      f(rx,2)+'deg) rotateY('+f(ry,2)+'deg) rotate('+f(rot,2)+'deg) scale('+f(s,3)+')';
+  }
+  function measure(){w=stage.offsetWidth;sh=stage.offsetHeight}
+  function frame(){
+    raf=0;
+    var r=run.getBoundingClientRect(),vh=innerHeight||1,
+        x=clamp(-r.top/Math.max(1,r.height-sh))*L,
+        arrive=clamp((vh-r.top)/(vh*.8)),              /* the first beat comes up with the stage */
+        wipe=TURN<0?0:smooth(clamp((x-at[TURN]-.1)/((HOLD[TURN]||1)*.55))),
+        best=-1,bestV=.5;
+    parts.forEach(function(p,i){
+      var h=HOLD[i]||1,
+          kin=i?clamp((x-at[i]+T)/T):clamp(arrive),      /* 0..1 through the change into this beat */
+          kout=i<N-1?clamp((x-at[i]-h)/T):0,             /* 0..1 through the change out of it */
+          vis=kout<1&&kin>0;
+      if(vis!==p.vis){p.vis=vis;p.b.style.visibility=vis?'visible':'hidden'}
+      if(!vis)return;
+      /* the words: out in the first part of a change, in at the end of it, never both at once */
+      var ce=i?smooth(clamp((kin-.6)/.4)):smooth(clamp((arrive-.35)/.65)),
+          cq=smooth(clamp(kout/.4));
+      if(p.kind==='turn')ce=wipe;                        /* his words come up with the after */
+      put(p,p.copy,'copy','translate3d(0,'+f((1-ce)*28-cq*28,1)+'px,0)',f(Math.min(ce,1-cq),3));
+      var v=Math.min(ce,1-cq);
+      if(v>bestV){bestV=v;best=i}
+      if(!p.art)return;
+      if(p.kind==='prod'){
+        var e=out3(clamp((kin-.2)/.8)),q=Math.pow(clamp(kout/.8),2);
+        put(p,p.art,'art',swirl(1-e,q),f(q>0?1-clamp((q-.45)/.55):clamp(e*1.8),3));
+      }else{
+        var pe=i?smooth(clamp((kin-.35)/.65)):smooth(arrive),pq=smooth(clamp(kout/.6));
+        put(p,p.art,'art','translate3d(0,'+f((1-pe)*36-pq*36,1)+'px,0) scale('+f(.94+.06*pe-.05*pq,4)+')',f(Math.min(pe,1-pq),3));
+      }
+      if(p.wipe){                                         /* the after slides in from its own side */
+        put(p,p.wipe,'wipe','translate3d('+f((1-wipe)*100,2)+'%,0,0)','1');
+        put(p,p.win,'win','translate3d('+f((wipe-1)*100,2)+'%,0,0)','1');
+      }
+    });
+    parts.forEach(function(p,i){var on=i===best;if(on!==p.on){p.on=on;p.b.classList.toggle('is-on',on)}});
+    /* the ground warms: to sand between the last dark beat and the first warm one, while no
+       words are up, and to chalk as the after wipes in */
+    var ks=SAND>0?clamp((x-at[SAND]+T)/T):0;
+    sand.style.opacity=f(smooth(clamp((ks-.35)/.25)),3);
+    chalk.style.opacity=f(wipe,3);
+  }
+  function wake(){if(near&&!raf)raf=requestAnimationFrame(frame)}
+  sec.classList.add('is-live');
+  measure();frame();
   addEventListener('scroll',wake,{passive:true});
-  /* only animate while the band is on screen; arriving by a jump, start at the right level */
-  new IntersectionObserver(function(es){
-    on=es[0].isIntersecting;
-    if(on){level=target=drained();slosh=0;t0=0;lastY=scrollY;settled=false;rise();wake()}
-    else{bubbles.length=0;level=target=drained();slosh=0;draw();rise()}
-  }).observe(run);
+  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});frame()});
+  new IntersectionObserver(function(es){near=es[0].isIntersecting;if(near){measure();frame()}},
+    {rootMargin:'200px 0px'}).observe(run);
+  /* a shelf link reached by keyboard brings its own beat on screen, where its line stands */
+  run.addEventListener('focusin',function(ev){
+    var i=beats.indexOf(ev.target.closest('.st-beat'));
+    if(i<0)return;
+    var r=run.getBoundingClientRect(),
+        y=scrollY+r.top+(r.height-sh)*(at[i]+(HOLD[i]||1)*.5)/L;
+    scrollTo({top:Math.round(y),behavior:'instant'});
+    frame();
+  });
 })();
 
 /* Interface sound: short glassy ticks, synthesised here so there is nothing to download */
@@ -1120,7 +1062,7 @@ if(mcForm){
 })();
 
 /* The footer horizon: Peter's wave along the top edge of the footer. It is below the fold on
-   every page, so it is asked for only as the footer nears, the way the fizz still is. Without
+   every page, so it is asked for only as the footer nears, as the pour's frames are. Without
    script it is never asked for at all and the footer is plain black. */
 (function(){
   var im=$('.foot-glow img');
