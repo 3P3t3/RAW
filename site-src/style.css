@@ -704,6 +704,10 @@ html:not(.js) #results[hidden]{display:block!important}
 .story.is-live .st-was{display:block}
 .story.is-live .st-copy{will-change:transform,opacity}
 .story.is-live .st-pack img,.story.is-live .st-shade{will-change:transform,opacity}
+/* each beat and each light keeps its own layer for the whole run: an opacity crossing 1 would
+   otherwise make and unmake one, and that costs a layout every time it happens */
+.story.is-live .st-beat,.story.is-live .st-bg span{will-change:opacity}
+.story.is-live .st-sand{will-change:transform}
 .st-book{margin-top:12px}
 .st-arc{display:none}
 .story.is-live .st-arc{display:block;position:relative;flex:0 0 auto;width:min(100%,380px);height:min(36vw,150px);margin-bottom:8px}
