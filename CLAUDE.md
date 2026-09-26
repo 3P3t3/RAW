@@ -43,11 +43,14 @@ resolve the source, run the build, then commit.
 
 ## Never read the generated pages
 
-`homepage.html` is ~77k chars (~19k tokens). All eight generated pages together are ~370k
-chars (~93k tokens). All nine files in `site-src/` together are ~89k chars (~22k tokens).
+`homepage.html` is ~160k chars (~40k tokens). All eight generated pages together are ~850k
+chars (~210k tokens). All ten files in `site-src/` together are ~210k chars (~52k tokens).
+(Measured 2026-09-25; the pages roughly doubled once the inline script, icon sprite and
+consult section grew, so re-measure rather than trusting these if they look off.)
 
-**Reading one generated page costs more than reading the entire source of the site.**
-To check something in a generated page, grep it:
+**One generated page costs as much as three-quarters of the entire source, and the eight
+together cost four times the source** — and every line of them is a copy of something
+the source already says better. To check something in a generated page, grep it:
 
     grep -n "pod-count" homepage.html | head
     grep -c "card-link" category-protein.html
