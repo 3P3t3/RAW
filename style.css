@@ -663,6 +663,9 @@ html:not(.js) #results[hidden]{display:block!important}
 .story.is-live .st-bg{display:block;position:absolute;inset:0;background:var(--teal)}
 .st-bg span{position:absolute;inset:0;opacity:0}
 .st-sand{background:var(--sand)}
+/* the pour band's own scrim, carried over its bottom edge: the ground comes up out of the
+   pour's dark and lifts to teal as the stage settles, instead of meeting it at a hard line */
+.st-dusk{background:linear-gradient(rgba(0,20,27,.88),rgba(0,20,27,0) 70%)}
 .st-chalk{background:var(--chalk)}
 .story.is-live .st-beats{position:absolute;left:0;right:0;top:0;height:100vh}
 @supports (height:100svh){.story.is-live .st-beats{height:100svh}}
@@ -678,6 +681,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .story.is-live .st-was{display:block}
 .story.is-live .st-copy{will-change:transform,opacity}
 .story.is-live .st-solo{justify-content:center}
+.story.is-live .st-proof{padding-top:0}
 
 @media (min-width:768px){
   .st-beat{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;align-items:center;align-content:center;

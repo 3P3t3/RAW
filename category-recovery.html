@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=8b4bde2e">
+<link rel="stylesheet" href="style.css?v=7331519a">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -1189,7 +1189,7 @@ if(mcForm){
   var run=$('#st-run');
   if(!run||!html.classList.contains('motion'))return;
   var sec=run.parentNode,stage=$('.st-stage',run),beats=$$('.st-beat',run),N=beats.length,
-      sand=$('.st-sand',run),chalk=$('.st-chalk',run);
+      dusk=$('.st-dusk',run),sand=$('.st-sand',run),chalk=$('.st-chalk',run);
   /* How long each beat holds, and each change between two beats (T), in one unit. The run's
      height in style.css sets the pace; this sets the rhythm. The turn (the before becoming the
      after) holds longest, since the wipe happens while it is up; the family closes on a long
@@ -1229,7 +1229,8 @@ if(mcForm){
     raf=0;
     var r=run.getBoundingClientRect(),vh=innerHeight||1,
         x=clamp(-r.top/Math.max(1,r.height-sh))*L,
-        arrive=clamp((vh-r.top)/(vh*.8)),              /* the first beat comes up with the stage */
+        arrive=clamp((vh-r.top)/(vh*.8)),              /* the first photo comes up with the stage, */
+        settle=clamp(1-r.top/(vh*.3)),                 /* the pour's shade lifts as the stage settles */
         wipe=TURN<0?0:smooth(clamp((x-at[TURN]-.1)/((HOLD[TURN]||1)*.55))),
         best=-1,bestV=.5;
     parts.forEach(function(p,i){
@@ -1240,7 +1241,7 @@ if(mcForm){
       if(vis!==p.vis){p.vis=vis;p.b.style.visibility=vis?'visible':'hidden'}
       if(!vis)return;
       /* the words: out in the first part of a change, in at the end of it, never both at once */
-      var ce=i?smooth(clamp((kin-.6)/.4)):smooth(clamp((arrive-.35)/.65)),
+      var ce=i?smooth(clamp((kin-.6)/.4)):smooth(clamp(x/.35)),   /* the first words wait for the stage to hold */
           cq=smooth(clamp(kout/.4));
       if(p.kind==='turn')ce=wipe;                        /* his words come up with the after */
       put(p,p.copy,'copy','translate3d(0,'+f((1-ce)*28-cq*28,1)+'px,0)',f(Math.min(ce,1-cq),3));
@@ -1265,6 +1266,7 @@ if(mcForm){
     var ks=SAND>0?clamp((x-at[SAND]+T)/T):0;
     sand.style.opacity=f(smooth(clamp((ks-.35)/.25)),3);
     chalk.style.opacity=f(wipe,3);
+    dusk.style.opacity=f(1-smooth(settle),3);
   }
   function wake(){if(near&&!raf)raf=requestAnimationFrame(frame)}
   sec.classList.add('is-live');
