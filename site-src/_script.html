@@ -1022,8 +1022,8 @@ if(mcForm){
     parts.forEach(function(p,i){var on=i===best;if(on!==p.on){p.on=on;p.b.classList.toggle('is-on',on)}});
     /* the ground warms with the product: the sand sweeps in from the right behind the arriving
        can and has covered the words' column before they rise; chalk comes with the after */
-    var ks=SAND>0?clamp((x-at[SAND]+T)/T):0,sw=smooth(clamp((ks-.15)/.45));
-    sand.style.transform='translate3d('+f((1-sw)*100,2)+'%,0,0)';
+    var ks=SAND>0?clamp((x-at[SAND]+T)/T):0,sw=smooth(clamp((ks-.12)/.42));
+    sand.style.transform='translate3d('+f(55-87*sw,2)+'%,0,0) rotate(-14deg)';   /* +55% (off the stage) to -32% (every corner solid) */
     chalk.style.opacity=f(wipe,3);
     dusk.style.opacity=f(1-smooth(settle),3);
     lampD.style.opacity=f(lit[0],3);lampW.style.opacity=f(lit[1],3);

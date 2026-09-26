@@ -688,8 +688,13 @@ html:not(.js) #results[hidden]{display:block!important}
 /* the sand sweeps in from the right behind the arriving can, on a soft leading edge, rather
    than fading up over the whole stage: the script slides it, and it is solid long before the
    words rise on it */
-.story.is-live .st-sand{left:-22%;opacity:1;transform:translate3d(100%,0,0);
-  background:linear-gradient(90deg,rgba(230,211,197,0),var(--sand) 18%)}
+/* it is light coming in, not a curtain: a long span turned 14 degrees, its soft leading edge
+   about half a stage wide, so it sweeps across on the slant and reaches the words' corner (lower
+   left) last. 240% wide, not less: on a tall phone the slant alone moves the edge 43% of the
+   width between top and bottom, and it must still cover every corner at rest (-32%). */
+.story.is-live .st-sand{left:0;top:-25%;right:auto;bottom:auto;width:240%;height:150%;opacity:1;
+  transform-origin:50% 50%;transform:translate3d(55%,0,0) rotate(-14deg);
+  background:linear-gradient(to right,rgba(230,211,197,0),var(--sand) 21%)}
 .story.is-live .st-beats{position:absolute;left:0;right:0;top:0;height:100vh}
 @supports (height:100svh){.story.is-live .st-beats{height:100svh}}
 .story.is-live .st-beat{position:absolute;inset:0;justify-content:flex-end;gap:22px;background:none;
