@@ -56,13 +56,16 @@ FAMILIES = {
 }
 
 # Category pages: slug, name, tagline, heading, family prefixes that belong to it.
+# A family may sit on more than one shelf: each shelf page lists everything its own list names.
+# Its card tag (and its data-cat) names one home shelf, the later of them in this list.
 CATEGORIES = [
     ('recovery', 'Recovery', 'Wind down, repair and sleep: post-workout mixes, magnesium, herbals and topical creams.', 'Everything in Recovery', [
         'XS Post-Workout Recovery', 'XS Muscle Multiplier', 'XS CBD Cream', 'XS CBD Pro Cream',
         'Nutrilite Magnesium', 'Nutrilite Organics Ashwagandha Capsules', 'Nutrilite Organics Chamomile Tea',
         'Nutrilite Sleep Health', 'n* by Nutrilite Sweet Dreams']),
     ('hydration', 'Hydration', 'Electrolytes and drink mixes for long, hot and sweaty sessions.', 'Everything in Hydration', [
-        'XS Sports Twist Tubes', 'Nutrilite Twist Tubes 2GO', 'XS CocoWater Hydration Drink Mix']),
+        'XS Sports Twist Tubes', 'Nutrilite Twist Tubes 2GO', 'XS CocoWater Hydration Drink Mix',
+        'XS Creatine+']),  # also on Daily Foundations: it is half of Peter's hydration stack
     ('energy-focus', 'Energy &amp; Focus', 'Pre-workout, tablets and the full XS energy range.', 'Everything in Energy &amp; Focus', [
         'XS Pre-Workout Boost', 'XS Energy + Focus Dietary Supplement', 'XS Energy Drink 12 oz',
         'XS Energy + Burn 12 oz', 'XS Juiced and Burn 12 oz', 'XS Sparkling Juiced Energy 12 oz',
@@ -256,12 +259,13 @@ def main():
     for n in FEATURED + [t[3] for t in GOAL_TILES]:
         assert n in by, f'Missing product in CSV: {n}'
 
-    cat_of = {}
+    cat_of = {}  # each product's home shelf, for its tag: on two shelves, the later one wins
     for slug_, name, tag, heading, fams in CATEGORIES:
         for pr in products:
             if family(pr['product']) in fams:
                 cat_of[pr['product']] = slug_
-    counts = {c[0]: sum(1 for pr in products if cat_of.get(pr['product']) == c[0]) for c in CATEGORIES}
+    on_shelf = lambda pr, fams: family(pr['product']) in fams  # what a shelf page lists: its own list, whole
+    counts = {c[0]: sum(1 for pr in products if on_shelf(pr, c[4])) for c in CATEGORIES}
     names = {c[0]: c[1] for c in CATEGORIES}
 
     def card(pr, i=0, extra=''):
@@ -313,7 +317,7 @@ def main():
             tabs.append(
                 f'          <button class="shelf-tab" type="button" role="tab" id="tab-{slug_}" aria-controls="panel-{slug_}" '
                 f'aria-selected="{on}" tabindex="{0 if i == 0 else -1}">{name}</button>')
-            picks = sorted({pr['name'] for pr in products if cat_of.get(pr['product']) == slug_})[:3]
+            picks = sorted({pr['name'] for pr in products if on_shelf(pr, fams)})[:3]
             panels.append(
                 f'        <div class="shelf-panel" role="tabpanel" id="panel-{slug_}" aria-labelledby="tab-{slug_}"'
                 f'{"" if i == 0 else " hidden"}>\n'
@@ -385,7 +389,7 @@ def main():
 
     cat_tpl = open(os.path.join(ROOT, 'site-src', 'category.template.html')).read()
     for slug_, name, tag, heading, fams in CATEGORIES:
-        items = [pr for pr in products if cat_of.get(pr['product']) == slug_]
+        items = [pr for pr in products if on_shelf(pr, fams)]
         items.sort(key=lambda pr: (pr['name'].lower(), pr['desc'].lower()))
         carousel = ''
         if slug_ in CAROUSELS:
