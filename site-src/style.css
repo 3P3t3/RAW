@@ -630,8 +630,16 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-fam .st-photo{height:min(40vh,300px);aspect-ratio:4/5}
 /* the hydration stack arrives as a pair: one high on the left, one low on the right */
 .st-pair{width:min(86vw,380px);aspect-ratio:5/4}
-.st-pair img{position:absolute;width:64%;height:auto;aspect-ratio:1;top:0;left:0}
-.st-pair img+img{top:auto;left:auto;right:0;bottom:0}
+/* a pack: its picture and, under it, a contact shadow on the baseline every pack shot stands
+   on (the build seats each one at 91% of its square). The script moves the two separately, so
+   the shadow lifts and shrinks with the swirl but never turns with it. */
+.st-pack{position:absolute;inset:0}
+.st-pack img{position:relative;display:block;width:100%;height:100%;object-fit:contain;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.st-shade{position:absolute;left:15%;width:70%;top:84%;height:14%;
+  background:radial-gradient(ellipse,rgba(0,20,27,.38),transparent 70%)}
+.st-warm .st-shade{background:radial-gradient(ellipse,rgba(0,20,27,.22),transparent 70%)}
+.st-pair .st-pack{inset:auto;width:64%;aspect-ratio:1;top:0;left:0}
+.st-pair .st-pack+.st-pack{top:auto;left:auto;right:0;bottom:0}
 /* the turn: without the stage only the after stands; the stage lays the before under it */
 .st-was{display:none}
 .st-wipe,.st-wipe-in{position:absolute;inset:0;overflow:hidden}
@@ -674,6 +682,14 @@ html:not(.js) #results[hidden]{display:block!important}
    pour's dark and lifts to teal as the stage settles, instead of meeting it at a hard line */
 .st-dusk{background:linear-gradient(rgba(0,20,27,.88),rgba(0,20,27,0) 70%)}
 .st-chalk{background:var(--chalk)}
+/* the stage light: a soft pool where the pack stands, up only while a pack is at rest in it */
+.st-lamp-dark{background:radial-gradient(circle at 50% 38%,rgba(244,242,236,.10),transparent 55%)}
+.st-lamp-warm{background:radial-gradient(circle at 50% 38%,rgba(255,255,255,.35),transparent 55%)}
+/* the sand sweeps in from the right behind the arriving can, on a soft leading edge, rather
+   than fading up over the whole stage: the script slides it, and it is solid long before the
+   words rise on it */
+.story.is-live .st-sand{left:-22%;opacity:1;transform:translate3d(100%,0,0);
+  background:linear-gradient(90deg,rgba(230,211,197,0),var(--sand) 18%)}
 .story.is-live .st-beats{position:absolute;left:0;right:0;top:0;height:100vh}
 @supports (height:100svh){.story.is-live .st-beats{height:100svh}}
 .story.is-live .st-beat{position:absolute;inset:0;justify-content:flex-end;gap:22px;background:none;
@@ -687,6 +703,11 @@ html:not(.js) #results[hidden]{display:block!important}
 .story.is-live .st-pair{max-height:min(74vw,320px)}
 .story.is-live .st-was{display:block}
 .story.is-live .st-copy{will-change:transform,opacity}
+.story.is-live .st-pack img,.story.is-live .st-shade{will-change:transform,opacity}
+.st-book{margin-top:12px}
+.st-arc{display:none}
+.story.is-live .st-arc{display:block;position:relative;flex:0 0 auto;width:min(100%,380px);height:min(36vw,150px);margin-bottom:8px}
+.st-arc .st-pack{inset:auto;width:26%;aspect-ratio:1;left:calc(var(--x) - 13%);top:var(--y)}
 .story.is-live .st-solo{justify-content:center}
 .story.is-live .st-proof{padding-top:0}
 
@@ -697,6 +718,8 @@ html:not(.js) #results[hidden]{display:block!important}
   .st-copy{grid-column:1 / 7;grid-row:1}
   .st-solo .st-copy{grid-column:2 / 12}
   .st-solo .st-say{max-width:28ch}
+  .st-solo .st-arc{grid-column:2 / 12;grid-row:1;justify-self:start}
+  .st-solo .st-arc~.st-copy{grid-row:2}
   .st-art{width:min(38vw,420px)}
   .st-photo{width:auto;height:min(64vh,520px)}
   .st-fam .st-photo{height:min(52vh,400px)}
@@ -710,6 +733,13 @@ html:not(.js) #results[hidden]{display:block!important}
   .story.is-live .st-photo{max-height:520px}
   .story.is-live .st-fam .st-photo{max-height:420px}
   .story.is-live .st-pair{max-height:416px}
+  .st-lamp-dark{background:radial-gradient(circle at 74% 50%,rgba(244,242,236,.10),transparent 45%)}
+  .st-lamp-warm{background:radial-gradient(circle at 74% 50%,rgba(255,255,255,.35),transparent 45%)}
+}
+@media (min-width:1200px){
+  .st-say{font-size:24px;line-height:1.45}
+  .st-line{font-size:clamp(52px,5.4vw,76px)}
+  .st-solo .st-say{font-size:clamp(30px,3.2vw,44px)}
 }
 
 /* ---------- Archipelago: seven floating islands ---------- */

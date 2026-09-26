@@ -92,7 +92,7 @@
     <h2 class="vh" id="story-title">Peter’s story</h2>
     <div class="st-run" id="st-run">
       <div class="st-stage">
-        <div class="st-bg" aria-hidden="true"><span class="st-dusk"></span><span class="st-sand"></span><span class="st-chalk"></span></div>
+        <div class="st-bg" aria-hidden="true"><span class="st-dusk"></span><span class="st-lamp st-lamp-dark"></span><span class="st-sand"></span><span class="st-lamp st-lamp-warm"></span><span class="st-chalk"></span></div>
         <ol class="st-beats">
           <li class="st-beat st-dark" data-kind="photo">
             <div class="st-hero"><div class="st-art st-photo">
@@ -105,7 +105,7 @@
           </li>
           <li class="st-beat st-dark" data-kind="prod">
             <div class="st-hero"><div class="st-art">
-              <img src="assets/products/xs-grass-fed-whey-protein-chocolate.webp" width="600" height="600" loading="lazy" decoding="async" alt="XS Grass-Fed Whey Protein">
+              <span class="st-pack" data-tilt="-6"><span class="st-shade"></span><img src="assets/products/xs-grass-fed-whey-protein-chocolate.webp" width="600" height="600" loading="lazy" decoding="async" alt="XS Grass-Fed Whey Protein"></span>
             </div></div>
             <div class="st-copy">
               <!-- PETER-COPY --><p class="st-line">I fixed my food and found someone who pushed me.</p><!-- /PETER-COPY -->
@@ -114,7 +114,7 @@
           </li>
           <li class="st-beat st-dark" data-kind="prod">
             <div class="st-hero"><div class="st-art">
-              <img src="assets/products/nutrilite-begin-daily-gi-primer.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Begin Daily GI Primer">
+              <span class="st-pack" data-tilt="0"><span class="st-shade"></span><img src="assets/products/nutrilite-begin-daily-gi-primer.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Begin Daily GI Primer"></span>
             </div></div>
             <div class="st-copy">
               <!-- PETER-COPY --><p class="st-line">I changed my morning routine.</p><!-- /PETER-COPY -->
@@ -124,8 +124,8 @@
           <!-- his hydration stack, the two he actually takes: they arrive as a pair -->
           <li class="st-beat st-dark" data-kind="prod">
             <div class="st-hero"><div class="st-art st-pair">
-              <img src="assets/products/xs-creatine.webp" width="600" height="600" loading="lazy" decoding="async" alt="XS Creatine+">
-              <img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Twist Tubes 2GO">
+              <span class="st-pack" data-tilt="-4"><span class="st-shade"></span><img src="assets/products/xs-creatine.webp" width="600" height="600" loading="lazy" decoding="async" alt="XS Creatine+"></span>
+              <span class="st-pack" data-tilt="7"><span class="st-shade"></span><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Twist Tubes 2GO"></span>
             </div></div>
             <div class="st-copy">
               <!-- PETER-COPY --><p class="st-line">I focused way more on hydration and getting electrolytes.</p>
@@ -135,7 +135,7 @@
           </li>
           <li class="st-beat st-warm" data-kind="prod">
             <div class="st-hero"><div class="st-art">
-              <img src="assets/products/xs-elite-focus-energy-drink-peach-mango.webp" width="600" height="600" loading="lazy" decoding="async" alt="XS Elite + Focus Energy Drink">
+              <span class="st-pack" data-tilt="6"><span class="st-shade"></span><img src="assets/products/xs-elite-focus-energy-drink-peach-mango.webp" width="600" height="600" loading="lazy" decoding="async" alt="XS Elite + Focus Energy Drink"></span>
             </div></div>
             <div class="st-copy">
               <!-- PETER-COPY --><p class="st-line">I swapped out my huge coffee spikes for smoother energy.</p><!-- /PETER-COPY -->
@@ -144,7 +144,7 @@
           </li>
           <li class="st-beat st-warm" data-kind="prod">
             <div class="st-hero"><div class="st-art">
-              <img src="assets/products/nutrilite-sleep-health.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Sleep Health">
+              <span class="st-pack" data-tilt="-3"><span class="st-shade"></span><img src="assets/products/nutrilite-sleep-health.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Sleep Health"></span>
             </div></div>
             <div class="st-copy">
               <!-- PETER-COPY --><p class="st-line">And I found ways to maximize my sleep, even during the newborn nights.</p><!-- /PETER-COPY -->
@@ -167,8 +167,20 @@
             </div>
           </li>
           <li class="st-beat st-light st-solo" data-kind="text">
+            <!-- supplement after supplement: the five packs just seen, back as a loose arc. Only
+                 while the stage runs; the plain sequence has just shown each of them. -->
+            <div class="st-hero st-arc" aria-hidden="true">
+              <span class="st-pack" data-tilt="-12" style="--x:13%;--y:34%"><span class="st-shade"></span><img src="assets/products/xs-grass-fed-whey-protein-chocolate.webp" width="600" height="600" loading="lazy" decoding="async" alt=""></span>
+              <span class="st-pack" data-tilt="7" style="--x:31.5%;--y:12%"><span class="st-shade"></span><img src="assets/products/nutrilite-begin-daily-gi-primer.webp" width="600" height="600" loading="lazy" decoding="async" alt=""></span>
+              <span class="st-pack" data-tilt="-4" style="--x:50%;--y:0%"><span class="st-shade"></span><img src="assets/products/xs-creatine.webp" width="600" height="600" loading="lazy" decoding="async" alt=""></span>
+              <span class="st-pack" data-tilt="9" style="--x:68.5%;--y:12%"><span class="st-shade"></span><img src="assets/products/xs-elite-focus-energy-drink-peach-mango.webp" width="600" height="600" loading="lazy" decoding="async" alt=""></span>
+              <span class="st-pack" data-tilt="-6" style="--x:87%;--y:34%"><span class="st-shade"></span><img src="assets/products/nutrilite-sleep-health.webp" width="600" height="600" loading="lazy" decoding="async" alt=""></span>
+            </div>
             <div class="st-copy">
               <!-- PETER-COPY --><p class="st-say">The hardest part was figuring it out alone, testing supplement after supplement to find what worked. That’s what this call is for.</p><!-- /PETER-COPY -->
+              <!-- the call, asked for where the story asks for it. The tab's own "Free call" steps aside
+                   while this is on screen (it is one of the tab's zones in _script.html). -->
+              <a class="btn st-book" href="#consult">Book a free call</a>
             </div>
           </li>
           <li class="st-beat st-light st-fam" data-kind="photo">

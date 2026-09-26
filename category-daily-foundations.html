@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=ad3489e2">
+<link rel="stylesheet" href="style.css?v=cdfe1d1c">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -417,7 +417,8 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    and, once it takes the form's place, the calendar. Not the whole consult section: it sits
    directly under the calculator, so watching all of it would put the tab away across the
    offer and the disclosure, which is where the visitor decides. Peter's story (#story) is
-   not watched either: the tab rides over it. The form is hidden (no box, so no intersection) once
+   not watched either: the tab rides over it, except while the story's own "Book a free call"
+   is up (.st-book: the story parks it off its stage while its beat is not). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
    which sit where the tab does on a phone and go to the same places, the band that sends you
    to the calculator on a category page, and the footer,
@@ -426,7 +427,7 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.hero-actions,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -1168,36 +1169,51 @@ if(mcForm){
 })();
 
 /* Peter's story: nine beats on one stage that holds the window for the length of the run.
-   Where each beat is, and how far in or out of its turn, is a pure function of how far the
-   run has scrolled, as the pour is: scrolling back up plays it backwards. The script takes
-   the section over (.is-live) only when motion is allowed; otherwise, and until it does, the
-   beats are a plain vertical sequence. Everything written per frame is transform or opacity.
-   A pack shot swirls in, turning and tilted, settles upright and still while its line is
-   read, and spins away as the next one comes in. It is a flat picture, so it only ever turns
-   in its own plane and tilts well short of edge-on: it is never seen from behind or mirrored.
-   The photos of Peter do not spin: they rise in and fall away, and at the turn the after
-   wipes in over the before. */
+   Where each beat is, and how far in or out of its turn, is a function of how far the run has
+   scrolled, as the pour is: scrolling back up plays it backwards. The stage follows the scroll
+   through an eased copy of it (each frame closes 18% of the gap, and the loop runs until the
+   two agree), so a flick that crosses two beats still plays both swirls instead of cutting
+   between them. Only the stage lags; the page scrolls as it always does.
+   The script takes the section over (.is-live) only when motion is allowed; otherwise, and
+   until it does, the beats are a plain vertical sequence. Everything written per frame is
+   transform or opacity.
+   A pack shot swirls in from the upper right, turning and tilted, swings just past its resting
+   angle and settles there while its line is read, then spins away down to the left as the next
+   one comes in, so the two cross on a diagonal rather than one replacing the other in the
+   middle. It is a flat picture, so it only ever turns in its own plane and tilts well short of
+   edge-on: it is never seen from behind or mirrored. Its shadow lifts and shrinks with it but
+   never turns. The photos of Peter do not spin: they rise in and fall away, and at the turn the
+   after wipes in over the before. */
 (function(){
   var run=$('#st-run');
   if(!run||!html.classList.contains('motion'))return;
   var sec=run.parentNode,stage=$('.st-stage',run),beats=$$('.st-beat',run),N=beats.length,
-      dusk=$('.st-dusk',run),sand=$('.st-sand',run),chalk=$('.st-chalk',run);
+      dusk=$('.st-dusk',run),sand=$('.st-sand',run),chalk=$('.st-chalk',run),
+      lampD=$('.st-lamp-dark',run),lampW=$('.st-lamp-warm',run);
   /* How long each beat holds, and each change between two beats (T), in one unit. The run's
-     height in style.css sets the pace; this sets the rhythm. The turn (the before becoming the
-     after) holds longest, since the wipe happens while it is up; the family closes on a long
-     hold before the stage lets go into the proof. */
-  var HOLD=[1,.8,.8,1,.8,.9,1.7,1,1.3],T=1,at=[],L=0;
+     height in style.css sets the pace (at 390x664 a unit is about 307px); this sets the rhythm.
+     A change is 1.5 units, about 460px, so a swirl is long enough to be seen; every hold is
+     still at least 180px. The turn (the before becoming the after) holds longest, since the
+     wipe happens while it is up. */
+  var HOLD=[.9,.6,.6,.8,.6,.7,1.7,.7,1.1],T=1.5,at=[],L=0;
   beats.forEach(function(b,i){at.push(L);L+=(HOLD[i]||1)+(i<N-1?T:0)});
   var TURN=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('turn'),
       SAND=beats.indexOf($('.st-warm',run));        /* the first beat on the sand */
   var parts=beats.map(function(b){
     return {b:b,kind:b.getAttribute('data-kind'),art:$('.st-art',b),copy:$('.st-copy',b),
+            book:$('.st-book',b),warm:b.classList.contains('st-warm'),
+            packs:$$('.st-pack',b).map(function(k,j){
+              /* a pair comes one after the other; the arc in the text beat, one after another */
+              return {img:$('img',k),shade:$('.st-shade',k),tilt:+k.getAttribute('data-tilt')||0,
+                      off:j*(b.getAttribute('data-kind')==='prod'?.15:.12)};
+            }),
             wipe:$('.st-wipe',b),win:$('.st-wipe-in',b),vis:null,on:null,keys:{}};
   });
-  var w=0,sh=0,raf=0,near=false,D=Math.PI/180;
+  var w=0,sh=0,raf=0,near=false,snap=true,topS=0,D=Math.PI/180;
   function clamp(x){return x<0?0:x>1?1:x}
   function smooth(x){return x*x*(3-2*x)}
   function out3(x){return 1-Math.pow(1-x,3)}
+  function back(x){var y=x-1;return 1+2*y*y*y+y*y}  /* eases out past 1 by about 4%, then settles */
   function f(n,d){return n.toFixed(d)}
   function put(p,el,name,tf,op){        /* write only what changed */
     if(!el)return;
@@ -1205,46 +1221,64 @@ if(mcForm){
     if(p.keys[name]===k)return;
     p.keys[name]=k;el.style.transform=tf;el.style.opacity=op;
   }
-  /* The swirl. m: how far from settled on the way in (1 far, 0 home); q: how far gone on the
-     way out. Clockwise, on a flattened ring: in from the upper right, round through the right
-     into the middle; out through the left and away up the other side, so the one leaving and
-     the one arriving are always on opposite sides of the stage. */
-  function swirl(m,q){
-    var rad=Math.min(w*.95,900),a,R,rot,rx,ry,s;
-    if(q>0){R=rad*q;a=(140+80*q)*D;rot=130*q;rx=-12*q;ry=24*q;s=1-.5*q}
-    else{R=rad*m;a=(40-80*m)*D;rot=-130*m;rx=12*m;ry=-24*m;s=1-.6*m}
-    return 'translate3d('+f(Math.cos(a)*R,1)+'px,'+f(Math.sin(a)*R*.55,1)+'px,0) perspective(900px) rotateX('+
-      f(rx,2)+'deg) rotateY('+f(ry,2)+'deg) rotate('+f(rot,2)+'deg) scale('+f(s,3)+')';
+  /* the swirl, for one pack: u runs 0..1 through its arrival, q 0..1 through its leaving */
+  function swirl(p,k,i,u,q){
+    var rad=Math.min(w*.95,900),m=1-out3(u),a,R,rot,rx,ry,s,op,x,y;
+    if(q>0){R=rad*q;a=(120+40*q)*D;rot=k.tilt+130*q;rx=-12*q;ry=24*q;s=1-.5*q;op=1-clamp((q-.3)/.7)}
+    else{R=rad*m;a=(40-80*m)*D;rot=k.tilt-130*(1-back(u));rx=12*m;ry=-24*m;s=1-.45*m;op=clamp((1-m)*1.8)}
+    x=f(Math.cos(a)*R,1);y=f(Math.sin(a)*R*.55,1);
+    put(p,k.img,'i'+i,'translate3d('+x+'px,'+y+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotateY('+
+      f(ry,2)+'deg) rotate('+f(rot,2)+'deg) scale('+f(s,3)+')',f(op,3));
+    put(p,k.shade,'s'+i,'translate3d('+x+'px,'+y+'px,0) scale('+f(s,3)+')',f(Math.min(1-m,1-q),3));
+    return (1-m)*(1-q);
   }
   function measure(){w=stage.offsetWidth;sh=stage.offsetHeight}
   function frame(){
     raf=0;
-    var r=run.getBoundingClientRect(),vh=innerHeight||1,
-        x=clamp(-r.top/Math.max(1,r.height-sh))*L,
-        arrive=clamp((vh-r.top)/(vh*.8)),              /* the first photo comes up with the stage, */
-        settle=clamp(1-r.top/(vh*.3)),                 /* the pour's shade lifts as the stage settles */
+    var r=run.getBoundingClientRect(),vh=innerHeight||1,span=Math.max(1,r.height-sh);
+    /* the eased copy of the run's position: everything below is read off it, so the wipe, the
+       ground and the arrival move together. A jump (a link, a reload, the band coming near)
+       snaps it instead. */
+    if(snap){topS=r.top;snap=false}else topS+=(r.top-topS)*.18;
+    var still=Math.abs(r.top-topS)*L/span<.002;
+    if(still)topS=r.top;
+    var top=topS,
+        x=clamp(-top/span)*L,
+        arrive=clamp((vh-top)/(vh*.8)),                /* the first photo comes up with the stage, */
+        settle=clamp(1-top/(vh*.3)),                   /* the pour's shade lifts as the stage settles */
         wipe=TURN<0?0:smooth(clamp((x-at[TURN]-.1)/((HOLD[TURN]||1)*.55))),
-        best=-1,bestV=.5;
+        best=-1,bestV=.5,lit=[0,0];
     parts.forEach(function(p,i){
       var h=HOLD[i]||1,
           kin=i?clamp((x-at[i]+T)/T):clamp(arrive),      /* 0..1 through the change into this beat */
           kout=i<N-1?clamp((x-at[i]-h)/T):0,             /* 0..1 through the change out of it */
           vis=kout<1&&kin>0;
       if(vis!==p.vis){p.vis=vis;p.b.style.opacity=vis?'1':'0'}   /* opacity, not visibility: its link stays reachable by Tab */
-      if(!vis)return;
+      /* the button is parked below the stage's edge while its words are not up, so the tab's
+         observer sees it exactly while it can be seen */
+      if(!vis){if(p.book)put(p,p.book,'book','translate3d(0,120vh,0)','0');return}
       /* the words: out in the first part of a change, in at the end of it, never both at once */
       var ce=i?smooth(clamp((kin-.6)/.4)):smooth(clamp(x/.35)),   /* the first words wait for the stage to hold */
           cq=smooth(clamp(kout/.4));
       if(p.kind==='turn')ce=wipe;                        /* his words come up with the after */
-      put(p,p.copy,'copy','translate3d(0,'+f((1-ce)*28-cq*28,1)+'px,0)',f(Math.min(ce,1-cq),3));
       var v=Math.min(ce,1-cq);
+      put(p,p.copy,'copy','translate3d(0,'+f((1-ce)*28-cq*28,1)+'px,0)',f(v,3));
+      if(p.book)put(p,p.book,'book',v<.02?'translate3d(0,120vh,0)':'translate3d(0,'+f((1-ce)*40,1)+'px,0)',f(v,3));
       if(v>bestV){bestV=v;best=i}
+      var u=clamp((kin-.4)/.6),q=clamp(kout/.55);
+      if(p.kind!=='prod')p.packs.forEach(function(k,j){  /* the arc: packs that come back, not a hero */
+        swirl(p,k,j,clamp((u-k.off)/(1-k.off)),Math.pow(clamp((q-k.off*.5)/(1-k.off*.5)),2));
+      });
       if(!p.art)return;
       if(p.kind==='prod'){
-        var e=out3(clamp((kin-.2)/.8)),q=Math.pow(clamp(kout/.8),2);
-        put(p,p.art,'art',swirl(1-e,q),f(q>0?1-clamp((q-.45)/.55):clamp(e*1.8),3));
+        var rest=1;
+        p.packs.forEach(function(k,j){                  /* a pair arrives and leaves one after the other */
+          var uj=clamp((u-k.off)/(1-k.off)),qj=Math.pow(clamp((q-k.off)/(1-k.off)),2);
+          rest=Math.min(rest,swirl(p,k,j,uj,qj));
+        });
+        lit[p.warm?1:0]=Math.max(lit[p.warm?1:0],rest);
       }else{
-        var pe=i?smooth(clamp((kin-.35)/.65)):smooth(arrive),pq=smooth(clamp(kout/.6));
+        var pe=i?smooth(clamp((kin-.35)/.65)):smooth(arrive),pq=smooth(clamp(kout/.35));
         put(p,p.art,'art','translate3d(0,'+f((1-pe)*36-pq*36,1)+'px,0) scale('+f(.94+.06*pe-.05*pq,4)+')',f(Math.min(pe,1-pq),3));
       }
       if(p.wipe){                                         /* the after slides in from its own side */
@@ -1253,27 +1287,30 @@ if(mcForm){
       }
     });
     parts.forEach(function(p,i){var on=i===best;if(on!==p.on){p.on=on;p.b.classList.toggle('is-on',on)}});
-    /* the ground warms: to sand between the last dark beat and the first warm one, while no
-       words are up, and to chalk as the after wipes in */
-    var ks=SAND>0?clamp((x-at[SAND]+T)/T):0;
-    sand.style.opacity=f(smooth(clamp((ks-.35)/.25)),3);
+    /* the ground warms with the product: the sand sweeps in from the right behind the arriving
+       can and has covered the words' column before they rise; chalk comes with the after */
+    var ks=SAND>0?clamp((x-at[SAND]+T)/T):0,sw=smooth(clamp((ks-.15)/.45));
+    sand.style.transform='translate3d('+f((1-sw)*100,2)+'%,0,0)';
     chalk.style.opacity=f(wipe,3);
     dusk.style.opacity=f(1-smooth(settle),3);
+    lampD.style.opacity=f(lit[0],3);lampW.style.opacity=f(lit[1],3);
+    if(!still)raf=requestAnimationFrame(frame);        /* keep easing until the stage has caught up */
   }
   function wake(){if(near&&!raf)raf=requestAnimationFrame(frame)}
+  function now(){if(raf)cancelAnimationFrame(raf);raf=0;snap=true;frame()}
   sec.classList.add('is-live');
-  measure();frame();
+  measure();now();
   addEventListener('scroll',wake,{passive:true});
-  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});frame()});
-  new IntersectionObserver(function(es){near=es[0].isIntersecting;if(near){measure();frame()}},
+  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});now()});
+  new IntersectionObserver(function(es){near=es[0].isIntersecting;if(near){measure();now()}},
     {rootMargin:'200px 0px'}).observe(run);
-  /* a shelf link reached by keyboard brings its own beat on screen, where its line stands */
+  /* a link reached by keyboard brings its own beat on screen, where its line stands */
   run.addEventListener('focusin',function(ev){
     var i=beats.indexOf(ev.target.closest('.st-beat'));
     if(i<0)return;
     var r=run.getBoundingClientRect(),
         y=Math.round(scrollY+r.top+(r.height-sh)*(at[i]+(HOLD[i]||1)*.5)/L),
-        go=function(){if(Math.abs(scrollY-y)>1)scrollTo({top:y,behavior:'instant'});frame()};
+        go=function(){if(Math.abs(scrollY-y)>1)scrollTo({top:y,behavior:'instant'});now()};
     go();requestAnimationFrame(go);                   /* again after the browser's own scroll to the focus */
   });
 })();
