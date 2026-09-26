@@ -1171,9 +1171,11 @@ if(mcForm){
 /* Peter's story: nine beats on one stage that holds the window for the length of the run.
    Where each beat is, and how far in or out of its turn, is a function of how far the run has
    scrolled, as the pour is: scrolling back up plays it backwards. The stage follows the scroll
-   through an eased copy of it (each frame closes 18% of the gap, and the loop runs until the
-   two agree), so a flick that crosses two beats still plays both swirls instead of cutting
-   between them. Only the stage lags; the page scrolls as it always does.
+   through an eased copy of it (each frame closes 18% of the gap, at most .14 of a unit, and
+   the loop runs until the two agree), so a flick that crosses two beats still plays both
+   swirls instead of cutting between them. Only the stage lags; the page scrolls as it always
+   does. The cap is the pour's MAXSTEP idea: the ease alone is front-loaded, and crossed a
+   whole change in the first three frames of a flick.
    The script takes the section over (.is-live) only when motion is allowed; otherwise, and
    until it does, the beats are a plain vertical sequence. Everything written per frame is
    transform or opacity.
@@ -1239,7 +1241,8 @@ if(mcForm){
     /* the eased copy of the run's position: everything below is read off it, so the wipe, the
        ground and the arrival move together. A jump (a link, a reload, the band coming near)
        snaps it instead. */
-    if(snap){topS=r.top;snap=false}else topS+=(r.top-topS)*.18;
+    if(snap){topS=r.top;snap=false}
+    else{var d=(r.top-topS)*.18,cap=.14*span/L;topS+=d>cap?cap:d<-cap?-cap:d}   /* and never more than .14 of a unit a frame, so each change in a flick still gets its frames */
     var still=Math.abs(r.top-topS)*L/span<.002;
     if(still)topS=r.top;
     var top=topS,
