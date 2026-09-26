@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=9387f80b">
+<link rel="stylesheet" href="style.css?v=202a27cc">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -758,7 +758,7 @@ if(mcForm){
       mcCount=$('#mc-step-n'),mcBars=$$('#mc-prog span'),mcErr=$('#mc-err'),
       mcBack=$('#mc-back'),mcNext=$('#mc-next'),mcNotes=$('#mc-notes'),
       MCKEY='aspire-macros',MCFIELDS='sex age weight ft inch activity basis frame trained goal loss'.split(' '),
-      mcAt=0,mcDone=false,mcSum='';
+      mcAt=0,mcDone=false,mcSum='',cNums=$('#c-nums');
   var MCBASIS={
     standard:'New to training, or coming back to it.',
     better:'In the gym consistently, without years behind you.',
@@ -830,7 +830,8 @@ if(mcForm){
     s.classList.remove('mc-in');void s.offsetWidth;s.classList.add('mc-in');   /* restart the fade */
     if(focus)$('.mc-q',s).focus();
   }
-  function mcShow(){mcQuiz.hidden=mcDone;mcRes.hidden=!mcDone}
+  /* the strip at the top of the consult shows exactly when the card's numbers do */
+  function mcShow(){mcQuiz.hidden=mcDone;mcRes.hidden=!mcDone;if(cNums)cNums.hidden=!mcDone}
 
   function mcRender(focus){
     var r=mcCalc({sex:mcGet('sex'),age:mcNum('age'),weightLb:mcNum('weight'),
@@ -870,6 +871,13 @@ if(mcForm){
       mcNotes.appendChild(p);
     });
     mcSum='Macros: '+mcCal(r.target)+' cal a day, '+r.proteinG+'g protein, '+r.fatG+'g fat, '+r.carbG+'g carbs.';
+    /* the same four figures the card prints, carried into the consult's strip */
+    if(cNums){
+      $('#c-nums-cal').textContent=mcCal(r.target);
+      $('#c-nums-p').textContent=r.proteinG+'g';
+      $('#c-nums-f').textContent=r.fatG+'g';
+      $('#c-nums-c').textContent=r.carbG+'g';
+    }
     if(focus){
       $('#mc-res-t').focus();
       say('Your targets: '+mcCal(r.target)+' calories, '+r.proteinG+' grams protein, '+
@@ -893,11 +901,12 @@ if(mcForm){
     if(mcAt<mcSteps.length-1){mcAt++;mcStep(true);mcSave();return}
     mcDone=true;mcShow();mcRender(true);mcSave();
     if(!mcFilled&&mcInView())mcFill(false);   /* already on screen: no intersection left to wait for */
+    mcGlide();                                /* a fresh tap only: the restore at the bottom never calls this */
   });
   mcBack.addEventListener('click',function(){if(mcAt){mcAt--;mcStep(true);mcSave()}});
-  $('#mc-edit').addEventListener('click',function(){mcDone=false;mcShow();mcStep(true);mcSave()});
+  $('#mc-edit').addEventListener('click',function(){mcStop();mcDone=false;mcShow();mcStep(true);mcSave()});
   $('#mc-again').addEventListener('click',function(){
-    mcForm.reset();mcAt=0;mcDone=false;mcShow();mcStep(true);
+    mcStop();mcForm.reset();mcAt=0;mcDone=false;mcShow();mcStep(true);
     try{localStorage.removeItem(MCKEY)}catch(e){}
   });
   /* the targets go to the consult's own form. The button under the numbers carries them; so
@@ -925,6 +934,7 @@ if(mcForm){
     return r.top<(innerHeight||0)&&r.bottom>0;
   }
   function mcGo(e){
+    mcStop();
     if(!cform)return;                            /* no consult here: just follow the anchor */
     e.preventDefault();
     mcFill(true);
@@ -933,6 +943,39 @@ if(mcForm){
     t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
   }
   $('#mc-book').addEventListener('click',mcGo);
+
+  /* After a fresh "See my numbers" the card comes up, the visitor gets a moment with it, and
+     then the page glides down to the consult, whose strip carries the same four numbers, so
+     both are seen. A beat longer when a warning is up: there is more to read. Anything the
+     visitor does in that pause (a scroll, a touch, a click, a key, leaving the tab) means
+     they are reading, so the glide is dropped and nothing else moves. The scroll test is by
+     distance from where the card left the page, so the jump that focusing the card's own
+     heading can cause is not mistaken for the visitor. Reduced motion keeps the pause and
+     jumps instead of gliding: the same move the button under the numbers makes. Only the
+     submit handler calls this, so results restored from localStorage never move the page. */
+  var mcWait=0,mcY=0,MCSTOP=['wheel','touchstart','pointerdown','keydown','scroll'];
+  function mcNudge(e){if(e.type!=='scroll'||Math.abs(scrollY-mcY)>4)mcStop()}
+  function mcStop(){
+    if(!mcWait)return;
+    clearTimeout(mcWait);mcWait=0;
+    MCSTOP.forEach(function(ev){removeEventListener(ev,mcNudge,true)});
+    doc.removeEventListener('visibilitychange',mcStop);
+  }
+  function mcGlide(){
+    mcStop();
+    if(!mcSec||$('body > .intro'))return;       /* no consult on this page, or the curtain is still up */
+    mcY=scrollY;
+    MCSTOP.forEach(function(ev){addEventListener(ev,mcNudge,{capture:true,passive:true})});
+    doc.addEventListener('visibilitychange',mcStop);
+    mcWait=setTimeout(function(){
+      mcStop();
+      if(!mcDone)return;
+      mcFill(false);                             /* the goal chip and the note line, if still empty */
+      mcSec.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+      var t=$('#consult-title');
+      t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
+    },$('.mc-warn',mcNotes)?2600:1500);
+  }
   if(cform&&mcSec&&'IntersectionObserver' in window)
     new IntersectionObserver(function(es){if(es[0].isIntersecting&&!mcFilled)mcFill(false)}).observe(mcSec);
 
@@ -1103,7 +1146,7 @@ if(mcForm){
 /* The fizz: the full glass behind the hydration line, bubbling, drains away as you scroll. The
    level is a pure function of scroll (eased a touch, so it pours rather than jumps), so
    scrolling back up refills it. It starts as the band's top reaches the top of the window
-   and is empty by the time the stage lets go, just before the footer shows. Above the
+   and is empty by the time the stage lets go, just before the calculator's band shows. Above the
    surface the canvas is chalk; below it, the glass shows through and bubbles rise to the
    surface and pop there. One canvas, redrawn each frame while the band is on screen.
    The cup rides the same level: see rise() below. */

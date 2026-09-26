@@ -165,12 +165,16 @@ html:not(.js) .mtab{display:none}
 .hero .label{color:var(--sand)}
 .hero h1{color:var(--chalk);font-size:clamp(52px,17vw,72px)}
 .hero h1 span{display:block;white-space:nowrap}
-.hero .sub{max-width:34ch;color:var(--on-dark);font-size:16px}
+.hero .sub{max-width:34ch;color:var(--on-dark);font-size:16px;text-wrap:balance}
 .hero .tlink{color:var(--sand)}
 .hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px 28px;margin-top:6px}
 .hero-actions{width:100%}
 .hero-actions .btn{flex:1 1 100%}
 .hero-copy{padding-bottom:28px}
+/* phones: the subhead's two lines are paid for out of the copy's top padding and the gap
+   above the buttons, so "Work out your macros" still sits whole on the first screen at
+   375x812 after the curtain. Measured: the button's foot at 798, not 812. */
+@media (max-width:767px){.hero-copy{padding-top:20px}.hero-actions{margin-top:0}}
 .glass{position:relative;margin:0 calc(-1 * var(--pad));aspect-ratio:1;overflow:hidden}
 .glass video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:linear-gradient(90deg,var(--teal) 50%,var(--beige) 50%)}
 .glass-toggle{position:absolute;z-index:3;left:14px;bottom:14px;width:40px;height:40px;border-radius:50%;background:var(--teal);color:var(--chalk)}
@@ -292,6 +296,13 @@ html:not(.js) .mtab{display:none}
 .consult{overflow:hidden;overflow:clip;color:var(--text)}  /* clip, not hidden: hidden would make this a scroll box and kill the sticky card below */
 .consult .split-text p:not(.label){max-width:40ch}
 .c-fine{font-size:14px;color:var(--text)}
+/* the calculator's numbers, carried into the consult after "See my numbers": the card's
+   tiles and micro-labels, smaller, one row at every width. The script owns [hidden]. */
+.c-nums{display:grid;gap:8px;width:100%;max-width:40ch;margin-bottom:10px}
+.c-nums-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.c-nums-list li{display:grid;gap:4px;justify-items:center;min-width:0;padding:10px 2px;background:var(--tile);text-align:center}
+.c-nums-g{font:800 clamp(18px,5.6vw,24px)/1 var(--display);font-stretch:72%;color:var(--teal);white-space:nowrap}
+.c-nums .mc-lab{font-size:11px;letter-spacing:.06em}
 .c-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:10px;max-width:40ch}
 .c-list li{position:relative;padding-left:20px;font-size:16px;color:var(--text)}
 .c-list li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:1px;background:var(--teal)}
@@ -624,7 +635,8 @@ html:not(.js) #results[hidden]{display:block!important}
   background:linear-gradient(rgba(0,20,27,.88) 0,rgba(0,20,27,.7) 18%,rgba(0,20,27,.7) 100%)}
 .fizz-film{z-index:1}
 /* The drain's run: room below the line to scroll the glass empty in. Its end is where
-   the stage lets go of the window, so the band is chalk before the footer shows. */
+   the stage lets go of the window, so the band is chalk before the calculator's sand
+   band below it shows. */
 .fizz-run{display:none}
 html.motion .fizz-run{display:block;height:80vh}
 @supports (height:100lvh){html.motion .fizz-run{height:80lvh}}
@@ -768,11 +780,12 @@ html:not(.js) .isle{position:static;width:auto;margin:0}
 .foot-fda{margin:10px 0 0;font-size:12px;line-height:1.5;color:var(--on-dark);opacity:.72;max-width:66ch}
 
 /* ---------- Macros: seven questions, one per screen, then the numbers ----------
-   A sand band between the shelves' chalk and the podium's teal, so the three read as a
-   step down rather than a repeat. The card is opaque chalk rather than the consult's
-   translucent glass: every number in it is measured for contrast, and a backdrop that
-   changes underneath would make those measurements a guess. Without script the quiz and
-   the results are both removed and .mc-nojs says so, so the band is never a dead husk. */
+   A sand band between the drained glass's chalk above it and the consult's chalk below,
+   so the calculator reads as its own step rather than more of the page. The card is
+   opaque chalk rather than the consult's translucent glass: every number in it is
+   measured for contrast, and a backdrop that changes underneath would make those
+   measurements a guess. Without script the quiz and the results are both removed and
+   .mc-nojs says so, so the band is never a dead husk. */
 .macros-sec{background:var(--sand)}
 .macros-sec h2 span{display:block}
 .mc-card{display:grid;gap:20px;padding:24px 20px 26px;background:var(--chalk);

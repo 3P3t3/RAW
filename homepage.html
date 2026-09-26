@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=9387f80b">
+<link rel="stylesheet" href="style.css?v=202a27cc">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -371,7 +371,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <div class="hero-copy">
         <p class="label">Sports nutrition &amp; wellness</p>
         <h1 id="hero-title"><span>Picked</span> <span>for how</span> <span>you train.</span></h1>
-        
+        <!-- PETER-COPY --><p class="sub">Hand-picked supplements. Free macros. A half-hour call on what’s worth taking.</p><!-- /PETER-COPY -->
         <div class="hero-actions">
           <a class="btn" href="#macros">Work out your macros</a>
           <a class="tlink" href="#consult">Book a free call</a>
@@ -400,13 +400,78 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     </div>
   </section>
 
-  <!-- 4a. Macros: seven questions, one per screen, then the numbers and one action.
-       It sits third, straight after the shelves: early enough to be the way in, and behind
-       the shelves rather than in front of them, so the seven islands stay the first thing
-       after the hero and nothing here gates them. The consult follows it directly, so the
-       numbers are answered by the call and not by three bands of scenery in between. The
-       pour, the fizz and the drain still run unbroken from #trending through #hydrate, and
-       no band may be dropped inside that run or it would cut the liquid in half. -->
+  <!-- 4. Trending: three best sellers on a podium, oversized and breaking the band.
+       The band's ground is a 150-frame film of the pour, scrubbed by scroll. It is
+       scenery, not content: frames come only as the band nears, and reduced motion
+       gets one still. It follows the shelves, and #hydrate follows it directly: the two are
+       one drink, poured here and drained there. -->
+  <section class="sec podium-sec dark" id="trending" aria-labelledby="trending-title">
+    <div class="pour-bg" id="pour-bg" aria-hidden="true">
+      <div class="pour-stage">
+        <canvas class="pour-film" id="pour-film"></canvas>
+        <img class="pour-still" id="pour-still" alt="" decoding="async" hidden>
+        <noscript><img class="pour-still" src="assets/pour/sm/0060.webp" alt=""></noscript>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="sec-head grow"><h2 id="trending-title">Trending now</h2></div>
+      <ul class="podium">
+        <li class="pod pod-1"><a class="card-link tilt" href="https://amway.com/share-link/TcFtuhPvJ" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">01</span><span class="shot"><img src="assets/cutouts/xs-creatine.webp" alt="" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">XS Creatine+</h3><p class="p-desc">Creatine powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="pod pod-2"><a class="card-link tilt" href="https://amway.com/share-link/FOhn2MdGS" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">02</span><span class="shot"><img src="assets/cutouts/nutrilite-begin-daily-gi-primer.webp" alt="" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Begin Daily GI Primer</h3><p class="p-desc">Daily digestive powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="pod pod-3"><a class="card-link tilt" href="https://amway.com/share-link/gry6-Xg5l" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">03</span><span class="shot"><img src="assets/cutouts/xs-elite-focus-energy-drink-peach-mango.webp" alt="" width="600" height="600"></span><p class="p-tag">Energy &amp; Focus</p><h3 class="p-name">XS Elite + Focus Energy Drink</h3><p class="p-desc">Energy drink · Peach Mango</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 5. Hydration: the third beat of the drink. The pour fills the glass behind #trending,
+       directly above; here it fizzes and drains to the page's chalk, which is where the
+       calculator's band below picks up, and as the water leaves, a cup comes
+       up through the line it left behind. The line is content; the glass, the fizz and the
+       cup are scenery. The beat holds on screen while the glass drains behind it. With
+       reduced motion, or no script, the cup stands fully risen and nothing moves. -->
+  <section class="sec hydrate fizz-sec" id="hydrate" aria-labelledby="hydrate-title">
+    <div class="fizz-bg" id="fizz-bg" aria-hidden="true">
+      <div class="fizz-stage">
+        <img class="fizz-still" data-src="assets/pour/sm/0150.webp" data-srcset="assets/pour/sm/0150.webp 618w, assets/pour/big/0150.webp 810w" sizes="100vw" alt="" decoding="async">
+        <canvas class="fizz-film" id="fizz-film"></canvas>
+      </div>
+      <svg class="fizz-shore" viewBox="0 0 1200 100" preserveAspectRatio="none" focusable="false"><path d="M0 22C90 12 170 30 270 24S450 8 560 18 760 34 870 22 1060 10 1200 20V100H0Z"/></svg>
+    </div>
+    <div class="wrap split hy-beat">
+      <!-- Peter's line, word for word: the question quiet, the answer the statement. One
+           heading, so it is read as he wrote it, question first, and names the band. -->
+      <div class="split-text hy-line grow">
+        <h2 id="hydrate-title"><span class="hy-q">Not sure how much water is enough?</span> <span class="hy-a">Athletes aim for one ounce per pound of bodyweight.</span></h2>
+      </div>
+      <div class="hy-well grow" style="--d:1" aria-hidden="true">
+        <div class="hy-clip">
+          <div class="hy-cup" id="hy-cup">
+            <svg viewBox="0 0 200 232" focusable="false">
+              <path class="hy-water" d="M52 92C68 86 84 97 100 92S133 86 148 92L141 217H59Z"/>
+              <path class="hy-surf" d="M52 92C68 86 84 97 100 92S133 86 148 92"/>
+              <g class="hy-bubbles"><circle cx="86" cy="196" r="3.4"/><circle cx="117" cy="178" r="2.5"/><circle cx="97" cy="152" r="1.9"/><circle cx="124" cy="126" r="2.7"/><circle cx="80" cy="120" r="1.7"/></g>
+              <path class="hy-ticks" d="M56 120h11M57 140h6M59 160h11M60 180h6M62 200h11"/>
+              <path class="hy-shine" d="M137 40 128 200"/>
+              <path class="hy-glass" d="M44 18H156L140 230H60Z"/>
+              <path class="hy-base" d="M60 217H140"/>
+            </svg>
+          </div>
+        </div>
+        <svg class="hy-ripple" viewBox="0 0 400 24" preserveAspectRatio="none" focusable="false"><path d="M62 13C84 6 110 7 124 12M276 12C290 7 316 6 338 13"/></svg>
+        <svg class="hy-tide" viewBox="0 0 400 24" preserveAspectRatio="none" focusable="false"><path d="M0 12C30 8 57 15 90 12S150 5 187 9 253 16 290 11 353 7 400 11"/></svg>
+      </div>
+    </div>
+    <div class="fizz-run" aria-hidden="true"></div>
+  </section>
+
+  <!-- 6a. Macros: seven questions, one per screen, then the numbers and one action.
+       It sits after the drink, not before it: straight after the shelves it came too early,
+       so Peter moved it below #trending and #hydrate, and the drained glass's chalk hands over
+       to its sand. The consult follows it directly, and must: the numbers are handed straight
+       into the booking form (mcFill in _script.html), and a fresh "See my numbers" glides the
+       page down onto it, so nothing may be put between the two. The pour, the fizz and the
+       drain run unbroken from #trending through #hydrate above, and no band may be dropped
+       inside that run either, or it would cut the liquid in half. -->
   <section class="sec macros-sec" id="macros" aria-labelledby="macros-title">
     <div class="wrap split">
       <div class="split-text grow">
@@ -534,12 +599,24 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     </div>
   </section>
 
-  <!-- 4b. Consult: four answers first, then a time on my calendar. It sits directly under
+  <!-- 6b. Consult: four answers first, then a time on my calendar. It sits directly under
        the calculator, so whoever finished seven questions is asked for something while the
-       numbers are still on screen. -->
+       numbers are still on screen, and the numbers ride in with them in the strip at its top. -->
   <section class="sec consult" id="consult" aria-labelledby="consult-title">
     <div class="wrap split">
       <div class="split-text grow">
+        <!-- the calculator's numbers, carried down: hidden until there are results, filled by
+             mcRender in _script.html, restored with them on a return visit, and put away again
+             while an answer is being changed. The card's own eyebrow and tiles, smaller. -->
+        <div class="c-nums" id="c-nums" hidden>
+          <p class="label">Your numbers</p>
+          <ul class="c-nums-list">
+            <li><span class="c-nums-g" id="c-nums-cal">&#8212;</span><span class="mc-lab">cal</span></li>
+            <li><span class="c-nums-g" id="c-nums-p">&#8212;</span><span class="mc-lab">Protein</span></li>
+            <li><span class="c-nums-g" id="c-nums-f">&#8212;</span><span class="mc-lab">Fat</span></li>
+            <li><span class="c-nums-g" id="c-nums-c">&#8212;</span><span class="mc-lab">Carbs</span></li>
+          </ul>
+        </div>
         <p class="label">One to one</p>
         <h2 id="consult-title"><span>What’s worth</span> <span>taking</span></h2>
         <!-- PETER-COPY --><p>Half an hour, free.</p>
@@ -613,29 +690,9 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     </div>
   </section>
 
-  <!-- 5. Trending: three best sellers on a podium, oversized and breaking the band.
-       The band's ground is a 150-frame film of the pour, scrubbed by scroll. It is
-       scenery, not content: frames come only as the band nears, and reduced motion
-       gets one still. -->
-  <section class="sec podium-sec dark" id="trending" aria-labelledby="trending-title">
-    <div class="pour-bg" id="pour-bg" aria-hidden="true">
-      <div class="pour-stage">
-        <canvas class="pour-film" id="pour-film"></canvas>
-        <img class="pour-still" id="pour-still" alt="" decoding="async" hidden>
-        <noscript><img class="pour-still" src="assets/pour/sm/0060.webp" alt=""></noscript>
-      </div>
-    </div>
-    <div class="wrap">
-      <div class="sec-head grow"><h2 id="trending-title">Trending now</h2></div>
-      <ul class="podium">
-        <li class="pod pod-1"><a class="card-link tilt" href="https://amway.com/share-link/TcFtuhPvJ" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">01</span><span class="shot"><img src="assets/cutouts/xs-creatine.webp" alt="" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">XS Creatine+</h3><p class="p-desc">Creatine powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="pod pod-2"><a class="card-link tilt" href="https://amway.com/share-link/FOhn2MdGS" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">02</span><span class="shot"><img src="assets/cutouts/nutrilite-begin-daily-gi-primer.webp" alt="" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Begin Daily GI Primer</h3><p class="p-desc">Daily digestive powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="pod pod-3"><a class="card-link tilt" href="https://amway.com/share-link/gry6-Xg5l" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">03</span><span class="shot"><img src="assets/cutouts/xs-elite-focus-energy-drink-peach-mango.webp" alt="" width="600" height="600"></span><p class="p-tag">Energy &amp; Focus</p><h3 class="p-name">XS Elite + Focus Energy Drink</h3><p class="p-desc">Energy drink · Peach Mango</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- 6. The full shelf. It stays out of the way until you search or ask for it. -->
+  <!-- 7. The full shelf. It stays out of the way until you search or ask for it, and it sits
+       last, after the consult, so opening it never splits the drink or the calculator from
+       the call. -->
   <section class="sec shop results" id="results" aria-labelledby="shop-title" hidden>
     <div class="wrap">
       <div class="sec-head"><h2 id="shop-title" tabindex="-1">All products</h2></div>
@@ -708,46 +765,6 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <li class="card grow" style="--d:0" data-cat="hydration"><a class="card-link" href="https://amway.com/share-link/hzkCx98xw" target="_blank" rel="noopener"><span class="shot shot-studio"><img src="assets/products/xs-sports-twist-tubes-raspberry-lemonade.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Hydration</p><h3 class="p-name">XS Sports Twist Tubes</h3><p class="p-desc">Drink mix tubes · Raspberry Lemonade</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
       </ul>
     </div>
-  </section>
-
-  <!-- 7. Hydration: the third beat of the drink. The pour fills the glass behind #trending;
-       here it fizzes and drains to the page's chalk, and as the water leaves, a cup comes
-       up through the line it left behind. The line is content; the glass, the fizz and the
-       cup are scenery. The beat holds on screen while the glass drains behind it. With
-       reduced motion, or no script, the cup stands fully risen and nothing moves. -->
-  <section class="sec hydrate fizz-sec" id="hydrate" aria-labelledby="hydrate-title">
-    <div class="fizz-bg" id="fizz-bg" aria-hidden="true">
-      <div class="fizz-stage">
-        <img class="fizz-still" data-src="assets/pour/sm/0150.webp" data-srcset="assets/pour/sm/0150.webp 618w, assets/pour/big/0150.webp 810w" sizes="100vw" alt="" decoding="async">
-        <canvas class="fizz-film" id="fizz-film"></canvas>
-      </div>
-      <svg class="fizz-shore" viewBox="0 0 1200 100" preserveAspectRatio="none" focusable="false"><path d="M0 22C90 12 170 30 270 24S450 8 560 18 760 34 870 22 1060 10 1200 20V100H0Z"/></svg>
-    </div>
-    <div class="wrap split hy-beat">
-      <!-- Peter's line, word for word: the question quiet, the answer the statement. One
-           heading, so it is read as he wrote it, question first, and names the band. -->
-      <div class="split-text hy-line grow">
-        <h2 id="hydrate-title"><span class="hy-q">Not sure how much water is enough?</span> <span class="hy-a">Athletes aim for one ounce per pound of bodyweight.</span></h2>
-      </div>
-      <div class="hy-well grow" style="--d:1" aria-hidden="true">
-        <div class="hy-clip">
-          <div class="hy-cup" id="hy-cup">
-            <svg viewBox="0 0 200 232" focusable="false">
-              <path class="hy-water" d="M52 92C68 86 84 97 100 92S133 86 148 92L141 217H59Z"/>
-              <path class="hy-surf" d="M52 92C68 86 84 97 100 92S133 86 148 92"/>
-              <g class="hy-bubbles"><circle cx="86" cy="196" r="3.4"/><circle cx="117" cy="178" r="2.5"/><circle cx="97" cy="152" r="1.9"/><circle cx="124" cy="126" r="2.7"/><circle cx="80" cy="120" r="1.7"/></g>
-              <path class="hy-ticks" d="M56 120h11M57 140h6M59 160h11M60 180h6M62 200h11"/>
-              <path class="hy-shine" d="M137 40 128 200"/>
-              <path class="hy-glass" d="M44 18H156L140 230H60Z"/>
-              <path class="hy-base" d="M60 217H140"/>
-            </svg>
-          </div>
-        </div>
-        <svg class="hy-ripple" viewBox="0 0 400 24" preserveAspectRatio="none" focusable="false"><path d="M62 13C84 6 110 7 124 12M276 12C290 7 316 6 338 13"/></svg>
-        <svg class="hy-tide" viewBox="0 0 400 24" preserveAspectRatio="none" focusable="false"><path d="M0 12C30 8 57 15 90 12S150 5 187 9 253 16 290 11 353 7 400 11"/></svg>
-      </div>
-    </div>
-    <div class="fizz-run" aria-hidden="true"></div>
   </section>
 
 </main>
@@ -1300,7 +1317,7 @@ if(mcForm){
       mcCount=$('#mc-step-n'),mcBars=$$('#mc-prog span'),mcErr=$('#mc-err'),
       mcBack=$('#mc-back'),mcNext=$('#mc-next'),mcNotes=$('#mc-notes'),
       MCKEY='aspire-macros',MCFIELDS='sex age weight ft inch activity basis frame trained goal loss'.split(' '),
-      mcAt=0,mcDone=false,mcSum='';
+      mcAt=0,mcDone=false,mcSum='',cNums=$('#c-nums');
   var MCBASIS={
     standard:'New to training, or coming back to it.',
     better:'In the gym consistently, without years behind you.',
@@ -1372,7 +1389,8 @@ if(mcForm){
     s.classList.remove('mc-in');void s.offsetWidth;s.classList.add('mc-in');   /* restart the fade */
     if(focus)$('.mc-q',s).focus();
   }
-  function mcShow(){mcQuiz.hidden=mcDone;mcRes.hidden=!mcDone}
+  /* the strip at the top of the consult shows exactly when the card's numbers do */
+  function mcShow(){mcQuiz.hidden=mcDone;mcRes.hidden=!mcDone;if(cNums)cNums.hidden=!mcDone}
 
   function mcRender(focus){
     var r=mcCalc({sex:mcGet('sex'),age:mcNum('age'),weightLb:mcNum('weight'),
@@ -1412,6 +1430,13 @@ if(mcForm){
       mcNotes.appendChild(p);
     });
     mcSum='Macros: '+mcCal(r.target)+' cal a day, '+r.proteinG+'g protein, '+r.fatG+'g fat, '+r.carbG+'g carbs.';
+    /* the same four figures the card prints, carried into the consult's strip */
+    if(cNums){
+      $('#c-nums-cal').textContent=mcCal(r.target);
+      $('#c-nums-p').textContent=r.proteinG+'g';
+      $('#c-nums-f').textContent=r.fatG+'g';
+      $('#c-nums-c').textContent=r.carbG+'g';
+    }
     if(focus){
       $('#mc-res-t').focus();
       say('Your targets: '+mcCal(r.target)+' calories, '+r.proteinG+' grams protein, '+
@@ -1435,11 +1460,12 @@ if(mcForm){
     if(mcAt<mcSteps.length-1){mcAt++;mcStep(true);mcSave();return}
     mcDone=true;mcShow();mcRender(true);mcSave();
     if(!mcFilled&&mcInView())mcFill(false);   /* already on screen: no intersection left to wait for */
+    mcGlide();                                /* a fresh tap only: the restore at the bottom never calls this */
   });
   mcBack.addEventListener('click',function(){if(mcAt){mcAt--;mcStep(true);mcSave()}});
-  $('#mc-edit').addEventListener('click',function(){mcDone=false;mcShow();mcStep(true);mcSave()});
+  $('#mc-edit').addEventListener('click',function(){mcStop();mcDone=false;mcShow();mcStep(true);mcSave()});
   $('#mc-again').addEventListener('click',function(){
-    mcForm.reset();mcAt=0;mcDone=false;mcShow();mcStep(true);
+    mcStop();mcForm.reset();mcAt=0;mcDone=false;mcShow();mcStep(true);
     try{localStorage.removeItem(MCKEY)}catch(e){}
   });
   /* the targets go to the consult's own form. The button under the numbers carries them; so
@@ -1467,6 +1493,7 @@ if(mcForm){
     return r.top<(innerHeight||0)&&r.bottom>0;
   }
   function mcGo(e){
+    mcStop();
     if(!cform)return;                            /* no consult here: just follow the anchor */
     e.preventDefault();
     mcFill(true);
@@ -1475,6 +1502,39 @@ if(mcForm){
     t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
   }
   $('#mc-book').addEventListener('click',mcGo);
+
+  /* After a fresh "See my numbers" the card comes up, the visitor gets a moment with it, and
+     then the page glides down to the consult, whose strip carries the same four numbers, so
+     both are seen. A beat longer when a warning is up: there is more to read. Anything the
+     visitor does in that pause (a scroll, a touch, a click, a key, leaving the tab) means
+     they are reading, so the glide is dropped and nothing else moves. The scroll test is by
+     distance from where the card left the page, so the jump that focusing the card's own
+     heading can cause is not mistaken for the visitor. Reduced motion keeps the pause and
+     jumps instead of gliding: the same move the button under the numbers makes. Only the
+     submit handler calls this, so results restored from localStorage never move the page. */
+  var mcWait=0,mcY=0,MCSTOP=['wheel','touchstart','pointerdown','keydown','scroll'];
+  function mcNudge(e){if(e.type!=='scroll'||Math.abs(scrollY-mcY)>4)mcStop()}
+  function mcStop(){
+    if(!mcWait)return;
+    clearTimeout(mcWait);mcWait=0;
+    MCSTOP.forEach(function(ev){removeEventListener(ev,mcNudge,true)});
+    doc.removeEventListener('visibilitychange',mcStop);
+  }
+  function mcGlide(){
+    mcStop();
+    if(!mcSec||$('body > .intro'))return;       /* no consult on this page, or the curtain is still up */
+    mcY=scrollY;
+    MCSTOP.forEach(function(ev){addEventListener(ev,mcNudge,{capture:true,passive:true})});
+    doc.addEventListener('visibilitychange',mcStop);
+    mcWait=setTimeout(function(){
+      mcStop();
+      if(!mcDone)return;
+      mcFill(false);                             /* the goal chip and the note line, if still empty */
+      mcSec.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+      var t=$('#consult-title');
+      t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
+    },$('.mc-warn',mcNotes)?2600:1500);
+  }
   if(cform&&mcSec&&'IntersectionObserver' in window)
     new IntersectionObserver(function(es){if(es[0].isIntersecting&&!mcFilled)mcFill(false)}).observe(mcSec);
 
@@ -1645,7 +1705,7 @@ if(mcForm){
 /* The fizz: the full glass behind the hydration line, bubbling, drains away as you scroll. The
    level is a pure function of scroll (eased a touch, so it pours rather than jumps), so
    scrolling back up refills it. It starts as the band's top reaches the top of the window
-   and is empty by the time the stage lets go, just before the footer shows. Above the
+   and is empty by the time the stage lets go, just before the calculator's band shows. Above the
    surface the canvas is chalk; below it, the glass shows through and bubbles rise to the
    surface and pop there. One canvas, redrawn each frame while the band is on screen.
    The cup rides the same level: see rise() below. */
