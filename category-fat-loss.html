@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=7331519a">
+<link rel="stylesheet" href="style.css?v=4158fff1">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -1228,7 +1228,7 @@ if(mcForm){
           kin=i?clamp((x-at[i]+T)/T):clamp(arrive),      /* 0..1 through the change into this beat */
           kout=i<N-1?clamp((x-at[i]-h)/T):0,             /* 0..1 through the change out of it */
           vis=kout<1&&kin>0;
-      if(vis!==p.vis){p.vis=vis;p.b.style.visibility=vis?'visible':'hidden'}
+      if(vis!==p.vis){p.vis=vis;p.b.style.opacity=vis?'':'0'}   /* opacity, not visibility: its link stays reachable by Tab */
       if(!vis)return;
       /* the words: out in the first part of a change, in at the end of it, never both at once */
       var ce=i?smooth(clamp((kin-.6)/.4)):smooth(clamp(x/.35)),   /* the first words wait for the stage to hold */
@@ -1270,9 +1270,9 @@ if(mcForm){
     var i=beats.indexOf(ev.target.closest('.st-beat'));
     if(i<0)return;
     var r=run.getBoundingClientRect(),
-        y=scrollY+r.top+(r.height-sh)*(at[i]+(HOLD[i]||1)*.5)/L;
-    scrollTo({top:Math.round(y),behavior:'instant'});
-    frame();
+        y=Math.round(scrollY+r.top+(r.height-sh)*(at[i]+(HOLD[i]||1)*.5)/L),
+        go=function(){if(Math.abs(scrollY-y)>1)scrollTo({top:y,behavior:'instant'});frame()};
+    go();requestAnimationFrame(go);                   /* again after the browser's own scroll to the focus */
   });
 })();
 

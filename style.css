@@ -671,7 +671,7 @@ html:not(.js) #results[hidden]{display:block!important}
 @supports (height:100svh){.story.is-live .st-beats{height:100svh}}
 .story.is-live .st-beat{position:absolute;inset:0;justify-content:flex-end;gap:22px;background:none;
   padding:calc(var(--mast) + 16px) var(--pad) calc(72px + env(safe-area-inset-bottom,0px));
-  visibility:hidden;pointer-events:none}
+  opacity:0;pointer-events:none}
 .story.is-live .st-beat.is-on{pointer-events:auto}
 .story.is-live .st-hero{flex:1 1 0;min-height:0}
 .story.is-live .st-art{height:100%;width:auto;max-width:100%;max-height:min(92vw,380px);will-change:transform,opacity}
