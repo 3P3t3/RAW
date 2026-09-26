@@ -921,7 +921,7 @@ if(mcForm){
      A change is 1.5 units, about 460px, so a swirl is long enough to be seen; every hold is
      still at least 180px. The turn (the before becoming the after) holds longest, since the
      wipe happens while it is up. */
-  var HOLD=[.9,.6,.6,.8,.6,.7,1.7,.7,1.1],T=1.5,at=[],L=0;
+  var HOLD=[.9,.6,.6,.8,.6,.7,1.7,.7,1],T=1.5,at=[],L=0;
   beats.forEach(function(b,i){at.push(L);L+=(HOLD[i]||1)+(i<N-1?T:0)});
   var TURN=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('turn'),
       SAND=beats.indexOf($('.st-warm',run));        /* the first beat on the sand */

@@ -636,7 +636,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-pack{position:absolute;inset:0}
 .st-pack img{position:relative;display:block;width:100%;height:100%;object-fit:contain;-webkit-backface-visibility:hidden;backface-visibility:hidden}
 .st-shade{position:absolute;left:15%;width:70%;top:84%;height:14%;
-  background:radial-gradient(ellipse,rgba(0,20,27,.38),transparent 70%)}
+  background:radial-gradient(ellipse,rgba(0,20,27,.5),transparent 70%)}
 .st-warm .st-shade{background:radial-gradient(ellipse,rgba(0,20,27,.22),transparent 70%)}
 .st-pair .st-pack{inset:auto;width:64%;aspect-ratio:1;top:0;left:0}
 .st-pair .st-pack+.st-pack{top:auto;left:auto;right:0;bottom:0}
@@ -683,7 +683,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-dusk{background:linear-gradient(rgba(0,20,27,.88),rgba(0,20,27,0) 70%)}
 .st-chalk{background:var(--chalk)}
 /* the stage light: a soft pool where the pack stands, up only while a pack is at rest in it */
-.st-lamp-dark{background:radial-gradient(circle at 50% 38%,rgba(244,242,236,.10),transparent 55%)}
+.st-lamp-dark{background:radial-gradient(circle at 50% 38%,rgba(244,242,236,.15),transparent 55%)}
 .st-lamp-warm{background:radial-gradient(circle at 50% 38%,rgba(255,255,255,.35),transparent 55%)}
 /* the sand sweeps in from the right behind the arriving can, on a soft leading edge, rather
    than fading up over the whole stage: the script slides it, and it is solid long before the
@@ -704,7 +704,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .story.is-live .st-hero{flex:1 1 0;min-height:0}
 .story.is-live .st-art{height:100%;width:auto;max-width:100%;max-height:min(92vw,380px);will-change:transform,opacity}
 .story.is-live .st-photo{max-height:440px}
-.story.is-live .st-fam .st-photo{max-height:340px}
+.story.is-live .st-fam .st-photo{max-height:400px}   /* one paragraph now: the family is the largest thing on the beat */
 .story.is-live .st-pair{max-height:min(74vw,320px)}
 .story.is-live .st-was{display:block}
 .story.is-live .st-copy{will-change:transform,opacity}
@@ -742,7 +742,7 @@ html:not(.js) #results[hidden]{display:block!important}
   .story.is-live .st-photo{max-height:520px}
   .story.is-live .st-fam .st-photo{max-height:420px}
   .story.is-live .st-pair{max-height:416px}
-  .st-lamp-dark{background:radial-gradient(circle at 74% 50%,rgba(244,242,236,.10),transparent 45%)}
+  .st-lamp-dark{background:radial-gradient(circle at 74% 50%,rgba(244,242,236,.15),transparent 45%)}
   .st-lamp-warm{background:radial-gradient(circle at 74% 50%,rgba(255,255,255,.35),transparent 45%)}
 }
 @media (min-width:1200px){
