@@ -1242,6 +1242,11 @@ if(mcForm){
     var rad=Math.min(w*.95,900),m=1-out3(u),a,R,rot,rx,ry,s,op,x,y;
     if(q>0){R=rad*q;a=(120+40*q)*D;rot=k.tilt+130*q;rx=-12*q;ry=24*q;s=1-.5*q;op=1-clamp((q-.2)/.6)}
     else{R=rad*m;a=(40-80*m)*D;rot=k.tilt-130*(1-back(u));rx=12*m;ry=-24*m;s=1-.45*m;op=clamp((1-m)*1.8)}
+    if(q>0&&p.kind!=='prod'){                        /* the arc lifts away up and right in place, clear of the words */
+      put(p,k.img,'i'+i,'translate3d('+f(40*q,1)+'px,'+f(-30*q,1)+'px,0) rotate('+k.tilt+'deg) scale('+f(1-.15*q,3)+')',f(1-smooth(q),3));
+      put(p,k.shade,'s'+i,'translate3d('+f(40*q,1)+'px,'+f(-30*q,1)+'px,0) scale('+f(1-.15*q,3)+')',f(1-q,3));
+      return 0;
+    }
     x=f(Math.cos(a)*R+k.rx*w/100,1);y=f(Math.sin(a)*R*.55,1);s*=k.rs;
     put(p,k.img,'i'+i,'translate3d('+x+'px,'+y+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotateY('+
       f(ry,2)+'deg) rotate('+f(rot,2)+'deg) scale('+f(s,3)+')',f(op,3));
