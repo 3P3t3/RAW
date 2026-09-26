@@ -1262,7 +1262,7 @@ if(mcForm){
        snaps it instead. */
     if(snap){topS=r.top;snap=false}
     else{
-      var B=2.5*span/L;                                 /* never more than a beat and a change behind the finger */
+      var B=3.5*span/L;                                 /* never more than about 950px behind the finger at 390 (a unit is ~271px), so one 900px flick still plays whole */
       if(r.top-topS>B)topS=r.top-B;else if(topS-r.top>B)topS=r.top+B;
       var d=(r.top-topS)*.18,cap=.14*span/L;topS+=d>cap?cap:d<-cap?-cap:d}   /* and never more than .14 of a unit a frame, so each change in a flick still gets its frames */
     var still=Math.abs(r.top-topS)*L/span<.002;
