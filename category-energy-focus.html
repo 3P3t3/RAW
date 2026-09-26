@@ -1327,7 +1327,7 @@ if(mcForm){
         lit[p.warm?1:0]=Math.max(lit[p.warm?1:0],rest);
         if(rest>restV){restV=rest;restX=p.packs[0].rx}
       }else{
-        var pe=i?smooth(clamp((kin-.35)/.65)):smooth(arrive),pq=smooth(clamp(kout/.35));
+        var pe=i?smooth(clamp((kin-.45)/.55)):smooth(arrive),pq=smooth(clamp(kout/.35));
         put(p,p.art,'art','translate3d(0,'+f((1-pe)*36-pq*36,1)+'px,0) scale('+f(.94+.06*pe-.05*pq,4)+')',f(Math.min(pe,1-pq),3));
       }
       if(p.wipe){                                         /* the after slides in from its own side */
