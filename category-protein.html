@@ -652,7 +652,8 @@ if(arch){
 var cform=$('#consult-form');
 if(cform){
   var csum=$('#consult-sum'),cbox=$('#consult-embed'),
-      val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()};
+      val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()},
+      cSync=null;     /* set by the calculator below: brings its own lines up to date before a1-a4 are read */
   /* the chip values are noun and verb phrases both, so each one carries the wording it needs
      in the sentence. A new chip needs a line here or it falls back to 'your goal'. */
   var CGOAL={'Lose fat':'losing fat','Build muscle':'building muscle','More energy':'more energy',
@@ -690,6 +691,7 @@ if(cform){
       csum.textContent='Your answers are ready. The booking calendar connects here shortly.';
       return;
     }
+    if(cSync)cSync();
     /* a1-a4 go in the embed url itself; widget.js drops a prefill object for custom answers */
     var qs=[];
     [val('goal'),val('training'),val('stack'),val('note')].forEach(function(v,i){
@@ -706,6 +708,14 @@ if(cform){
         parentElement:cbox
       });
       cform.hidden=true;
+      /* the 700px calendar takes the place of a taller form, and whoever tapped "Pick a time"
+         was at that form's foot, so the page would be left looking past the calendar. Bring
+         its top up under the masthead (html's scroll-padding-top, --mast, as the anchors do),
+         unless it is already on screen. Reduced motion jumps instead of gliding. */
+      var ct=cbox.getBoundingClientRect().top,
+          cm=parseFloat(getComputedStyle(html).scrollPaddingTop)||0;
+      if(ct<cm||ct>=innerHeight)
+        cbox.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
       say('Calendar loaded. Pick a time.');
     },function(){
       csum.textContent='The calendar did not load. Try again in a moment.';
@@ -914,7 +924,8 @@ if(mcForm){
     if(miss){mcErr.hidden=false;mcErr.textContent=miss;return}
     if(mcAt<mcSteps.length-1){mcAt++;mcStep(true);mcSave();return}
     mcDone=true;mcShow();mcRender(true);mcSave();
-    if(!mcFilled&&mcInView())mcFill(false);   /* already on screen: no intersection left to wait for */
+    mcFilled=false;                           /* new numbers: the consult's lines are due again */
+    if(mcInView())mcFill(false);              /* already on screen: no intersection left to wait for */
     mcGlide();                                /* a fresh tap only: the restore at the bottom never calls this */
   });
   mcBack.addEventListener('click',function(){if(mcAt){mcAt--;mcStep(true);mcSave()}});
@@ -925,23 +936,46 @@ if(mcForm){
   });
   /* the targets go to the consult's own form. The button under the numbers carries them; so
      does scrolling to the form, which is what most people do instead. The button, being asked
-     for, sets the goal outright; the scroll only fills what is still empty, and only once, so
-     nothing anyone has typed or cleared is overwritten.
+     for, sets the goal outright; the scroll only fills a field that is empty or still holds
+     exactly what the site last put there, so nothing anyone has typed or picked is overwritten,
+     while a line the site wrote follows every new calculation instead of keeping the first
+     one's numbers. Each fresh "See my numbers" makes the fill due once more; between
+     calculations it runs once, so a line the visitor cleared stays cleared.
+     What the site wrote is remembered in localStorage beside the answers (its own key, so
+     "Start over" cannot orphan it). A reload loses the page's memory, and some browsers put
+     the old field values back on a reload (Chrome did not when measured; Safari may): without
+     the record, a chip or line the site wrote would then pass for the visitor's own and never
+     follow a new calculation. Not autocomplete=off on the form instead: that would also throw
+     away chips the visitor picked, which are theirs to keep.
      The consult sits directly under the calculator now, so the form can already be in view
      when the last answer lands. There is then no new intersection for the observer to report
      — it went true while the quiz was still up, and mcFill turned back at !mcDone — so the
      seventh answer asks the geometry itself and fills it on the spot instead. Measured rather
      than remembered: the observer's last word can still be in flight when the button is hit. */
   var MCTOC={loss:'Lose fat',recomp:'Lose fat',gain:'Build muscle',maint:'Stay healthy day to day'},
-      mcFilled=false,mcSec=$('#consult');
-  function mcFill(force){
+      mcFilled=false,mcSec=$('#consult'),MCAUTO='aspire-consult-auto',mcAuto={goal:'',note:''};
+  try{var mcA=JSON.parse(localStorage.getItem(MCAUTO)||'null');
+      if(mcA){mcAuto.goal=String(mcA.goal||'');mcAuto.note=String(mcA.note||'')}}catch(e){}
+  /* the site's to rewrite: empty, or exactly what it last wrote there */
+  function mcOurs(el,was){return !el.value||el.value===was}
+  /* keep=true is the last look before booking: it only brings a line the site wrote up to
+     date, and never fills a field the visitor has emptied */
+  function mcFill(force,keep){
     if(!cform||!mcDone||cform.hidden)return;     /* nothing to carry, or the calendar has the form */
     var g=MCTOC[mcGet('goal')],moved=false,note=cform.elements.note,goal=cform.elements.goal;
-    if(g&&goal&&(force||!goal.value)){goal.value=g;moved=true}
-    if(note&&!note.value&&mcSum){note.value=mcSum;moved=true}
-    mcFilled=true;
+    if(g&&goal&&(force||(keep?goal.value&&goal.value===mcAuto.goal:mcOurs(goal,mcAuto.goal)))){
+      if(goal.value!==g){goal.value=g;moved=true}
+      mcAuto.goal=g;
+    }
+    if(note&&mcSum&&(keep?note.value&&note.value===mcAuto.note:mcOurs(note,mcAuto.note))){
+      if(note.value!==mcSum){note.value=mcSum;moved=true}
+      mcAuto.note=mcSum;
+    }
+    if(!keep)mcFilled=true;
+    try{localStorage.setItem(MCAUTO,JSON.stringify(mcAuto))}catch(e){}
     if(moved)cform.dispatchEvent(new Event('change'));
   }
+  if(cform)cSync=function(){mcFill(false,true)};
   function mcInView(){
     if(!mcSec)return false;
     var r=mcSec.getBoundingClientRect();
@@ -958,9 +992,10 @@ if(mcForm){
   }
   $('#mc-book').addEventListener('click',mcGo);
 
-  /* After a fresh "See my numbers" the card comes up, the visitor gets a moment with it, and
-     then the page glides down to the consult, whose strip carries the same four numbers, so
-     both are seen. A beat longer when a warning is up: there is more to read. Anything the
+  /* After a fresh "See my numbers" the card comes up, the visitor gets three seconds with it,
+     and then the page glides down to the consult, whose strip carries the same four numbers,
+     so both are seen. Four seconds when a warning is up: there is more to read. (It was 1.5
+     and 2.6; a visitor tested at that pace had not finished reading the card.) Anything the
      visitor does in that pause (a scroll, a touch, a click, a key, leaving the tab) means
      they are reading, so the glide is dropped and nothing else moves. The scroll test is by
      distance from where the card left the page, so the jump that focusing the card's own
@@ -984,11 +1019,11 @@ if(mcForm){
     mcWait=setTimeout(function(){
       mcStop();
       if(!mcDone)return;
-      mcFill(false);                             /* the goal chip and the note line, if still empty */
+      mcFill(false);                             /* the goal chip and the note line, if still the site's */
       mcSec.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
       var t=$('#consult-title');
       t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
-    },$('.mc-warn',mcNotes)?2600:1500);
+    },$('.mc-warn',mcNotes)?4000:3000);
   }
   if(cform&&mcSec&&'IntersectionObserver' in window)
     new IntersectionObserver(function(es){if(es[0].isIntersecting&&!mcFilled)mcFill(false)}).observe(mcSec);
