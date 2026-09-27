@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=95dfd504">
+<link rel="stylesheet" href="style.css?v=7e19a079">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -168,7 +168,7 @@
       <h1 id="cat-title">Hydration</h1>
       <p class="sub">Electrolytes and drink mixes for long, hot and sweaty sessions.</p>
       <p class="cat-count">6 products</p>
-      <!-- DRAFT-COPY --><p class="cat-sample"><a href="homepage.html?try=Hydration#sample">Get a free sample</a></p><!-- /DRAFT-COPY -->
+      <!-- DRAFT-COPY --><p class="cat-sample"><a href="homepage.html?try=Hydration#sample">Ask for a free sample</a></p><!-- /DRAFT-COPY -->
     </div>
   </section>
 
@@ -426,8 +426,8 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    not watched either: the tab rides over it, except while the story's own "Book a free call"
    is up (.st-book: the story parks it off its stage while its beat is not). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
-   which sit where the tab does on a phone and go to the same places, "The game plan"'s "Pick
-   your free sample" (#how-go) and the quick-call buttons (.q-go), which it would cover, the band that sends you
+   which sit where the tab does on a phone and go to the same places, "The game plan"'s "Ask
+   for a free sample" (#how-go) and the quick-call buttons (.q-go), which it would cover, the band that sends you
    to the calculator on a category page, and the footer,
    which is the end of every page and so could never be scrolled out from under it. It also
    waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
@@ -766,7 +766,7 @@ if(sform){
     });
   };
   sPick();
-  /* a category page's "Get a free sample" names its shelf, so the question starts answered */
+  /* a category page's "Ask for a free sample" names its shelf, so the question starts answered */
   var sTry=(new URLSearchParams(location.search).get('try')||'').slice(0,80);
   if(sTry&&!sval('product'))sel('product').value=sTry;
   var sShow=function(){
@@ -826,12 +826,12 @@ if(sform){
     };
     if(by==='Text')body.phone=sval('phone');else body.email=sval('email');
     body.product=sval('product');body.delivery=sval('delivery');body.note=sval('note');
-    body.consent='Yes, Peter can text or email me about this sample';
+    body.consent='Yes, Peter can text or email me about this';
     body.keep_in_touch=sel('keep_in_touch').checked?'Yes':'No';
     sform.setAttribute('aria-busy','true');sgo.textContent='Sending…';
     say('Sending your request.');
     var fail=function(){
-      sform.removeAttribute('aria-busy');sgo.textContent='Request my sample';
+      sform.removeAttribute('aria-busy');sgo.textContent='Send it to Peter';
       sfail.textContent='That didn’t send. Check your connection and try again. Everything you typed is still here.';
       say(sfail.textContent);
     };
