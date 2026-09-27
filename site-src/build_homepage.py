@@ -122,6 +122,15 @@ PLATES = {
 PETER = [('protein', 'Food'), ('daily-foundations', 'Mornings'), ('hydration', 'Water'),
          ('energy-focus', 'Energy'), ('recovery', 'Sleep')]
 
+# The rack's three-step guide, under "What are we maximizing?" (DRAFT-COPY). The script marks the
+# step the visitor is on (aria-current): 1 until a plate is open, 2 while one is, 3 once one is loaded.
+# Step 3's two links go where the stack is taken: the call and the sample.
+RACK_GUIDE = ('<!-- DRAFT-COPY --><ol class="rk-guide" id="rk-guide" role="list" aria-label="How the rack works">'
+              '<li class="is-now" aria-current="step"><span class="rg-n" aria-hidden="true">1</span><span class="rg-t">Tap any plate to see the packs on it.</span></li>'
+              '<li><span class="rg-n" aria-hidden="true">2</span><span class="rg-t">Load the ones you’d take. They ride up top.</span></li>'
+              '<li><span class="rg-n" aria-hidden="true">3</span><span class="rg-t">Bring it to a <a href="#consult">free call</a>, or ask for a <a href="#sample">sample</a>.</span></li>'
+              '</ol><!-- /DRAFT-COPY -->')
+
 # The trending band's ground: True scrubs the 150-frame pour behind the podium, False makes the
 # band a compact row of three cards on the page's field and fetches none of it (the no-pour rules
 # in style.css). The frames and the script stay either way.
@@ -640,8 +649,12 @@ def main():
                 '          <h3 class="pcard-name" id="pcard-name"></h3>\n'
                 '          <p class="pcard-line" id="pcard-line"></p>\n'
                 '          <ul class="pcard-facts" id="pcard-facts" aria-label="Quick facts"></ul>\n'
-                '          <a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Add to cart on Amway'
-                '<span class="vh"> (opens in a new tab)</span></a>\n'
+                '          <div class="pcard-acts"><a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Add to cart on Amway'
+                '<span class="vh"> (opens in a new tab)</span></a>'
+                # DRAFT-COPY: the script names the plate after it and reads "On your bar" once it is on
+                + ('<button class="btn btn-line pcard-load" id="pcard-load" type="button" hidden>'
+                   '<span class="pl-t">Load this plate</span><span class="vh pl-cat"></span></button>' if SHELF_VIEW == 'bar' else '')
+                + '</div>\n'
                 '        </div>\n'
                 '      </div>\n'
                 '    </dialog>\n')
@@ -677,8 +690,8 @@ def main():
                 '       bar, pinned under the masthead (_script.html). Without script every panel stands open. -->\n'
                 '  <section class="sec rack-sec" id="goals" aria-labelledby="goals-title">\n'
                 '    <div class="wrap">\n'
-                '      <div class="sec-head grow"><div><h2 id="goals-title">What are we <span>maximizing?</span></h2>'
-                '<p class="rk-hint">Tap a plate to see what’s on it.</p></div></div>\n'
+                '      <div class="sec-head grow"><div><h2 class="hl-2" id="goals-title"><span class="hl-lead">What are we</span> <span class="hl-k">maximizing?</span></h2>'
+                + RACK_GUIDE + '</div></div>\n'
                 '      <div class="rack grow" id="rack">\n        <ul class="rk-plates">\n'
                 + '\n'.join(plates) +
                 '\n        </ul>\n' + '\n'.join(panels) + '\n      </div>\n    </div>\n'
@@ -704,17 +717,26 @@ def main():
             # the pinned bar: the visitor's stack, or Peter's through #story; the script shows it once the hero has gone
             '{{PIN}}': ('<div class="lbpin" id="lbpin" aria-hidden="true"><div class="wrap lbpin-in">'
                         '<div class="lbpin-bars bbx">' + barbell('bb-you') + barbell('bb-peter') + '</div>'
-                        '<p class="lbpin-cap"><span class="lbc-set lbc-yset"><span class="lbc-who"><span class="lbc lbc-you">Empty bar</span></span>'
+                        '<p class="lbpin-cap"><span class="lbc-set lbc-yset"><span class="lbc-who"><span class="lbc lbc-you"></span></span>'
                         '<span class="lbc-new"><span class="lbc lbc-ynew"></span></span></span>'
                         '<span class="lbc-set lbc-pset"><span class="lbc-who">' + caps + '</span><span class="lbc-new">' + news + '</span></span></p></div></div>'),
             '{{ARC_BAR}}': '<div class="bbx">' + barbell('bb-arc', [c for c, _ in PETER]) + '</div>',
             '{{MYSTACK}}': ('  <!-- After the story: the stack his story loaded, drawn loaded, with its key, and the two ways on -->\n'
                             '  <section class="sec dark mys" id="my-stack" aria-labelledby="mys-title">\n    <div class="wrap mys-in">\n'
-                            '      <h2 class="grow" id="mys-title">That’s my stack.</h2>\n'
+                            '      <h2 class="grow hl-2 hl-dk" id="mys-title"><span class="hl-lead">That’s</span> <span class="hl-k">my stack.</span></h2>\n'
                             '      <div class="mys-bar bbx grow" style="--d:1">' + barbell('bb-dk bb-big', [c for c, _ in PETER]) + '</div>\n'
                             '      <ul class="mys-key grow" style="--d:2" aria-label="The plates on it">'
                             + ''.join(f'<li><i style="--c:{PLATES[c][0]}"></i>{n}</li>' for c, n in pn) + '</ul>\n'
-                            '      <p class="mys-build grow" style="--d:2">Build yours.</p>\n'
+                            '      <p class="mys-build grow hl-3d hl-dk" style="--d:2">Build yours.</p>\n'
+                            # the visitor's stack beside his, from the saved stack (_script.html fills it); none yet, an
+                            # invitation to the rack. Without script there is no stack to show, so none of it shows.
+                            '      <!-- DRAFT-COPY --><div class="mys-you grow" id="mys-you" style="--d:2">\n'
+                            '        <div class="mys-has" hidden><p class="mys-cap"><span class="mys-n">Your stack</span>'
+                            '<a class="mys-edit" href="#goals">Change it</a></p>\n'
+                            '        <div class="mys-ybar bbx">' + barbell('bb-dk bb-you') + '</div>\n'
+                            '        <ul class="mys-key mys-ykey" aria-label="The plates on yours"></ul></div>\n'
+                            '        <p class="mys-none">Nothing on your bar yet. <a href="#goals">Load a plate or two</a> and bring them along.</p>\n'
+                            '      </div><!-- /DRAFT-COPY -->\n'
                             '      <!-- DRAFT-COPY --><p class="mys-sub grow" style="--d:3">Half an hour, free. Your macros, what you already take, and the smallest stack that moves your goal.</p>\n'
                             '      <div class="mys-acts grow" style="--d:3"><a class="btn" href="#macros">Work out your macros</a>'
                             '<a class="btn btn-line" href="#consult">Book a free call</a></div>\n'

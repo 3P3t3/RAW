@@ -1447,6 +1447,89 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
 .motion .mys-bar:not(.in) .bb-r .bb-p{opacity:0;transform:translate3d(calc(7.5 * var(--st)),0,0)}
 .motion .mys-bar .bb-p{transition-duration:420ms,240ms;transition-delay:calc(260ms + var(--o) * 110ms)}
 @media (min-width:768px){.mys-acts .btn{flex:1 1 0}}
+
+/* ---------- Headline treatments: two-tone and extruded, for a few moments only ----------
+   (a) .hl-k: one word in the button blue inside a teal headline ("plan", "free"). .hl-2: a headline in
+   two lines of two sizes, a small teal lead over its keyword set large in the blue ("What are we /
+   MAXIMIZING?"). On teal (.hl-dk) the lead is the on-dark grey and the keyword chalk.
+   (b) .hl-3d: a solid extrusion for the hero line and the payoff. The face is blue on chalk (sand on
+   teal); seven hairline steps of text-shadow run down and right, the first a lit chamfer a shade
+   lighter than the face, then the side, darkening toward the back (deep teal on chalk; on teal, where
+   teal would vanish, the blue into indigo), and a soft cast shadow under it all. Everything is in em,
+   so the depth scales with the type (about 5px at 390, 9px at 1440); text-shadow only, so it costs
+   no layout and reads with no script and no motion. Contrast of the faces: blue on chalk 7.3:1 (5.1:1
+   on the field's warmest glow), sand on teal 10:1, chalk on teal 12.9:1; the leads, teal on chalk
+   12.9:1 and on-dark on teal 9.3:1. */
+.hl-k{color:var(--blue)}
+.hl-2 .hl-lead{display:block;margin-bottom:.1em;font-size:.5em;font-weight:700;line-height:1;letter-spacing:.04em;color:var(--teal)}
+.hl-2 .hl-k{display:block;font-size:1.3em;line-height:.9}
+.hl-2.hl-dk .hl-lead{color:var(--on-dark)}
+.hl-2.hl-dk .hl-k{color:var(--chalk)}
+.hl-3d{--u:.012em;--h:#5360D0;--s1:#0A3A48;--s2:#042A35;--s3:#001E27;--cast:rgba(0,20,27,.26);color:var(--blue);letter-spacing:.012em;
+  text-shadow:var(--u) var(--u) 0 var(--h),
+    calc(2 * var(--u)) calc(2 * var(--u)) 0 var(--s1),calc(3 * var(--u)) calc(3 * var(--u)) 0 var(--s1),
+    calc(4 * var(--u)) calc(4 * var(--u)) 0 var(--s2),calc(5 * var(--u)) calc(5 * var(--u)) 0 var(--s2),
+    calc(6 * var(--u)) calc(6 * var(--u)) 0 var(--s3),calc(7 * var(--u)) calc(7 * var(--u)) 0 var(--s3),
+    calc(7 * var(--u) + .03em) calc(7 * var(--u) + .07em) .1em var(--cast)}
+.hl-3d.hl-dk{--h:#FFF7EF;--s1:#3340B8;--s2:#2A3597;--s3:#222B7A;--cast:rgba(0,0,0,.42);color:var(--sand)}
+/* where they are used: the hero's last line, a step larger; the payoff's "Build yours.", larger still */
+.hero h1 .hl-3d{font-size:1.1em;margin-top:.02em;padding-bottom:.08em}
+.mys h2.hl-2{font-size:clamp(40px,12vw,80px)}
+.mys-build.hl-3d{font-size:clamp(50px,15vw,104px);margin-top:12px}
+/* "Scroll to load the bar." under the hero's bar: it was sand, from the teal hero; on the chalk field
+   that was 1.3:1. It takes the page's text grey (7.1:1). */
+.hbar-cap{color:var(--text)}
+
+/* the rack's three-step guide, under its heading: one line a step on a phone, each numbered on a
+   small plate. The step the visitor is on is the blue plate and the dark line; the steps behind them
+   are teal plates; the ones ahead are open rings. Colour only, so there is nothing to move under
+   reduced motion. Text is --text on chalk, 7.1:1, and ink for the step they are on. */
+.rk-guide{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:7px;counter-reset:none}
+.rk-guide li{display:flex;align-items:center;gap:10px;min-height:22px;font:500 15px/1.3 var(--sans);color:var(--text)}
+.rk-guide li.is-now{color:var(--ink);font-weight:650}
+.rg-n{position:relative;flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;
+  font:800 11px/1 var(--sans);font-stretch:75%;color:var(--teal);box-shadow:inset 0 0 0 1.5px rgba(0,46,59,.45);
+  transition:background-color 200ms,color 200ms,box-shadow 200ms}
+.rg-n::after{content:"";position:absolute;inset:3px;border-radius:50%;border:1px solid transparent}
+.is-done .rg-n{background:var(--teal);color:var(--chalk);box-shadow:none}
+.is-now .rg-n{background:var(--blue);color:#fff;box-shadow:0 0 0 3px rgba(51,64,184,.18)}
+.is-done .rg-n::after,.is-now .rg-n::after{border-color:rgba(255,255,255,.28)}
+.rk-guide a{color:var(--teal);font-weight:650;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px}
+.rk-guide .is-now a{color:var(--blue)}
+@media (prefers-reduced-motion:reduce){.rg-n{transition:none}}
+@media (max-width:359px){.rk-guide li{font-size:14px;align-items:flex-start}.rk-guide .rg-t{padding-top:2px}}
+@media (min-width:768px){.rk-guide{margin-top:10px;gap:8px}.rk-guide li{font-size:16px}}
+
+/* the pinned strip only counts in the anchors' offset once there is a stack to show (html.has-stack,
+   set by the script); without one it is away outside the story, and the story pads for it itself.
+   .snap: when it comes up its contents are set at once, so it never arrives mid-fade. */
+.t-bar{scroll-padding-top:var(--mast)}
+.t-bar.has-stack{scroll-padding-top:calc(var(--mast) + var(--pin))}
+.lbpin.snap .lbpin-bars .bb,.lbpin.snap .lbc-set{transition:none}
+
+/* the product card: "Load this plate" beside "Add to cart on Amway", and "On your bar" once it is on */
+.pcard-acts{display:flex;flex-wrap:wrap;gap:10px;width:100%}
+.pcard-acts .btn{flex:1 1 100%}
+.pcard-load[aria-disabled="true"]{color:var(--teal);box-shadow:inset 0 0 0 1px rgba(0,46,59,.35);cursor:default}
+.pcard-load[aria-disabled="true"]::before{content:"";width:14px;height:8px;margin:-4px 2px 0 0;border:solid currentColor;border-width:0 0 2px 2px;transform:rotate(-45deg)}
+.pcard-load[aria-disabled="true"]:active{opacity:1}
+@media (min-width:768px){.pcard-acts .btn{flex:1 1 auto}}
+
+/* under "Build yours.": the visitor's stack, drawn like his a size down, with its key and a way back
+   to the rack; or, with none yet, one line inviting them to load one */
+.mys-you{display:grid;justify-items:center;gap:10px;width:100%;max-width:640px}
+html:not(.js) .mys-you{display:none}
+.mys-has{display:grid;justify-items:center;gap:10px;width:100%}
+.mys-has[hidden],.mys-none[hidden]{display:none}
+.mys-cap{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:4px 14px;margin:0;
+  font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--sand)}
+.mys-edit{display:inline-flex;align-items:center;min-height:44px;margin:-12px 0;color:var(--chalk);letter-spacing:.08em;
+  text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
+.mys-ybar{width:100%;max-width:560px}
+.mys-ybar .bb{font-size:clamp(3px,calc(100cqi / 50),10px)}
+.mys-none{max-width:34ch;margin:0;font:500 17px/1.5 var(--sans);color:var(--on-dark);text-wrap:balance}
+.mys-none a{color:var(--chalk);font-weight:650;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
+.mys :focus-visible{outline-color:var(--sand)}
 /* ===================================================================================
    The field: one ground for the whole site, "warm chalk" (Peter's pick, B of the three mockups
    on raw24/bg-mockups). Kept as one block, after everything it overrides, so it merges in one piece.
