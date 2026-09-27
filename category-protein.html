@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=7d0639de">
+<link rel="stylesheet" href="style.css?v=544b38a4">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -1681,6 +1681,11 @@ var LB=null;
       capNew.textContent='+ '+NAME[newest];
       hush($$('.bb-ring',youBars[youBars.length-1]));
       flash([capNew].concat(rings(youBars[youBars.length-1],newest)));   /* the pinned one: the hero's is off screen */
+      /* the weight arriving: as the plate settles, the bar gives a hair under it and comes back */
+      if(!reduce.matches)youBars.forEach(function(bar){
+        if(bar.animate)bar.animate([{transform:'none'},{transform:'translate3d(0,.24em,0)',offset:.3},{transform:'none'}],
+                                   {duration:320,delay:230,easing:'cubic-bezier(.3,.6,.4,1)'});
+      });
     }
   }
   /* the rack: a plate shows its panel; the same plate again, Escape, or another plate puts it away */
@@ -1722,7 +1727,7 @@ var LB=null;
       var c=b.getAttribute('data-cat'),i=stack.indexOf(c),on=i<0;
       if(on)stack.push(c);else stack.splice(i,1);
       save();paint(on?c:null);noteDue=true;
-      if(on)doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:'level'}));
+      doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:on?'clank':'unclank'}));   /* a visitor's plate only: the story's are silent */
       say(NAME[c]+(on?' is on the bar. ':' is off the bar. ')+count(stack.length)+'.');
     });
   });
@@ -1770,12 +1775,14 @@ var LB=null;
   function wr(el,k,tf,op){var v=tf+'|'+op;if(keys[k]===v)return;keys[k]=v;el.style.transform=tf;el.style.opacity=op}
   LB={cats:PC,
     measure:function(){st=parseFloat(getComputedStyle(pBar).fontSize)*2.05;keys={}},   /* --st in style.css */
-    /* where plate c's centre sits on the pinned bar once it is down (the viewport's frame), and its height */
+    /* where plate c's centre sits on the pinned bar once it is down (the viewport's frame), and its
+       height; the pinned bar's top and foot, and where its "+ name" caption starts */
     target:function(c){
       var p=pr[c],sl=p.parentNode.getBoundingClientRect(),fs=parseFloat(getComputedStyle(pBar).fontSize),
           tf=getComputedStyle(pin).transform,ty=tf&&tf!=='none'?new DOMMatrixReadOnly(tf).m42:0,
-          h=parseFloat(p.style.getPropertyValue('--s'))*10*fs;
-      return {x:sl.left+(.15+.9)*fs+RANK[c]*st,y:sl.top+sl.height/2-ty,h:h};
+          h=parseFloat(p.style.getPropertyValue('--s'))*10*fs,pb=pin.getBoundingClientRect(),cap=pNews[PC.indexOf(c)];
+      return {x:sl.left+(.15+.9)*fs+RANK[c]*st,y:sl.top+sl.height/2-ty,h:h,
+              top:pb.top-ty,bot:pb.bottom-ty,cap:cap?cap.getBoundingClientRect().left:sl.left};
     },
     peter:function(ps){
       var n=0;
@@ -1869,25 +1876,44 @@ var LB=null;
       wells=$$('.stc-bay',rowEl),cats=wells.map(function(b){return b.getAttribute('data-cat')}),
       geo=null,rowA=0,rowZ=0,rowIn=0,cp={keys:{}},C={x0:0,y0:0,s:1,dx:0,dy:0,op:0};
   /* the bar theme: no case strip here; the pinned bar (LB, above) is the stack. Each pack, once its
-     line is read, shrinks up into its own plate's place on it and is gone as the plate slides on. */
-  var BARM=!rowEl&&!!LB;
+     line is read, shrinks up onto the pinned bar and lands beside its own plate as the plate slides on:
+     this pack is that plate. The pinned bar is drawn over the stage, so for that part of the way the
+     pack is a copy in the bar's own layer (.lbt), laid exactly over it, which waits by its plate a
+     moment and goes as the next beat settles. */
+  var BARM=!rowEl&&!!LB,pinEl=BARM?$('#lbpin'):null,tags=null,tp={keys:{}};
   if(BARM)cats=LB.cats;
-  parts.forEach(function(p){
+  parts.forEach(function(p,i){
     if(p.kind!=='prod')return;
     var go=$('.st-go',p.b),m=go&&/category-([a-z-]+)\.html/.exec(go.getAttribute('href')),c=m?cats.indexOf(m[1]):-1;
-    p.packs.forEach(function(k){k.g=ITEMS.length;k.c=c;ITEMS.push(k)});
+    p.packs.forEach(function(k){k.g=ITEMS.length;k.c=c;k.bi=i;ITEMS.push(k)});
   });
   ITEMS.forEach(function(k){   /* packs that share a compartment stand side by side in it */
     var mates=ITEMS.filter(function(o){return o.c===k.c});
     k.n=mates.length;k.j=mates.indexOf(k);
   });
+  if(pinEl){   /* the copies: no picture is asked for until the story is near (measure, below) */
+    tags=document.createElement('div');tags.className='lbpin-tags';
+    ITEMS.forEach(function(k){var t=document.createElement('img');t.className='lbt';t.alt='';t.decoding='async';k.tag=t;tags.appendChild(t)});
+    pinEl.appendChild(tags);
+  }
   function measure(){
     w=stage.offsetWidth;sh=stage.offsetHeight;
-    if(BARM){   /* the plates' places on the pinned bar, in the stage's frame once it holds (its top at 0) */
+    if(BARM){   /* each pack's place beside its plate on the pinned bar, in the stage's frame once it holds (its top at 0) */
       LB.measure();
-      var s0=stage.getBoundingClientRect();
-      geo={items:ITEMS.map(function(k){var b=k.pack.getBoundingClientRect(),P=LB.target(cats[k.c]||cats[0]);
-        return {cx:b.left+b.width/2-s0.left,cy:b.top+b.height/2-s0.top,B:b.width||1,tx:P.x-s0.left,ty:P.y,S:P.h*1.7}})};
+      var s0=stage.getBoundingClientRect(),P0=null;
+      geo={items:ITEMS.map(function(k){var b=k.pack.getBoundingClientRect(),P=LB.target(cats[k.c]||cats[0]),
+          S=(P.bot-P.top)*1.1,m=Math.min(b.width,b.height)||1;   /* a square picture shows at the box's smaller side */
+        P0=P.top;
+        /* it stands on the pinned bar's foot (a pack's picture ends about 90% down its square), just
+           before its "+ name", which comes up as its plate goes on; a pair side by side */
+        return {cx:b.left+b.width/2-s0.left,cy:b.top+b.height/2-s0.top,W:b.width,H:b.height,
+                tx:P.cap-S*(.3+(k.n-1-k.j)*.46)-s0.left,ty:P.bot-2-S*.4,sc:S/m}})};
+      if(tags)ITEMS.forEach(function(k){   /* each copy on its pack's own box, in the pinned bar's frame */
+        var G=geo.items[k.g],t=k.tag.style;
+        t.left=f(G.cx-G.W/2+s0.left,1)+'px';t.top=f(G.cy-G.H/2-P0,1)+'px';t.width=f(G.W,1)+'px';t.height=f(G.H,1)+'px';
+        if(!k.tag.getAttribute('src'))k.tag.src=k.img.currentSrc||k.img.src;
+      });
+      tp.keys={};
       return;
     }
     var s=stage.getBoundingClientRect(),rx=rowEl.offsetLeft,ry=rowEl.offsetTop,rw=rowEl.offsetWidth,rh=rowEl.offsetHeight,
@@ -1912,6 +1938,11 @@ var LB=null;
      lifts away from there. */
   var DROP={from:2.4,lift:.08,dip:.05,lean:8,hop:22};
   function lerp(a,b,t){return a+(b-a)*t}
+  function fly(k,G,q){   /* the bar theme's leaving: from its rest up to its place beside its plate, on a small arc */
+    var eb=smooth(Math.min(q,1)),rp=k.rx*w/100;
+    return {x:lerp(rp,G.tx-G.cx,eb),y:lerp(0,G.ty-G.cy,eb)-Math.sin(Math.PI*eb)*DROP.hop,s:lerp(k.rs,G.sc,eb),rot:lerp(k.tilt,0,eb)};
+  }
+  function mv(x,y,rx,rot,s){return 'translate3d('+f(x,1)+'px,'+f(y,1)+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotate('+f(rot,2)+'deg) scale('+f(s,3)+')'}
   function drop(p,k,i,u,q){
     var G=geo&&geo.items[k.g],land=clamp(u/.8),g=land*land,rp=k.rx*w/100,x,y,s,rot,rx=0,op=1,near=0;
     if(!G)return 0;
@@ -1921,18 +1952,16 @@ var LB=null;
       s=u<.8?k.rs*(1+(DROP.from-1)*(1-g)):k.rs*(1-DROP.dip*Math.sin(Math.PI*clamp((u-.8)/.2)));
       x=rp;y=-DROP.lift*sh*(1-g);rot=k.tilt+DROP.lean*(1-g);rx=10*(1-g);
       op=smooth(clamp(land/.6));near=Math.pow(clamp((u-.55)/.25),2);   /* from nothing at the lens to solid 60% of the way down */
-    }else if(BARM){                                   /* up into its plate's place on the pinned bar, fading as the plate goes on */
-      var eb=smooth(Math.min(q,1));
-      x=lerp(rp,G.tx-G.cx,eb);y=lerp(0,G.ty-G.cy,eb)-Math.sin(Math.PI*eb)*DROP.hop;s=lerp(k.rs,G.S/G.B,eb);rot=lerp(k.tilt,0,eb);
-      op=1-smooth(clamp((q-.74)/.26));             /* nearly there, and going under the pinned bar, before it fades */
+    }else if(BARM){                                   /* up beside its plate on the pinned bar; its copy there (.lbt) takes over */
+      var F=fly(k,G,q);x=F.x;y=F.y;s=F.s;rot=F.rot;
+      op=1-smooth(clamp((q-.74)/.26));             /* nearly there, and under the pinned bar, where only the copy is seen */
     }else if(q<1){
       var e=smooth(q);
       x=lerp(rp,sx,e);y=lerp(0,sy,e)-Math.sin(Math.PI*e)*DROP.hop;s=lerp(k.rs,sS,e);rot=lerp(k.tilt,0,e);
     }else{
       x=sx;y=sy;s=sS;rot=0;op=C.op;                     /* in its compartment: it goes where the case goes */
     }
-    put(p,k.img,'i'+i,'translate3d('+f(x,1)+'px,'+f(y,1)+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotate('+
-      f(rot,2)+'deg) scale('+f(s,3)+')',f(op,3));
+    put(p,k.img,'i'+i,mv(x,y,rx,rot,s),f(op,3));
     /* the shadow keeps to the floor under its rest, grows and darkens on touchdown, and goes with it */
     put(p,k.shade,'s'+i,'translate3d('+f(rp,1)+'px,0,0) scale('+f(k.rs*(.55+.45*near+.08*Math.sin(Math.PI*clamp((u-.8)/.2))),3)+')',
       f(Math.min(1,near*(1+.25*Math.sin(Math.PI*clamp((u-.8)/.2))))*(1-clamp(q*3)),3));
@@ -2011,6 +2040,14 @@ var LB=null;
       }
     });
     parts.forEach(function(p,i){var on=i===best;if(on!==p.on){p.on=on;p.b.classList.toggle('is-on',on)}});
+    /* the copies on the pinned bar: each rides over its pack from the moment it leaves, lands beside
+       its plate, waits there through the rest of the change and goes as the next beat's words settle */
+    if(tags&&geo)ITEMS.forEach(function(k){
+      var i=k.bi,ko=(x-at[i]-(HOLD[i]||1))/T,qj=clamp((clamp((ko-.1)/.4)-k.off)/(1-k.off)),G=geo.items[k.g];
+      if(qj<=0||ko>=1.28){put(tp,k.tag,'t'+k.g,'none','0');return}
+      var F=fly(k,G,qj),gone=smooth(clamp((ko-1.02)/.26));
+      put(tp,k.tag,'t'+k.g,mv(F.x,F.y,0,F.rot,F.s*(1-.18*gone)),f(smooth(clamp(qj/.12))*(1-gone),3));
+    });
     /* his plates: each slides on as its pack arrives at the bar, in the change out of its beat */
     if(BARM)LB.peter(parts.reduce(function(ps,p,i){
       if(p.kind==='prod'){var ko=i<N-1?clamp((x-at[i]-(HOLD[i]||1))/T):0;ps.push(smooth(clamp((clamp((ko-.1)/.4)-.62)/.36)))}
@@ -2037,7 +2074,7 @@ var LB=null;
   sec.classList.add('is-live');
   measure();now();
   addEventListener('scroll',wake,{passive:true});
-  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});cp.keys={};now()});
+  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});cp.keys={};tp.keys={};now()});
   new IntersectionObserver(function(es){near=es[0].isIntersecting;if(near){measure();now()}},
     {rootMargin:'200px 0px'}).observe(run);
   /* a link reached by keyboard brings its own beat on screen, where its line stands */
@@ -2131,17 +2168,42 @@ var LB=null;
     var t=ctx.currentTime;
     note(1318.5,t,.46,.08,'sine',bus);note(3639,t,.16,.015,'sine',bus);note(1975.5,t+.07,.42,.055,'sine',bus);
   }
+  /* the bar's two, a plate going on and coming off. The thud is below the bus's 220Hz high-pass, so it
+     has its own path to the speakers (still behind the mute: every sound here checks `on` first) */
+  var low=null;
+  function lowBus(){if(!low){low=ctx.createGain();low.gain.value=.5;low.connect(ctx.destination)}return low}
+  function thud(at,f0,f1,dur,vol,out){   /* a sine that drops as it dies: the weight of it */
+    var o=ctx.createOscillator(),g=ctx.createGain();
+    o.type='sine';o.frequency.setValueAtTime(f0,at);o.frequency.exponentialRampToValueAtTime(f1,at+dur*.7);
+    g.gain.setValueAtTime(.0001,at);g.gain.linearRampToValueAtTime(vol,at+.004);g.gain.exponentialRampToValueAtTime(.0001,at+dur);
+    o.connect(g);g.connect(out);o.start(at);o.stop(at+dur+.02);
+  }
+  function clank(){   /* a plate going on: a low thud, the rubber's knock and a short ring of the steel sleeve, ~0.35s */
+    if(!on)return;wake();
+    var t=ctx.currentTime,L=lowBus();
+    thud(t,140,48,.24,.5,L);thud(t,260,150,.1,.14,L);   /* the second is the body a phone's speaker can play */
+    burst(t,.05,.3,'lowpass',1100,L);
+    [[1210,.045,.3],[1837,.03,.22],[2764,.02,.15],[4011,.01,.09]].forEach(function(r){note(r[0],t+.006,r[2],r[1],'sine',bus)});
+  }
+  function unclank(){   /* a plate coming off: softer, a knock and the slide off the sleeve, ~0.25s */
+    if(!on)return;wake();
+    var t=ctx.currentTime,L=lowBus();
+    thud(t,120,70,.16,.2,L);
+    var fl=burst(t+.02,.16,.035,'bandpass',2600);fl.Q.value=1.4;
+    note(1520,t+.03,.12,.014,'sine',bus);
+  }
   var sounds={
     tap:function(){tick(1180,.09,.10)},          /* links, cards, options */
     go:function(){tick(760,.16,.12,'sine')},      /* primary buttons */
     isle:function(){tick(430,.22,.13,'sine')},    /* an island, or a lid of the case, opening */
     soft:function(){tick(1560,.05,.045)},         /* small controls */
-    can:can,level:level,chime:chime               /* the product card opening (#pcard, by family) */
+    can:can,level:level,chime:chime,              /* the product card opening (#pcard, by family) */
+    clank:clank,unclank:unclank                   /* "Load this plate" and "Take it off the bar" (the rack's own event) */
   };
   doc.addEventListener('aspire:sfx',function(e){if(sounds[e.detail])sounds[e.detail]()});
   doc.addEventListener('pointerdown',function(e){
     var t=e.target.closest('a,button,.chip');
-    if(!t||t.id==='sound-toggle'||t.classList.contains('bay-go'))return;   /* a pack: its card has its own sound */
+    if(!t||t.id==='sound-toggle'||t.classList.contains('bay-go')||t.classList.contains('rk-load'))return;   /* a pack: its card has its own sound; the load button, its clank */
     if(t.closest('.isle,.bay-lid'))return sounds.isle();
     if(t.classList.contains('btn'))return sounds.go();
     if(t.classList.contains('icon-btn')||t.classList.contains('chip'))return sounds.soft();

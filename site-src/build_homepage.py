@@ -112,9 +112,11 @@ CASE_PICKS = 3  # packs an open compartment shows: one per family, in the shelf'
 # loaded larger plates nearest the collar. The first five ranks are Peter's stack in the order his
 # story loads it, so his bar builds outward and never reshuffles; the two he does not take come last.
 # The text on a plate is white or ink, whichever the build finds clears 4.5:1 (it stops if neither does).
+# The colours are a satin rubber: Recovery is the XS blue taken down to a bumper plate's (the button's
+# --blue read as a toy on a plate) and Fat Loss a shade deeper, so white clears 4.5:1 with the face's light on it.
 PLATES = {
-    'recovery': ('#3340B8', 4), 'hydration': ('#7FA7B0', 2), 'energy-focus': ('#E2C8AE', 3),
-    'protein': ('#1E262F', 0), 'fat-loss': ('#A5664A', 5), 'daily-foundations': ('#6B5646', 1),
+    'recovery': ('#3D4794', 4), 'hydration': ('#7FA7B0', 2), 'energy-focus': ('#E2C8AE', 3),
+    'protein': ('#1E262F', 0), 'fat-loss': ('#975D44', 5), 'daily-foundations': ('#6B5646', 1),
     'skin-redefined': ('#D6D4C9', 6),
 }
 # Peter's stack, in the order #story loads it; it must match the shelves his five pack beats link to
@@ -658,8 +660,8 @@ def main():
                 f'          <li><button class="rk-plate" type="button" id="rk-{slug_}" aria-pressed="false" aria-controls="rk-p-{slug_}" '
                 f'data-cat="{slug_}" data-rank="{rank}" style="--c:{col};--t:{plate_ink(col)}">'
                 f'<span class="rk-disc" aria-hidden="true"><span class="rk-hole"></span></span>'
-                f'<span class="rk-name">{name}</span><span class="rk-num" aria-hidden="true">{i + 1:02d}</span>'
-                f'<span class="rk-on">On bar</span></button></li>')
+                f'<span class="rk-name">{name}</span><span class="rk-line" aria-hidden="true">{SHELF_LINE[slug_]}</span>'
+                f'<span class="rk-on">On the bar</span></button></li>')
             packs = case_picks(slug_, fams)
             names_ = [pr['name'] for pr in packs]
             cells = '\n'.join(
@@ -688,9 +690,15 @@ def main():
     shelves = {'ring': ring_section, 'strip': strip_section, 'case': case_section, 'bar': rack_section}[SHELF_VIEW]()
     BAR = SHELF_VIEW == 'bar'
     # the story's five pack beats link to Peter's shelves; the bar theme loads his plates in that order
-    story_cats = re.findall(r'class="tlink st-go" href="category-([a-z-]+)\.html"', open(SRC).read())
+    story_src = open(SRC).read()
+    story_cats = re.findall(r'class="tlink st-go" href="category-([a-z-]+)\.html"', story_src)
+    # each of those beats' first pack (the one "That's my stack" shows beside its plate), by shelf
+    story_pack = {m.group(2): m.group(1) for m in re.finditer(
+        r'<li class="st-beat[^"]*" data-kind="prod">.*?<img src="([^"]+)".*?class="tlink st-go" href="category-([a-z-]+)\.html"', story_src, re.S)}
     if BAR and story_cats != [c for c, _ in PETER]:
         raise SystemExit(f"PETER: the story's pack beats link {story_cats}, not {[c for c, _ in PETER]}")
+    if BAR and sorted(story_pack) != sorted(c for c, _ in PETER):
+        raise SystemExit(f"PETER: found a pack picture for {sorted(story_pack)} in the story's pack beats, not for each of {[c for c, _ in PETER]}")
     bar_bits = {k: '' for k in ('{{HTML_CLASS}}', '{{HERO_BAR}}', '{{PIN}}', '{{ARC_BAR}}', '{{MYSTACK}}')}
     bar_bits.update({f'{{{{STEP_{i + 1}}}}}': '' for i in range(len(PETER))})
     if BAR:
@@ -713,7 +721,8 @@ def main():
                             '      <h2 class="grow" id="mys-title">That’s my stack.</h2>\n'
                             '      <div class="mys-bar bbx grow" style="--d:1">' + barbell('bb-dk bb-big', [c for c, _ in PETER]) + '</div>\n'
                             '      <ul class="mys-key grow" style="--d:2" aria-label="The plates on it">'
-                            + ''.join(f'<li><i style="--c:{PLATES[c][0]}"></i>{n}</li>' for c, n in pn) + '</ul>\n'
+                            + ''.join(f'<li><span class="mys-th"><img src="{story_pack[c]}" alt="" loading="lazy" decoding="async" width="96" height="96"></span>'
+                                      f'<span class="mys-n"><i style="--c:{PLATES[c][0]}"></i>{n}</span></li>' for c, n in pn) + '</ul>\n'
                             '      <p class="mys-build grow" style="--d:2">Build yours.</p>\n'
                             '      <!-- DRAFT-COPY --><p class="mys-sub grow" style="--d:3">Half an hour, free. Your macros, what you already take, and the smallest stack that moves your goal.</p>\n'
                             '      <div class="mys-acts grow" style="--d:3"><a class="btn" href="#macros">Work out your macros</a>'
