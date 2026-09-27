@@ -466,205 +466,104 @@ a.how-step:active{opacity:.7}
   .sample-sec .qc-form{grid-column:1 / 6;grid-row:2;align-self:start}
   .qc .btn{width:auto}
 }
-/* The sample form in two steps. Everything here is under #sample, so the consult's card, chips
-   and fields, which the sample form borrows, never change. Without script nothing is hidden:
-   the progress cue, Next, Back and the recap stay [hidden], and it is one form. */
+/* The free sample (#sample) reads as a note to Peter: a fill-in-the-blank sentence in the display
+   type, in two short steps with script. Every field keeps its real label, visually hidden, and the
+   sentence around it is aria-hidden. The blanks grow as they fill (the script sizes them), the
+   chips sit in the sentence as words. All of it is under #sample, so the consult's card, chips and
+   fields, which this form borrows, never change. Without script nothing is hidden: one form. */
 #sample-form.s-two[data-step="1"] #s-step2,#sample-form.s-two[data-step="2"] #s-step1{display:none}
-#sample .s-step{display:grid;gap:22px;min-width:0}
+#sample .c-card{position:relative;border-radius:30px;background:var(--chalk);padding:40px 22px 22px;
+  box-shadow:inset 0 0 0 2px var(--ink),8px 8px 0 var(--teal)}
+#sample .btn{border-radius:999px}
+#sample .s-step{display:block;min-width:0;font:400 28px/1.62 var(--display);color:var(--ink)}
 #sample .s-step:focus{outline:none}
-#sample .s-say,#sample .s-opt-a,#sample .s-opt-d,#sample .s-recap-h,#sample .s-ic{display:none}
-#sample .s-opt b{font-weight:inherit}
-#sample .s-ps{display:contents}              /* A's "P.S." line: a line of its own there, nothing elsewhere */
-.s-mir{position:absolute;left:-9999px;top:0;visibility:hidden;white-space:pre;pointer-events:none}
-/* "1 of 2": two short bars and the count, in running text. Deliberately not the outlined
-   uppercase tag the old "Step n of 4" marks were. */
-.s-prog{display:flex;align-items:center;gap:10px;font:600 13px/1 var(--sans);color:var(--text)}
-.s-prog-bar{display:flex;gap:4px}
-.s-prog-bar i{width:22px;height:4px;border-radius:2px;background:rgba(30,38,47,.16)}
-.s-prog-bar i:first-child,#sample-form[data-step="2"] .s-prog-bar i{background:var(--teal)}
+#sample .s-say{font-weight:800;font-stretch:75%;letter-spacing:-.005em}
+#sample .c-q{display:contents}
+#sample .s-ps{display:block}
+#sample .c-q legend,#sample .c-field label{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* the choices, as words in the sentence: dashed until picked, then a teal pill knocked askew */
+#sample .chips{display:inline}
+#sample .chip{display:inline-flex;vertical-align:baseline}
+#sample .chip span{min-height:44px;padding:0 .3em;border:2px dashed rgba(30,38,47,.34);border-radius:999px;
+  background:transparent;font:800 28px/1 var(--display);font-stretch:75%;color:var(--text)}
+#sample .chip input:checked + span{background:var(--teal);border:2px solid var(--ink);color:var(--chalk);
+  transform:rotate(-2deg);box-shadow:3px 3px 0 var(--ink)}
+@media (hover:hover){
+  #sample .chip:hover span{transform:none;color:var(--ink);border-color:var(--ink)}
+  #sample .chip:hover input:checked + span{transform:rotate(-2deg);color:var(--chalk)}
+}
+#sample .chip input:focus-visible + span{outline:3px solid var(--blue);outline-offset:3px}
+#sample .s-by .chip + .chip::before,#sample .s-deliv .chip + .chip::before{content:"/" / "";padding:0 .12em;
+  font:800 28px/44px var(--display);font-stretch:75%;color:rgba(30,38,47,.35)}
+#sample .s-deliv .chip + .chip::before{content:"or" / "";padding:0 .22em;color:var(--ink)}
+/* the full stop rides on the last choice, so a narrow line can never strand it on its own */
+#sample .s-deliv .chip + .chip::after{content:"." / "";padding-left:.06em;font-weight:800;font-stretch:75%;line-height:44px;color:var(--ink)}
+/* the blanks: a field and its error stacked in one inline box, so the sentence runs on after it */
+#sample .c-field{display:inline-flex;flex-direction:column;vertical-align:baseline;gap:4px;max-width:100%}
+#sample .c-field input,#sample .c-field textarea{min-width:4.4em;max-width:100%;border:0;border-radius:0;box-shadow:none;
+  field-sizing:content;font:800 28px/1 var(--display);font-stretch:75%;color:var(--blue);-webkit-appearance:none;appearance:none}
+#sample .c-field input{height:46px;padding:0 5px;border-bottom:3px solid var(--teal);background:transparent}
+#sample .c-field input::placeholder,#sample .c-field textarea::placeholder{color:transparent}
+#sample .c-field[data-by] input,#sample .s-f-item textarea{min-width:6.4em}
+#sample .c-field input:focus{outline:none;background:rgba(51,64,184,.08);border-bottom-color:var(--blue);box-shadow:0 3px 0 var(--blue)}
+#sample .c-field input[aria-invalid="true"]{border-bottom-color:#9B2C1F;background:rgba(155,44,31,.07);box-shadow:none}
+/* the product blank is a textarea so a long name wraps: every line gets its own underline */
+#sample .c-field textarea{--u:var(--teal);display:block;height:46px;padding:4px 5px 0;resize:none;overflow:hidden;
+  line-height:42px;overflow-wrap:break-word;background:repeating-linear-gradient(transparent 0 39px,var(--u) 39px 42px) content-box}
+#sample .c-field textarea:focus{--u:var(--blue);outline:none;background-color:rgba(51,64,184,.08)}
+#sample .c-field textarea[aria-invalid="true"]{--u:#9B2C1F;background-color:rgba(155,44,31,.07)}
+#sample .s-full + .s-say{display:none}
+/* no script: both contact blanks are there at once, so each shows its label above it */
+html:not(.js) #sample .c-field[data-by]{display:flex;margin:6px 0}
+html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:auto;margin:0;overflow:visible;clip:auto;
+  white-space:normal;font:600 13px/1.3 var(--sans);color:var(--text)}
+#sample .c-field .s-err{contain:inline-size;font-size:14px;line-height:1.35;font-stretch:100%}
+#sample .s-hint{font:400 14px/1.4 var(--sans)}
+#sample .s-step > .s-hint{margin-top:4px}
+#sample .s-deliv .s-hint,#sample .s-deliv .s-err{margin:4px 0 6px}
+/* what matches the product blank, from the datalist: tap one, or walk them with the arrow keys */
+#sample .s-sugg{list-style:none;margin:10px 0 2px;padding:0;display:grid;gap:6px;font:600 15px/1.3 var(--sans)}
+#sample .s-sugg li{display:flex;align-items:center;min-height:44px;padding:8px 16px;border-radius:22px;cursor:pointer;
+  background:#fff;box-shadow:inset 0 0 0 1.5px rgba(30,38,47,.22);color:var(--ink)}
+#sample .s-sugg li[aria-selected="true"]{background:var(--teal);color:var(--chalk);box-shadow:none}
+@media (hover:hover){#sample .s-sugg li:hover{box-shadow:inset 0 0 0 2px var(--ink)}}
+#sample .s-step > .btn{margin-top:16px}
+#sample .s-checks,#sample .s-acts,#sample .s-step > .s-err{margin-top:22px}
+#sample .s-next{margin-top:20px}
+#sample .c-fine{margin-top:18px;line-height:1.5}
+#sample .s-check input{width:24px;height:24px}
 .s-next-btn .ic{margin-right:-4px}
 #sample-form .s-acts{display:flex;gap:10px}
 #sample-form .s-acts .btn{flex:1 1 auto;width:auto}
 #sample-form .s-acts .s-back{flex:none;gap:6px;padding:0 18px}
-/* step 1, folded */
-.s-recap{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:rgba(0,46,59,.06)}
+.s-mir{position:absolute;left:-9999px;top:0;visibility:hidden;white-space:pre;pointer-events:none}
+/* step 1, folded to a line at the top of step 2 */
+.s-recap{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px;padding:0 0 12px;border-bottom:2px dashed rgba(30,38,47,.22)}
 .s-recap-t{flex:1;min-width:0;margin:0;font:400 15px/1.45 var(--sans);color:var(--ink);overflow-wrap:anywhere}
 .s-recap-t b{font-weight:700}
 .s-edit{flex:none;min-height:44px;margin:-12px -6px -12px 0;padding:0 6px;border:0;background:none;cursor:pointer;
   font:600 15px/1 var(--sans);color:var(--teal);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
-
-/* ---- B: today's form, softened. Rounded, slightly inset fields with floating labels, a teal
-   focus glow, Text/Email as one segmented toggle, drop-off and mail as two tiles. ---- */
-#sample.form-b .c-card{border-radius:24px 24px 12px 12px;background:rgba(248,247,242,.97);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 0 0 1px rgba(30,38,47,.07),0 26px 50px -30px rgba(0,30,39,.6)}
-#sample.form-b .btn{border-radius:14px}
-#sample.form-b .s-step{gap:18px}
-#sample.form-b .c-field{position:relative;gap:6px}
-#sample.form-b .c-field label{position:absolute;z-index:1;left:15px;top:29px;max-width:calc(100% - 30px);overflow:hidden;
-  white-space:nowrap;text-overflow:ellipsis;pointer-events:none;font:500 16px/1.2 var(--sans);color:var(--text);
-  transform:translateY(-50%);transform-origin:0 50%;transition:transform .18s cubic-bezier(.2,.7,.2,1)}
-#sample.form-b .c-field:focus-within label,#sample.form-b .c-field:has(input:not(:placeholder-shown)) label{
-  transform:translateY(calc(-50% - 13px)) scale(.8);color:var(--ink)}
-#sample.form-b .c-field input{height:58px;padding:22px 15px 6px;border:1px solid rgba(30,38,47,.13);border-radius:13px;
-  background:rgba(30,38,47,.045);box-shadow:inset 0 1px 3px rgba(0,30,39,.1);transition:box-shadow .18s,border-color .18s,background .18s}
-#sample.form-b .c-field input::placeholder{color:transparent}
-#sample.form-b .c-field input:focus::placeholder{color:rgba(65,83,101,.75)}
-#sample.form-b .c-field input:focus{border-color:var(--teal);background:#fff;
-  box-shadow:0 0 0 4px rgba(0,46,59,.17),0 0 18px 2px rgba(0,46,59,.12)}
-#sample.form-b .c-field input[aria-invalid="true"]{border-color:#9B2C1F;background:rgba(155,44,31,.05);box-shadow:0 0 0 3px rgba(155,44,31,.14)}
-#sample.form-b .s-by .chips{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:14px;
-  background:rgba(30,38,47,.06);box-shadow:inset 0 1px 3px rgba(0,30,39,.1)}
-#sample.form-b .s-by .chip{display:flex}
-#sample.form-b .s-by .chip span{width:100%;justify-content:center;border:0;border-radius:10px;background:transparent}
-#sample.form-b .s-by .chip input:checked + span{background:var(--teal);transform:none;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 6px 12px -6px rgba(0,30,39,.7)}
-#sample.form-b .s-by .chip:hover span{transform:none}
-#sample.form-b .s-deliv .chips{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-#sample.form-b .s-opt{display:flex}
-#sample.form-b .s-opt span{width:100%;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:3px;
-  min-height:112px;padding:14px 14px 14px;border-radius:14px;border-color:rgba(30,38,47,.14);background:rgba(255,255,255,.6)}
-#sample.form-b .s-opt .s-ic{display:block;width:26px;height:26px;margin-bottom:8px;color:var(--teal)}
-#sample.form-b .s-opt-d{display:block;font:400 13px/1.35 var(--sans);color:var(--text)}
-#sample.form-b .s-opt span::before{content:"";position:absolute;top:13px;right:13px;width:18px;height:18px;border-radius:50%;
-  box-shadow:inset 0 0 0 1.5px rgba(30,38,47,.3)}
-#sample.form-b .s-opt input:checked + span{background:var(--teal);border-color:var(--teal);color:var(--chalk)}
-#sample.form-b .s-opt input:checked + span::before{background:var(--sand);
-  box-shadow:inset 0 0 0 5px var(--sand),inset 0 0 0 9px var(--teal)}
-#sample.form-b .s-opt input:checked + span .s-ic{color:var(--sand)}
-#sample.form-b .s-opt input:checked + span .s-opt-d{color:var(--on-dark)}
-#sample.form-b .s-recap{border-radius:14px}
-#sample.form-b .s-check input{border-radius:6px}
-#sample.form-b .qc-form{border-radius:18px}
-
-/* ---- C: a checkout. Step 1 is one bordered stack with a glyph on each row, the delivery a
-   pair of radio cards, and step 1 comes back as an order-summary recap at the top of step 2. ---- */
-#sample.form-c .c-card{border-radius:18px;background:rgba(255,255,255,.97);padding:22px 18px 24px;
-  box-shadow:0 0 0 1px rgba(30,38,47,.1),0 22px 44px -30px rgba(0,30,39,.55)}
-#sample.form-c .btn{border-radius:10px}
-#sample.form-c .s-prog{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}
-#sample.form-c .s-prog-bar{display:grid;grid-template-columns:1fr 1fr;gap:4px}
-#sample.form-c .s-prog-bar i{width:auto}
-#sample.form-c #s-step1{gap:0}
-#sample.form-c .s-next-btn{margin-top:20px}
-#sample.form-c .c-field,#sample.form-c .s-by{position:relative;display:grid;grid-template-columns:22px minmax(0,1fr);
-  column-gap:14px;row-gap:2px;align-items:center;padding:11px 16px 12px;background:#fff;
-  border:1px solid rgba(30,38,47,.16)}
-#sample.form-c #s-step1 > :not(.s-f-name){border-top:0}
-#sample.form-c #s-step1 > :not(.s-f-name)::before{content:"";position:absolute;top:0;left:52px;right:0;height:1px;background:rgba(30,38,47,.12)}
-#sample.form-c .s-f-name{border-radius:14px 14px 0 0}
-#sample.form-c .s-f-item,#sample.form-c .s-f-note{border-radius:0 0 14px 14px}
-#sample.form-c .s-f-note{border-radius:14px}
-#sample.form-c .c-field:focus-within{z-index:1;box-shadow:0 0 0 2px var(--teal)}
-#sample.form-c .s-ic{display:block;width:22px;height:22px;color:var(--teal)}
-#sample.form-c .c-field .s-ic{grid-column:1;grid-row:1 / span 2}
-#sample.form-c .c-field label{grid-column:2;font:600 13px/1.2 var(--sans);color:var(--text)}
-#sample.form-c .c-field input{grid-column:2;height:30px;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
-#sample.form-c .c-field input:focus{box-shadow:none}
-#sample.form-c .c-field input::placeholder{color:rgba(65,83,101,.6)}
-#sample.form-c .c-field .s-hint,#sample.form-c .c-field .s-err{grid-column:2}
-#sample.form-c .c-field .s-hint{font-size:13px}
-#sample.form-c .c-field:has(input[aria-invalid="true"]){background:#FCF4F2}
-#sample.form-c .c-field:has(input[aria-invalid="true"]) .s-ic{color:#9B2C1F}
-#sample.form-c .s-by .s-ic{grid-column:1;grid-row:1;align-self:center}
-#sample.form-c .s-by legend{float:left;grid-column:2;grid-row:1;margin:0;font:600 13px/1.2 var(--sans);color:var(--text)}
-#sample.form-c .s-by .chips{grid-column:2;display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:6px;padding:3px;
-  border-radius:10px;background:rgba(30,38,47,.06)}
-#sample.form-c .s-by .chip{display:flex}
-#sample.form-c .s-by .chip span{width:100%;justify-content:center;border:0;border-radius:8px;background:transparent;font-size:14px}
-#sample.form-c .s-by .chip input:checked + span{background:#fff;color:var(--ink);transform:none;
-  box-shadow:0 0 0 1px rgba(30,38,47,.12),0 2px 6px -2px rgba(0,30,39,.35);--sheen:rgba(0,46,59,.1)}
-#sample.form-c .s-by .chip:hover span{transform:none}
-#sample.form-c .s-deliv .chips{display:grid;gap:10px}
-#sample.form-c .s-opt{display:flex}
-#sample.form-c .s-opt span{width:100%;display:grid;grid-template-columns:24px minmax(0,1fr) 22px;column-gap:14px;row-gap:2px;
-  align-items:center;min-height:68px;padding:13px 16px;border-radius:14px;border-color:rgba(30,38,47,.16);background:#fff}
-#sample.form-c .s-opt .s-ic{grid-column:1;grid-row:1 / span 2;width:24px;height:24px}
-#sample.form-c .s-opt-t{grid-column:2;grid-row:1;font:600 15px/1.25 var(--sans);color:var(--ink)}
-#sample.form-c .s-opt-d{display:block;grid-column:2;grid-row:2;font:400 13px/1.35 var(--sans);color:var(--text)}
-#sample.form-c .s-opt span::before{content:"";grid-column:3;grid-row:1 / span 2;width:20px;height:20px;border-radius:50%;
-  box-shadow:inset 0 0 0 1.5px rgba(30,38,47,.3)}
-#sample.form-c .s-opt input:checked + span{background:rgba(0,46,59,.035);color:var(--ink);transform:none;
-  border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal);--sheen:rgba(0,46,59,.1)}
-#sample.form-c .s-opt input:checked + span::before{box-shadow:inset 0 0 0 6px var(--teal)}
-@media (hover:hover){#sample.form-c .s-opt:hover span{transform:none;border-color:var(--teal)}}
-#sample.form-c .s-recap{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 12px;
-  padding:12px 16px 14px;border-radius:14px;background:rgba(0,46,59,.04);box-shadow:inset 0 0 0 1px rgba(30,38,47,.12)}
-#sample.form-c .s-recap-h{display:block;margin:0;font:600 13px/1.2 var(--sans);color:var(--text)}
-#sample.form-c .s-edit{grid-column:2;grid-row:1;margin:-12px -6px -8px 0}
-#sample.form-c .s-recap-t{grid-column:1 / -1;display:grid;gap:6px;font-size:15px}
-#sample.form-c .s-r{display:flex;align-items:center;gap:10px;min-width:0}
-#sample.form-c .s-r .s-ic{width:18px;height:18px;flex:none}
-#sample.form-c .s-r-sep{display:none}
-#sample.form-c .s-r b{font-weight:600}
-#sample.form-c .qc-form{border-radius:14px}
-
-/* ---- A: the form as a note to Peter, a fill-in-the-blank sentence in the display type. Every
-   field keeps its real label, visually hidden, and the sentence around it is aria-hidden. The
-   blanks grow as they fill (the script sizes them); the chips sit in the sentence as words. ---- */
-#sample.form-a .c-card{position:relative;border-radius:30px;background:var(--chalk);padding:44px 22px 26px;
-  box-shadow:inset 0 0 0 2px var(--ink),8px 8px 0 var(--teal)}
-#sample.form-a .btn{border-radius:999px}
-#sample.form-a .s-step{display:block;font:400 28px/1.62 var(--display);color:var(--ink)}
-#sample.form-a .s-say{display:inline;font-weight:800;font-stretch:75%;letter-spacing:-.005em}
-#sample.form-a .c-q{display:contents}
-#sample.form-a .s-ps{display:block}
-#sample.form-a .c-q legend,#sample.form-a .c-field label{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
-  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-#sample.form-a .chips{display:inline}
-#sample.form-a .chip{display:inline-flex;vertical-align:baseline}
-#sample.form-a .chip span{min-height:44px;padding:0 .3em;border:2px dashed rgba(30,38,47,.34);border-radius:999px;
-  background:transparent;font:800 28px/1 var(--display);font-stretch:75%;color:var(--text)}
-#sample.form-a .chip input:checked + span{background:var(--teal);border:2px solid var(--ink);color:var(--chalk);
-  transform:rotate(-2deg);box-shadow:3px 3px 0 var(--ink)}
-@media (hover:hover){
-  #sample.form-a .chip:hover span{transform:none;color:var(--ink);border-color:var(--ink)}
-  #sample.form-a .chip:hover input:checked + span{transform:rotate(-2deg);color:var(--chalk)}
-}
-#sample.form-a .chip input:focus-visible + span{outline:3px solid var(--blue);outline-offset:3px}
-#sample.form-a .s-by .chip + .chip::before{content:"/" / "";padding:0 .12em;font:800 28px/44px var(--display);font-stretch:75%;color:rgba(30,38,47,.35)}
-#sample.form-a .s-opt-t{display:none}
-#sample.form-a .s-opt-a{display:inline}
-#sample.form-a .s-deliv .chip + .chip::before{content:"or" / "";padding:0 .22em;font:800 28px/44px var(--display);font-stretch:75%;color:var(--ink)}
-#sample.form-a .c-field{display:inline-flex;flex-direction:column;vertical-align:baseline;gap:4px;max-width:100%}
-#sample.form-a .c-field input{height:46px;min-width:4.4em;max-width:100%;padding:0 5px;border:0;border-bottom:3px solid var(--teal);
-  border-radius:0;background:transparent;box-shadow:none;font:800 28px/1 var(--display);font-stretch:75%;color:var(--blue)}
-#sample.form-a .c-field input::placeholder{color:transparent}
-#sample.form-a .c-field input::-webkit-calendar-picker-indicator{display:none!important}
-#sample.form-a .c-field[data-by] input,#sample.form-a .s-f-item input{min-width:6.4em}
-#sample.form-a .c-field input:focus{background:rgba(51,64,184,.08);border-bottom-color:var(--blue);box-shadow:0 3px 0 var(--blue)}
-#sample.form-a .c-field input[aria-invalid="true"]{border-bottom-color:#9B2C1F;background:rgba(155,44,31,.07);box-shadow:none}
-#sample.form-a .c-field .s-err,#sample.form-a .c-field .s-hint{contain:inline-size;font-size:14px;line-height:1.35;font-stretch:100%}
-#sample.form-a .c-field .s-hint{font-weight:400}
-#sample.form-a .s-deliv .s-hint,#sample.form-a .s-deliv .s-err{margin:4px 0 6px}
-#sample.form-a .s-step > .btn,#sample.form-a .s-checks,#sample.form-a .s-acts,#sample.form-a .s-next,#sample.form-a .c-fine,
-#sample.form-a .s-step > .s-err{margin-top:24px}
-#sample.form-a .s-next{margin-top:20px}
-#sample.form-a .c-fine{line-height:1.5}
-#sample.form-a .s-recap{margin-bottom:18px;padding:0 0 12px;background:none;border-bottom:2px dashed rgba(30,38,47,.22)}
-#sample.form-a .s-check input{width:24px;height:24px}
-/* the count as a sticker slapped on the card's corner */
-#sample.form-a .s-prog{position:absolute;z-index:1;top:-32px;right:16px;display:grid;place-items:center;width:66px;height:66px;
+/* "1 of 2": a sticker slapped on the card's corner, never the old outlined "Step n of 4" tag */
+.s-prog{position:absolute;z-index:1;top:-32px;right:16px;display:grid;place-items:center;width:66px;height:66px;margin:0;
   border-radius:50%;background:var(--sand);box-shadow:inset 0 0 0 2px var(--ink),3px 3px 0 var(--ink);
   font:800 16px/1 var(--display);font-stretch:75%;color:var(--ink);transform:rotate(-12deg)}
-#sample.form-a .s-prog-bar{display:none}
-#sample.form-a .qc-form{border-radius:24px;box-shadow:inset 0 0 0 2px var(--ink)}
-@media (min-width:768px){
-  #sample.form-a .s-step{font-size:34px}
-  #sample.form-a .chip span,#sample.form-a .c-field input,#sample.form-a .s-by .chip + .chip::before,
-  #sample.form-a .s-deliv .chip + .chip::before{font-size:34px}
+#sample .qc-form{border-radius:24px;box-shadow:inset 0 0 0 2px var(--ink)}
+/* under 360px the note drops two pixels of type and four of margin a side, so a line holds a
+   clause and a blank; it is still the heavy condensed cut, just a size down */
+@media (max-width:359px){
+  #sample .c-card{padding-left:18px;padding-right:18px}
+  #sample .s-step{font-size:26px}
+  #sample .chip span,#sample .c-field input,#sample .c-field textarea,#sample .s-by .chip + .chip::before,
+  #sample .s-deliv .chip + .chip::before{font-size:26px}
 }
-@media (prefers-reduced-motion:reduce){
-  #sample.form-b .c-field label{transition:none}
+@media (min-width:768px){
+  #sample .c-card{padding:52px 36px 34px}
+  #sample .s-step{font-size:34px}
+  #sample .chip span,#sample .c-field input,#sample .c-field textarea,#sample .s-by .chip + .chip::before,
+  #sample .s-deliv .chip + .chip::before{font-size:34px}
 }
 
-/* MOCKUP-ONLY: the A / B / C switch, for Peter's phone */
-.s-mock{display:flex;align-items:center;gap:4px;width:max-content;margin:calc(-1 * var(--sec) + 18px) auto 36px;padding:4px 4px 4px 14px;
-  border-radius:999px;background:var(--ink);color:var(--chalk);font:600 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
-  box-shadow:0 8px 20px -10px rgba(0,0,0,.6)}
-.s-mock span{margin-right:6px;opacity:.7}
-.s-mock a{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;color:var(--chalk);text-decoration:none;font-size:15px;letter-spacing:0}
-.s-mock a[aria-current]{background:var(--sand);color:var(--ink)}
-/* /MOCKUP-ONLY */
 /* the category banner's way to it */
 .cat-sample a{color:var(--sand);font-weight:600;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
 

@@ -528,7 +528,7 @@ if(sform){
      to a one-line recap at the top of step 2 (Edit and Back unfold it, every value kept). The
      swap is opacity and transform only, and none at all under reduced motion. The fetch below
      is untouched: it still reads every field, whichever step is showing. */
-  var ssec=$('#sample'),s1=$('#s-step1'),s2=$('#s-step2'),sNext=$('#s-next'),sBack=$('#s-back'),
+  var s1=$('#s-step1'),s2=$('#s-step2'),sNext=$('#s-next'),sBack=$('#s-back'),
       sStep=function(){return sform.dataset.step==='2'?2:1},
       sStill=function(){return matchMedia('(prefers-reduced-motion: reduce)').matches};
   [$('#s-prog'),sNext,sBack,$('#s-recap')].forEach(function(el){el.hidden=false});
@@ -546,7 +546,6 @@ if(sform){
     var by=sBy();
     $('#s-r-name').textContent=sval('name');
     $('#s-r-how').textContent=(by==='Text'?'text ':'email ')+sval(by==='Text'?'phone':'email');
-    $('#s-r-icon').setAttribute('href',by==='Text'?'#i-phone':'#i-mail');
     $('#s-r-item').textContent=sval('product');
   };
   /* DRAFT-COPY: the two step announcements and the Next error count */
@@ -570,32 +569,64 @@ if(sform){
   sBack.addEventListener('click',sBackTo);
   $('#s-edit').addEventListener('click',sBackTo);
 
-  /* MOCKUP-ONLY: style A's blanks grow with what is typed. A hidden twin in the same type
-     measures the text; CSS min-width and max-width bound the result. */
+  /* The blanks grow with what is typed. A hidden twin in the same type measures the text; CSS
+     min-width and max-width bound it. The product blank is a textarea: once its words are wider
+     than the line it takes the whole line and wraps, a line taller at a time, so nothing typed
+     is ever scrolled out of sight. */
   var sMir=doc.createElement('span');sMir.className='s-mir';sMir.setAttribute('aria-hidden','true');sform.appendChild(sMir);
   var sFit=function(inp){
-    if(!ssec.classList.contains('form-a')){inp.style.width='';return}
     var cs=getComputedStyle(inp);
     ['fontFamily','fontSize','fontWeight','fontStretch','letterSpacing'].forEach(function(k){sMir.style[k]=cs[k]});
     sMir.textContent=inp.value;
-    inp.style.width=Math.ceil(sMir.getBoundingClientRect().width)+14+'px';
+    var w=Math.ceil(sMir.getBoundingClientRect().width)+14;
+    inp.style.width=w+'px';
+    /* wider than the line: it has the whole line, so the full stop after it steps aside */
+    inp.parentNode.classList.toggle('s-full',inp.offsetWidth<w);
+    if(inp.tagName==='TEXTAREA'){inp.style.height='';inp.style.height=inp.scrollHeight+'px'}
   };
-  var sFitAll=function(){$$('.c-field input',sform).forEach(sFit)};
-  /* ?form=a|b|c picks the look (B without it); the pill swaps it in place, so the curtain
-     does not replay, and keeps the address in step so a reload lands on the same one */
-  var sLook=function(o){
-    o=/^[abc]$/.test(o||'')?o:'b';
-    ssec.classList.remove('form-a','form-b','form-c');ssec.classList.add('form-'+o);
-    $$('.s-mock a',ssec).forEach(function(a){if(a.dataset.form===o)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')});
-    sFitAll();
-  };
-  sLook(new URLSearchParams(location.search).get('form'));
+  var sFitAll=function(){$$('.c-field input,.c-field textarea',sform).forEach(sFit)};
+  sFitAll();
   if(doc.fonts)doc.fonts.ready.then(sFitAll);
-  $$('.s-mock a',ssec).forEach(function(a){a.addEventListener('click',function(e){
-    e.preventDefault();sLook(a.dataset.form);
-    var u=new URL(location.href);u.searchParams.set('form',a.dataset.form);history.replaceState(null,'',u);
-  })});
-  /* /MOCKUP-ONLY */
+  addEventListener('resize',sFitAll);
+  /* The product blank: Enter means Next (or takes the highlighted suggestion), a pasted line break
+     becomes a space, and up to five product names that match what is typed show under it, from
+     the page's own datalist. Arrow keys walk them, Escape closes them, a tap takes one. */
+  var sProd=sel('product'),sSug=$('#s-sugg'),sAt=-1,
+      sNames=$$('#sample-products option').map(function(o){return o.value});
+  sProd.setAttribute('aria-autocomplete','list');sProd.setAttribute('aria-controls','s-sugg');
+  var sSugClose=function(){sSug.hidden=true;sSug.textContent='';sAt=-1;sProd.removeAttribute('aria-activedescendant')};
+  var sSugMark=function(i){
+    var li=$$('li',sSug);sAt=i;
+    li.forEach(function(l,k){l.setAttribute('aria-selected',k===i?'true':'false')});
+    sProd.setAttribute('aria-activedescendant',li[i].id);
+  };
+  var sSugPick=function(v){
+    sProd.value=v;sSugClose();sFit(sProd);
+    if(sProd.getAttribute('aria-invalid')==='true'){sProd.setAttribute('aria-invalid','false');$('#s-product-err').textContent=''}
+    sProd.dispatchEvent(new Event('change',{bubbles:true}));
+  };
+  /* DRAFT-COPY: the suggestion announcements */
+  var sSugShow=function(){
+    var v=sProd.value.trim().toLowerCase(),q=v.split(/\s+/).filter(Boolean),was=!sSug.hidden,
+        m=v.length<2?[]:sNames.filter(function(n){n=n.toLowerCase();return n!==v&&q.every(function(w){return n.indexOf(w)>=0})}).slice(0,5);
+    if(!m.length){sSugClose();return}
+    sSug.textContent='';
+    m.forEach(function(n,k){var li=doc.createElement('li');li.id='s-sugg-'+k;li.setAttribute('role','option');
+      li.setAttribute('aria-selected','false');li.textContent=n;sSug.appendChild(li)});
+    sSug.hidden=false;sAt=-1;sProd.removeAttribute('aria-activedescendant');
+    if(!was)say(m.length===1?'One product matches. Arrow down to hear it.':m.length+' products match. Arrow down to hear them.');
+  };
+  sSug.addEventListener('mousedown',function(e){e.preventDefault()});   /* the blank keeps focus */
+  sSug.addEventListener('click',function(e){var li=e.target.closest('li');if(li)sSugPick(li.textContent)});
+  sProd.addEventListener('keydown',function(e){
+    var li=$$('li',sSug);
+    if(e.isComposing)return;
+    if(e.key==='ArrowDown'&&li.length){e.preventDefault();sSugMark((sAt+1)%li.length)}
+    else if(e.key==='ArrowUp'&&li.length){e.preventDefault();sSugMark(sAt<=0?li.length-1:sAt-1)}
+    else if(e.key==='Escape'&&li.length)sSugClose();
+    else if(e.key==='Enter'){e.preventDefault();if(sAt>=0&&li[sAt])sSugPick(li[sAt].textContent);else{sSugClose();sForward()}}
+  });
+  sProd.addEventListener('blur',function(){setTimeout(sSugClose,150)});
   sform.addEventListener('change',function(e){
     if(e.target.name==='contact_by'){sPick();sFitAll()}
     if(sform.dataset.tried)sCheck();            /* once they have tried to send, errors clear as they fix them */
@@ -603,7 +634,11 @@ if(sform){
   });
   /* typing into a flagged field clears its own error; the check itself waits for change or send */
   sform.addEventListener('input',function(e){
-    if(e.target.matches('.c-field input'))sFit(e.target);
+    if(e.target===sProd){
+      if(/[\r\n]/.test(sProd.value))sProd.value=sProd.value.replace(/[\r\n]+/g,' ');
+      sSugShow();
+    }
+    if(e.target.matches('.c-field input,.c-field textarea'))sFit(e.target);
     var t=e.target,d=t.getAttribute('aria-invalid')==='true'&&t.getAttribute('aria-describedby');
     if(!d)return;
     t.setAttribute('aria-invalid','false');
