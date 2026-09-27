@@ -322,6 +322,9 @@ html:not(.js) .mtab{display:none}
 @supports (backdrop-filter:blur(6px)){.c-card{backdrop-filter:blur(10px);background:rgba(244,242,236,.7)}}
 .c-q{margin:0;padding:0;border:0;min-width:0}
 .c-q legend{display:block;padding:0;margin-bottom:10px;font:600 15px/1.3 var(--sans);color:var(--ink)}
+/* the macro calculator's move to the form focuses its first question (or the calendar, once it
+   is up) so the reading position follows; a landing spot, not a control, so no ring, as .mc-q */
+.c-q legend:focus,.c-embed:focus{outline:none}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 /* the label wraps a hidden radio; the span is the pill, so :checked styles a sibling.
    max-width keeps the two long training answers inside the card at 320px: the pill shrinks
