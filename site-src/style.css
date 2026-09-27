@@ -154,6 +154,9 @@ html.locked .mtab{transform:translateY(calc(100% + 2px));visibility:hidden}
 .mtab-call{background:var(--blue);color:#fff}
 .mtab a:active{opacity:.85}
 .mtab a:focus-visible{outline:2px solid var(--sand);outline-offset:-6px}
+/* under 360 the two halves at full tracking are 359px together and the call ran off the right
+   edge; a little less tracking and padding brings them to 312, both whole on a 320 screen */
+@media (max-width:359.98px){.mtab a{padding-inline:12px;letter-spacing:.08em}}
 /* 1024 and up the mast shows its own "Free call"; one call button on screen, never two */
 @media (min-width:1024px){.mtab-call{display:none!important}}
 html:not(.js) .mtab{display:none}
@@ -1359,6 +1362,32 @@ body{background:transparent}
 .no-pour .pod-rank,.no-pour .pod-count{color:var(--teal)}
 .no-pour .pod .p-tag,.no-pour .pod .p-desc{color:var(--text)}
 .no-pour .pod .shot::after{background:radial-gradient(closest-side,rgba(30,38,47,.3),rgba(30,38,47,0))}
+/* ...and it is a compact band, not a podium: the three are cards like the shop's (the same glow
+   behind the pack and shadow under it), each rank on its pack's corner. One row of three from
+   560px; below that a swipe row that bleeds to the screen's edges, where the next card stands
+   half in view so it is plain there is more. The whole band fits one phone screen. */
+.podium-sec.no-pour{margin-top:0;padding-top:var(--sec)}
+.no-pour .sec-head{padding-top:0;margin-bottom:18px}
+.no-pour .podium{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:64%;gap:16px;
+  margin:0 calc(-1 * var(--pad));padding:4px var(--pad) 8px;overflow-x:auto;scroll-snap-type:x mandatory;
+  scroll-padding-inline:var(--pad);scrollbar-width:none;overscroll-behavior-x:contain}
+.no-pour .podium::-webkit-scrollbar{display:none}
+.no-pour .pod{perspective:none;scroll-snap-align:start;min-width:0}
+.no-pour .pod .shot{margin-top:0}
+.no-pour .pod .shot::before{content:"";position:absolute;left:4%;right:4%;top:2%;bottom:6%;z-index:-2;border-radius:50%;
+  background:radial-gradient(58% 52% at 50% 46%,rgba(255,255,255,.72),rgba(255,255,255,0) 78%)}
+.no-pour .pod .shot::after{left:22%;right:22%;bottom:3%;height:7%}
+.no-pour .pod-rank{position:absolute;top:2px;left:0;z-index:2;margin:0;font:800 28px/1 var(--display);font-stretch:72%;letter-spacing:.01em}
+.no-pour .pod-count{margin-top:6px}
+@media (min-width:560px){
+  .no-pour .podium{grid-auto-flow:row;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;
+    margin:0;padding:0;overflow:visible;scroll-snap-type:none}
+}
+@media (min-width:768px){
+  .no-pour .podium{gap:40px}
+  .no-pour .pod .shot{aspect-ratio:4/3}
+  .no-pour .pod-rank{font-size:34px}
+}
 
 /* the stack case, its strip in the story, and the product card: the sand inside a compartment sat
    within a hair of the sand glow over chalk, so it goes a step lighter and takes an inset shadow on

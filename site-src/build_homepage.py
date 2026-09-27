@@ -102,8 +102,9 @@ CAROUSELS = {
 SHELF_VIEW = 'case'
 CASE_PICKS = 3  # packs an open compartment shows: one per family, in the shelf's own order
 
-# The trending band's ground: True scrubs the 150-frame pour behind the podium, False leaves the
-# band plain teal and fetches none of it. The frames and the script stay either way.
+# The trending band's ground: True scrubs the 150-frame pour behind the podium, False makes the
+# band a compact row of three cards on the page's field and fetches none of it (the no-pour rules
+# in style.css). The frames and the script stay either way.
 TRENDING_POUR = False
 
 # DRAFT-COPY for Peter's approval: the one line under the name on the case's product card, one per
@@ -626,6 +627,8 @@ def main():
     if not DEMO:
         os.makedirs(CUTS, exist_ok=True)
     podium = []
+    # the packs tilt toward the pointer over the pour; off it, they are plain cards like the shop's
+    tilt = ' tilt' if TRENDING_POUR else ''
     for i, r in enumerate(bestsellers()[:3]):
         pr = dict(by.get(r['product']) or {})
         if not pr:
@@ -641,7 +644,7 @@ def main():
         count = (f'<p class="pod-count"><span class="pod-num" data-count="{units}">0</span> '
                  f'bought this week</p>') if units.isdigit() else ''
         podium.append(
-            f'        <li class="pod pod-{i + 1}"><a class="card-link tilt" href="{esc(pr["share_link"])}" target="_blank" rel="noopener">'
+            f'        <li class="pod pod-{i + 1}"><a class="card-link{tilt}" href="{esc(pr["share_link"])}" target="_blank" rel="noopener">'
             f'<span class="pod-rank" aria-hidden="true">0{i + 1}</span>'
             f'{shot(pr, lazy=False)}<p class="p-tag">{names.get(cat_of.get(pr["product"]), "Wellness")}</p>'
             f'<h3 class="p-name">{esc(pr["name"])}</h3><p class="p-desc">{esc(pr["desc"])}</p>{count}'
