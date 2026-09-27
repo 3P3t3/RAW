@@ -922,8 +922,8 @@ html:not(.js) .isle{position:static;width:auto;margin:0}
    the sand inside shows a few of that shelf's packs and the way to the shelf. Phones and tablets
    hold the case upright, seven stacked; from 1024 it lies in one row of seven and the open
    compartment takes a wider column. The section's ground is the page's: the case keeps its edge
-   on chalk and on deep teal alike (a sand hairline rim and a soft drop shadow). Without script,
-   or before it runs, every compartment stands open with no lids. */
+   on chalk and on deep teal alike (a sand hairline rim and a soft drop shadow). Without script
+   every compartment stands open with no lids. */
 .case{--lid:color-mix(in srgb,var(--teal) 87%,var(--chalk));--lid-lo:color-mix(in srgb,var(--teal) 95%,var(--chalk));
   --well:color-mix(in srgb,var(--sand) 50%,var(--chalk));--hinge:320ms cubic-bezier(.3,.7,.2,1);
   position:relative;max-width:520px;padding:10px;border-radius:24px;
@@ -972,13 +972,14 @@ html:not(.js) .isle{position:static;width:auto;margin:0}
 /* it arrives closed: the case rises in with the heading (.grow) and its lids settle into place */
 .motion .case.in .lid{animation:lid-settle 560ms cubic-bezier(.2,.7,.2,1) calc(140ms + var(--i) * 45ms) backwards}
 @keyframes lid-settle{from{transform:perspective(640px) rotateX(-9deg) translate3d(0,-3px,0)}}
-/* no script (or not yet): every compartment open, no lids */
-.case:not(.is-live) .lid{display:none}
-.case:not(.is-live) .bay-in[hidden]{display:grid!important}
-.case:not(.is-live) .bay-well{grid-template-rows:1fr}
-.case:not(.is-live) .bay-lid{cursor:default}
-.case:not(.is-live) .bay-name{color:var(--teal)}
-.case:not(.is-live) .bay-note{color:var(--text)}
+/* no script: every compartment open, no lids. Keyed to html.js (set in the head), not to the case's
+   own script, so with script the packs are never fetched before a lid is opened */
+html:not(.js) .lid{display:none}
+html:not(.js) .bay-in[hidden]{display:grid!important}
+html:not(.js) .bay-well{grid-template-rows:1fr}
+html:not(.js) .bay-lid{cursor:default}
+html:not(.js) .bay-name{color:var(--teal)}
+html:not(.js) .bay-note{color:var(--text)}
 @media (prefers-reduced-motion:reduce){.lid,.bay-well,.case-bays,.bay-name,.bay-note{transition:none}}
 @media (min-width:768px){.case{margin-inline:auto}}
 @media (min-width:1024px){

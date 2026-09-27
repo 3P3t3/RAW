@@ -565,7 +565,8 @@ def main():
 def demo_report(page, style):
     """What the demo links that main does not have yet: those files have to ship with it."""
     import subprocess
-    refs = set(re.findall(r'assets/[A-Za-z0-9_./-]+\.[a-z0-9]{2,5}', page + style))
+    # our own files only: relative paths, and BASE-prefixed ones (og:image); not another host's assets/
+    refs = set(re.findall(r'(?<![\w./-])assets/[A-Za-z0-9_./-]+\.[a-z0-9]{2,5}', (page + style).replace(BASE, '')))
     refs |= {'site.webmanifest'} if 'site.webmanifest' in page else set()
     try:
         have = set(subprocess.run(['git', 'ls-tree', '-r', 'main', '--name-only'], cwd=ROOT, check=True,
