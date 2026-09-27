@@ -53,12 +53,149 @@
     </div>
   </section>
 
+  <!-- 3b. The game plan (#how): the path through the page, before anything else asks for attention.
+       Four numbered steps, each linking to where it happens (#macros, #sample, #quick-call; step 3
+       has no section of its own, so it is not a link), then the one thing to do. The same steps
+       are marked "Step n of 4" on the sections themselves (.step-mark). Step 4's words switch
+       with CONSULT_QUICK_URL in build_homepage.py, as the quick-call button does. -->
+  <section class="sec how-sec" id="how" aria-labelledby="how-title">
+    <div class="wrap">
+      <!-- DRAFT-COPY -->
+      <div class="how-head grow">
+        <p class="label">New here?</p>
+        <h2 id="how-title"><span>The game</span> <span>plan</span></h2>
+      </div>
+      <ol class="how-steps">
+        <li class="grow" style="--d:1"><a class="how-step" href="#macros"><span class="how-n" aria-hidden="true">01</span>
+          <span class="how-t">Name your goal.</span>
+          <span class="how-d">Pick what you’re chasing, then get your numbers from the free macro calculator.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li class="grow" style="--d:2"><a class="how-step" href="#sample"><span class="how-n" aria-hidden="true">02</span>
+          <span class="how-t">Sample anything on the shelves.</span>
+          <span class="how-d">On me. Dropped off in Lincoln, or mailed anywhere in the US.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li class="grow" style="--d:3"><div class="how-step"><span class="how-n" aria-hidden="true">03</span>
+          <span class="how-t">Report back.</span>
+          <span class="how-d">A few days in, I’ll ask how you’re getting on. Say what worked and what didn’t, and I’ll tell you what I’d add next, if anything.</span></div></li>
+        <li class="grow" style="--d:4"><a class="how-step" href="#quick-call"><span class="how-n" aria-hidden="true">04</span>
+          <span class="how-t">Make it part of your week.</span>
+          <span class="how-d">{{QUICK_STEP}}, then order through my Amway link if it earns a spot.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+      </ol>
+      <div class="how-go grow">
+        <a class="btn" id="how-go" href="#sample">Pick your free sample</a>
+        <a class="tlink" href="#macros">or run your macros first</a>
+        <p class="how-fine">Sixty seconds of typing. I answer every one myself.</p>
+      </div>
+      <!-- /DRAFT-COPY -->
+    </div>
+  </section>
+
 {{SHELVES}}
+
+  <!-- Free sample: visitors leave their own contact details and Peter reaches out; his phone and
+       email are never shown. Self-contained, so moving it is a cut-and-paste of this block.
+       With script it posts JSON to FormSubmit (_script.html); without, it is a plain POST and
+       FormSubmit sends the visitor back to #sample-sent, which :target shows in style.css.
+       The addresses come from SAMPLE_TO in build_homepage.py. -->
+  <section class="sec sample-sec" id="sample" aria-labelledby="sample-title">
+    <div class="wrap split">
+      <div class="split-text grow">
+        <!-- DRAFT-COPY --><p class="step-mark">Step 2 of 4</p>
+        <p class="label">Free sample</p>
+        <h2 id="sample-title"><span>First one’s</span> <span>on me</span></h2>
+        <p>Pick anything off the shelves and I’ll get you a free sample. Dropped off in Lincoln, or mailed anywhere in the US.</p><!-- /DRAFT-COPY -->
+      </div>
+      <form class="c-card grow" id="sample-form" action="{{SAMPLE_ACTION}}" method="POST" data-endpoint="{{SAMPLE_ENDPOINT}}" style="--d:1">
+        <input type="hidden" name="_subject" value="Sample request · Aspire Health">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="{{SAMPLE_NEXT}}">
+        <!-- the honeypot: people never see or reach it, bots fill it, FormSubmit drops those -->
+        <div class="vh" aria-hidden="true"><label for="s-honey">Leave this empty</label><input id="s-honey" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
+        <!-- DRAFT-COPY -->
+        <div class="c-field"><label for="s-name">Your name</label>
+          <input id="s-name" name="name" type="text" autocomplete="name" required aria-describedby="s-name-err">
+          <p class="s-err" id="s-name-err"></p></div>
+        <fieldset class="c-q">
+          <legend>Text or email?</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="contact_by" value="Text" checked><span>Text me</span></label>
+            <label class="chip"><input type="radio" name="contact_by" value="Email"><span>Email me</span></label>
+          </div>
+        </fieldset>
+        <div class="c-field" data-by="Text"><label for="s-phone">Your phone number</label>
+          <input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="s-phone-err">
+          <p class="s-err" id="s-phone-err"></p></div>
+        <div class="c-field" data-by="Email"><label for="s-email">Your email</label>
+          <input id="s-email" name="email" type="email" autocomplete="email" aria-describedby="s-email-err">
+          <p class="s-err" id="s-email-err"></p></div>
+        <div class="c-field"><label for="s-product">What would you like to try?</label>
+          <input id="s-product" name="product" type="text" list="sample-products" autocomplete="off" required
+                 placeholder="e.g. Grass-Fed Whey, Chocolate" aria-describedby="s-product-hint s-product-err">
+          <p class="s-hint" id="s-product-hint">Not sure? Say so and I’ll suggest something.</p>
+          <p class="s-err" id="s-product-err"></p></div>
+        <datalist id="sample-products">
+{{SAMPLE_PRODUCTS}}
+        </datalist>
+        <fieldset class="c-q" id="s-where" aria-describedby="s-where-err">
+          <legend>Where should it go?</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="delivery" value="Drop it off in Lincoln" required><span>I’m in Lincoln, drop it off</span></label>
+            <label class="chip"><input type="radio" name="delivery" value="Mail it (US)" aria-describedby="s-mail-note"><span>Mail it to me (US)</span></label>
+          </div>
+          <p class="s-hint s-mail-note" id="s-mail-note">No need for your address yet. I’ll get it when I reach out.</p>
+          <p class="s-err" id="s-where-err"></p>
+        </fieldset>
+        <div class="c-field"><label for="s-note">Anything else? <span>Optional</span></label>
+          <input id="s-note" name="note" type="text" autocomplete="off" maxlength="300" placeholder="A flavor you like, a good time to text…"></div>
+        <div class="s-checks">
+          <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this sample.</span></label>
+          <p class="s-err" id="s-consent-err"></p>
+          <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and the odd update after that is fine too. <em>Optional</em></span></label>
+        </div>
+        <button class="btn" type="submit" id="sample-go">Request my sample</button>
+        <p class="s-err" id="sample-fail" tabindex="-1"></p>
+        <ol class="s-next" aria-label="What happens next">
+          <li>You hear from me directly, by text or email, whichever you chose.</li>
+          <li>Local? We pick a drop-off. Going by mail? That’s when I ask for your address.</li>
+          <li>Give it a real try, then give me your honest take. You don’t owe me an order.</li>
+        </ol>
+        <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
+        <!-- /DRAFT-COPY -->
+      </form>
+      <!-- the thank-you takes the form's place: shown by the script after a send, or by
+           :target when FormSubmit sends a no-script visitor back to #sample-sent -->
+      <div class="c-card s-done" id="sample-sent">
+        <!-- DRAFT-COPY --><h3 id="sample-done-title" tabindex="-1">Got it, thank you.</h3>
+        <p>I’ll reach out within a day or two to sort out your sample.</p><!-- /DRAFT-COPY -->
+        <!-- DRAFT-COPY -->
+        <div class="s-step3">
+          <p class="step-mark">Step 3 of 4</p>
+          <p>Give it a few days, then I’ll ask how you’re getting on. Be honest about what worked and what didn’t, and I’ll say what I’d add next, if anything.</p>
+        </div>
+        <div class="qc qc-done">
+          <p class="step-mark">Step 4 of 4</p>
+          <p class="qc-ask">{{QUICK_ASK}}</p>
+          {{QUICK_CALL}}
+        </div>
+        <!-- /DRAFT-COPY -->
+      </div>
+      <!-- the quick call (step 4), under the form on a phone and beside it from 768 up. Once the
+           thank-you is up this copy steps aside for the one inside it, and the script hands
+           this id over to that one, so "#quick-call" always lands on the invitation on screen.
+           Words and button come from quick_call() in build_homepage.py. -->
+      <!-- DRAFT-COPY -->
+      <div class="qc qc-form" id="quick-call">
+        <p class="step-mark">Step 4 of 4</p>
+        <p class="qc-ask">{{QUICK_ASK}}</p>
+        {{QUICK_CALL}}
+      </div>
+      <!-- /DRAFT-COPY -->
+    </div>
+  </section>
 
   <!-- 4. Trending: three best sellers on a podium, oversized and breaking the band.
        The band's ground is a 150-frame film of the pour, scrubbed by scroll. It is
        scenery, not content: frames come only as the band nears, and reduced motion
-       gets one still. It follows the shelves, and Peter's story (#story) follows it directly,
+       gets one still. It follows the shelves (and the free sample, #sample), and Peter's story (#story) follows it directly,
        starting in this band's dark. -->
   <section class="sec podium-sec dark" id="trending" aria-labelledby="trending-title">
     <div class="pour-bg" id="pour-bg" aria-hidden="true">
@@ -183,7 +320,7 @@
             </div>
             <div class="st-copy">
               <!-- PETER-COPY --><p class="st-say">The hardest part was figuring it out alone, testing supplement after supplement to find what worked. That’s what this call is for. Book it and we’ll figure yours out together.</p><!-- /PETER-COPY -->
-              <!-- the call, asked for where the story asks for it. The tab's own "Free call" steps aside
+              <!-- the call, asked for where the story asks for it. The tab's own "Book a free call" steps aside
                    while this is on screen (it is one of the tab's zones in _script.html). -->
               <a class="btn st-book" href="#consult">Book a free call</a>
             </div>
@@ -227,6 +364,7 @@
   <section class="sec macros-sec" id="macros" aria-labelledby="macros-title">
     <div class="wrap split">
       <div class="split-text grow">
+        <!-- DRAFT-COPY --><p class="step-mark">Step 1 of 4</p><!-- /DRAFT-COPY -->
         <p class="label">Your numbers</p>
         <h2 id="macros-title"><span>Work out</span> <span>your macros</span></h2>
         <p>The math behind a higher you.</p>
@@ -341,7 +479,7 @@
             <li><span class="mc-g" id="mc-c">&#8212;</span><span class="mc-lab">Carbs</span><span class="mc-kc" id="mc-cc">&#8212;</span></li>
           </ul>
           <div class="mc-notes" id="mc-notes"></div>
-          <a class="btn" id="mc-book" href="#consult">Take these to a free call</a>
+          <a class="btn" id="mc-book" href="#consult">Book a free call</a>
           <div class="mc-foot">
             <button class="tlink" type="button" id="mc-edit">Change an answer</button>
             <button class="tlink" type="button" id="mc-again">Start over</button>

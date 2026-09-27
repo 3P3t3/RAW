@@ -4,6 +4,7 @@ Run from the project folder:  python3 site-src/build_homepage.py
 Edit share-links.csv (product, share_link, photo) and re-run to update the site.
 """
 import csv, hashlib, html, inspect, os, re, shutil
+from urllib.parse import quote
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, 'site-src', 'homepage.template.html')
@@ -112,11 +113,29 @@ CAT_THUMB = {  # the pack shown on the homepage row for each category
 # leave it empty and the form says the calendar is not connected yet instead of embedding nothing.
 CONSULT_URL = 'https://calendly.com/3pete/explore'
 
+# The quick 10-minute call: the invitation under the free-sample form and in its thank-you, and
+# step 4 of "The game plan" (#how). Paste the 10-minute Calendly event's link here and rebuild;
+# its label and link switch on at build time (see quick_call below), and _script.html opens it in
+# Calendly's popup. While it is empty nothing claims a 10-minute call: the button says "Book a
+# free call" and goes to #consult, the 30-minute booking already on the page.
+CONSULT_QUICK_URL = ''
+
+# The free-sample form (#sample on the homepage) posts to FormSubmit, which needs no account: the
+# first real request sends an activation email to this inbox, and once it is confirmed FormSubmit
+# offers a random alias to use instead. Swap the address for that alias here; nothing else names it.
+# With script the form posts JSON to the ajax endpoint; without, it is a plain POST to the action,
+# and FormSubmit sends the visitor back to SAMPLE_NEXT, where :target shows the thank-you.
+SAMPLE_TO = 'peterherschelman@gmail.com'
+
 # Where the site actually lives. Everything else on the site is linked relatively; this is
 # only for the absolute URLs that Open Graph and Twitter cards require. GitHub Pages serves
 # the repo from a subpath, so the trailing slash matters. Move to a custom domain and this
 # one line is the whole change — nothing else hardcodes the host.
 BASE = 'https://3p3t3.github.io/RAW/'
+
+SAMPLE_ENDPOINT = 'https://formsubmit.co/ajax/' + SAMPLE_TO
+SAMPLE_ACTION = 'https://formsubmit.co/' + SAMPLE_TO
+SAMPLE_NEXT = BASE + 'homepage.html?sample=sent#sample-sent'
 
 FEATURED = [  # props-free pack shots, so the grid reads as one series
     'XS Grass-Fed Whey Protein - Chocolate',
@@ -222,6 +241,22 @@ def shot(p, lazy=True, cls='shot'):
         ld = 'loading="lazy" ' if lazy else ''
         return f'<span class="{cls}"><img src="{p["img"]}" alt="" {ld}width="600" height="600"></span>'
     return f'<span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>coming soon</span></span>'
+
+
+def quick_call():
+    """The quick call's words and button, switched on CONSULT_QUICK_URL. All of it is DRAFT-COPY."""
+    if CONSULT_QUICK_URL:
+        return {
+            '{{QUICK_ASK}}': 'Want a quick 10 min to figure out how to optimize this in your routine? Book a consult here.',
+            '{{QUICK_STEP}}': 'Ten minutes on the phone to find where it slots in',
+            '{{QUICK_CALL}}': f'<a class="btn q-go" href="{esc(CONSULT_QUICK_URL)}" target="_blank" rel="noopener" '
+                              f'data-quick>Book a quick 10-min call<span class="vh"> (opens a calendar)</span></a>',
+        }
+    return {  # no 10-minute event yet: the 30-minute call on this page, and it says so
+        '{{QUICK_ASK}}': 'Want to figure out how to optimize this in your routine? That’s what the free call is for.',
+        '{{QUICK_STEP}}': 'A free call to find where it slots in',
+        '{{QUICK_CALL}}': '<a class="btn q-go" href="#consult">Book a free call</a>',
+    }
 
 
 def bestsellers():
@@ -357,6 +392,9 @@ def main():
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)),
               '{{TOTAL_PRODUCTS}}': plural(len(products), 'product', zero='products'), '{{CONSULT_URL}}': CONSULT_URL,
               '{{BASE}}': BASE}
+    # what the sample form's "What would you like to try?" suggests: every family, by the name its cards carry
+    sample_list = '\n'.join(f'          <option value="{esc(n)}"></option>'
+                            for n in sorted({pr['name'] for pr in products}, key=str.lower))
 
     os.makedirs(CUTS, exist_ok=True)
     podium = []
@@ -383,7 +421,9 @@ def main():
     out = open(SRC).read()
     for k, v in dict(shared, **{'{{HEADER}}': header.replace('{{HOME}}', ''), '{{HOME}}': '',
                                 '{{PAGE_URL}}': BASE + 'homepage.html', '{{INTRO}}': intro,
-                                '{{GOALS}}': cat_rows(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves}).items():
+                                '{{GOALS}}': cat_rows(),
+                                '{{SAMPLE_ENDPOINT}}': SAMPLE_ENDPOINT, '{{SAMPLE_ACTION}}': SAMPLE_ACTION,
+                                '{{SAMPLE_NEXT}}': SAMPLE_NEXT, '{{SAMPLE_PRODUCTS}}': sample_list, **quick_call(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves}).items():
         out = out.replace(k, v)
     open(OUT, 'w').write(out)
 
@@ -418,6 +458,7 @@ def main():
         for k, v in dict(shared, **{
                 '{{HEADER}}': header.replace('{{HOME}}', 'homepage.html'), '{{HOME}}': 'homepage.html',
                 '{{PAGE_URL}}': BASE + f'category-{slug_}.html',
+                '{{SAMPLE_LINK}}': 'homepage.html?try=' + quote(html.unescape(name)) + '#sample',
                 '{{CAT_NAME}}': name, '{{CAT_TAG}}': tag, '{{CAT_HEADING}}': heading,
                 '{{CAT_COUNT}}': plural(counts[slug_], 'product', zero='No products yet'), '{{CAT_GRID}}': cgrid, '{{CAROUSEL}}': carousel,
                 '{{CAT_OTHERS}}': cat_rows(only={slug_}), '{{CAT_BG}}': f'assets/bg-{slug_}.webp'}).items():

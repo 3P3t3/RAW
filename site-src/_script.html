@@ -144,14 +144,15 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    not watched either: the tab rides over it, except while the story's own "Book a free call"
    is up (.st-book: the story parks it off its stage while its beat is not). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
-   which sit where the tab does on a phone and go to the same places, the band that sends you
+   which sit where the tab does on a phone and go to the same places, "The game plan"'s "Pick
+   your free sample" (#how-go) and the quick-call buttons (.q-go), which it would cover, the band that sends you
    to the calculator on a category page, and the footer,
    which is the end of every page and so could never be scrolled out from under it. It also
    waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -360,6 +361,49 @@ if(arch){
   }
 }
 
+/* Calendly's widget.js, shared by the consult's inline calendar and the quick call's popup.
+   It is only fetched on the first booking tap, once, so nobody who never books pays for it. */
+var wjs=0,wq=[];
+var withCalendly=function(fn,fail){
+  if(window.Calendly)return fn();
+  wq.push(fn);
+  if(wjs)return;
+  wjs=1;
+  var sc=doc.createElement('script');
+  sc.src='https://assets.calendly.com/assets/external/widget.js';
+  sc.async=true;
+  sc.onload=function(){wq.splice(0).forEach(function(f){f()})};
+  sc.onerror=function(){wjs=0;wq.length=0;fail()};
+  doc.head.appendChild(sc);
+};
+
+/* The quick 10-minute call. Only there once CONSULT_QUICK_URL is set in build_homepage.py (until
+   then the button is a plain link to #consult, and carries no data-quick). It is a real link to
+   the calendar in a new tab; with script it opens in Calendly's popup over the page instead.
+   The popup needs Calendly's widget.css as well as widget.js (the inline embed needs neither's
+   styles), so it waits for both. Cmd/ctrl/shift-clicks keep the plain link. */
+var qcss=null;
+$$('a[data-quick]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button)return;
+    e.preventDefault();
+    var go=function(){window.Calendly.initPopupWidget({url:a.href+(a.href.indexOf('?')>-1?'&':'?')+
+          'hide_gdpr_banner=1&background_color=f4f2ec&text_color=1e262f&primary_color=002e3b'})},
+        tab=function(){if(!window.open(a.href,'_blank','noopener'))location.href=a.href};
+    if(!qcss){
+      qcss=doc.createElement('link');qcss.rel='stylesheet';
+      qcss.href='https://assets.calendly.com/assets/external/widget.css';
+      qcss.onload=function(){qcss.done=1};
+      qcss.onerror=function(){qcss.done=1};
+      doc.head.appendChild(qcss);
+    }
+    withCalendly(function(){
+      if(qcss.done)return go();
+      qcss.addEventListener('load',go);qcss.addEventListener('error',go);
+    },tab);
+  });
+});
+
 /* Consult: the calendar embeds in place of the form, the four answers prefilled as a1-a4
    (Calendly maps those positionally onto the event type's custom questions) */
 var cform=$('#consult-form');
@@ -383,20 +427,6 @@ if(cform){
     return 'Thirty minutes on '+(CGOAL[g]||'your goal')+(CTRAIN[t]?', '+CTRAIN[t]:'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
-  /* widget.js is only fetched on submit, once, so nobody who never books pays for it */
-  var wjs=0,wq=[];
-  var withCalendly=function(fn,fail){
-    if(window.Calendly)return fn();
-    wq.push(fn);
-    if(wjs)return;
-    wjs=1;
-    var sc=doc.createElement('script');
-    sc.src='https://assets.calendly.com/assets/external/widget.js';
-    sc.async=true;
-    sc.onload=function(){wq.splice(0).forEach(function(f){f()})};
-    sc.onerror=function(){wjs=0;wq.length=0;fail()};
-    doc.head.appendChild(sc);
-  };
   cform.addEventListener('submit',function(e){
     e.preventDefault();
     var url=cform.dataset.consult;
@@ -433,6 +463,105 @@ if(cform){
     },function(){
       csum.textContent='The calendar did not load. Try again in a moment.';
     });
+  });
+}
+
+/* Free sample: the visitor's own details go to Peter's inbox through FormSubmit, as JSON, and
+   a thank-you takes the form's place. Without script the form is a plain POST and FormSubmit
+   sends them back to #sample-sent (style.css shows it by :target). Homepage only. */
+var sform=$('#sample-form');
+if(sform){
+  var sdone=$('#sample-sent'),sgo=$('#sample-go'),sfail=$('#sample-fail'),
+      sel=function(n){return sform.elements[n]},
+      sval=function(n){var el=sel(n);return ((el&&el.value)||'').trim()},
+      sBy=function(){return sval('contact_by')||'Text'};
+  sform.noValidate=true;                        /* the script reports errors beside each field instead */
+  /* Text or Email: only the matching field shows, is required and is sent */
+  var sPick=function(){
+    $$('[data-by]',sform).forEach(function(f){
+      var on=f.dataset.by===sBy(),inp=$('input',f);
+      f.hidden=!on;inp.disabled=!on;inp.required=on;
+    });
+  };
+  sPick();
+  /* a category page's "Get a free sample" names its shelf, so the question starts answered */
+  var sTry=(new URLSearchParams(location.search).get('try')||'').slice(0,80);
+  if(sTry&&!sval('product'))sel('product').value=sTry;
+  var sShow=function(){
+    sform.hidden=true;sdone.classList.add('on');
+    /* the quick call under the form steps aside for the one in the thank-you: hand it the id */
+    var qf=$('#quick-call'),qd=$('.qc',sdone);
+    if(qf&&qd){qf.removeAttribute('id');qd.id='quick-call'}
+    var h=$('#sample-done-title');h.focus({preventScroll:true});
+    sdone.scrollIntoView({block:'nearest'});
+  };
+  if(new URLSearchParams(location.search).get('sample')==='sent')sShow();
+  var sErr=function(el,id,msg){
+    var p=$('#'+id);p.textContent=msg||'';
+    if(el)el.setAttribute('aria-invalid',msg?'true':'false');
+    return msg?el:null;
+  };
+  var sCheck=function(){
+    var bad=[],by=sBy(),v;
+    bad.push(sErr(sel('name'),'s-name-err',sval('name')?'':'Please add your name.'));
+    if(by==='Text'){v=sval('phone').replace(/\D/g,'');
+      bad.push(sErr(sel('phone'),'s-phone-err',v.length>=10?'':(v?'That number looks short. Add the area code.':'Please add a number I can text.')));}
+    else{v=sval('email');
+      bad.push(sErr(sel('email'),'s-email-err',/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)?'':(v?'That email doesn’t look right.':'Please add an email I can reach you at.')));}
+    bad.push(sErr(sel('product'),'s-product-err',sval('product')?'':'Tell me what you’d like to try, or say you’re not sure.'));
+    v=!!sval('delivery');                       /* a radio group: the error sits in its fieldset */
+    $('#s-where-err').textContent=v?'':'Pick drop-off in Lincoln or mail.';
+    $$('input[name="delivery"]',sform).forEach(function(r){r.setAttribute('aria-invalid',v?'false':'true')});
+    bad.push(v?null:$('input[name="delivery"]',sform));
+    bad.push(sErr(sel('consent'),'s-consent-err',sel('consent').checked?'':'Please tick this so I’m allowed to reach you.'));
+    return bad.filter(Boolean);
+  };
+  sform.addEventListener('change',function(e){
+    if(e.target.name==='contact_by')sPick();
+    if(sform.dataset.tried)sCheck();            /* once they have tried to send, errors clear as they fix them */
+  });
+  /* typing into a flagged field clears its own error; the check itself waits for change or send */
+  sform.addEventListener('input',function(e){
+    var t=e.target,d=t.getAttribute('aria-invalid')==='true'&&t.getAttribute('aria-describedby');
+    if(!d)return;
+    t.setAttribute('aria-invalid','false');
+    d.split(' ').forEach(function(i){if(/-err$/.test(i))$('#'+i).textContent=''});
+  });
+  sform.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(sform.getAttribute('aria-busy')==='true')return;
+    sform.dataset.tried='1';
+    sfail.textContent='';
+    var bad=sCheck();
+    if(bad.length){
+      bad[0].focus();
+      say(bad.length===1?'One thing to fix before this can send.':bad.length+' things to fix before this can send.');
+      return;
+    }
+    var by=sBy(),body={
+      _subject:sval('_subject'),_template:sval('_template'),_captcha:sval('_captcha'),_honey:sel('_honey').value,
+      name:sval('name'),contact_by:by
+    };
+    if(by==='Text')body.phone=sval('phone');else body.email=sval('email');
+    body.product=sval('product');body.delivery=sval('delivery');body.note=sval('note');
+    body.consent='Yes, Peter can text or email me about this sample';
+    body.keep_in_touch=sel('keep_in_touch').checked?'Yes':'No';
+    sform.setAttribute('aria-busy','true');sgo.textContent='Sending…';
+    say('Sending your request.');
+    var fail=function(){
+      sform.removeAttribute('aria-busy');sgo.textContent='Request my sample';
+      sfail.textContent='That didn’t send. Check your connection and try again. Everything you typed is still here.';
+      say(sfail.textContent);
+    };
+    fetch(sform.dataset.endpoint,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify(body)})
+      .then(function(r){return r.json().catch(function(){return {}}).then(function(j){
+        if(!r.ok||!(j.success===true||j.success==='true'))throw 0;
+        sform.removeAttribute('aria-busy');
+        sShow();
+        say('Request sent. Peter will reach out within a day or two.');
+      })})
+      .catch(fail);
   });
 }
 
