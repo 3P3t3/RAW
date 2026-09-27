@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=b0505c05">
+<link rel="stylesheet" href="style.css?v=64febb32">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -31,7 +31,6 @@
   <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
-  <symbol id="i-out" viewBox="0 0 24 24"><path d="M8 16L17 7M9 7h8v8"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></symbol>
   <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 8.5a5 5 0 010 7"/></symbol>
@@ -436,16 +435,16 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    is up (.st-book: the story parks it off its stage while its beat is not). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
    which sit where the tab does on a phone and go to the same places, "The game plan"'s "Ask
-   for a free sample" (#how-go), the quick-call buttons (.q-go) and the sample form's own send button
-   (#sample-go), which it would cover, an open compartment of the stack case (.bay-in: a closed one
-   is hidden, so has no box and never counts), the band that sends you
+   for a free sample" (#how-go), the quick-call buttons (.q-go) and the sample form's Next and Send
+   (#s-next, #sample-go), which it would cover, an open compartment of the stack case (.bay-in: a
+   closed one is hidden, so has no box and never counts), the band that sends you
    to the calculator on a category page, and the footer,
    which is the end of every page and so could never be scrolled out from under it. It also
    waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#sample-go,.bay-in,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#s-next,#sample-go,.bay-in,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -962,7 +961,8 @@ if(sform){
     if(el)el.setAttribute('aria-invalid',msg?'true':'false');
     return msg?el:null;
   };
-  var sCheck=function(){
+  /* the checks, split by step: Next runs the first, Send runs both, in the same order as ever */
+  var sCheck1=function(){
     var bad=[],by=sBy(),v;
     bad.push(sErr(sel('name'),'s-name-err',sval('name')?'':'Please add your name.'));
     if(by==='Text'){v=sval('phone').replace(/\D/g,'');
@@ -970,19 +970,134 @@ if(sform){
     else{v=sval('email');
       bad.push(sErr(sel('email'),'s-email-err',/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)?'':(v?'That email doesn’t look right.':'Please add an email I can reach you at.')));}
     bad.push(sErr(sel('product'),'s-product-err',sval('product')?'':'Tell me what you’d like to try, or say you’re not sure.'));
-    v=!!sval('delivery');                       /* a radio group: the error sits in its fieldset */
+    return bad.filter(Boolean);
+  };
+  var sCheck2=function(){
+    var bad=[],v=!!sval('delivery');            /* a radio group: the error sits in its fieldset */
     $('#s-where-err').textContent=v?'':'Pick drop-off in Lincoln or mail.';
     $$('input[name="delivery"]',sform).forEach(function(r){r.setAttribute('aria-invalid',v?'false':'true')});
     bad.push(v?null:$('input[name="delivery"]',sform));
     bad.push(sErr(sel('consent'),'s-consent-err',sel('consent').checked?'':'Please tick this so I’m allowed to reach you.'));
     return bad.filter(Boolean);
   };
+  var sCheck=function(){return sCheck1().concat(sCheck2())};
+
+  /* Two short steps. The markup is one form; the script folds it: step 1 is who you are and what
+     you'd like, step 2 is where it goes and the send. Next checks step 1 only, then step 1 folds
+     to a one-line recap at the top of step 2 (Edit and Back unfold it, every value kept). The
+     swap is opacity and transform only, and none at all under reduced motion. The fetch below
+     is untouched: it still reads every field, whichever step is showing. */
+  var s1=$('#s-step1'),s2=$('#s-step2'),sNext=$('#s-next'),sBack=$('#s-back'),
+      sStep=function(){return sform.dataset.step==='2'?2:1},
+      sStill=function(){return matchMedia('(prefers-reduced-motion: reduce)').matches};
+  [$('#s-prog'),sNext,sBack,$('#s-recap')].forEach(function(el){el.hidden=false});
+  sform.classList.add('s-two');sform.dataset.step='1';
+  var sTo=function(n){
+    var el=n===2?s2:s1,dx=n===2?28:-28;
+    sform.dataset.step=n;$('#s-prog-t').textContent=n+' of 2';
+    if(!sStill()&&el.animate)el.animate([{opacity:0,transform:'translate3d('+dx+'px,0,0)'},{opacity:1,transform:'none'}],
+      {duration:380,easing:'cubic-bezier(.2,.7,.2,1)'});
+    /* the card changed height under the visitor: if its top went up behind the mast, bring it back */
+    var m=$('.mast'),top=sform.getBoundingClientRect().top-(m?m.offsetHeight:0)-12;
+    if(top<0)scrollBy({top:top,behavior:sStill()?'auto':'smooth'});
+  };
+  var sRecap=function(){
+    var by=sBy();
+    $('#s-r-name').textContent=sval('name');
+    $('#s-r-how').textContent=(by==='Text'?'text ':'email ')+sval(by==='Text'?'phone':'email');
+    $('#s-r-item').textContent=sval('product');
+  };
+  /* DRAFT-COPY: the two step announcements and the Next error count */
+  var sForward=function(){
+    sform.dataset.tried1='1';
+    var bad=sCheck1();
+    if(bad.length){
+      bad[0].focus();
+      say(bad.length===1?'One thing to fix before the next step.':bad.length+' things to fix before the next step.');
+      return;
+    }
+    sRecap();sTo(2);
+    ($('input[name="delivery"]:checked',sform)||$('input[name="delivery"]',sform)).focus({preventScroll:true});
+    say('2 of 2. Where should it go?');
+  };
+  var sBackTo=function(){
+    sTo(1);s1.focus({preventScroll:true});
+    say('1 of 2. Your details, just as you left them.');
+  };
+  sNext.addEventListener('click',sForward);
+  sBack.addEventListener('click',sBackTo);
+  $('#s-edit').addEventListener('click',sBackTo);
+
+  /* The blanks grow with what is typed. A hidden twin in the same type measures the text; CSS
+     min-width and max-width bound it. The product blank is a textarea: once its words are wider
+     than the line it takes the whole line and wraps, a line taller at a time, so nothing typed
+     is ever scrolled out of sight. */
+  var sMir=doc.createElement('span');sMir.className='s-mir';sMir.setAttribute('aria-hidden','true');sform.appendChild(sMir);
+  var sFit=function(inp){
+    var cs=getComputedStyle(inp);
+    ['fontFamily','fontSize','fontWeight','fontStretch','letterSpacing'].forEach(function(k){sMir.style[k]=cs[k]});
+    sMir.textContent=inp.value;
+    var w=Math.ceil(sMir.getBoundingClientRect().width)+14;
+    inp.style.width=w+'px';
+    /* wider than the line: it has the whole line, so the full stop after it steps aside */
+    inp.parentNode.classList.toggle('s-full',inp.offsetWidth<w);
+    if(inp.tagName==='TEXTAREA'){inp.style.height='';inp.style.height=inp.scrollHeight+'px'}
+  };
+  var sFitAll=function(){$$('.c-field input,.c-field textarea',sform).forEach(sFit)};
+  sFitAll();
+  if(doc.fonts)doc.fonts.ready.then(sFitAll);
+  addEventListener('resize',sFitAll);
+  /* The product blank: Enter means Next (or takes the highlighted suggestion), a pasted line break
+     becomes a space, and up to five product names that match what is typed show under it, from
+     the page's own datalist. Arrow keys walk them, Escape closes them, a tap takes one. */
+  var sProd=sel('product'),sSug=$('#s-sugg'),sAt=-1,
+      sNames=$$('#sample-products option').map(function(o){return o.value});
+  sProd.setAttribute('aria-autocomplete','list');sProd.setAttribute('aria-controls','s-sugg');
+  var sSugClose=function(){sSug.hidden=true;sSug.textContent='';sAt=-1;sProd.removeAttribute('aria-activedescendant')};
+  var sSugMark=function(i){
+    var li=$$('li',sSug);sAt=i;
+    li.forEach(function(l,k){l.setAttribute('aria-selected',k===i?'true':'false')});
+    sProd.setAttribute('aria-activedescendant',li[i].id);
+  };
+  var sSugPick=function(v){
+    sProd.value=v;sSugClose();sFit(sProd);
+    if(sProd.getAttribute('aria-invalid')==='true'){sProd.setAttribute('aria-invalid','false');$('#s-product-err').textContent=''}
+    sProd.dispatchEvent(new Event('change',{bubbles:true}));
+  };
+  /* DRAFT-COPY: the suggestion announcements */
+  var sSugShow=function(){
+    var v=sProd.value.trim().toLowerCase(),q=v.split(/\s+/).filter(Boolean),was=!sSug.hidden,
+        m=v.length<2?[]:sNames.filter(function(n){n=n.toLowerCase();return n!==v&&q.every(function(w){return n.indexOf(w)>=0})}).slice(0,5);
+    if(!m.length){sSugClose();return}
+    sSug.textContent='';
+    m.forEach(function(n,k){var li=doc.createElement('li');li.id='s-sugg-'+k;li.setAttribute('role','option');
+      li.setAttribute('aria-selected','false');li.textContent=n;sSug.appendChild(li)});
+    sSug.hidden=false;sAt=-1;sProd.removeAttribute('aria-activedescendant');
+    if(!was)say(m.length===1?'One product matches. Arrow down to hear it.':m.length+' products match. Arrow down to hear them.');
+  };
+  sSug.addEventListener('mousedown',function(e){e.preventDefault()});   /* the blank keeps focus */
+  sSug.addEventListener('click',function(e){var li=e.target.closest('li');if(li)sSugPick(li.textContent)});
+  sProd.addEventListener('keydown',function(e){
+    var li=$$('li',sSug);
+    if(e.isComposing)return;
+    if(e.key==='ArrowDown'&&li.length){e.preventDefault();sSugMark((sAt+1)%li.length)}
+    else if(e.key==='ArrowUp'&&li.length){e.preventDefault();sSugMark(sAt<=0?li.length-1:sAt-1)}
+    else if(e.key==='Escape'&&li.length)sSugClose();
+    else if(e.key==='Enter'){e.preventDefault();if(sAt>=0&&li[sAt])sSugPick(li[sAt].textContent);else{sSugClose();sForward()}}
+  });
+  sProd.addEventListener('blur',function(){setTimeout(sSugClose,150)});
   sform.addEventListener('change',function(e){
-    if(e.target.name==='contact_by')sPick();
+    if(e.target.name==='contact_by'){sPick();sFitAll()}
     if(sform.dataset.tried)sCheck();            /* once they have tried to send, errors clear as they fix them */
+    else if(sform.dataset.tried1)sCheck1();     /* ...or, after a Next that stopped, step 1's */
   });
   /* typing into a flagged field clears its own error; the check itself waits for change or send */
   sform.addEventListener('input',function(e){
+    if(e.target===sProd){
+      if(/[\r\n]/.test(sProd.value))sProd.value=sProd.value.replace(/[\r\n]+/g,' ');
+      sSugShow();
+    }
+    if(e.target.matches('.c-field input,.c-field textarea'))sFit(e.target);
     var t=e.target,d=t.getAttribute('aria-invalid')==='true'&&t.getAttribute('aria-describedby');
     if(!d)return;
     t.setAttribute('aria-invalid','false');
@@ -991,10 +1106,12 @@ if(sform){
   sform.addEventListener('submit',function(e){
     e.preventDefault();
     if(sform.getAttribute('aria-busy')==='true')return;
+    if(sStep()===1){sForward();return}          /* Enter in step 1 means Next */
     sform.dataset.tried='1';
     sfail.textContent='';
     var bad=sCheck();
     if(bad.length){
+      if(s1.contains(bad[0]))sTo(1);
       bad[0].focus();
       say(bad.length===1?'One thing to fix before this can send.':bad.length+' things to fix before this can send.');
       return;

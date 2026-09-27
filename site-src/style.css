@@ -469,6 +469,104 @@ a.how-step:active{opacity:.7}
   .sample-sec .qc-form{grid-column:1 / 6;grid-row:2;align-self:start}
   .qc .btn{width:auto}
 }
+/* The free sample (#sample) reads as a note to Peter: a fill-in-the-blank sentence in the display
+   type, in two short steps with script. Every field keeps its real label, visually hidden, and the
+   sentence around it is aria-hidden. The blanks grow as they fill (the script sizes them), the
+   chips sit in the sentence as words. All of it is under #sample, so the consult's card, chips and
+   fields, which this form borrows, never change. Without script nothing is hidden: one form. */
+#sample-form.s-two[data-step="1"] #s-step2,#sample-form.s-two[data-step="2"] #s-step1{display:none}
+#sample .c-card{position:relative;border-radius:30px;background:var(--chalk);padding:40px 22px 22px;
+  box-shadow:inset 0 0 0 2px var(--ink),8px 8px 0 var(--teal)}
+#sample .btn{border-radius:999px}
+#sample .s-step{display:block;min-width:0;font:400 28px/1.62 var(--display);color:var(--ink)}
+#sample .s-step:focus{outline:none}
+#sample .s-say{font-weight:800;font-stretch:75%;letter-spacing:-.005em}
+#sample .c-q{display:contents}
+#sample .s-ps{display:block}
+#sample .c-q legend,#sample .c-field label{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* the choices, as words in the sentence: dashed until picked, then a teal pill knocked askew */
+#sample .chips{display:inline}
+#sample .chip{display:inline-flex;vertical-align:baseline}
+#sample .chip span{min-height:44px;padding:0 .3em;border:2px dashed rgba(30,38,47,.34);border-radius:999px;
+  background:transparent;font:800 28px/1 var(--display);font-stretch:75%;color:var(--text)}
+#sample .chip input:checked + span{background:var(--teal);border:2px solid var(--ink);color:var(--chalk);
+  transform:rotate(-2deg);box-shadow:3px 3px 0 var(--ink)}
+@media (hover:hover){
+  #sample .chip:hover span{transform:none;color:var(--ink);border-color:var(--ink)}
+  #sample .chip:hover input:checked + span{transform:rotate(-2deg);color:var(--chalk)}
+}
+#sample .chip input:focus-visible + span{outline:3px solid var(--blue);outline-offset:3px}
+#sample .s-by .chip + .chip::before,#sample .s-deliv .chip + .chip::before{content:"/" / "";padding:0 .12em;
+  font:800 28px/44px var(--display);font-stretch:75%;color:rgba(30,38,47,.35)}
+#sample .s-deliv .chip + .chip::before{content:"or" / "";padding:0 .22em;color:var(--ink)}
+/* the full stop rides on the last choice, so a narrow line can never strand it on its own */
+#sample .s-deliv .chip + .chip::after{content:"." / "";padding-left:.06em;font-weight:800;font-stretch:75%;line-height:44px;color:var(--ink)}
+/* the blanks: a field and its error stacked in one inline box, so the sentence runs on after it */
+#sample .c-field{display:inline-flex;flex-direction:column;vertical-align:baseline;gap:4px;max-width:100%}
+#sample .c-field input,#sample .c-field textarea{min-width:4.4em;max-width:100%;border:0;border-radius:0;box-shadow:none;
+  field-sizing:content;font:800 28px/1 var(--display);font-stretch:75%;color:var(--blue);-webkit-appearance:none;appearance:none}
+#sample .c-field input{height:46px;padding:0 5px;border-bottom:3px solid var(--teal);background:transparent}
+#sample .c-field input::placeholder,#sample .c-field textarea::placeholder{color:transparent}
+#sample .c-field[data-by] input,#sample .s-f-item textarea{min-width:6.4em}
+#sample .c-field input:focus{outline:none;background:rgba(51,64,184,.08);border-bottom-color:var(--blue);box-shadow:0 3px 0 var(--blue)}
+#sample .c-field input[aria-invalid="true"]{border-bottom-color:#9B2C1F;background:rgba(155,44,31,.07);box-shadow:none}
+/* the product blank is a textarea so a long name wraps: every line gets its own underline */
+#sample .c-field textarea{--u:var(--teal);display:block;height:46px;padding:4px 5px 0;resize:none;overflow:hidden;
+  line-height:42px;overflow-wrap:break-word;background:repeating-linear-gradient(transparent 0 39px,var(--u) 39px 42px) content-box}
+#sample .c-field textarea:focus{--u:var(--blue);outline:none;background-color:rgba(51,64,184,.08)}
+#sample .c-field textarea[aria-invalid="true"]{--u:#9B2C1F;background-color:rgba(155,44,31,.07)}
+#sample .s-full + .s-say{display:none}
+/* no script: both contact blanks are there at once, so each shows its label above it */
+html:not(.js) #sample .c-field[data-by]{display:flex;margin:6px 0}
+html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:auto;margin:0;overflow:visible;clip:auto;
+  white-space:normal;font:600 13px/1.3 var(--sans);color:var(--text)}
+#sample .c-field .s-err{contain:inline-size;font-size:14px;line-height:1.35;font-stretch:100%}
+#sample .s-hint{font:400 14px/1.4 var(--sans)}
+#sample .s-step > .s-hint{margin-top:4px}
+#sample .s-deliv .s-hint,#sample .s-deliv .s-err{margin:4px 0 6px}
+/* what matches the product blank, from the datalist: tap one, or walk them with the arrow keys */
+#sample .s-sugg{list-style:none;margin:10px 0 2px;padding:0;display:grid;gap:6px;font:600 15px/1.3 var(--sans)}
+#sample .s-sugg li{display:flex;align-items:center;min-height:44px;padding:8px 16px;border-radius:22px;cursor:pointer;
+  background:#fff;box-shadow:inset 0 0 0 1.5px rgba(30,38,47,.22);color:var(--ink)}
+#sample .s-sugg li[aria-selected="true"]{background:var(--teal);color:var(--chalk);box-shadow:none}
+@media (hover:hover){#sample .s-sugg li:hover{box-shadow:inset 0 0 0 2px var(--ink)}}
+#sample .s-step > .btn{margin-top:16px}
+#sample .s-checks,#sample .s-acts,#sample .s-step > .s-err{margin-top:22px}
+#sample .s-next{margin-top:20px}
+#sample .c-fine{margin-top:18px;line-height:1.5}
+#sample .s-check input{width:24px;height:24px}
+.s-next-btn .ic{margin-right:-4px}
+#sample-form .s-acts{display:flex;gap:10px}
+#sample-form .s-acts .btn{flex:1 1 auto;width:auto}
+#sample-form .s-acts .s-back{flex:none;gap:6px;padding:0 18px}
+.s-mir{position:absolute;left:-9999px;top:0;visibility:hidden;white-space:pre;pointer-events:none}
+/* step 1, folded to a line at the top of step 2 */
+.s-recap{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px;padding:0 0 12px;border-bottom:2px dashed rgba(30,38,47,.22)}
+.s-recap-t{flex:1;min-width:0;margin:0;font:400 15px/1.45 var(--sans);color:var(--ink);overflow-wrap:anywhere}
+.s-recap-t b{font-weight:700}
+.s-edit{flex:none;min-height:44px;margin:-12px -6px -12px 0;padding:0 6px;border:0;background:none;cursor:pointer;
+  font:600 15px/1 var(--sans);color:var(--teal);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
+/* "1 of 2": a sticker slapped on the card's corner, never the old outlined "Step n of 4" tag */
+.s-prog{position:absolute;z-index:1;top:-32px;right:16px;display:grid;place-items:center;width:66px;height:66px;margin:0;
+  border-radius:50%;background:var(--sand);box-shadow:inset 0 0 0 2px var(--ink),3px 3px 0 var(--ink);
+  font:800 16px/1 var(--display);font-stretch:75%;color:var(--ink);transform:rotate(-12deg)}
+#sample .qc-form{border-radius:24px;box-shadow:inset 0 0 0 2px var(--ink)}
+/* under 360px the note drops two pixels of type and four of margin a side, so a line holds a
+   clause and a blank; it is still the heavy condensed cut, just a size down */
+@media (max-width:359px){
+  #sample .c-card{padding-left:18px;padding-right:18px}
+  #sample .s-step{font-size:26px}
+  #sample .chip span,#sample .c-field input,#sample .c-field textarea,#sample .s-by .chip + .chip::before,
+  #sample .s-deliv .chip + .chip::before{font-size:26px}
+}
+@media (min-width:768px){
+  #sample .c-card{padding:52px 36px 34px}
+  #sample .s-step{font-size:34px}
+  #sample .chip span,#sample .c-field input,#sample .c-field textarea,#sample .s-by .chip + .chip::before,
+  #sample .s-deliv .chip + .chip::before{font-size:34px}
+}
+
 /* the category banner's way to it */
 .cat-sample a{color:var(--sand);font-weight:600;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
 

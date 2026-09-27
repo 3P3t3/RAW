@@ -111,55 +111,83 @@
         <input type="hidden" name="_next" value="{{SAMPLE_NEXT}}">
         <!-- the honeypot: people never see or reach it, bots fill it, FormSubmit drops those -->
         <div class="vh" aria-hidden="true"><label for="s-honey">Leave this empty</label><input id="s-honey" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
+        <!-- Two short steps with script: step 1 is who you are and what you'd like, step 2 is where
+             it goes and the send. Without script nothing here is hidden, so it is one form and a
+             plain POST, as before. The count, Next, Back and the recap are [hidden] until the script
+             takes over. The form reads as a note to Peter, a fill-in-the-blank sentence: .s-say is
+             the sentence, aria-hidden, since every field keeps its own real (visually hidden) label. -->
+        <p class="s-prog" id="s-prog" hidden><span id="s-prog-t">1 of 2</span></p>
         <!-- DRAFT-COPY -->
-        <div class="c-field"><label for="s-name">Your name</label>
-          <input id="s-name" name="name" type="text" autocomplete="name" required aria-describedby="s-name-err">
-          <p class="s-err" id="s-name-err"></p></div>
-        <fieldset class="c-q">
-          <legend>Text or email?</legend>
-          <div class="chips">
-            <label class="chip"><input type="radio" name="contact_by" value="Text" checked><span>Text me</span></label>
-            <label class="chip"><input type="radio" name="contact_by" value="Email"><span>Email me</span></label>
-          </div>
-        </fieldset>
-        <div class="c-field" data-by="Text"><label for="s-phone">Your phone number</label>
-          <input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="s-phone-err">
-          <p class="s-err" id="s-phone-err"></p></div>
-        <div class="c-field" data-by="Email"><label for="s-email">Your email</label>
-          <input id="s-email" name="email" type="email" autocomplete="email" aria-describedby="s-email-err">
-          <p class="s-err" id="s-email-err"></p></div>
-        <div class="c-field"><label for="s-product">What would you like to try?</label>
-          <input id="s-product" name="product" type="text" list="sample-products" autocomplete="off" required
-                 placeholder="e.g. Grass-Fed Whey, Chocolate" aria-describedby="s-product-hint s-product-err">
+        <div class="s-step" id="s-step1" role="group" tabindex="-1" aria-label="Your details">
+          <span class="s-say" aria-hidden="true">Hey Peter, I’m</span>
+          <div class="c-field"><label for="s-name">Your name</label>
+            <input id="s-name" name="name" type="text" autocomplete="name" required aria-describedby="s-name-err">
+            <p class="s-err" id="s-name-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <fieldset class="c-q s-by">
+            <legend>Text or email?</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="contact_by" value="Text" checked><span>Text me</span></label>
+              <label class="chip"><input type="radio" name="contact_by" value="Email"><span>Email me</span></label>
+            </div>
+          </fieldset>
+          <span class="s-say" aria-hidden="true">at</span>
+          <div class="c-field" data-by="Text"><label for="s-phone">Your phone number</label>
+            <input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="s-phone-err">
+            <p class="s-err" id="s-phone-err"></p></div>
+          <div class="c-field" data-by="Email"><label for="s-email">Your email</label>
+            <input id="s-email" name="email" type="email" autocomplete="email" aria-describedby="s-email-err">
+            <p class="s-err" id="s-email-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <span class="s-say" aria-hidden="true">I’ve had my eye on</span>
+          <!-- a textarea, not an input, so a long product name wraps inside its blank instead of
+               scrolling out of sight. One line, and Enter means Next (the script sees to both). -->
+          <div class="c-field s-f-item"><label for="s-product">What would you like to try?</label>
+            <textarea id="s-product" name="product" rows="1" autocomplete="off" required
+                   aria-describedby="s-product-hint s-product-err"></textarea>
+            <p class="s-err" id="s-product-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <!-- the product names, for the script's suggestions under the blank -->
+          <ul class="s-sugg" id="s-sugg" role="listbox" aria-label="Products that match" hidden></ul>
           <p class="s-hint" id="s-product-hint">Not sure? Say so and I’ll suggest something.</p>
-          <p class="s-err" id="s-product-err"></p></div>
-        <datalist id="sample-products">
+          <datalist id="sample-products">
 {{SAMPLE_PRODUCTS}}
-        </datalist>
-        <fieldset class="c-q" id="s-where" aria-describedby="s-where-err">
-          <legend>Where should it go?</legend>
-          <div class="chips">
-            <label class="chip"><input type="radio" name="delivery" value="Drop it off in Lincoln" required><span>I’m in Lincoln, drop it off</span></label>
-            <label class="chip"><input type="radio" name="delivery" value="Mail it (US)" aria-describedby="s-mail-note"><span>Mail it to me (US)</span></label>
-          </div>
-          <p class="s-hint s-mail-note" id="s-mail-note">No need for your address yet. I’ll ask for it if it’s one I can mail.</p>
-          <p class="s-err" id="s-where-err"></p>
-        </fieldset>
-        <div class="c-field"><label for="s-note">Anything else? <span>Optional</span></label>
-          <input id="s-note" name="note" type="text" autocomplete="off" maxlength="300" placeholder="A flavor you like, a good time to text…"></div>
-        <div class="s-checks">
-          <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this.</span></label>
-          <p class="s-err" id="s-consent-err"></p>
-          <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and the odd update after that is fine too. <em>Optional</em></span></label>
+          </datalist>
+          <button class="btn s-next-btn" type="button" id="s-next" hidden>Next<svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
         </div>
-        <button class="btn" type="submit" id="sample-go">Send it to Peter</button>
-        <p class="s-err" id="sample-fail" tabindex="-1"></p>
-        <ol class="s-next" aria-label="What happens next">
-          <li>You hear from me directly, by text or email, whichever you chose.</li>
-          <li>If it’s one I can send, we pick a drop-off in Lincoln, or I ask for your address to mail it.</li>
-          <li>Give it a real try, then give me your honest take. You don’t owe me an order.</li>
-        </ol>
-        <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
+        <div class="s-step" id="s-step2">
+          <!-- step 1, folded to a line once Next has checked it: filled in by the script -->
+          <div class="s-recap" id="s-recap" hidden>
+            <p class="s-recap-t"><b id="s-r-name"></b> · <span id="s-r-how"></span> · <span id="s-r-item"></span></p>
+            <button class="s-edit" type="button" id="s-edit">Edit<span class="vh"> your name, number or email, and pick</span></button>
+          </div>
+          <span class="s-say" aria-hidden="true">You can</span>
+          <fieldset class="c-q s-deliv" id="s-where" aria-describedby="s-where-err">
+            <legend>Where should it go?</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="delivery" value="Drop it off in Lincoln" required><span>drop it off, I’m in Lincoln</span></label>
+              <label class="chip"><input type="radio" name="delivery" value="Mail it (US)" aria-describedby="s-mail-note"><span>mail it, I’m in the US</span></label>
+            </div>
+            <p class="s-hint s-mail-note" id="s-mail-note">No need for your address yet. I’ll ask for it if it’s one I can mail.</p>
+            <p class="s-err" id="s-where-err"></p>
+          </fieldset>
+          <div class="s-ps"><span class="s-say" aria-hidden="true">P.S.</span>
+          <div class="c-field s-f-note"><label for="s-note">Anything else? <span>Optional</span></label>
+            <input id="s-note" name="note" type="text" autocomplete="off" maxlength="300" placeholder="A flavor you like, a good time to text…"></div></div>
+          <div class="s-checks">
+            <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this.</span></label>
+            <p class="s-err" id="s-consent-err"></p>
+            <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and the odd update after that is fine too. <em>Optional</em></span></label>
+          </div>
+          <div class="s-acts">
+            <button class="btn btn-line s-back" type="button" id="s-back" hidden><svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-back"/></svg>Back</button>
+            <button class="btn" type="submit" id="sample-go">Send it to Peter</button>
+          </div>
+          <p class="s-err" id="sample-fail" tabindex="-1"></p>
+          <ol class="s-next" aria-label="What happens next">
+            <li>You hear from me directly, by text or email, whichever you chose.</li>
+            <li>If it’s one I can send, we pick a drop-off in Lincoln, or I ask for your address to mail it.</li>
+            <li>Give it a real try, then give me your honest take. You don’t owe me an order.</li>
+          </ol>
+          <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
+        </div>
         <!-- /DRAFT-COPY -->
       </form>
       <!-- the thank-you takes the form's place: shown by the script after a send, or by

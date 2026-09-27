@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=b0505c05">
+<link rel="stylesheet" href="style.css?v=64febb32">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -233,7 +233,6 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
   <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
-  <symbol id="i-out" viewBox="0 0 24 24"><path d="M8 16L17 7M9 7h8v8"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></symbol>
   <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 8.5a5 5 0 010 7"/></symbol>
@@ -537,29 +536,43 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <input type="hidden" name="_next" value="https://3p3t3.github.io/RAW/homepage.html?sample=sent#sample-sent">
         <!-- the honeypot: people never see or reach it, bots fill it, FormSubmit drops those -->
         <div class="vh" aria-hidden="true"><label for="s-honey">Leave this empty</label><input id="s-honey" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
+        <!-- Two short steps with script: step 1 is who you are and what you'd like, step 2 is where
+             it goes and the send. Without script nothing here is hidden, so it is one form and a
+             plain POST, as before. The count, Next, Back and the recap are [hidden] until the script
+             takes over. The form reads as a note to Peter, a fill-in-the-blank sentence: .s-say is
+             the sentence, aria-hidden, since every field keeps its own real (visually hidden) label. -->
+        <p class="s-prog" id="s-prog" hidden><span id="s-prog-t">1 of 2</span></p>
         <!-- DRAFT-COPY -->
-        <div class="c-field"><label for="s-name">Your name</label>
-          <input id="s-name" name="name" type="text" autocomplete="name" required aria-describedby="s-name-err">
-          <p class="s-err" id="s-name-err"></p></div>
-        <fieldset class="c-q">
-          <legend>Text or email?</legend>
-          <div class="chips">
-            <label class="chip"><input type="radio" name="contact_by" value="Text" checked><span>Text me</span></label>
-            <label class="chip"><input type="radio" name="contact_by" value="Email"><span>Email me</span></label>
-          </div>
-        </fieldset>
-        <div class="c-field" data-by="Text"><label for="s-phone">Your phone number</label>
-          <input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="s-phone-err">
-          <p class="s-err" id="s-phone-err"></p></div>
-        <div class="c-field" data-by="Email"><label for="s-email">Your email</label>
-          <input id="s-email" name="email" type="email" autocomplete="email" aria-describedby="s-email-err">
-          <p class="s-err" id="s-email-err"></p></div>
-        <div class="c-field"><label for="s-product">What would you like to try?</label>
-          <input id="s-product" name="product" type="text" list="sample-products" autocomplete="off" required
-                 placeholder="e.g. Grass-Fed Whey, Chocolate" aria-describedby="s-product-hint s-product-err">
+        <div class="s-step" id="s-step1" role="group" tabindex="-1" aria-label="Your details">
+          <span class="s-say" aria-hidden="true">Hey Peter, I’m</span>
+          <div class="c-field"><label for="s-name">Your name</label>
+            <input id="s-name" name="name" type="text" autocomplete="name" required aria-describedby="s-name-err">
+            <p class="s-err" id="s-name-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <fieldset class="c-q s-by">
+            <legend>Text or email?</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="contact_by" value="Text" checked><span>Text me</span></label>
+              <label class="chip"><input type="radio" name="contact_by" value="Email"><span>Email me</span></label>
+            </div>
+          </fieldset>
+          <span class="s-say" aria-hidden="true">at</span>
+          <div class="c-field" data-by="Text"><label for="s-phone">Your phone number</label>
+            <input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="s-phone-err">
+            <p class="s-err" id="s-phone-err"></p></div>
+          <div class="c-field" data-by="Email"><label for="s-email">Your email</label>
+            <input id="s-email" name="email" type="email" autocomplete="email" aria-describedby="s-email-err">
+            <p class="s-err" id="s-email-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <span class="s-say" aria-hidden="true">I’ve had my eye on</span>
+          <!-- a textarea, not an input, so a long product name wraps inside its blank instead of
+               scrolling out of sight. One line, and Enter means Next (the script sees to both). -->
+          <div class="c-field s-f-item"><label for="s-product">What would you like to try?</label>
+            <textarea id="s-product" name="product" rows="1" autocomplete="off" required
+                   aria-describedby="s-product-hint s-product-err"></textarea>
+            <p class="s-err" id="s-product-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <!-- the product names, for the script's suggestions under the blank -->
+          <ul class="s-sugg" id="s-sugg" role="listbox" aria-label="Products that match" hidden></ul>
           <p class="s-hint" id="s-product-hint">Not sure? Say so and I’ll suggest something.</p>
-          <p class="s-err" id="s-product-err"></p></div>
-        <datalist id="sample-products">
+          <datalist id="sample-products">
           <option value="Artistry Skin Nutrition Renewing Softening Toner"></option>
           <option value="Artistry Skin Nutrition Sleeping Mask"></option>
           <option value="Artistry Studio Glow Boss Cleanser + Exfoliator"></option>
@@ -592,31 +605,45 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           <option value="XS Sports Protein Bars"></option>
           <option value="XS Sports Protein Shakes"></option>
           <option value="XS Sports Twist Tubes"></option>
-        </datalist>
-        <fieldset class="c-q" id="s-where" aria-describedby="s-where-err">
-          <legend>Where should it go?</legend>
-          <div class="chips">
-            <label class="chip"><input type="radio" name="delivery" value="Drop it off in Lincoln" required><span>I’m in Lincoln, drop it off</span></label>
-            <label class="chip"><input type="radio" name="delivery" value="Mail it (US)" aria-describedby="s-mail-note"><span>Mail it to me (US)</span></label>
-          </div>
-          <p class="s-hint s-mail-note" id="s-mail-note">No need for your address yet. I’ll ask for it if it’s one I can mail.</p>
-          <p class="s-err" id="s-where-err"></p>
-        </fieldset>
-        <div class="c-field"><label for="s-note">Anything else? <span>Optional</span></label>
-          <input id="s-note" name="note" type="text" autocomplete="off" maxlength="300" placeholder="A flavor you like, a good time to text…"></div>
-        <div class="s-checks">
-          <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this.</span></label>
-          <p class="s-err" id="s-consent-err"></p>
-          <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and the odd update after that is fine too. <em>Optional</em></span></label>
+          </datalist>
+          <button class="btn s-next-btn" type="button" id="s-next" hidden>Next<svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
         </div>
-        <button class="btn" type="submit" id="sample-go">Send it to Peter</button>
-        <p class="s-err" id="sample-fail" tabindex="-1"></p>
-        <ol class="s-next" aria-label="What happens next">
-          <li>You hear from me directly, by text or email, whichever you chose.</li>
-          <li>If it’s one I can send, we pick a drop-off in Lincoln, or I ask for your address to mail it.</li>
-          <li>Give it a real try, then give me your honest take. You don’t owe me an order.</li>
-        </ol>
-        <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
+        <div class="s-step" id="s-step2">
+          <!-- step 1, folded to a line once Next has checked it: filled in by the script -->
+          <div class="s-recap" id="s-recap" hidden>
+            <p class="s-recap-t"><b id="s-r-name"></b> · <span id="s-r-how"></span> · <span id="s-r-item"></span></p>
+            <button class="s-edit" type="button" id="s-edit">Edit<span class="vh"> your name, number or email, and pick</span></button>
+          </div>
+          <span class="s-say" aria-hidden="true">You can</span>
+          <fieldset class="c-q s-deliv" id="s-where" aria-describedby="s-where-err">
+            <legend>Where should it go?</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="delivery" value="Drop it off in Lincoln" required><span>drop it off, I’m in Lincoln</span></label>
+              <label class="chip"><input type="radio" name="delivery" value="Mail it (US)" aria-describedby="s-mail-note"><span>mail it, I’m in the US</span></label>
+            </div>
+            <p class="s-hint s-mail-note" id="s-mail-note">No need for your address yet. I’ll ask for it if it’s one I can mail.</p>
+            <p class="s-err" id="s-where-err"></p>
+          </fieldset>
+          <div class="s-ps"><span class="s-say" aria-hidden="true">P.S.</span>
+          <div class="c-field s-f-note"><label for="s-note">Anything else? <span>Optional</span></label>
+            <input id="s-note" name="note" type="text" autocomplete="off" maxlength="300" placeholder="A flavor you like, a good time to text…"></div></div>
+          <div class="s-checks">
+            <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this.</span></label>
+            <p class="s-err" id="s-consent-err"></p>
+            <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and the odd update after that is fine too. <em>Optional</em></span></label>
+          </div>
+          <div class="s-acts">
+            <button class="btn btn-line s-back" type="button" id="s-back" hidden><svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-back"/></svg>Back</button>
+            <button class="btn" type="submit" id="sample-go">Send it to Peter</button>
+          </div>
+          <p class="s-err" id="sample-fail" tabindex="-1"></p>
+          <ol class="s-next" aria-label="What happens next">
+            <li>You hear from me directly, by text or email, whichever you chose.</li>
+            <li>If it’s one I can send, we pick a drop-off in Lincoln, or I ask for your address to mail it.</li>
+            <li>Give it a real try, then give me your honest take. You don’t owe me an order.</li>
+          </ol>
+          <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
+        </div>
         <!-- /DRAFT-COPY -->
       </form>
       <!-- the thank-you takes the form's place: shown by the script after a send, or by
@@ -1299,16 +1326,16 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    is up (.st-book: the story parks it off its stage while its beat is not). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
    which sit where the tab does on a phone and go to the same places, "The game plan"'s "Ask
-   for a free sample" (#how-go), the quick-call buttons (.q-go) and the sample form's own send button
-   (#sample-go), which it would cover, an open compartment of the stack case (.bay-in: a closed one
-   is hidden, so has no box and never counts), the band that sends you
+   for a free sample" (#how-go), the quick-call buttons (.q-go) and the sample form's Next and Send
+   (#s-next, #sample-go), which it would cover, an open compartment of the stack case (.bay-in: a
+   closed one is hidden, so has no box and never counts), the band that sends you
    to the calculator on a category page, and the footer,
    which is the end of every page and so could never be scrolled out from under it. It also
    waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#sample-go,.bay-in,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#s-next,#sample-go,.bay-in,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -1825,7 +1852,8 @@ if(sform){
     if(el)el.setAttribute('aria-invalid',msg?'true':'false');
     return msg?el:null;
   };
-  var sCheck=function(){
+  /* the checks, split by step: Next runs the first, Send runs both, in the same order as ever */
+  var sCheck1=function(){
     var bad=[],by=sBy(),v;
     bad.push(sErr(sel('name'),'s-name-err',sval('name')?'':'Please add your name.'));
     if(by==='Text'){v=sval('phone').replace(/\D/g,'');
@@ -1833,19 +1861,134 @@ if(sform){
     else{v=sval('email');
       bad.push(sErr(sel('email'),'s-email-err',/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)?'':(v?'That email doesn’t look right.':'Please add an email I can reach you at.')));}
     bad.push(sErr(sel('product'),'s-product-err',sval('product')?'':'Tell me what you’d like to try, or say you’re not sure.'));
-    v=!!sval('delivery');                       /* a radio group: the error sits in its fieldset */
+    return bad.filter(Boolean);
+  };
+  var sCheck2=function(){
+    var bad=[],v=!!sval('delivery');            /* a radio group: the error sits in its fieldset */
     $('#s-where-err').textContent=v?'':'Pick drop-off in Lincoln or mail.';
     $$('input[name="delivery"]',sform).forEach(function(r){r.setAttribute('aria-invalid',v?'false':'true')});
     bad.push(v?null:$('input[name="delivery"]',sform));
     bad.push(sErr(sel('consent'),'s-consent-err',sel('consent').checked?'':'Please tick this so I’m allowed to reach you.'));
     return bad.filter(Boolean);
   };
+  var sCheck=function(){return sCheck1().concat(sCheck2())};
+
+  /* Two short steps. The markup is one form; the script folds it: step 1 is who you are and what
+     you'd like, step 2 is where it goes and the send. Next checks step 1 only, then step 1 folds
+     to a one-line recap at the top of step 2 (Edit and Back unfold it, every value kept). The
+     swap is opacity and transform only, and none at all under reduced motion. The fetch below
+     is untouched: it still reads every field, whichever step is showing. */
+  var s1=$('#s-step1'),s2=$('#s-step2'),sNext=$('#s-next'),sBack=$('#s-back'),
+      sStep=function(){return sform.dataset.step==='2'?2:1},
+      sStill=function(){return matchMedia('(prefers-reduced-motion: reduce)').matches};
+  [$('#s-prog'),sNext,sBack,$('#s-recap')].forEach(function(el){el.hidden=false});
+  sform.classList.add('s-two');sform.dataset.step='1';
+  var sTo=function(n){
+    var el=n===2?s2:s1,dx=n===2?28:-28;
+    sform.dataset.step=n;$('#s-prog-t').textContent=n+' of 2';
+    if(!sStill()&&el.animate)el.animate([{opacity:0,transform:'translate3d('+dx+'px,0,0)'},{opacity:1,transform:'none'}],
+      {duration:380,easing:'cubic-bezier(.2,.7,.2,1)'});
+    /* the card changed height under the visitor: if its top went up behind the mast, bring it back */
+    var m=$('.mast'),top=sform.getBoundingClientRect().top-(m?m.offsetHeight:0)-12;
+    if(top<0)scrollBy({top:top,behavior:sStill()?'auto':'smooth'});
+  };
+  var sRecap=function(){
+    var by=sBy();
+    $('#s-r-name').textContent=sval('name');
+    $('#s-r-how').textContent=(by==='Text'?'text ':'email ')+sval(by==='Text'?'phone':'email');
+    $('#s-r-item').textContent=sval('product');
+  };
+  /* DRAFT-COPY: the two step announcements and the Next error count */
+  var sForward=function(){
+    sform.dataset.tried1='1';
+    var bad=sCheck1();
+    if(bad.length){
+      bad[0].focus();
+      say(bad.length===1?'One thing to fix before the next step.':bad.length+' things to fix before the next step.');
+      return;
+    }
+    sRecap();sTo(2);
+    ($('input[name="delivery"]:checked',sform)||$('input[name="delivery"]',sform)).focus({preventScroll:true});
+    say('2 of 2. Where should it go?');
+  };
+  var sBackTo=function(){
+    sTo(1);s1.focus({preventScroll:true});
+    say('1 of 2. Your details, just as you left them.');
+  };
+  sNext.addEventListener('click',sForward);
+  sBack.addEventListener('click',sBackTo);
+  $('#s-edit').addEventListener('click',sBackTo);
+
+  /* The blanks grow with what is typed. A hidden twin in the same type measures the text; CSS
+     min-width and max-width bound it. The product blank is a textarea: once its words are wider
+     than the line it takes the whole line and wraps, a line taller at a time, so nothing typed
+     is ever scrolled out of sight. */
+  var sMir=doc.createElement('span');sMir.className='s-mir';sMir.setAttribute('aria-hidden','true');sform.appendChild(sMir);
+  var sFit=function(inp){
+    var cs=getComputedStyle(inp);
+    ['fontFamily','fontSize','fontWeight','fontStretch','letterSpacing'].forEach(function(k){sMir.style[k]=cs[k]});
+    sMir.textContent=inp.value;
+    var w=Math.ceil(sMir.getBoundingClientRect().width)+14;
+    inp.style.width=w+'px';
+    /* wider than the line: it has the whole line, so the full stop after it steps aside */
+    inp.parentNode.classList.toggle('s-full',inp.offsetWidth<w);
+    if(inp.tagName==='TEXTAREA'){inp.style.height='';inp.style.height=inp.scrollHeight+'px'}
+  };
+  var sFitAll=function(){$$('.c-field input,.c-field textarea',sform).forEach(sFit)};
+  sFitAll();
+  if(doc.fonts)doc.fonts.ready.then(sFitAll);
+  addEventListener('resize',sFitAll);
+  /* The product blank: Enter means Next (or takes the highlighted suggestion), a pasted line break
+     becomes a space, and up to five product names that match what is typed show under it, from
+     the page's own datalist. Arrow keys walk them, Escape closes them, a tap takes one. */
+  var sProd=sel('product'),sSug=$('#s-sugg'),sAt=-1,
+      sNames=$$('#sample-products option').map(function(o){return o.value});
+  sProd.setAttribute('aria-autocomplete','list');sProd.setAttribute('aria-controls','s-sugg');
+  var sSugClose=function(){sSug.hidden=true;sSug.textContent='';sAt=-1;sProd.removeAttribute('aria-activedescendant')};
+  var sSugMark=function(i){
+    var li=$$('li',sSug);sAt=i;
+    li.forEach(function(l,k){l.setAttribute('aria-selected',k===i?'true':'false')});
+    sProd.setAttribute('aria-activedescendant',li[i].id);
+  };
+  var sSugPick=function(v){
+    sProd.value=v;sSugClose();sFit(sProd);
+    if(sProd.getAttribute('aria-invalid')==='true'){sProd.setAttribute('aria-invalid','false');$('#s-product-err').textContent=''}
+    sProd.dispatchEvent(new Event('change',{bubbles:true}));
+  };
+  /* DRAFT-COPY: the suggestion announcements */
+  var sSugShow=function(){
+    var v=sProd.value.trim().toLowerCase(),q=v.split(/\s+/).filter(Boolean),was=!sSug.hidden,
+        m=v.length<2?[]:sNames.filter(function(n){n=n.toLowerCase();return n!==v&&q.every(function(w){return n.indexOf(w)>=0})}).slice(0,5);
+    if(!m.length){sSugClose();return}
+    sSug.textContent='';
+    m.forEach(function(n,k){var li=doc.createElement('li');li.id='s-sugg-'+k;li.setAttribute('role','option');
+      li.setAttribute('aria-selected','false');li.textContent=n;sSug.appendChild(li)});
+    sSug.hidden=false;sAt=-1;sProd.removeAttribute('aria-activedescendant');
+    if(!was)say(m.length===1?'One product matches. Arrow down to hear it.':m.length+' products match. Arrow down to hear them.');
+  };
+  sSug.addEventListener('mousedown',function(e){e.preventDefault()});   /* the blank keeps focus */
+  sSug.addEventListener('click',function(e){var li=e.target.closest('li');if(li)sSugPick(li.textContent)});
+  sProd.addEventListener('keydown',function(e){
+    var li=$$('li',sSug);
+    if(e.isComposing)return;
+    if(e.key==='ArrowDown'&&li.length){e.preventDefault();sSugMark((sAt+1)%li.length)}
+    else if(e.key==='ArrowUp'&&li.length){e.preventDefault();sSugMark(sAt<=0?li.length-1:sAt-1)}
+    else if(e.key==='Escape'&&li.length)sSugClose();
+    else if(e.key==='Enter'){e.preventDefault();if(sAt>=0&&li[sAt])sSugPick(li[sAt].textContent);else{sSugClose();sForward()}}
+  });
+  sProd.addEventListener('blur',function(){setTimeout(sSugClose,150)});
   sform.addEventListener('change',function(e){
-    if(e.target.name==='contact_by')sPick();
+    if(e.target.name==='contact_by'){sPick();sFitAll()}
     if(sform.dataset.tried)sCheck();            /* once they have tried to send, errors clear as they fix them */
+    else if(sform.dataset.tried1)sCheck1();     /* ...or, after a Next that stopped, step 1's */
   });
   /* typing into a flagged field clears its own error; the check itself waits for change or send */
   sform.addEventListener('input',function(e){
+    if(e.target===sProd){
+      if(/[\r\n]/.test(sProd.value))sProd.value=sProd.value.replace(/[\r\n]+/g,' ');
+      sSugShow();
+    }
+    if(e.target.matches('.c-field input,.c-field textarea'))sFit(e.target);
     var t=e.target,d=t.getAttribute('aria-invalid')==='true'&&t.getAttribute('aria-describedby');
     if(!d)return;
     t.setAttribute('aria-invalid','false');
@@ -1854,10 +1997,12 @@ if(sform){
   sform.addEventListener('submit',function(e){
     e.preventDefault();
     if(sform.getAttribute('aria-busy')==='true')return;
+    if(sStep()===1){sForward();return}          /* Enter in step 1 means Next */
     sform.dataset.tried='1';
     sfail.textContent='';
     var bad=sCheck();
     if(bad.length){
+      if(s1.contains(bad[0]))sTo(1);
       bad[0].focus();
       say(bad.length===1?'One thing to fix before this can send.':bad.length+' things to fix before this can send.');
       return;
