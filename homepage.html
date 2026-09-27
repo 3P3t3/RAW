@@ -2820,7 +2820,7 @@ var LB=null;
     }else if(BARM){                                   /* up into its plate's place on the pinned bar, fading as the plate goes on */
       var eb=smooth(Math.min(q,1));
       x=lerp(rp,G.tx-G.cx,eb);y=lerp(0,G.ty-G.cy,eb)-Math.sin(Math.PI*eb)*DROP.hop;s=lerp(k.rs,G.S/G.B,eb);rot=lerp(k.tilt,0,eb);
-      op=1-smooth(clamp((q-.5)/.42));
+      op=1-smooth(clamp((q-.74)/.26));             /* nearly there, and going under the pinned bar, before it fades */
     }else if(q<1){
       var e=smooth(q);
       x=lerp(rp,sx,e);y=lerp(0,sy,e)-Math.sin(Math.PI*e)*DROP.hop;s=lerp(k.rs,sS,e);rot=lerp(k.tilt,0,e);
@@ -2909,7 +2909,7 @@ var LB=null;
     parts.forEach(function(p,i){var on=i===best;if(on!==p.on){p.on=on;p.b.classList.toggle('is-on',on)}});
     /* his plates: each slides on as its pack arrives at the bar, in the change out of its beat */
     if(BARM)LB.peter(parts.reduce(function(ps,p,i){
-      if(p.kind==='prod'){var ko=i<N-1?clamp((x-at[i]-(HOLD[i]||1))/T):0;ps.push(smooth(clamp((clamp((ko-.1)/.4)-.45)/.45)))}
+      if(p.kind==='prod'){var ko=i<N-1?clamp((x-at[i]-(HOLD[i]||1))/T):0;ps.push(smooth(clamp((clamp((ko-.1)/.4)-.62)/.36)))}
       return ps},[]));
     /* the ground warms with the product: the sand sweeps in from the right behind the arriving
        can and has covered the words' column before they rise; chalk comes with the after */
