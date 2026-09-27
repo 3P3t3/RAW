@@ -91,8 +91,8 @@ placed by hand, not generated, so the build never rewrites it and nothing cleans
 
 `assets/peter/` holds Peter's photos for the story and the proof wall: `family-320.webp` (Peter, his
 wife and daughter), his before/after composites `front-`, `side-`, `back-` at `640.webp` and `960.webp`,
-and `front-before-480.webp` / `front-after-480.webp`, the two halves of the front pair cut at its
-seam (crop only) for the story's before-becomes-after wipe.
+and `side-before-480.webp` / `side-after-480.webp`, the two halves of the side pair cut at its
+seam (crop only, WebP q92) for the story's opening before and its before-becomes-after wipe.
 They are cut from his originals in `~/Desktop/aspiree/assets/rooms/` and placed by hand, so the
 build never touches them. Peter chose to make them public; the repo is public because Pages
 requires it.
