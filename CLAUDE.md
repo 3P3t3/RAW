@@ -108,6 +108,16 @@ increase that without asking him. The three pairs share one framing spec measure
 the seam must stay at exactly 50% with befores on the left, or the page's Before/After headings
 stop aligning.
 
+`assets/story/` holds the story's AI-relit product shots, `xs-creatine-lit.webp` (680px) and
+`nutrilite-sleep-health-lit.webp` (860px): relit with fal-ai/flux-pro/kontext, cut out with
+fal-ai/birefnet/v2, and placed by hand, so the build never touches them. Each was checked so that
+the name, logos, colours, shape and every front-of-pack number match the real pack; fine print may
+differ. Each sits on a square canvas framed like the catalogue image it replaces (same centre, same
+baseline, same pack area), so the story's `data-scale`/`data-x` and `.st-shade` carry over unchanged.
+The sleep bottle's moulded base rim, below the label seam only, had the lit set's teal bounce
+white-balanced out. Only the story uses them: the product cards, shelf pages and podium still use
+the catalogue images.
+
 ## The story (`#story`)
 
 The homepage runs hero → shelves → `#trending` (the scroll-scrubbed can pour) → `#story` →
