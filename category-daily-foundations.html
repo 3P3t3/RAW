@@ -1640,7 +1640,8 @@ var LB=null;
     els.forEach(function(el){
       if(!el||!el.animate)return;
       el.getAnimations().forEach(function(a){a.cancel()});
-      el.animate([{opacity:0},{opacity:1,offset:.1},{opacity:1,offset:.78},{opacity:0}],{duration:2400,easing:'linear'});
+      el.animate(reduce.matches?[{opacity:1},{opacity:1}]:[{opacity:0},{opacity:1,offset:.1},{opacity:1,offset:.78},{opacity:0}],
+                 {duration:2400,easing:'linear'});   /* reduced motion: shown, then gone, with no fade */
     });
   }
   function rings(bar,c){return $$('.bb-p[data-cat="'+c+'"] .bb-ring',bar)}
@@ -1678,8 +1679,12 @@ var LB=null;
       if(dy>1)scrollBy({top:dy,behavior:reduce.matches?'instant':'smooth'});
     },reduce.matches?0:60);
   }
+  /* the rack is one stop for Tab: the arrow keys, Home and End move between plates, so Tab goes
+     on from the plate straight into its open panel */
+  function rove(i){plates.forEach(function(b,j){b.tabIndex=j===i?0:-1})}
   function pick(i){
     sel=sel===i?-1:i;
+    rove(i);
     plates.forEach(function(b,j){b.setAttribute('aria-pressed',j===sel?'true':'false')});
     panels.forEach(function(p,j){p.hidden=j!==sel});
     if(sel>-1)show(sel);
@@ -1689,9 +1694,10 @@ var LB=null;
     b.addEventListener('keydown',function(e){
       var k=e.key,N=plates.length,j=k==='ArrowRight'||k==='ArrowDown'?(i+1)%N:k==='ArrowLeft'||k==='ArrowUp'?(i+N-1)%N:k==='Home'?0:k==='End'?N-1:-1;
       if(j<0)return;
-      e.preventDefault();plates[j].focus();
+      e.preventDefault();rove(j);plates[j].focus();
     });
   });
+  rove(0);
   if(rack)rack.addEventListener('keydown',function(e){
     if(e.key!=='Escape'||sel<0)return;
     var i=sel;pick(i);plates[i].focus();
