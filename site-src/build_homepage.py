@@ -106,6 +106,116 @@ CASE_PICKS = 3  # packs an open compartment shows: one per family, in the shelf'
 # band plain teal and fetches none of it. The frames and the script stay either way.
 TRENDING_POUR = False
 
+# DRAFT-COPY for Peter's approval: the one line under the name on the case's product card, one per
+# family (from the one-liner draft of 2026-09-26). Written to stay clear of Amway's health claims:
+# each says what the thing is or when it is used, never what it does for you. Every family needs one.
+TAGLINES = {
+    'XS Post-Workout Recovery': 'For getting back in the game after training',
+    'XS Muscle Multiplier': 'A daily habit alongside your strength training',
+    'XS CBD Cream': 'A soothing rub, before or after activity',
+    'XS CBD Pro Cream': 'The most CBD of the XS creams',
+    'Nutrilite Magnesium': 'Making sure you get enough, every day',
+    'Nutrilite Organics Ashwagandha Capsules': 'For the calmer end of a busy day',
+    'Nutrilite Organics Chamomile Tea': 'A cup to unwind with in the evening',
+    'Nutrilite Sleep Health': 'Part of the wind-down before lights out',
+    'n* by Nutrilite Sweet Dreams': 'Blueberry lavender, at the end of the night',
+    'XS Sports Twist Tubes': 'Turns your water bottle into a sports drink',
+    'Nutrilite Twist Tubes 2GO': 'Three everyday mixes to twist into water',
+    'XS CocoWater Hydration Drink Mix': 'Before, during and after the long, hot ones',
+    'XS Pre-Workout Boost': 'The last thing before a hard session',
+    'XS Energy + Focus Dietary Supplement': 'For giving the workout your full attention',
+    'XS Energy Drink 12 oz': 'The no-sugar can for before the session',
+    'XS Energy + Burn 12 oz': 'A small coffee’s caffeine, plus green tea extract',
+    'XS Juiced and Burn 12 oz': 'Six flavors from two ranges, to find yours',
+    'XS Sparkling Juiced Energy 12 oz': 'Made with real fruit juice, no added sugar',
+    'XS Elite + Focus Energy Drink': 'The everyday can, with naturally sourced caffeine',
+    'XS Grass-Fed Whey Protein': '30 g of protein a scoop, minimal ingredients',
+    'XS Grass-Fed Whey Protein Powder Sachets': 'The same 30 g shake, in single servings',
+    'XS Sports Protein Bars': 'Between or after workouts, 20 g of protein',
+    'XS Sports Protein Shakes': 'Ready to drink, with 25 g of protein',
+    'XS Protein Crisps': 'Savory, with 12 g of pea protein a serving',
+    'Nutrilite Organics All-in-One Bars': 'For when hunger hits on the go',
+    'XS Ignite Powder': 'Caffeine free, neat or mixed into a drink',
+    'XS Creatine+': 'A daily 5 g scoop, training day or not',
+    'Nutrilite Begin Daily GI Primer': 'A plant-rich drink to start your day',
+    'Nutrilite Balance Within Probiotic': 'A daily stick pack, part of the routine',
+    'Artistry Skin Nutrition Renewing Softening Toner': 'A milky layer that leaves skin soft',
+    'Artistry Skin Nutrition Sleeping Mask': 'Moisture to end the evening routine',
+    'Artistry Studio Glow Boss Cleanser + Exfoliator': 'A fresh start for your skin, every day',
+}
+
+# The quick-fact chips on the case's product card, per listing: (the amway.com page they were read
+# off, [2-4 chips]). Composition and format only: grams, milligrams, counts, sizes, "Caffeine free".
+# Never a benefit, never a claim. Every chip was read on that page (its Product details and
+# Ingredients tabs, through the listing's share link) on 2026-09-27. A listing with no entry shows
+# its tagline alone: add one only from its own Amway page, and never guess a number.
+AMWAY = 'https://www.amway.com/en_US/'
+CARD_FACTS = {
+    'XS Post-Workout Recovery - Fruit Punch (12 Stick Packs)': (
+        AMWAY + 'XS%E2%84%A2-Post-Workout-Recovery---Fruit-Punch-%2812-Stick-Packs%29-p-316380',
+        ['12 stick packs', '5.6 g L-glutamine', '1.5 g glucosamine', '45 calories']),
+    'XS Muscle Multiplier - Berry Blast': (
+        AMWAY + 'XS%E2%84%A2-Muscle-Multiplier---Berry-Blast-p-126753',
+        ['4.1 g essential amino acids', '0 g sugar', '25 calories', '222 g pouch']),
+    'Nutrilite Organics Chamomile Tea': (
+        AMWAY + 'Nutrilite%E2%84%A2-Organics-Chamomile-Tea-p-308636',
+        ['20 tea bags', 'Caffeine free', 'USDA Organic', '0 calories']),
+    'XS Sports Twist Tubes - Raspberry Lemonade': (
+        AMWAY + 'XS%E2%84%A2-Sports-Twist-Tubes-%E2%80%93-Raspberry-Lemonade-p-305555',
+        ['20 tubes', '5 g sugar', '25 calories', '120 mg sodium']),
+    'XS Creatine+': (
+        AMWAY + 'XS%E2%84%A2-Creatine%2B-p-128463',
+        ['5 g creatine monohydrate', '30 servings', 'Unflavored', 'Caffeine free']),
+    'Nutrilite Twist Tubes 2GO - Variety Pack': (
+        AMWAY + 'Nutrilite%26trade%3B-Twist-Tubes-2GO%26trade%3B-%26ndash%3B-Variety-Pack-p-110922',
+        ['20 tubes', '3 flavors', '5–30 calories a tube']),
+    'XS Energy Drink 12 oz - Classic': (
+        AMWAY + 'XS%E2%84%A2-Energy-Drink-12-oz---Classic-p-126883',
+        ['0 g sugar', '114 mg caffeine', '15 calories', '12 cans, 12 fl oz']),
+    'XS Pre-Workout Boost - Blue Raspberry (30 Serving Pouch)': (
+        AMWAY + 'XS%E2%84%A2-Pre-Workout-Boost---Blue-Raspberry-%2830-Serving-Pouch%29-p-316375',
+        ['115 mg caffeine', '4 g beta-alanine', '3.4 g L-citrulline', '30 servings']),
+    'XS Energy + Focus Dietary Supplement - 30 Tablets': (
+        AMWAY + 'XS%26trade%3B-Energy-%2B-Focus-Dietary-Supplement---30-Tablets-p-107846',
+        ['30 tablets', '75 mg caffeine a tablet', 'Caffeine from green tea']),
+    'XS Sports Protein Bars - Chocolate Peanut Butter': (
+        AMWAY + 'XS%E2%84%A2-Sports-Protein-Bars-%E2%80%93-Chocolate-Peanut-Butter-p-110385',
+        ['20 g protein', '12 bars', 'Gluten free']),
+    'XS Grass-Fed Whey Protein - Chocolate': (
+        AMWAY + 'XS%E2%84%A2-Grass-Fed-Whey-Protein-%E2%80%93-Chocolate-p-128154',
+        ['30 g protein', '20 servings', 'Grass-fed whey', '1 g sugar']),
+    'XS Sports Protein Shakes - Rich Chocolate': (
+        AMWAY + 'XS%E2%84%A2-Sports-Protein-Shakes-%E2%80%93-Rich-Chocolate-p-110369',
+        ['25 g protein', '1 g sugar', '12 shakes', 'Ready to drink']),
+    'XS Ignite Powder - Moro Blood Orange': (
+        AMWAY + 'XS%E2%84%A2-Ignite-Powder-%E2%80%93-Moro-Blood-Orange-p-127811',
+        ['30 sachets', 'Caffeine free', '15 calories', 'Gluten free']),
+    'Nutrilite Begin Daily GI Primer': (
+        AMWAY + 'Nutrilite-Begin%E2%84%A2-Daily-GI-Primer-p-127725',
+        ['30 servings', '4 g fiber', '30 calories', '<1 g sugar']),
+    'Nutrilite Balance Within Probiotic': (
+        AMWAY + 'Nutrilite%E2%84%A2-Balance-Within%E2%84%A2-Probiotic-p-120571',
+        ['30 stick packs', '6.3 billion CFU', '5 probiotic strains']),
+    'Artistry Skin Nutrition Sleeping Mask': (
+        AMWAY + 'Artistry-Skin-Nutrition%E2%84%A2-Sleeping-Mask-p-125575',
+        ['80 mL', 'Leave-on mask', 'With niacinamide']),
+    'Artistry Skin Nutrition Renewing Softening Toner': (
+        AMWAY + 'Artistry-Skin-Nutrition%E2%84%A2-Renewing-Softening-Toner--p-123783V',
+        ['200 mL', 'pH balanced', 'No animal-derived ingredients']),
+    'Artistry Studio Glow Boss Cleanser + Exfoliator': (
+        AMWAY + 'Artistry-Studio%E2%84%A2-Glow-Boss-Cleanser-%2B-Exfoliator-p-124812',
+        ['125 mL', 'Vegan', 'pH balanced', 'No parabens']),
+}
+
+# The product card's sound, by family: 'can' (a can cracking open and fizzing), 'level' (a short
+# rising arpeggio) or, for anything not named here, 'chime'. _script.html synthesises all three
+# inside the interface sound, so the mute button covers them and there is nothing to download.
+CARD_SOUND = {
+    'XS Creatine+': 'level',
+    'XS Energy Drink 12 oz': 'can', 'XS Energy + Burn 12 oz': 'can', 'XS Juiced and Burn 12 oz': 'can',
+    'XS Sparkling Juiced Energy 12 oz': 'can', 'XS Elite + Focus Energy Drink': 'can',
+}
+
 SHELF_LINE = {  # the line under each shelf name
     'recovery': 'After the session', 'hydration': 'Long, hot sessions', 'energy-focus': 'Before the session',
     'protein': 'Hitting your protein', 'fat-loss': 'Training to lean out', 'daily-foundations': 'Everyday basics',
@@ -307,6 +417,14 @@ def main():
             p['img'] = ''
         products.append(p)
     by = {p['product']: p for p in products}
+    missing = sorted(set(FAMILIES) - set(TAGLINES))
+    if missing:
+        raise SystemExit(f'TAGLINES: no line for {missing}')
+    for k, (src, chips) in CARD_FACTS.items():
+        if k not in by:
+            raise SystemExit(f'CARD_FACTS: no such product {k!r}')
+        if not src.startswith(AMWAY) or not 2 <= len(chips) <= 4 or any('|' in c for c in chips):
+            raise SystemExit(f'CARD_FACTS[{k!r}]: needs its amway.com source and 2-4 chips')
     for n in FEATURED + [t[3] for t in GOAL_TILES]:
         assert n in by, f'Missing product in CSV: {n}'
 
@@ -407,14 +525,26 @@ def main():
                 out_.append(pr)
         return out_
 
+    def pack_link(pr, label):
+        """A pack in a compartment: a link straight to its Amway page, carrying what its product card
+        shows. With script _script.html turns it into a button that opens the card (#pcard); without,
+        it stays the link. The card's words and facts ride on it, so there is no second copy of them."""
+        fam = family(pr['product'])
+        facts = CARD_FACTS.get(pr['product'], ('', []))[1]
+        named = '' if label == pr['name'] else f'<span class="vh">{esc(pr["name"])}, </span>'
+        return (f'<a class="bay-go" href="{esc(pr["share_link"])}" target="_blank" rel="noopener" '
+                f'data-name="{esc(pr["name"])}" data-kind="{esc(pr["desc"])}" data-line="{esc(TAGLINES[fam])}" '
+                f'data-facts="{esc("|".join(facts))}" data-sfx="{CARD_SOUND.get(fam, "chime")}">'
+                f'<img src="{pr["img"]}" alt="" width="600" height="600" loading="lazy" decoding="async">'
+                f'{named}<span>{esc(label)}</span><span class="vh">, buy on Amway (opens in a new tab)</span></a>')
+
     def case_section():
         bays = []
         for i, (slug_, name, tag, heading, fams) in enumerate(CATEGORIES):
             packs = case_picks(slug_, fams)
             names_ = [pr['name'] for pr in packs]
             cells = '\n'.join(
-                f'                <li class="bay-pack" style="--k:{j}"><img src="{pr["img"]}" alt="" width="600" height="600" '
-                f'loading="lazy" decoding="async"><span>{esc(pr["name"] if names_.count(pr["name"]) == 1 else pr["desc"].split(" · ")[-1])}</span></li>'
+                f'                <li class="bay-pack" style="--k:{j}">{pack_link(pr, pr["name"] if names_.count(pr["name"]) == 1 else pr["desc"].split(" · ")[-1])}</li>'
                 for j, pr in enumerate(packs))
             bays.append(
                 f'          <li class="bay" style="--i:{i}">\n'
@@ -435,7 +565,27 @@ def main():
                 '      <div class="sec-head grow"><h2 id="goals-title">What are we <span>maximizing?</span></h2></div>\n'
                 '      <div class="case grow" id="case">\n        <ul class="case-bays">\n'
                 + '\n'.join(bays) +
-                '\n        </ul>\n      </div>\n    </div>\n  </section>')
+                '\n        </ul>\n      </div>\n    </div>\n'
+                + card_dialog() +
+                '  </section>')
+
+    def card_dialog():
+        """The product card the case's packs open (_script.html fills it from the pack it opened from).
+        A modal <dialog>: without script, or without dialog support, nothing opens it and it never shows."""
+        return ('    <dialog class="pcard" id="pcard" aria-labelledby="pcard-name" aria-describedby="pcard-line">\n'
+                '      <div class="pcard-in">\n'
+                '        <button class="icon-btn pcard-x" type="button" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>\n'
+                '        <div class="pcard-art"><img id="pcard-img" alt="" width="600" height="600"></div>\n'
+                '        <div class="pcard-copy">\n'
+                '          <p class="pcard-kind" id="pcard-kind"></p>\n'
+                '          <h3 class="pcard-name" id="pcard-name"></h3>\n'
+                '          <p class="pcard-line" id="pcard-line"></p>\n'
+                '          <ul class="pcard-facts" id="pcard-facts" aria-label="Quick facts"></ul>\n'
+                '          <a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Add to cart on Amway'
+                '<span class="vh"> (opens in a new tab)</span></a>\n'
+                '        </div>\n'
+                '      </div>\n'
+                '    </dialog>\n')
 
     shelves = {'ring': ring_section, 'strip': strip_section, 'case': case_section}[SHELF_VIEW]()
     # the story's stack is the same case in miniature: the same seven compartments, in the same order,
