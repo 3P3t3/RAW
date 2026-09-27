@@ -112,9 +112,12 @@ stop aligning.
 Elite, Sleep Health, as `*-lit.webp`): relit with fal-ai/flux-pro/kontext, cut out with
 fal-ai/birefnet/v2, and placed by hand, so the build never touches them. Each was checked so that the
 name, logos, colours and shape match the real pack, while fine print may differ. The GI Primer shot
-is ~7% taller than the real tub (Peter accepted it). On XS Elite (the volume line) and the whey (net
-weight, servings, the caption under FREE) the model got lines wrong, so those were softened to
-illegible rather than left stating a wrong number. The sleep bottle's base rim had the lit set's teal
+is ~7% taller than the real tub (Peter accepted it). On the whey the model got lines wrong (net
+weight, servings, the caption under FREE), so those were softened to illegible rather than left
+stating a wrong number. XS Elite was regenerated for realism from the real catalogue can (droplets,
+metallic rim): its volume line reads the true "12 fl oz (355 mL)", and because kontext widened the
+can on every try, the cut-out was squeezed horizontally back to the real can's proportion — an even
+rescale, nothing redrawn. The sleep bottle's base rim had the lit set's teal
 bounce white-balanced out. Each file is framed like the catalogue image it replaces (same centre x,
 baseline and pack area; the whey measured on the pouch, with its scoop in front), so the story's
 `data-*` attributes and `.st-shade` carry over unchanged. Only the story uses them; the product cards,
@@ -131,7 +134,7 @@ Peter's lines inside it are his, verbatim, in PETER-COPY markers.
 
 Its pace lives in two places: the `HOLD` table and `T` in the story block of `_script.html`, and the
 run height (900lvh) in `style.css`. The stage renders from an eased copy of the scroll position with
-a speed cap and a backlog clamp, so a fast flick still plays each swirl; it is still a pure function
+a speed cap and a backlog clamp, so a fast flick still plays each fall; it is still a pure function
 of scroll, so scrolling back plays it backwards. Transforms and opacity only (a full scrub costs 0
 layouts); keep it that way. Reduced motion and no JavaScript get the same beats as a plain vertical
 sequence. It was tuned over four Fable review rounds; the rounds are tagged `story-round-0` to
