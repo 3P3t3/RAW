@@ -154,9 +154,10 @@ html.locked .mtab{transform:translateY(calc(100% + 2px));visibility:hidden}
 .mtab-call{background:var(--blue);color:#fff}
 .mtab a:active{opacity:.85}
 .mtab a:focus-visible{outline:2px solid var(--sand);outline-offset:-6px}
-/* under 360 the two halves at full tracking are 359px together and the call ran off the right
-   edge; a little less tracking and padding brings them to 312, both whole on a 320 screen */
-@media (max-width:359.98px){.mtab a{padding-inline:12px;letter-spacing:.08em}}
+/* at full tracking the two halves are 359px together: the call ran off the right edge under 360
+   and sat 0.4px from both edges at 360. Under 375 a little less tracking and padding brings them
+   to 312, whole on a 320 screen and clear of the edges at 360 */
+@media (max-width:374.98px){.mtab a{padding-inline:12px;letter-spacing:.08em}}
 /* 1024 and up the mast shows its own "Free call"; one call button on screen, never two */
 @media (min-width:1024px){.mtab-call{display:none!important}}
 html:not(.js) .mtab{display:none}
