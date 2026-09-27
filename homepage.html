@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=b76928ef">
+<link rel="stylesheet" href="style.css?v=fd8403c0">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -382,9 +382,11 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
 
   <!-- 3b. The game plan (#how): the path through the page, before anything else asks for attention.
        Four numbered steps, each linking to where it happens (#macros, #sample, #quick-call; step 3
-       has no section of its own, so it is not a link), then the one thing to do. The same steps
-       are marked "Step n of 4" on the sections themselves (.step-mark). Step 4's words switch
-       with CONSULT_QUICK_URL in build_homepage.py, as the quick-call button does. -->
+       has no section of its own, so it is not a link), then the one thing to do. The sections
+       themselves carry no step numbers: they sit in a different order on the page, so this list
+       alone is the map. Step 4's words switch with CONSULT_QUICK_URL in build_homepage.py, as
+       the quick-call button does. The sample is a request, never a promise: Peter decides what he
+       can send, so no line here or in #sample may guarantee one. -->
   <section class="sec how-sec" id="how" aria-labelledby="how-title">
     <div class="wrap">
       <!-- DRAFT-COPY -->
@@ -397,8 +399,8 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           <span class="how-t">Name your goal.</span>
           <span class="how-d">Pick what you’re chasing, then get your numbers from the free macro calculator.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li class="grow" style="--d:2"><a class="how-step" href="#sample"><span class="how-n" aria-hidden="true">02</span>
-          <span class="how-t">Sample anything on the shelves.</span>
-          <span class="how-d">On me. Dropped off in Lincoln, or mailed anywhere in the US.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+          <span class="how-t">Request a free sample.</span>
+          <span class="how-d">On me, while supplies last, dropped off in Lincoln or mailed in the US.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li class="grow" style="--d:3"><div class="how-step"><span class="how-n" aria-hidden="true">03</span>
           <span class="how-t">Report back.</span>
           <span class="how-d">A few days in, I’ll ask how you’re getting on. Say what worked and what didn’t, and I’ll tell you what I’d add next, if anything.</span></div></li>
@@ -407,7 +409,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           <span class="how-d">A free call to find where it slots in, then order through my Amway link if it earns a spot.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ol>
       <div class="how-go grow">
-        <a class="btn" id="how-go" href="#sample">Pick your free sample</a>
+        <a class="btn" id="how-go" href="#sample">Ask for a free sample</a>
         <a class="tlink" href="#macros">or run your macros first</a>
         <p class="how-fine">Sixty seconds of typing. I answer every one myself.</p>
       </div>
@@ -511,10 +513,9 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
   <section class="sec sample-sec" id="sample" aria-labelledby="sample-title">
     <div class="wrap split">
       <div class="split-text grow">
-        <!-- DRAFT-COPY --><p class="step-mark">Step 2 of 4</p>
-        <p class="label">Free sample</p>
-        <h2 id="sample-title"><span>First one’s</span> <span>on me</span></h2>
-        <p>Pick anything off the shelves and I’ll get you a free sample. Dropped off in Lincoln, or mailed anywhere in the US.</p><!-- /DRAFT-COPY -->
+        <!-- DRAFT-COPY --><p class="label">Try it first</p>
+        <h2 id="sample-title"><span>Request a</span> <span>free sample</span></h2>
+        <p>On me, while supplies last. Dropped off in Lincoln, or mailed anywhere in the US.</p><!-- /DRAFT-COPY -->
       </div>
       <form class="c-card grow" id="sample-form" action="https://formsubmit.co/peterherschelman@gmail.com" method="POST" data-endpoint="https://formsubmit.co/ajax/peterherschelman@gmail.com" style="--d:1">
         <input type="hidden" name="_subject" value="Sample request · Aspire Health">
@@ -585,21 +586,21 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
             <label class="chip"><input type="radio" name="delivery" value="Drop it off in Lincoln" required><span>I’m in Lincoln, drop it off</span></label>
             <label class="chip"><input type="radio" name="delivery" value="Mail it (US)" aria-describedby="s-mail-note"><span>Mail it to me (US)</span></label>
           </div>
-          <p class="s-hint s-mail-note" id="s-mail-note">No need for your address yet. I’ll get it when I reach out.</p>
+          <p class="s-hint s-mail-note" id="s-mail-note">No need for your address yet. I’ll ask for it if it’s one I can mail.</p>
           <p class="s-err" id="s-where-err"></p>
         </fieldset>
         <div class="c-field"><label for="s-note">Anything else? <span>Optional</span></label>
           <input id="s-note" name="note" type="text" autocomplete="off" maxlength="300" placeholder="A flavor you like, a good time to text…"></div>
         <div class="s-checks">
-          <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this sample.</span></label>
+          <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this.</span></label>
           <p class="s-err" id="s-consent-err"></p>
           <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and the odd update after that is fine too. <em>Optional</em></span></label>
         </div>
-        <button class="btn" type="submit" id="sample-go">Request my sample</button>
+        <button class="btn" type="submit" id="sample-go">Send it to Peter</button>
         <p class="s-err" id="sample-fail" tabindex="-1"></p>
         <ol class="s-next" aria-label="What happens next">
           <li>You hear from me directly, by text or email, whichever you chose.</li>
-          <li>Local? We pick a drop-off. Going by mail? That’s when I ask for your address.</li>
+          <li>If it’s one I can send, we pick a drop-off in Lincoln, or I ask for your address to mail it.</li>
           <li>Give it a real try, then give me your honest take. You don’t owe me an order.</li>
         </ol>
         <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
@@ -609,14 +610,12 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
            :target when FormSubmit sends a no-script visitor back to #sample-sent -->
       <div class="c-card s-done" id="sample-sent">
         <!-- DRAFT-COPY --><h3 id="sample-done-title" tabindex="-1">Got it, thank you.</h3>
-        <p>I’ll reach out within a day or two to sort out your sample.</p><!-- /DRAFT-COPY -->
+        <p>You’ll hear from me within a day or two about what I can send.</p><!-- /DRAFT-COPY -->
         <!-- DRAFT-COPY -->
         <div class="s-step3">
-          <p class="step-mark">Step 3 of 4</p>
-          <p>Give it a few days, then I’ll ask how you’re getting on. Be honest about what worked and what didn’t, and I’ll say what I’d add next, if anything.</p>
+          <p>If I can send it, give it a few days, then I’ll ask how you’re getting on. Be honest about what worked and what didn’t, and I’ll say what I’d add next, if anything.</p>
         </div>
         <div class="qc qc-done">
-          <p class="step-mark">Step 4 of 4</p>
           <p class="qc-ask">Want to figure out how to optimize this in your routine? That’s what the free call is for.</p>
           <a class="btn q-go" href="#consult">Book a free call</a>
         </div>
@@ -628,7 +627,6 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
            Words and button come from quick_call() in build_homepage.py. -->
       <!-- DRAFT-COPY -->
       <div class="qc qc-form" id="quick-call">
-        <p class="step-mark">Step 4 of 4</p>
         <p class="qc-ask">Want to figure out how to optimize this in your routine? That’s what the free call is for.</p>
         <a class="btn q-go" href="#consult">Book a free call</a>
       </div>
@@ -799,7 +797,6 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
   <section class="sec macros-sec" id="macros" aria-labelledby="macros-title">
     <div class="wrap split">
       <div class="split-text grow">
-        <!-- DRAFT-COPY --><p class="step-mark">Step 1 of 4</p><!-- /DRAFT-COPY -->
         <p class="label">Your numbers</p>
         <h2 id="macros-title"><span>Work out</span> <span>your macros</span></h2>
         <p>The math behind a higher you.</p>
@@ -1288,8 +1285,8 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    not watched either: the tab rides over it, except while the story's own "Book a free call"
    is up (.st-book: the story parks it off its stage while its beat is not). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
-   which sit where the tab does on a phone and go to the same places, "The game plan"'s "Pick
-   your free sample" (#how-go), the quick-call buttons (.q-go) and the sample form's own send button
+   which sit where the tab does on a phone and go to the same places, "The game plan"'s "Ask
+   for a free sample" (#how-go), the quick-call buttons (.q-go) and the sample form's own send button
    (#sample-go), which it would cover, an open compartment of the stack case (.bay-in: a closed one
    is hidden, so has no box and never counts), the band that sends you
    to the calculator on a category page, and the footer,
@@ -1690,7 +1687,7 @@ if(sform){
     });
   };
   sPick();
-  /* a category page's "Get a free sample" names its shelf, so the question starts answered */
+  /* a category page's "Ask for a free sample" names its shelf, so the question starts answered */
   var sTry=(new URLSearchParams(location.search).get('try')||'').slice(0,80);
   if(sTry&&!sval('product'))sel('product').value=sTry;
   var sShow=function(){
@@ -1750,12 +1747,12 @@ if(sform){
     };
     if(by==='Text')body.phone=sval('phone');else body.email=sval('email');
     body.product=sval('product');body.delivery=sval('delivery');body.note=sval('note');
-    body.consent='Yes, Peter can text or email me about this sample';
+    body.consent='Yes, Peter can text or email me about this';
     body.keep_in_touch=sel('keep_in_touch').checked?'Yes':'No';
     sform.setAttribute('aria-busy','true');sgo.textContent='Sending…';
     say('Sending your request.');
     var fail=function(){
-      sform.removeAttribute('aria-busy');sgo.textContent='Request my sample';
+      sform.removeAttribute('aria-busy');sgo.textContent='Send it to Peter';
       sfail.textContent='That didn’t send. Check your connection and try again. Everything you typed is still here.';
       say(sfail.textContent);
     };
