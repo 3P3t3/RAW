@@ -108,15 +108,17 @@ increase that without asking him. The three pairs share one framing spec measure
 the seam must stay at exactly 50% with befores on the left, or the page's Before/After headings
 stop aligning.
 
-`assets/story/` holds the story's AI-relit product shots, `xs-creatine-lit.webp` (680px) and
-`nutrilite-sleep-health-lit.webp` (860px): relit with fal-ai/flux-pro/kontext, cut out with
-fal-ai/birefnet/v2, and placed by hand, so the build never touches them. Each was checked so that
-the name, logos, colours, shape and every front-of-pack number match the real pack; fine print may
-differ. Each sits on a square canvas framed like the catalogue image it replaces (same centre, same
-baseline, same pack area), so the story's `data-scale`/`data-x` and `.st-shade` carry over unchanged.
-The sleep bottle's moulded base rim, below the label seam only, had the lit set's teal bounce
-white-balanced out. Only the story uses them: the product cards, shelf pages and podium still use
-the catalogue images.
+`assets/story/` holds AI-relit shots of all five story products (whey, GI Primer, XS Creatine+, XS
+Elite, Sleep Health, as `*-lit.webp`): relit with fal-ai/flux-pro/kontext, cut out with
+fal-ai/birefnet/v2, and placed by hand, so the build never touches them. Each was checked so that the
+name, logos, colours and shape match the real pack, while fine print may differ. The GI Primer shot
+is ~7% taller than the real tub (Peter accepted it). On XS Elite (the volume line) and the whey (net
+weight, servings, the caption under FREE) the model got lines wrong, so those were softened to
+illegible rather than left stating a wrong number. The sleep bottle's base rim had the lit set's teal
+bounce white-balanced out. Each file is framed like the catalogue image it replaces (same centre x,
+baseline and pack area; the whey measured on the pouch, with its scoop in front), so the story's
+`data-*` attributes and `.st-shade` carry over unchanged. Only the story uses them; the product cards,
+shelf pages and podium still use the catalogue images.
 
 ## The story (`#story`)
 
