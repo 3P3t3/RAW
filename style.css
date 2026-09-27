@@ -650,7 +650,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-copy{display:grid;gap:12px;justify-items:start;width:100%}
 .st-copy p{max-width:36ch}   /* measured in each line's own type */
 .st-copy .st-line{max-width:none}   /* the display lines take the column */
-.st-line{font:800 clamp(30px,8.6vw,40px)/.95 var(--display);font-stretch:72%;text-transform:uppercase;
+.st-line{font:800 clamp(36px,11.3vw,52px)/.95 var(--display);   /* the headline of each pack beat: 44px at 390, 36px at 320 */font-stretch:72%;text-transform:uppercase;
   letter-spacing:-.005em;text-wrap:balance;color:var(--teal)}
 .st-dark .st-line{color:var(--chalk)}
 .st-say{font:500 19px/1.45 var(--sans);text-wrap:pretty}
@@ -662,7 +662,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-solo .st-say{font-size:clamp(22px,6.2vw,30px);line-height:1.3;font-weight:600}
 .st-copy .st-note{max-width:40ch}
 /* short phones: his longer paragraphs give a little, so the photo beside them keeps its size */
-@media (max-height:600px){.st-say{font-size:17px;line-height:1.4}}
+@media (max-height:600px){.st-say{font-size:17px;line-height:1.4}.st-line{font-size:clamp(33px,10.4vw,44px)}}   /* short phones: the pack keeps its room */
 /* the proof the stage lets go into: the three pairs, stacked */
 .st-proof{padding-top:48px;padding-bottom:var(--sec)}
 .st-proof .c-proof{max-width:680px;margin:0 auto}
@@ -741,7 +741,7 @@ html:not(.js) #results[hidden]{display:block!important}
   .st-photo{width:auto;height:min(64vh,520px)}
   .st-fam .st-photo{height:min(52vh,400px)}
   .st-pair{width:min(46vw,520px)}
-  .st-line{font-size:clamp(44px,5vw,64px)}
+  .st-line{font-size:clamp(52px,6.2vw,84px)}
   .st-say{font-size:22px}
   .st-solo .st-say{font-size:clamp(30px,3.2vw,40px)}
   .story.is-live .st-beat{padding-top:calc(var(--mast) + 24px);padding-bottom:40px}
@@ -755,7 +755,7 @@ html:not(.js) #results[hidden]{display:block!important}
 }
 @media (min-width:1200px){
   .st-say{font-size:24px;line-height:1.45}
-  .st-line{font-size:clamp(52px,5.4vw,76px)}
+  .st-line{font-size:clamp(64px,6.8vw,96px)}
   .st-solo .st-say{font-size:clamp(30px,3.2vw,44px)}
 }
 
