@@ -1,0 +1,1596 @@
+
+/* Bricolage Grotesque, self-hosted. It used to come from two Google origins -- a 1451-byte
+   stylesheet from one, which then named the actual file on a second -- both in front of the
+   first paint: 2 DNS lookups + 2 TLS handshakes + 3 sequential round trips. Now it is one
+   same-origin file, preloaded by both templates, on the connection that already brought the
+   HTML. Nothing on this site touches a Google server any more; a grep for their hostnames
+   across site-src/ and the generated pages should stay empty.
+
+   The file is the exact latin variable woff2 Google served for this site's axis request,
+   all three axes intact: opsz 12..96, wght 200..800, wdth 75..100. Licence: assets/fonts/OFL.txt
+   (SIL OFL 1.1 — shipping it alongside the font is a condition of the licence, not a courtesy).
+
+   There is no @font-face descriptor for the optical-size axis: opsz is carried in the font's
+   own fvar table and applied by font-optical-sizing, whose initial value is auto. Google's
+   stylesheet relied on exactly the same thing and declared only the two ranges below. body
+   restates font-optical-sizing:auto so the dependency is visible rather than implied.
+
+   latin-ext is declared but gated by unicode-range, so it costs nothing on the wire for the
+   current content and is fetched only if a product name ever gains a character that needs it —
+   the same behaviour Google's stylesheet gave us. */
+@font-face{
+  font-family:"Bricolage Grotesque";
+  font-style:normal;
+  font-weight:200 800;
+  font-stretch:75% 100%;
+  font-display:swap;
+  src:url("assets/fonts/bricolage-grotesque-v9-latin.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:"Bricolage Grotesque";
+  font-style:normal;
+  font-weight:200 800;
+  font-stretch:75% 100%;
+  font-display:swap;
+  src:url("assets/fonts/bricolage-grotesque-v9-latin-ext.woff2") format("woff2");
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+:root{
+  /* Two darks, one sand, one greige ground */
+  --teal:#002E3B;--pearl:#1E262F;--beige:#E2C8AE;--sand:#E6D3C5;--soft:#D6D4C9;--tile:#E2DFD7;--chalk:#F4F2EC;--mindful:#BDB6AD;
+  --text:#415365;--ink:#1E262F;--line:rgba(30,38,47,.18);--on-dark:#C4D2D4;
+  --r:0px;
+  /* Bricolage Grotesque, variable. Its width axis spans 75-100 only: the 72% below
+     clamps to 75% (imperceptible) and .wordmark cannot stretch past 100%. */
+  --display:"Bricolage Grotesque","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --sans:"Bricolage Grotesque","Helvetica Neue",Helvetica,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --blue:#3340B8; /* lifted from the XS can */
+  --hero:#033246; /* the dark half of the hero video, so the panel and the film share one edge */
+  --pad:20px;--sec:72px;--mast:60px;
+  --ease:520ms cubic-bezier(.2,.7,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+/* the canvas takes its colour from html and extends the gradient's end colours into the
+   overscroll areas: teal above the mast, black under the black footer. body's own chalk
+   covers the document, so the gradient is only ever seen past the ends of the page. */
+html{-webkit-text-size-adjust:100%;scroll-padding-top:var(--mast);background:linear-gradient(var(--teal) 0 50%,#000 50% 100%)}
+html.locked{overflow:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:9;pointer-events:none;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.055'/%3E%3C/svg%3E");background-size:160px 160px}
+body{margin:0;background:var(--chalk);color:var(--text);font:16px/1.55 var(--sans);font-optical-sizing:auto;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:var(--display);font-weight:800;font-stretch:72%;text-transform:uppercase;color:var(--teal);margin:0;line-height:.92;letter-spacing:-.005em;text-wrap:balance}
+h3{font:600 17px/1.3 var(--sans);color:var(--ink);margin:0}
+p{margin:0}
+a{color:inherit}
+img{max-width:100%}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+a,button,summary{touch-action:manipulation}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+.dark :focus-visible,.mast :focus-visible,.menu :focus-visible{outline-color:var(--sand)}
+[hidden]{display:none!important}
+.vh{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:8px;top:-200px;z-index:50;background:var(--sand);color:var(--teal);padding:12px 16px;min-height:44px;border-radius:var(--r)}
+.skip:focus{top:8px}
+.ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:square;flex:none}
+.ic-sm{width:18px;height:18px}
+.wrap{width:100%;max-width:calc(1200px + 2 * var(--pad));margin:0 auto;padding:0 var(--pad)}
+
+/* One label style, one size */
+.label{font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
+
+/* Actions */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 28px;border:0;border-radius:var(--r);background:var(--blue);color:#fff;font:600 16px/1.2 var(--sans);text-decoration:none;text-align:center}
+.btn:active{opacity:.85}
+
+.btn-line{background:transparent;color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+/* the same button at the 44px hit height the mast and the text links already use */
+.btn-sm{min-height:44px;padding:0 18px;font-size:14px}
+.tlink{display:inline-flex;align-items:center;min-height:44px;padding:0;border:0;background:transparent;color:var(--teal);font:600 16px/1.2 var(--sans);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:6px}
+.tlink:active{opacity:.7}
+.tlink:active{opacity:.7}
+.icon-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:0;border-radius:var(--r);background:transparent;color:inherit}
+.icon-btn:active{background:rgba(255,255,255,.1)}
+
+/* Motion: rise-in on entry */
+.motion .grow{opacity:0;transform:translate3d(0,16px,0);transition:transform var(--ease),opacity var(--ease);transition-delay:calc(var(--d,0) * 70ms)}
+.motion .grow.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.motion .grow{opacity:1;transform:none;transition:none}}
+
+/* 1 + 2. Header: menu, wordmark, search. Search opens as a row on phones. */
+.mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--teal);color:var(--sand)}
+.bar{display:grid;grid-template-columns:44px 1fr auto auto;align-items:center;gap:4px;height:60px}
+.sound-toggle{color:var(--sand)}
+.wordmark{justify-self:center;display:inline-flex;align-items:center;gap:10px;min-height:44px;font-family:var(--sans);font-weight:800;font-stretch:112%;font-size:14px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;color:var(--sand);text-decoration:none}
+/* the wave: 4.11:1, filled rather than stroked, so it needs a wide slot of its own */
+.wordmark .mark{width:103px;height:25px;flex:none;fill:currentColor;stroke:none}
+/* 361-479: the compact bar cannot carry the 103px wave beside the wordmark at full size.
+   The content is 404px wide; with the page's 40px of side padding it needs a 444px
+   viewport, so below that the name takes the compact setting and the mark 84x20. Measured,
+   not guessed: at 390 this was 404px of content in a 350px bar, and the search toggle was
+   clipped off the page entirely. */
+@media (max-width:479px){.mast .wordmark{gap:6px;font-size:11px;letter-spacing:.08em}
+  .mast .wordmark .mark{width:84px;height:20px}}
+/* the menu bar carries only the close button and the wordmark, so the wave keeps its
+   103px there; under 420 the name takes the compact setting, as 260px of wordmark
+   overruns a 320px panel by 23px. */
+.menu .wordmark .mark{width:103px;height:25px}
+@media (max-width:419px){.menu .wordmark{gap:6px;font-size:11px;letter-spacing:.08em}}
+/* 419 and down the wave alone carries the bar. Beside the name it could only be 56px
+   there, which is not really the mark; with the name out of the way the bar has room for
+   140. The name stays in the accessibility tree and in the page title. */
+@media (max-width:419px){.mast .wordmark{gap:0}
+  .mast .wordmark .wm-name{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .mast .wordmark .mark{width:140px;height:34px}}
+/* the smallest phones: 140 overruns once a classic scrollbar takes 15px, so 320-360 gets 112 */
+@media (max-width:360px){.mast .wordmark .mark{width:112px;height:27px}}
+.nav-inline{display:none}
+.search{display:flex;gap:8px;padding:0 0 14px}
+.js .mast:not(.s-open) .search{display:none}
+.search{position:relative}
+.search input{flex:1;min-width:0;height:44px;padding:0 44px 0 14px;border:1px solid rgba(230,211,197,.4);border-radius:var(--r);background:rgba(230,211,197,.06);color:var(--chalk);font-size:16px;-webkit-appearance:none;appearance:none}
+.search input::placeholder{color:var(--on-dark);opacity:1}
+.search input:focus{border-color:var(--sand);outline:none;box-shadow:inset 0 0 0 1px var(--sand)}
+.search-go{position:absolute;right:0;top:0;color:var(--sand)}
+html:not(.js) .search-toggle{visibility:hidden}
+
+/* The tab: the calculator and the call, hung from the foot of the window. The pair moves as
+   one: off screen and out of the tab order until the script adds .on, which it does only
+   while nothing it could cover is in view and the curtain is gone (the tab block in the
+   script lists what); the open menu (html.locked) sends it away again. No script, no tab.
+   The calculator wears the mast's teal and micro-type; the call is the filled blue of every
+   primary button, because it is the one that matters. Each half runs down into the safe
+   area, so its colour reaches the edge of the glass. */
+.mtab{position:fixed;left:0;right:0;bottom:0;z-index:19;width:max-content;max-width:100%;margin:0 auto;
+  display:flex;border:1px solid rgba(230,211,197,.3);border-bottom:0;border-radius:var(--r);background:var(--teal);
+  transform:translateY(calc(100% + 2px));visibility:hidden;
+  transition:transform var(--ease),visibility 0s linear 520ms}
+.mtab.on{transform:none;visibility:visible;transition:transform var(--ease),visibility 0s}
+html.locked .mtab{transform:translateY(calc(100% + 2px));visibility:hidden}
+.mtab a{display:flex;align-items:center;justify-content:center;min-height:calc(44px + env(safe-area-inset-bottom,0px));
+  padding:0 18px env(safe-area-inset-bottom,0px);font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;
+  white-space:nowrap;text-decoration:none}
+.mtab-calc{color:var(--sand)}
+.mtab-call{background:var(--blue);color:#fff}
+.mtab a:active{opacity:.85}
+.mtab a:focus-visible{outline:2px solid var(--sand);outline-offset:-6px}
+/* at full tracking the two halves are 359px together: the call ran off the right edge under 360
+   and sat 0.4px from both edges at 360. Under 375 a little less tracking and padding brings them
+   to 312, whole on a 320 screen and clear of the edges at 360 */
+@media (max-width:374.98px){.mtab a{padding-inline:12px;letter-spacing:.08em}}
+/* 1024 and up the mast shows its own "Free call"; one call button on screen, never two */
+@media (min-width:1024px){.mtab-call{display:none!important}}
+html:not(.js) .mtab{display:none}
+@media (prefers-reduced-motion:reduce){.mtab,.mtab.on{transition:none}}
+
+/* 3. Hero: headline on solid teal, the glass explosion to the right over a teal/beige split */
+.hero{position:relative;isolation:isolate;overflow:hidden;background:var(--hero);color:var(--on-dark)}
+.hero-copy{position:relative;z-index:2;min-width:0;display:grid;gap:16px;justify-items:start;padding-top:28px;padding-bottom:12px}
+.hero .label{color:var(--sand)}
+.hero h1{color:var(--chalk);font-size:clamp(52px,17vw,72px)}
+.hero h1 span{display:block;white-space:nowrap}
+.hero .sub{max-width:34ch;color:var(--on-dark);font-size:16px;text-wrap:balance}
+.hero .tlink{color:var(--sand)}
+.hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px 28px;margin-top:6px}
+.hero-actions{width:100%}
+.hero-actions .btn{flex:1 1 100%}
+.hero-copy{padding-bottom:28px}
+/* phones: the subhead's two lines are paid for out of the copy's top padding and the gap
+   above the buttons, so "Work out your macros" still sits whole on the first screen at
+   375x812 after the curtain. Measured: the button's foot at 798, not 812. */
+@media (max-width:767px){.hero-copy{padding-top:20px}.hero-actions{margin-top:0}}
+.glass{position:relative;margin:0 calc(-1 * var(--pad));aspect-ratio:1;overflow:hidden}
+.glass video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:linear-gradient(90deg,var(--teal) 50%,var(--beige) 50%)}
+.glass-toggle{position:absolute;z-index:3;left:14px;bottom:14px;width:40px;height:40px;border-radius:50%;background:var(--teal);color:var(--chalk)}
+.glass-toggle:active{background:var(--teal);opacity:.8}
+.glass-toggle .ic{width:18px;height:18px}
+
+/* Sections */
+.sec{padding:var(--sec) 0}
+/* The game plan (#how): the path, four numbered steps and one thing to do. It sits on the page's
+   own ground between the hero and the shelves, closed off from them by a hairline. On a phone
+   each step is a row (number, words, arrow); from 768 they stand in two columns, from 1024 in four. */
+.how-sec{padding-bottom:0}
+.how-sec>.wrap{padding-bottom:var(--sec);border-bottom:1px solid var(--line);
+  width:calc(100% - 2 * var(--pad));max-width:1200px;padding-inline:0}
+.how-head{display:grid;gap:10px;margin-bottom:24px}
+.how-head h2{font-size:40px}
+.how-steps{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--line)}
+.how-steps li{border-bottom:1px solid var(--line)}
+.how-step{display:grid;grid-template-columns:40px minmax(0,1fr) 18px;column-gap:14px;row-gap:4px;
+  padding:16px 0;color:inherit;text-decoration:none}
+.how-n{grid-row:1 / span 2;font:800 28px/1 var(--display);font-stretch:72%;color:var(--teal)}
+.how-t{grid-column:2;font:600 17px/1.3 var(--sans);color:var(--ink)}
+.how-d{grid-column:2;font-size:15px;line-height:1.5;color:var(--text)}
+.how-ic{grid-column:3;grid-row:1 / span 2;align-self:center;color:var(--teal)}
+a.how-step:active{opacity:.7}
+@media (hover:hover){a.how-step:hover .how-t{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}}
+.how-go{display:flex;flex-wrap:wrap;align-items:center;gap:6px 28px;margin-top:28px}
+.how-go .btn{flex:1 1 100%}
+.how-fine{flex-basis:100%;font-size:14px;color:var(--text)}
+@media (min-width:768px){
+  .how-head{margin-bottom:40px}
+  .how-head h2{font-size:52px}
+  .how-steps{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px;border-top:0}
+  .how-steps li{border-bottom:0;border-top:1px solid var(--line)}
+  .how-step{grid-template-columns:minmax(0,1fr) 18px;row-gap:8px;padding:18px 0 28px}
+  .how-n{grid-row:auto;grid-column:1;font-size:44px}
+  .how-ic{grid-row:1;grid-column:2;align-self:start}
+  .how-t,.how-d{grid-column:1 / -1}
+  .how-go{margin-top:12px}
+  .how-go .btn{flex:none}
+}
+@media (min-width:1024px){.how-steps{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* Shelves: one tab per goal, one pack per panel */
+.shelves-sec .sec-head{margin-bottom:22px}
+.shelf-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1 * var(--pad));
+  padding:0 var(--pad);border-bottom:1px solid var(--line)}
+.shelf-tabs::-webkit-scrollbar{display:none}
+.shelf-tab{flex:none;min-height:52px;padding:0 16px;border:0;background:transparent;color:var(--text);
+  font:600 15px/1.2 var(--sans);white-space:nowrap;box-shadow:inset 0 -2px 0 transparent;transition:color .15s,box-shadow .15s}
+.shelf-tab[aria-selected="true"]{color:var(--teal);box-shadow:inset 0 -2px 0 var(--teal)}
+@media (hover:hover){.shelf-tab:hover{color:var(--teal)}}
+.shelf-panel{padding-top:24px;min-height:300px}
+.shelf-link{display:grid;gap:16px;align-items:center;color:inherit;text-decoration:none}
+.shelf-art{display:block;width:min(240px,62%);justify-self:center}
+.shelf-art img{display:block;width:100%;height:auto}
+.shelf-copy{display:grid;gap:8px;justify-items:start}
+.shelf-name{font:800 36px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.shelf-desc{max-width:34ch}
+.shelf-picks{font-size:14px;color:var(--text);max-width:40ch}
+.shelf-go{margin-top:4px;font:600 16px/1.2 var(--sans);color:var(--teal);text-decoration:underline;
+  text-decoration-thickness:1.5px;text-underline-offset:6px}
+@media (hover:hover){.shelf-link:hover .shelf-go{text-decoration-thickness:2.5px}}
+/* Generated backdrops: one image per band, masked so it dissolves into the ground */
+.isles-sec,.results,.consult,.cat-shop{position:relative;isolation:isolate}
+/* Dark bands: the trending band carries the pour film, the rest stay flat */
+.podium-sec{background:var(--teal)}
+/* Category pages: the sand band that sends you to the calculator */
+.cat-macros{background:var(--sand);color:var(--text)}
+.goals-sec{padding-bottom:0}
+.sec-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 24px;margin-bottom:28px}
+.sec-head>div{display:grid;gap:10px}
+.sec-head h2,.split-text h2{font-size:40px}
+.sec-head h2:focus{outline:none}
+.sec-head .tlink{flex:none}
+.sec-note{font-size:16px}
+
+/* 4. Goals: a typographic index, one ruled row per goal */
+.goal-index{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.goal-index li{border-bottom:1px solid var(--line)}
+.goal{display:grid;grid-template-columns:minmax(0,1fr) 96px;grid-template-areas:"name img" "desc img" "n img";column-gap:16px;align-items:center;padding:18px 0;color:var(--teal);text-decoration:none}
+.goal:active{opacity:.7}
+
+@media (hover:hover){.goal:hover .goal-name{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px}.goal:hover .goal-n{text-decoration:underline;text-underline-offset:4px}.card-link:hover .p-name{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}.tlink:hover{text-decoration-thickness:2.5px}}
+.goal-name{grid-area:name;font:800 24px/1 var(--display);font-stretch:72%;text-transform:uppercase}
+.goal-index{counter-reset:goal}
+
+.goal-desc{grid-area:desc;margin-top:8px;font-size:16px;line-height:1.35;color:var(--text)}
+.goal-n{grid-area:n;margin-top:6px;font-size:15px;font-variant-numeric:tabular-nums;color:var(--text)}
+.goal-img{grid-area:img;display:block;width:88px;aspect-ratio:1;justify-self:end;overflow:hidden}
+.goal-island{grid-area:img;display:flex;align-items:center;justify-content:flex-end;width:96px;height:78px}
+.goal-island img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;filter:drop-shadow(0 10px 10px rgba(30,38,47,.25))}
+.goal-img img{display:block;width:100%;height:100%;object-fit:contain}
+
+/* 5. Products: one backdrop, no chrome */
+.filter{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-8px 0 24px;padding:8px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+/* The filter line echoes whatever was typed into the search box, so its longest token is
+   a stranger's, not Peter's: "Nothing matches “zzzz…”" is as wide as the reader cares to
+   make it. As a flex item this p had min-width:auto, so it grew to the token's min-content
+   width (403px at 320) and shoved the Close button off the page. min-width:0 lets it
+   shrink, anywhere lets the token break, and Close keeps its own width. */
+.filter p{min-width:0;overflow-wrap:anywhere;color:var(--ink)}
+.filter .tlink{flex:none}
+.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 12px}
+.card{display:flex;flex-direction:column;min-width:0}
+.card-link{display:block;color:inherit;text-decoration:none}
+.shot{position:relative;display:block;aspect-ratio:6/5;padding:0 6% 4%}
+.shot-studio{aspect-ratio:1;padding:0}
+.shot img{position:relative;z-index:1;display:block;width:100%;height:100%;object-fit:contain;object-position:50% 100%}
+.grid .shot,.slide .shot{isolation:isolate}
+.grid .shot::before,.slide .shot::before{content:"";position:absolute;left:4%;right:4%;top:2%;bottom:6%;z-index:-2;border-radius:50%;
+  background:radial-gradient(58% 52% at 50% 46%,rgba(255,255,255,.72),rgba(255,255,255,0) 78%)}
+/* the re-lit studio packs carry their own contact shadow; everything else gets one here */
+.grid .shot:not(.shot-studio)::after,.slide .shot:not(.shot-studio)::after{content:"";position:absolute;left:22%;right:22%;bottom:3%;height:7%;z-index:-1;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(30,38,47,.3),rgba(30,38,47,0))}
+.card-link:active .shot{opacity:.85}
+.ph{display:flex;align-items:center;justify-content:center;aspect-ratio:1;padding:10px;text-align:center;font-size:13px;line-height:1.35;color:var(--text);background:var(--tile);border-radius:var(--r)}
+.ph-cap b{font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.p-tag{margin-top:10px;font:400 14px/1.3 var(--sans);color:var(--text)}
+.p-name{margin-top:4px;font:500 16px/1.3 var(--sans);color:var(--ink)}
+.card-link{display:grid}
+.p-desc{margin-top:3px;font-size:14px;line-height:1.45;color:var(--text)}
+/* Product copy is Peter's, straight out of share-links.csv, and a flavour can arrive as one
+   unbreakable token: "Strawberry/Watermelon" is 21 characters and no line-break opportunity,
+   because a solidus is not one. At 320 that token is 160px wide in a 127px card and printed
+   over its neighbour. `anywhere` lets it break mid-token as a last resort -- and, unlike
+   break-word, it also drops the token out of the min-content width, so a card in a
+   percentage or auto track cannot be forced wide by it either. Every place a product name
+   or description is printed uses these three classes: both grids, the carousel slides, the
+   and the podium. Guard the class, not the one row in the CSV. */
+.p-tag,.p-name,.p-desc{overflow-wrap:anywhere}
+/* rows share text heights: each card spans three subgrid rows. Both grids also need an
+   explicit single column: with only grid-template-rows set, the card's one column is auto,
+   and an auto track takes the min-content width of its item. .shot carries aspect-ratio, so
+   when the subgrid row is taller than its ratio wants -- which happens in any row that also
+   holds a square .shot-studio -- the ratio transfers that height back into a width and the
+   track blows past the card. minmax(0,1fr) pins the column to the card instead. */
+.shop .grid{row-gap:0}
+.shop .grid .card{display:grid;grid-row:span 4;grid-template-rows:subgrid;grid-template-columns:minmax(0,1fr);padding-bottom:36px}
+.shop .grid .card-link{grid-row:1 / 5;display:grid;grid-template-rows:subgrid;grid-template-columns:minmax(0,1fr)}
+.more{margin-top:40px;padding-top:20px;border-top:1px solid var(--line)}
+.shop .grid{column-gap:12px}
+
+/* Dark bands and the two-column split */
+.dark{background:var(--teal);color:var(--on-dark)}
+.dark h2{color:var(--chalk)}
+.cat-macros h2 span{display:block;white-space:nowrap}
+.dark .label{color:var(--on-dark)}
+.split{display:grid;grid-template-columns:minmax(0,1fr);gap:32px}
+.split-text{display:grid;gap:14px;align-content:start;justify-items:start}
+.split-text p:not(.label){max-width:42ch}
+
+/* 7. Consult: four answers, then a time on the calendar */
+.consult{overflow:hidden;overflow:clip;color:var(--text)}  /* clip, not hidden: hidden would make this a scroll box, and nothing sticky inside it could stick */
+.consult .split-text p:not(.label){max-width:40ch}
+.c-fine{font-size:14px;color:var(--text)}
+/* the calculator's numbers, carried into the consult after "See my numbers": the card's
+   tiles and micro-labels, smaller, one row at every width. The script owns [hidden]. */
+.c-nums{display:grid;gap:8px;width:100%;max-width:40ch;margin-bottom:10px}
+.c-nums-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.c-nums-list li{display:grid;gap:4px;justify-items:center;min-width:0;padding:10px 2px;background:var(--tile);text-align:center}
+.c-nums-g{font:800 clamp(18px,5.6vw,24px)/1 var(--display);font-stretch:72%;color:var(--teal);white-space:nowrap}
+.c-nums .mc-lab{font-size:11px;letter-spacing:.06em}
+.c-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:10px;max-width:40ch}
+.c-list li{position:relative;padding-left:20px;font-size:16px;color:var(--text)}
+.c-list li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:1px;background:var(--teal)}
+/* Peter's proof, which closes #story: the before and after, all three views stacked, nothing
+   to swipe. Every img carries its width and height, so nothing jumps when the lazy files land. */
+.c-proof{display:grid;gap:10px;width:100%;min-width:0;margin:4px 0 0}
+/* the three files share one crop, so a 1fr 1fr row above the stack puts the two headings on
+   the very 50% line every image splits on: one pair labels all three. */
+.c-cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.c-cols span{font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--text);opacity:.62;text-align:center}
+.c-stack{display:grid;gap:8px;min-width:0}
+.c-stack img{display:block;width:100%;height:auto;background:var(--tile)}
+.c-proof figcaption{font-size:14px;color:var(--text)}
+.c-card{display:grid;gap:22px;padding:24px 20px 26px;background:rgba(244,242,236,.86);
+  box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 40px 60px -40px rgba(0,30,39,.55)}
+@supports (backdrop-filter:blur(6px)){.c-card{backdrop-filter:blur(10px);background:rgba(244,242,236,.7)}}
+.c-q{margin:0;padding:0;border:0;min-width:0}
+.c-q legend{display:block;padding:0;margin-bottom:10px;font:600 15px/1.3 var(--sans);color:var(--ink)}
+/* the macro calculator's move to the form focuses its first question (or the calendar, once it
+   is up) so the reading position follows; a landing spot, not a control, so no ring, as .mc-q */
+.c-q legend:focus,.c-embed:focus{outline:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+/* the label wraps a hidden radio; the span is the pill, so :checked styles a sibling.
+   max-width keeps the two long training answers inside the card at 320px: the pill shrinks
+   and its text wraps to a second line rather than pushing the row wider than the screen. */
+.chip{position:relative;display:inline-flex;max-width:100%;min-width:0;cursor:pointer}
+.chip input{position:absolute;width:1px;height:1px;opacity:0;margin:0}
+.chip span{position:relative;display:inline-flex;align-items:center;gap:9px;overflow:hidden;
+  min-height:44px;padding:9px 13px;
+  border:1px solid var(--line);background:rgba(255,255,255,.5);color:var(--ink);
+  font:600 15px/1.25 var(--sans);
+  --sheen:rgba(0,46,59,.14);                 /* the sweep, dark on the pale pill */
+  transition:background .15s,color .15s,border-color .15s,box-shadow .18s,transform .18s cubic-bezier(.2,.7,.2,1)}
+/* a selected chip is picked up off the card: it lifts, casts a shadow, and holds a lit inner
+   edge along its top. All three survive greyscale, so selection never rests on colour alone. */
+.chip input:checked + span{background:var(--teal);border-color:var(--teal);color:var(--chalk);
+  transform:translateY(-2px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 0 0 1px rgba(255,255,255,.14),
+             0 10px 16px -10px rgba(0,30,39,.85);
+  --sheen:rgba(255,255,255,.5)}               /* and light on the teal one */
+.chip input:focus-visible + span{outline:2px solid var(--teal);outline-offset:3px}
+@media (hover:hover){
+  .chip:hover span{border-color:var(--teal);transform:translateY(-1px)}
+  .chip input:checked + span{transform:translateY(-2px)}
+}
+/* The emblems: 22px objects, forward when their chip is chosen. Decorative — the pill's own
+   text is the accessible name, and each svg carries aria-hidden in the markup. */
+.em{width:22px;height:22px;flex:none;overflow:visible;
+  transition:transform .18s cubic-bezier(.2,.7,.2,1),filter .18s}
+.chip input:checked + span .em{transform:translateY(-1px) scale(1.1);
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.45))}
+/* The shimmer: one specular sweep, fired by the act of choosing (and on hover, where there is
+   a pointer to hover with). Not an idle loop — five pills glinting on their own next to a
+   submit button is exactly the skeleton-loader look, and it would pull against the CTA.
+   Tied to the choice instead, it reads as the chip acknowledging the tap, which is also the
+   only version a phone ever gets to see. */
+.chip span::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;
+  background:linear-gradient(104deg,transparent 38%,var(--sheen) 50%,transparent 62%)}
+.chip input:checked + span::after{animation:chip-sheen 620ms cubic-bezier(.35,.6,.25,1)}
+@media (hover:hover){.chip:hover span::after{animation:chip-sheen 760ms cubic-bezier(.35,.6,.25,1)}}
+@keyframes chip-sheen{
+  from{opacity:1;transform:translate3d(-120%,0,0)}
+  to{opacity:1;transform:translate3d(120%,0,0)}
+}
+/* reduced motion: no sweep and nothing moves. The teal fill, the lit inner edge and the cast
+   shadow stay, so a selected chip is still unmistakable. */
+@media (prefers-reduced-motion:reduce){
+  .chip span,.em{transition:none}
+  .chip span::after{display:none}
+  .chip:hover span,.chip input:checked + span{transform:none}
+  .chip input:checked + span .em{transform:none}
+}
+.c-field{display:grid;gap:8px}
+.c-field label{font:600 15px/1.3 var(--sans);color:var(--ink)}
+.c-field label span{font-weight:400;color:var(--text)}
+.c-field input{height:52px;padding:0 14px;border:1px solid var(--line);border-radius:var(--r);
+  background:rgba(255,255,255,.62);color:var(--ink);font-size:16px;-webkit-appearance:none;appearance:none}
+.c-field input:focus{outline:none;border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.c-card .btn{width:100%}
+.c-sum{font-size:14px;color:var(--text);margin-top:-12px}
+/* nothing chosen yet, nothing to say: the line leaves the card's grid entirely rather than
+   holding a blank row and its 22px gap open under the button */
+.c-sum:empty{display:none}
+/* the calendly iframe takes the card's slot, so it reads as the card rather than a white box */
+.c-embed{height:700px;background:rgba(244,242,236,.7);
+  box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 40px 60px -40px rgba(0,30,39,.55)}
+/* calendly sets height="100%" as an attribute, which iframes ignore, so size it here */
+.c-embed iframe{display:block;width:100%;height:100%;border:0}
+
+/* Free sample (#sample): the consult's card, chips and fields, on the sand band. Only the
+   checkboxes, the hints and the errors are its own. */
+.sample-sec{background:var(--sand);color:var(--text)}
+.s-hint{font-size:14px;color:var(--text);margin:0}
+.s-mail-note{display:none;margin-top:10px}
+#sample-form:has(input[name="delivery"][value^="Mail"]:checked) .s-mail-note{display:block}
+.s-err{margin:0;font:600 14px/1.35 var(--sans);color:#9B2C1F}
+.s-err:empty{display:none}
+.c-field input[aria-invalid="true"]{border-color:#9B2C1F;box-shadow:inset 0 0 0 1px #9B2C1F}
+.s-checks{display:grid;gap:12px}
+.s-check{display:flex;gap:12px;align-items:flex-start;font:500 15px/1.4 var(--sans);color:var(--ink);cursor:pointer}
+.s-check input{flex:none;width:22px;height:22px;margin:0;accent-color:var(--teal)}
+.s-check em{font-style:normal;font-weight:400;color:var(--text)}
+#sample-form[aria-busy="true"] .btn{opacity:.7;cursor:progress}
+/* the thank-you: kept out of the layout until the script shows it (.on) or FormSubmit sends a
+   no-script visitor back to #sample-sent, when :target shows it and :has puts the form away */
+.s-done{display:none;gap:10px;align-content:start}
+.s-done.on,.s-done:target{display:grid}
+.s-done h3{font:800 28px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.s-done h3:focus{outline:none}
+.sample-sec:has(.s-done:target) #sample-form{display:none}
+/* what happens after "Request my sample": three numbered lines under the button */
+.s-next{list-style:none;margin:-8px 0 0;padding:0;display:grid;gap:8px;counter-reset:sn}
+.s-next li{position:relative;padding-left:32px;font-size:14px;line-height:1.45;color:var(--ink);counter-increment:sn}
+.s-next li::before{content:counter(sn);position:absolute;left:0;top:-1px;width:21px;height:21px;display:grid;place-items:center;
+  font:700 11px/1 var(--sans);color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+/* the quick call (step 4): under the form on a phone, beside it from 768 up, and again inside the
+   thank-you, where the one under the form steps aside. Its button is built by quick_call(). */
+.qc{display:grid;gap:12px;justify-items:start;padding:20px;box-shadow:inset 0 0 0 1px var(--line)}
+.qc-ask{font:600 17px/1.35 var(--sans);color:var(--ink);max-width:36ch}
+.qc .btn{width:100%}
+.s-done .qc{margin-top:8px;padding:18px 0 0;box-shadow:none;border-top:1px solid var(--line)}
+.s-step3{display:grid;gap:8px;justify-items:start;margin-top:8px}
+.sample-sec:has(.s-done.on) .qc-form,.sample-sec:has(.s-done:target) .qc-form{display:none}
+@media (min-width:768px){
+  .sample-sec .split{grid-template-rows:auto 1fr}
+  .sample-sec .split-text{grid-row:1}
+  .sample-sec .c-card{grid-row:1 / span 2}
+  .sample-sec .qc-form{grid-column:1 / 6;grid-row:2;align-self:start}
+  .qc .btn{width:auto}
+}
+/* The free sample (#sample) reads as a note to Peter: a fill-in-the-blank sentence in the display
+   type, in two short steps with script. Every field keeps its real label, visually hidden, and the
+   sentence around it is aria-hidden. The blanks grow as they fill (the script sizes them), the
+   chips sit in the sentence as words. All of it is under #sample, so the consult's card, chips and
+   fields, which this form borrows, never change. Without script nothing is hidden: one form. */
+#sample-form.s-two[data-step="1"] #s-step2,#sample-form.s-two[data-step="2"] #s-step1{display:none}
+#sample .c-card{position:relative;border-radius:30px;background:var(--chalk);padding:40px 22px 22px;
+  box-shadow:inset 0 0 0 2px var(--ink),8px 8px 0 var(--teal)}
+#sample .btn{border-radius:999px}
+#sample .s-step{display:block;min-width:0;font:400 28px/1.62 var(--display);color:var(--ink)}
+#sample .s-step:focus{outline:none}
+#sample .s-say{font-weight:800;font-stretch:75%;letter-spacing:-.005em}
+#sample .c-q{display:contents}
+#sample .s-ps{display:block}
+#sample .c-q legend,#sample .c-field label{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* the choices, as words in the sentence: dashed until picked, then a teal pill knocked askew */
+#sample .chips{display:inline}
+#sample .chip{display:inline-flex;vertical-align:baseline}
+#sample .chip span{min-height:44px;padding:0 .3em;border:2px dashed rgba(30,38,47,.34);border-radius:999px;
+  background:transparent;font:800 28px/1 var(--display);font-stretch:75%;color:var(--text)}
+#sample .chip input:checked + span{background:var(--teal);border:2px solid var(--ink);color:var(--chalk);
+  transform:rotate(-2deg);box-shadow:3px 3px 0 var(--ink)}
+@media (hover:hover){
+  #sample .chip:hover span{transform:none;color:var(--ink);border-color:var(--ink)}
+  #sample .chip:hover input:checked + span{transform:rotate(-2deg);color:var(--chalk)}
+}
+#sample .chip input:focus-visible + span{outline:3px solid var(--blue);outline-offset:3px}
+#sample .s-by .chip + .chip::before,#sample .s-deliv .chip + .chip::before{content:"/" / "";padding:0 .12em;
+  font:800 28px/44px var(--display);font-stretch:75%;color:rgba(30,38,47,.35)}
+#sample .s-deliv .chip + .chip::before{content:"or" / "";padding:0 .22em;color:var(--ink)}
+/* the full stop rides on the last choice, so a narrow line can never strand it on its own */
+#sample .s-deliv .chip + .chip::after{content:"." / "";padding-left:.06em;font-weight:800;font-stretch:75%;line-height:44px;color:var(--ink)}
+/* the blanks: a field and its error stacked in one inline box, so the sentence runs on after it */
+#sample .c-field{display:inline-flex;flex-direction:column;vertical-align:baseline;gap:4px;max-width:100%}
+#sample .c-field input,#sample .c-field textarea{min-width:4.4em;max-width:100%;border:0;border-radius:0;box-shadow:none;
+  field-sizing:content;font:800 28px/1 var(--display);font-stretch:75%;color:var(--blue);-webkit-appearance:none;appearance:none}
+#sample .c-field input{height:46px;padding:0 5px;border-bottom:3px solid var(--teal);background:transparent}
+#sample .c-field input::placeholder,#sample .c-field textarea::placeholder{color:transparent}
+#sample .c-field[data-by] input,#sample .s-f-item textarea{min-width:6.4em}
+#sample .c-field input:focus{outline:none;background:rgba(51,64,184,.08);border-bottom-color:var(--blue);box-shadow:0 3px 0 var(--blue)}
+#sample .c-field input[aria-invalid="true"]{border-bottom-color:#9B2C1F;background:rgba(155,44,31,.07);box-shadow:none}
+/* the product blank is a textarea so a long name wraps: every line gets its own underline */
+#sample .c-field textarea{--u:var(--teal);display:block;height:46px;padding:4px 5px 0;resize:none;overflow:hidden;
+  line-height:42px;overflow-wrap:break-word;background:repeating-linear-gradient(transparent 0 39px,var(--u) 39px 42px) content-box}
+#sample .c-field textarea:focus{--u:var(--blue);outline:none;background-color:rgba(51,64,184,.08)}
+#sample .c-field textarea[aria-invalid="true"]{--u:#9B2C1F;background-color:rgba(155,44,31,.07)}
+#sample .s-full + .s-say{display:none}
+/* no script: both contact blanks are there at once, so each shows its label above it */
+html:not(.js) #sample .c-field[data-by]{display:flex;margin:6px 0}
+html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:auto;margin:0;overflow:visible;clip:auto;
+  white-space:normal;font:600 13px/1.3 var(--sans);color:var(--text)}
+#sample .c-field .s-err{contain:inline-size;font-size:14px;line-height:1.35;font-stretch:100%}
+#sample .s-hint{font:400 14px/1.4 var(--sans)}
+#sample .s-step > .s-hint{margin-top:4px}
+#sample .s-deliv .s-hint,#sample .s-deliv .s-err{margin:4px 0 6px}
+/* what matches the product blank, from the datalist: tap one, or walk them with the arrow keys */
+#sample .s-sugg{list-style:none;margin:10px 0 2px;padding:0;display:grid;gap:6px;font:600 15px/1.3 var(--sans)}
+#sample .s-sugg li{display:flex;align-items:center;min-height:44px;padding:8px 16px;border-radius:22px;cursor:pointer;
+  background:#fff;box-shadow:inset 0 0 0 1.5px rgba(30,38,47,.22);color:var(--ink)}
+#sample .s-sugg li[aria-selected="true"]{background:var(--teal);color:var(--chalk);box-shadow:none}
+@media (hover:hover){#sample .s-sugg li:hover{box-shadow:inset 0 0 0 2px var(--ink)}}
+#sample .s-step > .btn{margin-top:16px}
+#sample .s-checks,#sample .s-acts,#sample .s-step > .s-err{margin-top:22px}
+#sample .s-next{margin-top:20px}
+#sample .c-fine{margin-top:18px;line-height:1.5}
+#sample .s-check input{width:24px;height:24px}
+.s-next-btn .ic{margin-right:-4px}
+#sample-form .s-acts{display:flex;gap:10px}
+#sample-form .s-acts .btn{flex:1 1 auto;width:auto}
+#sample-form .s-acts .s-back{flex:none;gap:6px;padding:0 18px}
+.s-mir{position:absolute;left:-9999px;top:0;visibility:hidden;white-space:pre;pointer-events:none}
+/* step 1, folded to a line at the top of step 2 */
+.s-recap{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px;padding:0 0 12px;border-bottom:2px dashed rgba(30,38,47,.22)}
+.s-recap-t{flex:1;min-width:0;margin:0;font:400 15px/1.45 var(--sans);color:var(--ink);overflow-wrap:anywhere}
+.s-recap-t b{font-weight:700}
+.s-edit{flex:none;min-height:44px;margin:-12px -6px -12px 0;padding:0 6px;border:0;background:none;cursor:pointer;
+  font:600 15px/1 var(--sans);color:var(--teal);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
+/* "1 of 2": a sticker slapped on the card's corner, never the old outlined "Step n of 4" tag */
+.s-prog{position:absolute;z-index:1;top:-32px;right:16px;display:grid;place-items:center;width:66px;height:66px;margin:0;
+  border-radius:50%;background:var(--sand);box-shadow:inset 0 0 0 2px var(--ink),3px 3px 0 var(--ink);
+  font:800 16px/1 var(--display);font-stretch:75%;color:var(--ink);transform:rotate(-12deg)}
+#sample .qc-form{border-radius:24px;box-shadow:inset 0 0 0 2px var(--ink)}
+/* under 360px the note drops two pixels of type and four of margin a side, so a line holds a
+   clause and a blank; it is still the heavy condensed cut, just a size down */
+@media (max-width:359px){
+  #sample .c-card{padding-left:18px;padding-right:18px}
+  #sample .s-step{font-size:26px}
+  #sample .chip span,#sample .c-field input,#sample .c-field textarea,#sample .s-by .chip + .chip::before,
+  #sample .s-deliv .chip + .chip::before{font-size:26px}
+}
+@media (min-width:768px){
+  #sample .c-card{padding:52px 36px 34px}
+  #sample .s-step{font-size:34px}
+  #sample .chip span,#sample .c-field input,#sample .c-field textarea,#sample .s-by .chip + .chip::before,
+  #sample .s-deliv .chip + .chip::before{font-size:34px}
+}
+
+/* the category banner's way to it */
+.cat-sample a{color:var(--sand);font-weight:600;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
+
+/* 8. Footer */
+.foot{background:#00222C;color:#C3CACD;padding:56px 0 calc(40px + env(safe-area-inset-bottom))}
+.foot-h{margin-bottom:8px;font-weight:600;color:var(--sand)}
+.foot .wordmark{justify-self:start;align-self:start;min-height:0;gap:0;font-size:13px;color:var(--sand);text-decoration:none;padding:8px 0;margin:-8px 0}
+.foot .wordmark:active{opacity:.7}
+@media (hover:hover){.foot .wordmark:hover{text-decoration:underline;text-underline-offset:5px}}
+/* the lockup as type: the mark is already the horizon behind it, so it is not repeated here */
+.foot-brand{display:grid;gap:7px;justify-self:start}
+.foot-tag{margin:0;font:600 12px/1.3 var(--sans);letter-spacing:.30em;text-transform:uppercase;color:#51A8AA}
+.foot-place{margin:0;font:500 11px/1.3 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--on-dark);opacity:.75}
+.foot-top{display:grid;gap:14px;padding-bottom:28px;border-bottom:1px solid rgba(230,211,197,.18)}
+.foot-links{display:grid;justify-items:start;gap:0}
+.foot-links a{display:inline-flex;align-items:center;min-height:44px;color:var(--chalk);text-decoration:none}
+.foot-links a:active{opacity:.7}
+@media (hover:hover){.foot-links a:hover{text-decoration:underline;text-underline-offset:5px}}
+.foot-meta{display:grid;gap:12px;margin-top:24px;max-width:70ch;font-size:14px;line-height:1.6}
+
+/* 8b. Footer horizon. Peter's lit wave laid along the top edge of the footer, the light
+   where the page ends. The shipped asset is the wave band cropped out of his artwork, so
+   the lockup type that sits under the wave there can never enter the frame. The ground
+   under it goes black, the image is screened onto it and its lower edge is masked away, so
+   there is no rectangle where the picture stops. The band owns its own strip: the footer's
+   top padding is the band's height plus its usual 36px, so no text ever sits on the glow.
+   Kept as one block, after the footer's own, so it merges in one piece. */
+.foot{--horizon:clamp(96px,22vw,260px);position:relative;isolation:isolate;
+  background:#000;padding-top:calc(var(--horizon) + 36px)}
+.foot-glow{position:absolute;left:0;top:0;width:100%;height:var(--horizon);pointer-events:none;
+  mix-blend-mode:screen;
+  -webkit-mask-image:linear-gradient(#000 50%,rgba(0,0,0,.4) 80%,transparent 100%);
+          mask-image:linear-gradient(#000 50%,rgba(0,0,0,.4) 80%,transparent 100%)}
+.foot-glow img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0}
+.foot .wrap{position:relative;z-index:1}
+
+/* Full-screen nav panel */
+dialog{color:var(--text)}
+.menu{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:var(--teal);color:var(--sand)}
+.menu-in{display:flex;flex-direction:column;min-height:100%}
+.menu-nav{margin-top:auto;padding-bottom:calc(32px + env(safe-area-inset-bottom))}
+.menu-nav .label{color:var(--on-dark)}
+.menu-list{list-style:none;margin:12px 0 0;padding:0}
+.menu-list li{border-top:1px solid rgba(230,211,197,.2)}
+.menu-list a,.menu-list button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:64px;padding:0;border:0;background:transparent;color:var(--chalk);font:800 36px/1 var(--display);font-stretch:72%;text-transform:uppercase;text-align:left;text-decoration:none}
+.menu-cta{width:100%;margin-top:28px}
+/* the shelves: every category page, in the nav's small type, two to a row */
+.menu-shelves-t{margin-top:24px}
+.menu-shelves{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}
+.menu-shelves a{display:flex;align-items:center;min-height:44px;border-top:1px solid rgba(230,211,197,.2);color:var(--chalk);font:600 15px/1.2 var(--sans);text-decoration:none}
+.menu-shelves a:active{opacity:.7}
+
+/* without JS nothing can reveal the shelf, so it is simply open */
+html:not(.js) #results[hidden]{display:block!important}
+
+/* ---------- 768px ---------- */
+@media (min-width:768px){
+  :root{--pad:40px;--sec:112px}
+
+  /* 12 columns, 24px gutters; column 6 starts every second-column element */
+  .hero,.goal,.split,.foot-top{--g:24px}
+  .hero-in,.goal,.split,.foot-top{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px}
+  .hero-in{align-items:center;min-height:clamp(560px,calc(100vh - 76px),800px);padding-top:56px;padding-bottom:56px}
+  .hero-copy{grid-column:1 / 6;grid-row:1;padding:0;gap:22px}
+  .hero h1{font-size:clamp(72px,7vw,104px)}
+  .hero .sub{font-size:18px;max-width:30ch}
+  .hero-actions{width:auto}
+  .hero-actions .btn{flex:none}
+  .hero-actions .tlink{display:inline-flex}
+  /* the film sits in the right half; its own dark half meets the panel, so there is one edge */
+  .glass{position:absolute;top:0;bottom:0;right:0;margin:0;aspect-ratio:auto;
+    left:calc((100% - min(100%, 1280px)) / 2 + 40px + 5 * ((min(100%, 1280px) - 80px - 264px) / 12 + 24px))}
+  .hero-copy{padding-bottom:0}
+  .glass-toggle{left:auto;right:24px;bottom:24px}
+
+  .shelf-panel{padding-top:36px;min-height:340px}
+  .shelf-link{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px}
+  .shelf-art{width:min(320px,100%)}
+  .shelf-name{font-size:52px}
+  .sec-head{margin-bottom:48px}
+  .sec-head h2,.split-text h2{font-size:52px}
+  .goal{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:none;column-gap:24px;padding:18px 0}
+  .goal-name{grid-area:auto;grid-column:1;font-size:30px;white-space:nowrap}
+  .goal-desc{grid-area:auto;grid-column:2}
+  .goal-n{grid-area:auto;grid-column:3}
+  .goal-img{grid-area:auto;grid-column:4}
+  .goal-desc{margin-top:0}
+  .goal-n{margin-top:0}
+  .goal-img{width:120px}
+  .goal-island{grid-area:auto;grid-column:4;align-self:center;justify-self:end;width:128px;height:104px}
+
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:48px 20px}
+  .shop .grid{row-gap:0}
+  .shop .grid .card{padding-bottom:52px}
+
+  .split{align-items:center}
+  .split{align-items:start}
+  .split-text{grid-column:1 / 6}
+  .split-text h2{max-width:none}
+  .ordering .split{align-items:start}
+
+  .foot-top{align-items:center}
+  .foot-top .foot-brand{grid-column:1 / 5}
+  .foot-links{grid-column:5 / 13;grid-auto-flow:column;justify-content:flex-end;gap:0 36px}
+  .c-card,.c-embed{grid-column:7 / 13}
+  .c-card{padding:32px}
+}
+
+/* ---------- 1024px: the inline nav ----------
+   wordmark + four nav items + the search field need ~990px of bar. Below that the
+   compact bar keeps the menu and the search toggle, and the consult is the filled
+   button at the foot of the menu panel instead. */
+@media (min-width:1024px){
+  :root{--mast:76px}
+  /* the wordmark column may not shrink below its own width: with the wave in it the block
+     is ~277px, and a minmax(0,1fr) track let it overflow into the nav at 1024 */
+  .mast .wrap{display:grid;grid-template-columns:minmax(auto,1fr) auto minmax(0,1fr) auto;align-items:center;gap:24px;height:76px}
+  .mast .search{justify-self:end;width:min(100%,300px);min-width:150px}
+  .mast .bar{display:contents}
+  .menu-btn,.search-toggle{display:none}
+  .mast .sound-toggle{order:4;justify-self:end;margin-left:-6px}
+  .mast .wordmark{justify-self:start;font-size:14px}
+  .mast .wordmark .mark{width:120px;height:29px}
+  .nav-inline{display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
+  .nav-inline a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--sand);text-decoration:none}
+  .nav-inline a:active{opacity:.7}
+  /* the primary action: same micro-type as its neighbours, filled */
+  .nav-inline .btn{margin-left:8px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#fff}
+  .js .mast:not(.s-open) .search,.search{display:flex;padding:0}
+}
+/* the mast's call reads "Book a free call" (the same words as every way to the call); that is
+   ~50px longer than the old "Free call", so under 1200 the nav items sit a little closer and
+   the nav keeps clear of the search field at 1024 */
+@media (min-width:1024px) and (max-width:1199px){
+  .nav-inline{gap:0}
+  .nav-inline a{padding:0 9px}
+  .nav-inline .btn{margin-left:6px;padding:0 14px}
+  .mast .search{min-width:138px}
+}
+
+/* ---------- 1200px ---------- */
+@media (min-width:1200px){
+  .goals{gap:20px}
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:56px 24px}
+  .shop .grid{row-gap:0}
+}
+
+/* ---------- Category pages ---------- */
+.cat-hero{position:relative;isolation:isolate;overflow:hidden;background:var(--teal);color:var(--chalk);min-height:58vh;display:grid;align-items:end}
+.cat-bg{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;transform:scale(1.08);will-change:transform}
+.cat-hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,30,39,.62),rgba(0,30,39,.28) 45%,rgba(0,30,39,.82))}
+.caustics{position:absolute;inset:0;z-index:-1;width:100%;height:100%;mix-blend-mode:screen;opacity:.5;pointer-events:none}
+.cat-hero-in{padding-block:120px 40px;display:grid;gap:14px;justify-items:start}
+.cat-hero .label a{color:var(--sand);text-decoration:none;border-bottom:1px solid rgba(230,211,197,.5);padding-bottom:2px}
+.cat-hero h1{color:var(--chalk);font-size:clamp(46px,14vw,68px)}
+.cat-hero .sub{max-width:42ch;color:var(--on-dark);font-size:16px}
+.cat-count{font-size:14px;color:var(--sand);font-variant-numeric:tabular-nums}
+.cat-shop .grid{row-gap:0}
+.cat-shop .card{display:grid;grid-row:span 4;grid-template-rows:subgrid;grid-template-columns:minmax(0,1fr);padding-bottom:36px}
+.cat-shop .card-link{grid-row:1 / 5;display:grid;grid-template-rows:subgrid;grid-template-columns:minmax(0,1fr)}
+.cat-more{padding-top:0}
+
+/* Flavour carousel */
+.carousel-sec .sec-head{align-items:center}
+.sec-head>.car-nav{display:flex;gap:4px}
+.car-nav .icon-btn{border:1px solid var(--line);color:var(--teal)}
+.car-nav .icon-btn:active{background:var(--press)}
+.carousel{list-style:none;display:grid;grid-auto-flow:column;grid-auto-columns:60%;gap:16px;margin:20px calc(-1 * var(--pad)) 0;padding:0 var(--pad);overflow-x:auto;contain:paint;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.carousel::-webkit-scrollbar{display:none}
+.slide{scroll-snap-align:none}
+.slide .card-link{display:grid;color:inherit;text-decoration:none}
+.slide .shot{aspect-ratio:1}
+.slide .p-name{min-height:2.6em;margin-top:8px;font:600 15px/1.3 var(--sans);color:var(--ink)}
+.carousel-sec .sec-note{margin-top:-14px}
+
+@media (min-width:768px){
+  .cat-hero{min-height:64vh}
+  .cat-hero-in{padding-block:180px 56px;gap:18px}
+  .cat-hero h1{font-size:clamp(64px,7vw,104px)}
+  .cat-hero .sub{font-size:18px;max-width:46ch}
+  .carousel{grid-auto-columns:24%;gap:24px;margin:24px 0 0;padding:0}
+  .cat-shop .card{padding-bottom:52px}
+  .cat-shop .grid{row-gap:0}
+}
+
+/* ---------- Trending: podium ---------- */
+.podium-sec{position:relative;isolation:isolate;margin-top:56px;padding-top:0;overflow:visible}
+.podium-sec .sec-head{padding-top:var(--sec);margin-bottom:0;align-items:baseline}
+.podium{list-style:none;margin:56px 0 0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:44px;align-items:start}
+.pod{position:relative;perspective:900px}
+.pod .card-link{position:relative;display:grid;color:var(--chalk);text-decoration:none;transform-style:preserve-3d;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.pod .shot{margin-top:-30px;isolation:isolate}
+.pod .shot::after{content:"";position:absolute;left:24%;right:24%;bottom:2%;height:6%;z-index:-1;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(0,12,18,.7),rgba(0,12,18,0))}
+.pod-rank{order:-1;margin-bottom:6px;font:600 12px/1.3 var(--sans);letter-spacing:.16em;color:var(--sand);font-variant-numeric:tabular-nums}
+.pod .p-tag{color:var(--sand)}
+.pod .p-name{color:var(--chalk)}
+.pod .p-desc{color:var(--on-dark)}
+.pod-count{margin-top:10px;font-size:14px;color:var(--sand);font-variant-numeric:tabular-nums}
+.pod-num{font:800 22px/1 var(--display);font-stretch:72%;display:inline-block;margin-right:4px}
+@media (hover:hover){.pod .card-link:hover .p-name{text-decoration:underline;text-underline-offset:4px}}
+@media (prefers-reduced-motion:reduce){.pod .card-link{transition:none}}
+
+@media (min-width:768px){
+  .podium-sec{margin-top:88px}
+  .podium{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;align-items:start;margin-top:76px}
+  .pod .shot{margin-top:-70px}
+
+}
+
+/* ---------- The pour: a scroll-scrubbed film behind the trending band ---------- */
+/* The stage is sized to the large viewport: mobile Safari's toolbar coming back must not
+   resize it mid-scrub. Sticky keeps it over whatever slice of the band is on screen, and
+   max-height keeps it inside a band shorter than the viewport, so it never needs clipping
+   (an overflow:hidden parent would stop the sticking). Teal underneath, so a band whose
+   frames are still coming, or never come, is still a band. */
+.pour-bg{position:absolute;inset:0;z-index:-1;background:var(--teal)}
+.pour-stage{position:sticky;top:0;height:100vh;max-height:100%}
+@supports (height:100lvh){.pour-stage{height:100lvh}}
+.pour-film,.pour-still{display:block;width:100%;height:100%;object-fit:cover}
+.pour-still{position:absolute;inset:0}
+/* The scrim. The podium sits on top of this, and the film runs to near-white where the
+   drink fills the frame, so it is heavy on purpose: .7 holds every text colour on the
+   band above 4.5:1 against a white pixel, and the ends go darker still for the heading
+   and for the edges the band shares with the light sections. */
+.pour-bg::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(rgba(0,20,27,.88) 0,rgba(0,20,27,.7) 18%,rgba(0,20,27,.7) 82%,rgba(0,20,27,.88) 100%)}
+
+/* ---------- Peter's story: a storyboard after the pour ---------- */
+/* Nine beats in reading order. As plain content (reduced motion, no script) they stand one
+   under another, each on its own tone, dark to light. When the script takes the section over
+   (.is-live) the stage sticks for the length of the run, the beats stack inside it, and the
+   script moves each one with transform and opacity only, as a pure function of how far the
+   run has scrolled. The ground is the pour band's teal with the sand and the chalk faded in
+   over it, so it warms without ever being a colour the site does not use. */
+.story{position:relative;background:var(--chalk)}
+.st-beats{list-style:none;margin:0;padding:0}
+.st-bg{display:none}
+.st-beat{display:flex;flex-direction:column;align-items:center;gap:24px;padding:56px var(--pad)}
+.st-dark{background:var(--teal);color:var(--on-dark)}
+.st-warm{background:var(--sand);color:var(--ink)}
+.st-light{background:var(--chalk);color:var(--ink)}
+.st-dark :focus-visible{outline-color:var(--sand)}
+.st-hero{display:flex;align-items:center;justify-content:center;width:100%;min-width:0}
+.st-art{position:relative;flex:none;width:min(66vw,300px);aspect-ratio:1}
+.st-art img{display:block;width:100%;height:100%;object-fit:contain;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+/* his photos: the frame is the photo's own shape, and a crop of it never shows */
+.st-photo{width:auto;height:min(56vh,420px);aspect-ratio:3/4;overflow:hidden;background:var(--tile)}
+.st-photo img{object-fit:cover}
+.st-fam .st-photo{height:min(40vh,300px);aspect-ratio:4/5}
+/* the hydration stack arrives as a pair: one high on the left, one low on the right */
+.st-pair{width:min(86vw,380px);aspect-ratio:5/4}
+/* a pack: its picture and, under it, a contact shadow on the baseline every pack shot stands
+   on (the build seats each one at 91% of its square). The script moves the two separately, so
+   the shadow lifts and shrinks with the swirl but never turns with it. */
+.st-pack{position:absolute;inset:0}
+.st-pack img{position:relative;display:block;width:100%;height:100%;object-fit:contain;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.st-shade{position:absolute;left:15%;width:70%;top:84%;height:14%;
+  background:radial-gradient(ellipse,rgba(0,20,27,.5),transparent 70%)}
+.st-warm .st-shade{background:radial-gradient(ellipse,rgba(0,20,27,.22),transparent 70%)}
+.st-pair .st-pack{inset:auto;width:64%;aspect-ratio:1;top:0;left:0}
+.st-pair .st-pack+.st-pack{top:auto;left:auto;right:0;bottom:0}
+/* the turn: without the stage only the after stands; the stage lays the before under it */
+.st-was{display:none}
+.st-wipe,.st-wipe-in{position:absolute;inset:0;overflow:hidden}
+.st-tag{position:absolute;left:8px;top:8px;padding:6px 8px;background:rgba(244,242,236,.9);color:var(--ink);
+  font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase}
+/* the after's tag sits on its own side, so mid-wipe the frame reads before | after, as the pair does */
+.st-wipe .st-tag{left:auto;right:8px}
+.st-copy{display:grid;gap:12px;justify-items:start;width:100%}
+.st-copy p{max-width:36ch}   /* measured in each line's own type */
+.st-copy .st-line{max-width:none}   /* the display lines take the column */
+.st-line{font:800 clamp(36px,11.3vw,52px)/.95 var(--display);   /* the headline of each pack beat: 44px at 390, 36px at 320 */font-stretch:72%;text-transform:uppercase;
+  letter-spacing:-.005em;text-wrap:balance;color:var(--teal)}
+.st-dark .st-line{color:var(--chalk)}
+.st-say{font:500 19px/1.45 var(--sans);text-wrap:pretty}
+.st-dark .st-say{color:var(--chalk)}
+.st-note{font-size:15px;line-height:1.45;color:var(--text)}
+.st-dark .st-note{color:var(--on-dark)}
+.st-go .ic{margin-left:8px}
+.st-dark .st-go{color:var(--sand)}
+.st-solo .st-say{font-size:clamp(22px,6.2vw,30px);line-height:1.3;font-weight:600}
+.st-copy .st-note{max-width:40ch}
+/* short phones: his longer paragraphs give a little, so the photo beside them keeps its size */
+@media (max-height:600px){.st-say{font-size:17px;line-height:1.4}.st-line{font-size:clamp(33px,10.4vw,44px)}}   /* short phones: the pack keeps its room */
+/* the proof the stage lets go into: the three pairs, stacked */
+.st-proof{padding-top:48px;padding-bottom:var(--sec)}
+.st-proof .c-proof{max-width:680px;margin:0 auto}
+
+/* the stage. Sized to the large viewport so mobile Safari's toolbar cannot resize it
+   mid-scrub, as the pour's is; the beats inside it to the small one, so a line and its link
+   are never under the toolbar. Each beat clears the masthead at the top and the tab at the
+   foot. Only the beat whose line is up can be tapped. */
+.story.is-live .st-run{height:900vh}
+@supports (height:100lvh){.story.is-live .st-run{height:900lvh}}
+.story.is-live .st-stage{position:sticky;top:0;height:100vh;overflow:hidden;overflow:clip}
+@supports (height:100lvh){.story.is-live .st-stage{height:100lvh}}
+.story.is-live .st-bg{display:block;position:absolute;inset:0;background:var(--teal)}
+.st-bg span{position:absolute;inset:0;opacity:0}
+.st-sand{background:var(--sand)}
+/* the pour band's own scrim, carried over its bottom edge: the ground comes up out of the
+   pour's dark and lifts to teal as the stage settles, instead of meeting it at a hard line */
+.st-dusk{background:linear-gradient(rgba(0,20,27,.88),rgba(0,20,27,0) 70%)}
+.st-chalk{background:var(--chalk)}
+/* the stage light: a soft pool where the pack stands, up only while a pack is at rest in it */
+.st-lamp-dark{background:radial-gradient(circle at 50% 38%,rgba(244,242,236,.15),transparent 55%)}
+.st-lamp-warm{background:radial-gradient(circle at 50% 38%,rgba(255,255,255,.35),transparent 55%)}
+/* the sand sweeps in from the right behind the arriving can, on a soft leading edge, rather
+   than fading up over the whole stage: the script slides it, and it is solid long before the
+   words rise on it */
+/* it is light coming in, not a curtain: a long span turned 14 degrees, its soft leading edge
+   about half a stage wide, so it sweeps across on the slant and reaches the words' corner (lower
+   left) last. 240% wide, not less: on a tall phone the slant alone moves the edge 43% of the
+   width between top and bottom, and it must still cover every corner at rest (-32%). */
+.story.is-live .st-sand{left:0;top:-25%;right:auto;bottom:auto;width:240%;height:150%;opacity:1;
+  transform-origin:50% 50%;transform:translate3d(55%,0,0) rotate(-14deg);
+  background:linear-gradient(to right,rgba(230,211,197,0),var(--sand) 21%)}
+.story.is-live .st-beats{position:absolute;left:0;right:0;top:0;height:100vh}
+@supports (height:100svh){.story.is-live .st-beats{height:100svh}}
+.story.is-live .st-beat{position:absolute;inset:0;justify-content:flex-end;gap:22px;background:none;
+  padding:calc(var(--mast) + 16px) var(--pad) calc(72px + env(safe-area-inset-bottom,0px));
+  opacity:0;pointer-events:none}
+.story.is-live .st-beat.is-on{pointer-events:auto}
+.story.is-live .st-hero{flex:1 1 0;min-height:0}
+.story.is-live .st-art{height:100%;width:auto;max-width:100%;max-height:min(92vw,380px);will-change:transform,opacity}
+.story.is-live .st-photo{max-height:440px}
+.story.is-live .st-fam .st-photo{max-height:400px}   /* one paragraph now: the family is the largest thing on the beat */
+.story.is-live .st-pair{max-height:min(74vw,320px)}
+.story.is-live .st-was{display:block}
+.story.is-live .st-copy{will-change:transform,opacity}
+.story.is-live .st-pack img,.story.is-live .st-shade{will-change:transform,opacity}
+/* each beat and each light keeps its own layer for the whole run: an opacity crossing 1 would
+   otherwise make and unmake one, and that costs a layout every time it happens */
+.story.is-live .st-beat,.story.is-live .st-bg span{will-change:opacity}
+.story.is-live .st-sand{will-change:transform}
+.st-book{margin-top:12px}
+.st-arc{display:none}
+.story.is-live .st-arc{display:block;position:relative;flex:0 0 auto;width:min(100%,380px);height:min(36vw,150px);margin-bottom:8px}
+.st-arc .st-pack{inset:auto;width:24%;aspect-ratio:1;left:calc(var(--x) - 12%);top:var(--y)}
+/* the stack: the #goals case in miniature, the same seven compartments in the same order, along
+   the top of the stage. It comes up empty with the first pack's beat; each pack, once its line
+   has been read, shrinks and glides into its own shelf's compartment, so by the sleep beat five
+   are filled and two stand empty; at the call the whole case, packs and all, moves up into the
+   place above the button (.st-arc, an empty box) and lifts away after it. The script measures the
+   wells once per resize and moves the case with transform and opacity only. */
+.st-row{display:none}
+.story.is-live .st-row{display:block;position:absolute;z-index:0;left:var(--pad);right:var(--pad);top:calc(var(--mast) + 6px);height:62px;pointer-events:none;
+  opacity:0;transform-origin:50% 50%;will-change:transform,opacity}
+.story.is-live .st-beats{z-index:1}   /* the packs stand in the case, so they are drawn over it */
+.stc-body{display:flex;gap:3px;height:100%;padding:4px;border-radius:12px;
+  background:linear-gradient(165deg,color-mix(in srgb,var(--teal) 86%,var(--chalk)),var(--teal) 45%,color-mix(in srgb,var(--teal) 78%,#000));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px rgba(230,211,197,.24),0 14px 26px -14px rgba(0,20,27,.6)}
+.stc-bay{display:flex;flex-direction:column;flex:1 1 0;min-width:0;gap:4px}
+.stc-well{flex:1 1 0;min-height:0;border-radius:8px;background:linear-gradient(color-mix(in srgb,var(--sand) 55%,var(--chalk)),var(--sand));
+  box-shadow:inset 0 5px 8px -5px rgba(0,20,27,.5),inset 0 0 0 1px rgba(0,20,27,.14)}
+.stc-name{display:none}
+.story.is-live .st-warm{padding-top:calc(var(--mast) + 16px + 68px)}   /* the packs' own beats keep the case's band clear */
+.story.is-live .st-arc{height:clamp(62px,19vw,84px)}
+/* with the pour switched off the band above is flat teal, so there is no film's shade to carry over */
+.no-pour~.story .st-dusk{display:none}
+.story.is-live .st-solo{justify-content:center}
+.story.is-live .st-proof{padding-top:0}
+/* the opening pair: the same photo at the same size and place in both beats, so the turn can lay
+   its before exactly over the first one. Held to the top of its slot, and sized to leave room
+   for the words under it at every phone height. */
+@media (max-width:767px){
+  .story.is-live .st-open .st-hero{align-items:flex-start}
+  .story.is-live .st-open .st-photo{height:min(440px,calc(100vh - var(--mast) - 280px));max-height:none}
+  @supports (height:100svh){.story.is-live .st-open .st-photo{height:min(440px,calc(100svh - var(--mast) - 280px))}}
+}
+
+@media (min-width:768px){
+  .st-beat{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;align-items:center;align-content:center;
+    padding:88px max(var(--pad),calc((100% - 1200px) / 2))}
+  .st-hero{grid-column:7 / 13;grid-row:1}
+  .st-copy{grid-column:1 / 7;grid-row:1}
+  .st-solo .st-copy{grid-column:2 / 12}
+  .st-solo .st-say{max-width:28ch}
+  .st-solo .st-arc{grid-column:2 / 12;grid-row:1;justify-self:start}
+  .st-solo .st-arc~.st-copy{grid-row:2}
+  .st-art{width:min(38vw,420px)}
+  .st-photo{width:auto;height:min(64vh,520px)}
+  .st-fam .st-photo{height:min(52vh,400px)}
+  .st-pair{width:min(46vw,520px)}
+  .st-line{font-size:clamp(52px,6.2vw,84px)}
+  .st-say{font-size:22px}
+  .st-solo .st-say{font-size:clamp(30px,3.2vw,40px)}
+  .story.is-live .st-beat{padding-top:calc(var(--mast) + 24px);padding-bottom:40px}
+  .story.is-live .st-hero{height:min(66vh,560px)}
+  .story.is-live .st-art{max-height:420px}
+  .story.is-live .st-photo{max-height:520px}
+  .story.is-live .st-fam .st-photo{max-height:420px}
+  .story.is-live .st-pair{max-height:416px}
+  .story.is-live .st-row{left:calc(50% + 12px);right:max(var(--pad),calc((100% - 1200px) / 2));top:calc(var(--mast) + 18px);height:104px}
+  .stc-body{gap:5px;padding:6px 6px 5px;border-radius:16px}
+  .stc-well{border-radius:10px}
+  .stc-name{display:block;min-height:2.3em;font:700 8.5px/1.15 var(--sans);letter-spacing:.14em;text-transform:uppercase;text-align:center;
+    color:var(--sand);text-wrap:balance;overflow:hidden}
+  .story.is-live .st-warm{padding-top:calc(var(--mast) + 24px + 116px)}
+  /* the call's place for the case is a band above its words, not a hero column: without this it took
+     the live hero height (up to 560px) and pushed the words and the button off a 900px-tall screen */
+  .story.is-live .st-solo .st-arc{width:min(100%,760px);height:min(10vw,136px)}
+  .st-lamp-dark{background:radial-gradient(circle at 74% 50%,rgba(244,242,236,.15),transparent 45%)}
+  .st-lamp-warm{background:radial-gradient(circle at 74% 50%,rgba(255,255,255,.35),transparent 45%)}
+}
+@media (min-width:1200px){
+  .st-say{font-size:24px;line-height:1.45}
+  .st-line{font-size:clamp(64px,6.8vw,96px)}
+  .st-solo .st-say{font-size:clamp(30px,3.2vw,44px)}
+}
+
+/* ---------- Archipelago: seven floating islands ---------- */
+.isles-sec{overflow:hidden;padding-bottom:40px}
+.isles-sec .sec-head{margin-bottom:20px}
+.isle-caption{display:grid;justify-items:center;gap:3px;text-align:center;margin-top:10px;min-height:46px}
+.isle-caption .isle-name,.isle-caption .isle-note{transition:opacity .25s}
+.archipelago{contain:layout paint;touch-action:pan-y;cursor:grab}
+.archipelago.dragging{cursor:grabbing}
+.archipelago{position:relative;height:clamp(250px,58vw,300px);margin-top:4px}
+.isles{list-style:none;margin:0;padding:0;position:absolute;inset:0}
+.isle{position:absolute;left:50%;top:50%;width:var(--w,150px);margin-left:calc(var(--w,150px) / -2);will-change:transform,opacity;transform-origin:50% 45%}
+.isle a{display:grid;justify-items:center;gap:6px;color:var(--ink);text-decoration:none}
+.isle-art{position:relative;display:block;width:100%}
+.isle-art img{display:block;width:100%;height:auto}
+.isle-label{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.isle-name{font:800 16px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.isle-note{font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
+.isle a:focus-visible .isle-name{text-decoration:underline;text-underline-offset:4px}
+@media (hover:hover){.isle a:hover .isle-name{text-decoration:underline;text-underline-offset:4px}}
+.isles-toggle{position:absolute;right:0;bottom:0;width:40px;height:40px;border-radius:50%;background:var(--teal);color:var(--chalk)}
+.isles-toggle .ic{width:18px;height:18px}
+.isles-toggle:active{background:var(--teal);opacity:.8}
+html:not(.js) .archipelago{height:auto}
+html:not(.js) .isles{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+html:not(.js) .isle{position:static;width:auto;margin:0}
+@media (min-width:768px){
+  .archipelago{height:360px;margin-top:8px}
+  .isle-name{font-size:19px}
+  .isle-note{font-size:12px}
+}
+
+/* ---------- The stack case (#goals): the seven shelves as one case ---------- */
+/* One object: a dark teal case with seven compartments, one per shelf. Each lid is a button
+   (_script.html) with its shelf's name and line on it in small caps; it hinges up and away, and
+   the sand inside shows a few of that shelf's packs and the way to the shelf. Phones and tablets
+   hold the case upright, seven stacked; from 1024 it lies in one row of seven and the open
+   compartment takes a wider column. The section's ground is the page's: the case keeps its edge
+   on chalk and on deep teal alike (a sand hairline rim and a soft drop shadow). Without script
+   every compartment stands open with no lids. */
+.case{--lid:color-mix(in srgb,var(--teal) 87%,var(--chalk));--lid-lo:color-mix(in srgb,var(--teal) 95%,var(--chalk));
+  --well:color-mix(in srgb,var(--sand) 50%,var(--chalk));--hinge:320ms cubic-bezier(.3,.7,.2,1);
+  position:relative;max-width:520px;padding:10px;border-radius:24px;
+  background:linear-gradient(165deg,color-mix(in srgb,var(--teal) 90%,var(--chalk)) 0%,color-mix(in srgb,var(--teal) 88%,#000) 40%,color-mix(in srgb,var(--teal) 70%,#000) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(0,0,0,.4),0 0 0 1px rgba(230,211,197,.24),
+    0 34px 60px -30px rgba(0,20,27,.65),0 14px 24px -18px rgba(0,20,27,.5)}
+.case-bays{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.bay{position:relative;display:grid;grid-template-rows:auto auto;border-radius:14px;overflow:hidden;
+  background:linear-gradient(var(--well),var(--sand) 80%);
+  box-shadow:inset 0 9px 14px -9px rgba(0,20,27,.55),inset 0 0 0 1px rgba(0,20,27,.14)}
+.bay-lid{position:relative;z-index:1;display:grid;align-content:center;justify-items:start;gap:5px;width:100%;min-height:62px;
+  padding:12px 52px 12px 18px;border:0;border-radius:0;background:none;text-align:left}
+.bay-lid:focus-visible{outline:2px solid var(--sand);outline-offset:-6px}
+.bay.is-open .bay-lid:focus-visible{outline-color:var(--teal)}
+.bay-name,.bay-note{position:relative;z-index:1;text-transform:uppercase;transition:color var(--hinge)}
+.bay-name{font:700 13px/1.15 var(--sans);letter-spacing:.2em;color:var(--chalk)}
+.bay-note{font:600 10.5px/1.25 var(--sans);letter-spacing:.16em;color:var(--on-dark)}
+.bay.is-open .bay-name{color:var(--teal)}
+.bay.is-open .bay-note{color:var(--text)}
+/* the lid: teal on the teal case, a lit top edge, one soft sheen running across all seven, and a
+   thumb notch at its free edge. It hinges on its back edge and is gone by the time it is open. */
+.lid{position:absolute;inset:0;z-index:0;border-radius:inherit;
+  background:linear-gradient(172deg,transparent 30%,rgba(255,255,255,.075) 48%,transparent 64%) 0 calc(var(--i) * 100% / 6) / 100% 700% no-repeat,
+    linear-gradient(var(--lid),var(--lid-lo));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -2px 0 rgba(0,0,0,.3),0 0 0 1px rgba(0,12,16,.35);
+  transform-origin:50% 0;transition:transform var(--hinge),opacity 260ms cubic-bezier(.4,0,.2,1) 60ms}
+.lid::after{content:"";position:absolute;right:20px;top:50%;width:6px;height:24px;margin-top:-12px;border-radius:3px;
+  background:rgba(0,16,22,.5);box-shadow:0 1px 0 rgba(255,255,255,.12),inset 0 1px 2px rgba(0,0,0,.45)}
+.bay.is-open .lid{transform:perspective(640px) rotateX(-48deg) translate3d(0,-12px,0);opacity:0;pointer-events:none}
+@media (hover:hover){.bay:not(.is-open) .bay-lid:hover .lid{transform:perspective(640px) rotateX(-7deg)}}
+.bay-well{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--hinge)}
+.bay.is-open .bay-well{grid-template-rows:1fr}
+.bay-in{display:grid;align-content:start;justify-items:start;min-height:0;overflow:hidden;padding:0 18px}
+.bay-packs{list-style:none;margin:0;padding:2px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%}
+.bay-pack{position:relative;z-index:0;text-align:center;font:500 12px/1.3 var(--sans);color:var(--ink)}
+/* a pack: a link to Amway without script, a button that opens its product card with it */
+.bay-go{display:grid;justify-items:center;align-content:start;gap:4px;width:100%;margin:0;padding:0;border:0;border-radius:12px;
+  background:none;color:inherit;font:inherit;text-align:center;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.bay-go:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+/* a pack shot is its product on a square with room round it, standing at 91% down, drawn --s times
+   the cell's width. It is grown by layout, not by a transform: the compartment has to clip to fold
+   shut, and a scaled image paints outside its own box, so its top was cut (Peter, on his phone).
+   Its transparent sides overlap the next cell's; on a phone it grows downward, so the compartment
+   gains the headroom, and on a wide screen, where the compartment has a fixed height and free
+   space above its packs, it reaches up into that space by the same 91%-down baseline as before */
+.bay-go img{--w:min(100%,112px);--s:1.3;display:block;width:calc(var(--w) * var(--s));max-width:none;height:auto;
+  margin:0 calc((100% - var(--w) * var(--s)) / 2);filter:drop-shadow(0 7px 6px rgba(0,20,27,.2));
+  transition:transform 200ms cubic-bezier(.2,.7,.2,1),opacity 120ms linear}
+@media (hover:hover){.bay-go:hover img{transform:translate3d(0,-3px,0)}}
+.bay-go:active img{transform:translate3d(0,1px,0)}
+.bay-go.is-out img{opacity:0}   /* its card is open and the pack is in it */
+.bay-all{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:4px 0 8px;color:var(--teal);font:600 15px/1.2 var(--sans);
+  text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
+@media (hover:hover){.bay-all:hover{text-decoration-thickness:2.5px}}
+.motion .bay.is-open .bay-pack{animation:pack-in 420ms cubic-bezier(.2,.7,.2,1) calc(90ms + var(--k) * 55ms) backwards}
+@keyframes pack-in{from{opacity:0;transform:translate3d(0,14px,0) scale(.94)}}
+/* it arrives closed: the case rises in with the heading (.grow) and its lids settle into place */
+.motion .case.in .lid{animation:lid-settle 560ms cubic-bezier(.2,.7,.2,1) calc(140ms + var(--i) * 45ms) backwards}
+@keyframes lid-settle{from{transform:perspective(640px) rotateX(-9deg) translate3d(0,-3px,0)}}
+/* no script: every compartment open, no lids. Keyed to html.js (set in the head), not to the case's
+   own script, so with script the packs are never fetched before a lid is opened */
+html:not(.js) .lid{display:none}
+html:not(.js) .bay-in[hidden]{display:grid!important}
+html:not(.js) .bay-well{grid-template-rows:1fr}
+html:not(.js) .bay-lid{cursor:default}
+html:not(.js) .bay-name{color:var(--teal)}
+html:not(.js) .bay-note{color:var(--text)}
+@media (prefers-reduced-motion:reduce){.lid,.bay-well,.case-bays,.bay-name,.bay-note,.bay-go img{transition:none}}
+@media (min-width:768px){.case{margin-inline:auto}}
+@media (min-width:1024px){
+  .case{max-width:none;padding:12px;border-radius:28px}
+  .case-bays{grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;transition:grid-template-columns var(--hinge)}
+  .bay{grid-template-rows:auto minmax(0,1fr);height:320px;border-radius:18px;container-type:inline-size}   /* not less: the tallest packs need it to stand whole */
+  /* the lid covers the whole compartment, the button only its label: a tap on the lid is a tap on it */
+  .bay-lid{position:static;align-content:start;min-height:0;padding:22px 14px 10px}
+  .bay-name{font-size:clamp(9px,calc((100cqi - 28px) / 9.9),13px);letter-spacing:.18em}
+  .bay-note{font-size:clamp(8.5px,calc((100cqi - 28px) / 7.8),10.5px);letter-spacing:.14em}
+  .lid{background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.07) 48%,transparent 64%) calc(var(--i) * 100% / 6) 0 / 700% 100% no-repeat,
+    linear-gradient(var(--lid),var(--lid-lo))}
+  .lid::after{right:auto;left:50%;top:auto;bottom:18px;width:30px;height:6px;margin:0 0 0 -15px}
+  .bay-well,.bay.is-open .bay-well{grid-template-rows:1fr}
+  .bay-in{align-content:end;padding:0 14px 8px}
+  .bay-packs{gap:10px}
+  .bay-go img{--w:min(100%,124px);--s:1.42;margin-top:calc(var(--w) * (1 - var(--s)) * .91);margin-bottom:calc(var(--w) * (1 - var(--s)) * .09)}
+  .bay-all{margin-bottom:6px}
+}
+
+/* ---------- The product card (#pcard): a pack in an open compartment, up close ---------- */
+/* The case in small: a teal rim round a sand well, the pack standing in it, its name in the
+   display face, a line, a few facts as small-caps chips and the way to Amway. A modal <dialog>
+   (_script.html): a bottom sheet on a phone, a card in the middle from 700. The pack flies into it
+   from its compartment and a few sparks go off as it lands (transforms and opacity only, none of
+   it under reduced motion). html.locked, as for the menu, keeps the page still and the tab away. */
+.pcard{width:100%;max-width:none;max-height:none;margin:auto 0 0;padding:0;border:0;background:transparent;overflow:visible;color:var(--ink)}
+.pcard::backdrop{background:rgba(0,16,22,.62)}
+.motion .pcard[open]::backdrop{animation:pc-dim 240ms ease-out}
+.pcard.is-closing::backdrop{animation:pc-undim 220ms ease-in forwards}
+@keyframes pc-dim{from{opacity:0}}
+@keyframes pc-undim{to{opacity:0}}
+.pcard-in{position:relative;max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));border-radius:24px 24px 0 0;
+  background:linear-gradient(165deg,color-mix(in srgb,var(--teal) 90%,var(--chalk)) 0%,color-mix(in srgb,var(--teal) 88%,#000) 40%,color-mix(in srgb,var(--teal) 70%,#000) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 0 0 1px rgba(230,211,197,.24),0 -20px 50px -20px rgba(0,20,27,.6)}
+.pcard-art{position:relative;display:grid;place-items:center;padding:14px 0 0;border-radius:16px 16px 0 0;
+  background:linear-gradient(color-mix(in srgb,var(--sand) 50%,var(--chalk)),color-mix(in srgb,var(--sand) 72%,var(--chalk)));
+  box-shadow:inset 0 9px 14px -9px rgba(0,20,27,.55)}
+.pcard-art img{display:block;width:min(56vw,220px);height:auto;filter:drop-shadow(0 10px 10px rgba(0,20,27,.22))}
+.pcard-copy{display:grid;justify-items:start;gap:10px;padding:6px 20px 20px;border-radius:0 0 16px 16px;background:var(--sand)}
+.pcard-kind{margin:0;font:600 11px/1.35 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
+.pcard-name{margin:0;font:800 32px/.95 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal);text-wrap:balance}
+.pcard-line{margin:0;font:500 16px/1.4 var(--sans);color:var(--ink)}
+.pcard-facts{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 4px;padding:0}
+.pcard-facts li{display:inline-flex;align-items:center;min-height:28px;padding:0 11px;border-radius:999px;background:var(--teal);color:var(--sand);
+  font:600 11px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase}
+.pcard-facts[hidden]{display:none}
+.pcard-buy{width:100%}
+.pcard-x{position:absolute;z-index:2;top:14px;right:14px;border-radius:50%;background:rgba(244,242,236,.7);color:var(--teal)}
+.pcard-x:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+/* the pack in flight, and the sparks: fixed in the top layer, never in the way of a tap */
+.pcard-fly,.pcard-spark{position:fixed;left:0;top:0;pointer-events:none;will-change:transform,opacity}
+.pcard-fly{z-index:3;transform-origin:0 0;filter:drop-shadow(0 10px 10px rgba(0,20,27,.22))}
+.pcard-fly[hidden]{display:none}
+.pcard-spark{z-index:1;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%}
+@media (min-width:700px){
+  .pcard{width:min(680px,calc(100% - 48px));margin:auto}
+  .pcard-in{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);max-height:calc(100dvh - 48px);padding:10px;border-radius:28px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 0 0 1px rgba(230,211,197,.24),0 34px 60px -30px rgba(0,20,27,.65)}
+  .pcard-art{padding:24px 12px;border-radius:18px 0 0 18px}
+  .pcard-art img{width:min(100%,260px)}
+  .pcard-copy{align-content:center;padding:28px 28px 26px;border-radius:0 18px 18px 0}
+  .pcard-name{font-size:38px}
+}
+
+/* ── Opening curtain ───────────────────────────────────────────────────────────
+   Homepage only, every load. Nothing here paints on its own: site-src/_intro.html
+   inserts .intro at run time, so there is no curtain in the markup and none without
+   JS. The halves are SVG so the seam can follow the wave's own centre line; only their
+   transform ever changes. The guard at the bottom is a second lock on reduced motion,
+   after the one in the script. */
+.intro{position:fixed;inset:0;z-index:100;overflow:hidden;contain:layout paint;
+  font-family:var(--sans);color:var(--chalk);--curtain:#000}   /* black, not the teal: the lit
+     build of the wave was drawn on black, and on teal its bloom flattens and its outer
+     edges melt into the ground. The page it parts to reveal is the page, unchanged. */
+.intro-sheet{position:absolute;inset:0;background:var(--curtain)}
+.intro-half{position:absolute;inset:0;display:block;width:100%;height:100%;fill:var(--curtain);
+  will-change:transform}
+.intro-stage{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;
+  padding:0 var(--pad);text-align:center}
+.intro-word{display:flex;justify-content:center;margin-right:-.14em;font-weight:800;font-stretch:100%;
+  font-size:clamp(21px,7vw,58px);line-height:1;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.intro-l{display:block;overflow:hidden;padding:.05em 0 .1em}      /* the mask the letters rise out of */
+.intro-l > span{display:block;transform:translateY(118%)}
+.intro-sp{display:block;width:.5em}
+.intro-tag{margin:1.4em 0 0;opacity:0;color:var(--sand);
+  font:600 clamp(9px,2.4vw,12px)/1 var(--sans);letter-spacing:.34em;text-transform:uppercase}
+/* The wave, in layers. Only the divs ever move: .intro-wave carries the flight into the
+   masthead and .intro-sweep the arrival, while .intro-lit and .intro-flat only ever swap,
+   on one frame, under that movement. Neither build is transformed itself. */
+.intro-wave{position:absolute;transform-origin:0 0;will-change:transform}
+.intro-sweep{position:absolute;inset:0;opacity:0;transform-origin:50% 50%;
+  will-change:transform,opacity}
+.intro-lit,.intro-flat{position:absolute;inset:0;will-change:opacity}
+/* the flat mark is what shows by default, so a render that has not arrived costs the
+   curtain its lighting and nothing else; the script raises .intro-lit only once the
+   render has decoded */
+.intro-lit{opacity:0}
+.intro-flat{opacity:1}
+.intro-wave svg{position:absolute;inset:0;display:block;width:100%;height:100%}
+.intro-flat svg{fill:var(--sand);stroke:none}   /* the masthead's own colour, so it lands into it */
+/* Peter's render is a different wave from the drawn mark — best fit over its centre line
+   leaves a mean of 0.38 and a worst of 1.21 of the mark's 100 units. These four numbers
+   are that fit, as percentages of the mark's own box, so the lit wave sits as nearly on
+   the flat one as it can; the rest is why the swap is a cut and not a dissolve. */
+.intro-lit img{position:absolute;left:.686%;top:-27.116%;width:102.820%;height:141.954%;
+  display:block;max-width:none}
+@media (prefers-reduced-motion:reduce){.intro{display:none}}
+
+/* the FDA sentence sits under the vendor line, quieter but still legible */
+.foot-fda{margin:10px 0 0;font-size:12px;line-height:1.5;color:var(--on-dark);opacity:.72;max-width:66ch}
+
+/* ---------- Macros: seven questions, one per screen, then the numbers ----------
+   A sand band between the drained glass's chalk above it and the consult's chalk below,
+   so the calculator reads as its own step rather than more of the page. The card is
+   opaque chalk rather than the consult's translucent glass: every number in it is
+   measured for contrast, and a backdrop that changes underneath would make those
+   measurements a guess. Without script the quiz and the results are both removed and
+   .mc-nojs says so, so the band is never a dead husk. */
+.macros-sec{background:var(--sand)}
+.macros-sec h2 span{display:block}
+.mc-card{display:grid;gap:20px;padding:24px 20px 26px;background:var(--chalk);
+  box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 40px 60px -40px rgba(0,30,39,.55)}
+.mc-nojs{font-size:15px;line-height:1.55;color:var(--ink)}
+.mc-nojs .tlink{min-height:0;font-size:15px}
+html.js .mc-nojs{display:none}
+html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
+
+.mc-quiz{display:grid;gap:16px}
+.mc-count{font-size:14px;color:var(--text)}
+.mc-prog{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-top:-8px}
+.mc-prog span{height:3px;background:rgba(0,46,59,.18)}
+.mc-prog span.is-on{background:var(--teal)}
+/* one step per screen; the script hides the rest, and the legend is the question */
+.mc-step{margin:0;padding:0;border:0;min-width:0}
+.mc-q{display:block;width:100%;padding:0;margin:0 0 12px;font:600 22px/1.25 var(--sans);color:var(--teal)}
+.mc-q:focus{outline:none}
+.mc-help{margin:0 0 14px;font-size:14px;line-height:1.55;color:var(--text)}
+.mc-in{animation:mc-in 260ms cubic-bezier(.2,.7,.2,1) both}
+@keyframes mc-in{from{opacity:0;transform:translate3d(0,8px,0)}}
+
+/* the options are the consult's chip, stacked: a real radio under a pill */
+.mc-opts{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.mc-opts.cols{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mc-opts.cols3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.mc-opt{position:relative;display:block;cursor:pointer}
+.mc-opt input{position:absolute;width:1px;height:1px;opacity:0;margin:0}
+.mc-opt span{display:flex;align-items:center;height:100%;min-height:56px;padding:12px 15px;
+  border:1px solid var(--line);background:rgba(255,255,255,.6);color:var(--ink);
+  font:600 15px/1.25 var(--sans);transition:background .15s,color .15s,border-color .15s}
+.mc-opt input:checked + span{background:var(--teal);border-color:var(--teal);color:var(--chalk)}
+.mc-opt input:focus-visible + span{outline:2px solid var(--teal);outline-offset:3px}
+@media (hover:hover){.mc-opt:hover span{border-color:var(--teal)}}
+
+/* the follow-up a single answer opens: frame size, training history, how hard a deficit */
+.mc-sub{margin:16px 0 0;padding:16px 0 0;border:0;border-top:1px solid var(--line);min-width:0}
+/* a real top border, not an inset shadow: the browser cuts the gap the legend sits in, and a
+   shadow would be painted straight through the words instead */
+.mc-sub legend{padding:0 10px 0 0;margin-bottom:10px;font:600 15px/1.3 var(--sans);color:var(--ink)}
+
+.mc-field{display:grid;gap:8px}
+.mc-field label{font:600 15px/1.3 var(--sans);color:var(--ink)}
+.mc-field input{width:100%;min-width:0;height:52px;padding:0 14px;border:1px solid var(--line);
+  border-radius:var(--r);background:rgba(255,255,255,.7);color:var(--ink);font-size:16px;
+  -webkit-appearance:none;appearance:none}
+.mc-field input:focus{outline:none;border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+/* the spinners cost width the 320px card has not got, and nobody nudges their height by 1in */
+.mc-field input::-webkit-outer-spin-button,.mc-field input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.mc-field input[type=number]{-moz-appearance:textfield}
+.mc-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+
+.mc-nav{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.mc-nav .btn{flex:1 1 140px}
+/* errors and warnings carry a rule and their own words, never colour alone */
+.mc-err,.mc-warn{padding:12px 14px;background:rgba(51,64,184,.07);box-shadow:inset 2px 0 0 var(--blue);
+  color:var(--ink);font-size:14px;line-height:1.55}
+.mc-err{font-weight:600;font-size:15px}
+
+.mc-res{display:grid;gap:18px}
+.mc-res-t{font:800 30px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.mc-res-t:focus{outline:none}
+.mc-cals{margin:0;border-top:1px solid var(--line)}
+.mc-cals > div{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
+  gap:2px 16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.mc-cals dt{font:600 15px/1.3 var(--sans);color:var(--text)}
+.mc-cals dd{margin:0;font:600 17px/1.3 var(--sans);color:var(--ink)}
+.mc-cals > div:last-child dd{font-size:22px;color:var(--teal)}
+.mc-macros{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.mc-macros li{display:grid;gap:3px;justify-items:center;padding:14px 6px;background:var(--tile);text-align:center}
+.mc-g{font:800 28px/1 var(--display);font-stretch:72%;color:var(--teal)}
+.mc-lab{font:600 12px/1.3 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--text)}
+.mc-kc{font-size:13px;color:var(--text)}
+.mc-notes{display:grid;gap:10px}
+.mc-note{font-size:14px;line-height:1.55;color:var(--text)}
+.mc-res .btn{width:100%}
+.mc-foot{display:flex;flex-wrap:wrap;align-items:center;gap:0 20px}
+@media (prefers-reduced-motion:reduce){
+  .mc-in{animation:none}
+  .mc-opt span{transition:none}
+}
+@media (min-width:768px){
+  .macros-sec .mc-card{grid-column:7 / 13}
+  .mc-card{padding:32px;gap:24px}
+  .mc-q{font-size:24px}
+  .mc-opt span{min-height:60px;padding:14px 18px;font-size:16px}
+  .mc-res-t{font-size:38px}
+  .mc-macros{gap:12px}
+  .mc-g{font-size:34px}
+}
+
+/* ---------- Load the bar (SHELF_VIEW 'bar'): the barbell, the plate rack, the pinned bar ---------- */
+/* The barbell, side on, drawn from its font-size: 1em is a tenth of the biggest plate. Two sleeves
+   either side of the collars, and the shaft between with its knurled centre. A plate is a flat bar in
+   its shelf's colour, as tall as its rank allows (--s), and sits --o steps out from the collar: larger
+   plates nearest it. An unloaded plate waits just past the end of its sleeve, clipped, and slides on
+   in 300ms; under reduced motion it is simply there. Only transform and opacity ever change. */
+.bbx{container-type:inline-size;min-width:0}
+.bb{--st:2.05em;display:flex;align-items:center;height:10em;font-size:4px;line-height:0;overflow:clip visible}
+.bb-sl{position:relative;flex:none;width:calc(7 * var(--st) + 1.2em);height:1.5em;border-radius:.3em;
+  background:linear-gradient(#E4E8EA,#B0B8BD 55%,#858E94)}
+.bb-co{flex:none;width:1.1em;height:3em;border-radius:.3em;background:linear-gradient(#CDD3D6,#8E979D 55%,#687177)}
+.bb-sh{position:relative;flex:1 1 auto;min-width:3em;height:.95em;background:linear-gradient(#D6DBDE,#9CA5AA 60%,#7A838A)}
+.bb-kn{position:absolute;left:37%;right:37%;top:0;bottom:0;
+  background:repeating-linear-gradient(60deg,rgba(38,46,52,.42) 0 .1em,transparent .1em .3em),
+    repeating-linear-gradient(-60deg,rgba(38,46,52,.42) 0 .1em,transparent .1em .3em)}
+.bb-p{position:absolute;top:50%;width:1.8em;height:calc(var(--s) * 10em);margin-top:calc(var(--s) * -5em);border-radius:.3em;
+  background:var(--c);box-shadow:inset 0 0 0 max(1px,.1em) rgba(0,0,0,.16);opacity:0;will-change:transform,opacity;
+  transition:transform 300ms cubic-bezier(.2,.75,.25,1),opacity 160ms linear}
+.bb-l .bb-p{right:.15em;transform:translate3d(calc(-7.5 * var(--st)),0,0)}
+.bb-r .bb-p{left:.15em;transform:translate3d(calc(7.5 * var(--st)),0,0)}
+.bb-l .bb-p.on{opacity:1;transform:translate3d(calc(var(--o) * -1 * var(--st)),0,0)}
+.bb-r .bb-p.on{opacity:1;transform:translate3d(calc(var(--o) * var(--st)),0,0)}
+.bb-dk .bb-p{box-shadow:inset 0 0 0 max(1px,.1em) rgba(244,242,236,.28)}   /* the dark plates keep an edge on teal */
+/* the newest plate's outline: flashed by the script, never left on */
+.bb-ring{position:absolute;inset:calc(-1 * max(3px,.4em));border:max(1.5px,.2em) solid var(--teal);border-radius:max(3px,.5em);opacity:0}
+.bb-dk .bb-ring{border-color:var(--sand)}
+@media (prefers-reduced-motion:reduce){.bb-p{transition:none}}
+
+/* the hero's bar, under its two links: empty until the visitor loads a plate */
+.hbar{display:grid;gap:8px;width:100%;margin-top:8px}
+.hbar .bb{font-size:clamp(4px,calc(100cqi / 48),9px)}
+.hbar:not(.has) .hbar-cap{margin-top:-2.2em}   /* an empty bar is thin: its caption comes up under it */
+.hbar-cap{font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--sand)}
+.hbar .hb-you,.hbar.has .hb-empty{display:none}
+.hbar.has .hb-you{display:inline}
+
+/* the pinned bar: under the masthead once the hero has gone, on phones and desktop. The visitor's
+   stack; through #story, Peter's (the two bars and their captions cross-fade). As slim as it can be
+   and still be read: a 31px bar and one 10px caption row. */
+.t-bar{--pin:52px;scroll-padding-top:calc(var(--mast) + var(--pin))}
+.lbpin{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + var(--mast));z-index:18;background:var(--chalk);
+  box-shadow:0 1px 0 var(--line),0 12px 18px -16px rgba(0,20,27,.55);
+  transform:translate3d(0,-100%,0);visibility:hidden;transition:transform 280ms cubic-bezier(.2,.7,.2,1),visibility 0s linear 280ms}
+.lbpin.on{transform:none;visibility:visible;transition:transform 280ms cubic-bezier(.2,.7,.2,1),visibility 0s}
+html.locked .lbpin{visibility:hidden}
+html:not(.js) .lbpin{display:none}
+.lbpin-in{display:grid;align-content:center;gap:3px;height:var(--pin);padding-top:1px}
+.lbpin-bars{display:grid}
+.lbpin-bars .bb{grid-area:1 / 1;font-size:3.1px;transition:opacity 220ms linear;will-change:opacity}
+.lbpin-cap{display:grid;font:600 10px/1.1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--text);white-space:nowrap}
+.lbc-set{grid-area:1 / 1;display:flex;justify-content:space-between;gap:12px;min-width:0;transition:opacity 220ms linear;will-change:opacity}
+.lbc-who,.lbc-new{display:grid;min-width:0}
+.lbc-new{justify-items:end;color:var(--teal)}
+.lbc{grid-area:1 / 1;overflow:hidden;text-overflow:ellipsis;opacity:0;will-change:opacity}
+.lbc-you,.lbc-p[data-n="0"]{opacity:1}
+.lbpin .bb-peter,.lbc-pset,.lbpin.is-peter .bb-you,.lbpin.is-peter .lbc-yset{opacity:0}
+.lbpin.is-peter .bb-peter,.lbpin.is-peter .lbc-pset{opacity:1}
+@media (prefers-reduced-motion:reduce){.lbpin,.lbpin.on,.lbpin-bars .bb,.lbc-set{transition:none}}
+@media (min-width:768px){
+  .t-bar{--pin:60px}
+  .lbpin-in{max-width:780px;gap:4px}
+  .lbpin-bars .bb{font-size:3.7px}
+  .lbpin-cap{font-size:10.5px}
+}
+
+/* #goals as a plate rack: seven plates, front on, all on show. Phones 3, 3 and 1 (centred); from
+   768 one row of seven. A plate is a button: its shelf's colour, a thin inner ring, the hole, the name
+   above it and its number under it, which reads "On bar" once it is loaded. The one whose panel is
+   open wears an outline ring. */
+.rack-sec .sec-head{margin-bottom:22px}
+.rk-hint{font:500 16px/1.4 var(--sans);color:var(--text)}
+.rk-plates{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 14px;max-width:420px}
+.rk-plates li:last-child:nth-child(3n+1){grid-column:2}
+.rk-plate{position:relative;display:block;width:100%;aspect-ratio:1;margin:0;padding:0;border:0;border-radius:50%;background:none;
+  color:var(--t);container-type:inline-size;-webkit-tap-highlight-color:transparent}
+.rk-plate:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
+.rk-disc{position:absolute;inset:0;border-radius:50%;background:var(--c);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.12),0 12px 18px -12px rgba(0,20,27,.6);transition:transform 200ms cubic-bezier(.2,.7,.2,1),box-shadow 200ms}
+.rk-disc::before{content:"";position:absolute;inset:7%;border-radius:50%;border:1px solid color-mix(in srgb,var(--t) 40%,transparent)}
+.rk-disc::after{content:"";position:absolute;inset:33%;border-radius:50%;background:color-mix(in srgb,var(--t) 7%,transparent);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--t) 22%,transparent)}
+.rk-hole{position:absolute;z-index:1;left:41.5%;top:41.5%;width:17%;height:17%;border-radius:50%;background:var(--chalk);
+  box-shadow:inset 0 2px 3px rgba(0,20,27,.5),0 0 0 2px color-mix(in srgb,var(--t) 30%,transparent)}
+.rk-name{position:absolute;left:13%;right:13%;bottom:61%;text-align:center;font:800 clamp(8px,10.5cqi,15px)/1 var(--sans);font-stretch:75%;
+  letter-spacing:.05em;text-transform:uppercase;text-wrap:balance}
+.rk-num,.rk-on{position:absolute;left:0;right:0;top:63%;text-align:center;font:700 clamp(8px,9cqi,13px)/1 var(--sans);letter-spacing:.14em;text-transform:uppercase}
+.rk-on{display:none}
+.rk-plate.is-on .rk-num{display:none}
+.rk-plate.is-on .rk-on{display:block}
+.rk-plate[aria-pressed="true"] .rk-disc{box-shadow:inset 0 0 0 1px rgba(0,0,0,.12),0 0 0 3px var(--chalk),0 0 0 5.5px var(--teal),0 16px 22px -12px rgba(0,20,27,.6)}
+@media (hover:hover){.rk-plate:hover .rk-disc{transform:translate3d(0,-3px,0)}}
+.rk-plate:active .rk-disc{transform:translate3d(0,1px,0)}
+.rk-panel{margin-top:24px;padding:18px 18px 6px;border-radius:18px;background:color-mix(in srgb,var(--sand) 45%,var(--chalk));
+  box-shadow:inset 0 5px 0 var(--c),inset 0 0 0 1px rgba(0,20,27,.08)}
+.rk-head{display:grid;gap:5px;margin:4px 0 14px}
+.rk-title{font:800 28px/.95 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.rk-sub{font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
+.rk-acts{display:flex;flex-wrap:wrap;align-items:center;gap:4px 24px;margin-top:14px}
+.rk-load{flex:1 1 100%}
+.rk-load[aria-pressed="true"]{background:transparent;color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.motion .rk-panel .bay-pack{animation:pack-in 420ms cubic-bezier(.2,.7,.2,1) calc(60ms + var(--k) * 55ms) backwards}
+html:not(.js) .rk-panel[hidden]{display:block!important}
+@media (prefers-reduced-motion:reduce){.rk-disc{transition:none}}
+@media (min-width:768px){
+  .rk-plates{grid-template-columns:repeat(7,minmax(0,1fr));max-width:none;gap:14px}
+  .rk-plates li:last-child:nth-child(3n+1){grid-column:auto}
+  .rk-panel{padding:24px 28px 10px}
+  .rk-load{flex:none}
+  .rk-panel .bay-packs{max-width:560px}
+}
+
+/* the story's pack beats: a quiet step label over each line, with its plate's colour */
+.st-step{display:flex;align-items:center;gap:8px;font:600 11px/1.2 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
+.st-step i{flex:none;width:9px;height:9px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+/* the pinned bar is the story's stack: every beat clears it, as they cleared the case */
+.t-bar .story.is-live .st-beat,.t-bar .story.is-live .st-warm{padding-top:calc(var(--mast) + var(--pin) + 14px)}
+@media (max-width:767px){
+  .t-bar .story.is-live .st-open .st-photo{height:min(440px,calc(100vh - var(--mast) - var(--pin) - 270px))}
+  @supports (height:100svh){.t-bar .story.is-live .st-open .st-photo{height:min(440px,calc(100svh - var(--mast) - var(--pin) - 270px))}}
+}
+/* at the call the fully loaded bar stands above the button, where the case rose into */
+.t-bar .story.is-live .st-arc{display:flex;align-items:center;height:clamp(62px,19vw,84px)}
+.st-arc .bbx{width:100%}
+.st-arc .bb{font-size:clamp(6.2px,1.9vw,8.4px);will-change:transform,opacity;opacity:0}
+@media (min-width:768px){
+  .t-bar .story.is-live .st-beat,.t-bar .story.is-live .st-warm{padding-top:calc(var(--mast) + var(--pin) + 24px)}
+  .t-bar .story.is-live .st-solo .st-arc{width:min(100%,720px);height:min(9vw,120px)}
+  .st-arc .bb{font-size:min(.9vw,12px)}
+}
+
+/* after the story: his stack, drawn loaded, on teal */
+.mys-in{display:grid;justify-items:center;gap:20px;text-align:center}
+.mys h2{color:var(--chalk);font-size:clamp(46px,14vw,96px)}
+.mys-bar{width:100%;max-width:900px;margin:8px 0 4px}
+.mys-bar .bb{font-size:clamp(4px,calc(100cqi / 40),15px)}
+.mys-key{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 20px;max-width:640px;
+  font:600 12px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark)}
+.mys-key li{display:flex;align-items:center;gap:8px}
+.mys-key i{flex:none;width:14px;height:14px;border-radius:50%;background:var(--c);box-shadow:0 0 0 1px rgba(230,211,197,.5)}
+.mys-build{margin-top:18px;font:800 clamp(40px,11vw,72px)/.92 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--sand)}
+.mys-sub{max-width:38ch;font-size:17px;line-height:1.5;color:var(--on-dark);text-wrap:balance}
+.mys-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;width:100%;max-width:560px;margin-top:6px}
+.mys-acts .btn{flex:1 1 100%}
+.mys .btn-line{color:var(--sand);box-shadow:inset 0 0 0 1px var(--sand)}
+/* the plates go on as the bar comes up, collar out */
+.motion .mys-bar:not(.in) .bb-l .bb-p{opacity:0;transform:translate3d(calc(-7.5 * var(--st)),0,0)}
+.motion .mys-bar:not(.in) .bb-r .bb-p{opacity:0;transform:translate3d(calc(7.5 * var(--st)),0,0)}
+.motion .mys-bar .bb-p{transition-duration:420ms,240ms;transition-delay:calc(260ms + var(--o) * 110ms)}
+@media (min-width:768px){.mys-acts .btn{flex:1 1 0}}
+/* ===================================================================================
+   The field: one ground for the whole site, "warm chalk" (Peter's pick, B of the three mockups
+   on raw24/bg-mockups). Kept as one block, after everything it overrides, so it merges in one piece.
+
+   One fixed layer (.field, straight after <body> on every page) carries it all: the chalk base, a
+   still slanted band of warm light low down (the story's own 14-degree sweep, laid across the
+   page), two soft glows (sand high left, pale teal right) that drift over ~50s, and a fine grain
+   over them. The glows are pre-blurred radial gradients, each on its own layer, with no filter;
+   only their transform animates, so the drift costs no layout and no paint, and reduced motion
+   stops it. Every band that painted its own ground (the hero's copy, the sample, the trending
+   band, the story's grounds, the calculator's sand) goes transparent, so the one field runs all
+   the way down. Cards and panels keep a surface where reading needs one. The only break is the
+   footer, whose horizon is black-native artwork: it keeps its black, and the field darkens into
+   it over its first 120px, so the page ends at nightfall rather than at a ruled line.
+   =================================================================================== */
+:root{
+  --fb:#F4F2EC;                                   /* the chalk */
+  --fg1:226,200,174;--fg1a:.45;                   /* high glow: sand (.45, not .60: the top of a screen must not read peach) */
+  --fg2:169,202,203;--fg2a:.40;                   /* second glow: pale teal */
+  --lo:226,200,174;--loa:.25;                     /* the low slanted band: sand, so the low light is warm where it meets the teal glow */
+  --grain:.07;                                    /* registers on a phone; past .08 it greys the chalk */
+  --hollow-hi:#F6EFE7;--hollow:#EFE4D8;           /* inside a compartment: a step lighter than the sand glow, so it stays a hollow */
+}
+.field{position:fixed;left:0;top:0;z-index:-1;display:block;width:100%;height:100vh;overflow:hidden;pointer-events:none;contain:strict;
+  background:linear-gradient(166deg,rgba(var(--lo),0) 52%,rgba(var(--lo),var(--loa)) 74%,rgba(var(--lo),0) 96%),var(--fb)}
+@supports (height:100lvh){.field{height:100lvh}}
+.fg{position:absolute;display:block;width:120vmax;height:120vmax;will-change:transform;
+  background:radial-gradient(closest-side,rgba(var(--c),var(--a)) 0,rgba(var(--c),calc(var(--a) * .55)) 38%,rgba(var(--c),calc(var(--a) * .18)) 70%,rgba(var(--c),0) 100%)}
+.fg1{--c:var(--fg1);--a:var(--fg1a);left:-58vmax;top:-66vmax;animation:fg-drift1 52s ease-in-out infinite alternate}
+.fg2{--c:var(--fg2);--a:var(--fg2a);right:-70vmax;top:8vh;width:110vmax;height:110vmax;animation:fg-drift2 44s ease-in-out infinite alternate}
+@keyframes fg-drift1{from{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(22vw,6vh,0) scale(1.08)}to{transform:translate3d(38vw,-2vh,0) scale(.96)}}
+@keyframes fg-drift2{from{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-18vw,14vh,0) scale(1.1)}to{transform:translate3d(-6vw,30vh,0) scale(1)}}
+/* the grain: the fractal noise the page used as its paper overlay, moved under the content and over
+   the glows, so it breaks up their banding while cards and type stay clean. The raw noise is half
+   transparent and low in contrast, which at .07 barely showed on a phone; the tile is made opaque,
+   centred light (about 74% grey) and stretched 2x, so at .07 the grain is twice as strong as the raw
+   tile's while it darkens the chalk less (measured: 1.3 levels on average, against 1.9) */
+.field::after{content:"";position:absolute;inset:0;opacity:var(--grain);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='2' intercept='-.26'/%3E%3CfeFuncG type='linear' slope='2' intercept='-.26'/%3E%3CfeFuncB type='linear' slope='2' intercept='-.26'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px 180px}
+@media (prefers-reduced-motion:reduce){.fg{animation:none}}
+/* the field's grain replaces the old paper overlay; body lets the field through. html keeps its
+   teal-over-black canvas for the overscroll past the teal mast and the black footer. */
+body::before{display:none}
+body{background:transparent}
+
+/* the hero: its copy stands on the field in the page's dark type; the square film is untouched */
+.hero{background:transparent;color:var(--text)}
+.hero .label,.hero .sub{color:var(--text)}
+.hero h1{color:var(--teal)}
+.hero .tlink{color:var(--teal)}
+
+/* the bands that painted their own ground */
+.sample-sec,.macros-sec,.cat-macros,.story,.st-dark,.st-warm,.st-light,.story.is-live .st-bg{background:transparent}
+#sample .c-card{background:#FAF9F5}   /* the note: a sheet a shade whiter than the chalk it lies on */
+
+/* #trending without the pour (TRENDING_POUR = False) is a plain band: on the field, in dark type.
+   With the pour on, the band keeps its film and its light type; the film needs its dark. */
+.podium-sec.no-pour{background:transparent;color:var(--text)}
+.no-pour h2{color:var(--teal)}
+.no-pour :focus-visible{outline-color:var(--teal)}
+.no-pour .pod .card-link,.no-pour .pod .p-name{color:var(--ink)}
+.no-pour .pod-rank,.no-pour .pod-count{color:var(--teal)}
+.no-pour .pod .p-tag,.no-pour .pod .p-desc{color:var(--text)}
+.no-pour .pod .shot::after{background:radial-gradient(closest-side,rgba(30,38,47,.3),rgba(30,38,47,0))}
+/* ...and it is a compact band, not a podium: the three are cards like the shop's (the same glow
+   behind the pack and shadow under it), each rank on its pack's corner. One row of three from
+   560px; below that a swipe row that bleeds to the screen's edges, where the next card stands
+   half in view so it is plain there is more. The whole band fits one phone screen. */
+.podium-sec.no-pour{margin-top:0;padding-top:var(--sec)}
+.no-pour .sec-head{padding-top:0;margin-bottom:18px}
+.no-pour .podium{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:64%;gap:16px;
+  margin:0 calc(-1 * var(--pad));padding:4px var(--pad) 8px;overflow-x:auto;scroll-snap-type:x mandatory;
+  scroll-padding-inline:var(--pad);scrollbar-width:none;overscroll-behavior-x:contain}
+.no-pour .podium::-webkit-scrollbar{display:none}
+.no-pour .pod{perspective:none;scroll-snap-align:start;min-width:0}
+.no-pour .pod .shot{margin-top:0}
+.no-pour .pod .shot::before{content:"";position:absolute;left:4%;right:4%;top:2%;bottom:6%;z-index:-2;border-radius:50%;
+  background:radial-gradient(58% 52% at 50% 46%,rgba(255,255,255,.72),rgba(255,255,255,0) 78%)}
+.no-pour .pod .shot::after{left:22%;right:22%;bottom:3%;height:7%}
+.no-pour .pod-rank{position:absolute;top:2px;left:0;z-index:2;margin:0;font:800 28px/1 var(--display);font-stretch:72%;letter-spacing:.01em}
+.no-pour .pod-count{margin-top:6px}
+@media (min-width:560px){
+  .no-pour .podium{grid-auto-flow:row;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;
+    margin:0;padding:0;overflow:visible;scroll-snap-type:none}
+}
+@media (min-width:768px){
+  .no-pour .podium{gap:40px}
+  .no-pour .pod .shot{aspect-ratio:4/3}
+  .no-pour .pod-rank{font-size:34px}
+}
+
+/* the stack case, its strip in the story, and the product card: the sand inside a compartment sat
+   within a hair of the sand glow over chalk, so it goes a step lighter and takes an inset shadow on
+   every side, and reads as a hollow whatever the field behind the case is doing */
+.bay{background:linear-gradient(var(--hollow-hi),var(--hollow) 80%);
+  box-shadow:inset 0 10px 16px -9px rgba(0,20,27,.55),inset 0 -8px 12px -10px rgba(0,20,27,.22),inset 0 0 0 1px rgba(0,20,27,.16)}
+.stc-well{background:linear-gradient(var(--hollow-hi),var(--hollow));
+  box-shadow:inset 0 5px 8px -4px rgba(0,20,27,.55),inset 0 -4px 6px -5px rgba(0,20,27,.22),inset 0 0 0 1px rgba(0,20,27,.16)}
+.pcard-art{background:linear-gradient(var(--hollow-hi),var(--hollow))}
+
+/* the story: its grounds go, and it still warms as it goes, as tints of the field */
+.st-dark{color:var(--ink)}
+.st-dark .st-line{color:var(--teal)}
+.st-dark .st-say{color:var(--ink)}
+.st-dark .st-note{color:var(--text)}
+.st-dark .st-go{color:var(--teal)}
+.st-dark :focus-visible{outline-color:var(--teal)}
+.story.is-live .st-sand{background:linear-gradient(to right,rgba(230,211,197,0),rgba(230,211,197,.45) 21%)}
+.st-chalk{background:rgba(255,255,255,.35)}
+.st-shade{background:radial-gradient(ellipse,rgba(0,20,27,.28),transparent 70%)}
+/* the stage light: a white pool on chalk. closest-side keeps the whole pool inside its layer, so it
+   never shows an edge as the lamp follows the pack across. */
+.st-lamp-dark,.st-lamp-warm{background:radial-gradient(circle closest-side at 50% 38%,rgba(255,255,255,.5),rgba(255,255,255,.16) 60%,transparent)}
+@media (min-width:768px){
+  .st-lamp-dark,.st-lamp-warm{background:radial-gradient(circle closest-side at 74% 50%,rgba(255,255,255,.5),rgba(255,255,255,.16) 60%,transparent)}
+}
+/* the opening pair still goes dark to light. The ground under the before was the stage's teal; on
+   the field the teal is a panel round the photo alone, a deep mat in the case's teal. The after
+   brings its own chalk-white mat, and it wipes in with the photo (the wipe's window is widened by
+   the mat on every side), so the dark is lifted off exactly as far as the after has come. The
+   stage's chalk veil rises with the wipe as it always did. Transforms only, as before. */
+.st-open{--mat:14px}
+.st-open .st-photo{overflow:visible;box-shadow:0 0 0 var(--mat) var(--teal),0 34px 50px -26px rgba(0,20,27,.6)}
+.st-open .st-wipe{inset:calc(-1 * var(--mat))}
+.st-open .st-wipe-in{padding:var(--mat);background:#FBFAF6;box-shadow:inset 0 0 0 1px rgba(30,38,47,.14)}
+.st-open .st-wipe .st-tag{top:calc(8px + var(--mat));right:calc(8px + var(--mat))}
+/* the mat takes room of its own: on the stage a phone holds the pair to the top of its slot, where
+   the mat would touch the masthead, so it steps down; as plain content it keeps clear of the words */
+@media (max-width:767px){.story.is-live .st-open .st-hero{padding-top:var(--mat)}}
+.story:not(.is-live) .st-open .st-hero{padding-block:var(--mat)}
+@media (min-width:768px){.st-open{--mat:20px}}
+
+/* cards and panels: a translucent surface with a hairline, so forms still read as forms */
+.c-card,.c-embed{background:rgba(255,255,255,.5);backdrop-filter:none;-webkit-backdrop-filter:none;
+  box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 40px 60px -40px rgba(0,30,39,.45)}
+.mc-card{background:rgba(250,249,245,.82)}   /* its numbers stay on a near-solid ground */
+
+/* the footer: nightfall. Its first 120px carry the field down through the teal's own dark into
+   black, and the horizon and the type start below that, on black as before. The fade ends on the
+   horizon image's own darkest blue, so the picture starts without a seam. */
+.foot{--dusk:120px;padding-top:calc(var(--dusk) + var(--horizon) + 36px);
+  background:linear-gradient(rgba(0,46,59,0) 0,rgba(0,46,59,.12) 24px,rgba(0,42,54,.45) 54px,rgba(0,26,34,.8) 86px,rgb(6,11,14) var(--dusk),#000 calc(var(--dusk) + 1px))}
+.foot-glow{top:var(--dusk)}
+/* the proof's Before / After heads were --text at .62 on chalk; over the field's glow that fell to
+   about 2.5:1, so they take the full --text (5.3:1 at the field's darkest) */
+.c-cols span{opacity:1}

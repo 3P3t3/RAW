@@ -83,7 +83,8 @@ Generated (never hand-edit; the next build overwrites them):
 `docs/macro-calculator.md` records the homepage macro calculator: where the maths came from, every
 formula and rounding in `mcCalc` in `_script.html`, and worked examples. Read it before touching them.
 
-`homepage-demo.html` and `style-demo.css` are a public preview Peter shares while the next homepage is
+`homepage-demo.html` + `style-demo.css` (the stack case) and `homepage-demo-bar.html` + `style-demo-bar.css`
+("load the bar", exported with `--demo-name bar`) are public previews Peter shares while the next homepage is
 worked on (the stack case, the free sample, the game plan). They are NOT made by main's build: they are
 exported from the working branch with `python3 site-src/build_homepage.py --demo OUTDIR` and copied in
 by RAW 0: EM. The page is `noindex`, nothing on the live site links to it, and it has its own stylesheet so
