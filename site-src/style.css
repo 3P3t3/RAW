@@ -1488,7 +1488,7 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
 .rk-guide li{display:flex;align-items:center;gap:10px;min-height:22px;font:500 15px/1.3 var(--sans);color:var(--text)}
 .rk-guide li.is-now{color:var(--ink);font-weight:650}
 .rg-n{position:relative;flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;
-  font:800 11px/1 var(--sans);font-stretch:75%;color:var(--teal);box-shadow:inset 0 0 0 1.5px rgba(0,46,59,.45);
+  font:800 11px/1 var(--sans);font-stretch:75%;color:var(--teal);box-shadow:inset 0 0 0 1.5px rgba(0,46,59,.62);
   transition:background-color 200ms,color 200ms,box-shadow 200ms}
 .rg-n::after{content:"";position:absolute;inset:3px;border-radius:50%;border:1px solid transparent}
 .is-done .rg-n{background:var(--teal);color:var(--chalk);box-shadow:none}
@@ -1497,6 +1497,7 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
 .rk-guide a{color:var(--teal);font-weight:650;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px}
 .rk-guide .is-now a{color:var(--blue)}
 @media (prefers-reduced-motion:reduce){.rg-n{transition:none}}
+html:not(.js) .rk-guide{display:none}   /* without script every panel stands open and nothing loads: no steps to follow */
 @media (max-width:359px){.rk-guide li{font-size:14px;align-items:flex-start}.rk-guide .rg-t{padding-top:2px}}
 @media (min-width:768px){.rk-guide{margin-top:10px;gap:8px}.rk-guide li{font-size:16px}}
 
