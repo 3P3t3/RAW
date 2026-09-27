@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=481a9e1c">
+<link rel="stylesheet" href="style.css?v=95dfd504">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -338,7 +338,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <a href="#goals">Goals</a>
         <a href="#results" data-all>Products</a>
         <a href="#macros">Macros</a>
-        <a class="btn btn-sm" href="#consult">Free call</a>
+        <a class="btn btn-sm" href="#consult">Book a free call</a>
       </nav>
       <button class="icon-btn sound-toggle" id="sound-toggle" type="button" aria-label="Turn interface sounds off" aria-pressed="true" hidden><svg class="ic" aria-hidden="true"><use href="#i-sound"/></svg></button>
       <button class="icon-btn search-toggle" id="search-toggle" type="button" aria-label="Search products" aria-expanded="false" aria-controls="search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
@@ -353,9 +353,9 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
 <!-- The calculator and the call, one tap from anywhere. The pair sits at the foot of the
      window and shows or hides as one: the script shows it only while nothing it could cover
      is in view (see the tab block in the script), never under the curtain or the menu, and
-     without script it never shows. From 1024 up the mast carries "Free call", so the tab
+     without script it never shows. From 1024 up the mast carries "Book a free call", so the tab
      drops its own and there is still only one. -->
-<div class="mtab" id="mtab"><a class="mtab-calc" href="#macros">Macro calculator</a><a class="mtab-call" href="#consult">Free call</a></div>
+<div class="mtab" id="mtab"><a class="mtab-calc" href="#macros">Macro calculator</a><a class="mtab-call" href="#consult">Book a free call</a></div>
 
 
 
@@ -377,6 +377,41 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           <a class="tlink" href="#consult">Book a free call</a>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- 3b. The game plan (#how): the path through the page, before anything else asks for attention.
+       Four numbered steps, each linking to where it happens (#macros, #sample, #quick-call; step 3
+       has no section of its own, so it is not a link), then the one thing to do. The same steps
+       are marked "Step n of 4" on the sections themselves (.step-mark). Step 4's words switch
+       with CONSULT_QUICK_URL in build_homepage.py, as the quick-call button does. -->
+  <section class="sec how-sec" id="how" aria-labelledby="how-title">
+    <div class="wrap">
+      <!-- DRAFT-COPY -->
+      <div class="how-head grow">
+        <p class="label">New here?</p>
+        <h2 id="how-title"><span>The game</span> <span>plan</span></h2>
+      </div>
+      <ol class="how-steps">
+        <li class="grow" style="--d:1"><a class="how-step" href="#macros"><span class="how-n" aria-hidden="true">01</span>
+          <span class="how-t">Name your goal.</span>
+          <span class="how-d">Pick what you’re chasing, then get your numbers from the free macro calculator.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li class="grow" style="--d:2"><a class="how-step" href="#sample"><span class="how-n" aria-hidden="true">02</span>
+          <span class="how-t">Sample anything on the shelves.</span>
+          <span class="how-d">On me. Dropped off in Lincoln, or mailed anywhere in the US.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li class="grow" style="--d:3"><div class="how-step"><span class="how-n" aria-hidden="true">03</span>
+          <span class="how-t">Report back.</span>
+          <span class="how-d">A few days in, I’ll ask how you’re getting on. Say what worked and what didn’t, and I’ll tell you what I’d add next, if anything.</span></div></li>
+        <li class="grow" style="--d:4"><a class="how-step" href="#quick-call"><span class="how-n" aria-hidden="true">04</span>
+          <span class="how-t">Make it part of your week.</span>
+          <span class="how-d">A free call to find where it slots in, then order through my Amway link if it earns a spot.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+      </ol>
+      <div class="how-go grow">
+        <a class="btn" id="how-go" href="#sample">Pick your free sample</a>
+        <a class="tlink" href="#macros">or run your macros first</a>
+        <p class="how-fine">Sixty seconds of typing. I answer every one myself.</p>
+      </div>
+      <!-- /DRAFT-COPY -->
     </div>
   </section>
 
@@ -408,8 +443,9 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
   <section class="sec sample-sec" id="sample" aria-labelledby="sample-title">
     <div class="wrap split">
       <div class="split-text grow">
-        <!-- DRAFT-COPY --><p class="label">Free sample</p>
-        <h2 id="sample-title"><span>Try it before</span> <span>you buy it</span></h2>
+        <!-- DRAFT-COPY --><p class="step-mark">Step 2 of 4</p>
+        <p class="label">Free sample</p>
+        <h2 id="sample-title"><span>First one’s</span> <span>on me</span></h2>
         <p>Pick anything off the shelves and I’ll get you a free sample. Dropped off in Lincoln, or mailed anywhere in the US.</p><!-- /DRAFT-COPY -->
       </div>
       <form class="c-card grow" id="sample-form" action="https://formsubmit.co/peterherschelman@gmail.com" method="POST" data-endpoint="https://formsubmit.co/ajax/peterherschelman@gmail.com" style="--d:1">
@@ -424,7 +460,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           <input id="s-name" name="name" type="text" autocomplete="name" required aria-describedby="s-name-err">
           <p class="s-err" id="s-name-err"></p></div>
         <fieldset class="c-q">
-          <legend>How should I reach you?</legend>
+          <legend>Text or email?</legend>
           <div class="chips">
             <label class="chip"><input type="radio" name="contact_by" value="Text" checked><span>Text me</span></label>
             <label class="chip"><input type="radio" name="contact_by" value="Email"><span>Email me</span></label>
@@ -438,7 +474,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           <p class="s-err" id="s-email-err"></p></div>
         <div class="c-field"><label for="s-product">What would you like to try?</label>
           <input id="s-product" name="product" type="text" list="sample-products" autocomplete="off" required
-                 placeholder="e.g. XS Energy Drink, Tropical" aria-describedby="s-product-hint s-product-err">
+                 placeholder="e.g. Grass-Fed Whey, Chocolate" aria-describedby="s-product-hint s-product-err">
           <p class="s-hint" id="s-product-hint">Not sure? Say so and I’ll suggest something.</p>
           <p class="s-err" id="s-product-err"></p></div>
         <datalist id="sample-products">
@@ -489,10 +525,15 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <div class="s-checks">
           <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this sample.</span></label>
           <p class="s-err" id="s-consent-err"></p>
-          <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and I’m happy to hear from him now and then after. <em>Optional</em></span></label>
+          <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and the odd update after that is fine too. <em>Optional</em></span></label>
         </div>
         <button class="btn" type="submit" id="sample-go">Request my sample</button>
         <p class="s-err" id="sample-fail" tabindex="-1"></p>
+        <ol class="s-next" aria-label="What happens next">
+          <li>You hear from me directly, by text or email, whichever you chose.</li>
+          <li>Local? We pick a drop-off. Going by mail? That’s when I ask for your address.</li>
+          <li>Give it a real try, then give me your honest take. You don’t owe me an order.</li>
+        </ol>
         <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
         <!-- /DRAFT-COPY -->
       </form>
@@ -501,7 +542,29 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <div class="c-card s-done" id="sample-sent">
         <!-- DRAFT-COPY --><h3 id="sample-done-title" tabindex="-1">Got it, thank you.</h3>
         <p>I’ll reach out within a day or two to sort out your sample.</p><!-- /DRAFT-COPY -->
+        <!-- DRAFT-COPY -->
+        <div class="s-step3">
+          <p class="step-mark">Step 3 of 4</p>
+          <p>Give it a few days, then I’ll ask how you’re getting on. Be honest about what worked and what didn’t, and I’ll say what I’d add next, if anything.</p>
+        </div>
+        <div class="qc qc-done">
+          <p class="step-mark">Step 4 of 4</p>
+          <p class="qc-ask">Want to figure out how to optimize this in your routine? That’s what the free call is for.</p>
+          <a class="btn q-go" href="#consult">Book a free call</a>
+        </div>
+        <!-- /DRAFT-COPY -->
       </div>
+      <!-- the quick call (step 4), under the form on a phone and beside it from 768 up. Once the
+           thank-you is up this copy steps aside for the one inside it, and the script hands
+           this id over to that one, so "#quick-call" always lands on the invitation on screen.
+           Words and button come from quick_call() in build_homepage.py. -->
+      <!-- DRAFT-COPY -->
+      <div class="qc qc-form" id="quick-call">
+        <p class="step-mark">Step 4 of 4</p>
+        <p class="qc-ask">Want to figure out how to optimize this in your routine? That’s what the free call is for.</p>
+        <a class="btn q-go" href="#consult">Book a free call</a>
+      </div>
+      <!-- /DRAFT-COPY -->
     </div>
   </section>
 
@@ -630,7 +693,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
             </div>
             <div class="st-copy">
               <!-- PETER-COPY --><p class="st-say">The hardest part was figuring it out alone, testing supplement after supplement to find what worked. That’s what this call is for. Book it and we’ll figure yours out together.</p><!-- /PETER-COPY -->
-              <!-- the call, asked for where the story asks for it. The tab's own "Free call" steps aside
+              <!-- the call, asked for where the story asks for it. The tab's own "Book a free call" steps aside
                    while this is on screen (it is one of the tab's zones in _script.html). -->
               <a class="btn st-book" href="#consult">Book a free call</a>
             </div>
@@ -672,6 +735,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
   <section class="sec macros-sec" id="macros" aria-labelledby="macros-title">
     <div class="wrap split">
       <div class="split-text grow">
+        <!-- DRAFT-COPY --><p class="step-mark">Step 1 of 4</p><!-- /DRAFT-COPY -->
         <p class="label">Your numbers</p>
         <h2 id="macros-title"><span>Work out</span> <span>your macros</span></h2>
         <p>The math behind a higher you.</p>
@@ -786,7 +850,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
             <li><span class="mc-g" id="mc-c">&#8212;</span><span class="mc-lab">Carbs</span><span class="mc-kc" id="mc-cc">&#8212;</span></li>
           </ul>
           <div class="mc-notes" id="mc-notes"></div>
-          <a class="btn" id="mc-book" href="#consult">Take these to a free call</a>
+          <a class="btn" id="mc-book" href="#consult">Book a free call</a>
           <div class="mc-foot">
             <button class="tlink" type="button" id="mc-edit">Change an answer</button>
             <button class="tlink" type="button" id="mc-again">Start over</button>
@@ -987,8 +1051,10 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     </div>
     <nav class="wrap menu-nav" aria-label="Menu">
       <ul class="menu-list">
+        <!-- DRAFT-COPY --><li><a href="#how">The game plan <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
         <li><a href="#goals">Goals <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="#results" data-all>All products <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <!-- DRAFT-COPY --><li><a href="#sample">Free sample <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
         <li><a href="#macros">Macros <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ul>
       <!-- every shelf, straight to its page. Generated from CATEGORIES in build_homepage.py,
@@ -1158,14 +1224,15 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    not watched either: the tab rides over it, except while the story's own "Book a free call"
    is up (.st-book: the story parks it off its stage while its beat is not). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
-   which sit where the tab does on a phone and go to the same places, the band that sends you
+   which sit where the tab does on a phone and go to the same places, "The game plan"'s "Pick
+   your free sample" (#how-go) and the quick-call buttons (.q-go), which it would cover, the band that sends you
    to the calculator on a category page, and the footer,
    which is the end of every page and so could never be scrolled out from under it. It also
    waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -1374,6 +1441,49 @@ if(arch){
   }
 }
 
+/* Calendly's widget.js, shared by the consult's inline calendar and the quick call's popup.
+   It is only fetched on the first booking tap, once, so nobody who never books pays for it. */
+var wjs=0,wq=[];
+var withCalendly=function(fn,fail){
+  if(window.Calendly)return fn();
+  wq.push(fn);
+  if(wjs)return;
+  wjs=1;
+  var sc=doc.createElement('script');
+  sc.src='https://assets.calendly.com/assets/external/widget.js';
+  sc.async=true;
+  sc.onload=function(){wq.splice(0).forEach(function(f){f()})};
+  sc.onerror=function(){wjs=0;wq.length=0;fail()};
+  doc.head.appendChild(sc);
+};
+
+/* The quick 10-minute call. Only there once CONSULT_QUICK_URL is set in build_homepage.py (until
+   then the button is a plain link to #consult, and carries no data-quick). It is a real link to
+   the calendar in a new tab; with script it opens in Calendly's popup over the page instead.
+   The popup needs Calendly's widget.css as well as widget.js (the inline embed needs neither's
+   styles), so it waits for both. Cmd/ctrl/shift-clicks keep the plain link. */
+var qcss=null;
+$$('a[data-quick]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button)return;
+    e.preventDefault();
+    var go=function(){window.Calendly.initPopupWidget({url:a.href+(a.href.indexOf('?')>-1?'&':'?')+
+          'hide_gdpr_banner=1&background_color=f4f2ec&text_color=1e262f&primary_color=002e3b'})},
+        tab=function(){if(!window.open(a.href,'_blank','noopener'))location.href=a.href};
+    if(!qcss){
+      qcss=doc.createElement('link');qcss.rel='stylesheet';
+      qcss.href='https://assets.calendly.com/assets/external/widget.css';
+      qcss.onload=function(){qcss.done=1};
+      qcss.onerror=function(){qcss.done=1};
+      doc.head.appendChild(qcss);
+    }
+    withCalendly(function(){
+      if(qcss.done)return go();
+      qcss.addEventListener('load',go);qcss.addEventListener('error',go);
+    },tab);
+  });
+});
+
 /* Consult: the calendar embeds in place of the form, the four answers prefilled as a1-a4
    (Calendly maps those positionally onto the event type's custom questions) */
 var cform=$('#consult-form');
@@ -1397,20 +1507,6 @@ if(cform){
     return 'Thirty minutes on '+(CGOAL[g]||'your goal')+(CTRAIN[t]?', '+CTRAIN[t]:'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
-  /* widget.js is only fetched on submit, once, so nobody who never books pays for it */
-  var wjs=0,wq=[];
-  var withCalendly=function(fn,fail){
-    if(window.Calendly)return fn();
-    wq.push(fn);
-    if(wjs)return;
-    wjs=1;
-    var sc=doc.createElement('script');
-    sc.src='https://assets.calendly.com/assets/external/widget.js';
-    sc.async=true;
-    sc.onload=function(){wq.splice(0).forEach(function(f){f()})};
-    sc.onerror=function(){wjs=0;wq.length=0;fail()};
-    doc.head.appendChild(sc);
-  };
   cform.addEventListener('submit',function(e){
     e.preventDefault();
     var url=cform.dataset.consult;
@@ -1473,6 +1569,9 @@ if(sform){
   if(sTry&&!sval('product'))sel('product').value=sTry;
   var sShow=function(){
     sform.hidden=true;sdone.classList.add('on');
+    /* the quick call under the form steps aside for the one in the thank-you: hand it the id */
+    var qf=$('#quick-call'),qd=$('.qc',sdone);
+    if(qf&&qd){qf.removeAttribute('id');qd.id='quick-call'}
     var h=$('#sample-done-title');h.focus({preventScroll:true});
     sdone.scrollIntoView({block:'nearest'});
   };

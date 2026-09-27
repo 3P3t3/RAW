@@ -113,6 +113,13 @@ CAT_THUMB = {  # the pack shown on the homepage row for each category
 # leave it empty and the form says the calendar is not connected yet instead of embedding nothing.
 CONSULT_URL = 'https://calendly.com/3pete/explore'
 
+# The quick 10-minute call: the invitation under the free-sample form and in its thank-you, and
+# step 4 of "The game plan" (#how). Paste the 10-minute Calendly event's link here and rebuild;
+# its label and link switch on at build time (see quick_call below), and _script.html opens it in
+# Calendly's popup. While it is empty nothing claims a 10-minute call: the button says "Book a
+# free call" and goes to #consult, the 30-minute booking already on the page.
+CONSULT_QUICK_URL = ''
+
 # The free-sample form (#sample on the homepage) posts to FormSubmit, which needs no account: the
 # first real request sends an activation email to this inbox, and once it is confirmed FormSubmit
 # offers a random alias to use instead. Swap the address for that alias here; nothing else names it.
@@ -234,6 +241,22 @@ def shot(p, lazy=True, cls='shot'):
         ld = 'loading="lazy" ' if lazy else ''
         return f'<span class="{cls}"><img src="{p["img"]}" alt="" {ld}width="600" height="600"></span>'
     return f'<span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>coming soon</span></span>'
+
+
+def quick_call():
+    """The quick call's words and button, switched on CONSULT_QUICK_URL. All of it is DRAFT-COPY."""
+    if CONSULT_QUICK_URL:
+        return {
+            '{{QUICK_ASK}}': 'Want a quick 10 min to figure out how to optimize this in your routine? Book a consult here.',
+            '{{QUICK_STEP}}': 'Ten minutes on the phone to find where it slots in',
+            '{{QUICK_CALL}}': f'<a class="btn q-go" href="{esc(CONSULT_QUICK_URL)}" target="_blank" rel="noopener" '
+                              f'data-quick>Book a quick 10-min call<span class="vh"> (opens a calendar)</span></a>',
+        }
+    return {  # no 10-minute event yet: the 30-minute call on this page, and it says so
+        '{{QUICK_ASK}}': 'Want to figure out how to optimize this in your routine? That’s what the free call is for.',
+        '{{QUICK_STEP}}': 'A free call to find where it slots in',
+        '{{QUICK_CALL}}': '<a class="btn q-go" href="#consult">Book a free call</a>',
+    }
 
 
 def bestsellers():
@@ -400,7 +423,7 @@ def main():
                                 '{{PAGE_URL}}': BASE + 'homepage.html', '{{INTRO}}': intro,
                                 '{{GOALS}}': cat_rows(),
                                 '{{SAMPLE_ENDPOINT}}': SAMPLE_ENDPOINT, '{{SAMPLE_ACTION}}': SAMPLE_ACTION,
-                                '{{SAMPLE_NEXT}}': SAMPLE_NEXT, '{{SAMPLE_PRODUCTS}}': sample_list, '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves}).items():
+                                '{{SAMPLE_NEXT}}': SAMPLE_NEXT, '{{SAMPLE_PRODUCTS}}': sample_list, **quick_call(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves}).items():
         out = out.replace(k, v)
     open(OUT, 'w').write(out)
 

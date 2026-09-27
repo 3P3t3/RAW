@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=481a9e1c">
+<link rel="stylesheet" href="style.css?v=95dfd504">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -136,7 +136,7 @@
         <a href="homepage.html#goals">Goals</a>
         <a href="homepage.html#results" data-all>Products</a>
         <a href="homepage.html#macros">Macros</a>
-        <a class="btn btn-sm" href="homepage.html#consult">Free call</a>
+        <a class="btn btn-sm" href="homepage.html#consult">Book a free call</a>
       </nav>
       <button class="icon-btn sound-toggle" id="sound-toggle" type="button" aria-label="Turn interface sounds off" aria-pressed="true" hidden><svg class="ic" aria-hidden="true"><use href="#i-sound"/></svg></button>
       <button class="icon-btn search-toggle" id="search-toggle" type="button" aria-label="Search products" aria-expanded="false" aria-controls="search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
@@ -151,9 +151,9 @@
 <!-- The calculator and the call, one tap from anywhere. The pair sits at the foot of the
      window and shows or hides as one: the script shows it only while nothing it could cover
      is in view (see the tab block in the script), never under the curtain or the menu, and
-     without script it never shows. From 1024 up the mast carries "Free call", so the tab
+     without script it never shows. From 1024 up the mast carries "Book a free call", so the tab
      drops its own and there is still only one. -->
-<div class="mtab" id="mtab"><a class="mtab-calc" href="homepage.html#macros">Macro calculator</a><a class="mtab-call" href="homepage.html#consult">Free call</a></div>
+<div class="mtab" id="mtab"><a class="mtab-calc" href="homepage.html#macros">Macro calculator</a><a class="mtab-call" href="homepage.html#consult">Book a free call</a></div>
 
 
 
@@ -248,8 +248,10 @@
     </div>
     <nav class="wrap menu-nav" aria-label="Menu">
       <ul class="menu-list">
+        <!-- DRAFT-COPY --><li><a href="homepage.html#how">The game plan <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
         <li><a href="homepage.html#goals">Goals <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="homepage.html#results" data-all>All products <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <!-- DRAFT-COPY --><li><a href="homepage.html#sample">Free sample <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
         <li><a href="homepage.html#macros">Macros <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ul>
       <!-- every shelf, straight to its page. Generated from CATEGORIES in build_homepage.py,
@@ -419,14 +421,15 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    not watched either: the tab rides over it, except while the story's own "Book a free call"
    is up (.st-book: the story parks it off its stage while its beat is not). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
-   which sit where the tab does on a phone and go to the same places, the band that sends you
+   which sit where the tab does on a phone and go to the same places, "The game plan"'s "Pick
+   your free sample" (#how-go) and the quick-call buttons (.q-go), which it would cover, the band that sends you
    to the calculator on a category page, and the footer,
    which is the end of every page and so could never be scrolled out from under it. It also
    waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -635,6 +638,49 @@ if(arch){
   }
 }
 
+/* Calendly's widget.js, shared by the consult's inline calendar and the quick call's popup.
+   It is only fetched on the first booking tap, once, so nobody who never books pays for it. */
+var wjs=0,wq=[];
+var withCalendly=function(fn,fail){
+  if(window.Calendly)return fn();
+  wq.push(fn);
+  if(wjs)return;
+  wjs=1;
+  var sc=doc.createElement('script');
+  sc.src='https://assets.calendly.com/assets/external/widget.js';
+  sc.async=true;
+  sc.onload=function(){wq.splice(0).forEach(function(f){f()})};
+  sc.onerror=function(){wjs=0;wq.length=0;fail()};
+  doc.head.appendChild(sc);
+};
+
+/* The quick 10-minute call. Only there once CONSULT_QUICK_URL is set in build_homepage.py (until
+   then the button is a plain link to #consult, and carries no data-quick). It is a real link to
+   the calendar in a new tab; with script it opens in Calendly's popup over the page instead.
+   The popup needs Calendly's widget.css as well as widget.js (the inline embed needs neither's
+   styles), so it waits for both. Cmd/ctrl/shift-clicks keep the plain link. */
+var qcss=null;
+$$('a[data-quick]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button)return;
+    e.preventDefault();
+    var go=function(){window.Calendly.initPopupWidget({url:a.href+(a.href.indexOf('?')>-1?'&':'?')+
+          'hide_gdpr_banner=1&background_color=f4f2ec&text_color=1e262f&primary_color=002e3b'})},
+        tab=function(){if(!window.open(a.href,'_blank','noopener'))location.href=a.href};
+    if(!qcss){
+      qcss=doc.createElement('link');qcss.rel='stylesheet';
+      qcss.href='https://assets.calendly.com/assets/external/widget.css';
+      qcss.onload=function(){qcss.done=1};
+      qcss.onerror=function(){qcss.done=1};
+      doc.head.appendChild(qcss);
+    }
+    withCalendly(function(){
+      if(qcss.done)return go();
+      qcss.addEventListener('load',go);qcss.addEventListener('error',go);
+    },tab);
+  });
+});
+
 /* Consult: the calendar embeds in place of the form, the four answers prefilled as a1-a4
    (Calendly maps those positionally onto the event type's custom questions) */
 var cform=$('#consult-form');
@@ -658,20 +704,6 @@ if(cform){
     return 'Thirty minutes on '+(CGOAL[g]||'your goal')+(CTRAIN[t]?', '+CTRAIN[t]:'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
-  /* widget.js is only fetched on submit, once, so nobody who never books pays for it */
-  var wjs=0,wq=[];
-  var withCalendly=function(fn,fail){
-    if(window.Calendly)return fn();
-    wq.push(fn);
-    if(wjs)return;
-    wjs=1;
-    var sc=doc.createElement('script');
-    sc.src='https://assets.calendly.com/assets/external/widget.js';
-    sc.async=true;
-    sc.onload=function(){wq.splice(0).forEach(function(f){f()})};
-    sc.onerror=function(){wjs=0;wq.length=0;fail()};
-    doc.head.appendChild(sc);
-  };
   cform.addEventListener('submit',function(e){
     e.preventDefault();
     var url=cform.dataset.consult;
@@ -734,6 +766,9 @@ if(sform){
   if(sTry&&!sval('product'))sel('product').value=sTry;
   var sShow=function(){
     sform.hidden=true;sdone.classList.add('on');
+    /* the quick call under the form steps aside for the one in the thank-you: hand it the id */
+    var qf=$('#quick-call'),qd=$('.qc',sdone);
+    if(qf&&qd){qf.removeAttribute('id');qd.id='quick-call'}
     var h=$('#sample-done-title');h.focus({preventScroll:true});
     sdone.scrollIntoView({block:'nearest'});
   };
