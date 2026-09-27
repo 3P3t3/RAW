@@ -1819,13 +1819,12 @@ if(mcForm){
    The script takes the section over (.is-live) only when motion is allowed; otherwise, and
    until it does, the beats are a plain vertical sequence. Everything written per frame is
    transform or opacity.
-   A pack shot swirls in from the upper right, turning and tilted, swings just past its resting
-   angle and settles there while its line is read, then spins away down to the left as the next
-   one comes in, so the two cross on a diagonal rather than one replacing the other in the
-   middle. It is a flat picture, so it only ever turns in its own plane and tilts well short of
-   edge-on: it is never seen from behind or mirrored. Its shadow lifts and shrinks with it but
-   never turns. The photos of Peter do not spin: they rise in and fall away, and at the turn the
-   after wipes in over the before. */
+   A pack drops from the camera: it starts at the lens, large and unseen, falls away onto the
+   stage and lands with a small squash while its line is read; then it shrinks up into its slot
+   in a row along the top, so the stack is built in front of you, and at the call that row rises
+   into the arc above the button. It only ever turns a few degrees in its own plane, so a flat
+   picture is never seen edge-on or mirrored. The photos of Peter do not move like that: they
+   rise in and fall away, and at the turn the after wipes in over the before. */
 (function(){
   var run=$('#st-run');
   if(!run||!html.classList.contains('motion'))return;
@@ -1858,7 +1857,6 @@ if(mcForm){
   function clamp(x){return x<0?0:x>1?1:x}
   function smooth(x){return x*x*(3-2*x)}
   function out3(x){return 1-Math.pow(1-x,3)}
-  function back(x){var y=x-1;return 1+2*y*y*y+y*y}  /* eases out past 1 by about 4%, then settles */
   function f(n,d){return n.toFixed(d)}
   function put(p,el,name,tf,op){        /* write only what changed */
     if(!el)return;
