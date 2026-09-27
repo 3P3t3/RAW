@@ -3,7 +3,7 @@
 Run from the project folder:  python3 site-src/build_homepage.py
 Edit share-links.csv (product, share_link, photo) and re-run to update the site.
 """
-import csv, hashlib, html, inspect, os, re, shutil
+import csv, hashlib, html, inspect, os, re, shutil, sys
 from urllib.parse import quote
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -18,6 +18,13 @@ STAMP = os.path.join(ROOT, 'assets', '.cut-version')  # fingerprint of normalize
 # url(assets/...) backgrounds resolve against the same folder they did when the css was inlined
 STYLE_OUT = os.path.join(ROOT, 'style.css')
 RECUT = False  # set for the whole run when that fingerprint moved, so every cached cut-out counts as stale
+# `--demo OUTDIR` exports a public copy of the homepage and writes nothing else: OUTDIR/homepage-demo.html,
+# linked to its own OUTDIR/style-demo.css, so the live pages and their shared style.css are never touched.
+# It is noindexed, and its canonical and og:url name the demo's own address. It photographs nothing
+# (no cut-outs, no copies), so run a normal build first; it then lists what it links that main lacks.
+DEMO = None
+DEMO_PAGE = 'homepage-demo.html'
+DEMO_STYLE = 'style-demo.css'
 
 # family prefix -> (type descriptor, goals, format). Longest prefix wins.
 # Goals: R Recovery, L Lean Mass, E Endurance, S Sleep & Longevity (first = primary).
@@ -88,9 +95,16 @@ CAROUSELS = {
     'energy-focus': ('XS Energy Drink 12 oz', 'Pick your flavor', 'The 12 oz range, one can at a time.'),
 }
 
-# 'strip' is the tabbed goal strip; 'ring' brings back the rotating archipelago.
-# Both are built from the same shelf data, so switching is this one word plus a rebuild.
-SHELF_VIEW = 'ring'
+# 'case' is the stack case: the seven shelves as the seven compartments of one case, each lid a
+# button that opens onto a few of that shelf's packs. 'strip' is the tabbed goal strip; 'ring'
+# brings back the rotating archipelago. All three are built from the same shelf data, so switching
+# is this one word plus a rebuild; the ring's script and styles stay in, idle while it is off.
+SHELF_VIEW = 'case'
+CASE_PICKS = 3  # packs an open compartment shows: one per family, in the shelf's own order
+
+# The trending band's ground: True scrubs the 150-frame pour behind the podium, False leaves the
+# band plain teal and fetches none of it. The frames and the script stay either way.
+TRENDING_POUR = False
 
 SHELF_LINE = {  # the line under each shelf name
     'recovery': 'After the session', 'hydration': 'Long, hot sessions', 'energy-focus': 'Before the session',
@@ -278,14 +292,16 @@ def main():
         studio = os.path.join(STUDIO, slug(r['product']) + '.webp')
         if os.path.exists(studio):
             fn = slug(r['product']) + '.webp'
-            shutil.copyfile(studio, os.path.join(ASSETS, fn))
+            if not DEMO:
+                shutil.copyfile(studio, os.path.join(ASSETS, fn))
             p['img'] = 'assets/products/' + fn
             p['studio'] = True
             products.append(p)
             continue
         if src and os.path.exists(src):
             fn = slug(r['product']) + os.path.splitext(src)[1].lower()
-            normalize(src, os.path.join(ASSETS, fn))
+            if not DEMO:
+                normalize(src, os.path.join(ASSETS, fn))
             p['img'] = 'assets/products/' + fn
         else:
             p['img'] = ''
@@ -374,7 +390,67 @@ def main():
                 + '\n'.join(panels) +
                 '\n      </div>\n    </div>\n  </section>')
 
-    shelves = ring_section() if SHELF_VIEW == 'ring' else strip_section()
+    def case_picks(slug_, fams):
+        """A few packs for a compartment: the shelf's own thumbnail first, then one per family, lit
+        studio shots before plain cut-outs and otherwise in the order the shelf lists them. A shelf
+        with fewer families than that shows what it has."""
+        items = [pr for pr in products if on_shelf(pr, fams) and pr['img']]
+        first = [pr for pr in items if pr['product'] == CAT_THUMB.get(slug_)]
+        rest = sorted(items, key=lambda pr: (not pr.get('studio'), fams.index(family(pr['product']))))
+        out_, seen = [], set()
+        for pr in first + rest:
+            if family(pr['product']) not in seen and len(out_) < CASE_PICKS:
+                seen.add(family(pr['product']))
+                out_.append(pr)
+        for pr in rest:  # one family only: its other packs, so the compartment is not a lone tub
+            if len(out_) < 2 and pr not in out_:
+                out_.append(pr)
+        return out_
+
+    def case_section():
+        bays = []
+        for i, (slug_, name, tag, heading, fams) in enumerate(CATEGORIES):
+            packs = case_picks(slug_, fams)
+            names_ = [pr['name'] for pr in packs]
+            cells = '\n'.join(
+                f'                <li class="bay-pack" style="--k:{j}"><img src="{pr["img"]}" alt="" width="600" height="600" '
+                f'loading="lazy" decoding="async"><span>{esc(pr["name"] if names_.count(pr["name"]) == 1 else pr["desc"].split(" · ")[-1])}</span></li>'
+                for j, pr in enumerate(packs))
+            bays.append(
+                f'          <li class="bay" style="--i:{i}">\n'
+                f'            <button class="bay-lid" type="button" id="lid-{slug_}" aria-expanded="false" aria-controls="bay-{slug_}">'
+                f'<span class="lid" aria-hidden="true"></span>'
+                f'<span class="bay-name">{name}</span><span class="vh">, </span><span class="bay-note">{SHELF_LINE[slug_]}</span></button>\n'
+                f'            <div class="bay-well"><div class="bay-in" id="bay-{slug_}" role="region" aria-labelledby="lid-{slug_}" hidden>\n'
+                f'              <ul class="bay-packs">\n{cells}\n              </ul>\n'
+                f'              <a class="bay-all" href="category-{slug_}.html">See all {name}'
+                f'<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>\n'
+                f'            </div></div>\n'
+                f'          </li>')
+        return ('  <!-- Shelves as the stack case: one compartment per shelf, all seven labelled at once. A lid is\n'
+                '       a real button; it opens onto a few of that shelf\'s packs and a link to the shelf, one\n'
+                '       compartment at a time (_script.html). Without script every compartment stands open. -->\n'
+                '  <section class="sec case-sec" id="goals" aria-labelledby="goals-title">\n'
+                '    <div class="wrap">\n'
+                '      <div class="sec-head grow"><h2 id="goals-title">What are we <span>maximizing?</span></h2></div>\n'
+                '      <div class="case grow" id="case">\n        <ul class="case-bays">\n'
+                + '\n'.join(bays) +
+                '\n        </ul>\n      </div>\n    </div>\n  </section>')
+
+    shelves = {'ring': ring_section, 'strip': strip_section, 'case': case_section}[SHELF_VIEW]()
+    # the story's stack is the same case in miniature: the same seven compartments, in the same order,
+    # empty until the story's packs tuck into them (_script.html measures them; nothing here moves)
+    case_strip = ('<div class="st-row st-case" aria-hidden="true"><span class="stc-body">'
+                  + ''.join(f'<span class="stc-bay" data-cat="{s}"><span class="stc-well"></span>'
+                            f'<span class="stc-name">{n}</span></span>' for s, n, *_ in CATEGORIES)
+                  + '</span></div>')
+    pour = ('''<div class="pour-bg" id="pour-bg" aria-hidden="true">
+      <div class="pour-stage">
+        <canvas class="pour-film" id="pour-film"></canvas>
+        <img class="pour-still" id="pour-still" alt="" decoding="async" hidden>
+        <noscript><img class="pour-still" src="assets/pour/sm/0060.webp" alt=""></noscript>
+      </div>
+    </div>''' if TRENDING_POUR else '<!-- TRENDING_POUR is off in build_homepage.py: a plain band -->')
 
     order = sorted(products, key=lambda pr: pr['name'].lower())
     grid = [card(pr, i) for i, pr in enumerate(order)]
@@ -383,8 +459,9 @@ def main():
     style, header, footer, dialogs, script, icons = (part('style.css'), part('_header.html'), part('_footer.html'),
                                                      part('_dialogs.html'), part('_script.html'), part('_icons.html'))
     intro = part('_intro.html')  # the opening curtain: homepage only, so it is not in `shared`
-    open(STYLE_OUT, 'w').write(style)  # served once and cached, instead of inlined into all eight pages
-    style_href = 'style.css?v=' + hashlib.sha1(style.encode()).hexdigest()[:8]  # bust the cache when the css moves
+    style_file = os.path.join(DEMO, DEMO_STYLE) if DEMO else STYLE_OUT
+    open(style_file, 'w').write(style)  # served once and cached, instead of inlined into all eight pages
+    style_href = os.path.basename(style_file) + '?v=' + hashlib.sha1(style.encode()).hexdigest()[:8]  # bust the cache when the css moves
     # the menu sheet lists every shelf; it follows {{DIALOGS}} in this dict so it fills the menu once it is in
     menu_shelves = '\n'.join(f'        <li><a href="category-{s}.html">{n}</a></li>' for s, n, *_ in CATEGORIES)
     shared = {'{{STYLE}}': style_href, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{MENU_SHELVES}}': menu_shelves,
@@ -396,7 +473,8 @@ def main():
     sample_list = '\n'.join(f'          <option value="{esc(n)}"></option>'
                             for n in sorted({pr['name'] for pr in products}, key=str.lower))
 
-    os.makedirs(CUTS, exist_ok=True)
+    if not DEMO:
+        os.makedirs(CUTS, exist_ok=True)
     podium = []
     for i, r in enumerate(bestsellers()[:3]):
         pr = dict(by.get(r['product']) or {})
@@ -405,7 +483,8 @@ def main():
         photo = next((row['photo'] for row in rows if row['product'] == r['product']), '')
         if photo and os.path.exists(os.path.join(PHOTOS, photo)):  # transparent cut-out for the dark band
             fn = slug(r['product']) + '.webp'
-            normalize(os.path.join(PHOTOS, photo), os.path.join(CUTS, fn))
+            if not DEMO:
+                normalize(os.path.join(PHOTOS, photo), os.path.join(CUTS, fn))
             pr['img'] = 'assets/cutouts/' + fn
             pr['studio'] = False
         units = (r.get('units_this_week') or '').strip()
@@ -418,13 +497,26 @@ def main():
             f'<h3 class="p-name">{esc(pr["name"])}</h3><p class="p-desc">{esc(pr["desc"])}</p>{count}'
             f'<span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
 
+    page_name = DEMO_PAGE if DEMO else 'homepage.html'
+    head_extra = (f'<meta name="robots" content="noindex">\n<link rel="canonical" href="{BASE}{DEMO_PAGE}">\n'
+                  if DEMO else '')
     out = open(SRC).read()
     for k, v in dict(shared, **{'{{HEADER}}': header.replace('{{HOME}}', ''), '{{HOME}}': '',
-                                '{{PAGE_URL}}': BASE + 'homepage.html', '{{INTRO}}': intro,
+                                '{{HEAD_EXTRA}}': head_extra,
+                                '{{PAGE_URL}}': BASE + page_name, '{{INTRO}}': intro,
                                 '{{GOALS}}': cat_rows(),
                                 '{{SAMPLE_ENDPOINT}}': SAMPLE_ENDPOINT, '{{SAMPLE_ACTION}}': SAMPLE_ACTION,
-                                '{{SAMPLE_NEXT}}': SAMPLE_NEXT, '{{SAMPLE_PRODUCTS}}': sample_list, **quick_call(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves}).items():
+                                '{{SAMPLE_NEXT}}': SAMPLE_NEXT.replace('homepage.html', page_name), '{{SAMPLE_PRODUCTS}}': sample_list, **quick_call(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves,
+                                '{{CASE_STRIP}}': case_strip, '{{POUR}}': pour,
+                                '{{POUR_CLASS}}': '' if TRENDING_POUR else ' no-pour'}).items():
         out = out.replace(k, v)
+    left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', out)))
+    if left:
+        raise SystemExit(f'unfilled placeholders in the homepage: {left}')
+    if DEMO:
+        open(os.path.join(DEMO, DEMO_PAGE), 'w').write(out)
+        demo_report(out, style)
+        return
     open(OUT, 'w').write(out)
 
     cat_tpl = open(os.path.join(ROOT, 'site-src', 'category.template.html')).read()
@@ -470,5 +562,31 @@ def main():
     print('categories', counts, 'uncategorised', [pr['product'] for pr in products if pr['product'] not in cat_of])
 
 
+def demo_report(page, style):
+    """What the demo links that main does not have yet: those files have to ship with it."""
+    import subprocess
+    refs = set(re.findall(r'assets/[A-Za-z0-9_./-]+\.[a-z0-9]{2,5}', page + style))
+    refs |= {'site.webmanifest'} if 'site.webmanifest' in page else set()
+    try:
+        have = set(subprocess.run(['git', 'ls-tree', '-r', 'main', '--name-only'], cwd=ROOT, check=True,
+                                  capture_output=True, text=True).stdout.split())
+    except (OSError, subprocess.CalledProcessError) as e:
+        raise SystemExit(f'--demo: could not list main ({e})')
+    new = sorted(r for r in refs if r not in have)
+    missing = [r for r in new if not os.path.exists(os.path.join(ROOT, r))]
+    print(f'demo: {os.path.join(DEMO, DEMO_PAGE)} + {DEMO_STYLE} ({len(refs)} asset references)')
+    print(f'assets the demo references that main does not have: {len(new)}')
+    for r in new:
+        print('  ' + r + ('   (MISSING here too)' if r in missing else ''))
+    if missing:
+        raise SystemExit('--demo: some referenced files do not exist; run a normal build first')
+
+
 if __name__ == '__main__':
+    if '--demo' in sys.argv:
+        i = sys.argv.index('--demo')
+        if i + 1 >= len(sys.argv):
+            raise SystemExit('usage: build_homepage.py --demo OUTDIR')
+        DEMO = os.path.abspath(sys.argv[i + 1])  # the repo root is fine: the export only adds its own two files
+        os.makedirs(DEMO, exist_ok=True)
     main()

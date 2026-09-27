@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=33259927">
+<link rel="stylesheet" href="style.css?v=3c3d3dc1">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -432,14 +432,16 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    is up (.st-book: the story parks it off its stage while its beat is not). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
    which sit where the tab does on a phone and go to the same places, "The game plan"'s "Pick
-   your free sample" (#how-go) and the quick-call buttons (.q-go), which it would cover, the band that sends you
+   your free sample" (#how-go), the quick-call buttons (.q-go) and the sample form's own send button
+   (#sample-go), which it would cover, an open compartment of the stack case (.bay-in: a closed one
+   is hidden, so has no box and never counts), the band that sends you
    to the calculator on a category page, and the footer,
    which is the end of every page and so could never be scrolled out from under it. It also
    waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#sample-go,.bay-in,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -647,6 +649,66 @@ if(arch){
     measure();layout();addEventListener('resize',function(){measure();layout()});   /* reduced motion: a still archipelago */
   }
 }
+
+/* The stack case (#goals): seven compartments, one per shelf, each lid a real button. A lid opens
+   onto a few of that shelf's packs and a link to it; one compartment is open at a time, and a
+   second tap, Escape, or opening another closes it. The lid's hinge, the packs rising in and, on
+   a wide screen, the open compartment making room are all transitions in style.css (~320ms);
+   under reduced motion they are off and a lid opens at once. Arrow keys, Home and End move
+   between lids. Nothing opens on its own. */
+(function(){
+  var cs=$('#case');
+  if(!cs)return;
+  var list=$('.case-bays',cs),bays=$$('.bay',cs),lids=bays.map(function(b){return $('.bay-lid',b)}),
+      ins=bays.map(function(b){return $('.bay-in',b)}),N=bays.length,open=-1,timers=[],
+      reduce=matchMedia('(prefers-reduced-motion: reduce)'),wide=matchMedia('(min-width: 1024px)'),
+      MS=340;   /* a touch over the transitions, so a region is only hidden once it has closed */
+  cs.classList.add('is-live');
+  function cols(){   /* a row of seven: the open one takes a wider column, the rest share what is left */
+    list.style.gridTemplateColumns=wide.matches?bays.map(function(b,i){return 'minmax(0,'+(i===open?'2.6fr':'1fr')+')'}).join(' '):'';
+  }
+  function set(i,on){
+    var b=bays[i],r=ins[i];
+    clearTimeout(timers[i]);
+    lids[i].setAttribute('aria-expanded',on?'true':'false');
+    if(on){r.hidden=false;void r.offsetHeight;b.classList.add('is-open')}   /* laid out closed first, so it opens rather than appears */
+    else{
+      b.classList.remove('is-open');
+      if(reduce.matches)r.hidden=true;
+      else timers[i]=setTimeout(function(){if(!b.classList.contains('is-open'))r.hidden=true},MS);
+    }
+  }
+  /* once it has opened, the whole compartment is brought on screen if it is not, above the tab */
+  function show(i){
+    setTimeout(function(){
+      if(open!==i)return;
+      var r=bays[i].getBoundingClientRect(),vh=innerHeight,tab=72,top=parseFloat(getComputedStyle(html).scrollPaddingTop)||0;
+      var dy=r.bottom>vh-tab?Math.min(r.bottom-(vh-tab),r.top-top-8):r.top<top?r.top-top-8:0;
+      if(dy>1||dy<-1)scrollBy({top:dy,behavior:reduce.matches?'instant':'smooth'});
+    },reduce.matches?0:MS);
+  }
+  function pick(i){
+    var was=open;
+    if(was>-1)set(was,false);
+    open=was===i?-1:i;
+    if(open>-1){set(open,true);show(open)}
+    cols();
+  }
+  lids.forEach(function(l,i){
+    l.addEventListener('click',function(){pick(i)});
+    l.addEventListener('keydown',function(e){
+      var k=e.key,j=k==='ArrowRight'||k==='ArrowDown'?(i+1)%N:k==='ArrowLeft'||k==='ArrowUp'?(i+N-1)%N:k==='Home'?0:k==='End'?N-1:-1;
+      if(j<0)return;
+      e.preventDefault();lids[j].focus();
+    });
+  });
+  /* Escape inside an open compartment closes it and hands focus back to its lid */
+  cs.addEventListener('keydown',function(e){
+    if(e.key!=='Escape'||open<0)return;
+    var i=open;pick(i);lids[i].focus();
+  });
+  wide.addEventListener('change',cols);
+})();
 
 /* Calendly's widget.js, shared by the consult's inline calendar and the quick call's popup.
    It is only fetched on the first booking tap, once, so nobody who never books pays for it. */
@@ -1337,10 +1399,11 @@ if(mcForm){
    until it does, the beats are a plain vertical sequence. Everything written per frame is
    transform or opacity.
    A pack drops from the camera: it starts at the lens, large and unseen, falls away onto the
-   stage and lands with a small squash while its line is read; then it shrinks up into its slot
-   in a row along the top, so the stack is built in front of you, and at the call that row rises
-   into the arc above the button. It only ever turns a few degrees in its own plane, so a flat
-   picture is never seen edge-on or mirrored. The photos of Peter do not move like that: they
+   stage and lands with a small squash while its line is read; then it shrinks up into its own
+   compartment of the case strip along the top (the #goals case in miniature: its shelf's
+   compartment, so the two hydration packs share one and two compartments stay empty), and at
+   the call the filled case rises into the place above the button. It only ever turns a few
+   degrees in its own plane, so a flat picture is never seen edge-on or mirrored. The photos of Peter do not move like that: they
    rise in and fall away, and at the turn the after wipes in over the before. */
 (function(){
   var run=$('#st-run');
@@ -1381,21 +1444,37 @@ if(mcForm){
     if(p.keys[name]===k)return;
     p.keys[name]=k;el.style.transform=tf;el.style.opacity=op;
   }
-  /* The stack: every pack of the five pack beats (six, with the pair), in order, and the six arc
-     slots above the call they end in. Where each rests, where its slot in the row is, and where its
-     arc slot is are measured here, from boxes nothing ever transforms, once per resize; a frame
-     only moves pictures. */
-  var ITEMS=[],SLOTS=CALL<N?$$('.st-arc .st-pack',beats[CALL]):[],rowEl=$('.st-row',run),geo=null,rowA=0,rowZ=0;
-  parts.forEach(function(p){if(p.kind==='prod')p.packs.forEach(function(k){k.g=ITEMS.length;ITEMS.push(k)})});
+  /* The stack: every pack of the five pack beats (six, with the pair), in order, each bound for
+     the compartment of the shelf its beat links to, and the place above the call the filled case
+     rises into. Where each pack rests, where it stands in its compartment and where that place is
+     are measured here once per resize: the packs and the place from boxes nothing transforms, the
+     case from its offsets (the frame does transform it); a frame only moves pictures. */
+  var ITEMS=[],arcEl=CALL<N?$('.st-arc',beats[CALL]):null,rowEl=$('.st-row',run),
+      wells=$$('.stc-bay',rowEl),cats=wells.map(function(b){return b.getAttribute('data-cat')}),
+      geo=null,rowA=0,rowZ=0,rowIn=0,cp={keys:{}},C={x0:0,y0:0,s:1,dx:0,dy:0,op:0};
+  parts.forEach(function(p){
+    if(p.kind!=='prod')return;
+    var go=$('.st-go',p.b),m=go&&/category-([a-z-]+)\.html/.exec(go.getAttribute('href')),c=m?cats.indexOf(m[1]):-1;
+    p.packs.forEach(function(k){k.g=ITEMS.length;k.c=c;ITEMS.push(k)});
+  });
+  ITEMS.forEach(function(k){   /* packs that share a compartment stand side by side in it */
+    var mates=ITEMS.filter(function(o){return o.c===k.c});
+    k.n=mates.length;k.j=mates.indexOf(k);
+  });
   function measure(){
     w=stage.offsetWidth;sh=stage.offsetHeight;
-    var s=stage.getBoundingClientRect(),rr=rowEl.getBoundingClientRect(),n=ITEMS.length||1,slot=rr.width/n;
-    geo={S:Math.min(rr.height*1.45,slot*1.5),
-      items:ITEMS.map(function(k,g){var b=k.pack.getBoundingClientRect();
+    var s=stage.getBoundingClientRect(),rx=rowEl.offsetLeft,ry=rowEl.offsetTop,rw=rowEl.offsetWidth,rh=rowEl.offsetHeight,
+        a=arcEl&&arcEl.getBoundingClientRect();
+    var bays=wells.map(function(b){var e=$('.stc-well',b);   /* each well's offsets are the case's own (it is their offsetParent) */
+      return {x:rx+e.offsetLeft,y:ry+e.offsetTop,w:e.offsetWidth,h:e.offsetHeight}});
+    geo={x0:rx+rw/2,y0:ry+rh/2,
+      /* the place above the call: the case fits it, centred, never past its own width */
+      Z:a&&a.width?Math.min(a.width/rw,a.height/rh):1,ax:a?a.left+a.width/2-s.left:0,ay:a?a.top+a.height/2-s.top:0,
+      items:ITEMS.map(function(k){var b=k.pack.getBoundingClientRect(),B=bays[k.c]||bays[0],
+          /* a pack square stands on its baseline (91% down); it fills its well and may stand a little proud of it */
+          S=Math.min(B.w*1.22,B.h*1.2)*(k.n>1?.8:1),off=k.n>1?(k.j-(k.n-1)/2)*B.w*.36:0;
         return {cx:b.left+b.width/2-s.left,cy:b.top+b.height/2-s.top,B:b.width||1,
-                rx:rr.left-s.left+slot*(g+.5),ry:rr.top+rr.height/2-s.top}}),
-      arc:SLOTS.map(function(a){var b=a.getBoundingClientRect();
-        return {x:b.left+b.width/2-s.left,y:b.top+b.height/2-s.top,A:b.width,t:+a.getAttribute('data-tilt')||0}})};
+                tx:B.x+B.w/2+off,ty:B.y+B.h-2-S*.41,S:S}})};
   }
   /* Drop from the camera, then into the stack. u: 0..1 through its arrival (it lands at .8); q:
      0..1 through its leaving. It starts right at the lens: 2.4 times its size, invisible, a little
@@ -1409,7 +1488,8 @@ if(mcForm){
   function drop(p,k,i,u,q){
     var G=geo&&geo.items[k.g],land=clamp(u/.8),g=land*land,rp=k.rx*w/100,x,y,s,rot,rx=0,op=1,near=0;
     if(!G)return 0;
-    var sx=G.rx-G.cx,sy=G.ry-G.cy,sS=geo.S/G.B;       /* its place in the row, as a move from its rest */
+    /* its place in its compartment, wherever the case is now, as a move from its rest */
+    var sx=C.x0+(G.tx-C.x0)*C.s+C.dx-G.cx,sy=C.y0+(G.ty-C.y0)*C.s+C.dy-G.cy,sS=G.S*C.s/G.B;
     if(q<=0){
       s=u<.8?k.rs*(1+(DROP.from-1)*(1-g)):k.rs*(1-DROP.dip*Math.sin(Math.PI*clamp((u-.8)/.2)));
       x=rp;y=-DROP.lift*sh*(1-g);rot=k.tilt+DROP.lean*(1-g);rx=10*(1-g);
@@ -1418,9 +1498,7 @@ if(mcForm){
       var e=smooth(q);
       x=lerp(rp,sx,e);y=lerp(0,sy,e)-Math.sin(Math.PI*e)*DROP.hop;s=lerp(k.rs,sS,e);rot=lerp(k.tilt,0,e);
     }else{
-      var A=geo.arc[k.g],a=A?smooth(clamp((rowA-k.g*.04)/(1-.2))):0,z=A?clamp((rowZ-k.g*.04)/.3):0;
-      x=sx;y=sy;s=sS;rot=0;
-      if(A){x=lerp(sx,A.x-G.cx,a)+40*z;y=lerp(sy,A.y-G.cy,a)-30*z;s=lerp(sS,A.A/G.B,a)*(1-.15*z);rot=lerp(0,A.t,a);op=1-smooth(z)}
+      x=sx;y=sy;s=sS;rot=0;op=C.op;                     /* in its compartment: it goes where the case goes */
     }
     put(p,k.img,'i'+i,'translate3d('+f(x,1)+'px,'+f(y,1)+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotate('+
       f(rot,2)+'deg) scale('+f(s,3)+')',f(op,3));
@@ -1449,7 +1527,16 @@ if(mcForm){
         wipe=TURN<0?0:smooth(clamp((x-at[TURN]-.1)/((HOLD[TURN]||1)*.55))),
         best=-1,bestV=.5,lit=[0,0],restV=0,restX=0,
         kc=CALL<N?clamp((x-at[CALL]+T)/T):0,zc=CALL<N-1?clamp((x-at[CALL]-(HOLD[CALL]||1))/T):0;
-    rowA=clamp((kc-.1)/.55);rowZ=zc;                    /* the row rises into the arc, then the arc lifts away */
+    rowA=clamp((kc-.1)/.55);rowZ=zc;                    /* the case rises into the place above the call, then lifts away */
+    /* the case: up with the first pack's beat, empty, as its line is read; filled by the sleep
+       beat; then the whole of it, packs and all, moves up into the call's place and lifts away */
+    rowIn=SAND>0?smooth(clamp(((x-at[SAND]+T)/T-.2)/.5)):1;
+    if(geo){
+      var ra=smooth(rowA),rz=smooth(clamp(rowZ/.6));
+      C.x0=geo.x0;C.y0=geo.y0;C.s=(1+(geo.Z-1)*ra)*(1-.12*rz);
+      C.dx=(geo.ax-geo.x0)*ra+40*rz;C.dy=(geo.ay-geo.y0)*ra-30*rz;C.op=1-rz;
+      put(cp,rowEl,'case','translate3d('+f(C.dx,1)+'px,'+f(C.dy,1)+'px,0) scale('+f(C.s,4)+')',f(Math.min(rowIn,C.op),3));
+    }
     parts.forEach(function(p,i){
       var h=HOLD[i]||1,
           kin=i?clamp((x-at[i]+T)/T):clamp(arrive),      /* 0..1 through the change into this beat */
@@ -1514,7 +1601,7 @@ if(mcForm){
   sec.classList.add('is-live');
   measure();now();
   addEventListener('scroll',wake,{passive:true});
-  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});now()});
+  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});cp.keys={};now()});
   new IntersectionObserver(function(es){near=es[0].isIntersecting;if(near){measure();now()}},
     {rootMargin:'200px 0px'}).observe(run);
   /* a link reached by keyboard brings its own beat on screen, where its line stands */
@@ -1566,13 +1653,13 @@ if(mcForm){
   var sounds={
     tap:function(){tick(1180,.09,.10)},          /* links, cards, options */
     go:function(){tick(760,.16,.12,'sine')},      /* primary buttons */
-    isle:function(){tick(430,.22,.13,'sine')},    /* an island opening */
+    isle:function(){tick(430,.22,.13,'sine')},    /* an island, or a lid of the case, opening */
     soft:function(){tick(1560,.05,.045)}          /* small controls */
   };
   doc.addEventListener('pointerdown',function(e){
     var t=e.target.closest('a,button,.chip');
     if(!t||t.id==='sound-toggle')return;
-    if(t.closest('.isle'))return sounds.isle();
+    if(t.closest('.isle,.bay-lid'))return sounds.isle();
     if(t.classList.contains('btn'))return sounds.go();
     if(t.classList.contains('icon-btn')||t.classList.contains('chip'))return sounds.soft();
     sounds.tap();

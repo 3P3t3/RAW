@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=33259927">
+<link rel="stylesheet" href="style.css?v=3c3d3dc1">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -415,23 +415,91 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     </div>
   </section>
 
-  <!-- Shelves as a rotating ring; tap one to open it -->
-  <section class="sec isles-sec" id="goals" aria-labelledby="goals-title">
+  <!-- Shelves as the stack case: one compartment per shelf, all seven labelled at once. A lid is
+       a real button; it opens onto a few of that shelf's packs and a link to the shelf, one
+       compartment at a time (_script.html). Without script every compartment stands open. -->
+  <section class="sec case-sec" id="goals" aria-labelledby="goals-title">
     <div class="wrap">
       <div class="sec-head grow"><h2 id="goals-title">What are we <span>maximizing?</span></h2></div>
-      <div class="archipelago" id="archipelago">
-        <ul class="isles">
-          <li class="isle" style="--i:0"><a href="category-recovery.html"><span class="isle-art"><img src="assets/islands/recovery.webp" alt="" width="760" height="760" fetchpriority="high"></span><span class="isle-label"><span class="isle-name">Recovery</span><span class="isle-note">After the session</span></span></a></li>
-          <li class="isle" style="--i:1"><a href="category-hydration.html"><span class="isle-art"><img src="assets/islands/hydration.webp" alt="" width="760" height="760" fetchpriority="high"></span><span class="isle-label"><span class="isle-name">Hydration</span><span class="isle-note">Long, hot sessions</span></span></a></li>
-          <li class="isle" style="--i:2"><a href="category-energy-focus.html"><span class="isle-art"><img src="assets/islands/energy-focus.webp" alt="" width="760" height="760" fetchpriority="high"></span><span class="isle-label"><span class="isle-name">Energy &amp; Focus</span><span class="isle-note">Before the session</span></span></a></li>
-          <li class="isle" style="--i:3"><a href="category-protein.html"><span class="isle-art"><img src="assets/islands/protein.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Protein Snack Pack</span><span class="isle-note">Hitting your protein</span></span></a></li>
-          <li class="isle" style="--i:4"><a href="category-fat-loss.html"><span class="isle-art"><img src="assets/islands/fat-loss.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Fat Loss</span><span class="isle-note">Training to lean out</span></span></a></li>
-          <li class="isle" style="--i:5"><a href="category-daily-foundations.html"><span class="isle-art"><img src="assets/islands/daily-foundations.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Daily Foundations</span><span class="isle-note">Everyday basics</span></span></a></li>
-          <li class="isle" style="--i:6"><a href="category-skin-redefined.html"><span class="isle-art"><img src="assets/islands/skin-redefined.webp" alt="" width="760" height="760" loading="lazy"></span><span class="isle-label"><span class="isle-name">Skin Redefined</span><span class="isle-note">Skin & overnight</span></span></a></li>
+      <div class="case grow" id="case">
+        <ul class="case-bays">
+          <li class="bay" style="--i:0">
+            <button class="bay-lid" type="button" id="lid-recovery" aria-expanded="false" aria-controls="bay-recovery"><span class="lid" aria-hidden="true"></span><span class="bay-name">Recovery</span><span class="vh">, </span><span class="bay-note">After the session</span></button>
+            <div class="bay-well"><div class="bay-in" id="bay-recovery" role="region" aria-labelledby="lid-recovery" hidden>
+              <ul class="bay-packs">
+                <li class="bay-pack" style="--k:0"><img src="assets/products/xs-post-workout-recovery-fruit-punch-12-stick-packs.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>XS Post-Workout Recovery</span></li>
+                <li class="bay-pack" style="--k:1"><img src="assets/products/xs-muscle-multiplier-berry-blast.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>XS Muscle Multiplier</span></li>
+                <li class="bay-pack" style="--k:2"><img src="assets/products/nutrilite-organics-chamomile-tea.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>Nutrilite Organics Chamomile Tea</span></li>
+              </ul>
+              <a class="bay-all" href="category-recovery.html">See all Recovery<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </div></div>
+          </li>
+          <li class="bay" style="--i:1">
+            <button class="bay-lid" type="button" id="lid-hydration" aria-expanded="false" aria-controls="bay-hydration"><span class="lid" aria-hidden="true"></span><span class="bay-name">Hydration</span><span class="vh">, </span><span class="bay-note">Long, hot sessions</span></button>
+            <div class="bay-well"><div class="bay-in" id="bay-hydration" role="region" aria-labelledby="lid-hydration" hidden>
+              <ul class="bay-packs">
+                <li class="bay-pack" style="--k:0"><img src="assets/products/xs-sports-twist-tubes-raspberry-lemonade.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>XS Sports Twist Tubes</span></li>
+                <li class="bay-pack" style="--k:1"><img src="assets/products/xs-creatine.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>XS Creatine+</span></li>
+                <li class="bay-pack" style="--k:2"><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>Nutrilite Twist Tubes 2GO</span></li>
+              </ul>
+              <a class="bay-all" href="category-hydration.html">See all Hydration<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </div></div>
+          </li>
+          <li class="bay" style="--i:2">
+            <button class="bay-lid" type="button" id="lid-energy-focus" aria-expanded="false" aria-controls="bay-energy-focus"><span class="lid" aria-hidden="true"></span><span class="bay-name">Energy &amp; Focus</span><span class="vh">, </span><span class="bay-note">Before the session</span></button>
+            <div class="bay-well"><div class="bay-in" id="bay-energy-focus" role="region" aria-labelledby="lid-energy-focus" hidden>
+              <ul class="bay-packs">
+                <li class="bay-pack" style="--k:0"><img src="assets/products/xs-energy-drink-12-oz-classic.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>XS Energy Drink</span></li>
+                <li class="bay-pack" style="--k:1"><img src="assets/products/xs-pre-workout-boost-blue-raspberry-30-serving-pouch.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>XS Pre-Workout Boost</span></li>
+                <li class="bay-pack" style="--k:2"><img src="assets/products/xs-energy-focus-dietary-supplement-30-tablets.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>XS Energy + Focus Dietary Supplement</span></li>
+              </ul>
+              <a class="bay-all" href="category-energy-focus.html">See all Energy &amp; Focus<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </div></div>
+          </li>
+          <li class="bay" style="--i:3">
+            <button class="bay-lid" type="button" id="lid-protein" aria-expanded="false" aria-controls="bay-protein"><span class="lid" aria-hidden="true"></span><span class="bay-name">Protein Snack Pack</span><span class="vh">, </span><span class="bay-note">Hitting your protein</span></button>
+            <div class="bay-well"><div class="bay-in" id="bay-protein" role="region" aria-labelledby="lid-protein" hidden>
+              <ul class="bay-packs">
+                <li class="bay-pack" style="--k:0"><img src="assets/products/xs-sports-protein-bars-chocolate-peanut-butter.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>XS Sports Protein Bars</span></li>
+                <li class="bay-pack" style="--k:1"><img src="assets/products/xs-grass-fed-whey-protein-chocolate.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>XS Grass-Fed Whey Protein</span></li>
+                <li class="bay-pack" style="--k:2"><img src="assets/products/xs-sports-protein-shakes-rich-chocolate.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>XS Sports Protein Shakes</span></li>
+              </ul>
+              <a class="bay-all" href="category-protein.html">See all Protein Snack Pack<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </div></div>
+          </li>
+          <li class="bay" style="--i:4">
+            <button class="bay-lid" type="button" id="lid-fat-loss" aria-expanded="false" aria-controls="bay-fat-loss"><span class="lid" aria-hidden="true"></span><span class="bay-name">Fat Loss</span><span class="vh">, </span><span class="bay-note">Training to lean out</span></button>
+            <div class="bay-well"><div class="bay-in" id="bay-fat-loss" role="region" aria-labelledby="lid-fat-loss" hidden>
+              <ul class="bay-packs">
+                <li class="bay-pack" style="--k:0"><img src="assets/products/xs-ignite-powder-moro-blood-orange.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>XS Ignite Powder</span></li>
+              </ul>
+              <a class="bay-all" href="category-fat-loss.html">See all Fat Loss<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </div></div>
+          </li>
+          <li class="bay" style="--i:5">
+            <button class="bay-lid" type="button" id="lid-daily-foundations" aria-expanded="false" aria-controls="bay-daily-foundations"><span class="lid" aria-hidden="true"></span><span class="bay-name">Daily Foundations</span><span class="vh">, </span><span class="bay-note">Everyday basics</span></button>
+            <div class="bay-well"><div class="bay-in" id="bay-daily-foundations" role="region" aria-labelledby="lid-daily-foundations" hidden>
+              <ul class="bay-packs">
+                <li class="bay-pack" style="--k:0"><img src="assets/products/xs-creatine.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>XS Creatine+</span></li>
+                <li class="bay-pack" style="--k:1"><img src="assets/products/nutrilite-begin-daily-gi-primer.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>Nutrilite Begin Daily GI Primer</span></li>
+                <li class="bay-pack" style="--k:2"><img src="assets/products/nutrilite-balance-within-probiotic.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>Nutrilite Balance Within Probiotic</span></li>
+              </ul>
+              <a class="bay-all" href="category-daily-foundations.html">See all Daily Foundations<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </div></div>
+          </li>
+          <li class="bay" style="--i:6">
+            <button class="bay-lid" type="button" id="lid-skin-redefined" aria-expanded="false" aria-controls="bay-skin-redefined"><span class="lid" aria-hidden="true"></span><span class="bay-name">Skin Redefined</span><span class="vh">, </span><span class="bay-note">Skin & overnight</span></button>
+            <div class="bay-well"><div class="bay-in" id="bay-skin-redefined" role="region" aria-labelledby="lid-skin-redefined" hidden>
+              <ul class="bay-packs">
+                <li class="bay-pack" style="--k:0"><img src="assets/products/artistry-skin-nutrition-sleeping-mask.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>Artistry Skin Nutrition Sleeping Mask</span></li>
+                <li class="bay-pack" style="--k:1"><img src="assets/products/artistry-skin-nutrition-renewing-softening-toner.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>Artistry Skin Nutrition Renewing Softening Toner</span></li>
+                <li class="bay-pack" style="--k:2"><img src="assets/products/artistry-studio-glow-boss-cleanser-exfoliator.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><span>Artistry Studio Glow Boss Cleanser + Exfoliator</span></li>
+              </ul>
+              <a class="bay-all" href="category-skin-redefined.html">See all Skin Redefined<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </div></div>
+          </li>
         </ul>
-        <button class="icon-btn isles-toggle" id="isles-toggle" type="button" aria-label="Pause the shelves" hidden><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>
       </div>
-      <p class="isle-caption" id="isle-caption" aria-hidden="true"><span class="isle-name"></span><span class="isle-note"></span></p>
     </div>
   </section>
 
@@ -569,18 +637,13 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
   </section>
 
   <!-- 4. Trending: three best sellers on a podium, oversized and breaking the band.
-       The band's ground is a 150-frame film of the pour, scrubbed by scroll. It is
+       The band's ground can be a 150-frame film of the pour, scrubbed by scroll (the pour markup
+       below, switched by TRENDING_POUR in build_homepage.py; off, the band is plain teal). It is
        scenery, not content: frames come only as the band nears, and reduced motion
        gets one still. It follows the shelves (and the free sample, #sample), and Peter's story (#story) follows it directly,
        starting in this band's dark. -->
-  <section class="sec podium-sec dark" id="trending" aria-labelledby="trending-title">
-    <div class="pour-bg" id="pour-bg" aria-hidden="true">
-      <div class="pour-stage">
-        <canvas class="pour-film" id="pour-film"></canvas>
-        <img class="pour-still" id="pour-still" alt="" decoding="async" hidden>
-        <noscript><img class="pour-still" src="assets/pour/sm/0060.webp" alt=""></noscript>
-      </div>
-    </div>
+  <section class="sec podium-sec dark no-pour" id="trending" aria-labelledby="trending-title">
+    <!-- TRENDING_POUR is off in build_homepage.py: a plain band -->
     <div class="wrap">
       <div class="sec-head grow"><h2 id="trending-title">Trending now</h2></div>
       <ul class="podium">
@@ -684,18 +747,11 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
             </div>
           </li>
           <li class="st-beat st-light st-solo" data-kind="text">
-            <!-- supplement after supplement: the six slots the stack settles into above the call.
-                 While the stage runs these are only places: the row of packs the visitor watched
-                 being built glides up into them (their own pictures stay hidden). Without the stage
-                 the arc is not shown; the plain sequence has just shown each pack. -->
-            <div class="st-hero st-arc" aria-hidden="true">
-              <span class="st-pack" data-tilt="-12" style="--x:10%;--y:34%"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt=""></span>
-              <span class="st-pack" data-tilt="7" style="--x:26%;--y:14%"><span class="st-shade"></span><img src="assets/story/nutrilite-begin-gi-primer-lit.webp" width="1008" height="1008" loading="lazy" decoding="async" alt=""></span>
-              <span class="st-pack" data-tilt="-4" style="--x:42%;--y:3%"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt=""></span>
-              <span class="st-pack" data-tilt="5" style="--x:58%;--y:3%"><span class="st-shade"></span><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt=""></span>
-              <span class="st-pack" data-tilt="9" style="--x:74%;--y:14%"><span class="st-shade"></span><img src="assets/story/xs-elite-focus-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt=""></span>
-              <span class="st-pack" data-tilt="-6" style="--x:90%;--y:34%"><span class="st-shade"></span><img src="assets/story/nutrilite-sleep-health-lit.webp" width="860" height="860" loading="lazy" decoding="async" alt=""></span>
-            </div>
+            <!-- supplement after supplement: the place above the call that the filled case rises
+                 into. While the stage runs it is only a box: the case strip the visitor watched
+                 being filled moves up into it, packs and all. Without the stage it is not shown;
+                 the plain sequence has just shown each pack. -->
+            <div class="st-hero st-arc" aria-hidden="true"></div>
             <div class="st-copy">
               <!-- PETER-COPY --><p class="st-say">The hardest part was figuring it out alone, testing supplement after supplement to find what worked. That’s what this call is for. Book it and we’ll figure yours out together.</p><!-- /PETER-COPY -->
               <!-- the call, asked for where the story asks for it. The tab's own "Book a free call" steps aside
@@ -712,8 +768,9 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
             </div>
           </li>
         </ol>
-        <!-- the shelf the stack is built on: an empty box whose size and place style.css sets -->
-        <div class="st-row" aria-hidden="true"></div>
+        <!-- the case the stack is built in: the #goals case in miniature, its seven compartments
+             generated from the same shelves (build_homepage.py); style.css sets its size and place -->
+        <div class="st-row st-case" aria-hidden="true"><span class="stc-body"><span class="stc-bay" data-cat="recovery"><span class="stc-well"></span><span class="stc-name">Recovery</span></span><span class="stc-bay" data-cat="hydration"><span class="stc-well"></span><span class="stc-name">Hydration</span></span><span class="stc-bay" data-cat="energy-focus"><span class="stc-well"></span><span class="stc-name">Energy &amp; Focus</span></span><span class="stc-bay" data-cat="protein"><span class="stc-well"></span><span class="stc-name">Protein Snack Pack</span></span><span class="stc-bay" data-cat="fat-loss"><span class="stc-well"></span><span class="stc-name">Fat Loss</span></span><span class="stc-bay" data-cat="daily-foundations"><span class="stc-well"></span><span class="stc-name">Daily Foundations</span></span><span class="stc-bay" data-cat="skin-redefined"><span class="stc-well"></span><span class="stc-name">Skin Redefined</span></span></span></div>
       </div>
     </div>
     <!-- the stage lets go into the proof itself: all three views stacked, nothing to swipe.
@@ -1232,14 +1289,16 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    is up (.st-book: the story parks it off its stage while its beat is not). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
    which sit where the tab does on a phone and go to the same places, "The game plan"'s "Pick
-   your free sample" (#how-go) and the quick-call buttons (.q-go), which it would cover, the band that sends you
+   your free sample" (#how-go), the quick-call buttons (.q-go) and the sample form's own send button
+   (#sample-go), which it would cover, an open compartment of the stack case (.bay-in: a closed one
+   is hidden, so has no box and never counts), the band that sends you
    to the calculator on a category page, and the footer,
    which is the end of every page and so could never be scrolled out from under it. It also
    waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#sample-go,.bay-in,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -1447,6 +1506,66 @@ if(arch){
     measure();layout();addEventListener('resize',function(){measure();layout()});   /* reduced motion: a still archipelago */
   }
 }
+
+/* The stack case (#goals): seven compartments, one per shelf, each lid a real button. A lid opens
+   onto a few of that shelf's packs and a link to it; one compartment is open at a time, and a
+   second tap, Escape, or opening another closes it. The lid's hinge, the packs rising in and, on
+   a wide screen, the open compartment making room are all transitions in style.css (~320ms);
+   under reduced motion they are off and a lid opens at once. Arrow keys, Home and End move
+   between lids. Nothing opens on its own. */
+(function(){
+  var cs=$('#case');
+  if(!cs)return;
+  var list=$('.case-bays',cs),bays=$$('.bay',cs),lids=bays.map(function(b){return $('.bay-lid',b)}),
+      ins=bays.map(function(b){return $('.bay-in',b)}),N=bays.length,open=-1,timers=[],
+      reduce=matchMedia('(prefers-reduced-motion: reduce)'),wide=matchMedia('(min-width: 1024px)'),
+      MS=340;   /* a touch over the transitions, so a region is only hidden once it has closed */
+  cs.classList.add('is-live');
+  function cols(){   /* a row of seven: the open one takes a wider column, the rest share what is left */
+    list.style.gridTemplateColumns=wide.matches?bays.map(function(b,i){return 'minmax(0,'+(i===open?'2.6fr':'1fr')+')'}).join(' '):'';
+  }
+  function set(i,on){
+    var b=bays[i],r=ins[i];
+    clearTimeout(timers[i]);
+    lids[i].setAttribute('aria-expanded',on?'true':'false');
+    if(on){r.hidden=false;void r.offsetHeight;b.classList.add('is-open')}   /* laid out closed first, so it opens rather than appears */
+    else{
+      b.classList.remove('is-open');
+      if(reduce.matches)r.hidden=true;
+      else timers[i]=setTimeout(function(){if(!b.classList.contains('is-open'))r.hidden=true},MS);
+    }
+  }
+  /* once it has opened, the whole compartment is brought on screen if it is not, above the tab */
+  function show(i){
+    setTimeout(function(){
+      if(open!==i)return;
+      var r=bays[i].getBoundingClientRect(),vh=innerHeight,tab=72,top=parseFloat(getComputedStyle(html).scrollPaddingTop)||0;
+      var dy=r.bottom>vh-tab?Math.min(r.bottom-(vh-tab),r.top-top-8):r.top<top?r.top-top-8:0;
+      if(dy>1||dy<-1)scrollBy({top:dy,behavior:reduce.matches?'instant':'smooth'});
+    },reduce.matches?0:MS);
+  }
+  function pick(i){
+    var was=open;
+    if(was>-1)set(was,false);
+    open=was===i?-1:i;
+    if(open>-1){set(open,true);show(open)}
+    cols();
+  }
+  lids.forEach(function(l,i){
+    l.addEventListener('click',function(){pick(i)});
+    l.addEventListener('keydown',function(e){
+      var k=e.key,j=k==='ArrowRight'||k==='ArrowDown'?(i+1)%N:k==='ArrowLeft'||k==='ArrowUp'?(i+N-1)%N:k==='Home'?0:k==='End'?N-1:-1;
+      if(j<0)return;
+      e.preventDefault();lids[j].focus();
+    });
+  });
+  /* Escape inside an open compartment closes it and hands focus back to its lid */
+  cs.addEventListener('keydown',function(e){
+    if(e.key!=='Escape'||open<0)return;
+    var i=open;pick(i);lids[i].focus();
+  });
+  wide.addEventListener('change',cols);
+})();
 
 /* Calendly's widget.js, shared by the consult's inline calendar and the quick call's popup.
    It is only fetched on the first booking tap, once, so nobody who never books pays for it. */
@@ -2137,10 +2256,11 @@ if(mcForm){
    until it does, the beats are a plain vertical sequence. Everything written per frame is
    transform or opacity.
    A pack drops from the camera: it starts at the lens, large and unseen, falls away onto the
-   stage and lands with a small squash while its line is read; then it shrinks up into its slot
-   in a row along the top, so the stack is built in front of you, and at the call that row rises
-   into the arc above the button. It only ever turns a few degrees in its own plane, so a flat
-   picture is never seen edge-on or mirrored. The photos of Peter do not move like that: they
+   stage and lands with a small squash while its line is read; then it shrinks up into its own
+   compartment of the case strip along the top (the #goals case in miniature: its shelf's
+   compartment, so the two hydration packs share one and two compartments stay empty), and at
+   the call the filled case rises into the place above the button. It only ever turns a few
+   degrees in its own plane, so a flat picture is never seen edge-on or mirrored. The photos of Peter do not move like that: they
    rise in and fall away, and at the turn the after wipes in over the before. */
 (function(){
   var run=$('#st-run');
@@ -2181,21 +2301,37 @@ if(mcForm){
     if(p.keys[name]===k)return;
     p.keys[name]=k;el.style.transform=tf;el.style.opacity=op;
   }
-  /* The stack: every pack of the five pack beats (six, with the pair), in order, and the six arc
-     slots above the call they end in. Where each rests, where its slot in the row is, and where its
-     arc slot is are measured here, from boxes nothing ever transforms, once per resize; a frame
-     only moves pictures. */
-  var ITEMS=[],SLOTS=CALL<N?$$('.st-arc .st-pack',beats[CALL]):[],rowEl=$('.st-row',run),geo=null,rowA=0,rowZ=0;
-  parts.forEach(function(p){if(p.kind==='prod')p.packs.forEach(function(k){k.g=ITEMS.length;ITEMS.push(k)})});
+  /* The stack: every pack of the five pack beats (six, with the pair), in order, each bound for
+     the compartment of the shelf its beat links to, and the place above the call the filled case
+     rises into. Where each pack rests, where it stands in its compartment and where that place is
+     are measured here once per resize: the packs and the place from boxes nothing transforms, the
+     case from its offsets (the frame does transform it); a frame only moves pictures. */
+  var ITEMS=[],arcEl=CALL<N?$('.st-arc',beats[CALL]):null,rowEl=$('.st-row',run),
+      wells=$$('.stc-bay',rowEl),cats=wells.map(function(b){return b.getAttribute('data-cat')}),
+      geo=null,rowA=0,rowZ=0,rowIn=0,cp={keys:{}},C={x0:0,y0:0,s:1,dx:0,dy:0,op:0};
+  parts.forEach(function(p){
+    if(p.kind!=='prod')return;
+    var go=$('.st-go',p.b),m=go&&/category-([a-z-]+)\.html/.exec(go.getAttribute('href')),c=m?cats.indexOf(m[1]):-1;
+    p.packs.forEach(function(k){k.g=ITEMS.length;k.c=c;ITEMS.push(k)});
+  });
+  ITEMS.forEach(function(k){   /* packs that share a compartment stand side by side in it */
+    var mates=ITEMS.filter(function(o){return o.c===k.c});
+    k.n=mates.length;k.j=mates.indexOf(k);
+  });
   function measure(){
     w=stage.offsetWidth;sh=stage.offsetHeight;
-    var s=stage.getBoundingClientRect(),rr=rowEl.getBoundingClientRect(),n=ITEMS.length||1,slot=rr.width/n;
-    geo={S:Math.min(rr.height*1.45,slot*1.5),
-      items:ITEMS.map(function(k,g){var b=k.pack.getBoundingClientRect();
+    var s=stage.getBoundingClientRect(),rx=rowEl.offsetLeft,ry=rowEl.offsetTop,rw=rowEl.offsetWidth,rh=rowEl.offsetHeight,
+        a=arcEl&&arcEl.getBoundingClientRect();
+    var bays=wells.map(function(b){var e=$('.stc-well',b);   /* each well's offsets are the case's own (it is their offsetParent) */
+      return {x:rx+e.offsetLeft,y:ry+e.offsetTop,w:e.offsetWidth,h:e.offsetHeight}});
+    geo={x0:rx+rw/2,y0:ry+rh/2,
+      /* the place above the call: the case fits it, centred, never past its own width */
+      Z:a&&a.width?Math.min(a.width/rw,a.height/rh):1,ax:a?a.left+a.width/2-s.left:0,ay:a?a.top+a.height/2-s.top:0,
+      items:ITEMS.map(function(k){var b=k.pack.getBoundingClientRect(),B=bays[k.c]||bays[0],
+          /* a pack square stands on its baseline (91% down); it fills its well and may stand a little proud of it */
+          S=Math.min(B.w*1.22,B.h*1.2)*(k.n>1?.8:1),off=k.n>1?(k.j-(k.n-1)/2)*B.w*.36:0;
         return {cx:b.left+b.width/2-s.left,cy:b.top+b.height/2-s.top,B:b.width||1,
-                rx:rr.left-s.left+slot*(g+.5),ry:rr.top+rr.height/2-s.top}}),
-      arc:SLOTS.map(function(a){var b=a.getBoundingClientRect();
-        return {x:b.left+b.width/2-s.left,y:b.top+b.height/2-s.top,A:b.width,t:+a.getAttribute('data-tilt')||0}})};
+                tx:B.x+B.w/2+off,ty:B.y+B.h-2-S*.41,S:S}})};
   }
   /* Drop from the camera, then into the stack. u: 0..1 through its arrival (it lands at .8); q:
      0..1 through its leaving. It starts right at the lens: 2.4 times its size, invisible, a little
@@ -2209,7 +2345,8 @@ if(mcForm){
   function drop(p,k,i,u,q){
     var G=geo&&geo.items[k.g],land=clamp(u/.8),g=land*land,rp=k.rx*w/100,x,y,s,rot,rx=0,op=1,near=0;
     if(!G)return 0;
-    var sx=G.rx-G.cx,sy=G.ry-G.cy,sS=geo.S/G.B;       /* its place in the row, as a move from its rest */
+    /* its place in its compartment, wherever the case is now, as a move from its rest */
+    var sx=C.x0+(G.tx-C.x0)*C.s+C.dx-G.cx,sy=C.y0+(G.ty-C.y0)*C.s+C.dy-G.cy,sS=G.S*C.s/G.B;
     if(q<=0){
       s=u<.8?k.rs*(1+(DROP.from-1)*(1-g)):k.rs*(1-DROP.dip*Math.sin(Math.PI*clamp((u-.8)/.2)));
       x=rp;y=-DROP.lift*sh*(1-g);rot=k.tilt+DROP.lean*(1-g);rx=10*(1-g);
@@ -2218,9 +2355,7 @@ if(mcForm){
       var e=smooth(q);
       x=lerp(rp,sx,e);y=lerp(0,sy,e)-Math.sin(Math.PI*e)*DROP.hop;s=lerp(k.rs,sS,e);rot=lerp(k.tilt,0,e);
     }else{
-      var A=geo.arc[k.g],a=A?smooth(clamp((rowA-k.g*.04)/(1-.2))):0,z=A?clamp((rowZ-k.g*.04)/.3):0;
-      x=sx;y=sy;s=sS;rot=0;
-      if(A){x=lerp(sx,A.x-G.cx,a)+40*z;y=lerp(sy,A.y-G.cy,a)-30*z;s=lerp(sS,A.A/G.B,a)*(1-.15*z);rot=lerp(0,A.t,a);op=1-smooth(z)}
+      x=sx;y=sy;s=sS;rot=0;op=C.op;                     /* in its compartment: it goes where the case goes */
     }
     put(p,k.img,'i'+i,'translate3d('+f(x,1)+'px,'+f(y,1)+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotate('+
       f(rot,2)+'deg) scale('+f(s,3)+')',f(op,3));
@@ -2249,7 +2384,16 @@ if(mcForm){
         wipe=TURN<0?0:smooth(clamp((x-at[TURN]-.1)/((HOLD[TURN]||1)*.55))),
         best=-1,bestV=.5,lit=[0,0],restV=0,restX=0,
         kc=CALL<N?clamp((x-at[CALL]+T)/T):0,zc=CALL<N-1?clamp((x-at[CALL]-(HOLD[CALL]||1))/T):0;
-    rowA=clamp((kc-.1)/.55);rowZ=zc;                    /* the row rises into the arc, then the arc lifts away */
+    rowA=clamp((kc-.1)/.55);rowZ=zc;                    /* the case rises into the place above the call, then lifts away */
+    /* the case: up with the first pack's beat, empty, as its line is read; filled by the sleep
+       beat; then the whole of it, packs and all, moves up into the call's place and lifts away */
+    rowIn=SAND>0?smooth(clamp(((x-at[SAND]+T)/T-.2)/.5)):1;
+    if(geo){
+      var ra=smooth(rowA),rz=smooth(clamp(rowZ/.6));
+      C.x0=geo.x0;C.y0=geo.y0;C.s=(1+(geo.Z-1)*ra)*(1-.12*rz);
+      C.dx=(geo.ax-geo.x0)*ra+40*rz;C.dy=(geo.ay-geo.y0)*ra-30*rz;C.op=1-rz;
+      put(cp,rowEl,'case','translate3d('+f(C.dx,1)+'px,'+f(C.dy,1)+'px,0) scale('+f(C.s,4)+')',f(Math.min(rowIn,C.op),3));
+    }
     parts.forEach(function(p,i){
       var h=HOLD[i]||1,
           kin=i?clamp((x-at[i]+T)/T):clamp(arrive),      /* 0..1 through the change into this beat */
@@ -2314,7 +2458,7 @@ if(mcForm){
   sec.classList.add('is-live');
   measure();now();
   addEventListener('scroll',wake,{passive:true});
-  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});now()});
+  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});cp.keys={};now()});
   new IntersectionObserver(function(es){near=es[0].isIntersecting;if(near){measure();now()}},
     {rootMargin:'200px 0px'}).observe(run);
   /* a link reached by keyboard brings its own beat on screen, where its line stands */
@@ -2366,13 +2510,13 @@ if(mcForm){
   var sounds={
     tap:function(){tick(1180,.09,.10)},          /* links, cards, options */
     go:function(){tick(760,.16,.12,'sine')},      /* primary buttons */
-    isle:function(){tick(430,.22,.13,'sine')},    /* an island opening */
+    isle:function(){tick(430,.22,.13,'sine')},    /* an island, or a lid of the case, opening */
     soft:function(){tick(1560,.05,.045)}          /* small controls */
   };
   doc.addEventListener('pointerdown',function(e){
     var t=e.target.closest('a,button,.chip');
     if(!t||t.id==='sound-toggle')return;
-    if(t.closest('.isle'))return sounds.isle();
+    if(t.closest('.isle,.bay-lid'))return sounds.isle();
     if(t.classList.contains('btn'))return sounds.go();
     if(t.classList.contains('icon-btn')||t.classList.contains('chip'))return sounds.soft();
     sounds.tap();

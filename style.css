@@ -814,14 +814,27 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-arc{display:none}
 .story.is-live .st-arc{display:block;position:relative;flex:0 0 auto;width:min(100%,380px);height:min(36vw,150px);margin-bottom:8px}
 .st-arc .st-pack{inset:auto;width:24%;aspect-ratio:1;left:calc(var(--x) - 12%);top:var(--y)}
-/* the stack: each pack, once its line has been read, shrinks and glides into a slot in a row
-   along the top of the stage, so by the sleep beat the whole stack stands there together; at
-   the call the row moves up into the arc (whose own pictures are only places, so stay hidden).
-   The row is an empty box: the script measures it, and the pack slots, once per resize. */
+/* the stack: the #goals case in miniature, the same seven compartments in the same order, along
+   the top of the stage. It comes up empty with the first pack's beat; each pack, once its line
+   has been read, shrinks and glides into its own shelf's compartment, so by the sleep beat five
+   are filled and two stand empty; at the call the whole case, packs and all, moves up into the
+   place above the button (.st-arc, an empty box) and lifts away after it. The script measures the
+   wells once per resize and moves the case with transform and opacity only. */
 .st-row{display:none}
-.story.is-live .st-row{display:block;position:absolute;left:var(--pad);right:var(--pad);top:calc(var(--mast) + 6px);height:58px;pointer-events:none}
-.story.is-live .st-warm{padding-top:calc(var(--mast) + 16px + 62px)}   /* the packs' own beats keep the row's band clear */
-.story.is-live .st-arc .st-pack{visibility:hidden}
+.story.is-live .st-row{display:block;position:absolute;z-index:0;left:var(--pad);right:var(--pad);top:calc(var(--mast) + 6px);height:62px;pointer-events:none;
+  opacity:0;transform-origin:50% 50%;will-change:transform,opacity}
+.story.is-live .st-beats{z-index:1}   /* the packs stand in the case, so they are drawn over it */
+.stc-body{display:flex;gap:3px;height:100%;padding:4px;border-radius:12px;
+  background:linear-gradient(165deg,color-mix(in srgb,var(--teal) 86%,var(--chalk)),var(--teal) 45%,color-mix(in srgb,var(--teal) 78%,#000));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px rgba(230,211,197,.24),0 14px 26px -14px rgba(0,20,27,.6)}
+.stc-bay{display:flex;flex-direction:column;flex:1 1 0;min-width:0;gap:4px}
+.stc-well{flex:1 1 0;min-height:0;border-radius:8px;background:linear-gradient(color-mix(in srgb,var(--sand) 55%,var(--chalk)),var(--sand));
+  box-shadow:inset 0 5px 8px -5px rgba(0,20,27,.5),inset 0 0 0 1px rgba(0,20,27,.14)}
+.stc-name{display:none}
+.story.is-live .st-warm{padding-top:calc(var(--mast) + 16px + 68px)}   /* the packs' own beats keep the case's band clear */
+.story.is-live .st-arc{height:clamp(62px,19vw,84px)}
+/* with the pour switched off the band above is flat teal, so there is no film's shade to carry over */
+.no-pour~.story .st-dusk{display:none}
 .story.is-live .st-solo{justify-content:center}
 .story.is-live .st-proof{padding-top:0}
 /* the opening pair: the same photo at the same size and place in both beats, so the turn can lay
@@ -855,11 +868,15 @@ html:not(.js) #results[hidden]{display:block!important}
   .story.is-live .st-photo{max-height:520px}
   .story.is-live .st-fam .st-photo{max-height:420px}
   .story.is-live .st-pair{max-height:416px}
-  .story.is-live .st-row{left:calc(50% + 12px);right:max(var(--pad),calc((100% - 1200px) / 2));top:calc(var(--mast) + 18px);height:84px}
-  .story.is-live .st-warm{padding-top:calc(var(--mast) + 24px + 96px)}
-  /* the call's arc is a band above its words, not a hero column: without this it took the live
-     hero height (up to 560px) and pushed the words and the button off a 900px-tall screen */
-  .story.is-live .st-solo .st-arc{height:min(13vw,170px)}
+  .story.is-live .st-row{left:calc(50% + 12px);right:max(var(--pad),calc((100% - 1200px) / 2));top:calc(var(--mast) + 18px);height:104px}
+  .stc-body{gap:5px;padding:6px 6px 5px;border-radius:16px}
+  .stc-well{border-radius:10px}
+  .stc-name{display:block;min-height:2.3em;font:700 8.5px/1.15 var(--sans);letter-spacing:.14em;text-transform:uppercase;text-align:center;
+    color:var(--sand);text-wrap:balance;overflow:hidden}
+  .story.is-live .st-warm{padding-top:calc(var(--mast) + 24px + 116px)}
+  /* the call's place for the case is a band above its words, not a hero column: without this it took
+     the live hero height (up to 560px) and pushed the words and the button off a 900px-tall screen */
+  .story.is-live .st-solo .st-arc{width:min(100%,760px);height:min(10vw,136px)}
   .st-lamp-dark{background:radial-gradient(circle at 74% 50%,rgba(244,242,236,.15),transparent 45%)}
   .st-lamp-warm{background:radial-gradient(circle at 74% 50%,rgba(255,255,255,.35),transparent 45%)}
 }
@@ -897,6 +914,89 @@ html:not(.js) .isle{position:static;width:auto;margin:0}
   .archipelago{height:360px;margin-top:8px}
   .isle-name{font-size:19px}
   .isle-note{font-size:12px}
+}
+
+/* ---------- The stack case (#goals): the seven shelves as one case ---------- */
+/* One object: a dark teal case with seven compartments, one per shelf. Each lid is a button
+   (_script.html) with its shelf's name and line on it in small caps; it hinges up and away, and
+   the sand inside shows a few of that shelf's packs and the way to the shelf. Phones and tablets
+   hold the case upright, seven stacked; from 1024 it lies in one row of seven and the open
+   compartment takes a wider column. The section's ground is the page's: the case keeps its edge
+   on chalk and on deep teal alike (a sand hairline rim and a soft drop shadow). Without script,
+   or before it runs, every compartment stands open with no lids. */
+.case{--lid:color-mix(in srgb,var(--teal) 87%,var(--chalk));--lid-lo:color-mix(in srgb,var(--teal) 95%,var(--chalk));
+  --well:color-mix(in srgb,var(--sand) 50%,var(--chalk));--hinge:320ms cubic-bezier(.3,.7,.2,1);
+  position:relative;max-width:520px;padding:10px;border-radius:24px;
+  background:linear-gradient(165deg,color-mix(in srgb,var(--teal) 90%,var(--chalk)) 0%,color-mix(in srgb,var(--teal) 88%,#000) 40%,color-mix(in srgb,var(--teal) 70%,#000) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(0,0,0,.4),0 0 0 1px rgba(230,211,197,.24),
+    0 34px 60px -30px rgba(0,20,27,.65),0 14px 24px -18px rgba(0,20,27,.5)}
+.case-bays{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.bay{position:relative;display:grid;grid-template-rows:auto auto;border-radius:14px;overflow:hidden;
+  background:linear-gradient(var(--well),var(--sand) 80%);
+  box-shadow:inset 0 9px 14px -9px rgba(0,20,27,.55),inset 0 0 0 1px rgba(0,20,27,.14)}
+.bay-lid{position:relative;z-index:1;display:grid;align-content:center;justify-items:start;gap:5px;width:100%;min-height:62px;
+  padding:12px 52px 12px 18px;border:0;border-radius:0;background:none;text-align:left}
+.bay-lid:focus-visible{outline:2px solid var(--sand);outline-offset:-6px}
+.bay.is-open .bay-lid:focus-visible{outline-color:var(--teal)}
+.bay-name,.bay-note{position:relative;z-index:1;text-transform:uppercase;transition:color var(--hinge)}
+.bay-name{font:700 13px/1.15 var(--sans);letter-spacing:.2em;color:var(--chalk)}
+.bay-note{font:600 10.5px/1.25 var(--sans);letter-spacing:.16em;color:var(--on-dark)}
+.bay.is-open .bay-name{color:var(--teal)}
+.bay.is-open .bay-note{color:var(--text)}
+/* the lid: teal on the teal case, a lit top edge, one soft sheen running across all seven, and a
+   thumb notch at its free edge. It hinges on its back edge and is gone by the time it is open. */
+.lid{position:absolute;inset:0;z-index:0;border-radius:inherit;
+  background:linear-gradient(172deg,transparent 30%,rgba(255,255,255,.075) 48%,transparent 64%) 0 calc(var(--i) * 100% / 6) / 100% 700% no-repeat,
+    linear-gradient(var(--lid),var(--lid-lo));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -2px 0 rgba(0,0,0,.3),0 0 0 1px rgba(0,12,16,.35);
+  transform-origin:50% 0;transition:transform var(--hinge),opacity 260ms cubic-bezier(.4,0,.2,1) 60ms}
+.lid::after{content:"";position:absolute;right:20px;top:50%;width:6px;height:24px;margin-top:-12px;border-radius:3px;
+  background:rgba(0,16,22,.5);box-shadow:0 1px 0 rgba(255,255,255,.12),inset 0 1px 2px rgba(0,0,0,.45)}
+.bay.is-open .lid{transform:perspective(640px) rotateX(-48deg) translate3d(0,-12px,0);opacity:0;pointer-events:none}
+@media (hover:hover){.bay:not(.is-open) .bay-lid:hover .lid{transform:perspective(640px) rotateX(-7deg)}}
+.bay-well{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--hinge)}
+.bay.is-open .bay-well{grid-template-rows:1fr}
+.bay-in{display:grid;align-content:start;justify-items:start;min-height:0;overflow:hidden;padding:0 18px}
+.bay-packs{list-style:none;margin:0;padding:2px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%}
+.bay-pack{display:grid;justify-items:center;align-content:start;gap:4px;text-align:center;font:500 12px/1.3 var(--sans);color:var(--ink)}
+.bay-pack{position:relative;z-index:0}
+/* a pack shot is its product on a square with room round it, standing at 91% down: grown about that
+   baseline, so the packs fill the compartment and still stand on one floor */
+.bay-pack img{display:block;width:100%;max-width:112px;height:auto;transform:scale(1.3);transform-origin:50% 91%;
+  filter:drop-shadow(0 7px 6px rgba(0,20,27,.2))}
+.bay-all{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:4px 0 8px;color:var(--teal);font:600 15px/1.2 var(--sans);
+  text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
+@media (hover:hover){.bay-all:hover{text-decoration-thickness:2.5px}}
+.motion .bay.is-open .bay-pack{animation:pack-in 420ms cubic-bezier(.2,.7,.2,1) calc(90ms + var(--k) * 55ms) backwards}
+@keyframes pack-in{from{opacity:0;transform:translate3d(0,14px,0) scale(.94)}}
+/* it arrives closed: the case rises in with the heading (.grow) and its lids settle into place */
+.motion .case.in .lid{animation:lid-settle 560ms cubic-bezier(.2,.7,.2,1) calc(140ms + var(--i) * 45ms) backwards}
+@keyframes lid-settle{from{transform:perspective(640px) rotateX(-9deg) translate3d(0,-3px,0)}}
+/* no script (or not yet): every compartment open, no lids */
+.case:not(.is-live) .lid{display:none}
+.case:not(.is-live) .bay-in[hidden]{display:grid!important}
+.case:not(.is-live) .bay-well{grid-template-rows:1fr}
+.case:not(.is-live) .bay-lid{cursor:default}
+.case:not(.is-live) .bay-name{color:var(--teal)}
+.case:not(.is-live) .bay-note{color:var(--text)}
+@media (prefers-reduced-motion:reduce){.lid,.bay-well,.case-bays,.bay-name,.bay-note{transition:none}}
+@media (min-width:768px){.case{margin-inline:auto}}
+@media (min-width:1024px){
+  .case{max-width:none;padding:12px;border-radius:28px}
+  .case-bays{grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;transition:grid-template-columns var(--hinge)}
+  .bay{grid-template-rows:auto minmax(0,1fr);height:clamp(290px,23vw,320px);border-radius:18px;container-type:inline-size}
+  /* the lid covers the whole compartment, the button only its label: a tap on the lid is a tap on it */
+  .bay-lid{position:static;align-content:start;min-height:0;padding:22px 14px 10px}
+  .bay-name{font-size:clamp(9px,calc((100cqi - 28px) / 9.9),13px);letter-spacing:.18em}
+  .bay-note{font-size:clamp(8.5px,calc((100cqi - 28px) / 7.8),10.5px);letter-spacing:.14em}
+  .lid{background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.07) 48%,transparent 64%) calc(var(--i) * 100% / 6) 0 / 700% 100% no-repeat,
+    linear-gradient(var(--lid),var(--lid-lo))}
+  .lid::after{right:auto;left:50%;top:auto;bottom:18px;width:30px;height:6px;margin:0 0 0 -15px}
+  .bay-well,.bay.is-open .bay-well{grid-template-rows:1fr}
+  .bay-in{align-content:end;padding:0 14px 8px}
+  .bay-packs{gap:10px}
+  .bay-pack img{max-width:124px;transform:scale(1.42)}
+  .bay-all{margin-bottom:6px}
 }
 
 /* ── Opening curtain ───────────────────────────────────────────────────────────
