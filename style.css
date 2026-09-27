@@ -716,7 +716,15 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-book{margin-top:12px}
 .st-arc{display:none}
 .story.is-live .st-arc{display:block;position:relative;flex:0 0 auto;width:min(100%,380px);height:min(36vw,150px);margin-bottom:8px}
-.st-arc .st-pack{inset:auto;width:26%;aspect-ratio:1;left:calc(var(--x) - 13%);top:var(--y)}
+.st-arc .st-pack{inset:auto;width:24%;aspect-ratio:1;left:calc(var(--x) - 12%);top:var(--y)}
+/* the stack: each pack, once its line has been read, shrinks and glides into a slot in a row
+   along the top of the stage, so by the sleep beat the whole stack stands there together; at
+   the call the row moves up into the arc (whose own pictures are only places, so stay hidden).
+   The row is an empty box: the script measures it, and the pack slots, once per resize. */
+.st-row{display:none}
+.story.is-live .st-row{display:block;position:absolute;left:var(--pad);right:var(--pad);top:calc(var(--mast) + 6px);height:58px;pointer-events:none}
+.story.is-live .st-warm{padding-top:calc(var(--mast) + 16px + 62px)}   /* the packs' own beats keep the row's band clear */
+.story.is-live .st-arc .st-pack{visibility:hidden}
 .story.is-live .st-solo{justify-content:center}
 .story.is-live .st-proof{padding-top:0}
 /* the opening pair: the same photo at the same size and place in both beats, so the turn can lay
@@ -750,6 +758,11 @@ html:not(.js) #results[hidden]{display:block!important}
   .story.is-live .st-photo{max-height:520px}
   .story.is-live .st-fam .st-photo{max-height:420px}
   .story.is-live .st-pair{max-height:416px}
+  .story.is-live .st-row{left:calc(50% + 12px);right:max(var(--pad),calc((100% - 1200px) / 2));top:calc(var(--mast) + 18px);height:84px}
+  .story.is-live .st-warm{padding-top:calc(var(--mast) + 24px + 96px)}
+  /* the call's arc is a band above its words, not a hero column: without this it took the live
+     hero height (up to 560px) and pushed the words and the button off a 900px-tall screen */
+  .story.is-live .st-solo .st-arc{height:min(13vw,170px)}
   .st-lamp-dark{background:radial-gradient(circle at 74% 50%,rgba(244,242,236,.15),transparent 45%)}
   .st-lamp-warm{background:radial-gradient(circle at 74% 50%,rgba(255,255,255,.35),transparent 45%)}
 }

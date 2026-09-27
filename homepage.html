@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=6cb96d3a">
+<link rel="stylesheet" href="style.css?v=77fba7d5">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -516,14 +516,17 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
             </div>
           </li>
           <li class="st-beat st-light st-solo" data-kind="text">
-            <!-- supplement after supplement: the five packs just seen, back as a loose arc. Only
-                 while the stage runs; the plain sequence has just shown each of them. -->
+            <!-- supplement after supplement: the six slots the stack settles into above the call.
+                 While the stage runs these are only places: the row of packs the visitor watched
+                 being built glides up into them (their own pictures stay hidden). Without the stage
+                 the arc is not shown; the plain sequence has just shown each pack. -->
             <div class="st-hero st-arc" aria-hidden="true">
-              <span class="st-pack" data-tilt="-12" style="--x:13%;--y:34%"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt=""></span>
-              <span class="st-pack" data-tilt="7" style="--x:31.5%;--y:12%"><span class="st-shade"></span><img src="assets/story/nutrilite-begin-gi-primer-lit.webp" width="1008" height="1008" loading="lazy" decoding="async" alt=""></span>
-              <span class="st-pack" data-tilt="-4" style="--x:50%;--y:0%"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt=""></span>
-              <span class="st-pack" data-tilt="9" style="--x:68.5%;--y:12%"><span class="st-shade"></span><img src="assets/story/xs-elite-focus-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt=""></span>
-              <span class="st-pack" data-tilt="-6" style="--x:87%;--y:34%"><span class="st-shade"></span><img src="assets/story/nutrilite-sleep-health-lit.webp" width="860" height="860" loading="lazy" decoding="async" alt=""></span>
+              <span class="st-pack" data-tilt="-12" style="--x:10%;--y:34%"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt=""></span>
+              <span class="st-pack" data-tilt="7" style="--x:26%;--y:14%"><span class="st-shade"></span><img src="assets/story/nutrilite-begin-gi-primer-lit.webp" width="1008" height="1008" loading="lazy" decoding="async" alt=""></span>
+              <span class="st-pack" data-tilt="-4" style="--x:42%;--y:3%"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt=""></span>
+              <span class="st-pack" data-tilt="5" style="--x:58%;--y:3%"><span class="st-shade"></span><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt=""></span>
+              <span class="st-pack" data-tilt="9" style="--x:74%;--y:14%"><span class="st-shade"></span><img src="assets/story/xs-elite-focus-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt=""></span>
+              <span class="st-pack" data-tilt="-6" style="--x:90%;--y:34%"><span class="st-shade"></span><img src="assets/story/nutrilite-sleep-health-lit.webp" width="860" height="860" loading="lazy" decoding="async" alt=""></span>
             </div>
             <div class="st-copy">
               <!-- PETER-COPY --><p class="st-say">The hardest part was figuring it out alone, testing supplement after supplement to find what worked. That’s what this call is for. Book it and we’ll figure yours out together.</p><!-- /PETER-COPY -->
@@ -541,6 +544,8 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
             </div>
           </li>
         </ol>
+        <!-- the shelf the stack is built on: an empty box whose size and place style.css sets -->
+        <div class="st-row" aria-hidden="true"></div>
       </div>
     </div>
     <!-- the stage lets go into the proof itself: all three views stacked, nothing to swipe.
@@ -1843,7 +1848,7 @@ if(mcForm){
             packs:$$('.st-pack',b).map(function(k,j){
               /* a pair comes one after the other; the arc in the text beat, one after another */
               /* where it comes to rest: its tilt, its offset across the stage (% of its width) and its size */
-              return {img:$('img',k),shade:$('.st-shade',k),tilt:+k.getAttribute('data-tilt')||0,
+              return {pack:k,img:$('img',k),shade:$('.st-shade',k),tilt:+k.getAttribute('data-tilt')||0,
                       rx:+k.getAttribute('data-x')||0,rs:+k.getAttribute('data-scale')||1,
                       off:j*(b.getAttribute('data-kind')==='prod'?.15:.12)};
             }),
@@ -1861,42 +1866,54 @@ if(mcForm){
     if(p.keys[name]===k)return;
     p.keys[name]=k;el.style.transform=tf;el.style.opacity=op;
   }
-  /* The fall, for one pack: u runs 0..1 through its arrival, q 0..1 through its leaving.
-     It drops in from above the stage down the right-hand lane, spinning in its own plane and
-     swaying a little as it comes, speeding up as a dropped thing does; it touches down at 80%
-     of its arrival, dips just past its resting place and settles, while the spin swings just past
-     its resting tilt and settles too. Leaving, it keeps falling: down and out through the foot of
-     the stage on the left-hand lane, still spinning, fading as it goes. So the one leaving and
-     the one arriving never share a lane or the middle. Its shadow stays on the floor at its
-     resting place and only comes up as it nears touchdown. The arc's packs fall the same way
-     but leave by lifting away in place (below). */
-  var FALL={top:.6,lane:.3,sway:.05,spin:200,swing:8,dip:.025,drop:.95,drift:.16,turn:220};
-  function swirl(p,k,i,u,q){
-    var F=FALL,land=clamp(u/.8),e=smooth(land),x,y,rot,rx,ry,s,op,near;
-    if(q>0&&p.kind!=='prod'){                        /* the arc lifts away up and right in place, clear of the words */
-      put(p,k.img,'i'+i,'translate3d('+f(40*q,1)+'px,'+f(-30*q,1)+'px,0) rotate('+k.tilt+'deg) scale('+f(1-.15*q,3)+')',f(1-smooth(q),3));
-      put(p,k.shade,'s'+i,'translate3d('+f(40*q,1)+'px,'+f(-30*q,1)+'px,0) scale('+f(1-.15*q,3)+')',f(1-q,3));
-      return 0;
+  /* The stack: every pack of the five pack beats (six, with the pair), in order, and the six arc
+     slots above the call they end in. Where each rests, where its slot in the row is, and where its
+     arc slot is are measured here, from boxes nothing ever transforms, once per resize; a frame
+     only moves pictures. */
+  var ITEMS=[],SLOTS=CALL<N?$$('.st-arc .st-pack',beats[CALL]):[],rowEl=$('.st-row',run),geo=null,rowA=0,rowZ=0;
+  parts.forEach(function(p){if(p.kind==='prod')p.packs.forEach(function(k){k.g=ITEMS.length;ITEMS.push(k)})});
+  function measure(){
+    w=stage.offsetWidth;sh=stage.offsetHeight;
+    var s=stage.getBoundingClientRect(),rr=rowEl.getBoundingClientRect(),n=ITEMS.length||1,slot=rr.width/n;
+    geo={S:Math.min(rr.height*1.45,slot*1.5),
+      items:ITEMS.map(function(k,g){var b=k.pack.getBoundingClientRect();
+        return {cx:b.left+b.width/2-s.left,cy:b.top+b.height/2-s.top,B:b.width||1,
+                rx:rr.left-s.left+slot*(g+.5),ry:rr.top+rr.height/2-s.top}}),
+      arc:SLOTS.map(function(a){var b=a.getBoundingClientRect();
+        return {x:b.left+b.width/2-s.left,y:b.top+b.height/2-s.top,A:b.width,t:+a.getAttribute('data-tilt')||0}})};
+  }
+  /* Drop from the camera, then into the stack. u: 0..1 through its arrival (it lands at .8); q:
+     0..1 through its leaving. It starts right at the lens: 2.4 times its size, invisible, a little
+     high; it falls away onto the stage, shrinking faster as it goes, as a dropped thing does, then
+     lands with a small squash (a 5% dip in size) and settles, and its shadow grows and darkens as it
+     touches down. Leaving, it shrinks and glides up into its slot in the row, on a small arc; it
+     stays there while the rest of the stack arrives, rides the row up into the arc at the call, and
+     lifts away from there. */
+  var DROP={from:2.4,lift:.08,dip:.05,lean:8,hop:22};
+  function lerp(a,b,t){return a+(b-a)*t}
+  function drop(p,k,i,u,q){
+    var G=geo&&geo.items[k.g],land=clamp(u/.8),g=land*land,rp=k.rx*w/100,x,y,s,rot,rx=0,op=1,near=0;
+    if(!G)return 0;
+    var sx=G.rx-G.cx,sy=G.ry-G.cy,sS=geo.S/G.B;       /* its place in the row, as a move from its rest */
+    if(q<=0){
+      s=u<.8?k.rs*(1+(DROP.from-1)*(1-g)):k.rs*(1-DROP.dip*Math.sin(Math.PI*clamp((u-.8)/.2)));
+      x=rp;y=-DROP.lift*sh*(1-g);rot=k.tilt+DROP.lean*(1-g);rx=10*(1-g);
+      op=smooth(clamp(land/.6));near=Math.pow(clamp((u-.55)/.25),2);   /* from nothing at the lens to solid 60% of the way down */
+    }else if(q<1){
+      var e=smooth(q);
+      x=lerp(rp,sx,e);y=lerp(0,sy,e)-Math.sin(Math.PI*e)*DROP.hop;s=lerp(k.rs,sS,e);rot=lerp(k.tilt,0,e);
+    }else{
+      var A=geo.arc[k.g],a=A?smooth(clamp((rowA-k.g*.04)/(1-.2))):0,z=A?clamp((rowZ-k.g*.04)/.3):0;
+      x=sx;y=sy;s=sS;rot=0;
+      if(A){x=lerp(sx,A.x-G.cx,a)+40*z;y=lerp(sy,A.y-G.cy,a)-30*z;s=lerp(sS,A.A/G.B,a)*(1-.15*z);rot=lerp(0,A.t,a);op=1-smooth(z)}
     }
-    if(q>0){                                          /* leaving: it falls on, down the left */
-      x=k.rx*w/100-F.drift*w*Math.pow(q,1.6);y=F.drop*sh*Math.pow(q,1.3);   /* it drops first and drifts after */
-      rot=k.tilt+F.turn*q;rx=-10*q;ry=16*q;s=k.rs*(1-.12*q);op=1-clamp((q-.4)/.45);near=0;
-    }else{                                            /* arriving: it drops in, down the right */
-      var fall=u<.8?(1+F.dip)*Math.pow(land,1.6):1+F.dip*(1-smooth((u-.8)/.2));
-      x=k.rx*w/100+F.lane*w*(1-e)+F.sway*w*Math.sin(u*Math.PI*2.2)*(1-u);
-      y=-F.top*sh*(1-fall);
-      /* the spin rides the fall, so it turns where it can be seen and faster as it drops, then
-         swings just past its resting tilt on touchdown and settles */
-      rot=k.tilt-F.spin*(1-Math.min(fall,1))+F.swing*Math.sin(Math.PI*clamp((u-.8)/.2));rx=14*(1-e);ry=-18*(1-e)*Math.cos(u*6);
-      s=k.rs*(.78+.22*e);op=clamp(u*4);near=Math.pow(clamp((u-.55)/.25),2);
-    }
-    put(p,k.img,'i'+i,'translate3d('+f(x,1)+'px,'+f(y,1)+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotateY('+
-      f(ry,2)+'deg) rotate('+f(rot,2)+'deg) scale('+f(s,3)+')',f(op,3));
-    /* the shadow keeps to the floor: it follows the pack across, never down */
-    put(p,k.shade,'s'+i,'translate3d('+f(x,1)+'px,0,0) scale('+f(k.rs*(.6+.4*near),3)+')',f(near*(1-clamp(q*3)),3));
+    put(p,k.img,'i'+i,'translate3d('+f(x,1)+'px,'+f(y,1)+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotate('+
+      f(rot,2)+'deg) scale('+f(s,3)+')',f(op,3));
+    /* the shadow keeps to the floor under its rest, grows and darkens on touchdown, and goes with it */
+    put(p,k.shade,'s'+i,'translate3d('+f(rp,1)+'px,0,0) scale('+f(k.rs*(.55+.45*near+.08*Math.sin(Math.PI*clamp((u-.8)/.2))),3)+')',
+      f(Math.min(1,near*(1+.25*Math.sin(Math.PI*clamp((u-.8)/.2))))*(1-clamp(q*3)),3));
     return near*(1-q);
   }
-  function measure(){w=stage.offsetWidth;sh=stage.offsetHeight}
   function frame(){
     raf=0;
     var r=run.getBoundingClientRect(),vh=innerHeight||1,span=Math.max(1,r.height-sh);
@@ -1915,12 +1932,14 @@ if(mcForm){
         arrive=clamp((vh-top)/(vh*.8)),                /* the first photo comes up with the stage, */
         settle=clamp(1-top/(vh*.3)),                   /* the pour's shade lifts as the stage settles */
         wipe=TURN<0?0:smooth(clamp((x-at[TURN]-.1)/((HOLD[TURN]||1)*.55))),
-        best=-1,bestV=.5,lit=[0,0],restV=0,restX=0;
+        best=-1,bestV=.5,lit=[0,0],restV=0,restX=0,
+        kc=CALL<N?clamp((x-at[CALL]+T)/T):0,zc=CALL<N-1?clamp((x-at[CALL]-(HOLD[CALL]||1))/T):0;
+    rowA=clamp((kc-.1)/.55);rowZ=zc;                    /* the row rises into the arc, then the arc lifts away */
     parts.forEach(function(p,i){
       var h=HOLD[i]||1,
           kin=i?clamp((x-at[i]+T)/T):clamp(arrive),      /* 0..1 through the change into this beat */
           kout=i<N-1?clamp((x-at[i]-h)/T):0,             /* 0..1 through the change out of it */
-          vis=kout<1&&kin>0;
+          vis=kin>0&&(p.kind==='prod'?(CALL<N?(zc<1||kout<1):kout<1):kout<1);   /* a pack's beat stays up while its pack is in the stack */
       if(vis!==p.vis){p.vis=vis;p.b.style.opacity=vis?'1':'0'}   /* opacity, not visibility: its link stays reachable by Tab */
       /* the button is parked below the stage's edge while its words are not up, so the tab's
          observer sees it exactly while it can be seen */
@@ -1933,17 +1952,14 @@ if(mcForm){
       put(p,p.copy,'copy','translate3d(0,'+f((1-ce)*28-cq*28,1)+'px,0)',f(v,3));
       if(p.book)put(p,p.book,'book',v<.02?'translate3d(0,120vh,0)':'translate3d(0,'+f((1-ce)*40,1)+'px,0)',f(v,3));
       if(v>bestV){bestV=v;best=i}
-      var u=clamp((kin-.25)/.45),q=clamp(kout/.55);   /* it lands (u .8) as the words start to rise, kin .61 */
-      if(p.kind!=='prod')p.packs.forEach(function(k,j){  /* the arc: packs that come back, not a hero */
-        swirl(p,k,j,clamp((u-k.off)/(1-k.off)),Math.pow(clamp((q-k.off*.5)/(1-k.off*.5)),2));
-      });
+      var u=clamp((kin-.35)/.35);   /* the drop starts once the last words are gone (kin .35) and lands (u .8) as the new ones rise, kin .63 */
       if(!p.art)return;
       if(p.kind==='prod'){
         var rest=1;
         p.packs.forEach(function(k,j){                  /* a pair arrives and leaves one after the other */
-          var qp=clamp((kout-.25)/.45),                 /* it leaves once the words are nearly gone, and is below them before new ones rise */
+          var qp=clamp((kout-.1)/.4),                   /* it tucks into the row (up, away from the words) as they drop, and is in its slot before the next pack is solid */
               uj=clamp((u-k.off)/(1-k.off)),qj=clamp((qp-k.off)/(1-k.off));
-          rest=Math.min(rest,swirl(p,k,j,uj,qj));
+          rest=Math.min(rest,drop(p,k,j,uj,qj));
         });
         lit[p.warm?1:0]=Math.max(lit[p.warm?1:0],rest);
         if(rest>restV){restV=rest;restX=p.packs[0].rx}
