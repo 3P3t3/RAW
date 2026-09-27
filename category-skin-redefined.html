@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=64febb32">
+<link rel="stylesheet" href="style.css?v=37c666cd">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -425,14 +425,15 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    which sit where the tab does on a phone and go to the same places, "The game plan"'s "Ask
    for a free sample" (#how-go), the quick-call buttons (.q-go) and the sample form's Next and Send
    (#s-next, #sample-go), which it would cover, an open compartment of the stack case (.bay-in: a
-   closed one is hidden, so has no box and never counts), the band that sends you
+   closed one is hidden, so has no box and never counts) or an open panel of the plate rack
+   (.rk-panel, likewise), the two buttons under "That's my stack" (.mys-acts), the band that sends you
    to the calculator on a category page, and the footer,
    which is the end of every page and so could never be scrolled out from under it. It also
    waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#s-next,#sample-go,.bay-in,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#s-next,#sample-go,.bay-in,.rk-panel,.mys-acts,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -718,7 +719,7 @@ if(arch){
       fly=doc.createElement('img'),SPARK=['#51A8AA','#E6D3C5','#002E3B','#E2C8AE','#51A8AA','#F4F2EC','#002E3B','#E2C8AE'];
   fly.className='pcard-fly';fly.alt='';fly.hidden=true;fly.setAttribute('aria-hidden','true');
   dlg.appendChild(fly);
-  $$('#case a.bay-go').forEach(function(a){
+  $$('#case a.bay-go,#rack a.bay-go').forEach(function(a){
     var b=doc.createElement('button'),k;
     b.type='button';b.className=a.className;b.setAttribute('aria-haspopup','dialog');
     for(k in a.dataset)b.dataset[k]=a.dataset[k];
@@ -858,7 +859,12 @@ var cform=$('#consult-form');
 if(cform){
   var csum=$('#consult-sum'),cbox=$('#consult-embed'),
       val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()},
-      cSync=null;     /* set by the calculator below: brings its own lines up to date before a1-a4 are read */
+      cSync=null,     /* set by the calculator below: brings its own lines up to date before a1-a4 are read */
+      /* the note ("Anything you want covered?") can carry two lines the site wrote: the bar's
+         "Interested in: ..." (the bar block below sets .line) and the calculator's macros line, in
+         that order. .last is the note exactly as the site last left it, so either writer can tell
+         the site's words from the visitor's. */
+      cLead={line:'',last:''};
   /* the chip values are noun and verb phrases both, so each one carries the wording it needs
      in the sentence. A new chip needs a line here or it falls back to 'your goal'. */
   var CGOAL={'Lose fat':'losing fat','Build muscle':'building muscle','More energy':'more energy',
@@ -1375,9 +1381,10 @@ if(mcForm){
       if(goal.value!==g){goal.value=g;moved=true}
       mcAuto.goal=g;
     }
-    if(note&&mcSum&&(keep?note.value&&note.value===mcAuto.note:mcOurs(note,mcAuto.note))){
-      if(note.value!==mcSum){note.value=mcSum;moved=true}
-      mcAuto.note=mcSum;
+    var mcN=(cLead.line?cLead.line+' ':'')+mcSum;   /* the bar's line, when there is one, leads */
+    if(note&&mcSum&&(keep?note.value&&(note.value===mcAuto.note||note.value===cLead.last):mcOurs(note,mcAuto.note)||note.value===cLead.last)){
+      if(note.value!==mcN){note.value=mcN;moved=true}
+      mcAuto.note=mcN;cLead.last=mcN;
     }
     if(!keep)mcFilled=true;
     try{localStorage.setItem(MCAUTO,JSON.stringify(mcAuto))}catch(e){}
@@ -1604,6 +1611,178 @@ if(mcForm){
   },{rootMargin:'400px 0px'}).observe(run);
 })();
 
+/* Load the bar (SHELF_VIEW 'bar' in build_homepage.py). #goals is a rack of seven plates, one per
+   shelf; a plate is a button that shows its shelf's panel (a few packs, each opening the product
+   card, "Load this plate" and a link to the shelf), one panel at a time, and nothing opens on its
+   own. Loaded plates are the visitor's stack: kept in localStorage (a browser that refuses it still
+   works, it just forgets), drawn on the hero's bar and on the bar pinned under the masthead, and
+   named in the call form's note ("Interested in: ..."), only while that note is empty or still says
+   exactly what the site last put there. Through #story the pinned bar is Peter's instead: the story
+   block below loads his five plates as its pack beats go by (LB.peter), and scrolling back takes them
+   off. Plates slide on in 300ms (style.css); under reduced motion they are simply there, and the
+   story's plates go on as each pack beat reaches the middle of the screen. */
+var LB=null;
+(function(){
+  var pin=$('#lbpin');
+  if(!pin)return;
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)'),KEY='aspire-stack',NKEY='aspire-consult-bar',
+      rack=$('#rack'),plates=rack?$$('.rk-plate',rack):[],panels=plates.map(function(b){return $('#'+b.getAttribute('aria-controls'))}),
+      loads=rack?$$('.rk-load',rack):[],NAME={},RANK={},stack=[],sel=-1,MS=320,
+      youBars=$$('.bb-you'),capYou=$('.lbc-you',pin),capNew=$('.lbc-ynew',pin),hbar=$('.hbar'),hbYou=hbar&&$('.hb-you',hbar),
+      pBar=$('.bb-peter',pin),pCaps=$$('.lbc-p',pin),pNews=$$('.lbc-pnew',pin),PC=pNews.map(function(e){return e.getAttribute('data-cat')});
+  plates.forEach(function(b){NAME[b.getAttribute('data-cat')]=$('.rk-name',b).textContent;RANK[b.getAttribute('data-cat')]=+b.getAttribute('data-rank')});
+  try{var sv=JSON.parse(localStorage.getItem(KEY)||'[]');
+      if(Array.isArray(sv))stack=sv.filter(function(c,i){return NAME.hasOwnProperty(c)&&sv.indexOf(c)===i})}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(stack))}catch(e){}}
+  function count(n){return n?'Your stack · '+n+' plate'+(n===1?'':'s'):'Empty bar'}
+  /* the newest plate's outline and its name, up for a moment and gone */
+  function flash(els){
+    els.forEach(function(el){
+      if(!el||!el.animate)return;
+      el.getAnimations().forEach(function(a){a.cancel()});
+      el.animate([{opacity:0},{opacity:1,offset:.1},{opacity:1,offset:.78},{opacity:0}],{duration:2400,easing:'linear'});
+    });
+  }
+  function rings(bar,c){return $$('.bb-p[data-cat="'+c+'"] .bb-ring',bar)}
+  function hush(els){els.forEach(function(e){e.getAnimations&&e.getAnimations().forEach(function(a){a.cancel()})})}   /* one newest at a time */
+  function paint(newest){
+    youBars.forEach(function(bar){
+      $$('.bb-p',bar).forEach(function(p){
+        var c=p.getAttribute('data-cat'),on=stack.indexOf(c)>-1;
+        if(on)p.style.setProperty('--o',stack.filter(function(k){return RANK[k]<RANK[c]}).length);
+        p.classList.toggle('on',on);
+      });
+    });
+    capYou.textContent=count(stack.length);
+    if(hbar){hbar.classList.toggle('has',stack.length>0);hbYou.textContent=count(stack.length)}
+    plates.forEach(function(b){b.classList.toggle('is-on',stack.indexOf(b.getAttribute('data-cat'))>-1)});
+    loads.forEach(function(b){
+      var on=stack.indexOf(b.getAttribute('data-cat'))>-1;
+      b.setAttribute('aria-pressed',on?'true':'false');
+      b.textContent=on?'Take it off the bar':'Load this plate';
+    });
+    if(cform)cLead.line=stack.length?'Interested in: '+stack.map(function(c){return NAME[c]}).join(', ')+'.':'';
+    if(newest){
+      capNew.textContent='+ '+NAME[newest];
+      hush($$('.bb-ring',youBars[youBars.length-1]));
+      flash([capNew].concat(rings(youBars[youBars.length-1],newest)));   /* the pinned one: the hero's is off screen */
+    }
+  }
+  /* the rack: a plate shows its panel; the same plate again, Escape, or another plate puts it away */
+  function show(i){   /* the panel, whole, on screen and clear of the pinned bar and the tab */
+    setTimeout(function(){
+      if(sel!==i)return;
+      var r=panels[i].getBoundingClientRect(),pr=plates[i].getBoundingClientRect(),vh=innerHeight,tab=72,
+          top=parseFloat(getComputedStyle(html).scrollPaddingTop)||0,
+          dy=r.bottom>vh-tab?Math.min(r.bottom-(vh-tab),pr.top-top-12):0;
+      if(dy>1)scrollBy({top:dy,behavior:reduce.matches?'instant':'smooth'});
+    },reduce.matches?0:60);
+  }
+  function pick(i){
+    sel=sel===i?-1:i;
+    plates.forEach(function(b,j){b.setAttribute('aria-pressed',j===sel?'true':'false')});
+    panels.forEach(function(p,j){p.hidden=j!==sel});
+    if(sel>-1)show(sel);
+  }
+  plates.forEach(function(b,i){
+    b.addEventListener('click',function(){pick(i)});
+    b.addEventListener('keydown',function(e){
+      var k=e.key,N=plates.length,j=k==='ArrowRight'||k==='ArrowDown'?(i+1)%N:k==='ArrowLeft'||k==='ArrowUp'?(i+N-1)%N:k==='Home'?0:k==='End'?N-1:-1;
+      if(j<0)return;
+      e.preventDefault();plates[j].focus();
+    });
+  });
+  if(rack)rack.addEventListener('keydown',function(e){
+    if(e.key!=='Escape'||sel<0)return;
+    var i=sel;pick(i);plates[i].focus();
+  });
+  loads.forEach(function(b){
+    b.hidden=false;
+    b.addEventListener('click',function(){
+      var c=b.getAttribute('data-cat'),i=stack.indexOf(c),on=i<0;
+      if(on)stack.push(c);else stack.splice(i,1);
+      save();paint(on?c:null);noteDue=true;
+      if(on)doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:'level'}));
+      say(NAME[c]+(on?' is on the bar. ':' is off the bar. ')+count(stack.length)+'.');
+    });
+  });
+  /* the call form's note: the bar's line goes in when the form is reached, and again after the stack
+     changes, only over an empty note or one that still says what the site last wrote there (the
+     calculator's macros line rides behind it); the visitor's own words are never touched */
+  var noteDue=true;
+  if(cform){try{cLead.last=localStorage.getItem(NKEY)||''}catch(e){}}
+  function noteFill(){
+    if(!cform||cform.hidden)return;
+    var el=cform.elements.note;
+    if(!el)return;
+    var v=el.value,mcA=typeof mcAuto==='object'&&mcAuto?mcAuto:null,mc=mcDone&&mcSum?mcSum:'';
+    noteDue=false;
+    if(v&&v!==cLead.last&&!(mcA&&v===mcA.note))return;
+    var want=[cLead.line,mc].filter(Boolean).join(' ');
+    if(v!==want){el.value=want;cform.dispatchEvent(new Event('change'))}
+    cLead.last=want;
+    try{localStorage.setItem(NKEY,want)}catch(e){}
+    if(mc&&mcA){mcA.note=want;try{localStorage.setItem(MCAUTO,JSON.stringify(mcA))}catch(e){}}
+  }
+  if(cform){
+    new IntersectionObserver(function(es){if(es[0].isIntersecting&&noteDue)noteFill()}).observe(cform);
+    var cs0=cSync;cSync=function(){noteFill();if(cs0)cs0()};   /* and once more before booking */
+  }
+  /* the pinned bar: up once the hero has gone under the masthead; Peter's while #story is under it */
+  var hero=$('.hero'),story=$('#story'),lineIO=null;
+  if(hero)new IntersectionObserver(function(es){pin.classList.toggle('on',!es[0].isIntersecting)},
+    {rootMargin:'-'+($('.mast')?$('.mast').offsetHeight:60)+'px 0px 0px 0px'}).observe(hero);
+  else pin.classList.add('on');
+  function line(){   /* a one-pixel line at the pinned bar's foot: #story crossing it is the switch */
+    if(lineIO)lineIO.disconnect();
+    if(!story)return;
+    var y=($('.mast')?$('.mast').offsetHeight:60)+pin.offsetHeight,b=Math.max(0,innerHeight-y-1);
+    lineIO=new IntersectionObserver(function(es){pin.classList.toggle('is-peter',es[0].isIntersecting)},{rootMargin:'-'+y+'px 0px -'+b+'px 0px'});
+    lineIO.observe(story);
+  }
+  line();
+  var rsz=0;addEventListener('resize',function(){clearTimeout(rsz);rsz=setTimeout(function(){line();LB.measure()},150)});
+  /* Peter's bar, for the story: ps[j] is 0..1, how far his j-th plate is on. Transform and opacity
+     only, each written only when it changes; the caption's count switches when a plate is half on. */
+  var st=0,keys={},lastN=-1,pl={},pr={};
+  $$('.bb-l .bb-p',pBar).forEach(function(p){pl[p.getAttribute('data-cat')]=p});
+  $$('.bb-r .bb-p',pBar).forEach(function(p){pr[p.getAttribute('data-cat')]=p});
+  function wr(el,k,tf,op){var v=tf+'|'+op;if(keys[k]===v)return;keys[k]=v;el.style.transform=tf;el.style.opacity=op}
+  LB={cats:PC,
+    measure:function(){st=parseFloat(getComputedStyle(pBar).fontSize)*2.05;keys={}},   /* --st in style.css */
+    /* where plate c's centre sits on the pinned bar once it is down (the viewport's frame), and its height */
+    target:function(c){
+      var p=pr[c],sl=p.parentNode.getBoundingClientRect(),fs=parseFloat(getComputedStyle(pBar).fontSize),
+          tf=getComputedStyle(pin).transform,ty=tf&&tf!=='none'?new DOMMatrixReadOnly(tf).m42:0,
+          h=parseFloat(p.style.getPropertyValue('--s'))*10*fs;
+      return {x:sl.left+(.15+.9)*fs+RANK[c]*st,y:sl.top+sl.height/2-ty,h:h};
+    },
+    peter:function(ps){
+      var n=0;
+      PC.forEach(function(c,j){
+        var p=ps[j]||0,d=(RANK[c]+(1-p)*(7.5-RANK[c]))*st,op=p>=1?'1':Math.min(1,p*1.6).toFixed(3);
+        wr(pl[c],'l'+c,'translate3d('+(-d).toFixed(1)+'px,0,0)',op);
+        wr(pr[c],'r'+c,'translate3d('+d.toFixed(1)+'px,0,0)',op);
+        if(p>=.5)n++;
+      });
+      if(n===lastN)return;
+      pCaps.forEach(function(e,i){e.style.opacity=i===n?'1':'0'});
+      hush(pNews.concat($$('.bb-ring',pBar)));
+      if(lastN>-1&&n>lastN&&n>0)flash([pNews[n-1]].concat(rings(pBar,PC[n-1])));
+      lastN=n;
+    }};
+  LB.measure();LB.peter([]);
+  paint(null);
+  /* no stage (reduced motion, or no IntersectionObserver-driven motion): his plates go on as each
+     pack beat reaches the middle of the screen, and come off as it goes back below it */
+  if(!html.classList.contains('motion')&&story){
+    var beats=$$('.st-beat[data-kind="prod"]',story),tick=0;
+    var upd=function(){tick=0;var mid=innerHeight*.55;LB.peter(beats.map(function(b){return b.getBoundingClientRect().top<mid?1:0}))};
+    addEventListener('scroll',function(){if(!tick)tick=requestAnimationFrame(upd)},{passive:true});
+    upd();
+  }
+})();
+
 /* Peter's story: nine beats on one stage that holds the window for the length of the run.
    Where each beat is, and how far in or out of its turn, is a function of how far the run has
    scrolled, as the pour is: scrolling back up plays it backwards. The stage follows the scroll
@@ -1648,7 +1827,7 @@ if(mcForm){
                       rx:+k.getAttribute('data-x')||0,rs:+k.getAttribute('data-scale')||1,
                       off:j*(b.getAttribute('data-kind')==='prod'?.15:.12)};
             }),
-            wipe:$('.st-wipe',b),win:$('.st-wipe-in',b),vis:null,on:null,keys:{}};
+            wipe:$('.st-wipe',b),win:$('.st-wipe-in',b),arcbar:$('.st-arc .bb',b),vis:null,on:null,keys:{}};
   });
   var w=0,sh=0,raf=0,near=false,snap=true,topS=0,D=Math.PI/180,lampX=null;
   function clamp(x){return x<0?0:x>1?1:x}
@@ -1669,6 +1848,10 @@ if(mcForm){
   var ITEMS=[],arcEl=CALL<N?$('.st-arc',beats[CALL]):null,rowEl=$('.st-row',run),
       wells=$$('.stc-bay',rowEl),cats=wells.map(function(b){return b.getAttribute('data-cat')}),
       geo=null,rowA=0,rowZ=0,rowIn=0,cp={keys:{}},C={x0:0,y0:0,s:1,dx:0,dy:0,op:0};
+  /* the bar theme: no case strip here; the pinned bar (LB, above) is the stack. Each pack, once its
+     line is read, shrinks up into its own plate's place on it and is gone as the plate slides on. */
+  var BARM=!rowEl&&!!LB;
+  if(BARM)cats=LB.cats;
   parts.forEach(function(p){
     if(p.kind!=='prod')return;
     var go=$('.st-go',p.b),m=go&&/category-([a-z-]+)\.html/.exec(go.getAttribute('href')),c=m?cats.indexOf(m[1]):-1;
@@ -1680,6 +1863,13 @@ if(mcForm){
   });
   function measure(){
     w=stage.offsetWidth;sh=stage.offsetHeight;
+    if(BARM){   /* the plates' places on the pinned bar, in the stage's frame once it holds (its top at 0) */
+      LB.measure();
+      var s0=stage.getBoundingClientRect();
+      geo={items:ITEMS.map(function(k){var b=k.pack.getBoundingClientRect(),P=LB.target(cats[k.c]||cats[0]);
+        return {cx:b.left+b.width/2-s0.left,cy:b.top+b.height/2-s0.top,B:b.width||1,tx:P.x-s0.left,ty:P.y,S:P.h*1.7}})};
+      return;
+    }
     var s=stage.getBoundingClientRect(),rx=rowEl.offsetLeft,ry=rowEl.offsetTop,rw=rowEl.offsetWidth,rh=rowEl.offsetHeight,
         a=arcEl&&arcEl.getBoundingClientRect();
     var bays=wells.map(function(b){var e=$('.stc-well',b);   /* each well's offsets are the case's own (it is their offsetParent) */
@@ -1711,6 +1901,10 @@ if(mcForm){
       s=u<.8?k.rs*(1+(DROP.from-1)*(1-g)):k.rs*(1-DROP.dip*Math.sin(Math.PI*clamp((u-.8)/.2)));
       x=rp;y=-DROP.lift*sh*(1-g);rot=k.tilt+DROP.lean*(1-g);rx=10*(1-g);
       op=smooth(clamp(land/.6));near=Math.pow(clamp((u-.55)/.25),2);   /* from nothing at the lens to solid 60% of the way down */
+    }else if(BARM){                                   /* up into its plate's place on the pinned bar, fading as the plate goes on */
+      var eb=smooth(Math.min(q,1));
+      x=lerp(rp,G.tx-G.cx,eb);y=lerp(0,G.ty-G.cy,eb)-Math.sin(Math.PI*eb)*DROP.hop;s=lerp(k.rs,G.S/G.B,eb);rot=lerp(k.tilt,0,eb);
+      op=1-smooth(clamp((q-.5)/.42));
     }else if(q<1){
       var e=smooth(q);
       x=lerp(rp,sx,e);y=lerp(0,sy,e)-Math.sin(Math.PI*e)*DROP.hop;s=lerp(k.rs,sS,e);rot=lerp(k.tilt,0,e);
@@ -1748,7 +1942,7 @@ if(mcForm){
     /* the case: up with the first pack's beat, empty, as its line is read; filled by the sleep
        beat; then the whole of it, packs and all, moves up into the call's place and lifts away */
     rowIn=SAND>0?smooth(clamp(((x-at[SAND]+T)/T-.2)/.5)):1;
-    if(geo){
+    if(geo&&!BARM){
       var ra=smooth(rowA),rz=smooth(clamp(rowZ/.6));
       C.x0=geo.x0;C.y0=geo.y0;C.s=(1+(geo.Z-1)*ra)*(1-.12*rz);
       C.dx=(geo.ax-geo.x0)*ra+40*rz;C.dy=(geo.ay-geo.y0)*ra-30*rz;C.op=1-rz;
@@ -1758,7 +1952,7 @@ if(mcForm){
       var h=HOLD[i]||1,
           kin=i?clamp((x-at[i]+T)/T):clamp(arrive),      /* 0..1 through the change into this beat */
           kout=i<N-1?clamp((x-at[i]-h)/T):0,             /* 0..1 through the change out of it */
-          vis=kin>0&&(p.kind==='prod'?(CALL<N?(zc<1||kout<1):kout<1):kout<1);   /* a pack's beat stays up while its pack is in the stack */
+          vis=kin>0&&(p.kind==='prod'&&!BARM?(CALL<N?(zc<1||kout<1):kout<1):kout<1);   /* a pack's beat stays up while its pack is in the stack */
       if(vis!==p.vis){p.vis=vis;p.b.style.opacity=vis?'1':'0'}   /* opacity, not visibility: its link stays reachable by Tab */
       /* the button is parked below the stage's edge while its words are not up, so the tab's
          observer sees it exactly while it can be seen */
@@ -1771,6 +1965,7 @@ if(mcForm){
       put(p,p.copy,'copy','translate3d(0,'+f((1-ce)*28-cq*28,1)+'px,0)',f(v,3));
       if(p.book)put(p,p.book,'book',v<.02?'translate3d(0,120vh,0)':'translate3d(0,'+f((1-ce)*40,1)+'px,0)',f(v,3));
       if(v>bestV){bestV=v;best=i}
+      if(p.arcbar)put(p,p.arcbar,'arcbar','translate3d(0,'+f((1-ce)*22-cq*22,1)+'px,0)',f(v,3));   /* the loaded bar above the call comes with its words */
       var u=clamp((kin-.35)/.35);   /* the drop starts once the last words are gone (kin .35) and lands (u .8) as the new ones rise, kin .63 */
       if(!p.art)return;
       if(p.kind==='prod'){
@@ -1796,6 +1991,10 @@ if(mcForm){
       }
     });
     parts.forEach(function(p,i){var on=i===best;if(on!==p.on){p.on=on;p.b.classList.toggle('is-on',on)}});
+    /* his plates: each slides on as its pack arrives at the bar, in the change out of its beat */
+    if(BARM)LB.peter(parts.reduce(function(ps,p,i){
+      if(p.kind==='prod'){var ko=i<N-1?clamp((x-at[i]-(HOLD[i]||1))/T):0;ps.push(smooth(clamp((clamp((ko-.1)/.4)-.45)/.45)))}
+      return ps},[]));
     /* the ground warms with the product: the sand sweeps in from the right behind the arriving
        can and has covered the words' column before they rise; chalk comes with the after */
     /* the ground: teal under the before, and the after brings the chalk as it wipes in. The

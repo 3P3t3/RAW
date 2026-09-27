@@ -1293,3 +1293,153 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
   .mc-macros{gap:12px}
   .mc-g{font-size:34px}
 }
+
+/* ---------- Load the bar (SHELF_VIEW 'bar'): the barbell, the plate rack, the pinned bar ---------- */
+/* The barbell, side on, drawn from its font-size: 1em is a tenth of the biggest plate. Two sleeves
+   either side of the collars, and the shaft between with its knurled centre. A plate is a flat bar in
+   its shelf's colour, as tall as its rank allows (--s), and sits --o steps out from the collar: larger
+   plates nearest it. An unloaded plate waits just past the end of its sleeve, clipped, and slides on
+   in 300ms; under reduced motion it is simply there. Only transform and opacity ever change. */
+.bbx{container-type:inline-size;min-width:0}
+.bb{--st:2.05em;display:flex;align-items:center;height:10em;font-size:4px;line-height:0;overflow:clip visible}
+.bb-sl{position:relative;flex:none;width:calc(7 * var(--st) + 1.2em);height:1.5em;border-radius:.3em;
+  background:linear-gradient(#E4E8EA,#B0B8BD 55%,#858E94)}
+.bb-co{flex:none;width:1.1em;height:3em;border-radius:.3em;background:linear-gradient(#CDD3D6,#8E979D 55%,#687177)}
+.bb-sh{position:relative;flex:1 1 auto;min-width:3em;height:.95em;background:linear-gradient(#D6DBDE,#9CA5AA 60%,#7A838A)}
+.bb-kn{position:absolute;left:37%;right:37%;top:0;bottom:0;
+  background:repeating-linear-gradient(60deg,rgba(38,46,52,.42) 0 .1em,transparent .1em .3em),
+    repeating-linear-gradient(-60deg,rgba(38,46,52,.42) 0 .1em,transparent .1em .3em)}
+.bb-p{position:absolute;top:50%;width:1.8em;height:calc(var(--s) * 10em);margin-top:calc(var(--s) * -5em);border-radius:.3em;
+  background:var(--c);box-shadow:inset 0 0 0 max(1px,.1em) rgba(0,0,0,.16);opacity:0;will-change:transform,opacity;
+  transition:transform 300ms cubic-bezier(.2,.75,.25,1),opacity 160ms linear}
+.bb-l .bb-p{right:.15em;transform:translate3d(calc(-7.5 * var(--st)),0,0)}
+.bb-r .bb-p{left:.15em;transform:translate3d(calc(7.5 * var(--st)),0,0)}
+.bb-l .bb-p.on{opacity:1;transform:translate3d(calc(var(--o) * -1 * var(--st)),0,0)}
+.bb-r .bb-p.on{opacity:1;transform:translate3d(calc(var(--o) * var(--st)),0,0)}
+.bb-dk .bb-p{box-shadow:inset 0 0 0 max(1px,.1em) rgba(244,242,236,.28)}   /* the dark plates keep an edge on teal */
+/* the newest plate's outline: flashed by the script, never left on */
+.bb-ring{position:absolute;inset:calc(-1 * max(3px,.4em));border:max(1.5px,.2em) solid var(--teal);border-radius:max(3px,.5em);opacity:0}
+.bb-dk .bb-ring{border-color:var(--sand)}
+@media (prefers-reduced-motion:reduce){.bb-p{transition:none}}
+
+/* the hero's bar, under its two links: empty until the visitor loads a plate */
+.hbar{display:grid;gap:8px;width:100%;margin-top:8px}
+.hbar .bb{font-size:clamp(4px,calc(100cqi / 48),9px)}
+.hbar:not(.has) .hbar-cap{margin-top:-2.2em}   /* an empty bar is thin: its caption comes up under it */
+.hbar-cap{font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--sand)}
+.hbar .hb-you,.hbar.has .hb-empty{display:none}
+.hbar.has .hb-you{display:inline}
+
+/* the pinned bar: under the masthead once the hero has gone, on phones and desktop. The visitor's
+   stack; through #story, Peter's (the two bars and their captions cross-fade). As slim as it can be
+   and still be read: a 31px bar and one 10px caption row. */
+.t-bar{--pin:52px;scroll-padding-top:calc(var(--mast) + var(--pin))}
+.lbpin{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + var(--mast));z-index:18;background:var(--chalk);
+  box-shadow:0 1px 0 var(--line),0 12px 18px -16px rgba(0,20,27,.55);
+  transform:translate3d(0,-100%,0);visibility:hidden;transition:transform 280ms cubic-bezier(.2,.7,.2,1),visibility 0s linear 280ms}
+.lbpin.on{transform:none;visibility:visible;transition:transform 280ms cubic-bezier(.2,.7,.2,1),visibility 0s}
+html.locked .lbpin{visibility:hidden}
+html:not(.js) .lbpin{display:none}
+.lbpin-in{display:grid;align-content:center;gap:3px;height:var(--pin);padding-top:1px}
+.lbpin-bars{display:grid}
+.lbpin-bars .bb{grid-area:1 / 1;font-size:3.1px;transition:opacity 220ms linear;will-change:opacity}
+.lbpin-cap{display:grid;font:600 10px/1.1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--text);white-space:nowrap}
+.lbc-set{grid-area:1 / 1;display:flex;justify-content:space-between;gap:12px;min-width:0;transition:opacity 220ms linear;will-change:opacity}
+.lbc-who,.lbc-new{display:grid;min-width:0}
+.lbc-new{justify-items:end;color:var(--teal)}
+.lbc{grid-area:1 / 1;overflow:hidden;text-overflow:ellipsis;opacity:0;will-change:opacity}
+.lbc-you,.lbc-p[data-n="0"]{opacity:1}
+.lbpin .bb-peter,.lbc-pset,.lbpin.is-peter .bb-you,.lbpin.is-peter .lbc-yset{opacity:0}
+.lbpin.is-peter .bb-peter,.lbpin.is-peter .lbc-pset{opacity:1}
+@media (prefers-reduced-motion:reduce){.lbpin,.lbpin.on,.lbpin-bars .bb,.lbc-set{transition:none}}
+@media (min-width:768px){
+  .t-bar{--pin:60px}
+  .lbpin-in{max-width:780px;gap:4px}
+  .lbpin-bars .bb{font-size:3.7px}
+  .lbpin-cap{font-size:10.5px}
+}
+
+/* #goals as a plate rack: seven plates, front on, all on show. Phones 3, 3 and 1 (centred); from
+   768 one row of seven. A plate is a button: its shelf's colour, a thin inner ring, the hole, the name
+   above it and its number under it, which reads "On bar" once it is loaded. The one whose panel is
+   open wears an outline ring. */
+.rack-sec .sec-head{margin-bottom:22px}
+.rk-hint{font:500 16px/1.4 var(--sans);color:var(--text)}
+.rk-plates{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 14px;max-width:420px}
+.rk-plates li:last-child:nth-child(3n+1){grid-column:2}
+.rk-plate{position:relative;display:block;width:100%;aspect-ratio:1;margin:0;padding:0;border:0;border-radius:50%;background:none;
+  color:var(--t);container-type:inline-size;-webkit-tap-highlight-color:transparent}
+.rk-plate:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
+.rk-disc{position:absolute;inset:0;border-radius:50%;background:var(--c);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.12),0 12px 18px -12px rgba(0,20,27,.6);transition:transform 200ms cubic-bezier(.2,.7,.2,1),box-shadow 200ms}
+.rk-disc::before{content:"";position:absolute;inset:7%;border-radius:50%;border:1px solid color-mix(in srgb,var(--t) 40%,transparent)}
+.rk-disc::after{content:"";position:absolute;inset:33%;border-radius:50%;background:color-mix(in srgb,var(--t) 7%,transparent);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--t) 22%,transparent)}
+.rk-hole{position:absolute;z-index:1;left:41.5%;top:41.5%;width:17%;height:17%;border-radius:50%;background:var(--chalk);
+  box-shadow:inset 0 2px 3px rgba(0,20,27,.5),0 0 0 2px color-mix(in srgb,var(--t) 30%,transparent)}
+.rk-name{position:absolute;left:13%;right:13%;bottom:61%;text-align:center;font:800 clamp(8px,10.5cqi,15px)/1 var(--sans);font-stretch:75%;
+  letter-spacing:.05em;text-transform:uppercase;text-wrap:balance}
+.rk-num,.rk-on{position:absolute;left:0;right:0;top:63%;text-align:center;font:700 clamp(8px,9cqi,13px)/1 var(--sans);letter-spacing:.14em;text-transform:uppercase}
+.rk-on{display:none}
+.rk-plate.is-on .rk-num{display:none}
+.rk-plate.is-on .rk-on{display:block}
+.rk-plate[aria-pressed="true"] .rk-disc{box-shadow:inset 0 0 0 1px rgba(0,0,0,.12),0 0 0 3px var(--chalk),0 0 0 5.5px var(--teal),0 16px 22px -12px rgba(0,20,27,.6)}
+@media (hover:hover){.rk-plate:hover .rk-disc{transform:translate3d(0,-3px,0)}}
+.rk-plate:active .rk-disc{transform:translate3d(0,1px,0)}
+.rk-panel{margin-top:24px;padding:18px 18px 6px;border-radius:18px;background:color-mix(in srgb,var(--sand) 45%,var(--chalk));
+  box-shadow:inset 0 5px 0 var(--c),inset 0 0 0 1px rgba(0,20,27,.08)}
+.rk-head{display:grid;gap:5px;margin:4px 0 14px}
+.rk-title{font:800 28px/.95 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.rk-sub{font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
+.rk-acts{display:flex;flex-wrap:wrap;align-items:center;gap:4px 24px;margin-top:14px}
+.rk-load{flex:1 1 100%}
+.rk-load[aria-pressed="true"]{background:transparent;color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.motion .rk-panel .bay-pack{animation:pack-in 420ms cubic-bezier(.2,.7,.2,1) calc(60ms + var(--k) * 55ms) backwards}
+html:not(.js) .rk-panel[hidden]{display:block!important}
+@media (prefers-reduced-motion:reduce){.rk-disc{transition:none}}
+@media (min-width:768px){
+  .rk-plates{grid-template-columns:repeat(7,minmax(0,1fr));max-width:none;gap:14px}
+  .rk-plates li:last-child:nth-child(3n+1){grid-column:auto}
+  .rk-panel{padding:24px 28px 10px}
+  .rk-load{flex:none}
+  .rk-panel .bay-packs{max-width:560px}
+}
+
+/* the story's pack beats: a quiet step label over each line, with its plate's colour */
+.st-step{display:flex;align-items:center;gap:8px;font:600 11px/1.2 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
+.st-step i{flex:none;width:9px;height:9px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+/* the pinned bar is the story's stack: every beat clears it, as they cleared the case */
+.t-bar .story.is-live .st-beat,.t-bar .story.is-live .st-warm{padding-top:calc(var(--mast) + var(--pin) + 14px)}
+@media (max-width:767px){
+  .t-bar .story.is-live .st-open .st-photo{height:min(440px,calc(100vh - var(--mast) - var(--pin) - 270px))}
+  @supports (height:100svh){.t-bar .story.is-live .st-open .st-photo{height:min(440px,calc(100svh - var(--mast) - var(--pin) - 270px))}}
+}
+/* at the call the fully loaded bar stands above the button, where the case rose into */
+.t-bar .story.is-live .st-arc{display:flex;align-items:center;height:clamp(62px,19vw,84px)}
+.st-arc .bbx{width:100%}
+.st-arc .bb{font-size:clamp(6.2px,1.9vw,8.4px);will-change:transform,opacity;opacity:0}
+@media (min-width:768px){
+  .t-bar .story.is-live .st-beat,.t-bar .story.is-live .st-warm{padding-top:calc(var(--mast) + var(--pin) + 24px)}
+  .t-bar .story.is-live .st-solo .st-arc{width:min(100%,720px);height:min(9vw,120px)}
+  .st-arc .bb{font-size:min(.9vw,12px)}
+}
+
+/* after the story: his stack, drawn loaded, on teal */
+.mys-in{display:grid;justify-items:center;gap:20px;text-align:center}
+.mys h2{color:var(--chalk);font-size:clamp(46px,14vw,96px)}
+.mys-bar{width:100%;max-width:900px;margin:8px 0 4px}
+.mys-bar .bb{font-size:clamp(4px,calc(100cqi / 40),15px)}
+.mys-key{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 20px;max-width:640px;
+  font:600 12px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark)}
+.mys-key li{display:flex;align-items:center;gap:8px}
+.mys-key i{flex:none;width:14px;height:14px;border-radius:50%;background:var(--c);box-shadow:0 0 0 1px rgba(230,211,197,.5)}
+.mys-build{margin-top:18px;font:800 clamp(40px,11vw,72px)/.92 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--sand)}
+.mys-sub{max-width:38ch;font-size:17px;line-height:1.5;color:var(--on-dark);text-wrap:balance}
+.mys-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;width:100%;max-width:560px;margin-top:6px}
+.mys-acts .btn{flex:1 1 100%}
+.mys .btn-line{color:var(--sand);box-shadow:inset 0 0 0 1px var(--sand)}
+/* the plates go on as the bar comes up, collar out */
+.motion .mys-bar:not(.in) .bb-l .bb-p{opacity:0;transform:translate3d(calc(-7.5 * var(--st)),0,0)}
+.motion .mys-bar:not(.in) .bb-r .bb-p{opacity:0;transform:translate3d(calc(7.5 * var(--st)),0,0)}
+.motion .mys-bar .bb-p{transition-duration:420ms,240ms;transition-delay:calc(260ms + var(--o) * 110ms)}
+@media (min-width:768px){.mys-acts .btn{flex:1 1 0}}

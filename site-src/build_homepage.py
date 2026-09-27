@@ -25,6 +25,9 @@ RECUT = False  # set for the whole run when that fingerprint moved, so every cac
 DEMO = None
 DEMO_PAGE = 'homepage-demo.html'
 DEMO_STYLE = 'style-demo.css'
+# `--demo OUTDIR --demo-name NAME` exports a second demo beside the first, as OUTDIR/homepage-demo-NAME.html
+# + style-demo-NAME.css, with its own canonical, og:url and sample _next. `--view VIEW` builds with that
+# SHELF_VIEW instead of the one below (e.g. `--demo OUTDIR --view case` for the case demo from this branch).
 
 # family prefix -> (type descriptor, goals, format). Longest prefix wins.
 # Goals: R Recovery, L Lean Mass, E Endurance, S Sleep & Longevity (first = primary).
@@ -95,12 +98,29 @@ CAROUSELS = {
     'energy-focus': ('XS Energy Drink 12 oz', 'Pick your flavor', 'The 12 oz range, one can at a time.'),
 }
 
-# 'case' is the stack case: the seven shelves as the seven compartments of one case, each lid a
+# 'bar' is the barbell: the seven shelves as seven weight plates on a rack, each a button that opens a
+# panel of that shelf's packs with "Load this plate"; the visitor's loaded plates ride on a bar pinned
+# under the masthead, which becomes Peter's bar through #story. 'case' is the stack case: the seven shelves as the seven compartments of one case, each lid a
 # button that opens onto a few of that shelf's packs. 'strip' is the tabbed goal strip; 'ring'
 # brings back the rotating archipelago. All three are built from the same shelf data, so switching
 # is this one word plus a rebuild; the ring's script and styles stay in, idle while it is off.
-SHELF_VIEW = 'case'
+SHELF_VIEW = 'bar'
 CASE_PICKS = 3  # packs an open compartment shows: one per family, in the shelf's own order
+
+# The plates, one per shelf, fixed everywhere the bar theme shows them: colour, and rank on the bar.
+# Rank sets size (rank 0 is the full plate, each rank after it 6% smaller) and so place: a bar is
+# loaded larger plates nearest the collar. The first five ranks are Peter's stack in the order his
+# story loads it, so his bar builds outward and never reshuffles; the two he does not take come last.
+# The text on a plate is white or ink, whichever the build finds clears 4.5:1 (it stops if neither does).
+PLATES = {
+    'recovery': ('#3340B8', 4), 'hydration': ('#7FA7B0', 2), 'energy-focus': ('#E2C8AE', 3),
+    'protein': ('#1E262F', 0), 'fat-loss': ('#A5664A', 5), 'daily-foundations': ('#6B5646', 1),
+    'skin-redefined': ('#D6D4C9', 6),
+}
+# Peter's stack, in the order #story loads it; it must match the shelves his five pack beats link to
+# (the build checks). DRAFT-COPY: the short tag after "Step n" on each of those beats.
+PETER = [('protein', 'Food'), ('daily-foundations', 'Mornings'), ('hydration', 'Water'),
+         ('energy-focus', 'Energy'), ('recovery', 'Sleep')]
 
 # The trending band's ground: True scrubs the 150-frame pour behind the podium, False leaves the
 # band plain teal and fetches none of it. The frames and the script stay either way.
@@ -354,6 +374,44 @@ def plural(n, noun, zero=None):
     return f'{n} {noun}' if n == 1 else f'{n} {noun}s'
 
 
+def _lum(h):
+    c = [int(h.lstrip('#')[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    c = [x / 12.92 if x <= .04045 else ((x + .055) / 1.055) ** 2.4 for x in c]
+    return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]
+
+
+def contrast(a, b):
+    la, lb = sorted((_lum(a), _lum(b)), reverse=True)
+    return (la + .05) / (lb + .05)
+
+
+def plate_ink(colour):
+    """White or ink on a plate: whichever clears 4.5:1, white first (it is the one the dark plates want)."""
+    for ink in ('#FFFFFF', '#1E262F'):
+        if contrast(colour, ink) >= 4.5:
+            return ink
+    raise SystemExit(f'PLATES: nothing reads on {colour} at 4.5:1')
+
+
+def barbell(cls, loaded=None):
+    """A barbell, side on: two sleeves of plates either side of the collars, and the shaft with its
+    knurled centre between them. With `loaded` (shelf slugs) it is drawn loaded and never changes;
+    without, every plate is on both sleeves, unloaded, for the script to load (_script.html). Plates
+    sit at the collar and step outward by rank; style.css draws everything from the bar's font-size."""
+    slugs = sorted(loaded if loaded is not None else PLATES, key=lambda k: PLATES[k][1])
+    def plates():
+        out = []
+        for k in slugs:
+            col, rank = PLATES[k]
+            o = sum(1 for j in slugs if PLATES[j][1] < rank) if loaded is not None else 0
+            out.append(f'<i class="bb-p{" on" if loaded is not None else ""}" data-cat="{k}" '
+                       f'style="--c:{col};--s:{1 - .06 * rank:.2f};--o:{o}"><b class="bb-ring"></b></i>')
+        return ''.join(out)
+    return (f'<div class="bb {cls}" aria-hidden="true"><span class="bb-sl bb-l">{plates()}</span><span class="bb-co"></span>'
+            f'<span class="bb-sh"><span class="bb-kn"></span></span><span class="bb-co"></span>'
+            f'<span class="bb-sl bb-r">{plates()}</span></div>')
+
+
 def esc(s):
     return html.escape(s, quote=True)
 
@@ -587,13 +645,89 @@ def main():
                 '      </div>\n'
                 '    </dialog>\n')
 
-    shelves = {'ring': ring_section, 'strip': strip_section, 'case': case_section}[SHELF_VIEW]()
+    def rack_section():
+        """The plate rack: the seven shelves as seven plates, all on show, front on. A plate is a button
+        (aria-pressed: its panel is the one showing); its panel has a few of the shelf's packs (each opens
+        the product card, as the case's do), "Load this plate" and a link to the shelf. Without script
+        every panel stands open under the rack and nothing loads."""
+        plates, panels = [], []
+        for i, (slug_, name, tag, heading, fams) in enumerate(CATEGORIES):
+            col, rank = PLATES[slug_]
+            plates.append(
+                f'          <li><button class="rk-plate" type="button" id="rk-{slug_}" aria-pressed="false" aria-controls="rk-p-{slug_}" '
+                f'data-cat="{slug_}" data-rank="{rank}" style="--c:{col};--t:{plate_ink(col)}">'
+                f'<span class="rk-disc" aria-hidden="true"><span class="rk-hole"></span></span>'
+                f'<span class="rk-name">{name}</span><span class="rk-num" aria-hidden="true">{i + 1:02d}</span>'
+                f'<span class="rk-on">On bar</span></button></li>')
+            packs = case_picks(slug_, fams)
+            names_ = [pr['name'] for pr in packs]
+            cells = '\n'.join(
+                f'              <li class="bay-pack" style="--k:{j}">{pack_link(pr, pr["name"] if names_.count(pr["name"]) == 1 else pr["desc"].split(" · ")[-1])}</li>'
+                for j, pr in enumerate(packs))
+            panels.append(
+                f'        <div class="rk-panel" id="rk-p-{slug_}" role="region" aria-labelledby="rk-t-{slug_}" style="--c:{col}" hidden>\n'
+                f'          <div class="rk-head"><h3 class="rk-title" id="rk-t-{slug_}">{name}</h3><p class="rk-sub">{SHELF_LINE[slug_]}</p></div>\n'
+                f'          <ul class="bay-packs rk-packs">\n{cells}\n          </ul>\n'
+                f'          <div class="rk-acts"><button class="btn rk-load" type="button" aria-pressed="false" data-cat="{slug_}" hidden>Load this plate</button>'
+                f'<a class="bay-all rk-all" href="category-{slug_}.html">See all {name}<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>\n'
+                f'        </div>')
+        return ('  <!-- Shelves as a plate rack: one plate per shelf, all seven at once, nothing moving on its own.\n'
+                '       A plate is a button that shows its shelf\'s panel; "Load this plate" puts it on the visitor\'s\n'
+                '       bar, pinned under the masthead (_script.html). Without script every panel stands open. -->\n'
+                '  <section class="sec rack-sec" id="goals" aria-labelledby="goals-title">\n'
+                '    <div class="wrap">\n'
+                '      <div class="sec-head grow"><div><h2 id="goals-title">What are we <span>maximizing?</span></h2>'
+                '<p class="rk-hint">Tap a plate to see what’s on it.</p></div></div>\n'
+                '      <div class="rack grow" id="rack">\n        <ul class="rk-plates">\n'
+                + '\n'.join(plates) +
+                '\n        </ul>\n' + '\n'.join(panels) + '\n      </div>\n    </div>\n'
+                + card_dialog() +
+                '  </section>')
+
+    shelves = {'ring': ring_section, 'strip': strip_section, 'case': case_section, 'bar': rack_section}[SHELF_VIEW]()
+    BAR = SHELF_VIEW == 'bar'
+    # the story's five pack beats link to Peter's shelves; the bar theme loads his plates in that order
+    story_cats = re.findall(r'class="tlink st-go" href="category-([a-z-]+)\.html"', open(SRC).read())
+    if BAR and story_cats != [c for c, _ in PETER]:
+        raise SystemExit(f"PETER: the story's pack beats link {story_cats}, not {[c for c, _ in PETER]}")
+    bar_bits = {k: '' for k in ('{{HTML_CLASS}}', '{{HERO_BAR}}', '{{PIN}}', '{{ARC_BAR}}', '{{MYSTACK}}')}
+    bar_bits.update({f'{{{{STEP_{i + 1}}}}}': '' for i in range(len(PETER))})
+    if BAR:
+        pn = [(c, names[c]) for c, _ in PETER]
+        caps = ''.join(f'<span class="lbc lbc-p" data-n="{n}">Peter’s stack · {n} of {len(PETER)}</span>' for n in range(len(PETER) + 1))
+        news = ''.join(f'<span class="lbc lbc-pnew" data-cat="{c}">+ {n}</span>' for c, n in pn)
+        bar_bits.update({
+            '{{HTML_CLASS}}': ' class="t-bar"',
+            '{{HERO_BAR}}': ('<div class="hbar"><div class="bbx">' + barbell('bb-dk bb-you') + '</div>'
+                             '<p class="hbar-cap" aria-hidden="true"><span class="hb-empty">Scroll to load the bar.</span><span class="hb-you"></span></p></div>'),
+            # the pinned bar: the visitor's stack, or Peter's through #story; the script shows it once the hero has gone
+            '{{PIN}}': ('<div class="lbpin" id="lbpin" aria-hidden="true"><div class="wrap lbpin-in">'
+                        '<div class="lbpin-bars bbx">' + barbell('bb-you') + barbell('bb-peter') + '</div>'
+                        '<p class="lbpin-cap"><span class="lbc-set lbc-yset"><span class="lbc-who"><span class="lbc lbc-you">Empty bar</span></span>'
+                        '<span class="lbc-new"><span class="lbc lbc-ynew"></span></span></span>'
+                        '<span class="lbc-set lbc-pset"><span class="lbc-who">' + caps + '</span><span class="lbc-new">' + news + '</span></span></p></div></div>'),
+            '{{ARC_BAR}}': '<div class="bbx">' + barbell('bb-arc', [c for c, _ in PETER]) + '</div>',
+            '{{MYSTACK}}': ('  <!-- After the story: the stack his story loaded, drawn loaded, with its key, and the two ways on -->\n'
+                            '  <section class="sec dark mys" id="my-stack" aria-labelledby="mys-title">\n    <div class="wrap mys-in">\n'
+                            '      <h2 class="grow" id="mys-title">That’s my stack.</h2>\n'
+                            '      <div class="mys-bar bbx grow" style="--d:1">' + barbell('bb-dk bb-big', [c for c, _ in PETER]) + '</div>\n'
+                            '      <ul class="mys-key grow" style="--d:2" aria-label="The plates on it">'
+                            + ''.join(f'<li><i style="--c:{PLATES[c][0]}"></i>{n}</li>' for c, n in pn) + '</ul>\n'
+                            '      <p class="mys-build grow" style="--d:2">Build yours.</p>\n'
+                            '      <!-- DRAFT-COPY --><p class="mys-sub grow" style="--d:3">Half an hour, free. Your macros, what you already take, and the smallest stack that moves your goal.</p>\n'
+                            '      <div class="mys-acts grow" style="--d:3"><a class="btn" href="#macros">Work out your macros</a>'
+                            '<a class="btn btn-line" href="#consult">Book a free call</a></div>\n'
+                            '    </div>\n  </section>\n'),
+        })
+        for i, (c, t) in enumerate(PETER):
+            bar_bits[f'{{{{STEP_{i + 1}}}}}'] = (f'<!-- DRAFT-COPY --><p class="st-step"><i style="--c:{PLATES[c][0]}"></i>'
+                                                 f'Step {i + 1} · {t}</p>')
     # the story's stack is the same case in miniature: the same seven compartments, in the same order,
     # empty until the story's packs tuck into them (_script.html measures them; nothing here moves)
-    case_strip = ('<div class="st-row st-case" aria-hidden="true"><span class="stc-body">'
+    case_strip = '' if BAR else ('<div class="st-row st-case" aria-hidden="true"><span class="stc-body">'
                   + ''.join(f'<span class="stc-bay" data-cat="{s}"><span class="stc-well"></span>'
                             f'<span class="stc-name">{n}</span></span>' for s, n, *_ in CATEGORIES)
-                  + '</span></div>')
+                  + '</span></div>')   # the bar theme's pinned bar is the story's stack instead
     pour = ('''<div class="pour-bg" id="pour-bg" aria-hidden="true">
       <div class="pour-stage">
         <canvas class="pour-film" id="pour-film"></canvas>
@@ -658,7 +792,7 @@ def main():
                                 '{{SAMPLE_ENDPOINT}}': SAMPLE_ENDPOINT, '{{SAMPLE_ACTION}}': SAMPLE_ACTION,
                                 '{{SAMPLE_NEXT}}': SAMPLE_NEXT.replace('homepage.html', page_name), '{{SAMPLE_PRODUCTS}}': sample_list, **quick_call(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves,
                                 '{{CASE_STRIP}}': case_strip, '{{POUR}}': pour,
-                                '{{POUR_CLASS}}': '' if TRENDING_POUR else ' no-pour'}).items():
+                                '{{POUR_CLASS}}': '' if TRENDING_POUR else ' no-pour', **bar_bits}).items():
         out = out.replace(k, v)
     left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', out)))
     if left:
@@ -734,10 +868,23 @@ def demo_report(page, style):
 
 
 if __name__ == '__main__':
-    if '--demo' in sys.argv:
-        i = sys.argv.index('--demo')
+    def arg(flag):
+        i = sys.argv.index(flag)
         if i + 1 >= len(sys.argv):
-            raise SystemExit('usage: build_homepage.py --demo OUTDIR')
-        DEMO = os.path.abspath(sys.argv[i + 1])  # the repo root is fine: the export only adds its own two files
+            raise SystemExit('usage: build_homepage.py [--demo OUTDIR [--demo-name NAME]] [--view bar|case|strip|ring]')
+        return sys.argv[i + 1]
+    if '--view' in sys.argv:
+        SHELF_VIEW = arg('--view')
+        if SHELF_VIEW not in ('bar', 'case', 'strip', 'ring'):
+            raise SystemExit(f'--view: no such view {SHELF_VIEW!r}')
+    if '--demo-name' in sys.argv:
+        if '--demo' not in sys.argv:
+            raise SystemExit('--demo-name goes with --demo OUTDIR')
+        name = arg('--demo-name')
+        if not re.fullmatch(r'[a-z0-9-]+', name):
+            raise SystemExit('--demo-name: lower-case letters, digits and hyphens only')
+        DEMO_PAGE, DEMO_STYLE = f'homepage-demo-{name}.html', f'style-demo-{name}.css'
+    if '--demo' in sys.argv:
+        DEMO = os.path.abspath(arg('--demo'))  # the repo root is fine: the export only adds its own two files
         os.makedirs(DEMO, exist_ok=True)
     main()
