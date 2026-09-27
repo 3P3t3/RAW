@@ -22,10 +22,13 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style-demo.css?v=64febb32">
+<link rel="stylesheet" href="style-demo.css?v=80ce7ed9">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
+<!-- the field: the one ground behind the whole page (chalk, two drifting glows, a low band of light
+     and grain); see the field block at the end of style.css -->
+<div class="field" aria-hidden="true"><span class="fg fg1"></span><span class="fg fg2"></span></div>
 <a class="skip" href="#main">Skip to content</a>
 
 <!-- Opening curtain. A black sheet, the wordmark rises out of its mask letter by letter,
@@ -678,7 +681,8 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
 
   <!-- 4. Trending: three best sellers on a podium, oversized and breaking the band.
        The band's ground can be a 150-frame film of the pour, scrubbed by scroll (the pour markup
-       below, switched by TRENDING_POUR in build_homepage.py; off, the band is plain teal). It is
+       below, switched by TRENDING_POUR in build_homepage.py; off, the band is a compact row of
+       three cards on the page's field, a swipe row on phones). It is
        scenery, not content: frames come only as the band nears, and reduced motion
        gets one still. It follows the shelves (and the free sample, #sample), and Peter's story (#story) follows it directly,
        starting in this band's dark. -->
@@ -687,9 +691,9 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     <div class="wrap">
       <div class="sec-head grow"><h2 id="trending-title">Trending now</h2></div>
       <ul class="podium">
-        <li class="pod pod-1"><a class="card-link tilt" href="https://amway.com/share-link/TcFtuhPvJ" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">01</span><span class="shot"><img src="assets/cutouts/xs-creatine.webp" alt="" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">XS Creatine+</h3><p class="p-desc">Creatine powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="pod pod-2"><a class="card-link tilt" href="https://amway.com/share-link/FOhn2MdGS" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">02</span><span class="shot"><img src="assets/cutouts/nutrilite-begin-daily-gi-primer.webp" alt="" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Begin Daily GI Primer</h3><p class="p-desc">Daily digestive powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="pod pod-3"><a class="card-link tilt" href="https://amway.com/share-link/gry6-Xg5l" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">03</span><span class="shot"><img src="assets/cutouts/xs-elite-focus-energy-drink-peach-mango.webp" alt="" width="600" height="600"></span><p class="p-tag">Energy &amp; Focus</p><h3 class="p-name">XS Elite + Focus Energy Drink</h3><p class="p-desc">Energy drink · Peach Mango</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="pod pod-1"><a class="card-link" href="https://amway.com/share-link/TcFtuhPvJ" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">01</span><span class="shot"><img src="assets/cutouts/xs-creatine.webp" alt="" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">XS Creatine+</h3><p class="p-desc">Creatine powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="pod pod-2"><a class="card-link" href="https://amway.com/share-link/FOhn2MdGS" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">02</span><span class="shot"><img src="assets/cutouts/nutrilite-begin-daily-gi-primer.webp" alt="" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Begin Daily GI Primer</h3><p class="p-desc">Daily digestive powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="pod pod-3"><a class="card-link" href="https://amway.com/share-link/gry6-Xg5l" target="_blank" rel="noopener"><span class="pod-rank" aria-hidden="true">03</span><span class="shot"><img src="assets/cutouts/xs-elite-focus-energy-drink-peach-mango.webp" alt="" width="600" height="600"></span><p class="p-tag">Energy &amp; Focus</p><h3 class="p-name">XS Elite + Focus Energy Drink</h3><p class="p-desc">Energy drink · Peach Mango</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
       </ul>
     </div>
   </section>

@@ -154,6 +154,10 @@ html.locked .mtab{transform:translateY(calc(100% + 2px));visibility:hidden}
 .mtab-call{background:var(--blue);color:#fff}
 .mtab a:active{opacity:.85}
 .mtab a:focus-visible{outline:2px solid var(--sand);outline-offset:-6px}
+/* at full tracking the two halves are 359px together: the call ran off the right edge under 360
+   and sat 0.4px from both edges at 360. Under 375 a little less tracking and padding brings them
+   to 312, whole on a 320 screen and clear of the edges at 360 */
+@media (max-width:374.98px){.mtab a{padding-inline:12px;letter-spacing:.08em}}
 /* 1024 and up the mast shows its own "Free call"; one call button on screen, never two */
 @media (min-width:1024px){.mtab-call{display:none!important}}
 html:not(.js) .mtab{display:none}
@@ -1293,3 +1297,151 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
   .mc-macros{gap:12px}
   .mc-g{font-size:34px}
 }
+
+/* ===================================================================================
+   The field: one ground for the whole site, "warm chalk" (Peter's pick, B of the three mockups
+   on raw24/bg-mockups). Kept as one block, after everything it overrides, so it merges in one piece.
+
+   One fixed layer (.field, straight after <body> on every page) carries it all: the chalk base, a
+   still slanted band of warm light low down (the story's own 14-degree sweep, laid across the
+   page), two soft glows (sand high left, pale teal right) that drift over ~50s, and a fine grain
+   over them. The glows are pre-blurred radial gradients, each on its own layer, with no filter;
+   only their transform animates, so the drift costs no layout and no paint, and reduced motion
+   stops it. Every band that painted its own ground (the hero's copy, the sample, the trending
+   band, the story's grounds, the calculator's sand) goes transparent, so the one field runs all
+   the way down. Cards and panels keep a surface where reading needs one. The only break is the
+   footer, whose horizon is black-native artwork: it keeps its black, and the field darkens into
+   it over its first 120px, so the page ends at nightfall rather than at a ruled line.
+   =================================================================================== */
+:root{
+  --fb:#F4F2EC;                                   /* the chalk */
+  --fg1:226,200,174;--fg1a:.45;                   /* high glow: sand (.45, not .60: the top of a screen must not read peach) */
+  --fg2:169,202,203;--fg2a:.40;                   /* second glow: pale teal */
+  --lo:226,200,174;--loa:.25;                     /* the low slanted band: sand, so the low light is warm where it meets the teal glow */
+  --grain:.07;                                    /* registers on a phone; past .08 it greys the chalk */
+  --hollow-hi:#F6EFE7;--hollow:#EFE4D8;           /* inside a compartment: a step lighter than the sand glow, so it stays a hollow */
+}
+.field{position:fixed;left:0;top:0;z-index:-1;display:block;width:100%;height:100vh;overflow:hidden;pointer-events:none;contain:strict;
+  background:linear-gradient(166deg,rgba(var(--lo),0) 52%,rgba(var(--lo),var(--loa)) 74%,rgba(var(--lo),0) 96%),var(--fb)}
+@supports (height:100lvh){.field{height:100lvh}}
+.fg{position:absolute;display:block;width:120vmax;height:120vmax;will-change:transform;
+  background:radial-gradient(closest-side,rgba(var(--c),var(--a)) 0,rgba(var(--c),calc(var(--a) * .55)) 38%,rgba(var(--c),calc(var(--a) * .18)) 70%,rgba(var(--c),0) 100%)}
+.fg1{--c:var(--fg1);--a:var(--fg1a);left:-58vmax;top:-66vmax;animation:fg-drift1 52s ease-in-out infinite alternate}
+.fg2{--c:var(--fg2);--a:var(--fg2a);right:-70vmax;top:8vh;width:110vmax;height:110vmax;animation:fg-drift2 44s ease-in-out infinite alternate}
+@keyframes fg-drift1{from{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(22vw,6vh,0) scale(1.08)}to{transform:translate3d(38vw,-2vh,0) scale(.96)}}
+@keyframes fg-drift2{from{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-18vw,14vh,0) scale(1.1)}to{transform:translate3d(-6vw,30vh,0) scale(1)}}
+/* the grain: the fractal noise the page used as its paper overlay, moved under the content and over
+   the glows, so it breaks up their banding while cards and type stay clean. The raw noise is half
+   transparent and low in contrast, which at .07 barely showed on a phone; the tile is made opaque,
+   centred light (about 74% grey) and stretched 2x, so at .07 the grain is twice as strong as the raw
+   tile's while it darkens the chalk less (measured: 1.3 levels on average, against 1.9) */
+.field::after{content:"";position:absolute;inset:0;opacity:var(--grain);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='2' intercept='-.26'/%3E%3CfeFuncG type='linear' slope='2' intercept='-.26'/%3E%3CfeFuncB type='linear' slope='2' intercept='-.26'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px 180px}
+@media (prefers-reduced-motion:reduce){.fg{animation:none}}
+/* the field's grain replaces the old paper overlay; body lets the field through. html keeps its
+   teal-over-black canvas for the overscroll past the teal mast and the black footer. */
+body::before{display:none}
+body{background:transparent}
+
+/* the hero: its copy stands on the field in the page's dark type; the square film is untouched */
+.hero{background:transparent;color:var(--text)}
+.hero .label,.hero .sub{color:var(--text)}
+.hero h1{color:var(--teal)}
+.hero .tlink{color:var(--teal)}
+
+/* the bands that painted their own ground */
+.sample-sec,.macros-sec,.cat-macros,.story,.st-dark,.st-warm,.st-light,.story.is-live .st-bg{background:transparent}
+#sample .c-card{background:#FAF9F5}   /* the note: a sheet a shade whiter than the chalk it lies on */
+
+/* #trending without the pour (TRENDING_POUR = False) is a plain band: on the field, in dark type.
+   With the pour on, the band keeps its film and its light type; the film needs its dark. */
+.podium-sec.no-pour{background:transparent;color:var(--text)}
+.no-pour h2{color:var(--teal)}
+.no-pour :focus-visible{outline-color:var(--teal)}
+.no-pour .pod .card-link,.no-pour .pod .p-name{color:var(--ink)}
+.no-pour .pod-rank,.no-pour .pod-count{color:var(--teal)}
+.no-pour .pod .p-tag,.no-pour .pod .p-desc{color:var(--text)}
+.no-pour .pod .shot::after{background:radial-gradient(closest-side,rgba(30,38,47,.3),rgba(30,38,47,0))}
+/* ...and it is a compact band, not a podium: the three are cards like the shop's (the same glow
+   behind the pack and shadow under it), each rank on its pack's corner. One row of three from
+   560px; below that a swipe row that bleeds to the screen's edges, where the next card stands
+   half in view so it is plain there is more. The whole band fits one phone screen. */
+.podium-sec.no-pour{margin-top:0;padding-top:var(--sec)}
+.no-pour .sec-head{padding-top:0;margin-bottom:18px}
+.no-pour .podium{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:64%;gap:16px;
+  margin:0 calc(-1 * var(--pad));padding:4px var(--pad) 8px;overflow-x:auto;scroll-snap-type:x mandatory;
+  scroll-padding-inline:var(--pad);scrollbar-width:none;overscroll-behavior-x:contain}
+.no-pour .podium::-webkit-scrollbar{display:none}
+.no-pour .pod{perspective:none;scroll-snap-align:start;min-width:0}
+.no-pour .pod .shot{margin-top:0}
+.no-pour .pod .shot::before{content:"";position:absolute;left:4%;right:4%;top:2%;bottom:6%;z-index:-2;border-radius:50%;
+  background:radial-gradient(58% 52% at 50% 46%,rgba(255,255,255,.72),rgba(255,255,255,0) 78%)}
+.no-pour .pod .shot::after{left:22%;right:22%;bottom:3%;height:7%}
+.no-pour .pod-rank{position:absolute;top:2px;left:0;z-index:2;margin:0;font:800 28px/1 var(--display);font-stretch:72%;letter-spacing:.01em}
+.no-pour .pod-count{margin-top:6px}
+@media (min-width:560px){
+  .no-pour .podium{grid-auto-flow:row;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;
+    margin:0;padding:0;overflow:visible;scroll-snap-type:none}
+}
+@media (min-width:768px){
+  .no-pour .podium{gap:40px}
+  .no-pour .pod .shot{aspect-ratio:4/3}
+  .no-pour .pod-rank{font-size:34px}
+}
+
+/* the stack case, its strip in the story, and the product card: the sand inside a compartment sat
+   within a hair of the sand glow over chalk, so it goes a step lighter and takes an inset shadow on
+   every side, and reads as a hollow whatever the field behind the case is doing */
+.bay{background:linear-gradient(var(--hollow-hi),var(--hollow) 80%);
+  box-shadow:inset 0 10px 16px -9px rgba(0,20,27,.55),inset 0 -8px 12px -10px rgba(0,20,27,.22),inset 0 0 0 1px rgba(0,20,27,.16)}
+.stc-well{background:linear-gradient(var(--hollow-hi),var(--hollow));
+  box-shadow:inset 0 5px 8px -4px rgba(0,20,27,.55),inset 0 -4px 6px -5px rgba(0,20,27,.22),inset 0 0 0 1px rgba(0,20,27,.16)}
+.pcard-art{background:linear-gradient(var(--hollow-hi),var(--hollow))}
+
+/* the story: its grounds go, and it still warms as it goes, as tints of the field */
+.st-dark{color:var(--ink)}
+.st-dark .st-line{color:var(--teal)}
+.st-dark .st-say{color:var(--ink)}
+.st-dark .st-note{color:var(--text)}
+.st-dark .st-go{color:var(--teal)}
+.st-dark :focus-visible{outline-color:var(--teal)}
+.story.is-live .st-sand{background:linear-gradient(to right,rgba(230,211,197,0),rgba(230,211,197,.45) 21%)}
+.st-chalk{background:rgba(255,255,255,.35)}
+.st-shade{background:radial-gradient(ellipse,rgba(0,20,27,.28),transparent 70%)}
+/* the stage light: a white pool on chalk. closest-side keeps the whole pool inside its layer, so it
+   never shows an edge as the lamp follows the pack across. */
+.st-lamp-dark,.st-lamp-warm{background:radial-gradient(circle closest-side at 50% 38%,rgba(255,255,255,.5),rgba(255,255,255,.16) 60%,transparent)}
+@media (min-width:768px){
+  .st-lamp-dark,.st-lamp-warm{background:radial-gradient(circle closest-side at 74% 50%,rgba(255,255,255,.5),rgba(255,255,255,.16) 60%,transparent)}
+}
+/* the opening pair still goes dark to light. The ground under the before was the stage's teal; on
+   the field the teal is a panel round the photo alone, a deep mat in the case's teal. The after
+   brings its own chalk-white mat, and it wipes in with the photo (the wipe's window is widened by
+   the mat on every side), so the dark is lifted off exactly as far as the after has come. The
+   stage's chalk veil rises with the wipe as it always did. Transforms only, as before. */
+.st-open{--mat:14px}
+.st-open .st-photo{overflow:visible;box-shadow:0 0 0 var(--mat) var(--teal),0 34px 50px -26px rgba(0,20,27,.6)}
+.st-open .st-wipe{inset:calc(-1 * var(--mat))}
+.st-open .st-wipe-in{padding:var(--mat);background:#FBFAF6;box-shadow:inset 0 0 0 1px rgba(30,38,47,.14)}
+.st-open .st-wipe .st-tag{top:calc(8px + var(--mat));right:calc(8px + var(--mat))}
+/* the mat takes room of its own: on the stage a phone holds the pair to the top of its slot, where
+   the mat would touch the masthead, so it steps down; as plain content it keeps clear of the words */
+@media (max-width:767px){.story.is-live .st-open .st-hero{padding-top:var(--mat)}}
+.story:not(.is-live) .st-open .st-hero{padding-block:var(--mat)}
+@media (min-width:768px){.st-open{--mat:20px}}
+
+/* cards and panels: a translucent surface with a hairline, so forms still read as forms */
+.c-card,.c-embed{background:rgba(255,255,255,.5);backdrop-filter:none;-webkit-backdrop-filter:none;
+  box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 40px 60px -40px rgba(0,30,39,.45)}
+.mc-card{background:rgba(250,249,245,.82)}   /* its numbers stay on a near-solid ground */
+
+/* the footer: nightfall. Its first 120px carry the field down through the teal's own dark into
+   black, and the horizon and the type start below that, on black as before. The fade ends on the
+   horizon image's own darkest blue, so the picture starts without a seam. */
+.foot{--dusk:120px;padding-top:calc(var(--dusk) + var(--horizon) + 36px);
+  background:linear-gradient(rgba(0,46,59,0) 0,rgba(0,46,59,.12) 24px,rgba(0,42,54,.45) 54px,rgba(0,26,34,.8) 86px,rgb(6,11,14) var(--dusk),#000 calc(var(--dusk) + 1px))}
+.foot-glow{top:var(--dusk)}
+/* the proof's Before / After heads were --text at .62 on chalk; over the field's glow that fell to
+   about 2.5:1, so they take the full --text (5.3:1 at the field's darkest) */
+.c-cols span{opacity:1}
