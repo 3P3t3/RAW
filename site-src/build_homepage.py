@@ -4,6 +4,7 @@ Run from the project folder:  python3 site-src/build_homepage.py
 Edit share-links.csv (product, share_link, photo) and re-run to update the site.
 """
 import csv, hashlib, html, inspect, os, re, shutil
+from urllib.parse import quote
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, 'site-src', 'homepage.template.html')
@@ -112,11 +113,22 @@ CAT_THUMB = {  # the pack shown on the homepage row for each category
 # leave it empty and the form says the calendar is not connected yet instead of embedding nothing.
 CONSULT_URL = 'https://calendly.com/3pete/explore'
 
+# The free-sample form (#sample on the homepage) posts to FormSubmit, which needs no account: the
+# first real request sends an activation email to this inbox, and once it is confirmed FormSubmit
+# offers a random alias to use instead. Swap the address for that alias here; nothing else names it.
+# With script the form posts JSON to the ajax endpoint; without, it is a plain POST to the action,
+# and FormSubmit sends the visitor back to SAMPLE_NEXT, where :target shows the thank-you.
+SAMPLE_TO = 'peterherschelman@gmail.com'
+
 # Where the site actually lives. Everything else on the site is linked relatively; this is
 # only for the absolute URLs that Open Graph and Twitter cards require. GitHub Pages serves
 # the repo from a subpath, so the trailing slash matters. Move to a custom domain and this
 # one line is the whole change — nothing else hardcodes the host.
 BASE = 'https://3p3t3.github.io/RAW/'
+
+SAMPLE_ENDPOINT = 'https://formsubmit.co/ajax/' + SAMPLE_TO
+SAMPLE_ACTION = 'https://formsubmit.co/' + SAMPLE_TO
+SAMPLE_NEXT = BASE + 'homepage.html?sample=sent#sample-sent'
 
 FEATURED = [  # props-free pack shots, so the grid reads as one series
     'XS Grass-Fed Whey Protein - Chocolate',
@@ -357,6 +369,9 @@ def main():
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)),
               '{{TOTAL_PRODUCTS}}': plural(len(products), 'product', zero='products'), '{{CONSULT_URL}}': CONSULT_URL,
               '{{BASE}}': BASE}
+    # what the sample form's "What would you like to try?" suggests: every family, by the name its cards carry
+    sample_list = '\n'.join(f'          <option value="{esc(n)}"></option>'
+                            for n in sorted({pr['name'] for pr in products}, key=str.lower))
 
     os.makedirs(CUTS, exist_ok=True)
     podium = []
@@ -383,7 +398,9 @@ def main():
     out = open(SRC).read()
     for k, v in dict(shared, **{'{{HEADER}}': header.replace('{{HOME}}', ''), '{{HOME}}': '',
                                 '{{PAGE_URL}}': BASE + 'homepage.html', '{{INTRO}}': intro,
-                                '{{GOALS}}': cat_rows(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves}).items():
+                                '{{GOALS}}': cat_rows(),
+                                '{{SAMPLE_ENDPOINT}}': SAMPLE_ENDPOINT, '{{SAMPLE_ACTION}}': SAMPLE_ACTION,
+                                '{{SAMPLE_NEXT}}': SAMPLE_NEXT, '{{SAMPLE_PRODUCTS}}': sample_list, '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves}).items():
         out = out.replace(k, v)
     open(OUT, 'w').write(out)
 
@@ -418,6 +435,7 @@ def main():
         for k, v in dict(shared, **{
                 '{{HEADER}}': header.replace('{{HOME}}', 'homepage.html'), '{{HOME}}': 'homepage.html',
                 '{{PAGE_URL}}': BASE + f'category-{slug_}.html',
+                '{{SAMPLE_LINK}}': 'homepage.html?try=' + quote(html.unescape(name)) + '#sample',
                 '{{CAT_NAME}}': name, '{{CAT_TAG}}': tag, '{{CAT_HEADING}}': heading,
                 '{{CAT_COUNT}}': plural(counts[slug_], 'product', zero='No products yet'), '{{CAT_GRID}}': cgrid, '{{CAROUSEL}}': carousel,
                 '{{CAT_OTHERS}}': cat_rows(only={slug_}), '{{CAT_BG}}': f'assets/bg-{slug_}.webp'}).items():

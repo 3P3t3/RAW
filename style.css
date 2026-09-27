@@ -390,6 +390,30 @@ html:not(.js) .mtab{display:none}
 /* calendly sets height="100%" as an attribute, which iframes ignore, so size it here */
 .c-embed iframe{display:block;width:100%;height:100%;border:0}
 
+/* Free sample (#sample): the consult's card, chips and fields, on the sand band. Only the
+   checkboxes, the hints and the errors are its own. */
+.sample-sec{background:var(--sand);color:var(--text)}
+.s-hint{font-size:14px;color:var(--text);margin:0}
+.s-mail-note{display:none;margin-top:10px}
+#sample-form:has(input[name="delivery"][value^="Mail"]:checked) .s-mail-note{display:block}
+.s-err{margin:0;font:600 14px/1.35 var(--sans);color:#9B2C1F}
+.s-err:empty{display:none}
+.c-field input[aria-invalid="true"]{border-color:#9B2C1F;box-shadow:inset 0 0 0 1px #9B2C1F}
+.s-checks{display:grid;gap:12px}
+.s-check{display:flex;gap:12px;align-items:flex-start;font:500 15px/1.4 var(--sans);color:var(--ink);cursor:pointer}
+.s-check input{flex:none;width:22px;height:22px;margin:0;accent-color:var(--teal)}
+.s-check em{font-style:normal;font-weight:400;color:var(--text)}
+#sample-form[aria-busy="true"] .btn{opacity:.7;cursor:progress}
+/* the thank-you: kept out of the layout until the script shows it (.on) or FormSubmit sends a
+   no-script visitor back to #sample-sent, when :target shows it and :has puts the form away */
+.s-done{display:none;gap:10px;align-content:start}
+.s-done.on,.s-done:target{display:grid}
+.s-done h3{font:800 28px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.s-done h3:focus{outline:none}
+.sample-sec:has(.s-done:target) #sample-form{display:none}
+/* the category banner's way to it */
+.cat-sample a{color:var(--sand);font-weight:600;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
+
 /* 8. Footer */
 .foot{background:#00222C;color:#C3CACD;padding:56px 0 calc(40px + env(safe-area-inset-bottom))}
 .foot-h{margin-bottom:8px;font-weight:600;color:var(--sand)}

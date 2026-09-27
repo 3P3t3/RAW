@@ -55,10 +55,84 @@
 
 {{SHELVES}}
 
+  <!-- Free sample: visitors leave their own contact details and Peter reaches out; his phone and
+       email are never shown. Self-contained, so moving it is a cut-and-paste of this block.
+       With script it posts JSON to FormSubmit (_script.html); without, it is a plain POST and
+       FormSubmit sends the visitor back to #sample-sent, which :target shows in style.css.
+       The addresses come from SAMPLE_TO in build_homepage.py. -->
+  <section class="sec sample-sec" id="sample" aria-labelledby="sample-title">
+    <div class="wrap split">
+      <div class="split-text grow">
+        <!-- DRAFT-COPY --><p class="label">Free sample</p>
+        <h2 id="sample-title"><span>Try it before</span> <span>you buy it</span></h2>
+        <p>Pick anything off the shelves and I’ll get you a free sample. Dropped off in Lincoln, or mailed anywhere in the US.</p><!-- /DRAFT-COPY -->
+      </div>
+      <form class="c-card grow" id="sample-form" action="{{SAMPLE_ACTION}}" method="POST" data-endpoint="{{SAMPLE_ENDPOINT}}" style="--d:1">
+        <input type="hidden" name="_subject" value="Sample request · Aspire Health">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="{{SAMPLE_NEXT}}">
+        <!-- the honeypot: people never see or reach it, bots fill it, FormSubmit drops those -->
+        <div class="vh" aria-hidden="true"><label for="s-honey">Leave this empty</label><input id="s-honey" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
+        <!-- DRAFT-COPY -->
+        <div class="c-field"><label for="s-name">Your name</label>
+          <input id="s-name" name="name" type="text" autocomplete="name" required aria-describedby="s-name-err">
+          <p class="s-err" id="s-name-err"></p></div>
+        <fieldset class="c-q">
+          <legend>How should I reach you?</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="contact_by" value="Text" checked><span>Text me</span></label>
+            <label class="chip"><input type="radio" name="contact_by" value="Email"><span>Email me</span></label>
+          </div>
+        </fieldset>
+        <div class="c-field" data-by="Text"><label for="s-phone">Your phone number</label>
+          <input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="s-phone-err">
+          <p class="s-err" id="s-phone-err"></p></div>
+        <div class="c-field" data-by="Email"><label for="s-email">Your email</label>
+          <input id="s-email" name="email" type="email" autocomplete="email" aria-describedby="s-email-err">
+          <p class="s-err" id="s-email-err"></p></div>
+        <div class="c-field"><label for="s-product">What would you like to try?</label>
+          <input id="s-product" name="product" type="text" list="sample-products" autocomplete="off" required
+                 placeholder="e.g. XS Energy Drink, Tropical" aria-describedby="s-product-hint s-product-err">
+          <p class="s-hint" id="s-product-hint">Not sure? Say so and I’ll suggest something.</p>
+          <p class="s-err" id="s-product-err"></p></div>
+        <datalist id="sample-products">
+{{SAMPLE_PRODUCTS}}
+        </datalist>
+        <fieldset class="c-q" id="s-where" aria-describedby="s-where-err">
+          <legend>Where should it go?</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="delivery" value="Drop it off in Lincoln" required><span>I’m in Lincoln, drop it off</span></label>
+            <label class="chip"><input type="radio" name="delivery" value="Mail it (US)" aria-describedby="s-mail-note"><span>Mail it to me (US)</span></label>
+          </div>
+          <p class="s-hint s-mail-note" id="s-mail-note">No need for your address yet. I’ll get it when I reach out.</p>
+          <p class="s-err" id="s-where-err"></p>
+        </fieldset>
+        <div class="c-field"><label for="s-note">Anything else? <span>Optional</span></label>
+          <input id="s-note" name="note" type="text" autocomplete="off" maxlength="300" placeholder="A flavor you like, a good time to text…"></div>
+        <div class="s-checks">
+          <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this sample.</span></label>
+          <p class="s-err" id="s-consent-err"></p>
+          <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and I’m happy to hear from him now and then after. <em>Optional</em></span></label>
+        </div>
+        <button class="btn" type="submit" id="sample-go">Request my sample</button>
+        <p class="s-err" id="sample-fail" tabindex="-1"></p>
+        <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
+        <!-- /DRAFT-COPY -->
+      </form>
+      <!-- the thank-you takes the form's place: shown by the script after a send, or by
+           :target when FormSubmit sends a no-script visitor back to #sample-sent -->
+      <div class="c-card s-done" id="sample-sent">
+        <!-- DRAFT-COPY --><h3 id="sample-done-title" tabindex="-1">Got it, thank you.</h3>
+        <p>I’ll reach out within a day or two to sort out your sample.</p><!-- /DRAFT-COPY -->
+      </div>
+    </div>
+  </section>
+
   <!-- 4. Trending: three best sellers on a podium, oversized and breaking the band.
        The band's ground is a 150-frame film of the pour, scrubbed by scroll. It is
        scenery, not content: frames come only as the band nears, and reduced motion
-       gets one still. It follows the shelves, and Peter's story (#story) follows it directly,
+       gets one still. It follows the shelves (and the free sample, #sample), and Peter's story (#story) follows it directly,
        starting in this band's dark. -->
   <section class="sec podium-sec dark" id="trending" aria-labelledby="trending-title">
     <div class="pour-bg" id="pour-bg" aria-hidden="true">
