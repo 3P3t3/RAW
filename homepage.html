@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=21824fcb">
+<link rel="stylesheet" href="style.css?v=0b9b1cea">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -425,8 +425,9 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
 
   <!-- 5. Peter's story, told as a storyboard: the stage holds on screen while each part of it
        arrives, and the product that part is about swirls in beside it and spins away as the
-       next one comes. It follows #trending, whose dark it starts in, and warms to the page's
-       sand and chalk as the story reaches energy and family: dark to light, as he went.
+       next one comes. It follows #trending and opens in its dark on his before; the after wipes
+       in straight away and brings the light (chalk), which is what leads into why his stack is
+       worth a look: the five packs then stand on the sand, and the call and his family on chalk.
        Every beat is real content in reading order. The stage is only a way of showing them:
        the script takes the section over (.is-live) when motion is allowed, and positions each
        beat as a pure function of how far the section has scrolled, as the pour does. Without
@@ -441,7 +442,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <div class="st-stage">
         <div class="st-bg" aria-hidden="true"><span class="st-dusk"></span><span class="st-lamp st-lamp-dark"></span><span class="st-sand"></span><span class="st-lamp st-lamp-warm"></span><span class="st-chalk"></span></div>
         <ol class="st-beats">
-          <li class="st-beat st-dark" data-kind="photo">
+          <li class="st-beat st-dark st-open" data-kind="photo">
             <div class="st-hero"><div class="st-art st-photo">
               <img src="assets/peter/side-before-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="Peter before, from the side">
               <span class="st-tag" aria-hidden="true">Before</span>
@@ -450,7 +451,23 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
               <!-- PETER-COPY --><p class="st-say">Tired all the time. Work was good, but I was scraping by week to week — and I’d let myself go further than I wanted to admit.</p><!-- /PETER-COPY -->
             </div>
           </li>
-          <li class="st-beat st-dark" data-kind="prod">
+          <!-- straight after the opening: the before holds, and the after wipes in over it from the
+               side it sits on in the pair, bringing the light. Without the stage only the after
+               stands here: the before is directly above. -->
+          <li class="st-beat st-light st-open" data-kind="turn">
+            <div class="st-hero"><div class="st-art st-photo">
+              <img class="st-was" src="assets/peter/side-before-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="">
+              <span class="st-tag st-was" aria-hidden="true">Before</span>
+              <div class="st-wipe"><div class="st-wipe-in">
+                <img src="assets/peter/side-after-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="Peter after, from the side, 15 months later">
+                <span class="st-tag" aria-hidden="true">After</span>
+              </div></div>
+            </div></div>
+            <div class="st-copy">
+              <!-- PETER-COPY --><p class="st-say">For the first time my energy held all day — and that’s what made the rest stick. Lifting hard. Same wake-up. Same bedtime.</p><!-- /PETER-COPY -->
+            </div>
+          </li>
+          <li class="st-beat st-warm" data-kind="prod">
             <div class="st-hero"><div class="st-art">
               <span class="st-pack" data-tilt="-6" data-x="-7" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Grass-Fed Whey Protein"></span>
             </div></div>
@@ -459,7 +476,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
               <a class="tlink st-go" href="category-protein.html">Protein Snack Pack<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
             </div>
           </li>
-          <li class="st-beat st-dark" data-kind="prod">
+          <li class="st-beat st-warm" data-kind="prod">
             <div class="st-hero"><div class="st-art">
               <span class="st-pack" data-tilt="0" data-x="9" data-scale=".96"><span class="st-shade"></span><img src="assets/story/nutrilite-begin-gi-primer-lit.webp" width="1008" height="1008" loading="lazy" decoding="async" alt="Nutrilite Begin Daily GI Primer"></span>
             </div></div>
@@ -469,7 +486,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
             </div>
           </li>
           <!-- his hydration stack, the two he actually takes: they arrive as a pair -->
-          <li class="st-beat st-dark" data-kind="prod">
+          <li class="st-beat st-warm" data-kind="prod">
             <div class="st-hero"><div class="st-art st-pair">
               <span class="st-pack" data-tilt="-4" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt="XS Creatine+"></span>
               <span class="st-pack" data-tilt="7" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Twist Tubes 2GO"></span>
@@ -496,21 +513,6 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
             <div class="st-copy">
               <!-- PETER-COPY --><p class="st-line">And I found ways to maximize my sleep, even during the newborn nights.</p><!-- /PETER-COPY -->
               <a class="tlink st-go" href="category-recovery.html">Recovery<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-            </div>
-          </li>
-          <!-- the before comes back, and the after wipes in over it from the side it sits on in
-               the pair. Without the stage only the after stands here: the before is above. -->
-          <li class="st-beat st-light" data-kind="turn">
-            <div class="st-hero"><div class="st-art st-photo">
-              <img class="st-was" src="assets/peter/side-before-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="">
-              <span class="st-tag st-was" aria-hidden="true">Before</span>
-              <div class="st-wipe"><div class="st-wipe-in">
-                <img src="assets/peter/side-after-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="Peter after, from the side, 15 months later">
-                <span class="st-tag" aria-hidden="true">After</span>
-              </div></div>
-            </div></div>
-            <div class="st-copy">
-              <!-- PETER-COPY --><p class="st-say">For the first time my energy held all day — and that’s what made the rest stick. Lifting hard. Same wake-up. Same bedtime.</p><!-- /PETER-COPY -->
             </div>
           </li>
           <li class="st-beat st-light st-solo" data-kind="text">
@@ -1830,10 +1832,11 @@ if(mcForm){
      A change is 1.5 units, about 460px, so a swirl is long enough to be seen; every hold is
      still at least 180px. The turn (the before becoming the after) holds longest, since the
      wipe happens while it is up. */
-  var HOLD=[.9,.6,.6,.8,.6,.7,1.7,.7,1],T=1.5,at=[],L=0;
+  var HOLD=[.9,1.7,.6,.6,.8,.6,.7,.8,1],T=1.5,at=[],L=0;   /* before, the turn, five packs, the call, family */
   beats.forEach(function(b,i){at.push(L);L+=(HOLD[i]||1)+(i<N-1?T:0)});
   var TURN=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('turn'),
-      SAND=beats.indexOf($('.st-warm',run));        /* the first beat on the sand */
+      WARM=beats.map(function(b){return b.classList.contains('st-warm')}),
+      SAND=WARM.indexOf(true),CALL=WARM.lastIndexOf(true)+1;   /* the packs are on the sand; the call after them */
   var parts=beats.map(function(b){
     return {b:b,kind:b.getAttribute('data-kind'),art:$('.st-art',b),copy:$('.st-copy',b),
             book:$('.st-book',b),warm:b.classList.contains('st-warm'),
@@ -1925,7 +1928,7 @@ if(mcForm){
       /* the words: out in the first part of a change, in at the end of it, never both at once */
       var ce=i?smooth(clamp((kin-.6)/.4)):smooth(clamp(x/.35)),   /* the first words wait for the stage to hold */
           cq=smooth(clamp(kout/.4));
-      if(p.kind==='turn')ce=wipe;                        /* his words come up with the after */
+      if(p.kind==='turn')ce=smooth(clamp((wipe-.6)/.4));  /* his words come up with the after, once its light is mostly in */
       var v=Math.min(ce,1-cq);
       put(p,p.copy,'copy','translate3d(0,'+f((1-ce)*28-cq*28,1)+'px,0)',f(v,3));
       if(p.book)put(p,p.book,'book',v<.02?'translate3d(0,120vh,0)':'translate3d(0,'+f((1-ce)*40,1)+'px,0)',f(v,3));
@@ -1946,6 +1949,10 @@ if(mcForm){
         if(rest>restV){restV=rest;restX=p.packs[0].rx}
       }else{
         var pe=i?smooth(clamp((kin-.45)/.55)):smooth(arrive),pq=smooth(clamp(kout/.35));
+        /* the opening pair is one photo: the before holds still, and the turn lays the very same
+           before over it (same size, same place) for the after to wipe across */
+        if(parts[i+1]&&parts[i+1].kind==='turn')pq=0;
+        if(p.kind==='turn'&&parts[i-1]&&parts[i-1].kind==='photo')pe=kin>0?1:0;
         put(p,p.art,'art','translate3d(0,'+f((1-pe)*36-pq*36,1)+'px,0) scale('+f(.94+.06*pe-.05*pq,4)+')',f(Math.min(pe,1-pq),3));
       }
       if(p.wipe){                                         /* the after slides in from its own side */
@@ -1956,9 +1963,14 @@ if(mcForm){
     parts.forEach(function(p,i){var on=i===best;if(on!==p.on){p.on=on;p.b.classList.toggle('is-on',on)}});
     /* the ground warms with the product: the sand sweeps in from the right behind the arriving
        can and has covered the words' column before they rise; chalk comes with the after */
-    var ks=SAND>0?clamp((x-at[SAND]+T)/T):0,sw=smooth(clamp((ks-.12)/.42));
-    sand.style.transform='translate3d('+f(55-87*sw,2)+'%,0,0) rotate(-14deg)';   /* +55% (off the stage) to -32% (every corner solid) */
-    chalk.style.opacity=f(wipe,3);
+    /* the ground: teal under the before, and the after brings the chalk as it wipes in. The
+       sand is laid under the chalk once that is opaque, and the chalk lifts off it in the middle
+       of the change into the first pack, while no words are up, so all five packs stand on the
+       sand; it comes back the same way in the change into the call. */
+    var k1=SAND>0?clamp((x-at[SAND]+T)/T):0,k2=CALL<N?clamp((x-at[CALL]+T)/T):0,
+        ch=SAND>0&&x<at[SAND]-T?wipe:Math.max(1-smooth(clamp((k1-.35)/.25)),smooth(clamp((k2-.35)/.25)));
+    sand.style.transform='translate3d('+(wipe>=1?'-32':'55')+'%,0,0) rotate(-14deg)';   /* under opaque chalk: -32% covers every corner, +55% is off the stage */
+    chalk.style.opacity=f(ch,3);
     dusk.style.opacity=f(1-smooth(settle),3);
     lampD.style.opacity=f(lit[0],3);lampW.style.opacity=f(lit[1],3);
     if(restV>0&&restX!==lampX){                          /* the light moves only when the resting pack does */

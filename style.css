@@ -719,6 +719,14 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-arc .st-pack{inset:auto;width:26%;aspect-ratio:1;left:calc(var(--x) - 13%);top:var(--y)}
 .story.is-live .st-solo{justify-content:center}
 .story.is-live .st-proof{padding-top:0}
+/* the opening pair: the same photo at the same size and place in both beats, so the turn can lay
+   its before exactly over the first one. Held to the top of its slot, and sized to leave room
+   for the words under it at every phone height. */
+@media (max-width:767px){
+  .story.is-live .st-open .st-hero{align-items:flex-start}
+  .story.is-live .st-open .st-photo{height:min(440px,calc(100vh - var(--mast) - 280px));max-height:none}
+  @supports (height:100svh){.story.is-live .st-open .st-photo{height:min(440px,calc(100svh - var(--mast) - 280px))}}
+}
 
 @media (min-width:768px){
   .st-beat{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;align-items:center;align-content:center;
