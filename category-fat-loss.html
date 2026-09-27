@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=21824fcb">
+<link rel="stylesheet" href="style.css?v=62fb6c0f">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -973,16 +973,35 @@ if(mcForm){
     if(!cform)return;                            /* no consult here: just follow the anchor */
     e.preventDefault();
     mcFill(true);
-    $('#consult').scrollIntoView();
-    var t=$('#consult-title');
-    t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
+    mcLand(false);
   }
   $('#mc-book').addEventListener('click',mcGo);
+  /* Both moves to the consult land on the booking form itself, not the top of the section:
+     the numbers strip, the offer and the disclosure are then above, already passed, and the
+     visitor arrives where the calculator has just filled the goal and the note, with the rest
+     to answer and "Pick a time" under them. The form's top goes up under the masthead (html's
+     scroll-padding-top, --mast, as the calendar's scroll above does); a form taller than the
+     screen still starts there. Measured from the layout, not from the box as drawn: until it
+     has been scrolled to, the form still carries the reveal's 16px nudge (.motion .grow), which
+     scrollIntoView would count, leaving the form's top 16px under the masthead once it rose.
+     Once the calendar has taken the form's place, the calendar is where the page goes.
+     Focus follows to the form's first question (the calendar box, once it is up), so keyboard
+     and screen-reader users arrive there too; the section heading would be off screen now. */
+  function mcLand(smooth){
+    var el=cform.hidden?cbox:cform,r=el.getBoundingClientRect(),tf=getComputedStyle(el).transform,
+        ty=tf&&tf!=='none'?new DOMMatrixReadOnly(tf).m42:0,
+        pad=parseFloat(getComputedStyle(html).scrollPaddingTop)||0;
+    scrollTo({top:Math.max(0,scrollY+r.top-ty-pad),behavior:smooth?'smooth':'auto'});
+    var t=cform.hidden?cbox:$('legend',cform);
+    t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
+  }
 
   /* After a fresh "See my numbers" the card comes up, the visitor gets three seconds with it,
-     and then the page glides down to the consult, whose strip carries the same four numbers,
-     so both are seen. Four seconds when a warning is up: there is more to read. (It was 1.5
-     and 2.6; a visitor tested at that pace had not finished reading the card.) Anything the
+     and then the page glides down to the consult's booking form (mcLand: its top under the
+     masthead, the goal and the note already filled from the card, focus on its first
+     question), so the next thing in front of them is the rest of the form and "Pick a time".
+     Four seconds when a warning is up: there is more to read. (It was 1.5 and 2.6; a visitor
+     tested at that pace had not finished reading the card.) Anything the
      visitor does in that pause (a scroll, a touch, a click, a key, leaving the tab) means
      they are reading, so the glide is dropped and nothing else moves. The scroll test is by
      distance from where the card left the page, so the jump that focusing the card's own
@@ -999,7 +1018,7 @@ if(mcForm){
   }
   function mcGlide(){
     mcStop();
-    if(!mcSec||$('body > .intro'))return;       /* no consult on this page, or the curtain is still up */
+    if(!cform||!mcSec||$('body > .intro'))return; /* no consult on this page, or the curtain is still up */
     mcY=scrollY;
     MCSTOP.forEach(function(ev){addEventListener(ev,mcNudge,{capture:true,passive:true})});
     doc.addEventListener('visibilitychange',mcStop);
@@ -1007,9 +1026,7 @@ if(mcForm){
       mcStop();
       if(!mcDone)return;
       mcFill(false);                             /* the goal chip and the note line, if still the site's */
-      mcSec.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
-      var t=$('#consult-title');
-      t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
+      mcLand(!matchMedia('(prefers-reduced-motion: reduce)').matches);
     },$('.mc-warn',mcNotes)?4000:3000);
   }
   if(cform&&mcSec&&'IntersectionObserver' in window)
