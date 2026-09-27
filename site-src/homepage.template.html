@@ -97,7 +97,12 @@
        With script it posts JSON to FormSubmit (_script.html); without, it is a plain POST and
        FormSubmit sends the visitor back to #sample-sent, which :target shows in style.css.
        The addresses come from SAMPLE_TO in build_homepage.py. -->
-  <section class="sec sample-sec" id="sample" aria-labelledby="sample-title">
+  <section class="sec sample-sec form-b" id="sample" aria-labelledby="sample-title">
+    <!-- MOCKUP-ONLY: three looks for the form, A, B and C, on one set of markup. The class on
+         #sample picks one (form-b without script); ?form=a|b|c sets it and these swap it in place,
+         so the curtain does not replay. Delete this nav, its CSS and its script block to ship. -->
+    <nav class="s-mock" aria-label="Form mockups"><span>Form</span><a href="?form=a#sample" data-form="a">A</a><a href="?form=b#sample" data-form="b" aria-current="true">B</a><a href="?form=c#sample" data-form="c">C</a></nav>
+    <!-- /MOCKUP-ONLY -->
     <div class="wrap split">
       <div class="split-text grow">
         <!-- DRAFT-COPY --><p class="label">Try it first</p>
@@ -111,55 +116,81 @@
         <input type="hidden" name="_next" value="{{SAMPLE_NEXT}}">
         <!-- the honeypot: people never see or reach it, bots fill it, FormSubmit drops those -->
         <div class="vh" aria-hidden="true"><label for="s-honey">Leave this empty</label><input id="s-honey" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
+        <!-- Two short steps with script: step 1 is who you are and what you'd like, step 2 is where
+             it goes and the send. Without script nothing here is hidden, so it is one form and a
+             plain POST, as before. The progress cue, Next, Back and the recap are [hidden] until
+             the script takes over. .s-say is the fill-in-the-blank sentence of style A: shown
+             only there, and aria-hidden, since every field keeps its own real label. -->
+        <div class="s-prog" id="s-prog" hidden><span class="s-prog-bar" aria-hidden="true"><i></i><i></i></span><span class="s-prog-t" id="s-prog-t">1 of 2</span></div>
         <!-- DRAFT-COPY -->
-        <div class="c-field"><label for="s-name">Your name</label>
-          <input id="s-name" name="name" type="text" autocomplete="name" required aria-describedby="s-name-err">
-          <p class="s-err" id="s-name-err"></p></div>
-        <fieldset class="c-q">
-          <legend>Text or email?</legend>
-          <div class="chips">
-            <label class="chip"><input type="radio" name="contact_by" value="Text" checked><span>Text me</span></label>
-            <label class="chip"><input type="radio" name="contact_by" value="Email"><span>Email me</span></label>
-          </div>
-        </fieldset>
-        <div class="c-field" data-by="Text"><label for="s-phone">Your phone number</label>
-          <input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="s-phone-err">
-          <p class="s-err" id="s-phone-err"></p></div>
-        <div class="c-field" data-by="Email"><label for="s-email">Your email</label>
-          <input id="s-email" name="email" type="email" autocomplete="email" aria-describedby="s-email-err">
-          <p class="s-err" id="s-email-err"></p></div>
-        <div class="c-field"><label for="s-product">What would you like to try?</label>
-          <input id="s-product" name="product" type="text" list="sample-products" autocomplete="off" required
-                 placeholder="e.g. Grass-Fed Whey, Chocolate" aria-describedby="s-product-hint s-product-err">
-          <p class="s-hint" id="s-product-hint">Not sure? Say so and I’ll suggest something.</p>
-          <p class="s-err" id="s-product-err"></p></div>
-        <datalist id="sample-products">
+        <div class="s-step" id="s-step1" role="group" tabindex="-1" aria-label="Your details">
+          <span class="s-say" aria-hidden="true">Hey Peter, I’m</span>
+          <div class="c-field s-f-name"><svg class="ic s-ic" aria-hidden="true" focusable="false"><use href="#i-person"/></svg><label for="s-name">Your name</label>
+            <input id="s-name" name="name" type="text" autocomplete="name" required placeholder=" " aria-describedby="s-name-err">
+            <p class="s-err" id="s-name-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <fieldset class="c-q s-by">
+            <svg class="ic s-ic" aria-hidden="true" focusable="false"><use href="#i-chat"/></svg>
+            <legend>Text or email?</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="contact_by" value="Text" checked><span>Text me</span></label>
+              <label class="chip"><input type="radio" name="contact_by" value="Email"><span>Email me</span></label>
+            </div>
+          </fieldset>
+          <span class="s-say" aria-hidden="true">at</span>
+          <div class="c-field" data-by="Text"><svg class="ic s-ic" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg><label for="s-phone">Your phone number</label>
+            <input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder=" " aria-describedby="s-phone-err">
+            <p class="s-err" id="s-phone-err"></p></div>
+          <div class="c-field" data-by="Email"><svg class="ic s-ic" aria-hidden="true" focusable="false"><use href="#i-mail"/></svg><label for="s-email">Your email</label>
+            <input id="s-email" name="email" type="email" autocomplete="email" placeholder=" " aria-describedby="s-email-err">
+            <p class="s-err" id="s-email-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <span class="s-say" aria-hidden="true">I’ve had my eye on</span>
+          <div class="c-field s-f-item"><svg class="ic s-ic" aria-hidden="true" focusable="false"><use href="#i-bag"/></svg><label for="s-product">What would you like to try?</label>
+            <input id="s-product" name="product" type="text" list="sample-products" autocomplete="off" required
+                   placeholder="e.g. Grass-Fed Whey, Chocolate" aria-describedby="s-product-hint s-product-err">
+            <p class="s-hint" id="s-product-hint">Not sure? Say so and I’ll suggest something.</p>
+            <p class="s-err" id="s-product-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <datalist id="sample-products">
 {{SAMPLE_PRODUCTS}}
-        </datalist>
-        <fieldset class="c-q" id="s-where" aria-describedby="s-where-err">
-          <legend>Where should it go?</legend>
-          <div class="chips">
-            <label class="chip"><input type="radio" name="delivery" value="Drop it off in Lincoln" required><span>I’m in Lincoln, drop it off</span></label>
-            <label class="chip"><input type="radio" name="delivery" value="Mail it (US)" aria-describedby="s-mail-note"><span>Mail it to me (US)</span></label>
-          </div>
-          <p class="s-hint s-mail-note" id="s-mail-note">No need for your address yet. I’ll ask for it if it’s one I can mail.</p>
-          <p class="s-err" id="s-where-err"></p>
-        </fieldset>
-        <div class="c-field"><label for="s-note">Anything else? <span>Optional</span></label>
-          <input id="s-note" name="note" type="text" autocomplete="off" maxlength="300" placeholder="A flavor you like, a good time to text…"></div>
-        <div class="s-checks">
-          <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this.</span></label>
-          <p class="s-err" id="s-consent-err"></p>
-          <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and the odd update after that is fine too. <em>Optional</em></span></label>
+          </datalist>
+          <button class="btn s-next-btn" type="button" id="s-next" hidden>Next<svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
         </div>
-        <button class="btn" type="submit" id="sample-go">Send it to Peter</button>
-        <p class="s-err" id="sample-fail" tabindex="-1"></p>
-        <ol class="s-next" aria-label="What happens next">
-          <li>You hear from me directly, by text or email, whichever you chose.</li>
-          <li>If it’s one I can send, we pick a drop-off in Lincoln, or I ask for your address to mail it.</li>
-          <li>Give it a real try, then give me your honest take. You don’t owe me an order.</li>
-        </ol>
-        <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
+        <div class="s-step" id="s-step2">
+          <!-- step 1, folded to a line once Next has checked it: filled in by the script -->
+          <div class="s-recap" id="s-recap" hidden>
+            <p class="s-recap-h">Your details</p>
+            <p class="s-recap-t"><span class="s-r s-r-name"><svg class="ic s-ic" aria-hidden="true" focusable="false"><use href="#i-person"/></svg><b id="s-r-name"></b></span><span class="s-r-sep" aria-hidden="true"> · </span><span class="s-r s-r-how"><svg class="ic s-ic" aria-hidden="true" focusable="false"><use id="s-r-icon" href="#i-phone"/></svg><span id="s-r-how"></span></span><span class="s-r-sep" aria-hidden="true"> · </span><span class="s-r s-r-item"><svg class="ic s-ic" aria-hidden="true" focusable="false"><use href="#i-bag"/></svg><span id="s-r-item"></span></span></p>
+            <button class="s-edit" type="button" id="s-edit">Edit<span class="vh"> your name, number or email, and pick</span></button>
+          </div>
+          <span class="s-say" aria-hidden="true">You can</span>
+          <fieldset class="c-q s-deliv" id="s-where" aria-describedby="s-where-err">
+            <legend>Where should it go?</legend>
+            <div class="chips">
+              <label class="chip s-opt"><input type="radio" name="delivery" value="Drop it off in Lincoln" required><span><svg class="ic s-ic" aria-hidden="true" focusable="false"><use href="#i-pin"/></svg><b class="s-opt-t">Drop-off in Lincoln</b><b class="s-opt-a">drop it off, I’m in Lincoln</b><small class="s-opt-d">I’ll run it over to you.</small></span></label>
+              <label class="chip s-opt"><input type="radio" name="delivery" value="Mail it (US)" aria-describedby="s-mail-note"><span><svg class="ic s-ic" aria-hidden="true" focusable="false"><use href="#i-box"/></svg><b class="s-opt-t">Mail it to me</b><b class="s-opt-a">mail it, I’m in the US</b><small class="s-opt-d">Anywhere in the US.</small></span></label><span class="s-say" aria-hidden="true">.</span>
+            </div>
+            <p class="s-hint s-mail-note" id="s-mail-note">No need for your address yet. I’ll ask for it if it’s one I can mail.</p>
+            <p class="s-err" id="s-where-err"></p>
+          </fieldset>
+          <div class="s-ps"><span class="s-say" aria-hidden="true">P.S.</span>
+          <div class="c-field s-f-note"><svg class="ic s-ic" aria-hidden="true" focusable="false"><use href="#i-note"/></svg><label for="s-note">Anything else? <span>Optional</span></label>
+            <input id="s-note" name="note" type="text" autocomplete="off" maxlength="300" placeholder="A flavor you like, a good time to text…"></div></div>
+          <div class="s-checks">
+            <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this.</span></label>
+            <p class="s-err" id="s-consent-err"></p>
+            <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and the odd update after that is fine too. <em>Optional</em></span></label>
+          </div>
+          <div class="s-acts">
+            <button class="btn btn-line s-back" type="button" id="s-back" hidden><svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-back"/></svg>Back</button>
+            <button class="btn" type="submit" id="sample-go">Send it to Peter</button>
+          </div>
+          <p class="s-err" id="sample-fail" tabindex="-1"></p>
+          <ol class="s-next" aria-label="What happens next">
+            <li>You hear from me directly, by text or email, whichever you chose.</li>
+            <li>If it’s one I can send, we pick a drop-off in Lincoln, or I ask for your address to mail it.</li>
+            <li>Give it a real try, then give me your honest take. You don’t owe me an order.</li>
+          </ol>
+          <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
+        </div>
         <!-- /DRAFT-COPY -->
       </form>
       <!-- the thank-you takes the form's place: shown by the script after a send, or by
