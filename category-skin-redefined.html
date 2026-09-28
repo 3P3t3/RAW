@@ -2291,14 +2291,16 @@ var LB=null;
   /* The caption strip under the shelf (Peter, 2026-09-28: "as we scroll, it needs to be a lot easier
      to read... maybe I can read it in one go"). His lines stand in one column in the track; the strip
      shows about three of them at a time and the track slides so that the caption belonging to the beat
-     on the shelf sits on the reading line (.4 of the strip's height, so there is more to come below
-     than above). ci is where the reading line is, measured in captions: caption q is exactly on it at
+     on the shelf starts just below the strip's top, about a fifth of the way down, so the tail of the
+     one before is still up there and the one after it is read below — and a caption too tall for that
+     gets as much of the lead as still lets it fit whole, so the line being read is never clipped on a
+     short phone. ci is where the reading line is, measured in captions: caption q is exactly on it at
      the middle of its beat's hold, and between two of those the track is always moving, slowly near a
      caption and quickly between them — nothing waits and nothing snaps. The track's offsets are
      measured once per resize; per frame it is one transform on the track, the strip's own opacity, and
      a class on the caption that is on the line (so its colour is written only when the line moves). */
   var rail=$('.st-caprail',run),track=rail&&$('.st-captrack',rail),caps=rail?$$('.st-cap',rail):[],
-      CAPO=[],CAPA=[],capNow=-1,rk={keys:{}},focus=0;
+      CAPO=[],CAPA=[],capNow=-1,rk={keys:{}};
   /* where each caption sits on the run: the middle of its beat's hold */
   CAPA=PB.slice(0,caps.length).map(function(i){return at[i]+(HOLD[i]||1)*.5});
   /* his plates: each pack's shelf goes onto the pinned bar over the last part of the change into its
@@ -2314,8 +2316,8 @@ var LB=null;
   function measure(){
     w=stage.offsetWidth;sh=stage.offsetHeight;
     if(track){
-      focus=rail.clientHeight*.4;
-      CAPO=caps.map(function(c){return c.offsetTop+c.offsetHeight/2});
+      var rh=rail.clientHeight;
+      CAPO=caps.map(function(c){return c.offsetTop-Math.max(6,Math.min(rh*.22,rh-c.offsetHeight-6))});
     }
     if(BARM){   /* the pile: each pack beat's floor (its art box's foot), and every pack's pose at each beat from its own on */
       var s0=stage.getBoundingClientRect(),
@@ -2451,7 +2453,7 @@ var LB=null;
       var co=fi>=CAPO.length-1?CAPO[CAPO.length-1]:lerp(CAPO[fi],CAPO[fi+1],ci-fi),
           ri=smooth(clamp(((x-at[PB[0]]+Tn(PB[0]))/Tn(PB[0])-.3)/.5)),
           ro=CALL<N?smooth(clamp((x-at[CALL]+Tn(CALL))/(Tn(CALL)*.5))):0;
-      put(rk,track,'track','translate3d(0,'+f(focus-co,1)+'px,0)','1');
+      put(rk,track,'track','translate3d(0,'+f(-co,1)+'px,0)','1');
       put(rk,rail,'rail','translate3d(0,'+f((1-ri)*24,1)+'px,0)',f(Math.min(ri,1-ro),3));
       var nw=Math.max(0,Math.min(caps.length-1,Math.round(ci)));
       if(nw!==capNow){if(caps[capNow])caps[capNow].classList.remove('is-now');caps[nw].classList.add('is-now');capNow=nw}
