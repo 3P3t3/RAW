@@ -70,7 +70,10 @@ FAMILIES = {
     'Nutrilite Cal Mag D': ('Calcium & magnesium tablets', 'S', 'pills'),
     'Nutrilite Carb Blocker': ('Mealtime tablets', 'L', 'pills'),
     'Nutrilite Concentrated Fruits and Vegetables': ('Fruit & vegetable tablets', 'S', 'pills'),
-    'Nutrilite Daily Multivitamin Tablets': ('Multivitamin tablets', 'S', 'pills'),
+    "Nutrilite Men's Daily Multivitamin Tablets": ('Multivitamin tablets', 'S', 'pills'),
+    "Nutrilite Women's Daily Multivitamin Tablets": ('Multivitamin tablets', 'S', 'pills'),
+    'Nutrilite Complete Menopause Support': ('Once-daily tablets', 'S', 'pills'),
+    'Nutrilite Iron Folic': ('Iron & folic acid tablets', 'S', 'pills'),
     'Nutrilite Double X Multivitamin': ('Multivitamin tablets', 'S', 'pills'),
     'Nutrilite Hair, Skin & Nail Health': ('Biotin & collagen tablets', '', 'pills'),
     'Nutrilite Immunity Defense Zinc + Holy Basil': ('Zinc & holy basil tablets', 'S', 'pills'),
@@ -78,7 +81,8 @@ FAMILIES = {
     'Nutrilite Lean Muscle': ('CLA softgels', 'L', 'pills'),
     "Nutrilite Men's Pack": ('Daily supplement packets', 'S', 'pills'),
     'Nutrilite Memory Builder Supplement': ('Cistanche tablets', 'E', 'pills'),
-    'Nutrilite Organics Daily Multi Gummies': ('Organic multivitamin gummies', 'S', 'pills'),
+    "Nutrilite Organics Men's Daily Multi Gummies": ('Organic multivitamin gummies', 'S', 'pills'),
+    "Nutrilite Organics Women's Daily Multi Gummies": ('Organic multivitamin gummies', 'S', 'pills'),
     'Nutrilite Organics Ginger Mint Tea': ('Organic herbal tea', 'S', 'ready'),
     "Nutrilite Organics Lion's Mane Mushroom Capsules": ('Organic mushroom capsules', 'E', 'pills'),
     'Nutrilite Organics Turmeric Gummies': ('Organic turmeric gummies', 'R', 'pills'),
@@ -121,7 +125,8 @@ CATEGORIES = [
         'Nutrilite Lean Muscle']),  # Lean Muscle's own label: "CLA helps lose fat, not muscle"
     ('daily-foundations', 'Daily Foundations', 'The everyday base: multivitamins, daily packs, creatine, omega, fiber and gut health.', 'Everything in Daily Foundations', [
         'XS Creatine+', 'Nutrilite Begin Daily GI Primer', 'Nutrilite Balance Within Probiotic',
-        'Nutrilite Double X Multivitamin', 'Nutrilite Daily Multivitamin Tablets', 'Nutrilite Organics Daily Multi Gummies',
+        'Nutrilite Double X Multivitamin', "Nutrilite Men's Daily Multivitamin Tablets", "Nutrilite Women's Daily Multivitamin Tablets",
+        "Nutrilite Organics Men's Daily Multi Gummies", "Nutrilite Organics Women's Daily Multi Gummies",
         "Nutrilite Men's Pack", "Nutrilite Women's Pack", 'Nutrilite Perfect Pack',
         'Nutrilite Concentrated Fruits and Vegetables', 'Nutrilite Cal Mag D', 'Nutrilite Advanced Omega',
         'Nutrilite Prebiotic Fiber', 'Nutrilite Organics Ginger Mint Tea',
@@ -129,6 +134,15 @@ CATEGORIES = [
     ('skin-redefined', 'Skin Redefined', 'Artistry skincare, for the hours you are not training.', 'Everything in Skin Redefined', [
         'Artistry Skin Nutrition Renewing Softening Toner', 'Artistry Skin Nutrition Sleeping Mask',
         'Artistry Studio Glow Boss Cleanser + Exfoliator', 'Nutrilite Hair, Skin & Nail Health']),
+    # DRAFT-COPY (the line after the name): Women's Health, from 2026-09-27. Only what is made for women;
+    # the women's pack and multis also stay on Daily Foundations beside the men's, and this is their tag
+    # HER PHOTO drops in at assets/bg-womens-health.webp (1600x900, the shelf page's hero, cropped to fill
+    # and under the page's dark gradient like every shelf's): replace that one file and rebuild. Until then
+    # it is a placeholder, the Women's Pack on a plum field; assets/thumbs|shelf|islands/womens-health.webp are
+    # the pack's top, for the 'Keep looking' rows (and the idle strip and ring views)
+    ('womens-health', 'Women’s Health', 'For her everyday: the Women’s Pack, multivitamins, iron and menopause support.', 'Everything in Women’s Health', [
+        "Nutrilite Women's Pack", "Nutrilite Women's Daily Multivitamin Tablets", "Nutrilite Organics Women's Daily Multi Gummies",
+        'Nutrilite Iron Folic', 'Nutrilite Complete Menopause Support']),
 ]
 
 # The flavor carousel: category slug -> (family prefix to pull, heading, line)
@@ -148,16 +162,18 @@ CASE_PICKS = 3  # packs an open compartment shows: one per family, in the shelf'
 # The plates, one per shelf, fixed everywhere the bar theme shows them: colour, and rank on the bar.
 # Rank sets size (rank 0 is the full plate, each rank after it 6% smaller) and so place: a bar is
 # loaded larger plates nearest the collar. The first five ranks are Peter's stack in the order his
-# story loads it, so his bar builds outward and never reshuffles; the two he does not take come last.
+# story loads it, so his bar builds outward and never reshuffles; the three he does not take come last.
 # The text on a plate is white or ink, whichever the build finds clears 4.5:1 (it stops if neither does).
 # The colours are a satin rubber: Recovery is the XS blue taken down to a bumper plate's (the button's
 # --blue read as a toy on a plate), Fat Loss a shade deeper and Hydration a shade lighter, so white and ink
 # still clear 4.5:1 under the face's light and shade (measured on the rendered plates, not only here: at
 # every face pixel under a letter, since the rack's plates grew to ~160px; both moved a little further for it).
+# Women's Health (the eighth, 2026-09-27) is a satin plum, 7.3:1 under white flat and 4.69:1 at its lowest
+# rendered pixel anywhere in its words' line boxes on a 390px phone (5.1 at 820, 5.3 at 1440).
 PLATES = {
     'recovery': ('#3D4794', 4), 'hydration': ('#93B7C0', 2), 'energy-focus': ('#E2C8AE', 3),
     'protein': ('#1E262F', 0), 'fat-loss': ('#8A543E', 5), 'daily-foundations': ('#6B5646', 1),
-    'skin-redefined': ('#D6D4C9', 6),
+    'skin-redefined': ('#D6D4C9', 6), 'womens-health': ('#76485F', 7),
 }
 # Peter's stack, in the order #story loads it; it must match the shelves his five pack beats link to
 # (the build checks). DRAFT-COPY: the short tag after "Step n" on each of those beats.
@@ -216,8 +232,12 @@ TAGLINES = {
     'Artistry Studio Glow Boss Cleanser + Exfoliator': 'A fresh start for your skin, every day',
     # DRAFT-COPY 2026-09-27, the new families: each is its format and how often, as printed on its label
     'Nutrilite Double X Multivitamin': 'Morning and evening tablets, 22 vitamins and minerals',
-    'Nutrilite Daily Multivitamin Tablets': 'One tablet once a day, made for men or for women',
-    'Nutrilite Organics Daily Multi Gummies': 'The daily multi as an organic, chewable gummy',
+    "Nutrilite Men's Daily Multivitamin Tablets": 'One tablet once a day, made for men',
+    "Nutrilite Women's Daily Multivitamin Tablets": 'One tablet once a day, made for women',
+    "Nutrilite Organics Men's Daily Multi Gummies": 'The daily multi as an organic gummy, for men',
+    "Nutrilite Organics Women's Daily Multi Gummies": 'The daily multi as an organic gummy, for women',
+    'Nutrilite Iron Folic': 'Iron and folic acid, one to three tablets a day',
+    'Nutrilite Complete Menopause Support': 'One tablet a day, made for the menopause years',
     "Nutrilite Men's Pack": 'One packet a day, put together for men',
     "Nutrilite Women's Pack": 'One packet a day, put together for women',
     'Nutrilite Perfect Pack': 'Two packets a day, with Double X inside',
@@ -318,7 +338,7 @@ CARD_SOUND = {
 SHELF_LINE = {  # the line under each shelf name
     'recovery': 'After the session', 'hydration': 'Long, hot sessions', 'energy-focus': 'Before the session',
     'protein': 'Hitting your protein', 'fat-loss': 'Training to lean out', 'daily-foundations': 'Everyday basics',
-    'skin-redefined': 'Skin & overnight',
+    'skin-redefined': 'Skin & overnight', 'womens-health': 'For her everyday',  # DRAFT-COPY
 }
 
 CAT_THUMB = {  # the pack shown on the homepage row for each category
@@ -329,6 +349,7 @@ CAT_THUMB = {  # the pack shown on the homepage row for each category
     'fat-loss': 'XS Ignite Powder - Moro Blood Orange',
     'daily-foundations': 'XS Creatine+',
     'skin-redefined': 'Artistry Skin Nutrition Sleeping Mask',
+    'womens-health': "Nutrilite Women's Pack",
 }
 
 # Calendly link for the consult section; it embeds inline on submit rather than opening a tab.
@@ -486,7 +507,7 @@ def barbell(cls, loaded=None):
             out.append(f'<i class="bb-p{" on" if loaded is not None else ""}" data-cat="{k}" '
                        f'style="--c:{col};--s:{1 - .06 * rank:.2f};--o:{o}"><b class="bb-ring"></b></i>')
         return ''.join(out)
-    return (f'<div class="bb {cls}" aria-hidden="true"><span class="bb-sl bb-l">{plates()}</span><span class="bb-co"></span>'
+    return (f'<div class="bb {cls}" style="--n:{len(PLATES)}" aria-hidden="true"><span class="bb-sl bb-l">{plates()}</span><span class="bb-co"></span>'
             f'<span class="bb-sh"><span class="bb-kn"></span></span><span class="bb-co"></span>'
             f'<span class="bb-sl bb-r">{plates()}</span></div>')
 

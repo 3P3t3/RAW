@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=2ab843eb">
+<link rel="stylesheet" href="style.css?v=7c9e0248">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -198,6 +198,7 @@
           <li><a class="goal" href="category-protein.html"><span class="goal-name">Protein Snack Pack</span><span class="goal-desc">Powders, shakes, bars and crisps to hit your protein for the day.</span><span class="goal-island"><img src="assets/thumbs/protein.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
           <li><a class="goal" href="category-daily-foundations.html"><span class="goal-name">Daily Foundations</span><span class="goal-desc">The everyday base</span><span class="goal-island"><img src="assets/thumbs/daily-foundations.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
           <li><a class="goal" href="category-skin-redefined.html"><span class="goal-name">Skin Redefined</span><span class="goal-desc">Artistry skincare, for the hours you are not training.</span><span class="goal-island"><img src="assets/thumbs/skin-redefined.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-womens-health.html"><span class="goal-name">Women’s Health</span><span class="goal-desc">For her everyday</span><span class="goal-island"><img src="assets/thumbs/womens-health.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
       </ul>
     </div>
   </section>
@@ -230,7 +231,7 @@
       <nav class="foot-links" aria-label="Footer">
         <a href="homepage.html#macros">Macro calculator</a>
         <a href="homepage.html#consult">Book a free call</a>
-        <a href="homepage.html#results" data-all>All 97 products</a>
+        <a href="homepage.html#results" data-all>All 99 products</a>
       </nav>
     </div>
     <div class="foot-meta">
@@ -269,6 +270,7 @@
         <li><a href="category-fat-loss.html">Fat Loss</a></li>
         <li><a href="category-daily-foundations.html">Daily Foundations</a></li>
         <li><a href="category-skin-redefined.html">Skin Redefined</a></li>
+        <li><a href="category-womens-health.html">Women’s Health</a></li>
       </ul>
       <!-- the consult leaves the list and becomes the one filled thing here, as in the mast -->
       <a class="btn menu-cta" href="homepage.html#consult">Book a free call</a>
@@ -1616,7 +1618,7 @@ if(mcForm){
   },{rootMargin:'400px 0px'}).observe(run);
 })();
 
-/* Load the bar (SHELF_VIEW 'bar' in build_homepage.py). #goals is a rack of seven plates, one per
+/* Load the bar (SHELF_VIEW 'bar' in build_homepage.py). #goals is a rack of eight plates, one per
    shelf; a plate is a button that shows its shelf's panel (a few packs, each opening the product
    card, "Load this plate" and a link to the shelf), one panel at a time, and nothing opens on its
    own. Loaded plates are the visitor's stack: kept in localStorage (a browser that refuses it still
@@ -1856,6 +1858,7 @@ var LB=null;
   var st=0,keys={},lastN=-1,pl={},pr={};
   $$('.bb-l .bb-p',pBar).forEach(function(p){pl[p.getAttribute('data-cat')]=p});
   $$('.bb-r .bb-p',pBar).forEach(function(p){pr[p.getAttribute('data-cat')]=p});
+  var NP=$$('.bb-r .bb-p',pBar).length;   /* plates a sleeve holds: an unloaded one waits half a step past the last (style.css) */
   function wr(el,k,tf,op){var v=tf+'|'+op;if(keys[k]===v)return;keys[k]=v;el.style.transform=tf;el.style.opacity=op}
   LB={cats:PC,
     card:function(c){cCat=c;cardSync()},
@@ -1872,7 +1875,7 @@ var LB=null;
     peter:function(ps){
       var n=0;
       PC.forEach(function(c,j){
-        var p=ps[j]||0,d=(RANK[c]+(1-p)*(7.5-RANK[c]))*st,op=p>=1?'1':Math.min(1,p*1.6).toFixed(3);
+        var p=ps[j]||0,d=(RANK[c]+(1-p)*(NP+.5-RANK[c]))*st,op=p>=1?'1':Math.min(1,p*1.6).toFixed(3);
         wr(pl[c],'l'+c,'translate3d('+(-d).toFixed(1)+'px,0,0)',op);
         wr(pr[c],'r'+c,'translate3d('+d.toFixed(1)+'px,0,0)',op);
         if(p>=.5)n++;

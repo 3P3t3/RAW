@@ -43,12 +43,12 @@ resolve the source, run the build, then commit.
 
 ## Never read the generated pages
 
-`homepage.html` is ~160k chars (~40k tokens). All eight generated pages together are ~850k
-chars (~210k tokens). All ten files in `site-src/` together are ~210k chars (~52k tokens).
-(Measured 2026-09-25; the pages roughly doubled once the inline script, icon sprite and
-consult section grew, so re-measure rather than trusting these if they look off.)
+`homepage.html` is ~305k chars (~76k tokens). All nine generated pages together are ~1.64M
+chars (~410k tokens). All ten files in `site-src/` together are ~415k chars (~103k tokens).
+(Measured 2026-09-27 on the bar theme with 99 products and eight shelves; the pages grow with
+the script, the icon sprite and the product count, so re-measure rather than trusting these.)
 
-**One generated page costs as much as three-quarters of the entire source, and the eight
+**One generated page costs as much as three-quarters of the entire source, and the nine
 together cost four times the source** — and every line of them is a copy of something
 the source already says better. To check something in a generated page, grep it:
 
@@ -70,14 +70,14 @@ Source (edit these):
 - `site-src/style.css` — copied to `style.css` at the repo root at build time; every page links it via
   `{{STYLE}}`, which the build fills in with a content-hash query string. It sits at the root, not under
   `assets/`, so its `url(assets/...)` backgrounds keep resolving against the page's own folder
-- `share-links.csv` (`product,share_link,photo`) — the product list, 97 rows
+- `share-links.csv` (`product,share_link,photo`) — the product list, 99 rows
 - `bestsellers.csv` (`product,units_this_week`) — top 3 rows become the podium; `product` must
   match a `share-links.csv` name or the build exits. Blank `units_this_week` just hides the count.
 
 Generated (never hand-edit; the next build overwrites them):
 - `homepage.html`
 - `category-daily-foundations.html`, `-energy-focus.html`, `-fat-loss.html`, `-hydration.html`,
-  `-protein.html`, `-recovery.html`, `-skin-redefined.html`
+  `-protein.html`, `-recovery.html`, `-skin-redefined.html`, `-womens-health.html`
 - `style.css`, `assets/products/`, `assets/cutouts/`, `assets/.cut-version`
 
 `docs/macro-calculator.md` records the homepage macro calculator: where the maths came from, every
@@ -142,13 +142,19 @@ sequence. It was tuned over four Fable review rounds; the rounds are tagged `sto
 
 A product can sit on more than one shelf: a shelf page lists everything its own `CATEGORIES` entry
 names, while `cat_of` stays each product's single home shelf (its card tag). XS Creatine+ is on both
-Daily Foundations and Hydration.
+Daily Foundations and Hydration; the Women's Pack and the women's multivitamin tablets and gummies are
+on both Daily Foundations and Women's Health (their home shelf, being later in `CATEGORIES`).
+
+Women's Health's hero photo is `assets/bg-womens-health.webp` (1600x900): today a placeholder (the
+Women's Pack on a plum field); Peter's wife's photo replaces that one file. A product with no
+fitting shelf stays out of `share-links.csv` altogether: the homepage grid, search and the sample
+form list every row, so a row on no shelf still shows up there, tagged "Wellness".
 
 ## Build
 
     python3 site-src/build_homepage.py     # from the repo root
 
-Takes ~0.05s and prints `97 products (97 with photos)` plus the per-category counts. Run it after
+Takes ~0.05s and prints `99 products (99 with photos)` plus the per-category counts. Run it after
 any source edit; nothing else regenerates the pages.
 
 ## Why a build sometimes takes ~50s instead of 0.05s

@@ -1335,7 +1335,7 @@ if(mcForm){
   },{rootMargin:'400px 0px'}).observe(run);
 })();
 
-/* Load the bar (SHELF_VIEW 'bar' in build_homepage.py). #goals is a rack of seven plates, one per
+/* Load the bar (SHELF_VIEW 'bar' in build_homepage.py). #goals is a rack of eight plates, one per
    shelf; a plate is a button that shows its shelf's panel (a few packs, each opening the product
    card, "Load this plate" and a link to the shelf), one panel at a time, and nothing opens on its
    own. Loaded plates are the visitor's stack: kept in localStorage (a browser that refuses it still
@@ -1575,6 +1575,7 @@ var LB=null;
   var st=0,keys={},lastN=-1,pl={},pr={};
   $$('.bb-l .bb-p',pBar).forEach(function(p){pl[p.getAttribute('data-cat')]=p});
   $$('.bb-r .bb-p',pBar).forEach(function(p){pr[p.getAttribute('data-cat')]=p});
+  var NP=$$('.bb-r .bb-p',pBar).length;   /* plates a sleeve holds: an unloaded one waits half a step past the last (style.css) */
   function wr(el,k,tf,op){var v=tf+'|'+op;if(keys[k]===v)return;keys[k]=v;el.style.transform=tf;el.style.opacity=op}
   LB={cats:PC,
     card:function(c){cCat=c;cardSync()},
@@ -1591,7 +1592,7 @@ var LB=null;
     peter:function(ps){
       var n=0;
       PC.forEach(function(c,j){
-        var p=ps[j]||0,d=(RANK[c]+(1-p)*(7.5-RANK[c]))*st,op=p>=1?'1':Math.min(1,p*1.6).toFixed(3);
+        var p=ps[j]||0,d=(RANK[c]+(1-p)*(NP+.5-RANK[c]))*st,op=p>=1?'1':Math.min(1,p*1.6).toFixed(3);
         wr(pl[c],'l'+c,'translate3d('+(-d).toFixed(1)+'px,0,0)',op);
         wr(pr[c],'r'+c,'translate3d('+d.toFixed(1)+'px,0,0)',op);
         if(p>=.5)n++;
