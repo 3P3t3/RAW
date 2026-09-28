@@ -154,9 +154,10 @@ CATEGORIES = [
     # DRAFT-COPY (the line after the name): Men's Health, its counterpart, the ninth shelf. The men's pack and
     # multis also stay on Daily Foundations, and this is their tag. Concentrated Fruits and Vegetables stays on
     # Daily Foundations only: Amway files it under Men's Health, but nothing on its label is for men.
-    # PETER'S PHOTO drops in at assets/bg-mens-health.webp (1600x900, the shelf page's hero, cropped to fill
-    # and under the page's dark gradient like every shelf's); until then it is the Men's Pack on a green field.
-    # His DEXA card sits between the hero and the products (SHELF_EXTRA).
+    # HIS PHOTO is the hero, matching hers: his portrait with their daughter (assets/peter/with-daughter-*.webp),
+    # shown whole beside the name (SHELF_PORTRAIT). The old placeholder, assets/bg-mens-health.webp (the Men's
+    # Pack on a green field), is kept but no page shows it; drop the SHELF_PORTRAIT entry and it is the banner
+    # again. His DEXA card sits between the hero and the products (SHELF_EXTRA).
     ('mens-health', 'Men’s Health', 'For his everyday: the Men’s Pack, multivitamins, Prostate Health and organic herbal capsules.', 'Everything in Men’s Health', [
         "Nutrilite Men's Pack", "Nutrilite Men's Daily Multivitamin Tablets", "Nutrilite Organics Men's Daily Multi Gummies",
         'Nutrilite Prostate Health', 'Nutrilite Organics Horny Goat Weed & Tribulus Capsules']),
@@ -617,6 +618,7 @@ SHELF_PORTRAIT = {
     'womens-health': ('assets/her/with-daughter', 640, 960, 5 / 4,
                       her_says('{n} holding their baby daughter, both in matching lemon-print dresses',
                                'Peter’s wife holding their baby daughter, both in matching lemon-print dresses')),
+    'mens-health': ('assets/peter/with-daughter', 640, 960, 5 / 4, 'Peter holding their baby daughter'),
 }
 
 

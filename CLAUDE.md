@@ -94,7 +94,13 @@ wife and daughter), his before/after composites `front-`, `side-`, `back-` at `6
 and `side-before-480.webp` / `side-after-480.webp`, the two halves of the side pair cut at its
 seam (crop only, WebP q92) for the story's opening before and its before-becomes-after wipe.
 They are cut from his originals in `~/Desktop/aspiree/assets/rooms/` and placed by hand, so the
-build never touches them. Peter chose to make them public; the repo is public because Pages
+build never touches them. `with-daughter-640.webp` / `-960.webp` (640x800 and 960x1200, 4:5, WebP
+q90) are his portrait holding their baby daughter at an evening event, the Men's Health hero and the
+pair to Yenni's. They are cut from Peter's own photo (a 1179x1576 screenshot, Display P3): one crop,
+x 0-1080 and y 226-1576, clear of the screenshot's black band on rows 0-6, with his hair ~9% below
+the top and the baby's feet whole; converted P3 to sRGB so the colours hold once the profile is
+gone; then a uniform Lanczos resize. No retouching, no exposure or white-balance change, and no
+metadata: each file is a bare VP8 chunk (no EXIF, XMP or ICC). Peter chose to make them public; the repo is public because Pages
 requires it.
 
 **What may be edited, and what may not.** Crop, exposure and white balance are always fine. Peter
@@ -212,8 +218,9 @@ men's likewise on Daily Foundations and Men's Health.
 
 Women's Health's hero is Yenni's portrait with their daughter, from `assets/her/`, shown whole as a real
 `<img>` beside the name (`SHELF_PORTRAIT`). The old placeholder, `assets/bg-womens-health.webp` (the Women's
-Pack on a plum field), is still there but no page shows it. Men's Health's hero is still the placeholder
-`assets/bg-mens-health.webp` (1600x900, the Men's Pack on a green field); Peter's photo replaces that file. A product with no
+Pack on a plum field), is still there but no page shows it. Men's Health's hero is its pair: Peter's portrait
+with their daughter, from `assets/peter/with-daughter-*.webp`, through the same `SHELF_PORTRAIT`. Its old
+placeholder, `assets/bg-mens-health.webp` (the Men's Pack on a green field), is likewise kept but unused. A product with no
 fitting shelf stays out of `share-links.csv` altogether: the homepage grid, search and the sample
 form list every row, so a row on no shelf still shows up there, tagged "Wellness".
 
