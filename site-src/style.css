@@ -1793,3 +1793,101 @@ body{background:transparent}
 /* the proof's Before / After heads were --text at .62 on chalk; over the field's glow that fell to
    about 2.5:1, so they take the full --text (5.3:1 at the field's darkest) */
 .c-cols span{opacity:1}
+
+/* ===================================================================================
+   HIS AND HERS: the proof after #story, Yenni's story on Women's Health, and the DEXA cards
+   (build_homepage.py: HER_NAME, PETER_DEXA, HER_DEXA, SHELF_EXTRA, SHELF_PORTRAIT). Her photos
+   are the hand-placed files in assets/her/, cut to one spec like Peter's, so the same 50% line
+   carries each stack's Before / After heads.
+   =================================================================================== */
+.pf-title{margin:0 0 26px;font:800 clamp(36px,10vw,60px)/.92 var(--display);font-stretch:72%;text-transform:uppercase;
+  color:var(--teal);text-align:center;text-wrap:balance}
+.pf-k{color:var(--blue)}
+.pf-duo{display:grid;gap:44px;max-width:680px;margin:0 auto}
+.pf-who{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;margin:0}
+.pf-name{font:800 24px/1 var(--display);font-stretch:72%;text-transform:uppercase;letter-spacing:.02em;color:var(--teal)}
+.pf-when{font:600 13px/1.2 var(--sans);letter-spacing:.06em;color:var(--text);font-variant-numeric:tabular-nums}
+.pf-note{max-width:48ch;margin:52px auto 18px;text-align:center;font-size:15px;line-height:1.5;color:var(--text)}
+.dx-duo{display:grid;gap:20px;max-width:680px;margin:0 auto}
+/* wide: his three pairs and her two side by side, hers a little narrower so the columns end together
+   (three 3:2 pairs against two 0.78:1 pairs), and the two cards side by side under them */
+@media (min-width:1000px){
+  .pf-duo{max-width:none;grid-template-columns:minmax(0,1fr) minmax(0,.78fr);align-items:start;gap:48px}
+  .st-proof .pf-duo .c-proof{max-width:none;margin:0}
+  .dx-duo{max-width:none;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+}
+
+/* the DEXA card: numbers first, the two trends under them, the source last. The trends are zero-based
+   and time-true (dexa_chart); text in them is the page's text, never the line's colour. */
+.dx-card{container-type:inline-size;display:grid;gap:16px;min-width:0;padding:22px 18px 20px;background:#FAF9F5;
+  box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 30px 50px -36px rgba(0,30,39,.45)}
+.dx-head{display:grid;gap:6px}
+.dx-t{margin:0;font:800 26px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.dx-span{margin:0;font:600 13px/1.3 var(--sans);letter-spacing:.04em;color:var(--text);font-variant-numeric:tabular-nums}
+.dx-nums{display:grid;margin:0}
+.dx-n{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:2px 12px;padding:10px 0;border-top:1px solid var(--line)}
+.dx-n dt{font:600 12px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--text)}
+.dx-v{grid-column:2;grid-row:1 / span 2;align-self:center;margin:0;font:700 clamp(16px,5vw,20px)/1.1 var(--sans);color:var(--ink);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.dx-d{grid-column:1;margin:0;font-size:14px;color:var(--text);font-variant-numeric:tabular-nums}
+@container (min-width:520px){
+  .dx-nums{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:16px}
+  .dx-n{grid-template-columns:minmax(0,1fr);align-content:start}
+  .dx-v,.dx-d{grid-column:auto;grid-row:auto}
+  .dx-v{align-self:start;font-size:19px}
+}
+.dx-gapnote{margin:0;padding:10px 12px;font-size:14px;line-height:1.45;color:var(--text);background:rgba(65,83,101,.07)}
+.dx-charts{display:grid;gap:16px 22px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.dx-chart{margin:0;min-width:0}
+.dx-ct{display:flex;align-items:center;gap:8px;margin-bottom:6px;font:600 12px/1.2 var(--sans);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text)}
+.dx-ct i{flex:none;width:16px;height:2px;background:var(--c)}
+.dx-chart svg{display:block;width:100%;max-width:300px;height:auto;overflow:visible}
+.dx-grid{stroke:rgba(30,38,47,.14);stroke-width:1}
+.dx-base,.dx-tick{stroke:rgba(30,38,47,.45);stroke-width:1}
+.dx-yl,.dx-xl{font:500 12px var(--sans);fill:var(--text)}
+.dx-vl{font:700 13px var(--sans);fill:var(--ink);paint-order:stroke;stroke:#FAF9F5;stroke-width:4px;stroke-linejoin:round}
+.dx-line{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.dx-pt{stroke:#FAF9F5;stroke-width:2}
+.dx-gap{fill:rgba(65,83,101,.08)}
+.dx-gapl{font:600 12px var(--sans);letter-spacing:.04em;fill:var(--text)}
+.dx-src{display:grid;gap:4px;padding-top:12px;border-top:1px solid var(--line)}
+.dx-src p{margin:0;font-size:13px;line-height:1.45;color:var(--text)}
+/* on a shelf page the card stands alone, as wide as a reading column */
+.dx-one .dx-card{max-width:720px}
+.dx-sec{padding-bottom:0}
+
+/* Women's Health: her story, her two pairs, then her card, before the shelf's products */
+.her-sec{padding-bottom:0}
+.her-in{display:grid;gap:40px;align-items:start}
+.her-text{display:grid;gap:14px;justify-items:start}
+.her-text h2{font-size:clamp(42px,12vw,72px)}
+.her-text p:not(.label){max-width:46ch;margin:0;font-size:16px;line-height:1.55;color:var(--text)}
+.her-text .her-lead{font-size:18px;color:var(--ink)}
+.her-h{margin-top:10px}
+.her-text .c-list{margin:0}
+.her-text .her-fine{font-size:14px}
+.her-in .pf-hers{max-width:520px}
+.her-in .dx-card{max-width:720px}
+/* wide: the story and her card down the left, her two pairs down the right */
+@media (min-width:900px){
+  .her-in{grid-template-columns:minmax(0,1fr) minmax(0,.9fr);grid-template-rows:auto 1fr;gap:48px 56px}
+  .her-text{grid-area:1 / 1}
+  .her-in .pf-hers{grid-area:1 / 2 / 3 / 3}
+  .her-in .dx-card{grid-area:2 / 1;align-self:start}
+}
+
+/* her portrait with their daughter is Women's Health's hero: a real picture, shown whole, above the
+   name on a phone and beside it on wider screens (a banner's cover crop would cut into their faces) */
+.cat-hero-photo{min-height:0;align-items:end}
+.cat-pic{padding-top:calc(var(--mast) + 20px)}
+.cat-portrait{margin:0;width:100%;max-width:min(440px,56svh)}
+.cat-portrait img{display:block;width:100%;height:auto;box-shadow:0 34px 60px -34px rgba(0,0,0,.7)}
+.cat-hero-photo .cat-hero-in{padding-block:26px 40px}
+@media (min-width:760px){
+  .cat-hero-photo{min-height:64vh}
+  .cat-hero-photo>.wrap{grid-area:1 / 1}
+  .cat-pic{display:grid;justify-items:end;align-self:start;padding-block:calc(var(--mast) + 36px) 56px}
+  .cat-portrait{width:min(38vw,440px)}
+  .cat-hero-photo .cat-hero-in{align-self:end;padding-block:180px 56px;padding-right:calc(var(--pad) + min(38vw,440px) + 40px)}
+}
