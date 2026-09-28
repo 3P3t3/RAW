@@ -450,16 +450,11 @@ DEXA_AT = 'UC Davis Sports Medicine, Sacramento'   # Peter is from Lincoln, near
 DEXA_NOTES = [f'Measured by DEXA scan at {DEXA_AT}.',
               'We’re not sponsored by or affiliated with UC Davis Health; we’re just big fans of their DEXA service.',
               'Individual results vary.']
-PETER_DEXA = {
-    'scans': [('2024-01-26', 180.5, 26.6, 146.3, 14.7), ('2024-07-31', 171.4, 21.4, 142.5, 12.5),
-              ('2024-12-18', 164.5, 17.5, 139.6, 10.6), ('2025-07-15', 172.5, 19.7, 145.3, 11.4),
-              ('2026-01-13', 169.5, 20.3, 141.7, 12.0), ('2026-08-17', 174.8, 20.5, 146.7, 11.7)],
-}
 # Hers. Set HER_DEXA = None and her card comes off every page. 'gap' is the index of the scan after which there
 # is none until the next: the trend is drawn broken there (no line across it), and the card says why.
-# Peter's transformation, measured by DEXA scan at the start and end of the fifteen months his before/after photos
-# span (a different scanner from the card's scans, so no clinic is named): (weight lb, body fat %) before and after.
-# Only these four numbers are shown; nothing is derived from them.
+# Peter's card: his transformation, by DEXA scan at the start and end of the fifteen months his before/after
+# photos span: (weight lb, body fat %) before and after. Peter chose to show only these four numbers and no dates;
+# nothing is derived from them, and no clinic is named (his later scans at UC Davis are not used).
 PETER_TRANSFORM = ((170, 22.1), (164, 7.4))
 HER_DEXA = {
     'scans': [('2024-01', 137.8, 41.2, 92.1, 29.9), ('2024-07', 142.0, 41.8, 95.7, 29.4),
@@ -545,12 +540,25 @@ def dexa_card(d, title, level=3, span_line=None):
             '</article><!-- /DRAFT-COPY -->')
 
 
+def peter_card(level=3):
+    """Peter's DEXA card: the two scans of his transformation, fifteen months apart, as body fat and weight
+    only (PETER_TRANSFORM). No dates, no trend, no clinic: that is all he chose to show."""
+    (w0, f0), (w1, f1) = PETER_TRANSFORM
+    nums = [('Body fat', f'{f0:.1f}% → {f1:.1f}%', f'−{f0 - f1:.1f} points'),
+            ('Weight', f'{w0} → {w1} lb', f'−{w0 - w1} lb')]
+    t = 'Peter’s DEXA scans'
+    return (f'<!-- DRAFT-COPY --><article class="dx-card" aria-labelledby="dx-{slug(t)}">\n'
+            f'<div class="dx-head"><h{level} class="dx-t" id="dx-{slug(t)}">{t}</h{level}><p class="dx-span">Two scans, fifteen months apart</p></div>\n'
+            '<dl class="dx-nums">' + ''.join(f'<div class="dx-n"><dt>{k}</dt><dd class="dx-v">{v}</dd><dd class="dx-d">{dd}</dd></div>' for k, v, dd in nums) + '</dl>\n'
+            '<div class="dx-src"><p>Measured by DEXA scan.</p><p>Individual results vary.</p></div>\n'
+            '</article><!-- /DRAFT-COPY -->')
+
+
 def dexa_cards(level=3, who=('peter', 'her')):
     """Peter's card, then hers once HER_DEXA is filled."""
     out = []
     if 'peter' in who:
-        out.append(dexa_card(PETER_DEXA, 'Keeping it off', level,
-                             span_line=f'Peter’s DEXA scans since {when(PETER_DEXA["scans"][0][0])[1]}, after his transformation'))
+        out.append(peter_card(level))
     if 'her' in who and HER_DEXA:
         out.append(dexa_card(HER_DEXA, her_says('{n}’s DEXA scans', 'Her DEXA scans'), level))
     return '\n'.join(out)
@@ -634,11 +642,6 @@ def hero_media(slug_, name):
         f'width="{w2}" height="{round(w2 * ratio)}" alt="{esc(alt)}" fetchpriority="high"></figure></div>')}
 
 
-def peter_transform():
-    """The line under Peter's fifteen-month photos: his two DEXA numbers, and nothing derived from them."""
-    (w0, f0), (w1, f1) = PETER_TRANSFORM
-    return (f'<!-- DRAFT-COPY --><p class="pf-num">By DEXA scan: {w0} lb · {f0:.1f}% body fat → '
-            f'{w1} lb · {f1:.1f}% body fat</p><!-- /DRAFT-COPY -->')
 
 
 def proof_hers():
@@ -1197,7 +1200,7 @@ def main():
                                 '{{SAMPLE_PICKER}}': sample_picker, '{{PCARD}}': '' if SHELF_VIEW in ('bar', 'case') else card_dialog(), **quick_call(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves,
                                 '{{CASE_STRIP}}': case_strip, '{{POUR}}': pour,
                                 '{{POUR_CLASS}}': '' if TRENDING_POUR else ' no-pour',
-                                '{{PROOF_HERS}}': proof_hers(), '{{PETER_TRANSFORM}}': peter_transform(), '{{DEXA_CARDS}}': dexa_cards(), **bar_bits}).items():
+                                '{{PROOF_HERS}}': proof_hers(), '{{DEXA_CARDS}}': dexa_cards(), **bar_bits}).items():
         out = out.replace(k, v)
     left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', out)))
     if left:

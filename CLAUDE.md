@@ -157,9 +157,11 @@ are cut from the originals Peter sent and placed by hand, so the build never tou
 Her photos have their own dates (`HER_PHOTOS`: Nov 2025 → Jul 2026), about two months and ten months
 after their daughter's birth in Sep 2025. They are never presented as matching her DEXA scans.
 
-**The DEXA cards.** `PETER_DEXA` and `HER_DEXA` in `build_homepage.py` hold their scans as data
-rows: date, weight, fat, lean and body fat %. Both sets of scans come from UC Davis Sports Medicine in
-Sacramento. `dexa_card()` draws one card for either of them, with these parts:
+**The DEXA cards.** Peter's card (`peter_card()`, from `PETER_TRANSFORM`) shows only the two scans of his
+transformation, fifteen months apart: body fat and weight, no dates, no trend, no clinic. That is Peter's choice
+(2026-09-28); his later UC Davis scans are deliberately not used anywhere. `HER_DEXA` holds Yenni's scans as data
+rows: date, weight, fat, lean and body fat %, from UC Davis Sports Medicine in Sacramento. `dexa_card()` draws
+her card, with these parts:
 - The headline, which compares the first scan with the last.
 - A trend of fat mass and a trend of lean mass, each on its own zero-based axis with a time-true x.
 - A visually hidden table of every scan.
