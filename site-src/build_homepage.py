@@ -18,16 +18,20 @@ STAMP = os.path.join(ROOT, 'assets', '.cut-version')  # fingerprint of normalize
 # url(assets/...) backgrounds resolve against the same folder they did when the css was inlined
 STYLE_OUT = os.path.join(ROOT, 'style.css')
 RECUT = False  # set for the whole run when that fingerprint moved, so every cached cut-out counts as stale
-# `--demo OUTDIR` exports a public copy of the homepage and writes nothing else: OUTDIR/homepage-demo.html,
-# linked to its own OUTDIR/style-demo.css, so the live pages and their shared style.css are never touched.
-# It is noindexed, and its canonical and og:url name the demo's own address. It photographs nothing
-# (no cut-outs, no copies), so run a normal build first; it then lists what it links that main lacks.
+# `--demo OUTDIR` exports a public copy of the site and writes nothing else: OUTDIR/homepage-demo.html and
+# every shelf page as OUTDIR/category-<slug>-demo.html, all linked to their own OUTDIR/style-demo.css, so the
+# live pages and their shared style.css are never touched. Each is noindexed, its canonical and og:url name
+# its own demo address, and every link to the homepage or a shelf inside them names the demo copy instead
+# (demo_links), so a visitor never falls out of the demo into the live site. It photographs nothing (no
+# cut-outs, no copies), so run a normal build first; it then lists what it links that main lacks.
 DEMO = None
+DEMO_SUFFIX = '-demo'
 DEMO_PAGE = 'homepage-demo.html'
 DEMO_STYLE = 'style-demo.css'
-# `--demo OUTDIR --demo-name NAME` exports a second demo beside the first, as OUTDIR/homepage-demo-NAME.html
-# + style-demo-NAME.css, with its own canonical, og:url and sample _next. `--view VIEW` builds with that
-# SHELF_VIEW instead of the one below (e.g. `--demo OUTDIR --view case` for the case demo from this branch).
+# `--demo OUTDIR --demo-name NAME` exports a second demo beside the first, as OUTDIR/homepage-demo-NAME.html,
+# OUTDIR/category-<slug>-demo-NAME.html + style-demo-NAME.css, with their own canonical, og:url and sample
+# _next. `--view VIEW` builds with that SHELF_VIEW instead of the one below (e.g. `--demo OUTDIR --view case`
+# for the case demo from this branch).
 
 # family prefix -> (type descriptor, goals, format). Longest prefix wins.
 # Goals: R Recovery, L Lean Mass, E Endurance, S Sleep & Longevity (first = primary).
@@ -1151,10 +1155,11 @@ def main():
     if left:
         raise SystemExit(f'unfilled placeholders in the homepage: {left}')
     if DEMO:
+        out = demo_links(out)
         open(os.path.join(DEMO, DEMO_PAGE), 'w').write(out)
-        demo_report(out, style)
-        return
-    open(OUT, 'w').write(out)
+        demo_pages = {DEMO_PAGE: out}
+    else:
+        open(OUT, 'w').write(out)
 
     cat_tpl = open(os.path.join(ROOT, 'site-src', 'category.template.html')).read()
     for slug_, name, tag, heading, fams in CATEGORIES:
@@ -1184,8 +1189,11 @@ def main():
 '''
         cgrid = '\n'.join(card(pr, i) for i, pr in enumerate(items))
         page = cat_tpl
+        cat_page = f'category-{slug_}{DEMO_SUFFIX}.html' if DEMO else f'category-{slug_}.html'
         for k, v in dict(shared, **{
                 '{{HEADER}}': header.replace('{{HOME}}', 'homepage.html'), '{{HOME}}': 'homepage.html',
+                '{{HEAD_EXTRA}}': (f'<meta name="robots" content="noindex">\n<link rel="canonical" href="{BASE}{cat_page}">\n'
+                                   if DEMO else ''),
                 '{{PAGE_URL}}': BASE + f'category-{slug_}.html',
                 '{{SAMPLE_LINK}}': 'homepage.html?try=' + quote(html.unescape(name)) + '#sample',
                 '{{CAT_NAME}}': name, '{{CAT_TAG}}': tag, '{{CAT_HEADING}}': heading,
@@ -1193,19 +1201,36 @@ def main():
                 '{{CAT_OTHERS}}': cat_rows(only={slug_}), **hero_media(slug_, name),
                 '{{CAT_EXTRA}}': SHELF_EXTRA.get(slug_, lambda: '')()}).items():
             page = page.replace(k, v)
+        if DEMO:  # its own links, og:url included, name the demo copies (demo_links)
+            page = demo_links(page)
+            demo_pages[cat_page] = page
+            open(os.path.join(DEMO, cat_page), 'w').write(page)
+            continue
         open(os.path.join(ROOT, f'category-{slug_}.html'), 'w').write(page)
 
+    if DEMO:
+        demo_report(demo_pages, style)
+        return
     open(STAMP, 'w').write(cut_version())  # last, so a crash leaves the old stamp and the next run re-cuts
     print(f'{len(products)} products ({sum(1 for pr in products if pr["img"])} with photos) -> {OUT}')
     print('categories', counts, 'uncategorised', [pr['product'] for pr in products if pr['product'] not in cat_of])
 
 
-def demo_report(page, style):
+def demo_links(page):
+    """A demo page's links to the homepage and to every shelf, relative or absolute (og:url, the search's
+    'homepage.html?q=', a card's '?try=' link), rewritten to name the demo copies beside it."""
+    page = re.sub(r'(?<![\w-])homepage\.html', DEMO_PAGE, page)
+    shelves = '|'.join(re.escape(c[0]) for c in CATEGORIES)
+    return re.sub(rf'(?<![\w-])category-({shelves})\.html', rf'category-\1{DEMO_SUFFIX}.html', page)
+
+
+def demo_report(pages, style):
     """What the demo links that main does not have yet: those files have to ship with it."""
     import subprocess
     # our own files only: relative paths, and BASE-prefixed ones (og:image); not another host's assets/
-    refs = set(re.findall(r'(?<![\w./-])assets/[A-Za-z0-9_./-]+\.[a-z0-9]{2,5}', (page + style).replace(BASE, '')))
-    refs |= {'site.webmanifest'} if 'site.webmanifest' in page else set()
+    text = ''.join(pages.values()) + style
+    refs = set(re.findall(r'(?<![\w./-])assets/[A-Za-z0-9_./-]+\.[a-z0-9]{2,5}', text.replace(BASE, '')))
+    refs |= {'site.webmanifest'} if 'site.webmanifest' in text else set()
     try:
         have = set(subprocess.run(['git', 'ls-tree', '-r', 'main', '--name-only'], cwd=ROOT, check=True,
                                   capture_output=True, text=True).stdout.split())
@@ -1213,7 +1238,9 @@ def demo_report(page, style):
         raise SystemExit(f'--demo: could not list main ({e})')
     new = sorted(r for r in refs if r not in have)
     missing = [r for r in new if not os.path.exists(os.path.join(ROOT, r))]
-    print(f'demo: {os.path.join(DEMO, DEMO_PAGE)} + {DEMO_STYLE} ({len(refs)} asset references)')
+    print(f'demo: {len(pages)} pages in {DEMO} + {DEMO_STYLE} ({len(refs)} asset references)')
+    for n in pages:
+        print('  ' + n)
     print(f'assets the demo references that main does not have: {len(new)}')
     for r in new:
         print('  ' + r + ('   (MISSING here too)' if r in missing else ''))
@@ -1237,8 +1264,9 @@ if __name__ == '__main__':
         name = arg('--demo-name')
         if not re.fullmatch(r'[a-z0-9-]+', name):
             raise SystemExit('--demo-name: lower-case letters, digits and hyphens only')
-        DEMO_PAGE, DEMO_STYLE = f'homepage-demo-{name}.html', f'style-demo-{name}.css'
+        DEMO_SUFFIX = f'-demo-{name}'
+        DEMO_PAGE, DEMO_STYLE = f'homepage{DEMO_SUFFIX}.html', f'style-demo-{name}.css'
     if '--demo' in sys.argv:
-        DEMO = os.path.abspath(arg('--demo'))  # the repo root is fine: the export only adds its own two files
+        DEMO = os.path.abspath(arg('--demo'))  # the repo root is fine: the export only adds its own files
         os.makedirs(DEMO, exist_ok=True)
     main()
