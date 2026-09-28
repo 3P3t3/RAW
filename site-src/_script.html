@@ -1861,7 +1861,9 @@ var LB=null;
    compartment of the case strip along the top (the #goals case in miniature: its shelf's
    compartment, so the two hydration packs share one and two compartments stay empty), and at
    the call the filled case rises into the place above the button. It only ever turns a few
-   degrees in its own plane, so a flat picture is never seen edge-on or mirrored. The photos of Peter do not move like that: they
+   degrees in its own plane, so a flat picture is never seen edge-on or mirrored; every pack's
+   data-tilt is 0, so that turn is the fall's lean alone and each one lands, and stands in the
+   group, upright. The photos of Peter do not move like that: they
    rise in and fall away, and at the turn the after wipes in over the before. */
 (function(){
   var run=$('#st-run');
@@ -1891,7 +1893,9 @@ var LB=null;
             book:$('.st-book',b),warm:b.classList.contains('st-warm'),
             packs:$$('.st-pack',b).map(function(k,j){
               /* a pair comes one after the other; the arc in the text beat, one after another */
-              /* where it comes to rest: its tilt, its offset across the stage (% of its width) and its size */
+              /* where it comes to rest: its tilt (0 on every pack now — they stand straight in the
+                 group; the lean below is the fall's alone), its offset across the stage (% of its
+                 width) and its size */
               return {pack:k,img:$('img',k),shade:$('.st-shade',k),tilt:+k.getAttribute('data-tilt')||0,
                       rx:+k.getAttribute('data-x')||0,rs:+k.getAttribute('data-scale')||1,
                       off:j*(b.getAttribute('data-kind')==='prod'?.15:.12)};
