@@ -432,9 +432,6 @@ a.how-step:active{opacity:.7}
 .c-nums-list li{display:grid;gap:4px;justify-items:center;min-width:0;padding:10px 2px;background:var(--tile);text-align:center}
 .c-nums-g{font:800 clamp(18px,5.6vw,24px)/1 var(--display);font-stretch:72%;color:var(--teal);white-space:nowrap}
 .c-nums .mc-lab{font-size:11px;letter-spacing:.06em}
-.c-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:10px;max-width:40ch}
-.c-list li{position:relative;padding-left:20px;font-size:16px;color:var(--text)}
-.c-list li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:1px;background:var(--teal)}
 /* Peter's proof, which closes #story: the before and after, all three views stacked, nothing
    to swipe. Every img carries its width and height, so nothing jumps when the lazy files land. */
 .c-proof{display:grid;gap:10px;width:100%;min-width:0;margin:4px 0 0}
