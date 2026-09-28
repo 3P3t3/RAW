@@ -374,7 +374,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <div class="hero-copy">
         <p class="label">Sports nutrition &amp; wellness</p>
         <h1 id="hero-title"><span>Picked</span> <span>for how</span> <span class="hl-3d">you train.</span></h1>
-        <!-- PETER-COPY --><p class="sub">Hand-picked supplements. Free macros. A half-hour call on what’s worth taking.</p><!-- /PETER-COPY -->
+        <!-- PETER-COPY --><p class="sub">Hand-picked supplements. Free macros. A fifteen-minute call on what’s worth taking.</p><!-- /PETER-COPY -->
         <!-- the first thing offered is the plan, not a form: the calculator and the call are both
              inside it (steps 01 and 04), so asking for the map first gives nothing up. -->
         <!-- DRAFT-COPY --><div class="hero-actions">
@@ -415,7 +415,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           <span class="how-d">A few days in, I’ll ask how you’re getting on. Say what worked and what didn’t, and I’ll tell you what I’d add, if anything.</span></div></li>
         <li class="grow" style="--d:4"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="#macros"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="04"></i>04</span>
           <span class="how-t">Get my read on it.</span>
-          <span class="how-d">Run your macros free, about a minute of typing — or bring your stack to the half-hour call and I’ll say what I’d keep and what I’d drop.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+          <span class="how-d">Run your macros free, about a minute of typing — or bring your stack to the fifteen-minute call and I’ll say what I’d keep and what I’d drop.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li class="grow" style="--d:5"><a class="how-step" href="#quick-call"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="05"></i>05</span>
           <span class="how-t">Make it part of your week.</span>
           <span class="how-d">A free call to find where it slots in, then order through my Amway link if it earns a spot.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
@@ -943,7 +943,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
 <!-- DRAFT-COPY --><article class="dx-card" aria-labelledby="dx-peter-s-dexa-scans">
 <div class="dx-head"><h3 class="dx-t" id="dx-peter-s-dexa-scans">Peter’s DEXA scans</h3><p class="dx-span">Two scans, fifteen months apart</p></div>
 <dl class="dx-nums dx-four"><div class="dx-n"><dt>Body fat</dt><dd class="dx-v">22.1% → 7.4%</dd><dd class="dx-d">−14.7 points</dd></div><div class="dx-n"><dt>Weight</dt><dd class="dx-v">170 → 164 lb</dd><dd class="dx-d">−6 lb</dd></div><div class="dx-n"><dt>Fat</dt><dd class="dx-v">38 → 12 lb</dd><dd class="dx-d">−26 lb</dd></div><div class="dx-n"><dt>Lean mass</dt><dd class="dx-v">132 → 152 lb</dd><dd class="dx-d">+20 lb</dd></div></dl>
-<div class="dx-src"><p>Measured by DEXA scan.</p><p>The fat and lean pounds aren’t on the scan — I worked them out from the weight and body fat it gave me, and rounded them, so they’re ballpark.</p><p>Individual results vary.</p></div>
+<div class="dx-src"><p>Measured by DEXA scan.</p><p>Individual results vary.</p></div>
 </article><!-- /DRAFT-COPY -->
 <!-- DRAFT-COPY --><article class="dx-card" aria-labelledby="dx-yenni-s-dexa-scans">
 <div class="dx-head"><h3 class="dx-t" id="dx-yenni-s-dexa-scans">Yenni’s DEXA scans</h3><p class="dx-span">Four scans, Jan 2024 → Aug 2026</p></div>
@@ -969,7 +969,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <ul class="mys-key mys-ykey" aria-label="The plates on yours"></ul></div>
         <p class="mys-none">Nothing on your bar yet. <a href="#goals">Load a plate or two</a> and bring them along.</p>
       </div><!-- /DRAFT-COPY -->
-      <!-- DRAFT-COPY --><p class="mys-sub grow" style="--d:3">Half an hour, free. Your macros, what you already take, and the smallest stack that moves your goal.</p>
+      <!-- DRAFT-COPY --><p class="mys-sub grow" style="--d:3">Fifteen minutes, free. Your macros, what you already take, and the smallest stack that moves your goal.</p>
       <div class="mys-acts grow" style="--d:3"><a class="btn" href="#macros">Work out your macros</a><a class="btn btn-line" href="#consult">Book a free call</a></div>
     </div>
   </section>
@@ -1129,7 +1129,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         </div>
         <p class="label">One to one</p>
         <h2 id="consult-title"><span>What’s worth</span> <span>taking</span></h2>
-        <!-- PETER-COPY --><p>Half an hour, free. Bring your stack and your hard questions.</p><!-- /PETER-COPY -->
+        <!-- PETER-COPY --><p>Fifteen minutes, free. Bring your stack and your hard questions.</p><!-- /PETER-COPY -->
         <!-- the Amway disclosure stays wherever Peter recommends products (a paid endorsement must say so) -->
         <!-- PETER-COPY --><p>Disclaimer: I’m sponsored by Amway and paid based on products sold.</p><!-- /PETER-COPY -->
       </div>
@@ -2068,7 +2068,7 @@ if(cform){
   var line=function(){
     var g=val('goal'),t=val('training');
     if(!g&&!t)return '';                        /* nothing picked: no sentence, and :empty pulls the line out of the layout */
-    return 'Thirty minutes on '+(CGOAL[g]||'your goal')+(CTRAIN[t]?', '+CTRAIN[t]:'')+'.';
+    return 'Fifteen minutes on '+(CGOAL[g]||'your goal')+(CTRAIN[t]?', '+CTRAIN[t]:'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
   cform.addEventListener('submit',function(e){

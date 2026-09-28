@@ -554,24 +554,23 @@ def peter_card(level=3):
     (w0, f0), (w1, f1) = PETER_TRANSFORM
     nums = [('Body fat', f'{f0:.1f}% → {f1:.1f}%', f'−{f0 - f1:.1f} points'),
             ('Weight', f'{w0} → {w1} lb', f'−{w0 - w1} lb')]
-    derived = ''
     if PETER_SHOW_COMPOSITION:
         fat0, fat1 = round(w0 * f0 / 100), round(w1 * f1 / 100)    # pounds of fat each scan implies
         lean0, lean1 = round(w0 - w0 * f0 / 100), round(w1 - w1 * f1 / 100)   # everything that is not fat
         # Whole pounds, rounded FIRST, and every change then taken from the two rounded ends, so a
         # reader who subtracts what the row shows gets the number the row shows (38 → 12 is −26, not
-        # the exact −25.4). The half-pound that costs is well inside the ballpark the line below
-        # claims, and a card whose own arithmetic does not close reads as a mistake, which is worse.
+        # the exact −25.4); a card whose own arithmetic does not close reads as a mistake.
+        # These two rows are WORKED OUT from weight and body fat, not read off Peter's scan: he has
+        # the reports and is relaying them, so swap in the scan's own fat and lean pounds when he
+        # sends them (2026-09-28: he asked for the "I worked them out" line to come off).
         nums += [('Fat', f'{fat0} → {fat1} lb', f'−{fat0 - fat1} lb'),
                  ('Lean mass', f'{lean0} → {lean1} lb', f'+{lean1 - lean0} lb')]
-        derived = ('<p>The fat and lean pounds aren’t on the scan — I worked them out from the weight '
-                   'and body fat it gave me, and rounded them, so they’re ballpark.</p>')
     t = 'Peter’s DEXA scans'
     return (f'<!-- DRAFT-COPY --><article class="dx-card" aria-labelledby="dx-{slug(t)}">\n'
             f'<div class="dx-head"><h{level} class="dx-t" id="dx-{slug(t)}">{t}</h{level}><p class="dx-span">Two scans, fifteen months apart</p></div>\n'
             f'<dl class="dx-nums{" dx-four" if PETER_SHOW_COMPOSITION else ""}">'
             + ''.join(f'<div class="dx-n"><dt>{k}</dt><dd class="dx-v">{v}</dd><dd class="dx-d">{dd}</dd></div>' for k, v, dd in nums) + '</dl>\n'
-            f'<div class="dx-src"><p>Measured by DEXA scan.</p>{derived}<p>Individual results vary.</p></div>\n'
+            f'<div class="dx-src"><p>Measured by DEXA scan.</p><p>Individual results vary.</p></div>\n'
             '</article><!-- /DRAFT-COPY -->')
 
 
@@ -1121,7 +1120,7 @@ def main():
                             '        <ul class="mys-key mys-ykey" aria-label="The plates on yours"></ul></div>\n'
                             '        <p class="mys-none">Nothing on your bar yet. <a href="#goals">Load a plate or two</a> and bring them along.</p>\n'
                             '      </div><!-- /DRAFT-COPY -->\n'
-                            '      <!-- DRAFT-COPY --><p class="mys-sub grow" style="--d:3">Half an hour, free. Your macros, what you already take, and the smallest stack that moves your goal.</p>\n'
+                            '      <!-- DRAFT-COPY --><p class="mys-sub grow" style="--d:3">Fifteen minutes, free. Your macros, what you already take, and the smallest stack that moves your goal.</p>\n'
                             '      <div class="mys-acts grow" style="--d:3"><a class="btn" href="#macros">Work out your macros</a>'
                             '<a class="btn btn-line" href="#consult">Book a free call</a></div>\n'
                             '    </div>\n  </section>\n'),

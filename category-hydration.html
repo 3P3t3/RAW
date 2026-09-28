@@ -1008,7 +1008,7 @@ if(cform){
   var line=function(){
     var g=val('goal'),t=val('training');
     if(!g&&!t)return '';                        /* nothing picked: no sentence, and :empty pulls the line out of the layout */
-    return 'Thirty minutes on '+(CGOAL[g]||'your goal')+(CTRAIN[t]?', '+CTRAIN[t]:'')+'.';
+    return 'Fifteen minutes on '+(CGOAL[g]||'your goal')+(CTRAIN[t]?', '+CTRAIN[t]:'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
   cform.addEventListener('submit',function(e){
