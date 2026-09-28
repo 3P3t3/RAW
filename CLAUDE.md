@@ -211,8 +211,13 @@ his three pairs, Yenni's two beside them, then the DEXA cards. The wall sits aft
 water line now lives in the hydration beat).
 Peter's lines inside it are his, verbatim, in PETER-COPY markers.
 
-Its pace lives in two places: the `HOLD` table and `T` in the story block of `_script.html`, and the
-run height (900lvh) in `style.css`. The stage renders from an eased copy of the scroll position with
+Its pace lives in two places: the `HOLD` table and the per-change lengths in the story block of
+`_script.html`, and the run height (778lvh) in `style.css`. `HOLD` is
+`[.9, 1.7, .45, .45, .55, .45, .5, 2, 1]`: the before, the turn, the five pack beats, the call, the
+family. The pack beats are deliberately quick (a change between two packs is .8 units, not 1.5) and
+their packs pile up on stage rather than swapping out; the call holds 2.0 so every flick through the
+end of the story comes to rest on "Book a free call". Changing any of these means re-running the
+flick test before shipping. The stage renders from an eased copy of the scroll position with
 a speed cap and a backlog clamp, so a fast flick still plays each fall; it is still a pure function
 of scroll, so scrolling back plays it backwards. Transforms and opacity only (a full scrub costs 0
 layouts); keep it that way. Reduced motion and no JavaScript get the same beats as a plain vertical
