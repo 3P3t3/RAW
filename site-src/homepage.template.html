@@ -254,10 +254,11 @@
   </section>
 
   <!-- 5. Peter's story, told as a storyboard: the stage holds on screen while each part of it
-       arrives, and the product that part is about swirls in beside it and spins away as the
-       next one comes. It follows #trending and opens in its dark on his before; the after wipes
+       arrives, and the products it is about drop onto one shelf and stay there, gathering into
+       his stack, while his words run past under them. It follows #trending and opens in its dark on his before; the after wipes
        in straight away and brings the light (chalk), which is what leads into why his stack is
-       worth a look: the five packs then stand on the sand, and the call and his family on chalk.
+       worth a look: his five packs then gather on one shelf on the sand, with his words running
+       past underneath them as a caption strip, and the call and his family on chalk.
        Every beat is real content in reading order. The stage is only a way of showing them:
        the script takes the section over (.is-live) when motion is allowed, and positions each
        beat as a pure function of how far the section has scrolled, as the pour does. Without
@@ -314,59 +315,78 @@
               <!-- PETER-COPY --><p class="st-say">For the first time my energy held all day — and that’s what made the rest stick. Lifting hard. Same wake-up. Same bedtime.</p><!-- /PETER-COPY -->
             </div>
           </li>
-          <!-- The five pack beats. Each pack's data-tilt is the angle it comes to rest at, and
-               every one of them is 0: once the packs stopped leaving the stage and started piling
-               up together, a group each leaning its own way read as clutter (Peter, 2026-09-28:
-               "now that they're going to be all on the screen, I think having them straight is
-               actually better"). They still lean on the way down — DROP.lean in _script.html tips
-               the fall and unwinds to nothing at the landing — so the drop keeps its weight and
-               the gathered group stands square. -->
+          <!-- The shelf, and the caption strip under it (Peter, 2026-09-28: "the scrolling the
+               text... doesn't grab me. It feels very plain... maybe I can read it in one go...
+               it just feels like it takes too long"). Four pack beats now, not five lines one at a
+               time: each one drops its pack onto the same shelf and the packs stay, gathering into a
+               group (the pile in _script.html), while his words run past underneath in .st-caprail
+               with two or three of them legible at once. The beats here carry only the pictures; every
+               word and every shelf link is in the strip below them, in the same order, so the plain
+               sequence (reduced motion, no script) reads the shelf and then his lines.
+               Each pack's data-cat is the shelf whose plate it puts on the pinned bar, and the build
+               checks those against PETER; data-tilt is the angle it comes to rest at, and every one of
+               them is 0: once the packs stopped leaving the stage and started piling up together, a
+               group each leaning its own way read as clutter (Peter, 2026-09-28: "now that they're
+               going to be all on the screen, I think having them straight is actually better"). They
+               still lean on the way down — DROP.lean in _script.html tips the fall and unwinds to
+               nothing at the landing — so the drop keeps its weight and the gathered group stands square. -->
           <li class="st-beat st-warm" data-kind="prod">
             <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-tilt="0" data-x="-7" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Grass-Fed Whey Protein"></span>
+              <span class="st-pack" data-cat="protein" data-tilt="0" data-x="-7" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Grass-Fed Whey Protein"></span>
             </div></div>
-            <div class="st-copy">
-              {{STEP_1}}<!-- PETER-COPY --><p class="st-line">I fixed my food and found someone who pushed me.</p><!-- /PETER-COPY -->
-              <a class="tlink st-go" href="category-protein.html">Protein Snack Pack<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-            </div>
-          </li>
-          <li class="st-beat st-warm" data-kind="prod">
-            <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-tilt="0" data-x="9" data-scale=".96"><span class="st-shade"></span><img src="assets/story/nutrilite-begin-gi-primer-lit.webp" width="1008" height="1008" loading="lazy" decoding="async" alt="Nutrilite Begin Daily GI Primer"></span>
-            </div></div>
-            <div class="st-copy">
-              {{STEP_2}}<!-- PETER-COPY --><p class="st-line">I changed my morning routine.</p><!-- /PETER-COPY -->
-              <a class="tlink st-go" href="category-daily-foundations.html">Daily Foundations<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-            </div>
           </li>
           <!-- his hydration stack, the two he actually takes: they arrive as a pair -->
           <li class="st-beat st-warm" data-kind="prod">
             <div class="st-hero"><div class="st-art st-pair">
-              <span class="st-pack" data-tilt="0" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt="XS Creatine+"></span>
-              <span class="st-pack" data-tilt="0" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Twist Tubes 2GO"></span>
+              <span class="st-pack" data-cat="hydration" data-tilt="0" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt="XS Creatine+"></span>
+              <span class="st-pack" data-cat="hydration" data-tilt="0" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Twist Tubes 2GO"></span>
             </div></div>
-            <div class="st-copy">
-              {{STEP_3}}<!-- PETER-COPY --><p class="st-line">I focused way more on hydration and getting electrolytes.</p>
-              <p class="st-note">Not sure how much water is enough? Athletes aim for one ounce per pound of bodyweight.</p><!-- /PETER-COPY -->
-              <a class="tlink st-go" href="category-hydration.html">Hydration<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-            </div>
           </li>
           <li class="st-beat st-warm" data-kind="prod">
             <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-tilt="0" data-x="-9" data-scale="1.1"><span class="st-shade"></span><img src="assets/story/xs-elite-focus-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Elite + Focus Energy Drink"></span>
+              <span class="st-pack" data-cat="recovery" data-tilt="0" data-x="7" data-scale=".92"><span class="st-shade"></span><img src="assets/story/nutrilite-sleep-health-lit.webp" width="860" height="860" loading="lazy" decoding="async" alt="Nutrilite Sleep Health"></span>
             </div></div>
-            <div class="st-copy">
-              {{STEP_4}}<!-- PETER-COPY --><p class="st-line">I swapped out my huge coffee spikes for smoother energy.</p><!-- /PETER-COPY -->
-              <a class="tlink st-go" href="category-energy-focus.html">Energy &amp; Focus<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-            </div>
           </li>
+          <!-- the last two of his five arrive together, under the one line that folds the two beats
+               they used to have into it: the morning routine and the smoother energy -->
           <li class="st-beat st-warm" data-kind="prod">
-            <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-tilt="0" data-x="7" data-scale=".92"><span class="st-shade"></span><img src="assets/story/nutrilite-sleep-health-lit.webp" width="860" height="860" loading="lazy" decoding="async" alt="Nutrilite Sleep Health"></span>
+            <div class="st-hero"><div class="st-art st-pair">
+              <span class="st-pack" data-cat="daily-foundations" data-tilt="0" data-x="0" data-scale=".96"><span class="st-shade"></span><img src="assets/story/nutrilite-begin-gi-primer-lit.webp" width="1008" height="1008" loading="lazy" decoding="async" alt="Nutrilite Begin Daily GI Primer"></span>
+              <span class="st-pack" data-cat="energy-focus" data-tilt="0" data-x="0" data-scale="1.1"><span class="st-shade"></span><img src="assets/story/xs-elite-focus-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Elite + Focus Energy Drink"></span>
             </div></div>
-            <div class="st-copy">
-              {{STEP_5}}<!-- PETER-COPY --><p class="st-line">And I found ways to maximize my sleep, even during the newborn nights.</p><!-- /PETER-COPY -->
-              <a class="tlink st-go" href="category-recovery.html">Recovery<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </li>
+          <!-- The caption strip: his words, one continuous column of them under the shelf instead of
+               one line at a time. The script slides the track so the beat's own caption sits on the
+               strip's reading line at full strength, with the one before and the one after it quieter
+               (a softer teal, 5.2:1 on the sand — quiet, never unreadable) and still legible, so a
+               reader is always reading ahead. It is a pure function of the eased scroll, as the packs
+               are, so scrolling back runs it backwards; only the track's transform and the strip's
+               opacity are written per frame, and the colour changes only when the reading line moves
+               from one caption to the next. Without the stage it is a plain block of his four lines,
+               each with its shelf link, straight after the packs. -->
+          <li class="st-caprail" id="st-caps">
+            <div class="st-captrack">
+              <div class="st-cap">
+                <!-- PETER-COPY --><p class="st-line">I fixed my food and found someone who pushed me.</p><!-- /PETER-COPY -->
+                <a class="tlink st-go" href="category-protein.html">Protein Snack Pack<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+              </div>
+              <div class="st-cap">
+                <!-- PETER-COPY --><p class="st-line">I focused way more on hydration and getting electrolytes.</p>
+                <p class="st-note">Not sure how much water is enough? Athletes aim for one ounce per pound of bodyweight.</p><!-- /PETER-COPY -->
+                <a class="tlink st-go" href="category-hydration.html">Hydration<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+              </div>
+              <div class="st-cap">
+                <!-- PETER-COPY --><p class="st-line">And I found ways to maximize my sleep, even during the newborn nights.</p><!-- /PETER-COPY -->
+                <a class="tlink st-go" href="category-recovery.html">Recovery<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+              </div>
+              <!-- the two beats that came out, folded into one closing line in his voice, with both
+                   shelves still reachable from the story. DRAFT-COPY: his words are the two it folds
+                   ("I changed my morning routine." / "I swapped out my huge coffee spikes for smoother
+                   energy."), but the sentence joining them is not one he said. -->
+              <div class="st-cap">
+                <!-- DRAFT-COPY --><p class="st-line">I changed my mornings too, and swapped my huge coffee spikes for smoother energy.</p><!-- /DRAFT-COPY -->
+                <p class="st-caplinks"><a class="tlink st-go" href="category-daily-foundations.html">Daily Foundations<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="tlink st-go" href="category-energy-focus.html">Energy &amp; Focus<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+              </div>
             </div>
           </li>
           <li class="st-beat st-light st-solo" data-kind="text">
