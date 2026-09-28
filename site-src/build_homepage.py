@@ -447,7 +447,7 @@ def her_says(named, unnamed):
 DEXA_AT = 'UC Davis Sports Medicine, Sacramento'   # Peter is from Lincoln, nearby: the name says "local"
 # DRAFT-COPY: under every DEXA card, in this order
 DEXA_NOTES = [f'Measured by DEXA scan at {DEXA_AT}.',
-              'We’re not sponsored by or affiliated with UC Davis Health; we just use their DEXA service.',
+              'We’re not sponsored by or affiliated with UC Davis Health; we’re just big fans of their DEXA service.',
               'Individual results vary.']
 PETER_DEXA = {
     'scans': [('2024-01-26', 180.5, 26.6, 146.3, 14.7), ('2024-07-31', 171.4, 21.4, 142.5, 12.5),
@@ -456,12 +456,16 @@ PETER_DEXA = {
 }
 # Hers. Set HER_DEXA = None and her card comes off every page. 'gap' is the index of the scan after which there
 # is none until the next: the trend is drawn broken there (no line across it), and the card says why.
+# Peter's transformation, measured by DEXA scan at the start and end of the fifteen months his before/after photos
+# span (a different scanner from the card's scans, so no clinic is named): (weight lb, body fat %) before and after.
+# Only these four numbers are shown; nothing is derived from them.
+PETER_TRANSFORM = ((170, 22.1), (164, 7.4))
 HER_DEXA = {
     'scans': [('2024-01', 137.8, 41.2, 92.1, 29.9), ('2024-07', 142.0, 41.8, 95.7, 29.4),
               ('2024-12', 134.5, 39.0, 90.9, 29.0), ('2026-08-21', 132.9, 30.2, 98.1, 22.7)],
     # no scan from Dec 2024 to Aug 2026: she was pregnant from Dec 2024, and their daughter was born in Sep 2025
     'gap': 2,
-    'gap_why': 'her pregnancy and their daughter’s birth came in between',   # DRAFT-COPY
+    'gap_why': 'we got pregnant and had our first in between',   # DRAFT-COPY (Peter's words)
 }
 # The before/after photos in assets/her/ (placed by hand; CLAUDE.md): their own dates, not the scans'
 HER_PHOTOS = ('Nov 2025', 'Jul 2026')
@@ -512,7 +516,7 @@ def dexa_chart(d, k, colour, title):
             f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" aria-hidden="true" focusable="false">{"".join(o)}</svg></figure>')
 
 
-def dexa_card(d, title, level=3):
+def dexa_card(d, title, level=3, span_line=None):
     """The DEXA card: who, how many scans over when, the first scan against the last (body fat, fat, lean
     mass), the fat and lean trends, and the source and disclaimer. One component for both of them."""
     s, gap = d['scans'], d.get('gap')
@@ -525,7 +529,7 @@ def dexa_card(d, title, level=3):
             ('Fat', f'{a[2]:.1f} → {b[2]:.1f} lb', delta(b[2] - a[2], 'lb')),
             ('Lean mass', f'{a[3]:.1f} → {b[3]:.1f} lb', delta(b[3] - a[3], 'lb', held=1.0))]
     words = {4: 'Four', 5: 'Five', 6: 'Six', 7: 'Seven', 8: 'Eight'}
-    span = f'{words.get(len(s), len(s))} scans, {first} → {last}'
+    span = span_line or f'{words.get(len(s), len(s))} scans, {first} → {last}'
     gap_line = (f'<p class="dx-gapnote">No scan between {when(s[gap][0])[1]} and {when(s[gap + 1][0])[1]}: '
                 f'{d["gap_why"]}.</p>') if gap is not None else ''
     rows = ''.join(f'<tr><th scope="row">{when(r[0])[1]}</th><td>{r[4]:.1f}%</td><td>{r[2]:.1f} lb</td><td>{r[3]:.1f} lb</td></tr>' for r in s)
@@ -544,7 +548,8 @@ def dexa_cards(level=3, who=('peter', 'her')):
     """Peter's card, then hers once HER_DEXA is filled."""
     out = []
     if 'peter' in who:
-        out.append(dexa_card(PETER_DEXA, 'Peter’s DEXA scans', level))
+        out.append(dexa_card(PETER_DEXA, 'Keeping it off', level,
+                             span_line=f'Peter’s DEXA scans since {when(PETER_DEXA["scans"][0][0])[1]}, after his transformation'))
     if 'her' in who and HER_DEXA:
         out.append(dexa_card(HER_DEXA, her_says('{n}’s DEXA scans', 'Her DEXA scans'), level))
     return '\n'.join(out)
@@ -578,7 +583,7 @@ def her_story():
         <h2 id="her-title">{her_says('{n}’s story', 'Her story')}</h2>
         <p class="her-lead">{her_says('{full} runs the women’s side of Aspire Health. She’s Peter’s wife.', 'She’s Peter’s wife, and she runs the women’s side of Aspire Health.')}</p>
         <p>Their daughter was born in September 2025. {her_says('{n}', 'She')} started lifting with progressive overload while she was pregnant.</p>
-        <p>Her before photos are from November 2025, two months after the birth, so they include the body fat a pregnancy adds. Her afters are from July 2026.</p>
+        <p>Her before photos are from November 2025, two months postpartum, so they include the body fat a pregnancy adds. Her afters are from July 2026.</p>
         <h3 class="her-h">What changed</h3>
         <p>Not one thing, but her whole plan:</p>
         <ul class="c-list">
@@ -589,7 +594,7 @@ def her_story():
         </ul>
         <p class="her-fine">Individual results vary.</p>
       </div><!-- /DRAFT-COPY -->
-      {her_pairs('Before: two months after the birth. After: ten months after.', ' grow', 'Her photos')}
+      {her_pairs('Before: two months postpartum. After: ten months postpartum.', ' grow', 'Her photos')}
       {dexa_cards(3, ('her',))}
     </div>
   </section>
@@ -627,9 +632,16 @@ def hero_media(slug_, name):
         f'width="{w2}" height="{round(w2 * ratio)}" alt="{esc(alt)}" fetchpriority="high"></figure></div>')}
 
 
+def peter_transform():
+    """The line under Peter's fifteen-month photos: his two DEXA numbers, and nothing derived from them."""
+    (w0, f0), (w1, f1) = PETER_TRANSFORM
+    return (f'<!-- DRAFT-COPY --><p class="pf-num">By DEXA scan: {w0} lb · {f0:.1f}% body fat → '
+            f'{w1} lb · {f1:.1f}% body fat</p><!-- /DRAFT-COPY -->')
+
+
 def proof_hers():
     """The homepage's proof after #story: her pairs beside Peter's, then the DEXA cards."""
-    return her_pairs('Her before: two months after our daughter was born.')
+    return her_pairs('Before: two months postpartum.')
 
 
 def normalize(src, dst, size=600):
@@ -1183,7 +1195,7 @@ def main():
                                 '{{SAMPLE_PICKER}}': sample_picker, '{{PCARD}}': '' if SHELF_VIEW in ('bar', 'case') else card_dialog(), **quick_call(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves,
                                 '{{CASE_STRIP}}': case_strip, '{{POUR}}': pour,
                                 '{{POUR_CLASS}}': '' if TRENDING_POUR else ' no-pour',
-                                '{{PROOF_HERS}}': proof_hers(), '{{DEXA_CARDS}}': dexa_cards(), **bar_bits}).items():
+                                '{{PROOF_HERS}}': proof_hers(), '{{PETER_TRANSFORM}}': peter_transform(), '{{DEXA_CARDS}}': dexa_cards(), **bar_bits}).items():
         out = out.replace(k, v)
     left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', out)))
     if left:
