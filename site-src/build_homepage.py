@@ -556,13 +556,14 @@ def peter_card(level=3):
             ('Weight', f'{w0} → {w1} lb', f'−{w0 - w1} lb')]
     derived = ''
     if PETER_SHOW_COMPOSITION:
-        fat0, fat1 = w0 * f0 / 100, w1 * f1 / 100       # pounds of fat each scan implies
-        lean0, lean1 = w0 - fat0, w1 - fat1             # everything that is not fat
-        # whole pounds: every figure rounded on its own, and each change rounded from the exact
-        # difference rather than from the two rounded ends, so a row can read a pound off its own
-        # endpoints (38 → 12 with −25). The line under the card says they are worked out and rounded.
-        nums += [('Fat', f'{fat0:.0f} → {fat1:.0f} lb', f'−{fat0 - fat1:.0f} lb'),
-                 ('Lean mass', f'{lean0:.0f} → {lean1:.0f} lb', f'+{lean1 - lean0:.0f} lb')]
+        fat0, fat1 = round(w0 * f0 / 100), round(w1 * f1 / 100)    # pounds of fat each scan implies
+        lean0, lean1 = round(w0 - w0 * f0 / 100), round(w1 - w1 * f1 / 100)   # everything that is not fat
+        # Whole pounds, rounded FIRST, and every change then taken from the two rounded ends, so a
+        # reader who subtracts what the row shows gets the number the row shows (38 → 12 is −26, not
+        # the exact −25.4). The half-pound that costs is well inside the ballpark the line below
+        # claims, and a card whose own arithmetic does not close reads as a mistake, which is worse.
+        nums += [('Fat', f'{fat0} → {fat1} lb', f'−{fat0 - fat1} lb'),
+                 ('Lean mass', f'{lean0} → {lean1} lb', f'+{lean1 - lean0} lb')]
         derived = ('<p>The fat and lean pounds aren’t on the scan — I worked them out from the weight '
                    'and body fat it gave me, and rounded them, so they’re ballpark.</p>')
     t = 'Peter’s DEXA scans'

@@ -169,8 +169,9 @@ after their daughter's birth in Sep 2025. They are never presented as matching h
 transformation, fifteen months apart: body fat and weight, no dates, no trend, no clinic. That is Peter's choice
 (2026-09-28); his later UC Davis scans are deliberately not used anywhere. Under those two measured rows the card
 also carries **pounds of fat and of lean, worked out from them and not read off the report** (fat = weight x body
-fat %, lean = the rest), rounded to whole pounds: Fat 38 → 12 lb, −25 lb and Lean mass 132 → 152 lb, +19 lb. Each
-figure and each change is rounded from the exact value, so a row can read a pound off its own two ends. The line
+fat %, lean = the rest), rounded to whole pounds: Fat 38 → 12 lb, −26 lb and Lean mass 132 → 152 lb, +20 lb. Each
+end is rounded first and the change is then taken from the two rounded ends, so a reader who subtracts what a row
+shows gets the number that row shows; the half-pound that costs is inside the ballpark the line claims. The line
 under the card says in Peter's voice that they are worked out and rounded, because +19 lb of lean in fifteen months
 is at the very top of what is plausible and a DEXA lean figure carries water and glycogen besides. `PETER_SHOW_COMPOSITION
 = False` takes both rows and that line off every page in one edit. Yenni's card shows fat and lean as her scans
