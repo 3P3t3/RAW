@@ -138,18 +138,21 @@ CATEGORIES = [
         'Artistry Studio Glow Boss Cleanser + Exfoliator', 'Nutrilite Hair, Skin & Nail Health']),
     # DRAFT-COPY (the line after the name): Women's Health, from 2026-09-27. Only what is made for women;
     # the women's pack and multis also stay on Daily Foundations beside the men's, and this is their tag
-    # HER PHOTO drops in at assets/bg-womens-health.webp (1600x900, the shelf page's hero, cropped to fill
-    # and under the page's dark gradient like every shelf's): replace that one file and rebuild. Until then
-    # it is a placeholder, the Women's Pack on a plum field; assets/thumbs|shelf|islands/womens-health.webp are
-    # the pack's top, for the 'Keep looking' rows (and the idle strip and ring views)
+    # HER PHOTO is the hero: her portrait with their daughter (assets/her/with-daughter-*.webp), shown whole as a
+    # real picture beside the name (SHELF_PORTRAIT), since a banner's cover crop cut into their faces. The old
+    # placeholder, assets/bg-womens-health.webp (the Women's Pack on a plum field), is kept but no page shows it;
+    # drop the SHELF_PORTRAIT entry and it is the banner again. Her story, pairs and DEXA card sit between the
+    # hero and the products (SHELF_EXTRA). assets/thumbs|shelf|islands/womens-health.webp are the pack's top,
+    # for the 'Keep looking' rows (and the idle strip and ring views)
     ('womens-health', 'Women’s Health', 'For her everyday: the Women’s Pack, multivitamins, iron and menopause support.', 'Everything in Women’s Health', [
         "Nutrilite Women's Pack", "Nutrilite Women's Daily Multivitamin Tablets", "Nutrilite Organics Women's Daily Multi Gummies",
         'Nutrilite Iron Folic', 'Nutrilite Complete Menopause Support']),
     # DRAFT-COPY (the line after the name): Men's Health, its counterpart, the ninth shelf. The men's pack and
     # multis also stay on Daily Foundations, and this is their tag. Concentrated Fruits and Vegetables stays on
     # Daily Foundations only: Amway files it under Men's Health, but nothing on its label is for men.
-    # PETER'S PHOTO drops in at assets/bg-mens-health.webp (1600x900, the shelf page's hero), as hers does
-    # for Women's Health; until then it is the Men's Pack on a green field.
+    # PETER'S PHOTO drops in at assets/bg-mens-health.webp (1600x900, the shelf page's hero, cropped to fill
+    # and under the page's dark gradient like every shelf's); until then it is the Men's Pack on a green field.
+    # His DEXA card sits between the hero and the products (SHELF_EXTRA).
     ('mens-health', 'Men’s Health', 'For his everyday: the Men’s Pack, multivitamins, Prostate Health and organic herbal capsules.', 'Everything in Men’s Health', [
         "Nutrilite Men's Pack", "Nutrilite Men's Daily Multivitamin Tablets", "Nutrilite Organics Men's Daily Multi Gummies",
         'Nutrilite Prostate Health', 'Nutrilite Organics Horny Goat Weed & Tribulus Capsules']),
@@ -415,6 +418,214 @@ GOAL_TILES = [  # goal, name, line, product shown in the goal index
     ('E', 'Endurance', 'Energy and hydration that lasts', 'XS Sports Twist Tubes - Raspberry Lemonade'),
     ('S', 'Sleep &amp; Longevity', 'Rest deeper, age well', 'Nutrilite Sleep Health'),
 ]
+
+# ---- His and hers: the proof after #story, Yenni's story on Women's Health, and the DEXA cards ----
+# Peter's wife runs the women's side of the business; Peter approved her name, photos and results going
+# public. HER_NAME is her first name as the site shows it ("Yenni", as Peter introduced her; never the
+# longer name on her scan reports). Empty, nothing shows a gap: every line that names her has a second
+# wording without the name (see her_says), in Peter's voice ("my wife") or with "she".
+HER_NAME = 'Yenni'
+HER_SURNAME = 'Herschelman'  # only where a full name reads naturally: the intro on her shelf
+
+
+def her_says(named, unnamed):
+    """One line of copy about her: `named` with {n} (first name) and {full} filled in, or `unnamed` while
+    HER_NAME is empty."""
+    return named.format(n=HER_NAME, full=f'{HER_NAME} {HER_SURNAME}') if HER_NAME else unnamed
+
+
+# DEXA scans, both at the same clinic. The cards are drawn from these rows and nothing else: never the report,
+# its layout, its logo or colours, and nothing else from it (no birth date, patient ID or height).
+# A row is (date, weight lb, fat lb, lean lb, body fat %). Its date is 'YYYY-MM-DD', or 'YYYY-MM' when only the
+# month is known; the cards show month and year either way. Weight is kept for the record and never shown.
+# A card's headline is its first scan against its last. The scans are their own timeline: they are never
+# presented as covering the same months as the before/after photos.
+DEXA_AT = 'UC Davis Sports Medicine, Sacramento'   # Peter is from Lincoln, nearby: the name says "local"
+# DRAFT-COPY: under every DEXA card, in this order
+DEXA_NOTES = [f'Measured by DEXA scan at {DEXA_AT}.',
+              'We’re not sponsored by or affiliated with UC Davis Health; we just use their DEXA service.',
+              'Individual results vary.']
+PETER_DEXA = {
+    'scans': [('2024-01-26', 180.5, 26.6, 146.3, 14.7), ('2024-07-31', 171.4, 21.4, 142.5, 12.5),
+              ('2024-12-18', 164.5, 17.5, 139.6, 10.6), ('2025-07-15', 172.5, 19.7, 145.3, 11.4),
+              ('2026-01-13', 169.5, 20.3, 141.7, 12.0), ('2026-08-17', 174.8, 20.5, 146.7, 11.7)],
+}
+# Hers. Set HER_DEXA = None and her card comes off every page. 'gap' is the index of the scan after which there
+# is none until the next: the trend is drawn broken there (no line across it), and the card says why.
+HER_DEXA = {
+    'scans': [('2024-01', 137.8, 41.2, 92.1, 29.9), ('2024-07', 142.0, 41.8, 95.7, 29.4),
+              ('2024-12', 134.5, 39.0, 90.9, 29.0), ('2026-08-21', 132.9, 30.2, 98.1, 22.7)],
+    # no scan from Dec 2024 to Aug 2026: she was pregnant from Dec 2024, and their daughter was born in Sep 2025
+    'gap': 2,
+    'gap_why': 'her pregnancy and their daughter’s birth came in between',   # DRAFT-COPY
+}
+# The before/after photos in assets/her/ (placed by hand; CLAUDE.md): their own dates, not the scans'
+HER_PHOTOS = ('Nov 2025', 'Jul 2026')
+
+MONTHS = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split()
+
+
+def when(d):
+    """'YYYY-MM[-DD]' -> (the date as a fractional year, for the x axis; 'Mon YYYY', for the words)."""
+    y, m, *day = (int(x) for x in d.split('-'))
+    return y + (m - 1 + ((day[0] if day else 15) - 1) / 31) / 12, f'{MONTHS[m - 1]} {y}'
+
+
+def dexa_chart(d, k, colour, title):
+    """One small trend: a single measure (column k of the scans) on a time-true x axis from the first scan to
+    the last, and a y axis from zero, so a change is drawn at its real size. Where the scans have a gap the
+    line stops, and the gap is a shaded band marked "no scans": nothing is drawn where nothing was measured.
+    Only the first and last values are labelled; each point names its month and value on hover."""
+    W, H, L, R, T, B = 300, 132, 36, 16, 20, 26
+    s, gap = d['scans'], d.get('gap')
+    t = [when(r[0])[0] for r in s]
+    v = [r[k] for r in s]
+    top = -(-max(v) * 1.08 // 10) * 10                      # zero to the next ten above the highest value
+    X = lambda x: L + (x - t[0]) / (t[-1] - t[0]) * (W - L - R)
+    Y = lambda y: T + (1 - y / top) * (H - T - B)
+    o = []
+    for g in (0, top / 2, top):
+        o.append(f'<line class="dx-grid{" dx-base" if not g else ""}" x1="{L}" x2="{W - R + 4}" y1="{Y(g):.1f}" y2="{Y(g):.1f}"/>'
+                 f'<text class="dx-yl" x="{L - 7}" y="{Y(g) + 4:.1f}" text-anchor="end">{g:g}</text>')
+    y0 = int(t[0])
+    for x, y, a in [(t[0], y0, 'start')] + [(float(y), y, 'middle') for y in range(y0 + 1, int(t[-1]) + 1)]:
+        o.append(f'<line class="dx-tick" x1="{X(x):.1f}" x2="{X(x):.1f}" y1="{H - B}" y2="{H - B + 4}"/>'
+                 f'<text class="dx-xl" x="{X(x) - (4 if a == "start" else 0):.1f}" y="{H - 7}" text-anchor="{a}">{y}</text>')
+    if gap is not None:
+        a, b = X(t[gap]) + 8, X(t[gap + 1]) - 8
+        o.append(f'<rect class="dx-gap" x="{a:.1f}" y="{T - 6}" width="{b - a:.1f}" height="{H - B - T + 6}"/>'
+                 f'<text class="dx-gapl" x="{(a + b) / 2:.1f}" y="{T + (H - T - B) / 2 + 4:.1f}" text-anchor="middle">no scans</text>')
+    runs = [list(range(len(v)))] if gap is None else [list(range(gap + 1)), list(range(gap + 1, len(v)))]
+    for r in runs:
+        if len(r) > 1:
+            o.append(f'<polyline class="dx-line" points="{" ".join(f"{X(t[i]):.1f},{Y(v[i]):.1f}" for i in r)}" stroke="{colour}"/>')
+    for i in range(len(v)):
+        o.append(f'<circle class="dx-pt" cx="{X(t[i]):.1f}" cy="{Y(v[i]):.1f}" r="4" fill="{colour}">'
+                 f'<title>{when(s[i][0])[1]}: {v[i]:.1f} lb</title></circle>')
+    for i, a in ((0, 'start'), (len(v) - 1, 'end')):
+        o.append(f'<text class="dx-vl" x="{X(t[i]) + (2 if a == "start" else 6):.1f}" y="{Y(v[i]) - 9:.1f}" text-anchor="{a}">{v[i]:.1f}</text>')
+    return (f'<figure class="dx-chart"><figcaption class="dx-ct"><i style="--c:{colour}"></i>{title}</figcaption>'
+            f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" aria-hidden="true" focusable="false">{"".join(o)}</svg></figure>')
+
+
+def dexa_card(d, title, level=3):
+    """The DEXA card: who, how many scans over when, the first scan against the last (body fat, fat, lean
+    mass), the fat and lean trends, and the source and disclaimer. One component for both of them."""
+    s, gap = d['scans'], d.get('gap')
+    a, b = s[0], s[-1]
+    first, last = when(a[0])[1], when(b[0])[1]
+
+    def delta(x, unit, held=0.0):
+        return 'held' if abs(x) < held else f'{"+" if x > 0 else "−"}{abs(x):.1f} {unit}'
+    nums = [('Body fat', f'{a[4]:.1f}% → {b[4]:.1f}%', delta(b[4] - a[4], 'points')),
+            ('Fat', f'{a[2]:.1f} → {b[2]:.1f} lb', delta(b[2] - a[2], 'lb')),
+            ('Lean mass', f'{a[3]:.1f} → {b[3]:.1f} lb', delta(b[3] - a[3], 'lb', held=1.0))]
+    words = {4: 'Four', 5: 'Five', 6: 'Six', 7: 'Seven', 8: 'Eight'}
+    span = f'{words.get(len(s), len(s))} scans, {first} → {last}'
+    gap_line = (f'<p class="dx-gapnote">No scan between {when(s[gap][0])[1]} and {when(s[gap + 1][0])[1]}: '
+                f'{d["gap_why"]}.</p>') if gap is not None else ''
+    rows = ''.join(f'<tr><th scope="row">{when(r[0])[1]}</th><td>{r[4]:.1f}%</td><td>{r[2]:.1f} lb</td><td>{r[3]:.1f} lb</td></tr>' for r in s)
+    return (f'<!-- DRAFT-COPY --><article class="dx-card" aria-labelledby="dx-{slug(title)}">\n'
+            f'<div class="dx-head"><h{level} class="dx-t" id="dx-{slug(title)}">{title}</h{level}><p class="dx-span">{span}</p></div>\n'
+            '<dl class="dx-nums">' + ''.join(f'<div class="dx-n"><dt>{k}</dt><dd class="dx-v">{v}</dd><dd class="dx-d">{dd}</dd></div>' for k, v, dd in nums) + '</dl>\n'
+            f'{gap_line}'
+            '<div class="dx-charts">' + dexa_chart(d, 2, '#8A543E', 'Fat mass, lb') + dexa_chart(d, 3, '#3340B8', 'Lean mass, lb') + '</div>\n'
+            f'<div class="vh"><table><caption>{title}, every scan</caption><thead><tr><th scope="col">Scan</th><th scope="col">Body fat</th>'
+            f'<th scope="col">Fat mass</th><th scope="col">Lean mass</th></tr></thead><tbody>{rows}</tbody></table></div>\n'
+            '<div class="dx-src">' + ''.join(f'<p>{n}</p>' for n in DEXA_NOTES) + '</div>\n'
+            '</article><!-- /DRAFT-COPY -->')
+
+
+def dexa_cards(level=3, who=('peter', 'her')):
+    """Peter's card, then hers once HER_DEXA is filled."""
+    out = []
+    if 'peter' in who:
+        out.append(dexa_card(PETER_DEXA, 'Peter’s DEXA scans', level))
+    if 'her' in who and HER_DEXA:
+        out.append(dexa_card(HER_DEXA, her_says('{n}’s DEXA scans', 'Her DEXA scans'), level))
+    return '\n'.join(out)
+
+
+def her_pairs(caption, cls='', unnamed='My wife'):
+    """Her two before/after pairs, front and back, framed to one spec like Peter's three, so one row of
+    Before / After headings on the 50% line labels both. Their dates are the photos' own."""
+    who, alt = her_says('{n}', unnamed), her_says('{n}', 'Peter’s wife')
+    imgs = ''.join(
+        f'<img src="assets/her/{v}-640.webp" srcset="assets/her/{v}-640.webp 640w, assets/her/{v}-768.webp 768w" '
+        f'sizes="(min-width:1000px) 460px, (min-width:760px) 560px, calc(100vw - 40px)" width="768" height="979" '
+        f'loading="lazy" decoding="async" alt="{esc(alt)}, before and after, from the {v}: {HER_PHOTOS[0]} and {HER_PHOTOS[1]}">'
+        for v in ('front', 'back'))
+    return (f'<figure class="c-proof pf-hers{cls}">\n'
+            f'  <!-- DRAFT-COPY --><p class="pf-who"><span class="pf-name">{who}</span> <span class="pf-when">{HER_PHOTOS[0]} → {HER_PHOTOS[1]}</span></p><!-- /DRAFT-COPY -->\n'
+            '  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>\n'
+            f'  <div class="c-stack">{imgs}</div>\n'
+            f'  <!-- DRAFT-COPY --><figcaption>{caption}</figcaption><!-- /DRAFT-COPY -->\n'
+            '</figure>')
+
+
+def her_story():
+    """Women's Health only: Yenni's story, her pairs and her DEXA card, between the hero and the shelf."""
+    return f'''  <!-- Her story: only the Women's Health shelf has this block (SHELF_EXTRA in build_homepage.py). Facts only;
+       no health claims, and nothing says a supplement caused the change: it was her whole plan. -->
+  <section class="sec her-sec" id="her" aria-labelledby="her-title">
+    <div class="wrap her-in">
+      <!-- DRAFT-COPY --><div class="her-text grow">
+        <p class="label">Who runs this shelf</p>
+        <h2 id="her-title">{her_says('{n}’s story', 'Her story')}</h2>
+        <p class="her-lead">{her_says('{full} runs the women’s side of Aspire Health. She’s Peter’s wife.', 'She’s Peter’s wife, and she runs the women’s side of Aspire Health.')}</p>
+        <p>Their daughter was born in September 2025. {her_says('{n}', 'She')} started lifting with progressive overload while she was pregnant.</p>
+        <p>Her before photos are from November 2025, two months after the birth, so they include the body fat a pregnancy adds. Her afters are from July 2026.</p>
+        <h3 class="her-h">What changed</h3>
+        <p>Not one thing, but her whole plan:</p>
+        <ul class="c-list">
+          <li>Progressive overload: lifting a little more over time</li>
+          <li>Counting calories</li>
+          <li>Solid supplementation</li>
+          <li>Creatine, for the first time</li>
+        </ul>
+        <p class="her-fine">Individual results vary.</p>
+      </div><!-- /DRAFT-COPY -->
+      {her_pairs('Before: two months after the birth. After: ten months after.', ' grow', 'Her photos')}
+      {dexa_cards(3, ('her',))}
+    </div>
+  </section>
+
+'''
+
+
+def peter_numbers():
+    """Men's Health only: Peter's DEXA card, above the shelf."""
+    return ('  <!-- Peter\'s DEXA card: only the Men\'s Health shelf has this block (SHELF_EXTRA in build_homepage.py) -->\n'
+            '  <section class="sec dx-sec" aria-label="Peter’s DEXA scans">\n    <div class="wrap dx-one">\n'
+            + dexa_cards(2, ('peter',)) + '\n    </div>\n  </section>\n\n')
+
+
+# A shelf page's own block, between its hero and its products; only these two have one
+SHELF_EXTRA = {'womens-health': her_story, 'mens-health': peter_numbers}
+# A shelf whose hero is a real photo rather than a banner: it is shown whole, beside the name on wide
+# screens and above it on phones, because a banner's cover crop would cut into their faces
+SHELF_PORTRAIT = {
+    'womens-health': ('assets/her/with-daughter', 640, 960, 5 / 4,
+                      her_says('{n} holding their baby daughter, both in matching lemon-print dresses',
+                               'Peter’s wife holding their baby daughter, both in matching lemon-print dresses')),
+}
+
+
+def hero_media(slug_, name):
+    """The shelf hero's picture: its banner (assets/bg-<slug>.webp) under the name, or a portrait beside it."""
+    if slug_ not in SHELF_PORTRAIT:
+        return {'{{CAT_HERO_CLASS}}': '', '{{CAT_HERO_MEDIA}}': (
+            f'<img class="cat-bg" src="assets/bg-{slug_}.webp" alt="" width="1600" height="900" fetchpriority="high">')}
+    base, w1, w2, ratio, alt = SHELF_PORTRAIT[slug_]
+    return {'{{CAT_HERO_CLASS}}': ' cat-hero-photo', '{{CAT_HERO_MEDIA}}': (
+        f'<div class="wrap cat-pic"><figure class="cat-portrait"><img src="{base}-{w1}.webp" '
+        f'srcset="{base}-{w1}.webp {w1}w, {base}-{w2}.webp {w2}w" sizes="(min-width:760px) min(38vw, 440px), calc(100vw - 40px)" '
+        f'width="{w2}" height="{round(w2 * ratio)}" alt="{esc(alt)}" fetchpriority="high"></figure></div>')}
+
+
+def proof_hers():
+    """The homepage's proof after #story: her pairs beside Peter's, then the DEXA cards."""
+    return her_pairs('Her before: two months after our daughter was born.')
 
 
 def normalize(src, dst, size=600):
@@ -933,7 +1144,8 @@ def main():
                                 '{{SAMPLE_ENDPOINT}}': SAMPLE_ENDPOINT, '{{SAMPLE_ACTION}}': SAMPLE_ACTION,
                                 '{{SAMPLE_NEXT}}': SAMPLE_NEXT.replace('homepage.html', page_name), '{{SAMPLE_PRODUCTS}}': sample_list, **quick_call(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves,
                                 '{{CASE_STRIP}}': case_strip, '{{POUR}}': pour,
-                                '{{POUR_CLASS}}': '' if TRENDING_POUR else ' no-pour', **bar_bits}).items():
+                                '{{POUR_CLASS}}': '' if TRENDING_POUR else ' no-pour',
+                                '{{PROOF_HERS}}': proof_hers(), '{{DEXA_CARDS}}': dexa_cards(), **bar_bits}).items():
         out = out.replace(k, v)
     left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', out)))
     if left:
@@ -978,7 +1190,8 @@ def main():
                 '{{SAMPLE_LINK}}': 'homepage.html?try=' + quote(html.unescape(name)) + '#sample',
                 '{{CAT_NAME}}': name, '{{CAT_TAG}}': tag, '{{CAT_HEADING}}': heading,
                 '{{CAT_COUNT}}': plural(counts[slug_], 'product', zero='No products yet'), '{{CAT_GRID}}': cgrid, '{{CAROUSEL}}': carousel,
-                '{{CAT_OTHERS}}': cat_rows(only={slug_}), '{{CAT_BG}}': f'assets/bg-{slug_}.webp'}).items():
+                '{{CAT_OTHERS}}': cat_rows(only={slug_}), **hero_media(slug_, name),
+                '{{CAT_EXTRA}}': SHELF_EXTRA.get(slug_, lambda: '')()}).items():
             page = page.replace(k, v)
         open(os.path.join(ROOT, f'category-{slug_}.html'), 'w').write(page)
 

@@ -362,12 +362,17 @@
         {{CASE_STRIP}}
       </div>
     </div>
-    <!-- the stage lets go into the proof itself: all three views stacked, nothing to swipe.
-         The three files share one crop, so the seam between before and after sits at 50% in
-         each: the befores line up down the left, the afters down the right, and one pair of
-         headings on that same 50% line labels the whole stack. -->
+    <!-- the stage lets go into the proof itself, his and hers: Peter's three views stacked, and beside
+         them (under them on a phone) his wife's two, nothing to swipe. Each set shares one crop, so the seam
+         between before and after sits at 50% in every file: the befores line up down the left, the
+         afters down the right, and one pair of headings on that same 50% line labels each stack.
+         Then the DEXA cards, on their own dates (build_homepage.py: PETER_DEXA, HER_DEXA).
+         It is after the stage (#st-run), so none of it makes the story's run longer. -->
     <div class="wrap st-proof">
-      <figure class="c-proof">
+      <!-- DRAFT-COPY --><h3 class="pf-title"><span class="pf-k">His</span> and <span class="pf-k">hers</span></h3><!-- /DRAFT-COPY -->
+      <div class="pf-duo">
+      <figure class="c-proof pf-his">
+        <p class="pf-who"><span class="pf-name">Peter</span></p>
         <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
         <div class="c-stack">
           <img src="assets/peter/front-640.webp" srcset="assets/peter/front-640.webp 640w, assets/peter/front-960.webp 960w" sizes="(min-width:760px) 680px, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the front">
@@ -376,6 +381,12 @@
         </div>
         <!-- PETER-COPY --><figcaption>Same guy, 15 months apart.</figcaption><!-- /PETER-COPY -->
       </figure>
+      {{PROOF_HERS}}
+      </div>
+      <!-- DRAFT-COPY --><p class="pf-note">And by DEXA scan: body composition, measured on the scans’ own dates, not the photos’.</p><!-- /DRAFT-COPY -->
+      <div class="dx-duo">
+{{DEXA_CARDS}}
+      </div>
     </div>
   </section>
 

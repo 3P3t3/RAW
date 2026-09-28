@@ -108,6 +108,68 @@ increase that without asking him. The three pairs share one framing spec measure
 the seam must stay at exactly 50% with befores on the left, or the page's Before/After headings
 stop aligning.
 
+`assets/her/` holds the photos of Yenni, Peter's wife, who runs the women's side of the business.
+Peter approved her name, photos and results going public (2026-09-27). The site calls her "Yenni",
+which is `HER_NAME` in `build_homepage.py`; never use the longer name on her scan reports. These are
+the files:
+- `front-640.webp` / `front-768.webp` and `back-640.webp` / `back-768.webp`: her before/after pairs,
+  with the before on the left and the after on the right, 640x816 and 768x979.
+- `front-before-384`, `front-after-384`, `back-before-384`, `back-after-384`: the four halves on
+  their own, 384x979, framed the same way. No page uses them yet.
+- `with-daughter-640.webp` / `-960.webp`: her portrait with their daughter, 4:5, the Women's Health
+  hero.
+
+The pairs are cut from one composite of four panels: the before front and back from Nov 2025, and the
+after front and back from Jul 2026. It was split at its white panel seams, so the dividers and their
+anti-aliased columns are left out. All four halves share one framing spec measured on her body. Let L
+be the distance from her crown (the top of her head's hair line, not the ponytail) to her knee (the
+kneecap centre from the front, the knee crease from the back). The frame runs from 6.5% of L above the
+crown to 4.5% of L below the knee, and it is centred on her midline between the knees. The measured
+landmarks are:
+
+| half | crown y | knee y | midline x |
+|---|---|---|---|
+| before front | 82 | 890 | 207 |
+| before back | 88 | 949 | 576 |
+| after front | 82 | 866 | 976 |
+| after back | 73 | 881 | 1330 |
+
+These are composite pixels. Each half is scaled uniformly (the same factor in both directions) so
+that every L comes out the same size. The seam sits at exactly 50%. The before-front crop starts
+at x=31: that removes the wall charger and its cable at the bottom left and stays 3px clear of her
+hand.
+
+The portrait is the box (165,300)-(1197,1590) of her photo, clear of the screenshot's black bars.
+
+The editing rules match Peter's. Crop, exposure and white balance are allowed, and so is extending
+plain background at the edges, but never across an object or near her outline. **Her body is evidence
+and is never retouched, smoothed, slimmed or reshaped.** As shipped, every file is a crop plus a uniform
+resize. Nothing is synthesised, no colour was touched and no background was extended. Every file is
+rebuilt from raw pixels, so it carries no EXIF, XMP or ICC data: each is a bare `VP8 ` chunk. The files
+are cut from the originals Peter sent and placed by hand, so the build never touches them.
+
+Her photos have their own dates (`HER_PHOTOS`: Nov 2025 → Jul 2026), about two months and ten months
+after their daughter's birth in Sep 2025. They are never presented as matching her DEXA scans.
+
+**The DEXA cards.** `PETER_DEXA` and `HER_DEXA` in `build_homepage.py` hold their scans as data
+rows: date, weight, fat, lean and body fat %. Both sets of scans come from UC Davis Sports Medicine in
+Sacramento. `dexa_card()` draws one card for either of them, with these parts:
+- The headline, which compares the first scan with the last.
+- A trend of fat mass and a trend of lean mass, each on its own zero-based axis with a time-true x.
+- A visually hidden table of every scan.
+- The source line and the disclaimers (`DEXA_NOTES`).
+
+Weight is stored but never shown. Nothing else from the reports is used: no logo, layout or colours,
+and no date of birth, patient ID or height. Her scans have a gap (`'gap'`) from Dec 2024 to Aug 2026,
+which spans her pregnancy and their daughter's birth. Her trend is drawn broken there, with no line
+across the gap, and the card says why. Set `HER_DEXA = None` and her card comes off every page.
+
+Where it all shows:
+- The homepage proof after the story stage: her pairs beside Peter's, then both cards.
+- Women's Health: her portrait as the hero, drawn as a real `<img>` (`SHELF_PORTRAIT`), then her
+  story, pairs and card (`SHELF_EXTRA`).
+- Men's Health: Peter's card (`SHELF_EXTRA`).
+
 `assets/story/` holds AI-relit shots of all five story products (whey, GI Primer, XS Creatine+, XS
 Elite, Sleep Health, as `*-lit.webp`): relit with fal-ai/flux-pro/kontext, cut out with
 fal-ai/birefnet/v2, and placed by hand, so the build never touches them. Each was checked so that the
@@ -128,8 +190,10 @@ shelf pages and podium still use the catalogue images.
 The homepage runs hero → shelves → `#trending` (the scroll-scrubbed can pour) → `#story` →
 `#macros` → `#consult`. `#story` is a sticky, scroll-scrubbed stage telling Peter's 15 months in
 beats: his before, five product beats (each linking to a shelf), the before becoming the after,
-"That's what this call is for" with a "Book a free call" button, his family, then the three-pair
-proof wall. It replaced the old `#hydrate` band (its water line now lives in the hydration beat).
+"That's what this call is for" with a "Book a free call" button, his family, then the proof wall:
+his three pairs, Yenni's two beside them, then the DEXA cards. The wall sits after the stage
+(`#st-run`), so it does not make the run any longer. The story replaced the old `#hydrate` band (its
+water line now lives in the hydration beat).
 Peter's lines inside it are his, verbatim, in PETER-COPY markers.
 
 Its pace lives in two places: the `HOLD` table and `T` in the story block of `_script.html`, and the
@@ -146,9 +210,10 @@ Daily Foundations and Hydration; the Women's Pack and the women's multivitamin t
 on both Daily Foundations and Women's Health (their home shelf, being later in `CATEGORIES`), and the
 men's likewise on Daily Foundations and Men's Health.
 
-Women's Health's hero photo is `assets/bg-womens-health.webp` and Men's Health's is
-`assets/bg-mens-health.webp` (1600x900 each, the shelf page's hero): today placeholders (the Women's
-and Men's Pack on a plum and a green field). Peter's wife's photo and Peter's replace those two files. A product with no
+Women's Health's hero is Yenni's portrait with their daughter, from `assets/her/`, shown whole as a real
+`<img>` beside the name (`SHELF_PORTRAIT`). The old placeholder, `assets/bg-womens-health.webp` (the Women's
+Pack on a plum field), is still there but no page shows it. Men's Health's hero is still the placeholder
+`assets/bg-mens-health.webp` (1600x900, the Men's Pack on a green field); Peter's photo replaces that file. A product with no
 fitting shelf stays out of `share-links.csv` altogether: the homepage grid, search and the sample
 form list every row, so a row on no shelf still shows up there, tagged "Wellness".
 
