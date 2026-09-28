@@ -64,7 +64,10 @@
        themselves carry no step numbers: they sit in a different order on the page, so this list
        alone is the map. Step 4's words switch with CONSULT_QUICK_URL in build_homepage.py, as
        the quick-call button does. The sample is a request, never a promise: Peter decides what he
-       can send, so no line here or in #sample may guarantee one. -->
+       can send, so no line here or in #sample may guarantee one.
+       In the bar theme (html.t-bar) the steps hang on a steel shaft, each number on a plate (.how-pl,
+       drawn from its data-n); as the section scrolls through, the shaft lights and each plate slides
+       on (_script.html). .how-sh is the stretch of shaft to the next plate. Other views hide both. -->
   <section class="sec how-sec" id="how" aria-labelledby="how-title">
     <div class="wrap">
       <!-- DRAFT-COPY -->
@@ -73,16 +76,16 @@
         <h2 id="how-title"><span>The game</span> <span class="hl-k">plan</span></h2>
       </div>
       <ol class="how-steps">
-        <li class="grow" style="--d:1"><a class="how-step" href="#macros"><span class="how-n" aria-hidden="true">01</span>
+        <li class="grow" style="--d:1"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="#macros"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="01"></i>01</span>
           <span class="how-t">Name your goal.</span>
           <span class="how-d">Pick what you’re chasing, then get your numbers from the free macro calculator.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-        <li class="grow" style="--d:2"><a class="how-step" href="#sample"><span class="how-n" aria-hidden="true">02</span>
+        <li class="grow" style="--d:2"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="#sample"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="02"></i>02</span>
           <span class="how-t">Request a free sample.</span>
           <span class="how-d">On me, while supplies last, dropped off in Lincoln or mailed in the US.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-        <li class="grow" style="--d:3"><div class="how-step"><span class="how-n" aria-hidden="true">03</span>
+        <li class="grow" style="--d:3"><i class="how-sh" aria-hidden="true"><i></i></i><div class="how-step"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="03"></i>03</span>
           <span class="how-t">Report back.</span>
           <span class="how-d">A few days in, I’ll ask how you’re getting on. Say what worked and what didn’t, and I’ll tell you what I’d add next, if anything.</span></div></li>
-        <li class="grow" style="--d:4"><a class="how-step" href="#quick-call"><span class="how-n" aria-hidden="true">04</span>
+        <li class="grow" style="--d:4"><a class="how-step" href="#quick-call"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="04"></i>04</span>
           <span class="how-t">Make it part of your week.</span>
           <span class="how-d">{{QUICK_STEP}}, then order through my Amway link if it earns a spot.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ol>
