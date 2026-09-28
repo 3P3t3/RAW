@@ -446,6 +446,7 @@ a.how-step:active{opacity:.7}
 .c-stack{display:grid;gap:8px;min-width:0}
 .c-stack img{display:block;width:100%;height:auto;background:var(--tile)}
 .c-proof figcaption{font-size:14px;color:var(--text)}
+.c-proof .pf-num{margin:6px 0 0;font:600 14px/1.4 var(--sans);color:var(--ink);font-variant-numeric:tabular-nums}   /* Peter's DEXA numbers under his fifteen-month photos */
 .c-card{display:grid;gap:22px;padding:24px 20px 26px;background:rgba(244,242,236,.86);
   box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 40px 60px -40px rgba(0,30,39,.55)}
 @supports (backdrop-filter:blur(6px)){.c-card{backdrop-filter:blur(10px);background:rgba(244,242,236,.7)}}
@@ -1474,7 +1475,8 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
 .hbar.has .hb-you{display:inline}
 
 /* the pinned bar: under the masthead once the hero has gone, on phones and desktop. The visitor's
-   stack; through #story, Peter's (the two bars and their captions cross-fade). As slim as it can be
+   stack; through the story's stage (#st-run), Peter's (the two bars and their captions cross-fade).
+   From "His and hers" on it is the visitor's again, or gone if they have none. As slim as it can be
    and still be read: a 31px bar and one 10px caption row. */
 .t-bar{--pin:52px;scroll-padding-top:calc(var(--mast) + var(--pin))}
 .lbpin{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + var(--mast));z-index:18;background:var(--chalk);
@@ -1499,7 +1501,7 @@ html:not(.js) .lbpin{display:none}
    the bar on the right, a 30px bar. "+ name" comes up over the caption for a moment, on the strip's
    own chalk, and goes. With the masthead that is 96px; while the strip holds the visitor's stack
    the bottom tab steps aside (html.pin-you, set by the script), so the fixed chrome outside the
-   story is never more than 96px. */
+   story's stage is never more than 96px. */
 @media (max-width:767px){
   .t-bar{--pin:36px}
   .lbpin-in{grid-template-columns:auto minmax(0,1fr);align-items:center;gap:0 12px;padding-top:0}
@@ -1897,8 +1899,7 @@ body{background:transparent}
 .pf-who{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;margin:0}
 .pf-name{font:800 24px/1 var(--display);font-stretch:72%;text-transform:uppercase;letter-spacing:.02em;color:var(--teal)}
 .pf-when{font:600 13px/1.2 var(--sans);letter-spacing:.06em;color:var(--text);font-variant-numeric:tabular-nums}
-.pf-note{max-width:48ch;margin:52px auto 18px;text-align:center;font-size:15px;line-height:1.5;color:var(--text)}
-.dx-duo{display:grid;gap:20px;max-width:680px;margin:0 auto}
+.dx-duo{display:grid;gap:20px;max-width:680px;margin:52px auto 0}   /* the gap the photos' captions keep from the DEXA cards */
 /* wide: his three pairs and her two side by side, hers a little narrower so the columns end together
    (three 3:2 pairs against two 0.78:1 pairs), and the two cards side by side under them */
 @media (min-width:1000px){
