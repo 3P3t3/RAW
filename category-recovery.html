@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=7c9e0248">
+<link rel="stylesheet" href="style.css?v=5184de87">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -210,6 +210,7 @@
           <li><a class="goal" href="category-daily-foundations.html"><span class="goal-name">Daily Foundations</span><span class="goal-desc">The everyday base</span><span class="goal-island"><img src="assets/thumbs/daily-foundations.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
           <li><a class="goal" href="category-skin-redefined.html"><span class="goal-name">Skin Redefined</span><span class="goal-desc">Artistry skincare, for the hours you are not training.</span><span class="goal-island"><img src="assets/thumbs/skin-redefined.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
           <li><a class="goal" href="category-womens-health.html"><span class="goal-name">Women’s Health</span><span class="goal-desc">For her everyday</span><span class="goal-island"><img src="assets/thumbs/womens-health.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-mens-health.html"><span class="goal-name">Men’s Health</span><span class="goal-desc">For his everyday</span><span class="goal-island"><img src="assets/thumbs/mens-health.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
       </ul>
     </div>
   </section>
@@ -242,7 +243,7 @@
       <nav class="foot-links" aria-label="Footer">
         <a href="homepage.html#macros">Macro calculator</a>
         <a href="homepage.html#consult">Book a free call</a>
-        <a href="homepage.html#results" data-all>All 99 products</a>
+        <a href="homepage.html#results" data-all>All 101 products</a>
       </nav>
     </div>
     <div class="foot-meta">
@@ -282,6 +283,7 @@
         <li><a href="category-daily-foundations.html">Daily Foundations</a></li>
         <li><a href="category-skin-redefined.html">Skin Redefined</a></li>
         <li><a href="category-womens-health.html">Women’s Health</a></li>
+        <li><a href="category-mens-health.html">Men’s Health</a></li>
       </ul>
       <!-- the consult leaves the list and becomes the one filled thing here, as in the mast -->
       <a class="btn menu-cta" href="homepage.html#consult">Book a free call</a>
@@ -1629,7 +1631,7 @@ if(mcForm){
   },{rootMargin:'400px 0px'}).observe(run);
 })();
 
-/* Load the bar (SHELF_VIEW 'bar' in build_homepage.py). #goals is a rack of eight plates, one per
+/* Load the bar (SHELF_VIEW 'bar' in build_homepage.py). #goals is a rack of plates (nine), one per
    shelf; a plate is a button that shows its shelf's panel (a few packs, each opening the product
    card, "Load this plate" and a link to the shelf), one panel at a time, and nothing opens on its
    own. Loaded plates are the visitor's stack: kept in localStorage (a browser that refuses it still

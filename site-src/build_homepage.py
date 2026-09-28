@@ -74,6 +74,8 @@ FAMILIES = {
     "Nutrilite Women's Daily Multivitamin Tablets": ('Multivitamin tablets', 'S', 'pills'),
     'Nutrilite Complete Menopause Support': ('Once-daily tablets', 'S', 'pills'),
     'Nutrilite Iron Folic': ('Iron & folic acid tablets', 'S', 'pills'),
+    'Nutrilite Prostate Health': ('Saw palmetto softgels', 'S', 'pills'),
+    'Nutrilite Organics Horny Goat Weed & Tribulus Capsules': ('Organic herbal capsules', 'S', 'pills'),
     'Nutrilite Double X Multivitamin': ('Multivitamin tablets', 'S', 'pills'),
     'Nutrilite Hair, Skin & Nail Health': ('Biotin & collagen tablets', '', 'pills'),
     'Nutrilite Immunity Defense Zinc + Holy Basil': ('Zinc & holy basil tablets', 'S', 'pills'),
@@ -143,6 +145,14 @@ CATEGORIES = [
     ('womens-health', 'Women’s Health', 'For her everyday: the Women’s Pack, multivitamins, iron and menopause support.', 'Everything in Women’s Health', [
         "Nutrilite Women's Pack", "Nutrilite Women's Daily Multivitamin Tablets", "Nutrilite Organics Women's Daily Multi Gummies",
         'Nutrilite Iron Folic', 'Nutrilite Complete Menopause Support']),
+    # DRAFT-COPY (the line after the name): Men's Health, its counterpart, the ninth shelf. The men's pack and
+    # multis also stay on Daily Foundations, and this is their tag. Concentrated Fruits and Vegetables stays on
+    # Daily Foundations only: Amway files it under Men's Health, but nothing on its label is for men.
+    # PETER'S PHOTO drops in at assets/bg-mens-health.webp (1600x900, the shelf page's hero), as hers does
+    # for Women's Health; until then it is the Men's Pack on a green field.
+    ('mens-health', 'Men’s Health', 'For his everyday: the Men’s Pack, multivitamins, Prostate Health and organic herbal capsules.', 'Everything in Men’s Health', [
+        "Nutrilite Men's Pack", "Nutrilite Men's Daily Multivitamin Tablets", "Nutrilite Organics Men's Daily Multi Gummies",
+        'Nutrilite Prostate Health', 'Nutrilite Organics Horny Goat Weed & Tribulus Capsules']),
 ]
 
 # The flavor carousel: category slug -> (family prefix to pull, heading, line)
@@ -162,18 +172,20 @@ CASE_PICKS = 3  # packs an open compartment shows: one per family, in the shelf'
 # The plates, one per shelf, fixed everywhere the bar theme shows them: colour, and rank on the bar.
 # Rank sets size (rank 0 is the full plate, each rank after it 6% smaller) and so place: a bar is
 # loaded larger plates nearest the collar. The first five ranks are Peter's stack in the order his
-# story loads it, so his bar builds outward and never reshuffles; the three he does not take come last.
+# story loads it, so his bar builds outward and never reshuffles; the four he does not take come last.
 # The text on a plate is white or ink, whichever the build finds clears 4.5:1 (it stops if neither does).
 # The colours are a satin rubber: Recovery is the XS blue taken down to a bumper plate's (the button's
 # --blue read as a toy on a plate), Fat Loss a shade deeper and Hydration a shade lighter, so white and ink
 # still clear 4.5:1 under the face's light and shade (measured on the rendered plates, not only here: at
 # every face pixel under a letter, since the rack's plates grew to ~160px; both moved a little further for it).
 # Women's Health (the eighth, 2026-09-27) is a satin plum, 7.3:1 under white flat and 4.69:1 at its lowest
-# rendered pixel anywhere in its words' line boxes on a 390px phone (5.1 at 820, 5.3 at 1440).
+# rendered pixel anywhere in its words' line boxes on a 390px phone (5.3 at 820 and 1440). Men's Health
+# (the ninth, the same day) is a forest green: 7.8:1 flat, 4.81:1 at its lowest on a phone (5.6 wider).
 PLATES = {
     'recovery': ('#3D4794', 4), 'hydration': ('#93B7C0', 2), 'energy-focus': ('#E2C8AE', 3),
     'protein': ('#1E262F', 0), 'fat-loss': ('#8A543E', 5), 'daily-foundations': ('#6B5646', 1),
     'skin-redefined': ('#D6D4C9', 6), 'womens-health': ('#76485F', 7),
+    'mens-health': ('#39594A', 8),
 }
 # Peter's stack, in the order #story loads it; it must match the shelves his five pack beats link to
 # (the build checks). DRAFT-COPY: the short tag after "Step n" on each of those beats.
@@ -238,6 +250,8 @@ TAGLINES = {
     "Nutrilite Organics Women's Daily Multi Gummies": 'The daily multi as an organic gummy, for women',
     'Nutrilite Iron Folic': 'Iron and folic acid, one to three tablets a day',
     'Nutrilite Complete Menopause Support': 'One tablet a day, made for the menopause years',
+    'Nutrilite Prostate Health': 'Saw palmetto and nettle root, a softgel three times a day',
+    'Nutrilite Organics Horny Goat Weed & Tribulus Capsules': 'Organic horny goat weed and tribulus, in capsules',
     "Nutrilite Men's Pack": 'One packet a day, put together for men',
     "Nutrilite Women's Pack": 'One packet a day, put together for women',
     'Nutrilite Perfect Pack': 'Two packets a day, with Double X inside',
@@ -338,7 +352,8 @@ CARD_SOUND = {
 SHELF_LINE = {  # the line under each shelf name
     'recovery': 'After the session', 'hydration': 'Long, hot sessions', 'energy-focus': 'Before the session',
     'protein': 'Hitting your protein', 'fat-loss': 'Training to lean out', 'daily-foundations': 'Everyday basics',
-    'skin-redefined': 'Skin & overnight', 'womens-health': 'For her everyday',  # DRAFT-COPY
+    'skin-redefined': 'Skin & overnight', 'womens-health': 'For her everyday',
+    'mens-health': 'For his everyday',  # DRAFT-COPY, both
 }
 
 CAT_THUMB = {  # the pack shown on the homepage row for each category
@@ -349,7 +364,7 @@ CAT_THUMB = {  # the pack shown on the homepage row for each category
     'fat-loss': 'XS Ignite Powder - Moro Blood Orange',
     'daily-foundations': 'XS Creatine+',
     'skin-redefined': 'Artistry Skin Nutrition Sleeping Mask',
-    'womens-health': "Nutrilite Women's Pack",
+    'womens-health': "Nutrilite Women's Pack", 'mens-health': "Nutrilite Men's Pack",
 }
 
 # Calendly link for the consult section; it embeds inline on submit rather than opening a tab.
@@ -507,7 +522,11 @@ def barbell(cls, loaded=None):
             out.append(f'<i class="bb-p{" on" if loaded is not None else ""}" data-cat="{k}" '
                        f'style="--c:{col};--s:{1 - .06 * rank:.2f};--o:{o}"><b class="bb-ring"></b></i>')
         return ''.join(out)
-    return (f'<div class="bb {cls}" style="--n:{len(PLATES)}" aria-hidden="true"><span class="bb-sl bb-l">{plates()}</span><span class="bb-co"></span>'
+    # the sleeves hold every plate there is (--n, style.css). Peter's bars drawn loaded (the story's arc and
+    # "That's my stack") only ever carry his five, so they keep the seven-plate sleeve they were drawn with
+    # (a nine-plate one would push "That's my stack" past its box on a phone)
+    n = len(PLATES) if loaded is None else 7
+    return (f'<div class="bb {cls}" style="--n:{n}" aria-hidden="true"><span class="bb-sl bb-l">{plates()}</span><span class="bb-co"></span>'
             f'<span class="bb-sh"><span class="bb-kn"></span></span><span class="bb-co"></span>'
             f'<span class="bb-sl bb-r">{plates()}</span></div>')
 
