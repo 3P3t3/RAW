@@ -220,7 +220,7 @@ a.how-step:active{opacity:.7}
   .how-go{margin-top:12px}
   .how-go .btn{flex:none}
 }
-@media (min-width:1024px){.how-steps{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (min-width:1024px){.how-steps{grid-template-columns:repeat(5,minmax(0,1fr))}}
 /* The game plan in the bar theme (html.t-bar, with script): the steps hang on a steel shaft, each
    number on a small bumper plate seen face on, the rack's rubber and the bar's steel. Down the left
    on phones and tablets; from 1024 across the top of the four columns. As the section scrolls through
@@ -295,9 +295,11 @@ a.how-step:active{opacity:.7}
   .t-bar.js .how-t{font-size:18px}
   .t-bar.js .how-sh{top:53px}
 }
-/* from 1024: one bar across the top of the four columns, the plates on it, the light running left to right */
+/* from 1024: one bar across the top of the five columns, the plates on it, the light running left to
+   right. Five, not four, since the plan gained the macro-breakdown-or-a-call step: a fifth that wrapped
+   to a second row would sit off the end of the shaft, with nothing running into its plate. */
 @media (min-width:1024px){
-  .t-bar.js .how-steps{grid-template-columns:repeat(4,minmax(0,1fr));column-gap:24px;max-width:none}
+  .t-bar.js .how-steps{grid-template-columns:repeat(5,minmax(0,1fr));column-gap:20px;max-width:none}
   .t-bar.js .how-step{grid-template-columns:minmax(0,1fr) 18px;row-gap:8px;padding:6px 0 28px}
   .t-bar.js .how-n{grid-row:1;grid-column:1;width:56px;height:56px;margin:0 0 10px;font-size:18px}
   .t-bar.js .how-t{grid-row:2;grid-column:1}
@@ -732,7 +734,7 @@ html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:
 #consult-form .c-field input{width:100%}
 /* the hint on a blank stays readable rather than hidden as it is in the sentence: small sans,
    sitting on the underline, so the blank still says what belongs in it */
-#consult-form .c-field input::placeholder{color:rgba(30,38,47,.46);font:400 15px/46px var(--sans);font-stretch:100%}
+#consult-form .c-field input::placeholder{color:rgba(65,83,101,.85);font:400 15px/46px var(--sans);font-stretch:100%}
 #consult-form .c-sum{margin-top:-14px;font:400 15px/1.45 var(--sans);color:var(--text)}
 @media (max-width:359px){
   #consult-form{--ncs:23px;--ncq:22px}
