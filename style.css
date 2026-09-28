@@ -864,8 +864,10 @@ html:not(.js) #results[hidden]{display:block!important}
    mid-scrub, as the pour's is; the beats inside it to the small one, so a line and its link
    are never under the toolbar. Each beat clears the masthead at the top and the tab at the
    foot. Only the beat whose line is up can be tapped. */
-.story.is-live .st-run{height:900vh}
-@supports (height:100lvh){.story.is-live .st-run{height:900lvh}}
+/* 933: the call's hold went from .8 to 1.6 units (_script.html), and the run grew by as much (a unit is
+   still 800lvh / 19.7 of the eight screens it scrubs over), so no other beat's pace changed */
+.story.is-live .st-run{height:933vh}
+@supports (height:100lvh){.story.is-live .st-run{height:933lvh}}
 .story.is-live .st-stage{position:sticky;top:0;height:100vh;overflow:hidden;overflow:clip}
 @supports (height:100lvh){.story.is-live .st-stage{height:100lvh}}
 .story.is-live .st-bg{display:block;position:absolute;inset:0;background:var(--teal)}
@@ -1403,6 +1405,24 @@ html:not(.js) .lbpin{display:none}
 .lbpin .bb-peter,.lbc-pset,.lbpin.is-peter .bb-you,.lbpin.is-peter .lbc-yset{opacity:0}
 .lbpin.is-peter .bb-peter,.lbpin.is-peter .lbc-pset{opacity:1}
 @media (prefers-reduced-motion:reduce){.lbpin,.lbpin.on,.lbpin-bars .bb,.lbc-set{transition:none}}
+/* a phone's strip is one 36px row: the caption on the left ("Your stack · 2", "Peter's · 3 of 5"),
+   the bar on the right, a 30px bar. "+ name" comes up over the caption for a moment, on the strip's
+   own chalk, and goes. With the masthead that is 96px; while the strip holds the visitor's stack
+   the bottom tab steps aside (html.pin-you, set by the script), so the fixed chrome outside the
+   story is never more than 96px. */
+@media (max-width:767px){
+  .t-bar{--pin:36px}
+  .lbpin-in{grid-template-columns:auto minmax(0,1fr);align-items:center;gap:0 12px;padding-top:0}
+  .lbpin-cap{grid-row:1;grid-column:1;font-size:10px;letter-spacing:.1em}
+  .lbpin-bars{grid-row:1;grid-column:2}
+  .lbpin-bars .bb{font-size:3px}
+  .lbc-lg{display:none}
+  .lbc-set{display:grid}
+  .lbc-who,.lbc-new{grid-area:1 / 1}
+  .lbc-new{justify-items:stretch}
+  .lbc-new .lbc{background:var(--chalk)}
+  html.pin-you .mtab{transform:translateY(calc(100% + 2px));visibility:hidden}
+}
 @media (min-width:768px){
   .t-bar{--pin:60px}
   .lbpin-in{max-width:780px;gap:4px}

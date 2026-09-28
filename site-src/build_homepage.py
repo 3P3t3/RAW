@@ -717,7 +717,7 @@ def main():
     bar_bits.update({f'{{{{STEP_{i + 1}}}}}': '' for i in range(len(PETER))})
     if BAR:
         pn = [(c, names[c]) for c, _ in PETER]
-        caps = ''.join(f'<span class="lbc lbc-p" data-n="{n}">Peter’s stack · {n} of {len(PETER)}</span>' for n in range(len(PETER) + 1))
+        caps = ''.join(f'<span class="lbc lbc-p" data-n="{n}">Peter’s<span class="lbc-lg"> stack</span> · {n} of {len(PETER)}</span>' for n in range(len(PETER) + 1))   # a phone's one-row strip drops "stack"
         news = ''.join(f'<span class="lbc lbc-pnew" data-cat="{c}">+ {n}</span>' for c, n in pn)
         bar_bits.update({
             '{{HTML_CLASS}}': ' class="t-bar"',
