@@ -203,14 +203,20 @@ shelf pages and podium still use the catalogue images.
 
 ## The story (`#story`)
 
-The homepage runs hero → shelves → `#trending` (the scroll-scrubbed can pour) → `#story` →
+The homepage runs hero → shelves → `#trending` (the week's three best sellers, all three in view at
+every width; the scroll-scrubbed can pour behind them is `TRENDING_POUR`, off) → `#story` →
 `#macros` → `#consult`. `#story` is a sticky, scroll-scrubbed stage telling Peter's 15 months in
 beats: his before, five product beats (each linking to a shelf), the before becoming the after,
 "That's what this call is for" with a "Book a free call" button, his family, then the proof wall:
 his three pairs, Yenni's two beside them, then the DEXA cards. The wall sits after the stage
 (`#st-run`), so it does not make the run any longer. The story replaced the old `#hydrate` band (its
 water line now lives in the hydration beat).
+A visible heading opens the section — PETER'S STORY over "How did I get into this?" (`.st-head`),
+his own words for it. Like the proof wall it is outside `#st-run`, so it scrolls away normally and
+the run is no longer for it.
 Peter's lines inside it are his, verbatim, in PETER-COPY markers.
+The five packs all rest at `data-tilt="0"`: they stand straight in the group that gathers on stage,
+and the only turn left is the fall's own lean (`DROP.lean`), which unwinds to nothing at the landing.
 
 Its pace lives in two places: the `HOLD` table and the per-change lengths in the story block of
 `_script.html`, and the run height (778lvh) in `style.css`. `HOLD` is
