@@ -565,8 +565,10 @@ a.how-step:active{opacity:.7}
 /* The free sample (#sample) reads as a note to Peter: a fill-in-the-blank sentence in the display
    type, in two short steps with script. Every field keeps its real label, visually hidden, and the
    sentence around it is aria-hidden. The blanks grow as they fill (the script sizes them), the
-   chips sit in the sentence as words. All of it is under #sample, so the consult's card, chips and
-   fields, which this form borrows, never change. Without script nothing is hidden: one form. */
+   chips sit in the sentence as words. Without script nothing is hidden: one form.
+   The card itself is no longer the sample's alone: the shell, the display face, the blanks and the
+   pills are .nc below, which the consult form wears too. What stays under #sample here is only what
+   the SENTENCE needs — the hidden legends, the inline chips, the separators, the growing blanks. */
 #sample-form.s-two[data-step="1"] #s-step2,#sample-form.s-two[data-step="2"] #s-step1{display:none}
 /* .nc is that note-card hand, lifted out of #sample so the consult form can wear it too: the shell,
    the heavy condensed display face, the underlined blanks and the dashed choice pills. --ncs is the
