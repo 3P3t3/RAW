@@ -138,18 +138,21 @@ CATEGORIES = [
         'Artistry Studio Glow Boss Cleanser + Exfoliator', 'Nutrilite Hair, Skin & Nail Health']),
     # DRAFT-COPY (the line after the name): Women's Health, from 2026-09-27. Only what is made for women;
     # the women's pack and multis also stay on Daily Foundations beside the men's, and this is their tag
-    # HER PHOTO drops in at assets/bg-womens-health.webp (1600x900, the shelf page's hero, cropped to fill
-    # and under the page's dark gradient like every shelf's): replace that one file and rebuild. Until then
-    # it is a placeholder, the Women's Pack on a plum field; assets/thumbs|shelf|islands/womens-health.webp are
-    # the pack's top, for the 'Keep looking' rows (and the idle strip and ring views)
+    # HER PHOTO is the hero: her portrait with their daughter (assets/her/with-daughter-*.webp), shown whole as a
+    # real picture beside the name (SHELF_PORTRAIT), since a banner's cover crop cut into their faces. The old
+    # placeholder, assets/bg-womens-health.webp (the Women's Pack on a plum field), is kept but no page shows it;
+    # drop the SHELF_PORTRAIT entry and it is the banner again. Her story, pairs and DEXA card sit between the
+    # hero and the products (SHELF_EXTRA). assets/thumbs|shelf|islands/womens-health.webp are the pack's top,
+    # for the 'Keep looking' rows (and the idle strip and ring views)
     ('womens-health', 'Women’s Health', 'For her everyday: the Women’s Pack, multivitamins, iron and menopause support.', 'Everything in Women’s Health', [
         "Nutrilite Women's Pack", "Nutrilite Women's Daily Multivitamin Tablets", "Nutrilite Organics Women's Daily Multi Gummies",
         'Nutrilite Iron Folic', 'Nutrilite Complete Menopause Support']),
     # DRAFT-COPY (the line after the name): Men's Health, its counterpart, the ninth shelf. The men's pack and
     # multis also stay on Daily Foundations, and this is their tag. Concentrated Fruits and Vegetables stays on
     # Daily Foundations only: Amway files it under Men's Health, but nothing on its label is for men.
-    # PETER'S PHOTO drops in at assets/bg-mens-health.webp (1600x900, the shelf page's hero), as hers does
-    # for Women's Health; until then it is the Men's Pack on a green field.
+    # PETER'S PHOTO drops in at assets/bg-mens-health.webp (1600x900, the shelf page's hero, cropped to fill
+    # and under the page's dark gradient like every shelf's); until then it is the Men's Pack on a green field.
+    # His DEXA card sits between the hero and the products (SHELF_EXTRA).
     ('mens-health', 'Men’s Health', 'For his everyday: the Men’s Pack, multivitamins, Prostate Health and organic herbal capsules.', 'Everything in Men’s Health', [
         "Nutrilite Men's Pack", "Nutrilite Men's Daily Multivitamin Tablets", "Nutrilite Organics Men's Daily Multi Gummies",
         'Nutrilite Prostate Health', 'Nutrilite Organics Horny Goat Weed & Tribulus Capsules']),
