@@ -165,9 +165,16 @@ are cut from the originals Peter sent and placed by hand, so the build never tou
 Her photos have their own dates (`HER_PHOTOS`: Nov 2025 → Jul 2026), about two months and ten months
 after their daughter's birth in Sep 2025. They are never presented as matching her DEXA scans.
 
-**The DEXA cards.** Peter's card (`peter_card()`, from `PETER_TRANSFORM`) shows only the two scans of his
+**The DEXA cards.** Peter's card (`peter_card()`, from `PETER_TRANSFORM`) shows the two scans of his
 transformation, fifteen months apart: body fat and weight, no dates, no trend, no clinic. That is Peter's choice
-(2026-09-28); his later UC Davis scans are deliberately not used anywhere. `HER_DEXA` holds Yenni's scans as data
+(2026-09-28); his later UC Davis scans are deliberately not used anywhere. Under those two measured rows the card
+also carries **pounds of fat and of lean, worked out from them and not read off the report** (fat = weight x body
+fat %, lean = the rest), rounded to whole pounds: Fat 38 → 12 lb, −25 lb and Lean mass 132 → 152 lb, +19 lb. Each
+figure and each change is rounded from the exact value, so a row can read a pound off its own two ends. The line
+under the card says in Peter's voice that they are worked out and rounded, because +19 lb of lean in fifteen months
+is at the very top of what is plausible and a DEXA lean figure carries water and glycogen besides. `PETER_SHOW_COMPOSITION
+= False` takes both rows and that line off every page in one edit. Yenni's card shows fat and lean as her scans
+measured them, and is not affected. `HER_DEXA` holds Yenni's scans as data
 rows: date, weight, fat, lean and body fat %, from UC Davis Sports Medicine in Sacramento. `dexa_card()` draws
 her card, with these parts:
 - The headline, which compares the first scan with the last.
@@ -208,7 +215,9 @@ The homepage runs hero → shelves → `#trending` (the scroll-scrubbed can pour
 beats: his before, five product beats (each linking to a shelf), the before becoming the after,
 "That's what this call is for" with a "Book a free call" button, his family, then the proof wall:
 his three pairs, Yenni's two beside them, then the DEXA cards. The wall sits after the stage
-(`#st-run`), so it does not make the run any longer. The story replaced the old `#hydrate` band (its
+(`#st-run`), so it does not make the run any longer. It is its own `<section id="proof">` with a
+labelled heading, and the menu sheet's "Our before & afters" is the way to it from anywhere and from
+any shelf page — the site is not getting a third fixed layer for it. The story replaced the old `#hydrate` band (its
 water line now lives in the hydration beat).
 Peter's lines inside it are his, verbatim, in PETER-COPY markers.
 
