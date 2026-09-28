@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="en"{{HTML_CLASS}}>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#002E3B">
+{{HEAD_EXTRA}}<meta name="theme-color" content="#002E3B">
 <title>Aspire Health · Sports nutrition &amp; wellness</title>
 <meta name="description" content="Nutrilite and XS sports nutrition, hydration and sleep support, picked for how you train.">
 <meta property="og:type" content="website">
@@ -24,6 +24,9 @@
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
+<!-- the field: the one ground behind the whole page (chalk, two drifting glows, a low band of light
+     and grain); see the field block at the end of style.css -->
+<div class="field" aria-hidden="true"><span class="fg fg1"></span><span class="fg fg2"></span></div>
 <a class="skip" href="#main">Skip to content</a>
 
 {{INTRO}}
@@ -31,6 +34,7 @@
 {{ICONS}}
 
 {{HEADER}}
+{{PIN}}
 
 <main id="main">
 
@@ -43,31 +47,198 @@
       </div>
       <div class="hero-copy">
         <p class="label">Sports nutrition &amp; wellness</p>
-        <h1 id="hero-title"><span>Picked</span> <span>for how</span> <span>you train.</span></h1>
+        <h1 id="hero-title"><span>Picked</span> <span>for how</span> <span class="hl-3d">you train.</span></h1>
         <!-- PETER-COPY --><p class="sub">Hand-picked supplements. Free macros. A half-hour call on what’s worth taking.</p><!-- /PETER-COPY -->
         <div class="hero-actions">
           <a class="btn" href="#macros">Work out your macros</a>
           <a class="tlink" href="#consult">Book a free call</a>
         </div>
+        {{HERO_BAR}}
       </div>
+    </div>
+  </section>
+
+  <!-- 3b. The game plan (#how): the path through the page, before anything else asks for attention.
+       Four numbered steps, each linking to where it happens (#macros, #sample, #quick-call; step 3
+       has no section of its own, so it is not a link), then the one thing to do. The sections
+       themselves carry no step numbers: they sit in a different order on the page, so this list
+       alone is the map. Step 4's words switch with CONSULT_QUICK_URL in build_homepage.py, as
+       the quick-call button does. The sample is a request, never a promise: Peter decides what he
+       can send, so no line here or in #sample may guarantee one.
+       In the bar theme (html.t-bar) the steps hang on a steel shaft, each number on a plate (.how-pl,
+       drawn from its data-n); as the section scrolls through, the shaft lights and each plate slides
+       on (_script.html). .how-sh is the stretch of shaft to the next plate. Other views hide both. -->
+  <section class="sec how-sec" id="how" aria-labelledby="how-title">
+    <div class="wrap">
+      <!-- DRAFT-COPY -->
+      <div class="how-head grow">
+        <p class="label">New here?</p>
+        <h2 id="how-title"><span>The game</span> <span class="hl-k">plan</span></h2>
+      </div>
+      <ol class="how-steps">
+        <li class="grow" style="--d:1"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="#macros"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="01"></i>01</span>
+          <span class="how-t">Name your goal.</span>
+          <span class="how-d">Pick what you’re chasing, then get your numbers from the free macro calculator.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li class="grow" style="--d:2"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="#sample"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="02"></i>02</span>
+          <span class="how-t">Request a free sample.</span>
+          <span class="how-d">On me, while supplies last, dropped off near Lincoln or mailed in the US.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li class="grow" style="--d:3"><i class="how-sh" aria-hidden="true"><i></i></i><div class="how-step"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="03"></i>03</span>
+          <span class="how-t">Report back.</span>
+          <span class="how-d">A few days in, I’ll ask how you’re getting on. Say what worked and what didn’t, and I’ll tell you what I’d add next, if anything.</span></div></li>
+        <li class="grow" style="--d:4"><a class="how-step" href="#quick-call"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="04"></i>04</span>
+          <span class="how-t">Make it part of your week.</span>
+          <span class="how-d">{{QUICK_STEP}}, then order through my Amway link if it earns a spot.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+      </ol>
+      <div class="how-go grow">
+        <a class="btn" id="how-go" href="#sample">Ask for a free sample</a>
+        <a class="tlink" href="#macros">or run your macros first</a>
+        <p class="how-fine">Sixty seconds of typing. I answer every one myself.</p>
+      </div>
+      <!-- /DRAFT-COPY -->
     </div>
   </section>
 
 {{SHELVES}}
 
-  <!-- 4. Trending: three best sellers on a podium, oversized and breaking the band.
-       The band's ground is a 150-frame film of the pour, scrubbed by scroll. It is
-       scenery, not content: frames come only as the band nears, and reduced motion
-       gets one still. It follows the shelves, and Peter's story (#story) follows it directly,
-       starting in this band's dark. -->
-  <section class="sec podium-sec dark" id="trending" aria-labelledby="trending-title">
-    <div class="pour-bg" id="pour-bg" aria-hidden="true">
-      <div class="pour-stage">
-        <canvas class="pour-film" id="pour-film"></canvas>
-        <img class="pour-still" id="pour-still" alt="" decoding="async" hidden>
-        <noscript><img class="pour-still" src="assets/pour/sm/0060.webp" alt=""></noscript>
+  <!-- Free sample: visitors leave their own contact details and Peter reaches out; his phone and
+       email are never shown. Self-contained, so moving it is a cut-and-paste of this block.
+       With script it posts JSON to FormSubmit (_script.html); without, it is a plain POST and
+       FormSubmit sends the visitor back to #sample-sent, which :target shows in style.css.
+       The addresses come from SAMPLE_TO in build_homepage.py. -->
+  <section class="sec sample-sec" id="sample" aria-labelledby="sample-title">
+    <div class="wrap split">
+      <div class="split-text grow">
+        <!-- DRAFT-COPY --><p class="label">Try it first</p>
+        <h2 id="sample-title"><span>Request a</span> <span><span class="hl-k">free</span> sample</span></h2>
+        <p>On me, while supplies last. Dropped off near Lincoln, or mailed anywhere in the US.</p><!-- /DRAFT-COPY -->
       </div>
+      <form class="c-card grow" id="sample-form" action="{{SAMPLE_ACTION}}" method="POST" data-endpoint="{{SAMPLE_ENDPOINT}}" style="--d:1">
+        <input type="hidden" name="_subject" value="Sample request · Aspire Health">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="{{SAMPLE_NEXT}}">
+        <!-- the honeypot: people never see or reach it, bots fill it, FormSubmit drops those -->
+        <div class="vh" aria-hidden="true"><label for="s-honey">Leave this empty</label><input id="s-honey" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
+        <!-- Two short steps with script: step 1 is who you are and what you'd like, step 2 is where
+             it goes and the send. Without script nothing here is hidden, so it is one form and a
+             plain POST, as before. The count, Next, Back and the recap are [hidden] until the script
+             takes over. The form reads as a note to Peter, a fill-in-the-blank sentence: .s-say is
+             the sentence, aria-hidden, since every field keeps its own real (visually hidden) label. -->
+        <p class="s-prog" id="s-prog" hidden><span id="s-prog-t">1 of 2</span></p>
+        <!-- DRAFT-COPY -->
+        <div class="s-step" id="s-step1" role="group" tabindex="-1" aria-label="Your details">
+          <span class="s-say" aria-hidden="true">Hey Peter, I’m</span>
+          <div class="c-field"><label for="s-name">Your name</label>
+            <input id="s-name" name="name" type="text" autocomplete="name" required aria-describedby="s-name-err">
+            <p class="s-err" id="s-name-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <fieldset class="c-q s-by">
+            <legend>Text or email?</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="contact_by" value="Text" checked><span>Text me</span></label>
+              <label class="chip"><input type="radio" name="contact_by" value="Email"><span>Email me</span></label>
+            </div>
+          </fieldset>
+          <span class="s-say" aria-hidden="true">at</span>
+          <div class="c-field" data-by="Text"><label for="s-phone">Your phone number</label>
+            <input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="s-phone-err">
+            <p class="s-err" id="s-phone-err"></p></div>
+          <div class="c-field" data-by="Email"><label for="s-email">Your email</label>
+            <input id="s-email" name="email" type="email" autocomplete="email" aria-describedby="s-email-err">
+            <p class="s-err" id="s-email-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <span class="s-say" aria-hidden="true">I’ve had my eye on</span>
+          <!-- a textarea, not an input, so a long product name wraps inside its blank instead of
+               scrolling out of sight. One line, and Enter means Next (the script sees to both). -->
+          <div class="c-field s-f-item"><label for="s-product">What would you like to try?</label>
+            <textarea id="s-product" name="product" rows="1" autocomplete="off" required
+                   aria-describedby="s-product-hint s-product-err"></textarea>
+            <p class="s-err" id="s-product-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <!-- the product names, for the script's suggestions under the blank -->
+          <ul class="s-sugg" id="s-sugg" role="listbox" aria-label="Products that match" hidden></ul>
+          {{SAMPLE_PICKER}}
+          <!-- "Ask for a free sample" on a product card, over words the visitor typed here: the script keeps
+               them, puts the product in the P.S. and says so on this line -->
+          <p class="s-hint s-kept" id="s-kept" hidden></p>
+          <p class="s-hint" id="s-product-hint">Not sure? Say so and I’ll suggest something.</p>
+          <datalist id="sample-products">
+{{SAMPLE_PRODUCTS}}
+          </datalist>
+          <button class="btn s-next-btn" type="button" id="s-next" hidden>Next<svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
+        </div>
+        <div class="s-step" id="s-step2">
+          <!-- step 1, folded to a line once Next has checked it: filled in by the script -->
+          <div class="s-recap" id="s-recap" hidden>
+            <p class="s-recap-t"><b id="s-r-name"></b> · <span id="s-r-how"></span> · <span id="s-r-item"></span></p>
+            <button class="s-edit" type="button" id="s-edit">Edit<span class="vh"> your name, number or email, and pick</span></button>
+          </div>
+          <span class="s-say" aria-hidden="true">You can</span>
+          <fieldset class="c-q s-deliv" id="s-where" aria-describedby="s-where-err">
+            <legend>Where should it go?</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="delivery" value="Drop it off near Lincoln" required><span>drop it off, I’m near Lincoln</span></label>
+              <label class="chip"><input type="radio" name="delivery" value="Mail it (US)" aria-describedby="s-mail-note"><span>mail it, I’m in the US</span></label>
+            </div>
+            <p class="s-hint s-mail-note" id="s-mail-note">No need for your address yet. I’ll ask for it if it’s one I can mail.</p>
+            <p class="s-err" id="s-where-err"></p>
+          </fieldset>
+          <div class="s-ps"><span class="s-say" aria-hidden="true">P.S.</span>
+          <div class="c-field s-f-note"><label for="s-note">Anything else? <span>Optional</span></label>
+            <input id="s-note" name="note" type="text" autocomplete="off" maxlength="300" placeholder="A flavor you like, a good time to text…"></div></div>
+          <div class="s-checks">
+            <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this.</span></label>
+            <p class="s-err" id="s-consent-err"></p>
+            <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and the odd update after that is fine too. <em>Optional</em></span></label>
+          </div>
+          <div class="s-acts">
+            <button class="btn btn-line s-back" type="button" id="s-back" hidden><svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-back"/></svg>Back</button>
+            <button class="btn" type="submit" id="sample-go">Send it to Peter</button>
+          </div>
+          <p class="s-err" id="sample-fail" tabindex="-1"></p>
+          <ol class="s-next" aria-label="What happens next">
+            <li>You hear from me directly, by text or email, whichever you chose.</li>
+            <li>If it’s one I can send, we pick a drop-off near Lincoln, or I ask for your address to mail it.</li>
+            <li>Give it a real try, then give me your honest take. You don’t owe me an order.</li>
+          </ol>
+          <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
+        </div>
+        <!-- /DRAFT-COPY -->
+      </form>
+      <!-- the thank-you takes the form's place: shown by the script after a send, or by
+           :target when FormSubmit sends a no-script visitor back to #sample-sent -->
+      <div class="c-card s-done" id="sample-sent">
+        <!-- DRAFT-COPY --><h3 id="sample-done-title" tabindex="-1">Got it, thank you.</h3>
+        <p>You’ll hear from me within a day or two about what I can send.</p><!-- /DRAFT-COPY -->
+        <!-- DRAFT-COPY -->
+        <div class="s-step3">
+          <p>If I can send it, give it a few days, then I’ll ask how you’re getting on. Be honest about what worked and what didn’t, and I’ll say what I’d add next, if anything.</p>
+        </div>
+        <div class="qc qc-done">
+          <p class="qc-ask">{{QUICK_ASK}}</p>
+          {{QUICK_CALL}}
+        </div>
+        <!-- /DRAFT-COPY -->
+      </div>
+      <!-- the quick call (step 4), under the form on a phone and beside it from 768 up. Once the
+           thank-you is up this copy steps aside for the one inside it, and the script hands
+           this id over to that one, so "#quick-call" always lands on the invitation on screen.
+           Words and button come from quick_call() in build_homepage.py. -->
+      <!-- DRAFT-COPY -->
+      <div class="qc qc-form" id="quick-call">
+        <p class="qc-ask">{{QUICK_ASK}}</p>
+        {{QUICK_CALL}}
+      </div>
+      <!-- /DRAFT-COPY -->
     </div>
+  </section>
+
+  <!-- 4. Trending: three best sellers on a podium, oversized and breaking the band.
+       The band's ground can be a 150-frame film of the pour, scrubbed by scroll (the pour markup
+       below, switched by TRENDING_POUR in build_homepage.py; off, the band is a compact row of
+       three cards on the page's field, a swipe row on phones). It is
+       scenery, not content: frames come only as the band nears, and reduced motion
+       gets one still. It follows the shelves (and the free sample, #sample), and Peter's story (#story) follows it directly,
+       starting in this band's dark. -->
+  <section class="sec podium-sec dark{{POUR_CLASS}}" id="trending" aria-labelledby="trending-title">
+    {{POUR}}
     <div class="wrap">
       <div class="sec-head grow"><h2 id="trending-title">Trending now</h2></div>
       <ul class="podium">
@@ -78,8 +249,9 @@
 
   <!-- 5. Peter's story, told as a storyboard: the stage holds on screen while each part of it
        arrives, and the product that part is about swirls in beside it and spins away as the
-       next one comes. It follows #trending, whose dark it starts in, and warms to the page's
-       sand and chalk as the story reaches energy and family: dark to light, as he went.
+       next one comes. It follows #trending and opens in its dark on his before; the after wipes
+       in straight away and brings the light (chalk), which is what leads into why his stack is
+       worth a look: the five packs then stand on the sand, and the call and his family on chalk.
        Every beat is real content in reading order. The stage is only a way of showing them:
        the script takes the section over (.is-live) when motion is allowed, and positions each
        beat as a pure function of how far the section has scrolled, as the pour does. Without
@@ -94,7 +266,7 @@
       <div class="st-stage">
         <div class="st-bg" aria-hidden="true"><span class="st-dusk"></span><span class="st-lamp st-lamp-dark"></span><span class="st-sand"></span><span class="st-lamp st-lamp-warm"></span><span class="st-chalk"></span></div>
         <ol class="st-beats">
-          <li class="st-beat st-dark" data-kind="photo">
+          <li class="st-beat st-dark st-open" data-kind="photo">
             <div class="st-hero"><div class="st-art st-photo">
               <img src="assets/peter/side-before-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="Peter before, from the side">
               <span class="st-tag" aria-hidden="true">Before</span>
@@ -103,57 +275,10 @@
               <!-- PETER-COPY --><p class="st-say">Tired all the time. Work was good, but I was scraping by week to week — and I’d let myself go further than I wanted to admit.</p><!-- /PETER-COPY -->
             </div>
           </li>
-          <li class="st-beat st-dark" data-kind="prod">
-            <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-tilt="-6" data-x="-7" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Grass-Fed Whey Protein"></span>
-            </div></div>
-            <div class="st-copy">
-              <!-- PETER-COPY --><p class="st-line">I fixed my food and found someone who pushed me.</p><!-- /PETER-COPY -->
-              <a class="tlink st-go" href="category-protein.html">Protein Snack Pack<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-            </div>
-          </li>
-          <li class="st-beat st-dark" data-kind="prod">
-            <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-tilt="0" data-x="9" data-scale=".96"><span class="st-shade"></span><img src="assets/story/nutrilite-begin-gi-primer-lit.webp" width="1008" height="1008" loading="lazy" decoding="async" alt="Nutrilite Begin Daily GI Primer"></span>
-            </div></div>
-            <div class="st-copy">
-              <!-- PETER-COPY --><p class="st-line">I changed my morning routine.</p><!-- /PETER-COPY -->
-              <a class="tlink st-go" href="category-daily-foundations.html">Daily Foundations<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-            </div>
-          </li>
-          <!-- his hydration stack, the two he actually takes: they arrive as a pair -->
-          <li class="st-beat st-dark" data-kind="prod">
-            <div class="st-hero"><div class="st-art st-pair">
-              <span class="st-pack" data-tilt="-4" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt="XS Creatine+"></span>
-              <span class="st-pack" data-tilt="7" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Twist Tubes 2GO"></span>
-            </div></div>
-            <div class="st-copy">
-              <!-- PETER-COPY --><p class="st-line">I focused way more on hydration and getting electrolytes.</p>
-              <p class="st-note">Not sure how much water is enough? Athletes aim for one ounce per pound of bodyweight.</p><!-- /PETER-COPY -->
-              <a class="tlink st-go" href="category-hydration.html">Hydration<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-            </div>
-          </li>
-          <li class="st-beat st-warm" data-kind="prod">
-            <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-tilt="6" data-x="-9" data-scale="1.1"><span class="st-shade"></span><img src="assets/story/xs-elite-focus-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Elite + Focus Energy Drink"></span>
-            </div></div>
-            <div class="st-copy">
-              <!-- PETER-COPY --><p class="st-line">I swapped out my huge coffee spikes for smoother energy.</p><!-- /PETER-COPY -->
-              <a class="tlink st-go" href="category-energy-focus.html">Energy &amp; Focus<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-            </div>
-          </li>
-          <li class="st-beat st-warm" data-kind="prod">
-            <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-tilt="-3" data-x="7" data-scale=".92"><span class="st-shade"></span><img src="assets/story/nutrilite-sleep-health-lit.webp" width="860" height="860" loading="lazy" decoding="async" alt="Nutrilite Sleep Health"></span>
-            </div></div>
-            <div class="st-copy">
-              <!-- PETER-COPY --><p class="st-line">And I found ways to maximize my sleep, even during the newborn nights.</p><!-- /PETER-COPY -->
-              <a class="tlink st-go" href="category-recovery.html">Recovery<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-            </div>
-          </li>
-          <!-- the before comes back, and the after wipes in over it from the side it sits on in
-               the pair. Without the stage only the after stands here: the before is above. -->
-          <li class="st-beat st-light" data-kind="turn">
+          <!-- straight after the opening: the before holds, and the after wipes in over it from the
+               side it sits on in the pair, bringing the light. Without the stage only the after
+               stands here: the before is directly above. -->
+          <li class="st-beat st-light st-open" data-kind="turn">
             <div class="st-hero"><div class="st-art st-photo">
               <img class="st-was" src="assets/peter/side-before-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="">
               <span class="st-tag st-was" aria-hidden="true">Before</span>
@@ -166,19 +291,63 @@
               <!-- PETER-COPY --><p class="st-say">For the first time my energy held all day — and that’s what made the rest stick. Lifting hard. Same wake-up. Same bedtime.</p><!-- /PETER-COPY -->
             </div>
           </li>
-          <li class="st-beat st-light st-solo" data-kind="text">
-            <!-- supplement after supplement: the five packs just seen, back as a loose arc. Only
-                 while the stage runs; the plain sequence has just shown each of them. -->
-            <div class="st-hero st-arc" aria-hidden="true">
-              <span class="st-pack" data-tilt="-12" style="--x:13%;--y:34%"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt=""></span>
-              <span class="st-pack" data-tilt="7" style="--x:31.5%;--y:12%"><span class="st-shade"></span><img src="assets/story/nutrilite-begin-gi-primer-lit.webp" width="1008" height="1008" loading="lazy" decoding="async" alt=""></span>
-              <span class="st-pack" data-tilt="-4" style="--x:50%;--y:0%"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt=""></span>
-              <span class="st-pack" data-tilt="9" style="--x:68.5%;--y:12%"><span class="st-shade"></span><img src="assets/story/xs-elite-focus-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt=""></span>
-              <span class="st-pack" data-tilt="-6" style="--x:87%;--y:34%"><span class="st-shade"></span><img src="assets/story/nutrilite-sleep-health-lit.webp" width="860" height="860" loading="lazy" decoding="async" alt=""></span>
+          <li class="st-beat st-warm" data-kind="prod">
+            <div class="st-hero"><div class="st-art">
+              <span class="st-pack" data-tilt="-6" data-x="-7" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Grass-Fed Whey Protein"></span>
+            </div></div>
+            <div class="st-copy">
+              {{STEP_1}}<!-- PETER-COPY --><p class="st-line">I fixed my food and found someone who pushed me.</p><!-- /PETER-COPY -->
+              <a class="tlink st-go" href="category-protein.html">Protein Snack Pack<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
             </div>
+          </li>
+          <li class="st-beat st-warm" data-kind="prod">
+            <div class="st-hero"><div class="st-art">
+              <span class="st-pack" data-tilt="0" data-x="9" data-scale=".96"><span class="st-shade"></span><img src="assets/story/nutrilite-begin-gi-primer-lit.webp" width="1008" height="1008" loading="lazy" decoding="async" alt="Nutrilite Begin Daily GI Primer"></span>
+            </div></div>
+            <div class="st-copy">
+              {{STEP_2}}<!-- PETER-COPY --><p class="st-line">I changed my morning routine.</p><!-- /PETER-COPY -->
+              <a class="tlink st-go" href="category-daily-foundations.html">Daily Foundations<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </div>
+          </li>
+          <!-- his hydration stack, the two he actually takes: they arrive as a pair -->
+          <li class="st-beat st-warm" data-kind="prod">
+            <div class="st-hero"><div class="st-art st-pair">
+              <span class="st-pack" data-tilt="-4" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt="XS Creatine+"></span>
+              <span class="st-pack" data-tilt="7" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Twist Tubes 2GO"></span>
+            </div></div>
+            <div class="st-copy">
+              {{STEP_3}}<!-- PETER-COPY --><p class="st-line">I focused way more on hydration and getting electrolytes.</p>
+              <p class="st-note">Not sure how much water is enough? Athletes aim for one ounce per pound of bodyweight.</p><!-- /PETER-COPY -->
+              <a class="tlink st-go" href="category-hydration.html">Hydration<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </div>
+          </li>
+          <li class="st-beat st-warm" data-kind="prod">
+            <div class="st-hero"><div class="st-art">
+              <span class="st-pack" data-tilt="6" data-x="-9" data-scale="1.1"><span class="st-shade"></span><img src="assets/story/xs-elite-focus-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Elite + Focus Energy Drink"></span>
+            </div></div>
+            <div class="st-copy">
+              {{STEP_4}}<!-- PETER-COPY --><p class="st-line">I swapped out my huge coffee spikes for smoother energy.</p><!-- /PETER-COPY -->
+              <a class="tlink st-go" href="category-energy-focus.html">Energy &amp; Focus<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </div>
+          </li>
+          <li class="st-beat st-warm" data-kind="prod">
+            <div class="st-hero"><div class="st-art">
+              <span class="st-pack" data-tilt="-3" data-x="7" data-scale=".92"><span class="st-shade"></span><img src="assets/story/nutrilite-sleep-health-lit.webp" width="860" height="860" loading="lazy" decoding="async" alt="Nutrilite Sleep Health"></span>
+            </div></div>
+            <div class="st-copy">
+              {{STEP_5}}<!-- PETER-COPY --><p class="st-line">And I found ways to maximize my sleep, even during the newborn nights.</p><!-- /PETER-COPY -->
+              <a class="tlink st-go" href="category-recovery.html">Recovery<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </div>
+          </li>
+          <li class="st-beat st-light st-solo" data-kind="text">
+            <!-- supplement after supplement: the place above the call that the filled case rises
+                 into. While the stage runs it is only a box: the case strip the visitor watched
+                 being filled moves up into it, packs and all. Without the stage it is not shown;
+                 the plain sequence has just shown each pack. -->
+            <div class="st-hero st-arc" aria-hidden="true">{{ARC_BAR}}</div>
             <div class="st-copy">
               <!-- PETER-COPY --><p class="st-say">The hardest part was figuring it out alone, testing supplement after supplement to find what worked. That’s what this call is for. Book it and we’ll figure yours out together.</p><!-- /PETER-COPY -->
-              <!-- the call, asked for where the story asks for it. The tab's own "Free call" steps aside
+              <!-- the call, asked for where the story asks for it. The tab's own "Book a free call" steps aside
                    while this is on screen (it is one of the tab's zones in _script.html). -->
               <a class="btn st-book" href="#consult">Book a free call</a>
             </div>
@@ -192,25 +361,39 @@
             </div>
           </li>
         </ol>
+        <!-- the case the stack is built in: the #goals case in miniature, its seven compartments
+             generated from the same shelves (build_homepage.py); style.css sets its size and place -->
+        {{CASE_STRIP}}
       </div>
     </div>
-    <!-- the stage lets go into the proof itself: all three views stacked, nothing to swipe.
-         The three files share one crop, so the seam between before and after sits at 50% in
-         each: the befores line up down the left, the afters down the right, and one pair of
-         headings on that same 50% line labels the whole stack. -->
+    <!-- the stage lets go into the proof itself, his and hers: Peter's three views stacked, and beside
+         them (under them on a phone) his wife's two, nothing to swipe. Each set shares one crop, so the seam
+         between before and after sits at 50% in every file: the befores line up down the left, the
+         afters down the right, and one pair of headings on that same 50% line labels each stack.
+         Then the DEXA cards, on their own dates (build_homepage.py: PETER_TRANSFORM, HER_DEXA).
+         It is after the stage (#st-run), so none of it makes the story's run longer. -->
     <div class="wrap st-proof">
-      <figure class="c-proof">
+      <!-- DRAFT-COPY --><h3 class="pf-title"><span class="pf-k">His</span> and <span class="pf-k">hers</span></h3><!-- /DRAFT-COPY -->
+      <div class="pf-duo">
+      <figure class="c-proof pf-his">
+        <p class="pf-who"><span class="pf-name">Peter</span></p>
         <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
         <div class="c-stack">
           <img src="assets/peter/front-640.webp" srcset="assets/peter/front-640.webp 640w, assets/peter/front-960.webp 960w" sizes="(min-width:760px) 680px, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the front">
           <img src="assets/peter/side-640.webp" srcset="assets/peter/side-640.webp 640w, assets/peter/side-960.webp 960w" sizes="(min-width:760px) 680px, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the side">
           <img src="assets/peter/back-640.webp" srcset="assets/peter/back-640.webp 640w, assets/peter/back-960.webp 960w" sizes="(min-width:760px) 680px, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the back">
         </div>
-        <!-- PETER-COPY --><figcaption>Same guy, 15 months apart.</figcaption><!-- /PETER-COPY -->
+        <!-- PETER-COPY --><figcaption>Fifteen-month transformation.</figcaption><!-- /PETER-COPY -->
       </figure>
+      {{PROOF_HERS}}
+      </div>
+      <div class="dx-duo">
+{{DEXA_CARDS}}
+      </div>
     </div>
   </section>
 
+{{MYSTACK}}
   <!-- 6a. Macros: seven questions, one per screen, then the numbers and one action.
        It sits after the story, not before it: straight after the shelves it came too early,
        so Peter moved it below #trending and #story, and the story's closing chalk hands over
@@ -334,7 +517,7 @@
             <li><span class="mc-g" id="mc-c">&#8212;</span><span class="mc-lab">Carbs</span><span class="mc-kc" id="mc-cc">&#8212;</span></li>
           </ul>
           <div class="mc-notes" id="mc-notes"></div>
-          <a class="btn" id="mc-book" href="#consult">Take these to a free call</a>
+          <a class="btn" id="mc-book" href="#consult">Book a free call</a>
           <div class="mc-foot">
             <button class="tlink" type="button" id="mc-edit">Change an answer</button>
             <button class="tlink" type="button" id="mc-again">Start over</button>
@@ -366,16 +549,9 @@
         </div>
         <p class="label">One to one</p>
         <h2 id="consult-title"><span>What’s worth</span> <span>taking</span></h2>
-        <!-- PETER-COPY --><p>Half an hour, free.</p><!-- /PETER-COPY -->
-        <!-- who is on the call, before the disclosure: Peter comes before Amway -->
-        <!-- PETER-COPY --><p>I’m Peter — husband, dad to a baby girl, and a Lincoln local. My wife’s as obsessed with biohacking and longevity as I am.</p><!-- /PETER-COPY -->
-        <!-- the disclosure ends in a colon that introduces the bullets, so nothing may come between them -->
-        <!-- PETER-COPY --><p>Disclaimer: I am sponsored by Amway and am paid based on products sold. I take them myself and I’ve seen the process behind them. Ask me hard questions on the call — it’s about three things:</p><!-- /PETER-COPY -->
-        <ul class="c-list">
-          <li>Your macros, and whether the split is worth changing</li>
-          <li>What you already take, and what it is doing</li>
-          <li>The smallest stack that moves the goal, and what to drop</li>
-        </ul>
+        <!-- PETER-COPY --><p>Half an hour, free. Bring your stack and your hard questions.</p><!-- /PETER-COPY -->
+        <!-- the Amway disclosure stays wherever Peter recommends products (a paid endorsement must say so) -->
+        <!-- PETER-COPY --><p>Disclaimer: I’m sponsored by Amway and paid based on products sold.</p><!-- /PETER-COPY -->
       </div>
       <form class="c-card grow" id="consult-form" data-consult="{{CONSULT_URL}}" style="--d:1">
         <fieldset class="c-q">
@@ -437,7 +613,7 @@
 {{FOOTER}}
 
 {{DIALOGS}}
-
+{{PCARD}}
 <p class="vh" id="live" aria-live="polite"></p>
 
 {{SCRIPT}}

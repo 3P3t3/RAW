@@ -43,12 +43,12 @@ resolve the source, run the build, then commit.
 
 ## Never read the generated pages
 
-`homepage.html` is ~160k chars (~40k tokens). All eight generated pages together are ~850k
-chars (~210k tokens). All ten files in `site-src/` together are ~210k chars (~52k tokens).
-(Measured 2026-09-25; the pages roughly doubled once the inline script, icon sprite and
-consult section grew, so re-measure rather than trusting these if they look off.)
+`homepage.html` is ~310k chars (~78k tokens). All ten generated pages together are ~1.81M
+chars (~453k tokens). All ten files in `site-src/` together are ~415k chars (~104k tokens).
+(Measured 2026-09-27 on the bar theme with 101 products and nine shelves; the pages grow with
+the script, the icon sprite and the product count, so re-measure rather than trusting these.)
 
-**One generated page costs as much as three-quarters of the entire source, and the eight
+**One generated page costs as much as three-quarters of the entire source, and the ten
 together cost four times the source** — and every line of them is a copy of something
 the source already says better. To check something in a generated page, grep it:
 
@@ -70,14 +70,14 @@ Source (edit these):
 - `site-src/style.css` — copied to `style.css` at the repo root at build time; every page links it via
   `{{STYLE}}`, which the build fills in with a content-hash query string. It sits at the root, not under
   `assets/`, so its `url(assets/...)` backgrounds keep resolving against the page's own folder
-- `share-links.csv` (`product,share_link,photo`) — the product list, 65 rows
+- `share-links.csv` (`product,share_link,photo`) — the product list, 101 rows
 - `bestsellers.csv` (`product,units_this_week`) — top 3 rows become the podium; `product` must
   match a `share-links.csv` name or the build exits. Blank `units_this_week` just hides the count.
 
 Generated (never hand-edit; the next build overwrites them):
 - `homepage.html`
 - `category-daily-foundations.html`, `-energy-focus.html`, `-fat-loss.html`, `-hydration.html`,
-  `-protein.html`, `-recovery.html`, `-skin-redefined.html`
+  `-protein.html`, `-recovery.html`, `-skin-redefined.html`, `-womens-health.html`, `-mens-health.html`
 - `style.css`, `assets/products/`, `assets/cutouts/`, `assets/.cut-version`
 
 `docs/macro-calculator.md` records the homepage macro calculator: where the maths came from, every
@@ -101,7 +101,13 @@ wife and daughter), his before/after composites `front-`, `side-`, `back-` at `6
 and `side-before-480.webp` / `side-after-480.webp`, the two halves of the side pair cut at its
 seam (crop only, WebP q92) for the story's opening before and its before-becomes-after wipe.
 They are cut from his originals in `~/Desktop/aspiree/assets/rooms/` and placed by hand, so the
-build never touches them. Peter chose to make them public; the repo is public because Pages
+build never touches them. `with-daughter-640.webp` / `-960.webp` (640x800 and 960x1200, 4:5, WebP
+q90) are his portrait holding their baby daughter at an evening event, the Men's Health hero and the
+pair to Yenni's. They are cut from Peter's own photo (a 1179x1576 screenshot, Display P3): one crop,
+x 0-1080 and y 226-1576, clear of the screenshot's black band on rows 0-6, with his hair ~9% below
+the top and the baby's feet whole; converted P3 to sRGB so the colours hold once the profile is
+gone; then a uniform Lanczos resize. No retouching, no exposure or white-balance change, and no
+metadata: each file is a bare VP8 chunk (no EXIF, XMP or ICC). Peter chose to make them public; the repo is public because Pages
 requires it.
 
 **What may be edited, and what may not.** Crop, exposure and white balance are always fine. Peter
@@ -114,6 +120,70 @@ widens his waistband ~4.9%, which makes the transformation read slightly larger 
 increase that without asking him. The three pairs share one framing spec measured on his body, and
 the seam must stay at exactly 50% with befores on the left, or the page's Before/After headings
 stop aligning.
+
+`assets/her/` holds the photos of Yenni, Peter's wife, who runs the women's side of the business.
+Peter approved her name, photos and results going public (2026-09-27). The site calls her "Yenni",
+which is `HER_NAME` in `build_homepage.py`; never use the longer name on her scan reports. These are
+the files:
+- `front-640.webp` / `front-768.webp` and `back-640.webp` / `back-768.webp`: her before/after pairs,
+  with the before on the left and the after on the right, 640x816 and 768x979.
+- `front-before-384`, `front-after-384`, `back-before-384`, `back-after-384`: the four halves on
+  their own, 384x979, framed the same way. No page uses them yet.
+- `with-daughter-640.webp` / `-960.webp`: her portrait with their daughter, 4:5, the Women's Health
+  hero.
+
+The pairs are cut from one composite of four panels: the before front and back from Nov 2025, and the
+after front and back from Jul 2026. It was split at its white panel seams, so the dividers and their
+anti-aliased columns are left out. All four halves share one framing spec measured on her body. Let L
+be the distance from her crown (the top of her head's hair line, not the ponytail) to her knee (the
+kneecap centre from the front, the knee crease from the back). The frame runs from 6.5% of L above the
+crown to 4.5% of L below the knee, and it is centred on her midline between the knees. The measured
+landmarks are:
+
+| half | crown y | knee y | midline x |
+|---|---|---|---|
+| before front | 82 | 890 | 207 |
+| before back | 88 | 949 | 576 |
+| after front | 82 | 866 | 976 |
+| after back | 73 | 881 | 1330 |
+
+These are composite pixels. Each half is scaled uniformly (the same factor in both directions) so
+that every L comes out the same size. The seam sits at exactly 50%. The before-front crop starts
+at x=31: that removes the wall charger and its cable at the bottom left and stays 3px clear of her
+hand.
+
+The portrait is the box (165,300)-(1197,1590) of her photo, clear of the screenshot's black bars.
+
+The editing rules match Peter's. Crop, exposure and white balance are allowed, and so is extending
+plain background at the edges, but never across an object or near her outline. **Her body is evidence
+and is never retouched, smoothed, slimmed or reshaped.** As shipped, every file is a crop plus a uniform
+resize. Nothing is synthesised, no colour was touched and no background was extended. Every file is
+rebuilt from raw pixels, so it carries no EXIF, XMP or ICC data: each is a bare `VP8 ` chunk. The files
+are cut from the originals Peter sent and placed by hand, so the build never touches them.
+
+Her photos have their own dates (`HER_PHOTOS`: Nov 2025 → Jul 2026), about two months and ten months
+after their daughter's birth in Sep 2025. They are never presented as matching her DEXA scans.
+
+**The DEXA cards.** Peter's card (`peter_card()`, from `PETER_TRANSFORM`) shows only the two scans of his
+transformation, fifteen months apart: body fat and weight, no dates, no trend, no clinic. That is Peter's choice
+(2026-09-28); his later UC Davis scans are deliberately not used anywhere. `HER_DEXA` holds Yenni's scans as data
+rows: date, weight, fat, lean and body fat %, from UC Davis Sports Medicine in Sacramento. `dexa_card()` draws
+her card, with these parts:
+- The headline, which compares the first scan with the last.
+- A trend of fat mass and a trend of lean mass, each on its own zero-based axis with a time-true x.
+- A visually hidden table of every scan.
+- The source line and the disclaimers (`DEXA_NOTES`).
+
+Weight is stored but never shown. Nothing else from the reports is used: no logo, layout or colours,
+and no date of birth, patient ID or height. Her scans have a gap (`'gap'`) from Dec 2024 to Aug 2026,
+which spans her pregnancy and their daughter's birth. Her trend is drawn broken there, with no line
+across the gap, and the card says why. Set `HER_DEXA = None` and her card comes off every page.
+
+Where it all shows:
+- The homepage proof after the story stage: her pairs beside Peter's, then both cards.
+- Women's Health: her portrait as the hero, drawn as a real `<img>` (`SHELF_PORTRAIT`), then her
+  story, pairs and card (`SHELF_EXTRA`).
+- Men's Health: Peter's card (`SHELF_EXTRA`).
 
 `assets/story/` holds AI-relit shots of all five story products (whey, GI Primer, XS Creatine+, XS
 Elite, Sleep Health, as `*-lit.webp`): relit with fal-ai/flux-pro/kontext, cut out with
@@ -135,8 +205,10 @@ shelf pages and podium still use the catalogue images.
 The homepage runs hero → shelves → `#trending` (the scroll-scrubbed can pour) → `#story` →
 `#macros` → `#consult`. `#story` is a sticky, scroll-scrubbed stage telling Peter's 15 months in
 beats: his before, five product beats (each linking to a shelf), the before becoming the after,
-"That's what this call is for" with a "Book a free call" button, his family, then the three-pair
-proof wall. It replaced the old `#hydrate` band (its water line now lives in the hydration beat).
+"That's what this call is for" with a "Book a free call" button, his family, then the proof wall:
+his three pairs, Yenni's two beside them, then the DEXA cards. The wall sits after the stage
+(`#st-run`), so it does not make the run any longer. The story replaced the old `#hydrate` band (its
+water line now lives in the hydration beat).
 Peter's lines inside it are his, verbatim, in PETER-COPY markers.
 
 Its pace lives in two places: the `HOLD` table and `T` in the story block of `_script.html`, and the
@@ -149,13 +221,23 @@ sequence. It was tuned over four Fable review rounds; the rounds are tagged `sto
 
 A product can sit on more than one shelf: a shelf page lists everything its own `CATEGORIES` entry
 names, while `cat_of` stays each product's single home shelf (its card tag). XS Creatine+ is on both
-Daily Foundations and Hydration.
+Daily Foundations and Hydration; the Women's Pack and the women's multivitamin tablets and gummies are
+on both Daily Foundations and Women's Health (their home shelf, being later in `CATEGORIES`), and the
+men's likewise on Daily Foundations and Men's Health.
+
+Women's Health's hero is Yenni's portrait with their daughter, from `assets/her/`, shown whole as a real
+`<img>` beside the name (`SHELF_PORTRAIT`). The old placeholder, `assets/bg-womens-health.webp` (the Women's
+Pack on a plum field), is still there but no page shows it. Men's Health's hero is its pair: Peter's portrait
+with their daughter, from `assets/peter/with-daughter-*.webp`, through the same `SHELF_PORTRAIT`. Its old
+placeholder, `assets/bg-mens-health.webp` (the Men's Pack on a green field), is likewise kept but unused. A product with no
+fitting shelf stays out of `share-links.csv` altogether: the homepage grid, search and the sample
+form list every row, so a row on no shelf still shows up there, tagged "Wellness".
 
 ## Build
 
     python3 site-src/build_homepage.py     # from the repo root
 
-Takes ~0.05s and prints `65 products (65 with photos)` plus the per-category counts. Run it after
+Takes ~0.05s and prints `101 products (101 with photos)` plus the per-category counts. Run it after
 any source edit; nothing else regenerates the pages.
 
 ## Why a build sometimes takes ~50s instead of 0.05s

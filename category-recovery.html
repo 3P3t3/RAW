@@ -20,10 +20,12 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=21824fcb">
+<link rel="stylesheet" href="style.css?v=946ff39c">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
+<!-- the field: the site's one ground (the field block in style.css) -->
+<div class="field" aria-hidden="true"><span class="fg fg1"></span><span class="fg fg2"></span></div>
 <a class="skip" href="#main">Skip to content</a>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -31,7 +33,6 @@
   <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
-  <symbol id="i-out" viewBox="0 0 24 24"><path d="M8 16L17 7M9 7h8v8"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></symbol>
   <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 8.5a5 5 0 010 7"/></symbol>
@@ -136,7 +137,7 @@
         <a href="homepage.html#goals">Goals</a>
         <a href="homepage.html#results" data-all>Products</a>
         <a href="homepage.html#macros">Macros</a>
-        <a class="btn btn-sm" href="homepage.html#consult">Free call</a>
+        <a class="btn btn-sm" href="homepage.html#consult">Book a free call</a>
       </nav>
       <button class="icon-btn sound-toggle" id="sound-toggle" type="button" aria-label="Turn interface sounds off" aria-pressed="true" hidden><svg class="ic" aria-hidden="true"><use href="#i-sound"/></svg></button>
       <button class="icon-btn search-toggle" id="search-toggle" type="button" aria-label="Search products" aria-expanded="false" aria-controls="search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
@@ -151,15 +152,15 @@
 <!-- The calculator and the call, one tap from anywhere. The pair sits at the foot of the
      window and shows or hides as one: the script shows it only while nothing it could cover
      is in view (see the tab block in the script), never under the curtain or the menu, and
-     without script it never shows. From 1024 up the mast carries "Free call", so the tab
+     without script it never shows. From 1024 up the mast carries "Book a free call", so the tab
      drops its own and there is still only one. -->
-<div class="mtab" id="mtab"><a class="mtab-calc" href="homepage.html#macros">Macro calculator</a><a class="mtab-call" href="homepage.html#consult">Free call</a></div>
+<div class="mtab" id="mtab"><a class="mtab-calc" href="homepage.html#macros">Macro calculator</a><a class="mtab-call" href="homepage.html#consult">Book a free call</a></div>
 
 
 
 <main id="main">
 
-  <!-- Category banner: generated backdrop, live caustics, the category set large -->
+  <!-- Category banner: generated backdrop (or, for a shelf in SHELF_PORTRAIT, a whole portrait beside the name), live caustics, the category set large -->
   <section class="cat-hero" aria-labelledby="cat-title">
     <img class="cat-bg" src="assets/bg-recovery.webp" alt="" width="1600" height="900" fetchpriority="high">
     <canvas class="caustics" data-caustics aria-hidden="true"></canvas>
@@ -167,7 +168,8 @@
       <p class="label"><a href="homepage.html#goals">All shelves</a></p>
       <h1 id="cat-title">Recovery</h1>
       <p class="sub">Wind down, repair and sleep: post-workout mixes, magnesium, herbals and topical creams.</p>
-      <p class="cat-count">11 products</p>
+      <p class="cat-count">15 products</p>
+      <!-- DRAFT-COPY --><p class="cat-sample"><a href="homepage.html?try=Recovery#sample">Ask for a free sample</a></p><!-- /DRAFT-COPY -->
     </div>
   </section>
 
@@ -177,17 +179,21 @@
     <div class="wrap">
       <div class="sec-head grow"><h2 id="all-title">Everything in Recovery</h2></div>
       <ul class="grid" id="grid">
-        <li class="card grow" style="--d:0" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/PVUuzXLQ6" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/n-by-nutrilite-sweet-dreams-sleep-gummies.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">n* by Nutrilite Sweet Dreams</h3><p class="p-desc">Sleep gummies · Sleep Gummies</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:1" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/ROw2AOp7v" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/nutrilite-magnesium.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">Nutrilite Magnesium</h3><p class="p-desc">Mineral supplement</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:2" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/SMhXOCNJy" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/nutrilite-organics-ashwagandha-capsules.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">Nutrilite Organics Ashwagandha Capsules</h3><p class="p-desc">Organic herbal capsules</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:3" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/qe6JKbGxp" target="_blank" rel="noopener"><span class="shot shot-studio"><img src="assets/products/nutrilite-organics-chamomile-tea.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">Nutrilite Organics Chamomile Tea</h3><p class="p-desc">Organic herbal tea</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:0" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/o8m6KGk53" target="_blank" rel="noopener"><span class="shot shot-studio"><img src="assets/products/nutrilite-sleep-health.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">Nutrilite Sleep Health</h3><p class="p-desc">Nightly supplement</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:1" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/AwIzUqvC1" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-cbd-cream.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">XS CBD Cream</h3><p class="p-desc">Topical cream</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:2" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/9EXfGTpU-" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-cbd-pro-cream.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">XS CBD Pro Cream</h3><p class="p-desc">Topical cream</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:3" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/D2YioWCnT" target="_blank" rel="noopener"><span class="shot shot-studio"><img src="assets/products/xs-muscle-multiplier-berry-blast.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">XS Muscle Multiplier</h3><p class="p-desc">Training drink mix · Berry Blast</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:0" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/WvhxbGmYf" target="_blank" rel="noopener"><span class="shot"><img src="assets/products/xs-muscle-multiplier-watermelon.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">XS Muscle Multiplier</h3><p class="p-desc">Training drink mix · Watermelon</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:1" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/lrJlYVhGM" target="_blank" rel="noopener"><span class="shot shot-studio"><img src="assets/products/xs-post-workout-recovery-fruit-punch-12-stick-packs.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">XS Post-Workout Recovery</h3><p class="p-desc">Recovery mix · Fruit Punch, 12 stick packs</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:2" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/CBN8O~MnX" target="_blank" rel="noopener"><span class="shot shot-studio"><img src="assets/products/xs-post-workout-recovery-fruit-punch-30-serving-pouch.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">XS Post-Workout Recovery</h3><p class="p-desc">Recovery mix · Fruit Punch, 30-serving pouch</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:0" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/PVUuzXLQ6" target="_blank" rel="noopener" data-name="n* by Nutrilite Sweet Dreams" data-kind="Sleep gummies · Sleep Gummies" data-line="Blueberry lavender, at the end of the night" data-facts="" data-sfx="chime" data-try="n* by Nutrilite Sweet Dreams - Sleep Gummies"><span class="shot"><img src="assets/products/n-by-nutrilite-sweet-dreams-sleep-gummies.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">n* by Nutrilite Sweet Dreams</h3><p class="p-desc">Sleep gummies · Sleep Gummies</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:1" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/2IuF4S8Jg" target="_blank" rel="noopener" data-name="Nutrilite Joint Health" data-kind="Glucosamine tablets · 30 Day Supply" data-line="Glucosamine and chondroitin, two tablets twice a day" data-facts="" data-sfx="chime" data-try="Nutrilite Joint Health - 30 Day Supply"><span class="shot"><img src="assets/products/nutrilite-joint-health-30-day-supply.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">Nutrilite Joint Health</h3><p class="p-desc">Glucosamine tablets · 30 Day Supply</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:2" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/ROw2AOp7v" target="_blank" rel="noopener" data-name="Nutrilite Magnesium" data-kind="Mineral supplement" data-line="Making sure you get enough, every day" data-facts="" data-sfx="chime" data-try="Nutrilite Magnesium"><span class="shot"><img src="assets/products/nutrilite-magnesium.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">Nutrilite Magnesium</h3><p class="p-desc">Mineral supplement</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:3" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/SMhXOCNJy" target="_blank" rel="noopener" data-name="Nutrilite Organics Ashwagandha Capsules" data-kind="Organic herbal capsules" data-line="For the calmer end of a busy day" data-facts="" data-sfx="chime" data-try="Nutrilite Organics Ashwagandha Capsules"><span class="shot"><img src="assets/products/nutrilite-organics-ashwagandha-capsules.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">Nutrilite Organics Ashwagandha Capsules</h3><p class="p-desc">Organic herbal capsules</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:0" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/qe6JKbGxp" target="_blank" rel="noopener" data-name="Nutrilite Organics Chamomile Tea" data-kind="Organic herbal tea" data-line="A cup to unwind with in the evening" data-facts="20 tea bags|Caffeine free|USDA Organic|0 calories" data-sfx="chime" data-try="Nutrilite Organics Chamomile Tea"><span class="shot shot-studio"><img src="assets/products/nutrilite-organics-chamomile-tea.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">Nutrilite Organics Chamomile Tea</h3><p class="p-desc">Organic herbal tea</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:1" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/NMT2sAnLt" target="_blank" rel="noopener" data-name="Nutrilite Organics Turmeric Gummies" data-kind="Organic turmeric gummies" data-line="Organic turmeric gummies in tangerine ginger" data-facts="" data-sfx="chime" data-try="Nutrilite Organics Turmeric Gummies"><span class="shot"><img src="assets/products/nutrilite-organics-turmeric-gummies.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">Nutrilite Organics Turmeric Gummies</h3><p class="p-desc">Organic turmeric gummies</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:2" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/o8m6KGk53" target="_blank" rel="noopener" data-name="Nutrilite Sleep Health" data-kind="Nightly supplement" data-line="Part of the wind-down before lights out" data-facts="" data-sfx="chime" data-try="Nutrilite Sleep Health"><span class="shot shot-studio"><img src="assets/products/nutrilite-sleep-health.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">Nutrilite Sleep Health</h3><p class="p-desc">Nightly supplement</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:3" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/ltUNpScfV" target="_blank" rel="noopener" data-name="Nutrilite Stress Relief Probiotic" data-kind="Probiotic capsules" data-line="A once-a-day probiotic capsule" data-facts="" data-sfx="chime" data-try="Nutrilite Stress Relief Probiotic"><span class="shot"><img src="assets/products/nutrilite-stress-relief-probiotic.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">Nutrilite Stress Relief Probiotic</h3><p class="p-desc">Probiotic capsules</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:0" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/y3eNXUwJj" target="_blank" rel="noopener" data-name="Peak Performance Stack" data-kind="XS training bundle" data-line="Pre-workout, recovery, Muscle Multiplier and creatine together" data-facts="" data-sfx="level" data-try="Peak Performance Stack"><span class="shot"><img src="assets/products/peak-performance-stack.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">Peak Performance Stack</h3><p class="p-desc">XS training bundle</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:1" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/AwIzUqvC1" target="_blank" rel="noopener" data-name="XS CBD Cream" data-kind="Topical cream" data-line="A soothing rub, before or after activity" data-facts="" data-sfx="chime" data-try="XS CBD Cream"><span class="shot"><img src="assets/products/xs-cbd-cream.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">XS CBD Cream</h3><p class="p-desc">Topical cream</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:2" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/9EXfGTpU-" target="_blank" rel="noopener" data-name="XS CBD Pro Cream" data-kind="Topical cream" data-line="The most CBD of the XS creams" data-facts="" data-sfx="chime" data-try="XS CBD Pro Cream"><span class="shot"><img src="assets/products/xs-cbd-pro-cream.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">XS CBD Pro Cream</h3><p class="p-desc">Topical cream</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:3" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/D2YioWCnT" target="_blank" rel="noopener" data-name="XS Muscle Multiplier" data-kind="Training drink mix · Berry Blast" data-line="A daily habit alongside your strength training" data-facts="4.1 g essential amino acids|0 g sugar|25 calories|222 g pouch" data-sfx="chime" data-try="XS Muscle Multiplier - Berry Blast"><span class="shot shot-studio"><img src="assets/products/xs-muscle-multiplier-berry-blast.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">XS Muscle Multiplier</h3><p class="p-desc">Training drink mix · Berry Blast</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:0" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/WvhxbGmYf" target="_blank" rel="noopener" data-name="XS Muscle Multiplier" data-kind="Training drink mix · Watermelon" data-line="A daily habit alongside your strength training" data-facts="" data-sfx="chime" data-try="XS Muscle Multiplier - Watermelon"><span class="shot"><img src="assets/products/xs-muscle-multiplier-watermelon.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">XS Muscle Multiplier</h3><p class="p-desc">Training drink mix · Watermelon</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:1" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/lrJlYVhGM" target="_blank" rel="noopener" data-name="XS Post-Workout Recovery" data-kind="Recovery mix · Fruit Punch, 12 stick packs" data-line="For getting back in the game after training" data-facts="12 stick packs|5.6 g L-glutamine|1.5 g glucosamine|45 calories" data-sfx="chime" data-try="XS Post-Workout Recovery - Fruit Punch (12 Stick Packs)"><span class="shot shot-studio"><img src="assets/products/xs-post-workout-recovery-fruit-punch-12-stick-packs.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">XS Post-Workout Recovery</h3><p class="p-desc">Recovery mix · Fruit Punch, 12 stick packs</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
+        <li class="card grow" style="--d:2" data-cat="recovery"><a class="card-link" href="https://amway.com/share-link/CBN8O~MnX" target="_blank" rel="noopener" data-name="XS Post-Workout Recovery" data-kind="Recovery mix · Fruit Punch, 30-serving pouch" data-line="For getting back in the game after training" data-facts="" data-sfx="chime" data-try="XS Post-Workout Recovery - Fruit Punch (30 Serving Pouch)"><span class="shot shot-studio"><img src="assets/products/xs-post-workout-recovery-fruit-punch-30-serving-pouch.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Recovery</p><h3 class="p-name">XS Post-Workout Recovery</h3><p class="p-desc">Recovery mix · Fruit Punch, 30-serving pouch</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
       </ul>
     </div>
   </section>
@@ -200,9 +206,11 @@
           <li><a class="goal" href="category-hydration.html"><span class="goal-name">Hydration</span><span class="goal-desc">Electrolytes and drink mixes for long, hot and sweaty sessions.</span><span class="goal-island"><img src="assets/thumbs/hydration.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
           <li><a class="goal" href="category-energy-focus.html"><span class="goal-name">Energy &amp; Focus</span><span class="goal-desc">Pre-workout, tablets and the full XS energy range.</span><span class="goal-island"><img src="assets/thumbs/energy-focus.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
           <li><a class="goal" href="category-protein.html"><span class="goal-name">Protein Snack Pack</span><span class="goal-desc">Powders, shakes, bars and crisps to hit your protein for the day.</span><span class="goal-island"><img src="assets/thumbs/protein.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-fat-loss.html"><span class="goal-name">Fat Loss</span><span class="goal-desc">Thermogenic support to pair with your training.</span><span class="goal-island"><img src="assets/thumbs/fat-loss.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-fat-loss.html"><span class="goal-name">Fat Loss</span><span class="goal-desc">Powders, tablets and softgels to pair with your training.</span><span class="goal-island"><img src="assets/thumbs/fat-loss.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
           <li><a class="goal" href="category-daily-foundations.html"><span class="goal-name">Daily Foundations</span><span class="goal-desc">The everyday base</span><span class="goal-island"><img src="assets/thumbs/daily-foundations.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
           <li><a class="goal" href="category-skin-redefined.html"><span class="goal-name">Skin Redefined</span><span class="goal-desc">Artistry skincare, for the hours you are not training.</span><span class="goal-island"><img src="assets/thumbs/skin-redefined.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-womens-health.html"><span class="goal-name">Women’s Health</span><span class="goal-desc">For her everyday</span><span class="goal-island"><img src="assets/thumbs/womens-health.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
+          <li><a class="goal" href="category-mens-health.html"><span class="goal-name">Men’s Health</span><span class="goal-desc">For his everyday</span><span class="goal-island"><img src="assets/thumbs/mens-health.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
       </ul>
     </div>
   </section>
@@ -235,7 +243,7 @@
       <nav class="foot-links" aria-label="Footer">
         <a href="homepage.html#macros">Macro calculator</a>
         <a href="homepage.html#consult">Book a free call</a>
-        <a href="homepage.html#results" data-all>All 65 products</a>
+        <a href="homepage.html#results" data-all>All 101 products</a>
       </nav>
     </div>
     <div class="foot-meta">
@@ -257,8 +265,10 @@
     </div>
     <nav class="wrap menu-nav" aria-label="Menu">
       <ul class="menu-list">
+        <!-- DRAFT-COPY --><li><a href="homepage.html#how">The game plan <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
         <li><a href="homepage.html#goals">Goals <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="homepage.html#results" data-all>All products <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <!-- DRAFT-COPY --><li><a href="homepage.html#sample">Free sample <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
         <li><a href="homepage.html#macros">Macros <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ul>
       <!-- every shelf, straight to its page. Generated from CATEGORIES in build_homepage.py,
@@ -272,6 +282,8 @@
         <li><a href="category-fat-loss.html">Fat Loss</a></li>
         <li><a href="category-daily-foundations.html">Daily Foundations</a></li>
         <li><a href="category-skin-redefined.html">Skin Redefined</a></li>
+        <li><a href="category-womens-health.html">Women’s Health</a></li>
+        <li><a href="category-mens-health.html">Men’s Health</a></li>
       </ul>
       <!-- the consult leaves the list and becomes the one filled thing here, as in the mast -->
       <a class="btn menu-cta" href="homepage.html#consult">Book a free call</a>
@@ -279,6 +291,19 @@
   </div>
 </dialog>
 
+    <dialog class="pcard" id="pcard" aria-labelledby="pcard-name" aria-describedby="pcard-line">
+      <div class="pcard-in">
+        <button class="icon-btn pcard-x" type="button" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
+        <div class="pcard-art"><img id="pcard-img" alt="" width="600" height="600"></div>
+        <div class="pcard-copy">
+          <p class="pcard-kind" id="pcard-kind"></p>
+          <h3 class="pcard-name" id="pcard-name"></h3>
+          <p class="pcard-line" id="pcard-line"></p>
+          <ul class="pcard-facts" id="pcard-facts" aria-label="Quick facts"></ul>
+          <div class="pcard-acts"><a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Add to cart on Amway<span class="vh"> (opens in a new tab)</span></a><a class="btn btn-line pcard-try" id="pcard-try" href="homepage.html#sample" data-home="homepage.html">Ask for a free sample</a></div>
+        </div>
+      </div>
+    </dialog>
 
 <p class="vh" id="live" aria-live="polite"></p>
 
@@ -298,6 +323,71 @@ if(html.classList.contains('motion')){
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.15});
   $$('.grow').forEach(function(el){io.observe(el)});
 }
+
+/* The game plan (#how) in the bar theme: the shaft lights and the plates go on as the section scrolls
+   through (style.css draws them). A pure function of scroll: scrolling back takes them off again. On
+   a phone or tablet the shaft runs down the steps and the light's front sits on a reading line a
+   little below the middle of what the masthead (and the pinned strip, when it is up) leave in view,
+   so a step loads as it reaches the eye. From 1024 the bar runs across the four columns, and the light
+   crosses it while the row rises from 86% of the window to 44%. Per frame it reads one box and writes
+   only what changed: one transform per stretch of shaft, and a class per step (its plate's slide and
+   settle are a CSS transition on transform and opacity), so a scroll through costs no layout.
+   A plate going on as the page moves down asks for the softest tick there is (aspire:sfx 'step'; the
+   sound block below plays it only once the visitor has touched the page and sound is on, so scroll
+   alone never starts audio). Never on the way back up, once per step per pass (a pass starts over once
+   every plate is off again, above the walk), and at most one in any 120ms, so a fast flick that loads
+   several at once gives a single tick. No tick on load or after a resize, only on a scroll down.
+   Reduced motion or no IntersectionObserver: html.motion is off and style.css shows it all loaded,
+   silent. */
+(function(){
+  var how=$('#how'),list=how&&$('.how-steps',how);
+  if(!list||!html.classList.contains('t-bar')||!html.classList.contains('motion'))return;
+  var lis=$$('li',list),marks=lis.map(function(li){return $('.how-n',li)}),segs=lis.map(function(li){return $('.how-sh',li)}),
+      fills=segs.map(function(s){return s&&$('i',s)}),mast=$('.mast'),pin=$('#lbpin'),wide=matchMedia('(min-width:1024px)'),
+      geo=null,raf=0,near=false,on=[],now=-1,tf=[],run=[],prev=null,ticked=[],lastTick=-1e4;
+  function measure(){
+    var r=list.getBoundingClientRect(),h=wide.matches;
+    geo={h:h,top:mast?mast.offsetHeight:0,pin:pin?pin.offsetHeight:0,z:marks[0].offsetWidth,row:marks[0].getBoundingClientRect().top-r.top,
+      mk:marks.map(function(m){var b=m.getBoundingClientRect();return h?b.left-r.left:b.top-r.top}),
+      sg:segs.map(function(s){if(!s)return null;var b=s.getBoundingClientRect();return h?[b.left-r.left,b.width]:[b.top-r.top,b.height]})};
+    tf=[];
+  }
+  function frame(){
+    raf=0;
+    if(!geo)measure();
+    var r=list.getBoundingClientRect(),vh=innerHeight,g=geo,f,n=-1;
+    if(g.h){   /* the row's progress up the window, spread along the bar */
+      var y=r.top+g.row+g.z/2,p=Math.max(0,Math.min(1,(vh*.86-y)/(vh*.42))),a=g.mk[0]-1,b=g.mk[g.mk.length-1]+g.z;
+      f=p>0?a+p*(b-a):-1e4;
+    }else{     /* the reading line, in the list's own frame */
+      var top=g.top+(pin&&pin.classList.contains('on')?g.pin:0);
+      f=top+(vh-top)*.58-r.top;
+    }
+    var down=prev!==null&&f>prev,fresh=false;
+    prev=f;
+    lis.forEach(function(li,i){
+      var o=f>=g.mk[i]+g.z*.25;
+      if(o)n=i;
+      if(on[i]!==o){on[i]=o;li.classList.toggle('on',o);if(o&&down&&!ticked[i]){ticked[i]=true;fresh=true}}
+    });
+    if(n<0)ticked=[];   /* every plate off: back above the walk, so the next pass down may tick again */
+    if(fresh){var ms=performance.now();if(ms-lastTick>=120){lastTick=ms;doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:'step'}))}}
+    if(n!==now){if(now>-1)lis[now].classList.remove('now');if(n>-1)lis[n].classList.add('now');now=n}
+    fills.forEach(function(el,i){
+      if(!el)return;
+      var s=g.sg[i],x=Math.max(0,Math.min(1,(f-s[0])/s[1])),v=(x*100-100).toFixed(1),t=g.h?'translate3d('+v+'%,0,0)':'translate3d(0,'+v+'%,0)',u=x>0&&x<1;
+      if(tf[i]!==t){tf[i]=t;el.style.transform=t}
+      if(run[i]!==u){run[i]=u;segs[i].classList.toggle('run',u)}
+    });
+  }
+  function ask(){if(near&&!raf)raf=requestAnimationFrame(frame)}
+  new IntersectionObserver(function(es){near=es[0].isIntersecting;ask()},{rootMargin:'100% 0px 100% 0px'}).observe(how);
+  addEventListener('scroll',ask,{passive:true});
+  function again(){geo=null;prev=null;if(!raf)raf=requestAnimationFrame(frame)}   /* a new frame of reference: no tick from it */
+  addEventListener('resize',again);
+  if(window.ResizeObserver)new ResizeObserver(again).observe(list);
+  if(pin&&window.MutationObserver)new MutationObserver(ask).observe(pin,{attributes:true,attributeFilter:['class']});
+})();
 
 /* Hero glass video: plain H.264, so it plays everywhere; the poster shows until it does */
 var v=$('#glass-video'),vt=$('#glass-toggle'),userPaused=false;
@@ -428,14 +518,18 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    not watched either: the tab rides over it, except while the story's own "Book a free call"
    is up (.st-book: the story parks it off its stage while its beat is not). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
-   which sit where the tab does on a phone and go to the same places, the band that sends you
+   which sit where the tab does on a phone and go to the same places, "The game plan"'s "Ask
+   for a free sample" (#how-go), the quick-call buttons (.q-go) and the sample form's Next and Send
+   (#s-next, #sample-go), which it would cover, an open compartment of the stack case (.bay-in: a
+   closed one is hidden, so has no box and never counts) or an open panel of the plate rack
+   (.rk-panel, likewise), the two buttons under "That's my stack" (.mys-acts), the band that sends you
    to the calculator on a category page, and the footer,
    which is the end of every page and so could never be scrolled out from under it. It also
    waits for the curtain to leave. The open menu hides it in style.css. No observer, no tab. */
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#s-next,#sample-go,.bay-in,.rk-panel,.mys-acts,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -644,13 +738,266 @@ if(arch){
   }
 }
 
+/* The stack case (#goals): seven compartments, one per shelf, each lid a real button. A lid opens
+   onto a few of that shelf's packs and a link to it; one compartment is open at a time, and a
+   second tap, Escape, or opening another closes it. The lid's hinge, the packs rising in and, on
+   a wide screen, the open compartment making room are all transitions in style.css (~320ms);
+   under reduced motion they are off and a lid opens at once. Arrow keys, Home and End move
+   between lids. Nothing opens on its own. */
+(function(){
+  var cs=$('#case');
+  if(!cs)return;
+  var list=$('.case-bays',cs),bays=$$('.bay',cs),lids=bays.map(function(b){return $('.bay-lid',b)}),
+      ins=bays.map(function(b){return $('.bay-in',b)}),N=bays.length,open=-1,timers=[],
+      reduce=matchMedia('(prefers-reduced-motion: reduce)'),wide=matchMedia('(min-width: 1024px)'),
+      MS=340;   /* a touch over the transitions, so a region is only hidden once it has closed */
+  cs.classList.add('is-live');
+  function cols(){   /* a row of seven: the open one takes a wider column, the rest share what is left */
+    list.style.gridTemplateColumns=wide.matches?bays.map(function(b,i){return 'minmax(0,'+(i===open?'2.6fr':'1fr')+')'}).join(' '):'';
+  }
+  function set(i,on){
+    var b=bays[i],r=ins[i];
+    clearTimeout(timers[i]);
+    lids[i].setAttribute('aria-expanded',on?'true':'false');
+    if(on){r.hidden=false;void r.offsetHeight;b.classList.add('is-open')}   /* laid out closed first, so it opens rather than appears */
+    else{
+      b.classList.remove('is-open');
+      if(reduce.matches)r.hidden=true;
+      else timers[i]=setTimeout(function(){if(!b.classList.contains('is-open'))r.hidden=true},MS);
+    }
+  }
+  /* once it has opened, the whole compartment is brought on screen if it is not, above the tab */
+  function show(i){
+    setTimeout(function(){
+      if(open!==i)return;
+      var r=bays[i].getBoundingClientRect(),vh=innerHeight,tab=72,top=parseFloat(getComputedStyle(html).scrollPaddingTop)||0;
+      var dy=r.bottom>vh-tab?Math.min(r.bottom-(vh-tab),r.top-top-8):r.top<top?r.top-top-8:0;
+      if(dy>1||dy<-1)scrollBy({top:dy,behavior:reduce.matches?'instant':'smooth'});
+    },reduce.matches?0:MS);
+  }
+  function pick(i){
+    var was=open;
+    if(was>-1)set(was,false);
+    open=was===i?-1:i;
+    if(open>-1){set(open,true);show(open)}
+    cols();
+  }
+  lids.forEach(function(l,i){
+    l.addEventListener('click',function(){pick(i)});
+    l.addEventListener('keydown',function(e){
+      var k=e.key,j=k==='ArrowRight'||k==='ArrowDown'?(i+1)%N:k==='ArrowLeft'||k==='ArrowUp'?(i+N-1)%N:k==='Home'?0:k==='End'?N-1:-1;
+      if(j<0)return;
+      e.preventDefault();lids[j].focus();
+    });
+  });
+  /* Escape inside an open compartment closes it and hands focus back to its lid */
+  cs.addEventListener('keydown',function(e){
+    if(e.key!=='Escape'||open<0)return;
+    var i=open;pick(i);lids[i].focus();
+  });
+  wide.addEventListener('change',cols);
+})();
+
+/* The product card (#pcard). Each pack in an open compartment is a link to its Amway page in the
+   markup; here it becomes a button that opens a card for it: photo, name, a line, a few facts and
+   "Add to cart on Amway" (the same share link). Every other product tile (the homepage grid, Trending,
+   a shelf page's grid and flavor carousel) stays a link, so its heading stays a heading, but a plain
+   click or tap on it opens the same card instead; a cmd-, ctrl- or middle-click still opens its Amway
+   page in a new tab, as a link does. Only "Add to cart on Amway" goes to Amway. "Ask for a free sample"
+   closes the card and fills the sample form's blank with the product's exact name: in place on the
+   homepage (sAsk, in the sample block below), and through the homepage's ?try= link from a shelf page.
+   The card is a modal <dialog>, so focus stays in it
+   and the page behind is inert; Escape, the close button or a tap outside closes it, and focus goes
+   back to the pack. The pack flies out of its compartment into the card, a few sparks go off as it
+   lands, and it flies back in on close: transforms and opacity only, ~0.45s, and none of it under
+   reduced motion, where the card opens and closes at once. Its sound (by family: a can, a level-up,
+   a chime) is the interface sound's, below, so the mute button covers it. Everything the card says
+   rides on the pack, from build_homepage.py (TAGLINES, CARD_FACTS, CARD_SOUND). */
+(function(){
+  var dlg=$('#pcard');
+  if(!dlg||typeof dlg.showModal!=='function')return;   /* no dialog: the packs stay links */
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)'),panel=$('.pcard-in',dlg),img=$('#pcard-img'),
+      facts=$('#pcard-facts'),buy=$('#pcard-buy'),ask=$('#pcard-try'),opener=null,closing=false,
+      fly=doc.createElement('img'),SPARK=['#51A8AA','#E6D3C5','#002E3B','#E2C8AE','#51A8AA','#F4F2EC','#002E3B','#E2C8AE'];
+  fly.className='pcard-fly';fly.alt='';fly.hidden=true;fly.setAttribute('aria-hidden','true');
+  dlg.appendChild(fly);
+  $$('#case a.bay-go,#rack a.bay-go').forEach(function(a){
+    var b=doc.createElement('button'),k;
+    b.type='button';b.className=a.className;b.setAttribute('aria-haspopup','dialog');
+    for(k in a.dataset)b.dataset[k]=a.dataset[k];
+    b.dataset.href=a.getAttribute('href');
+    while(a.firstChild)b.appendChild(a.firstChild);
+    b.lastChild.textContent=', details';   /* was ", buy on Amway (opens in a new tab)" */
+    a.parentNode.replaceChild(b,a);
+    b.addEventListener('click',function(){open(b)});
+  });
+  /* the tiles: links still, which open the card; their "buy on Amway (opens in a new tab)" now says
+     what a tap does (the carousel's second, aria-hidden lap is cloned before this runs, so it goes too) */
+  var TILE='a.card-link[data-name]';
+  $$(TILE).forEach(function(a){
+    a.setAttribute('aria-haspopup','dialog');
+    var v=$('.vh:last-child',a);
+    if(v)v.textContent=v.textContent.replace(/buy on Amway \(opens in a new tab\)/i,function(m){return m.charAt(0)==='B'?'Details':'details'});
+  });
+  doc.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest(TILE);
+    if(!a||e.defaultPrevented||e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
+    e.preventDefault();open(a);
+  });
+  function box(el){var r=el.getBoundingClientRect();return {x:r.left,y:r.top,w:r.width,h:r.height}}
+  /* the pack's flight between two boxes: the flyer sits on `to` and starts transformed onto `from` */
+  function flight(from,to,ms,ease){
+    fly.hidden=false;
+    fly.style.width=to.w+'px';fly.style.height=to.h+'px';
+    var a=fly.animate([{transform:'translate3d('+from.x+'px,'+from.y+'px,0) scale('+from.w/to.w+')'},
+                       {transform:'translate3d('+to.x+'px,'+to.y+'px,0)'}],{duration:ms,easing:ease,fill:'forwards'});
+    return a;
+  }
+  function sparks(c){
+    SPARK.forEach(function(col,i){
+      var s=doc.createElement('span'),t=(i/SPARK.length+Math.random()*.08)*Math.PI*2,d=c.w*(.42+Math.random()*.2);
+      s.className='pcard-spark';s.setAttribute('aria-hidden','true');s.style.background=col;
+      dlg.appendChild(s);
+      var x=c.x+c.w/2,y=c.y+c.h*.55;
+      s.animate([{transform:'translate3d('+x+'px,'+y+'px,0) scale(.4)',opacity:0},
+                 {transform:'translate3d('+x+'px,'+y+'px,0) scale(1)',opacity:1,offset:.12},
+                 {transform:'translate3d('+(x+Math.cos(t)*d)+'px,'+(y+Math.sin(t)*d*.8)+'px,0) scale(.2)',opacity:0}],
+                {duration:560+Math.random()*120,delay:250,easing:'cubic-bezier(.15,.7,.3,1)',fill:'both'}).onfinish=function(){s.remove()};
+    });
+  }
+  function open(b){
+    if(dlg.open)return;
+    var d=b.dataset,pic=$('img',b),list=d.facts?d.facts.split('|'):[];
+    if(!pic)return;
+    opener=b;
+    img.src=pic.currentSrc||pic.src;
+    $('#pcard-kind').textContent=d.kind||'';
+    $('#pcard-name').textContent=d.name;
+    $('#pcard-line').textContent=d.line||'';
+    facts.textContent='';
+    list.forEach(function(f){var li=doc.createElement('li');li.textContent=f;facts.appendChild(li)});
+    facts.hidden=!list.length;
+    buy.href=d.href||b.getAttribute('href');
+    if(ask){   /* the exact listing name; a shelf page's goes by the homepage's ?try= */
+      ask.dataset.name=d.try||d.name;
+      ask.href=ask.dataset.home?ask.dataset.home+'?try='+encodeURIComponent(ask.dataset.name)+'#sample':'#sample';
+    }
+    var shelf=b.closest('.rk-panel');   /* the bar theme: its "Load this plate" loads the shelf it came from */
+    if(LB&&LB.card)LB.card(shelf?shelf.id.replace('rk-p-',''):'');
+    doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:d.sfx||'chime'}));
+    dlg.showModal();html.classList.add('locked');
+    panel.scrollTop=0;
+    if(reduce.matches||!fly.animate)return;
+    var from=box(pic),to=box(img);
+    b.classList.add('is-out');img.style.opacity='0';fly.src=img.src;
+    panel.animate([{opacity:0,transform:'translate3d(0,'+(innerWidth<700?48:16)+'px,0) scale(.98)'},{opacity:1,transform:'none'}],
+                  {duration:280,easing:'cubic-bezier(.2,.8,.2,1)'});
+    flight(from,to,460,'cubic-bezier(.3,1.25,.4,1)').onfinish=function(){
+      if(closing||!dlg.open)return;
+      img.style.opacity='';fly.hidden=true;
+    };
+    sparks(to);
+  }
+  function close(){
+    if(!dlg.open||closing)return;
+    if(reduce.matches||!fly.animate||!opener)return dlg.close();
+    closing=true;
+    var from=box(img),to=box($('img',opener));
+    fly.getAnimations().forEach(function(a){a.cancel()});
+    img.style.opacity='0';fly.src=img.src;
+    dlg.classList.add('is-closing');
+    panel.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translate3d(0,'+(innerWidth<700?40:12)+'px,0) scale(.98)'}],
+                  {duration:200,easing:'cubic-bezier(.4,0,.8,.6)',fill:'forwards'});
+    flight(from,to,300,'cubic-bezier(.5,0,.3,1)').onfinish=function(){dlg.close()};
+  }
+  dlg.addEventListener('close',function(){
+    closing=false;dlg.classList.remove('is-closing');
+    panel.getAnimations().forEach(function(a){a.cancel()});
+    fly.getAnimations&&fly.getAnimations().forEach(function(a){a.cancel()});
+    fly.hidden=true;img.style.opacity='';
+    $$('.pcard-spark',dlg).forEach(function(s){s.remove()});
+    html.classList.remove('locked');
+    if(opener){opener.classList.remove('is-out');opener.focus({preventScroll:true});opener=null}
+  });
+  /* Escape: the same way out as the button, when the browser lets it wait for the flight home */
+  dlg.addEventListener('cancel',function(e){if(e.cancelable&&!reduce.matches&&!closing){e.preventDefault();close()}});
+  /* Tab wraps inside the card rather than leaving the page for the browser's own controls */
+  dlg.addEventListener('keydown',function(e){
+    if(e.key!=='Tab')return;
+    var f=$$('button,a[href]',dlg).filter(function(e){return !e.hidden}),first=f[0],last=f[f.length-1];
+    if(e.shiftKey&&doc.activeElement===first){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&doc.activeElement===last){e.preventDefault();first.focus()}
+  });
+  $('.pcard-x',dlg).addEventListener('click',close);
+  dlg.addEventListener('click',function(e){if(e.target===dlg)close()});   /* a tap on the dimmed page */
+  /* "Ask for a free sample" on the homepage: the card goes at once (no flight home, since the page is
+     about to move) and the sample form takes the product; focus goes to the form, not back to the tile */
+  if(ask)ask.addEventListener('click',function(e){
+    if(ask.dataset.home||!sAsk||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
+    e.preventDefault();
+    if(opener)opener.classList.remove('is-out');
+    opener=null;
+    fly.getAnimations&&fly.getAnimations().forEach(function(a){a.cancel()});
+    dlg.close();html.classList.remove('locked');
+    sAsk(ask.dataset.name);
+  });
+})();
+
+/* Calendly's widget.js, shared by the consult's inline calendar and the quick call's popup.
+   It is only fetched on the first booking tap, once, so nobody who never books pays for it. */
+var wjs=0,wq=[];
+var withCalendly=function(fn,fail){
+  if(window.Calendly)return fn();
+  wq.push(fn);
+  if(wjs)return;
+  wjs=1;
+  var sc=doc.createElement('script');
+  sc.src='https://assets.calendly.com/assets/external/widget.js';
+  sc.async=true;
+  sc.onload=function(){wq.splice(0).forEach(function(f){f()})};
+  sc.onerror=function(){wjs=0;wq.length=0;fail()};
+  doc.head.appendChild(sc);
+};
+
+/* The quick 10-minute call. Only there once CONSULT_QUICK_URL is set in build_homepage.py (until
+   then the button is a plain link to #consult, and carries no data-quick). It is a real link to
+   the calendar in a new tab; with script it opens in Calendly's popup over the page instead.
+   The popup needs Calendly's widget.css as well as widget.js (the inline embed needs neither's
+   styles), so it waits for both. Cmd/ctrl/shift-clicks keep the plain link. */
+var qcss=null;
+$$('a[data-quick]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button)return;
+    e.preventDefault();
+    var go=function(){window.Calendly.initPopupWidget({url:a.href+(a.href.indexOf('?')>-1?'&':'?')+
+          'hide_gdpr_banner=1&background_color=f4f2ec&text_color=1e262f&primary_color=002e3b'})},
+        tab=function(){if(!window.open(a.href,'_blank','noopener'))location.href=a.href};
+    if(!qcss){
+      qcss=doc.createElement('link');qcss.rel='stylesheet';
+      qcss.href='https://assets.calendly.com/assets/external/widget.css';
+      qcss.onload=function(){qcss.done=1};
+      qcss.onerror=function(){qcss.done=1};
+      doc.head.appendChild(qcss);
+    }
+    withCalendly(function(){
+      if(qcss.done)return go();
+      qcss.addEventListener('load',go);qcss.addEventListener('error',go);
+    },tab);
+  });
+});
+
 /* Consult: the calendar embeds in place of the form, the four answers prefilled as a1-a4
    (Calendly maps those positionally onto the event type's custom questions) */
 var cform=$('#consult-form');
 if(cform){
   var csum=$('#consult-sum'),cbox=$('#consult-embed'),
       val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()},
-      cSync=null;     /* set by the calculator below: brings its own lines up to date before a1-a4 are read */
+      cSync=null,     /* set by the calculator below: brings its own lines up to date before a1-a4 are read */
+      /* the note ("Anything you want covered?") can carry two lines the site wrote: the bar's
+         "Interested in: ..." (the bar block below sets .line) and the calculator's macros line, in
+         that order. .last is the note exactly as the site last left it, so either writer can tell
+         the site's words from the visitor's. */
+      cLead={line:'',last:''};
   /* the chip values are noun and verb phrases both, so each one carries the wording it needs
      in the sentence. A new chip needs a line here or it falls back to 'your goal'. */
   var CGOAL={'Lose fat':'losing fat','Build muscle':'building muscle','More energy':'more energy',
@@ -667,20 +1014,6 @@ if(cform){
     return 'Thirty minutes on '+(CGOAL[g]||'your goal')+(CTRAIN[t]?', '+CTRAIN[t]:'')+'.';
   };
   cform.addEventListener('change',function(){csum.textContent=line()});
-  /* widget.js is only fetched on submit, once, so nobody who never books pays for it */
-  var wjs=0,wq=[];
-  var withCalendly=function(fn,fail){
-    if(window.Calendly)return fn();
-    wq.push(fn);
-    if(wjs)return;
-    wjs=1;
-    var sc=doc.createElement('script');
-    sc.src='https://assets.calendly.com/assets/external/widget.js';
-    sc.async=true;
-    sc.onload=function(){wq.splice(0).forEach(function(f){f()})};
-    sc.onerror=function(){wjs=0;wq.length=0;fail()};
-    doc.head.appendChild(sc);
-  };
   cform.addEventListener('submit',function(e){
     e.preventDefault();
     var url=cform.dataset.consult;
@@ -717,6 +1050,350 @@ if(cform){
     },function(){
       csum.textContent='The calendar did not load. Try again in a moment.';
     });
+  });
+}
+
+/* Free sample: the visitor's own details go to Peter's inbox through FormSubmit, as JSON, and
+   a thank-you takes the form's place. Without script the form is a plain POST and FormSubmit
+   sends them back to #sample-sent (style.css shows it by :target). Homepage only. */
+var sform=$('#sample-form'),sAsk=null;
+if(sform){
+  var sdone=$('#sample-sent'),sgo=$('#sample-go'),sfail=$('#sample-fail'),
+      sel=function(n){return sform.elements[n]},
+      sval=function(n){var el=sel(n);return ((el&&el.value)||'').trim()},
+      sBy=function(){return sval('contact_by')||'Text'};
+  sform.noValidate=true;                        /* the script reports errors beside each field instead */
+  /* Text or Email: only the matching field shows, is required and is sent */
+  var sPick=function(){
+    $$('[data-by]',sform).forEach(function(f){
+      var on=f.dataset.by===sBy(),inp=$('input',f);
+      f.hidden=!on;inp.disabled=!on;inp.required=on;
+    });
+  };
+  sPick();
+  /* a category page's "Ask for a free sample" names its shelf, and a product card's there names its
+     product's exact listing name (up to 70 characters), so the question starts answered. sPut is what
+     the site itself last wrote into the blank (this, the stack's prefill, a card, the picker): an
+     explicit choice may replace it, where words the visitor typed are kept (sAsk below) */
+  var sTry=(new URLSearchParams(location.search).get('try')||'').slice(0,120),sPut='';
+  if(sTry&&!sval('product'))sel('product').value=sPut=sTry;
+  var sShow=function(){
+    sform.hidden=true;sdone.classList.add('on');
+    /* the quick call under the form steps aside for the one in the thank-you: hand it the id */
+    var qf=$('#quick-call'),qd=$('.qc',sdone);
+    if(qf&&qd){qf.removeAttribute('id');qd.id='quick-call'}
+    var h=$('#sample-done-title');h.focus({preventScroll:true});
+    sdone.scrollIntoView({block:'nearest'});
+  };
+  if(new URLSearchParams(location.search).get('sample')==='sent')sShow();
+  var sErr=function(el,id,msg){
+    var p=$('#'+id);p.textContent=msg||'';
+    if(el)el.setAttribute('aria-invalid',msg?'true':'false');
+    return msg?el:null;
+  };
+  /* the checks, split by step: Next runs the first, Send runs both, in the same order as ever */
+  var sCheck1=function(){
+    var bad=[],by=sBy(),v;
+    bad.push(sErr(sel('name'),'s-name-err',sval('name')?'':'Please add your name.'));
+    if(by==='Text'){v=sval('phone').replace(/\D/g,'');
+      bad.push(sErr(sel('phone'),'s-phone-err',v.length>=10?'':(v?'That number looks short. Add the area code.':'Please add a number I can text.')));}
+    else{v=sval('email');
+      bad.push(sErr(sel('email'),'s-email-err',/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)?'':(v?'That email doesn’t look right.':'Please add an email I can reach you at.')));}
+    bad.push(sErr(sel('product'),'s-product-err',sval('product')?'':'Tell me what you’d like to try, or say you’re not sure.'));
+    return bad.filter(Boolean);
+  };
+  var sCheck2=function(){
+    var bad=[],v=!!sval('delivery');            /* a radio group: the error sits in its fieldset */
+    $('#s-where-err').textContent=v?'':'Pick drop-off near Lincoln or mail.';
+    $$('input[name="delivery"]',sform).forEach(function(r){r.setAttribute('aria-invalid',v?'false':'true')});
+    bad.push(v?null:$('input[name="delivery"]',sform));
+    bad.push(sErr(sel('consent'),'s-consent-err',sel('consent').checked?'':'Please tick this so I’m allowed to reach you.'));
+    return bad.filter(Boolean);
+  };
+  var sCheck=function(){return sCheck1().concat(sCheck2())};
+
+  /* Two short steps. The markup is one form; the script folds it: step 1 is who you are and what
+     you'd like, step 2 is where it goes and the send. Next checks step 1 only, then step 1 folds
+     to a one-line recap at the top of step 2 (Edit and Back unfold it, every value kept). The
+     swap is opacity and transform only, and none at all under reduced motion. The fetch below
+     is untouched: it still reads every field, whichever step is showing. */
+  var s1=$('#s-step1'),s2=$('#s-step2'),sNext=$('#s-next'),sBack=$('#s-back'),
+      sStep=function(){return sform.dataset.step==='2'?2:1},
+      sStill=function(){return matchMedia('(prefers-reduced-motion: reduce)').matches};
+  [$('#s-prog'),sNext,sBack,$('#s-recap')].forEach(function(el){el.hidden=false});
+  sform.classList.add('s-two');sform.dataset.step='1';
+  var sTo=function(n){
+    var el=n===2?s2:s1,dx=n===2?28:-28;
+    sform.dataset.step=n;$('#s-prog-t').textContent=n+' of 2';
+    if(!sStill()&&el.animate)el.animate([{opacity:0,transform:'translate3d('+dx+'px,0,0)'},{opacity:1,transform:'none'}],
+      {duration:380,easing:'cubic-bezier(.2,.7,.2,1)'});
+    /* the card changed height under the visitor: if its top went up behind the mast, bring it back */
+    var top=sform.getBoundingClientRect().top-(parseFloat(getComputedStyle(html).scrollPaddingTop)||0)-12;   /* the mast, and the strip when it is up */
+    if(top<0)scrollBy({top:top,behavior:sStill()?'auto':'smooth'});
+  };
+  var sRecap=function(){
+    var by=sBy();
+    $('#s-r-name').textContent=sval('name');
+    $('#s-r-how').textContent=(by==='Text'?'text ':'email ')+sval(by==='Text'?'phone':'email');
+    $('#s-r-item').textContent=sval('product');
+  };
+  /* DRAFT-COPY: the two step announcements and the Next error count */
+  var sForward=function(){
+    sform.dataset.tried1='1';
+    var bad=sCheck1();
+    if(bad.length){
+      bad[0].focus();
+      say(bad.length===1?'One thing to fix before the next step.':bad.length+' things to fix before the next step.');
+      return;
+    }
+    sRecap();sTo(2);
+    ($('input[name="delivery"]:checked',sform)||$('input[name="delivery"]',sform)).focus({preventScroll:true});
+    say('2 of 2. Where should it go?');
+  };
+  var sBackTo=function(){
+    sTo(1);s1.focus({preventScroll:true});
+    say('1 of 2. Your details, just as you left them.');
+  };
+  sNext.addEventListener('click',sForward);
+  sBack.addEventListener('click',sBackTo);
+  $('#s-edit').addEventListener('click',sBackTo);
+
+  /* The blanks grow with what is typed. A hidden twin in the same type measures the text; CSS
+     min-width and max-width bound it. The product blank is a textarea: once its words are wider
+     than the line it takes the whole line and wraps, a line taller at a time, so nothing typed
+     is ever scrolled out of sight. */
+  var sMir=doc.createElement('span');sMir.className='s-mir';sMir.setAttribute('aria-hidden','true');sform.appendChild(sMir);
+  var sFit=function(inp){
+    var cs=getComputedStyle(inp);
+    ['fontFamily','fontSize','fontWeight','fontStretch','letterSpacing'].forEach(function(k){sMir.style[k]=cs[k]});
+    sMir.textContent=inp.value;
+    var w=Math.ceil(sMir.getBoundingClientRect().width)+14;
+    inp.style.width=w+'px';
+    /* wider than the line: it has the whole line, so the full stop after it steps aside */
+    inp.parentNode.classList.toggle('s-full',inp.offsetWidth<w);
+    if(inp.tagName==='TEXTAREA'){inp.style.height='';inp.style.height=inp.scrollHeight+'px'}
+  };
+  var sFitAll=function(){$$('.c-field input,.c-field textarea',sform).forEach(sFit)};
+  sFitAll();
+  if(doc.fonts)doc.fonts.ready.then(sFitAll);
+  addEventListener('resize',sFitAll);
+  /* The product blank: Enter means Next (or takes the highlighted suggestion), a pasted line break
+     becomes a space, and up to five product names that match what is typed show under it, from
+     the page's own datalist. Arrow keys walk them, Escape closes them, a tap takes one. */
+  var sProd=sel('product'),sSug=$('#s-sugg'),sAt=-1,
+      sNames=$$('#sample-products option').map(function(o){return o.value});
+  sProd.setAttribute('aria-autocomplete','list');sProd.setAttribute('aria-controls','s-sugg');
+  var sSugClose=function(){sSug.hidden=true;sSug.textContent='';sAt=-1;sProd.removeAttribute('aria-activedescendant')};
+  var sSugMark=function(i){
+    var li=$$('li',sSug);sAt=i;
+    li.forEach(function(l,k){l.setAttribute('aria-selected',k===i?'true':'false')});
+    sProd.setAttribute('aria-activedescendant',li[i].id);
+  };
+  var sSugPick=function(v){
+    sProd.value=v;sSugClose();sFit(sProd);
+    if(sProd.getAttribute('aria-invalid')==='true'){sProd.setAttribute('aria-invalid','false');$('#s-product-err').textContent=''}
+    sProd.dispatchEvent(new Event('change',{bubbles:true}));
+  };
+  /* DRAFT-COPY: the suggestion announcements */
+  var sSugShow=function(){
+    var v=sProd.value.trim().toLowerCase(),q=v.split(/\s+/).filter(Boolean),was=!sSug.hidden,
+        m=v.length<2?[]:sNames.filter(function(n){n=n.toLowerCase();return n!==v&&q.every(function(w){return n.indexOf(w)>=0})}).slice(0,5);
+    if(!m.length){sSugClose();return}
+    sSug.textContent='';
+    m.forEach(function(n,k){var li=doc.createElement('li');li.id='s-sugg-'+k;li.setAttribute('role','option');
+      li.setAttribute('aria-selected','false');li.textContent=n;sSug.appendChild(li)});
+    sSug.hidden=false;sAt=-1;sProd.removeAttribute('aria-activedescendant');
+    if(!was)say(m.length===1?'One product matches. Arrow down to hear it.':m.length+' products match. Arrow down to hear them.');
+  };
+  sSug.addEventListener('mousedown',function(e){e.preventDefault()});   /* the blank keeps focus */
+  sSug.addEventListener('click',function(e){var li=e.target.closest('li');if(li)sSugPick(li.textContent)});
+  sProd.addEventListener('keydown',function(e){
+    var li=$$('li',sSug);
+    if(e.isComposing)return;
+    if(e.key==='ArrowDown'&&li.length){e.preventDefault();sSugMark((sAt+1)%li.length)}
+    else if(e.key==='ArrowUp'&&li.length){e.preventDefault();sSugMark(sAt<=0?li.length-1:sAt-1)}
+    else if(e.key==='Escape'&&li.length)sSugClose();
+    else if(e.key==='Enter'){e.preventDefault();if(sAt>=0&&li[sAt])sSugPick(li[sAt].textContent);else{sSugClose();sForward()}}
+  });
+  sProd.addEventListener('blur',function(){setTimeout(sSugClose,150)});
+
+  /* One product, chosen outright (a card's "Ask for a free sample", or the picker below), into the
+     blank: sized, any error on it cleared, and a change sent, as a picked suggestion does */
+  var sKept=$('#s-kept'),
+      sSet=function(v){
+        sProd.value=sPut=v;sSugClose();sFit(sProd);sKept.hidden=true;
+        if(sProd.getAttribute('aria-invalid')==='true'){sProd.setAttribute('aria-invalid','false');$('#s-product-err').textContent=''}
+        sProd.dispatchEvent(new Event('change',{bubbles:true}));
+      },
+      /* every name the site offers: the suggestions' and the tiles' exact listing names */
+      sKnown=sNames.concat($$('a.card-link[data-try]').map(function(a){return a.dataset.try}));
+  sProd.addEventListener('input',function(){sKept.hidden=true});
+  /* A product card's "Ask for a free sample", on the homepage: the form, on step 1, with the product in
+     the blank. It replaces an empty blank, anything the site put there and any product name that was
+     picked; words the visitor typed there themselves stay as they are, and the product goes in the
+     P.S. instead ("Also: ..."), which the line under the blank says. Then the page moves to the form
+     (a glide when it is near, a jump when it is far) and focus goes to step 1, as Back sends it. */
+  sAsk=function(n){
+    var v=sval('product'),sec=$('#sample');
+    if(!sform.hidden){
+      if(sStep()===2)sTo(1);
+      if(!v||v===sPut||sKnown.indexOf(v)>-1){
+        sSet(n);
+        /* DRAFT-COPY: what a screen reader hears */
+        say('I’ve had my eye on '+n+'. 1 of 2: now your name, and a number or an email.');
+      }else{
+        var note=sel('note'),cur=note.value.trim();
+        if(cur.indexOf(n)<0)note.value=((cur?cur+' · ':'')+'Also: '+n).slice(0,300);
+        /* DRAFT-COPY */
+        sKept.textContent='I kept what you wrote and put '+n+' in your P.S.';
+        sKept.hidden=false;
+        say(sKept.textContent);
+      }
+    }
+    var far=Math.abs(sec.getBoundingClientRect().top)>innerHeight*2;
+    sec.scrollIntoView({behavior:sStill()||far?'auto':'smooth',block:'start'});
+    (sform.hidden?$('#sample-done-title'):s1).focus({preventScroll:true});
+  };
+
+  /* "Pick from the shelves": beside the blank, a small chooser in the page's flow (it pushes Next down,
+     never covers it). First the nine shelves as small plates, in their rack colours; a tap lists that
+     shelf's products, each with its picture, from the homepage grid's tiles (data-shelves), sorted as
+     the shelf's own page sorts them; a tap on one puts its exact listing name in the blank, closes the
+     chooser and hands focus back to the blank. "All shelves" goes back. Buttons throughout: Tab walks
+     them, the arrow keys move between them too, and Escape closes it all, focus back on the blank.
+     Typing and the suggestions are untouched. Its opening is opacity and transform only, and none of
+     it under reduced motion. Without script, or with no tiles to list, it never shows. */
+  var spWrap=$('#s-pick'),spGo=$('#s-pick-go'),sp=$('#s-picker'),spS=$('#sp-shelves'),spL=$('#sp-list'),
+      spItems=$('#sp-items'),spT=$('#sp-list-t'),spBack=$('#sp-back'),spCat='',
+      spTiles=$$('#grid a.card-link[data-shelves][data-try]');
+  if(spWrap&&spTiles.length){
+    spWrap.hidden=false;
+    var spPlates=$$('.sp-plate',sp),
+        spAnim=function(el){if(!sStill()&&el.animate)el.animate([{opacity:0,transform:'translate3d(0,6px,0)'},{opacity:1,transform:'none'}],{duration:220,easing:'cubic-bezier(.2,.7,.2,1)'})},
+        spSee=function(){   /* the chooser's foot on screen, clear of a phone's bottom tab */
+          var r=sp.getBoundingClientRect(),over=r.bottom-(innerHeight-80);
+          if(over>0)scrollBy({top:Math.min(over,r.top-(parseFloat(getComputedStyle(html).scrollPaddingTop)||0)),behavior:sStill()?'auto':'smooth'});
+        },
+        spShelves=function(){
+          spL.hidden=true;spS.hidden=false;spAnim(spS);
+          var b=spPlates.filter(function(p){return p.dataset.cat===spCat})[0]||spPlates[0];
+          b.focus();
+        },
+        spOpen=function(){
+          sSugClose();sp.hidden=false;spGo.setAttribute('aria-expanded','true');
+          spAnim(sp);spShelves();spSee();
+        },
+        spClose=function(){
+          if(sp.hidden)return;
+          sp.hidden=true;spGo.setAttribute('aria-expanded','false');
+          sProd.focus();
+        },
+        spList=function(b){
+          var c=b.dataset.cat,nm=$('.sp-name',b).textContent;
+          spCat=c;spItems.textContent='';
+          spTiles.filter(function(a){return (' '+a.dataset.shelves+' ').indexOf(' '+c+' ')>-1})
+            .sort(function(x,y){return x.dataset.name.toLowerCase().localeCompare(y.dataset.name.toLowerCase())||
+                                       x.dataset.kind.toLowerCase().localeCompare(y.dataset.kind.toLowerCase())})
+            .forEach(function(a){
+              var li=doc.createElement('li'),it=doc.createElement('button'),th=doc.createElement('span'),im=doc.createElement('img'),
+                  tx=doc.createElement('span'),n1=doc.createElement('span'),n2=doc.createElement('span'),cm=doc.createElement('span'),pic=$('img',a);
+              it.type='button';it.className='sp-item';it.dataset.try=a.dataset.try;
+              th.className='sp-th';im.alt='';im.width=im.height=600;im.loading='lazy';im.decoding='async';
+              if(pic)im.src=pic.getAttribute('src');
+              th.appendChild(im);
+              tx.className='sp-tx';n1.className='sp-n';n1.textContent=a.dataset.name;
+              n2.className='sp-k';n2.textContent=a.dataset.kind;
+              cm.className='vh';cm.textContent=', ';
+              tx.appendChild(n1);tx.appendChild(cm);tx.appendChild(n2);
+              it.appendChild(th);it.appendChild(tx);li.appendChild(it);spItems.appendChild(li);
+            });
+          spT.textContent=nm;spItems.scrollTop=0;
+          spS.hidden=true;spL.hidden=false;spAnim(spL);
+          var first=$('.sp-item',spItems);
+          if(first)first.focus();
+          /* DRAFT-COPY */
+          say(nm+': '+spItems.children.length+' product'+(spItems.children.length===1?'':'s')+'. Pick one, or go back to all shelves.');
+          spSee();
+        };
+    spGo.addEventListener('click',function(){sp.hidden?spOpen():spClose()});
+    spPlates.forEach(function(b){b.addEventListener('click',function(){spList(b)})});
+    spBack.addEventListener('click',spShelves);
+    spItems.addEventListener('click',function(e){
+      var it=e.target.closest('.sp-item');
+      if(!it)return;
+      sSet(it.dataset.try);spClose();
+      /* DRAFT-COPY */
+      say('I’ve had my eye on '+it.dataset.try+'.');
+    });
+    sp.addEventListener('keydown',function(e){
+      if(e.key==='Escape'){e.preventDefault();e.stopPropagation();spClose();return}
+      var grid=!spS.hidden,set=grid?spPlates:$$('.sp-item',spItems),i=set.indexOf(doc.activeElement),to=-1,
+          cols=spPlates.filter(function(p){return p.offsetTop===spPlates[0].offsetTop}).length||1;
+      if(i<0)return;
+      if(e.key==='ArrowRight'||(!grid&&e.key==='ArrowDown'))to=Math.min(set.length-1,i+1);
+      else if(e.key==='ArrowLeft'||(!grid&&e.key==='ArrowUp'))to=Math.max(0,i-1);
+      else if(grid&&e.key==='ArrowDown')to=Math.min(set.length-1,i+cols);
+      else if(grid&&e.key==='ArrowUp')to=Math.max(0,i-cols);
+      else if(e.key==='Home')to=0;
+      else if(e.key==='End')to=set.length-1;
+      if(to<0)return;
+      e.preventDefault();set[to].focus();
+    });
+  }
+  sform.addEventListener('change',function(e){
+    if(e.target.name==='contact_by'){sPick();sFitAll()}
+    if(sform.dataset.tried)sCheck();            /* once they have tried to send, errors clear as they fix them */
+    else if(sform.dataset.tried1)sCheck1();     /* ...or, after a Next that stopped, step 1's */
+  });
+  /* typing into a flagged field clears its own error; the check itself waits for change or send */
+  sform.addEventListener('input',function(e){
+    if(e.target===sProd){
+      if(/[\r\n]/.test(sProd.value))sProd.value=sProd.value.replace(/[\r\n]+/g,' ');
+      sSugShow();
+    }
+    if(e.target.matches('.c-field input,.c-field textarea'))sFit(e.target);
+    var t=e.target,d=t.getAttribute('aria-invalid')==='true'&&t.getAttribute('aria-describedby');
+    if(!d)return;
+    t.setAttribute('aria-invalid','false');
+    d.split(' ').forEach(function(i){if(/-err$/.test(i))$('#'+i).textContent=''});
+  });
+  sform.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(sform.getAttribute('aria-busy')==='true')return;
+    if(sStep()===1){sForward();return}          /* Enter in step 1 means Next */
+    sform.dataset.tried='1';
+    sfail.textContent='';
+    var bad=sCheck();
+    if(bad.length){
+      if(s1.contains(bad[0]))sTo(1);
+      bad[0].focus();
+      say(bad.length===1?'One thing to fix before this can send.':bad.length+' things to fix before this can send.');
+      return;
+    }
+    var by=sBy(),body={
+      _subject:sval('_subject'),_template:sval('_template'),_captcha:sval('_captcha'),_honey:sel('_honey').value,
+      name:sval('name'),contact_by:by
+    };
+    if(by==='Text')body.phone=sval('phone');else body.email=sval('email');
+    body.product=sval('product');body.delivery=sval('delivery');body.note=sval('note');
+    body.consent='Yes, Peter can text or email me about this';
+    body.keep_in_touch=sel('keep_in_touch').checked?'Yes':'No';
+    sform.setAttribute('aria-busy','true');sgo.textContent='Sending…';
+    say('Sending your request.');
+    var fail=function(){
+      sform.removeAttribute('aria-busy');sgo.textContent='Send it to Peter';
+      sfail.textContent='That didn’t send. Check your connection and try again. Everything you typed is still here.';
+      say(sfail.textContent);
+    };
+    fetch(sform.dataset.endpoint,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify(body)})
+      .then(function(r){return r.json().catch(function(){return {}}).then(function(j){
+        if(!r.ok||!(j.success===true||j.success==='true'))throw 0;
+        sform.removeAttribute('aria-busy');
+        sShow();
+        say('Request sent. Peter will reach out within a day or two.');
+      })})
+      .catch(fail);
   });
 }
 
@@ -964,9 +1641,10 @@ if(mcForm){
       if(goal.value!==g){goal.value=g;moved=true}
       mcAuto.goal=g;
     }
-    if(note&&mcSum&&(keep?note.value&&note.value===mcAuto.note:mcOurs(note,mcAuto.note))){
-      if(note.value!==mcSum){note.value=mcSum;moved=true}
-      mcAuto.note=mcSum;
+    var mcN=(cLead.line?cLead.line+' ':'')+mcSum;   /* the bar's line, when there is one, leads */
+    if(note&&mcSum&&(keep?note.value&&(note.value===mcAuto.note||note.value===cLead.last):mcOurs(note,mcAuto.note)||note.value===cLead.last)){
+      if(note.value!==mcN){note.value=mcN;moved=true}
+      mcAuto.note=mcN;cLead.last=mcN;
     }
     if(!keep)mcFilled=true;
     try{localStorage.setItem(MCAUTO,JSON.stringify(mcAuto))}catch(e){}
@@ -983,16 +1661,35 @@ if(mcForm){
     if(!cform)return;                            /* no consult here: just follow the anchor */
     e.preventDefault();
     mcFill(true);
-    $('#consult').scrollIntoView();
-    var t=$('#consult-title');
-    t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
+    mcLand(false);
   }
   $('#mc-book').addEventListener('click',mcGo);
+  /* Both moves to the consult land on the booking form itself, not the top of the section:
+     the numbers strip, the offer and the disclosure are then above, already passed, and the
+     visitor arrives where the calculator has just filled the goal and the note, with the rest
+     to answer and "Pick a time" under them. The form's top goes up under the masthead (html's
+     scroll-padding-top, --mast, as the calendar's scroll above does); a form taller than the
+     screen still starts there. Measured from the layout, not from the box as drawn: until it
+     has been scrolled to, the form still carries the reveal's 16px nudge (.motion .grow), which
+     scrollIntoView would count, leaving the form's top 16px under the masthead once it rose.
+     Once the calendar has taken the form's place, the calendar is where the page goes.
+     Focus follows to the form's first question (the calendar box, once it is up), so keyboard
+     and screen-reader users arrive there too; the section heading would be off screen now. */
+  function mcLand(smooth){
+    var el=cform.hidden?cbox:cform,r=el.getBoundingClientRect(),tf=getComputedStyle(el).transform,
+        ty=tf&&tf!=='none'?new DOMMatrixReadOnly(tf).m42:0,
+        pad=parseFloat(getComputedStyle(html).scrollPaddingTop)||0;
+    scrollTo({top:Math.max(0,scrollY+r.top-ty-pad),behavior:smooth?'smooth':'auto'});
+    var t=cform.hidden?cbox:$('legend',cform);
+    t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
+  }
 
   /* After a fresh "See my numbers" the card comes up, the visitor gets three seconds with it,
-     and then the page glides down to the consult, whose strip carries the same four numbers,
-     so both are seen. Four seconds when a warning is up: there is more to read. (It was 1.5
-     and 2.6; a visitor tested at that pace had not finished reading the card.) Anything the
+     and then the page glides down to the consult's booking form (mcLand: its top under the
+     masthead, the goal and the note already filled from the card, focus on its first
+     question), so the next thing in front of them is the rest of the form and "Pick a time".
+     Four seconds when a warning is up: there is more to read. (It was 1.5 and 2.6; a visitor
+     tested at that pace had not finished reading the card.) Anything the
      visitor does in that pause (a scroll, a touch, a click, a key, leaving the tab) means
      they are reading, so the glide is dropped and nothing else moves. The scroll test is by
      distance from where the card left the page, so the jump that focusing the card's own
@@ -1009,7 +1706,7 @@ if(mcForm){
   }
   function mcGlide(){
     mcStop();
-    if(!mcSec||$('body > .intro'))return;       /* no consult on this page, or the curtain is still up */
+    if(!cform||!mcSec||$('body > .intro'))return; /* no consult on this page, or the curtain is still up */
     mcY=scrollY;
     MCSTOP.forEach(function(ev){addEventListener(ev,mcNudge,{capture:true,passive:true})});
     doc.addEventListener('visibilitychange',mcStop);
@@ -1017,9 +1714,7 @@ if(mcForm){
       mcStop();
       if(!mcDone)return;
       mcFill(false);                             /* the goal chip and the note line, if still the site's */
-      mcSec.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
-      var t=$('#consult-title');
-      t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
+      mcLand(!matchMedia('(prefers-reduced-motion: reduce)').matches);
     },$('.mc-warn',mcNotes)?4000:3000);
   }
   if(cform&&mcSec&&'IntersectionObserver' in window)
@@ -1176,6 +1871,289 @@ if(mcForm){
   },{rootMargin:'400px 0px'}).observe(run);
 })();
 
+/* Load the bar (SHELF_VIEW 'bar' in build_homepage.py). #goals is a rack of plates (nine), one per
+   shelf; a plate is a button that shows its shelf's panel (a few packs, each opening the product
+   card, "Load this plate" and a link to the shelf), one panel at a time, and nothing opens on its
+   own. Loaded plates are the visitor's stack: kept in localStorage (a browser that refuses it still
+   works, it just forgets), drawn on the hero's bar and on the bar pinned under the masthead, and
+   named in the call form's note ("Interested in: ..."), only while that note is empty or still says
+   exactly what the site last put there. Through the story's stage (#st-run) the pinned bar is Peter's
+   instead, and from the proof after it ("His and hers") it is the visitor's again: the story
+   block below loads his five plates as its pack beats go by (LB.peter), and scrolling back takes them
+   off. Plates slide on in 300ms (style.css); under reduced motion they are simply there, and the
+   story's plates go on as each pack beat reaches the middle of the screen.
+   The pinned strip is a reward, not a fixture: it is not there until the first plate lands (or
+   the stage starts, for Peter's), and it goes again when the last plate comes off, outside the stage.
+   html.has-stack says a stack exists, so the anchors' offset (scroll-padding-top in style.css) counts
+   the strip only when it will be there. The rack's three-step guide follows the visitor (1 until a
+   plate is open, 2 while one is, 3 once one is loaded); under "Build yours." their own stack stands
+   next to Peter's; the product card can load its shelf's plate; and the sample's "I've had my eye on"
+   blank is offered the loaded plates' shelves (up to three), on the same terms as the call form's note. */
+var LB=null;
+(function(){
+  var pin=$('#lbpin');
+  if(!pin)return;
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)'),KEY='aspire-stack',NKEY='aspire-consult-bar',
+      rack=$('#rack'),plates=rack?$$('.rk-plate',rack):[],panels=plates.map(function(b){return $('#'+b.getAttribute('aria-controls'))}),
+      loads=rack?$$('.rk-load',rack):[],NAME={},RANK={},stack=[],sel=-1,MS=320,
+      youBars=$$('.bb-you'),capYou=$('.lbc-you',pin),capNew=$('.lbc-ynew',pin),hbar=$('.hbar'),hbYou=hbar&&$('.hb-you',hbar),
+      pBar=$('.bb-peter',pin),pCaps=$$('.lbc-p',pin),pNews=$$('.lbc-pnew',pin),PC=pNews.map(function(e){return e.getAttribute('data-cat')}),
+      pinYou=$('.bb-you',pin),COL={},steps=$$('#rk-guide li'),
+      mys=$('#mys-you'),mysHas=mys&&$('.mys-has',mys),mysNone=mys&&$('.mys-none',mys),mysN=mys&&$('.mys-n',mys),mysKey=mys&&$('.mys-ykey',mys),
+      cLoad=$('#pcard-load'),cCat='',pdlg=$('#pcard');
+  plates.forEach(function(b){var c=b.getAttribute('data-cat');NAME[c]=$('.rk-name',b).textContent;RANK[c]=+b.getAttribute('data-rank');COL[c]=b.style.getPropertyValue('--c')});
+  try{var sv=JSON.parse(localStorage.getItem(KEY)||'[]');
+      if(Array.isArray(sv))stack=sv.filter(function(c,i){return NAME.hasOwnProperty(c)&&sv.indexOf(c)===i})}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(stack))}catch(e){}}
+  function count(n){return n?'Your stack · '+n+' plate'+(n===1?'':'s'):''}   /* no plates, no caption: the strip is away */
+  function capSet(n){   /* the strip's own: a phone's one-row strip drops " plates" (style.css) */
+    capYou.textContent=n?'Your stack · '+n:'';
+    if(n){var lg=doc.createElement('span');lg.className='lbc-lg';lg.textContent=' plate'+(n===1?'':'s');capYou.appendChild(lg)}
+  }
+  /* the newest plate's outline and its name, up for a moment and gone. On a phone's one-row strip
+     the name takes the caption's place: the count goes, the name comes, and back, never both at once */
+  var phone=matchMedia('(max-width: 767px)'),whos=$$('.lbc-who',pin);
+  function flash(els){
+    els.forEach(function(el){
+      if(!el||!el.animate)return;
+      el.getAnimations().forEach(function(a){a.cancel()});
+      var who=phone.matches&&el.classList.contains('lbc')?$('.lbc-who',el.closest('.lbc-set')):null,O={duration:2400,easing:'linear'};
+      if(!who){
+        el.animate(reduce.matches?[{opacity:1},{opacity:1}]:[{opacity:0},{opacity:1,offset:.1},{opacity:1,offset:.78},{opacity:0}],O);   /* reduced motion: shown, then gone, with no fade */
+        return;
+      }
+      hush([who]);
+      el.animate(reduce.matches?[{opacity:1},{opacity:1}]:[{opacity:0},{opacity:0,offset:.05},{opacity:1,offset:.1},{opacity:1,offset:.8},{opacity:0,offset:.85},{opacity:0}],O);
+      who.animate(reduce.matches?[{opacity:0},{opacity:0}]:[{opacity:1},{opacity:0,offset:.05},{opacity:0,offset:.85},{opacity:1,offset:.9},{opacity:1}],O);
+    });
+  }
+  function rings(bar,c){return $$('.bb-p[data-cat="'+c+'"] .bb-ring',bar)}
+  function hush(els){els.forEach(function(e){e&&e.getAnimations&&e.getAnimations().forEach(function(a){a.cancel()})})}   /* one newest at a time */
+  function paint(newest){
+    youBars.forEach(function(bar){
+      $$('.bb-p',bar).forEach(function(p){
+        var c=p.getAttribute('data-cat'),on=stack.indexOf(c)>-1;
+        if(on)p.style.setProperty('--o',stack.filter(function(k){return RANK[k]<RANK[c]}).length);
+        p.classList.toggle('on',on);
+      });
+    });
+    capSet(stack.length);
+    if(hbar){hbar.classList.toggle('has',stack.length>0);hbYou.textContent=count(stack.length)}
+    plates.forEach(function(b){b.classList.toggle('is-on',stack.indexOf(b.getAttribute('data-cat'))>-1)});
+    loads.forEach(function(b){
+      var on=stack.indexOf(b.getAttribute('data-cat'))>-1;
+      b.setAttribute('aria-pressed',on?'true':'false');
+      b.textContent=on?'Take it off the bar':'Load this plate';
+    });
+    if(cform)cLead.line=stack.length?'Interested in: '+stack.map(function(c){return NAME[c]}).join(', ')+'.':'';
+    guide();mysYou();cardSync();
+    html.classList.toggle('has-stack',stack.length>0);
+    if(newest)capNew.textContent='+ '+NAME[newest];
+    /* the strip comes up (or goes) and the newest plate flashes on it; behind the product card
+       the strip is hidden, so both wait for the card to close */
+    var go=function(){
+      pinSet();
+      if(newest){hush($$('.bb-ring',pinYou));flash([capNew].concat(rings(pinYou,newest)))}   /* the pinned one: the hero's is off screen */
+      /* the weight arriving: as the plate settles, the bar gives a hair under it and comes back */
+      if(newest&&!reduce.matches)youBars.forEach(function(bar){
+        if(bar.animate)bar.animate([{transform:'none'},{transform:'translate3d(0,.24em,0)',offset:.3},{transform:'none'}],
+                                   {duration:320,delay:230,easing:'cubic-bezier(.3,.6,.4,1)'});
+      });
+    };
+    if(pdlg&&pdlg.open){if(!pdlg.dataset.due){pdlg.dataset.due='1';pdlg.addEventListener('close',function(){delete pdlg.dataset.due;setTimeout(go,60)},{once:true})}}
+    else go();
+    sDue=true;if(sIn)sampleFill();
+  }
+  /* the guide: the step the visitor is on, and the ones behind them */
+  function guide(){
+    var n=stack.length?2:sel>-1?1:0;
+    steps.forEach(function(li,i){
+      li.classList.toggle('is-done',i<n);li.classList.toggle('is-now',i===n);
+      if(i===n)li.setAttribute('aria-current','step');else li.removeAttribute('aria-current');
+    });
+  }
+  /* under "Build yours.": the visitor's own stack (its bar is one of youBars), or the way to start one */
+  function mysYou(){
+    if(!mys)return;
+    mysHas.hidden=!stack.length;mysNone.hidden=stack.length>0;
+    mysN.textContent=count(stack.length);
+    mysKey.textContent='';
+    stack.forEach(function(c){
+      var li=doc.createElement('li'),i=doc.createElement('i');
+      i.style.setProperty('--c',COL[c]);li.appendChild(i);li.appendChild(doc.createTextNode(NAME[c]));mysKey.appendChild(li);
+    });
+  }
+  /* the product card's "Load this plate": its pack's shelf. Once that plate is on it reads "On your
+     bar" and does nothing (aria-disabled, so it stays in the Tab order and says why); the rack's
+     own button takes a plate off */
+  function cardSync(){
+    if(!cLoad)return;
+    cLoad.hidden=!NAME.hasOwnProperty(cCat);
+    if(cLoad.hidden)return;
+    var on=stack.indexOf(cCat)>-1;
+    $('.pl-t',cLoad).textContent=on?'On your bar':'Load this plate';
+    $('.pl-cat',cLoad).textContent=' ('+NAME[cCat]+')';
+    cLoad.setAttribute('aria-disabled',on?'true':'false');
+    cLoad.classList.toggle('is-on',on);
+  }
+  function toggle(c){
+    var i=stack.indexOf(c),on=i<0;
+    if(on)stack.push(c);else stack.splice(i,1);
+    save();paint(on?c:null);noteDue=true;
+    doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:on?'clank':'unclank'}));   /* a visitor's plate only: the story's are silent */
+    say(NAME[c]+(on?' is on the bar. ':' is off the bar. ')+(stack.length?count(stack.length)+'.':'Nothing else is on it.'));
+  }
+  if(cLoad)cLoad.addEventListener('click',function(){if(cCat&&stack.indexOf(cCat)<0)toggle(cCat)});
+  /* the rack: a plate shows its panel; the same plate again, Escape, or another plate puts it away */
+  function show(i){   /* the panel, whole, on screen and clear of the pinned bar and the tab */
+    setTimeout(function(){
+      if(sel!==i)return;
+      var r=panels[i].getBoundingClientRect(),pr=plates[i].getBoundingClientRect(),vh=innerHeight,tab=72,
+          top=parseFloat(getComputedStyle(html).scrollPaddingTop)||0,
+          dy=r.bottom>vh-tab?Math.min(r.bottom-(vh-tab),pr.top-top-12):0;
+      if(dy>1)scrollBy({top:dy,behavior:reduce.matches?'instant':'smooth'});
+    },reduce.matches?0:60);
+  }
+  /* the rack is one stop for Tab: the arrow keys, Home and End move between plates, so Tab goes
+     on from the plate straight into its open panel */
+  function rove(i){plates.forEach(function(b,j){b.tabIndex=j===i?0:-1})}
+  function pick(i){
+    sel=sel===i?-1:i;
+    rove(i);
+    plates.forEach(function(b,j){b.setAttribute('aria-pressed',j===sel?'true':'false')});
+    panels.forEach(function(p,j){p.hidden=j!==sel});
+    if(sel>-1)show(sel);
+    guide();
+  }
+  plates.forEach(function(b,i){
+    b.addEventListener('click',function(){pick(i)});
+    b.addEventListener('keydown',function(e){
+      var k=e.key,N=plates.length,j=k==='ArrowRight'||k==='ArrowDown'?(i+1)%N:k==='ArrowLeft'||k==='ArrowUp'?(i+N-1)%N:k==='Home'?0:k==='End'?N-1:-1;
+      if(j<0)return;
+      e.preventDefault();rove(j);plates[j].focus();
+    });
+  });
+  rove(0);
+  if(rack)rack.addEventListener('keydown',function(e){
+    if(e.key!=='Escape'||sel<0)return;
+    var i=sel;pick(i);plates[i].focus();
+  });
+  loads.forEach(function(b){
+    b.hidden=false;
+    b.addEventListener('click',function(){toggle(b.getAttribute('data-cat'))});
+  });
+  /* the call form's note: the bar's line goes in when the form is reached, and again after the stack
+     changes, only over an empty note or one that still says what the site last wrote there (the
+     calculator's macros line rides behind it); the visitor's own words are never touched */
+  var noteDue=true;
+  if(cform){try{cLead.last=localStorage.getItem(NKEY)||''}catch(e){}}
+  function noteFill(){
+    if(!cform||cform.hidden)return;
+    var el=cform.elements.note;
+    if(!el)return;
+    var v=el.value,mcA=typeof mcAuto==='object'&&mcAuto?mcAuto:null,mc=mcDone&&mcSum?mcSum:'';
+    noteDue=false;
+    if(v&&v!==cLead.last&&!(mcA&&v===mcA.note))return;
+    var want=[cLead.line,mc].filter(Boolean).join(' ');
+    if(v!==want){el.value=want;cform.dispatchEvent(new Event('change'))}
+    cLead.last=want;
+    try{localStorage.setItem(NKEY,want)}catch(e){}
+    if(mc&&mcA){mcA.note=want;try{localStorage.setItem(MCAUTO,JSON.stringify(mcA))}catch(e){}}
+  }
+  if(cform){
+    new IntersectionObserver(function(es){if(es[0].isIntersecting&&noteDue)noteFill()}).observe(cform);
+    var cs0=cSync;cSync=function(){noteFill();if(cs0)cs0()};   /* and once more before booking */
+  }
+  /* the sample's "I've had my eye on ___": the loaded plates' shelves, the newest three in the order
+     they went on ("something from Recovery, Hydration or Energy & Focus"), as the call's note names them,
+     when the form comes into view and after the stack changes, only over an empty blank or one
+     that still says exactly what the site last put there (kept in localStorage, as the note's is),
+     and only while step 1 shows it. A ?try= link's product, and anything typed, are never touched. */
+  var SKEY='aspire-sample-auto',sLast='',sDue=true,sIn=false;
+  try{sLast=localStorage.getItem(SKEY)||''}catch(e){}
+  function sampleFill(){
+    if(!sform||sform.hidden||sStep()!==1)return;
+    sDue=false;
+    var ns=stack.slice(-3).map(function(c){return NAME[c]}),v=sProd.value,
+        want=ns.length?'something from '+(ns.length>1?ns.slice(0,-1).join(', ')+' or ':'')+ns[ns.length-1]:'';
+    if(v&&v!==sLast||v===want)return;
+    sProd.value=sPut=want;sFit(sProd);
+    sLast=want;
+    try{localStorage.setItem(SKEY,want)}catch(e){}
+    sProd.dispatchEvent(new Event('change',{bubbles:true}));   /* a flagged blank re-checks, as a picked suggestion does */
+  }
+  if(sform)new IntersectionObserver(function(es){sIn=es[0].isIntersecting;if(sIn&&sDue)sampleFill()}).observe(sform);
+  /* the pinned bar: once the hero has gone under the masthead, and only with a plate on it or with
+     the story's stage under it (Peter's). The stage (#st-run), not all of #story: the proof after it
+     ("His and hers") is the visitor's again, or no strip for a visitor with no stack. When it comes up
+     its contents are set at once, not faded (.snap), so it never arrives showing the other stack; when
+     it goes it keeps what it showed, so nothing changes on the way out. With it up at the stage's
+     edges the two stacks cross-fade as before. */
+  var hero=$('.hero'),story=$('#story'),edge=$('#st-run')||story,lineIO=null,heroGone=!hero,inStory=false;
+  function pinSet(){
+    var up=heroGone&&(inStory||stack.length>0);
+    html.classList.toggle('pin-you',up&&!inStory);   /* a phone's bottom tab steps aside while the strip holds the visitor's stack */
+    if(!up){pin.classList.remove('on');return}
+    if(pin.classList.contains('on')){pin.classList.toggle('is-peter',inStory);return}
+    pin.classList.add('snap');pin.classList.toggle('is-peter',inStory);pin.classList.add('on');
+    requestAnimationFrame(function(){requestAnimationFrame(function(){pin.classList.remove('snap')})});
+  }
+  if(hero)new IntersectionObserver(function(es){heroGone=!es[0].isIntersecting;pinSet()},
+    {rootMargin:'-'+($('.mast')?$('.mast').offsetHeight:60)+'px 0px 0px 0px'}).observe(hero);
+  function line(){   /* a one-pixel line at the pinned bar's foot: the stage crossing it is the switch */
+    if(lineIO)lineIO.disconnect();
+    if(!edge)return;
+    var y=($('.mast')?$('.mast').offsetHeight:60)+pin.offsetHeight,b=Math.max(0,innerHeight-y-1);
+    lineIO=new IntersectionObserver(function(es){inStory=es[0].isIntersecting;pinSet()},{rootMargin:'-'+y+'px 0px -'+b+'px 0px'});
+    lineIO.observe(edge);
+  }
+  line();
+  var rsz=0;addEventListener('resize',function(){clearTimeout(rsz);rsz=setTimeout(function(){line();LB.measure()},150)});
+  /* Peter's bar, for the story: ps[j] is 0..1, how far his j-th plate is on. Transform and opacity
+     only, each written only when it changes; the caption's count switches when a plate is half on. */
+  var st=0,keys={},lastN=-1,pl={},pr={};
+  $$('.bb-l .bb-p',pBar).forEach(function(p){pl[p.getAttribute('data-cat')]=p});
+  $$('.bb-r .bb-p',pBar).forEach(function(p){pr[p.getAttribute('data-cat')]=p});
+  var NP=$$('.bb-r .bb-p',pBar).length;   /* plates a sleeve holds: an unloaded one waits half a step past the last (style.css) */
+  function wr(el,k,tf,op){var v=tf+'|'+op;if(keys[k]===v)return;keys[k]=v;el.style.transform=tf;el.style.opacity=op}
+  LB={cats:PC,
+    card:function(c){cCat=c;cardSync()},
+    measure:function(){st=parseFloat(getComputedStyle(pBar).fontSize)*2.05;keys={}},   /* --st in style.css */
+    /* where plate c's centre sits on the pinned bar once it is down (the viewport's frame), and its
+       height; the pinned bar's top and foot, and where its "+ name" caption starts */
+    target:function(c){
+      var p=pr[c],sl=p.parentNode.getBoundingClientRect(),fs=parseFloat(getComputedStyle(pBar).fontSize),
+          tf=getComputedStyle(pin).transform,ty=tf&&tf!=='none'?new DOMMatrixReadOnly(tf).m42:0,
+          h=parseFloat(p.style.getPropertyValue('--s'))*10*fs,pb=pin.getBoundingClientRect(),cap=pNews[PC.indexOf(c)];
+      return {x:sl.left+(.15+.9)*fs+RANK[c]*st,y:sl.top+sl.height/2-ty,h:h,
+              top:pb.top-ty,bot:pb.bottom-ty,cap:cap?cap.getBoundingClientRect().left:sl.left};
+    },
+    peter:function(ps){
+      var n=0;
+      PC.forEach(function(c,j){
+        var p=ps[j]||0,d=(RANK[c]+(1-p)*(NP+.5-RANK[c]))*st,op=p>=1?'1':Math.min(1,p*1.6).toFixed(3);
+        wr(pl[c],'l'+c,'translate3d('+(-d).toFixed(1)+'px,0,0)',op);
+        wr(pr[c],'r'+c,'translate3d('+d.toFixed(1)+'px,0,0)',op);
+        if(p>=.5)n++;
+      });
+      if(n===lastN)return;
+      pCaps.forEach(function(e,i){e.style.opacity=i===n?'1':'0'});
+      hush(pNews.concat($$('.bb-ring',pBar),whos));
+      if(lastN>-1&&n>lastN&&n>0)flash([pNews[n-1]].concat(rings(pBar,PC[n-1])));
+      lastN=n;
+    }};
+  LB.measure();LB.peter([]);
+  paint(null);
+  /* no stage (reduced motion, or no IntersectionObserver-driven motion): his plates go on as each
+     pack beat reaches the middle of the screen, and come off as it goes back below it */
+  if(!html.classList.contains('motion')&&story){
+    var beats=$$('.st-beat[data-kind="prod"]',story),tick=0;
+    var upd=function(){tick=0;var mid=innerHeight*.55;LB.peter(beats.map(function(b){return b.getBoundingClientRect().top<mid?1:0}))};
+    addEventListener('scroll',function(){if(!tick)tick=requestAnimationFrame(upd)},{passive:true});
+    upd();
+  }
+})();
+
 /* Peter's story: nine beats on one stage that holds the window for the length of the run.
    Where each beat is, and how far in or out of its turn, is a function of how far the run has
    scrolled, as the pour is: scrolling back up plays it backwards. The stage follows the scroll
@@ -1187,13 +2165,13 @@ if(mcForm){
    The script takes the section over (.is-live) only when motion is allowed; otherwise, and
    until it does, the beats are a plain vertical sequence. Everything written per frame is
    transform or opacity.
-   A pack shot swirls in from the upper right, turning and tilted, swings just past its resting
-   angle and settles there while its line is read, then spins away down to the left as the next
-   one comes in, so the two cross on a diagonal rather than one replacing the other in the
-   middle. It is a flat picture, so it only ever turns in its own plane and tilts well short of
-   edge-on: it is never seen from behind or mirrored. Its shadow lifts and shrinks with it but
-   never turns. The photos of Peter do not spin: they rise in and fall away, and at the turn the
-   after wipes in over the before. */
+   A pack drops from the camera: it starts at the lens, large and unseen, falls away onto the
+   stage and lands with a small squash while its line is read; then it shrinks up into its own
+   compartment of the case strip along the top (the #goals case in miniature: its shelf's
+   compartment, so the two hydration packs share one and two compartments stay empty), and at
+   the call the filled case rises into the place above the button. It only ever turns a few
+   degrees in its own plane, so a flat picture is never seen edge-on or mirrored. The photos of Peter do not move like that: they
+   rise in and fall away, and at the turn the after wipes in over the before. */
 (function(){
   var run=$('#st-run');
   if(!run||!html.classList.contains('motion'))return;
@@ -1204,28 +2182,35 @@ if(mcForm){
      height in style.css sets the pace (at 390x664 a unit is about 307px); this sets the rhythm.
      A change is 1.5 units, about 460px, so a swirl is long enough to be seen; every hold is
      still at least 180px. The turn (the before becoming the after) holds longest, since the
-     wipe happens while it is up. */
-  var HOLD=[.9,.6,.6,.8,.6,.7,1.7,.7,1],T=1.5,at=[],L=0;
-  beats.forEach(function(b,i){at.push(L);L+=(HOLD[i]||1)+(i<N-1?T:0)});
+     wipe happens while it is up. The call holds longer still (2.0, ~690px at 390x844): it is the
+     moment that matters, and a ~700px flick through the end of the story should come to rest on
+     "Book a free call" rather than over it. The run in style.css grew with it (900 to 949lvh), so
+     every other beat keeps its pace. */
+  /* The five pack beats run quicker (Peter: "it takes too long"): each holds about half a unit and
+     the change from one pack to the next is .8 (the one into the first pack 1), so a pack beat is ~1.3
+     units, not ~2.2. Everything else keeps its 1.5 change. TT[i] is the change INTO beat i. */
+  var HOLD=[.9,1.7,.45,.45,.55,.45,.5,2,1],TT=[0,1.5,1,.8,.8,.8,.8,1.5,1.5],at=[],L=0;   /* before, the turn, five packs, the call, family */
+  function Tn(i){return TT[i]||1.5}
+  beats.forEach(function(b,i){if(i)L+=Tn(i);at.push(L);L+=HOLD[i]||1});
   var TURN=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('turn'),
-      SAND=beats.indexOf($('.st-warm',run));        /* the first beat on the sand */
+      WARM=beats.map(function(b){return b.classList.contains('st-warm')}),
+      SAND=WARM.indexOf(true),CALL=WARM.lastIndexOf(true)+1;   /* the packs are on the sand; the call after them */
   var parts=beats.map(function(b){
     return {b:b,kind:b.getAttribute('data-kind'),art:$('.st-art',b),copy:$('.st-copy',b),
             book:$('.st-book',b),warm:b.classList.contains('st-warm'),
             packs:$$('.st-pack',b).map(function(k,j){
               /* a pair comes one after the other; the arc in the text beat, one after another */
               /* where it comes to rest: its tilt, its offset across the stage (% of its width) and its size */
-              return {img:$('img',k),shade:$('.st-shade',k),tilt:+k.getAttribute('data-tilt')||0,
+              return {pack:k,img:$('img',k),shade:$('.st-shade',k),tilt:+k.getAttribute('data-tilt')||0,
                       rx:+k.getAttribute('data-x')||0,rs:+k.getAttribute('data-scale')||1,
                       off:j*(b.getAttribute('data-kind')==='prod'?.15:.12)};
             }),
-            wipe:$('.st-wipe',b),win:$('.st-wipe-in',b),vis:null,on:null,keys:{}};
+            wipe:$('.st-wipe',b),win:$('.st-wipe-in',b),arcbar:$('.st-arc .bb',b),vis:null,on:null,keys:{}};
   });
   var w=0,sh=0,raf=0,near=false,snap=true,topS=0,D=Math.PI/180,lampX=null;
   function clamp(x){return x<0?0:x>1?1:x}
   function smooth(x){return x*x*(3-2*x)}
   function out3(x){return 1-Math.pow(1-x,3)}
-  function back(x){var y=x-1;return 1+2*y*y*y+y*y}  /* eases out past 1 by about 4%, then settles */
   function f(n,d){return n.toFixed(d)}
   function put(p,el,name,tf,op){        /* write only what changed */
     if(!el)return;
@@ -1233,42 +2218,139 @@ if(mcForm){
     if(p.keys[name]===k)return;
     p.keys[name]=k;el.style.transform=tf;el.style.opacity=op;
   }
-  /* The fall, for one pack: u runs 0..1 through its arrival, q 0..1 through its leaving.
-     It drops in from above the stage down the right-hand lane, spinning in its own plane and
-     swaying a little as it comes, speeding up as a dropped thing does; it touches down at 80%
-     of its arrival, dips just past its resting place and settles, while the spin swings just past
-     its resting tilt and settles too. Leaving, it keeps falling: down and out through the foot of
-     the stage on the left-hand lane, still spinning, fading as it goes. So the one leaving and
-     the one arriving never share a lane or the middle. Its shadow stays on the floor at its
-     resting place and only comes up as it nears touchdown. The arc's packs fall the same way
-     but leave by lifting away in place (below). */
-  var FALL={top:.6,lane:.3,sway:.05,spin:200,swing:8,dip:.025,drop:.95,drift:.16,turn:220};
-  function swirl(p,k,i,u,q){
-    var F=FALL,land=clamp(u/.8),e=smooth(land),x,y,rot,rx,ry,s,op,near;
-    if(q>0&&p.kind!=='prod'){                        /* the arc lifts away up and right in place, clear of the words */
-      put(p,k.img,'i'+i,'translate3d('+f(40*q,1)+'px,'+f(-30*q,1)+'px,0) rotate('+k.tilt+'deg) scale('+f(1-.15*q,3)+')',f(1-smooth(q),3));
-      put(p,k.shade,'s'+i,'translate3d('+f(40*q,1)+'px,'+f(-30*q,1)+'px,0) scale('+f(1-.15*q,3)+')',f(1-q,3));
-      return 0;
+  /* The stack: every pack of the five pack beats (six, with the pair), in order, each bound for
+     the compartment of the shelf its beat links to, and the place above the call the filled case
+     rises into. Where each pack rests, where it stands in its compartment and where that place is
+     are measured here once per resize: the packs and the place from boxes nothing transforms, the
+     case from its offsets (the frame does transform it); a frame only moves pictures. */
+  var ITEMS=[],arcEl=CALL<N?$('.st-arc',beats[CALL]):null,rowEl=$('.st-row',run),
+      wells=$$('.stc-bay',rowEl),cats=wells.map(function(b){return b.getAttribute('data-cat')}),
+      geo=null,rowA=0,rowZ=0,rowIn=0,cp={keys:{}},C={x0:0,y0:0,s:1,dx:0,dy:0,op:0};
+  /* the bar theme: no case strip here; the pinned bar (LB, above) is the stack. Each pack's plate
+     slides onto the pinned bar as the pack lands and its words come up, and is on by the time they
+     are (its beat's hold), so the strip counts the pack that is on the stage. The pack itself stays
+     on the stage (the pile, below): each one after it gathers round it, and at the call they clear. */
+  var BARM=!rowEl&&!!LB,PB=[],PS=null,SLOT=null;
+  if(BARM)cats=LB.cats;
+  parts.forEach(function(p,i){
+    if(p.kind!=='prod')return;
+    var go=$('.st-go',p.b),m=go&&/category-([a-z-]+)\.html/.exec(go.getAttribute('href')),c=m?cats.indexOf(m[1]):-1;
+    p.packs.forEach(function(k){k.g=ITEMS.length;k.c=c;k.bi=i;ITEMS.push(k)});
+  });
+  ITEMS.forEach(function(k){   /* packs that share a compartment stand side by side in it */
+    var mates=ITEMS.filter(function(o){return o.c===k.c});
+    k.n=mates.length;k.j=mates.indexOf(k);
+  });
+  parts.forEach(function(p,i){if(p.kind==='prod')PB.push(i)});
+  ITEMS.forEach(function(k){k.pb=PB.indexOf(k.bi)});
+  /* The pile (the bar theme): each pack drops in and stays. Once the next beat starts, the packs
+     already in gather round the one arriving, on the same floor: the newest nearest it and in front,
+     each one before a step further out, higher and smaller, as a group shot stands; the first one
+     side, the next the other, and so on. Newer packs sit later in the page, so they are drawn over the older, as they stand in
+     front of them. A tier: its distance out from the arriving pack's edge, its rise off the floor
+     and its size, all in the art box's height; the whole group is centred in the hero column and
+     scaled to fit it. */
+  var TIER=[{o:.1,r:.06,z:.56},{o:.24,r:.15,z:.47},{o:.36,r:.26,z:.4}];
+  function measure(){
+    w=stage.offsetWidth;sh=stage.offsetHeight;
+    if(BARM){   /* the pile: each pack beat's floor (its art box's foot), and every pack's pose at each beat from its own on */
+      var s0=stage.getBoundingClientRect(),
+          its=ITEMS.map(function(k){var b=k.pack.getBoundingClientRect();
+            return {cx:b.left+b.width/2-s0.left,cy:b.top+b.height/2-s0.top,B:Math.min(b.width,b.height)||1,rp:k.rx*w/100*.3}}),
+          AN=PB.map(function(i,c){var a=parts[i].art.getBoundingClientRect(),hr=$('.st-hero',parts[i].b).getBoundingClientRect(),
+            A=a.height||1,x0=a.left+a.width/2-s0.left,hw=0;
+            ITEMS.forEach(function(k,g){if(k.pb===c){var I=its[g];hw=Math.max(hw,(Math.abs(I.cx+I.rp-x0)+.3*I.B*k.rs)/A)}});
+            return {x:x0,x0:x0,b:a.bottom-s0.top,A:A,W:hr.width,hw:hw}});
+      /* where each gathered pack stands at beat c: its side (by the order they came in), and its tier
+         (by how many newer ones share that side) */
+      SLOT=function(k,c){
+        var side=k.g%2?1:-1,r=0;
+        ITEMS.forEach(function(o){if(o.pb<c&&o.g>k.g&&(o.g%2?1:-1)===side)r++});
+        return {s:side,t:TIER[Math.min(r,2)]};
+      };
+      AN.forEach(function(a,c){   /* the group's reach either side, and so where it centres and its scale, at beat c */
+        var lo=a.hw,hi=a.hw;
+        ITEMS.forEach(function(k){if(k.pb<c){var S=SLOT(k,c),e=a.hw+S.t.o+.3*S.t.z;if(S.s<0)lo=Math.max(lo,e);else hi=Math.max(hi,e)}});
+        a.f=Math.min(1,(a.W/2-6)/((lo+hi)/2*a.A));
+        a.x+=(lo-hi)/2*a.A*a.f;
+      });
+      geo={items:ITEMS.map(function(k,g){var I=its[g],poses=[];
+        for(var c=0;c<PB.length;c++){
+          if(c<k.pb){poses.push(null);continue}
+          var a=AN[c],X,Y,s,rot;
+          if(c===k.pb){X=a.x+(I.cx+I.rp-a.x0)*a.f;Y=a.b+(I.cy-a.b)*a.f;s=k.rs*a.f;rot=k.tilt}   /* its own beat: its rest, scaled with the group */
+          else{var S=SLOT(k,c),Z=S.t.z*a.A*a.f;X=a.x+S.s*(a.hw+S.t.o)*a.A*a.f;Y=a.b-S.t.r*a.A*a.f-Z/2;s=Z/I.B;rot=k.tilt*.35}
+          poses.push({x:X-I.cx,y:Y-I.cy,s:s,r:rot});
+        }
+        return {B:I.B,poses:poses}})};
+      return;
     }
-    if(q>0){                                          /* leaving: it falls on, down the left */
-      x=k.rx*w/100-F.drift*w*Math.pow(q,1.6);y=F.drop*sh*Math.pow(q,1.3);   /* it drops first and drifts after */
-      rot=k.tilt+F.turn*q;rx=-10*q;ry=16*q;s=k.rs*(1-.12*q);op=1-clamp((q-.4)/.45);near=0;
-    }else{                                            /* arriving: it drops in, down the right */
-      var fall=u<.8?(1+F.dip)*Math.pow(land,1.6):1+F.dip*(1-smooth((u-.8)/.2));
-      x=k.rx*w/100+F.lane*w*(1-e)+F.sway*w*Math.sin(u*Math.PI*2.2)*(1-u);
-      y=-F.top*sh*(1-fall);
-      /* the spin rides the fall, so it turns where it can be seen and faster as it drops, then
-         swings just past its resting tilt on touchdown and settles */
-      rot=k.tilt-F.spin*(1-Math.min(fall,1))+F.swing*Math.sin(Math.PI*clamp((u-.8)/.2));rx=14*(1-e);ry=-18*(1-e)*Math.cos(u*6);
-      s=k.rs*(.78+.22*e);op=clamp(u*4);near=Math.pow(clamp((u-.55)/.25),2);
+    var s=stage.getBoundingClientRect(),rx=rowEl.offsetLeft,ry=rowEl.offsetTop,rw=rowEl.offsetWidth,rh=rowEl.offsetHeight,
+        a=arcEl&&arcEl.getBoundingClientRect();
+    var bays=wells.map(function(b){var e=$('.stc-well',b);   /* each well's offsets are the case's own (it is their offsetParent) */
+      return {x:rx+e.offsetLeft,y:ry+e.offsetTop,w:e.offsetWidth,h:e.offsetHeight}});
+    geo={x0:rx+rw/2,y0:ry+rh/2,
+      /* the place above the call: the case fits it, centred, never past its own width */
+      Z:a&&a.width?Math.min(a.width/rw,a.height/rh):1,ax:a?a.left+a.width/2-s.left:0,ay:a?a.top+a.height/2-s.top:0,
+      items:ITEMS.map(function(k){var b=k.pack.getBoundingClientRect(),B=bays[k.c]||bays[0],
+          /* a pack square stands on its baseline (91% down); it fills its well and may stand a little proud of it */
+          S=Math.min(B.w*1.22,B.h*1.2)*(k.n>1?.8:1),off=k.n>1?(k.j-(k.n-1)/2)*B.w*.36:0;
+        return {cx:b.left+b.width/2-s.left,cy:b.top+b.height/2-s.top,B:b.width||1,
+                tx:B.x+B.w/2+off,ty:B.y+B.h-2-S*.41,S:S}})};
+  }
+  /* Drop from the camera, then into the stack. u: 0..1 through its arrival (it lands at .8); q:
+     0..1 through its leaving. It starts right at the lens: 2.4 times its size, invisible, a little
+     high; it falls away onto the stage, shrinking faster as it goes, as a dropped thing does, then
+     lands with a small squash (a 5% dip in size) and settles, and its shadow grows and darkens as it
+     touches down. Leaving, it shrinks and glides up into its slot in the row, on a small arc; it
+     stays there while the rest of the stack arrives, rides the row up into the arc at the call, and
+     lifts away from there. */
+  var DROP={from:2.4,lift:.08,dip:.05,lean:8,hop:22};
+  function lerp(a,b,t){return a+(b-a)*t}
+  /* the pile's pack: its drop onto its rest in its own beat, then its place in the group, beat by beat
+     (PS: which beat's group is forming, how far, and how far the group has cleared for the call) */
+  function pile(p,k,i,u){
+    var G=geo&&geo.items[k.g];
+    if(!G||!PS)return 0;
+    var x,y,s,rot,rx=0,op=1,near=1,land=clamp(u/.8),bump=Math.sin(Math.PI*clamp((u-.8)/.2));
+    if(PS.c<=k.pb){                                   /* its own beat: from the lens onto its rest */
+      var R=G.poses[k.pb],g=land*land;
+      s=u<.8?R.s*(1+(DROP.from-1)*(1-g)):R.s*(1-DROP.dip*bump);
+      x=R.x;y=R.y-DROP.lift*sh*(1-g);rot=R.r+DROP.lean*(1-g);rx=10*(1-g);
+      op=smooth(clamp(land/.6));near=Math.pow(clamp((u-.55)/.25),2);
+    }else{                                            /* gathered: from where it stood to its place in the new group */
+      var A=G.poses[PS.c-1],Z=G.poses[PS.c],e=PS.g;
+      x=lerp(A.x,Z.x,e);y=lerp(A.y,Z.y,e)-Math.sin(Math.PI*e)*DROP.hop*.4;s=lerp(A.s,Z.s,e);rot=lerp(A.r,Z.r,e);bump=0;
     }
-    put(p,k.img,'i'+i,'translate3d('+f(x,1)+'px,'+f(y,1)+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotateY('+
-      f(ry,2)+'deg) rotate('+f(rot,2)+'deg) scale('+f(s,3)+')',f(op,3));
-    /* the shadow keeps to the floor: it follows the pack across, never down */
-    put(p,k.shade,'s'+i,'translate3d('+f(x,1)+'px,0,0) scale('+f(k.rs*(.6+.4*near),3)+')',f(near*(1-clamp(q*3)),3));
+    if(PS.cl>0){op*=1-PS.cl;s*=1-.12*PS.cl;y+=PS.cl*.04*sh}   /* the group clears for the call */
+    put(p,k.img,'i'+i,mv(x,y,rx,rot,s),f(op,3));
+    /* its shadow, under it wherever it stands (its box's foot is .41 of the square below its middle) */
+    put(p,k.shade,'s'+i,'translate3d('+f(x,1)+'px,'+f(y+.41*G.B*(s-1),1)+'px,0) scale('+f(s*(.55+.45*near+.08*bump),3)+')',
+      f(Math.min(1,near*(1+.25*bump))*op*(PS.c<=k.pb?1:.8),3));
+    return PS.c<=k.pb&&PS.cl<1?near:0;
+  }
+  function mv(x,y,rx,rot,s){return 'translate3d('+f(x,1)+'px,'+f(y,1)+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotate('+f(rot,2)+'deg) scale('+f(s,3)+')'}
+  function drop(p,k,i,u,q){
+    var G=geo&&geo.items[k.g],land=clamp(u/.8),g=land*land,rp=k.rx*w/100,x,y,s,rot,rx=0,op=1,near=0;
+    if(!G)return 0;
+    /* its place in its compartment, wherever the case is now, as a move from its rest */
+    var sx=C.x0+(G.tx-C.x0)*C.s+C.dx-G.cx,sy=C.y0+(G.ty-C.y0)*C.s+C.dy-G.cy,sS=G.S*C.s/G.B;
+    if(q<=0){
+      s=u<.8?k.rs*(1+(DROP.from-1)*(1-g)):k.rs*(1-DROP.dip*Math.sin(Math.PI*clamp((u-.8)/.2)));
+      x=rp;y=-DROP.lift*sh*(1-g);rot=k.tilt+DROP.lean*(1-g);rx=10*(1-g);
+      op=smooth(clamp(land/.6));near=Math.pow(clamp((u-.55)/.25),2);   /* from nothing at the lens to solid 60% of the way down */
+    }else if(q<1){
+      var e=smooth(q);
+      x=lerp(rp,sx,e);y=lerp(0,sy,e)-Math.sin(Math.PI*e)*DROP.hop;s=lerp(k.rs,sS,e);rot=lerp(k.tilt,0,e);
+    }else{
+      x=sx;y=sy;s=sS;rot=0;op=C.op;                     /* in its compartment: it goes where the case goes */
+    }
+    put(p,k.img,'i'+i,mv(x,y,rx,rot,s),f(op,3));
+    /* the shadow keeps to the floor under its rest, grows and darkens on touchdown, and goes with it */
+    put(p,k.shade,'s'+i,'translate3d('+f(rp,1)+'px,0,0) scale('+f(k.rs*(.55+.45*near+.08*Math.sin(Math.PI*clamp((u-.8)/.2))),3)+')',
+      f(Math.min(1,near*(1+.25*Math.sin(Math.PI*clamp((u-.8)/.2))))*(1-clamp(q*3)),3));
     return near*(1-q);
   }
-  function measure(){w=stage.offsetWidth;sh=stage.offsetHeight}
   function frame(){
     raf=0;
     var r=run.getBoundingClientRect(),vh=innerHeight||1,span=Math.max(1,r.height-sh);
@@ -1287,12 +2369,28 @@ if(mcForm){
         arrive=clamp((vh-top)/(vh*.8)),                /* the first photo comes up with the stage, */
         settle=clamp(1-top/(vh*.3)),                   /* the pour's shade lifts as the stage settles */
         wipe=TURN<0?0:smooth(clamp((x-at[TURN]-.1)/((HOLD[TURN]||1)*.55))),
-        best=-1,bestV=.5,lit=[0,0],restV=0,restX=0;
+        best=-1,bestV=.5,lit=[0,0],restV=0,restX=0,
+        kc=CALL<N?clamp((x-at[CALL]+Tn(CALL))/Tn(CALL)):0,zc=CALL<N-1?clamp((x-at[CALL]-(HOLD[CALL]||1))/Tn(CALL+1)):0;
+    rowA=clamp((kc-.1)/.55);rowZ=zc;
+    if(BARM&&PB.length){   /* the group forms in the first part of each change between two packs, while the words are out */
+      var pc=0,pg=1,il=PB[PB.length-1];
+      for(var m=1;m<PB.length;m++){var ii=PB[m],gm=smooth(clamp((x-at[ii]+Tn(ii))/(.45*Tn(ii))));if(gm>0){pc=m;pg=gm}}
+      PS={c:pc,g:pg,cl:il<N-1?smooth(clamp((x-at[il]-(HOLD[il]||1))/(.45*Tn(il+1)))):0};
+    }                    /* the case rises into the place above the call, then lifts away */
+    /* the case: up with the first pack's beat, empty, as its line is read; filled by the sleep
+       beat; then the whole of it, packs and all, moves up into the call's place and lifts away */
+    rowIn=SAND>0?smooth(clamp(((x-at[SAND]+Tn(SAND))/Tn(SAND)-.2)/.5)):1;
+    if(geo&&!BARM){
+      var ra=smooth(rowA),rz=smooth(clamp(rowZ/.6));
+      C.x0=geo.x0;C.y0=geo.y0;C.s=(1+(geo.Z-1)*ra)*(1-.12*rz);
+      C.dx=(geo.ax-geo.x0)*ra+40*rz;C.dy=(geo.ay-geo.y0)*ra-30*rz;C.op=1-rz;
+      put(cp,rowEl,'case','translate3d('+f(C.dx,1)+'px,'+f(C.dy,1)+'px,0) scale('+f(C.s,4)+')',f(Math.min(rowIn,C.op),3));
+    }
     parts.forEach(function(p,i){
       var h=HOLD[i]||1,
-          kin=i?clamp((x-at[i]+T)/T):clamp(arrive),      /* 0..1 through the change into this beat */
-          kout=i<N-1?clamp((x-at[i]-h)/T):0,             /* 0..1 through the change out of it */
-          vis=kout<1&&kin>0;
+          kin=i?clamp((x-at[i]+Tn(i))/Tn(i)):clamp(arrive),      /* 0..1 through the change into this beat */
+          kout=i<N-1?clamp((x-at[i]-h)/Tn(i+1)):0,             /* 0..1 through the change out of it */
+          vis=kin>0&&(p.kind==='prod'?(BARM?PS.cl<1:CALL<N?(zc<1||kout<1):kout<1):kout<1);   /* a pack's beat stays up while its pack is in the stack, or on the stage */
       if(vis!==p.vis){p.vis=vis;p.b.style.opacity=vis?'1':'0'}   /* opacity, not visibility: its link stays reachable by Tab */
       /* the button is parked below the stage's edge while its words are not up, so the tab's
          observer sees it exactly while it can be seen */
@@ -1300,27 +2398,30 @@ if(mcForm){
       /* the words: out in the first part of a change, in at the end of it, never both at once */
       var ce=i?smooth(clamp((kin-.6)/.4)):smooth(clamp(x/.35)),   /* the first words wait for the stage to hold */
           cq=smooth(clamp(kout/.4));
-      if(p.kind==='turn')ce=wipe;                        /* his words come up with the after */
+      if(p.kind==='turn')ce=smooth(clamp((wipe-.6)/.4));  /* his words come up with the after, once its light is mostly in */
       var v=Math.min(ce,1-cq);
       put(p,p.copy,'copy','translate3d(0,'+f((1-ce)*28-cq*28,1)+'px,0)',f(v,3));
       if(p.book)put(p,p.book,'book',v<.02?'translate3d(0,120vh,0)':'translate3d(0,'+f((1-ce)*40,1)+'px,0)',f(v,3));
       if(v>bestV){bestV=v;best=i}
-      var u=clamp((kin-.25)/.45),q=clamp(kout/.55);   /* it lands (u .8) as the words start to rise, kin .61 */
-      if(p.kind!=='prod')p.packs.forEach(function(k,j){  /* the arc: packs that come back, not a hero */
-        swirl(p,k,j,clamp((u-k.off)/(1-k.off)),Math.pow(clamp((q-k.off*.5)/(1-k.off*.5)),2));
-      });
+      if(p.arcbar)put(p,p.arcbar,'arcbar','translate3d(0,'+f((1-ce)*22-cq*22,1)+'px,0)',f(v,3));   /* the loaded bar above the call comes with its words */
+      /* the drop: ~.27 units from the lens to the floor (it was ~.5), landing (u .8) at kin .62 as the new words rise */
+      var db=Math.min(.35,.28/Tn(i)),u=clamp((kin-(.62-.8*db))/db);
       if(!p.art)return;
       if(p.kind==='prod'){
         var rest=1;
         p.packs.forEach(function(k,j){                  /* a pair arrives and leaves one after the other */
-          var qp=clamp((kout-.25)/.45),                 /* it leaves once the words are nearly gone, and is below them before new ones rise */
+          var qp=clamp((kout-.1)/.4),                   /* it tucks into the row (up, away from the words) as they drop, and is in its slot before the next pack is solid */
               uj=clamp((u-k.off)/(1-k.off)),qj=clamp((qp-k.off)/(1-k.off));
-          rest=Math.min(rest,swirl(p,k,j,uj,qj));
+          rest=Math.min(rest,BARM?pile(p,k,j,uj):drop(p,k,j,uj,qj));
         });
         lit[p.warm?1:0]=Math.max(lit[p.warm?1:0],rest);
         if(rest>restV){restV=rest;restX=p.packs[0].rx}
       }else{
         var pe=i?smooth(clamp((kin-.45)/.55)):smooth(arrive),pq=smooth(clamp(kout/.35));
+        /* the opening pair is one photo: the before holds still, and the turn lays the very same
+           before over it (same size, same place) for the after to wipe across */
+        if(parts[i+1]&&parts[i+1].kind==='turn')pq=0;
+        if(p.kind==='turn'&&parts[i-1]&&parts[i-1].kind==='photo')pe=kin>0?1:0;
         put(p,p.art,'art','translate3d(0,'+f((1-pe)*36-pq*36,1)+'px,0) scale('+f(.94+.06*pe-.05*pq,4)+')',f(Math.min(pe,1-pq),3));
       }
       if(p.wipe){                                         /* the after slides in from its own side */
@@ -1329,11 +2430,22 @@ if(mcForm){
       }
     });
     parts.forEach(function(p,i){var on=i===best;if(on!==p.on){p.on=on;p.b.classList.toggle('is-on',on)}});
+    /* his plates: each slides on in the last part of the change into its beat, after its pack has
+       landed (kin .63) and as its words rise (.6 to 1), and is on at the hold; the count turns at
+       kin .85. Scrolling back takes it off at the same place. */
+    if(BARM)LB.peter(parts.reduce(function(ps,p,i){
+      if(p.kind==='prod'){var ki=i?clamp((x-at[i]+Tn(i))/Tn(i)):1;ps.push(smooth(clamp((ki-.7)/.3)))}
+      return ps},[]));
     /* the ground warms with the product: the sand sweeps in from the right behind the arriving
        can and has covered the words' column before they rise; chalk comes with the after */
-    var ks=SAND>0?clamp((x-at[SAND]+T)/T):0,sw=smooth(clamp((ks-.12)/.42));
-    sand.style.transform='translate3d('+f(55-87*sw,2)+'%,0,0) rotate(-14deg)';   /* +55% (off the stage) to -32% (every corner solid) */
-    chalk.style.opacity=f(wipe,3);
+    /* the ground: teal under the before, and the after brings the chalk as it wipes in. The
+       sand is laid under the chalk once that is opaque, and the chalk lifts off it in the middle
+       of the change into the first pack, while no words are up, so all five packs stand on the
+       sand; it comes back the same way in the change into the call. */
+    var k1=SAND>0?clamp((x-at[SAND]+Tn(SAND))/Tn(SAND)):0,k2=CALL<N?clamp((x-at[CALL]+Tn(CALL))/Tn(CALL)):0,
+        ch=SAND>0&&x<at[SAND]-Tn(SAND)?wipe:Math.max(1-smooth(clamp((k1-.35)/.25)),smooth(clamp((k2-.35)/.25)));
+    sand.style.transform='translate3d('+(wipe>=1?'-32':'55')+'%,0,0) rotate(-14deg)';   /* under opaque chalk: -32% covers every corner, +55% is off the stage */
+    chalk.style.opacity=f(ch,3);
     dusk.style.opacity=f(1-smooth(settle),3);
     lampD.style.opacity=f(lit[0],3);lampW.style.opacity=f(lit[1],3);
     if(restV>0&&restX!==lampX){                          /* the light moves only when the resting pack does */
@@ -1346,7 +2458,7 @@ if(mcForm){
   sec.classList.add('is-live');
   measure();now();
   addEventListener('scroll',wake,{passive:true});
-  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});now()});
+  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});cp.keys={};now()});
   new IntersectionObserver(function(es){near=es[0].isIntersecting;if(near){measure();now()}},
     {rootMargin:'200px 0px'}).observe(run);
   /* a link reached by keyboard brings its own beat on screen, where its line stands */
@@ -1395,16 +2507,92 @@ if(mcForm){
     });
     bp.connect(g);g.connect(bus);
   }
+  /* the product card's three, a little more character than a tick, each under 0.6s */
+  var noise=null;
+  function hiss(){   /* a shared 0.6s of white noise; each use plays a slice of it */
+    if(!noise){
+      noise=ctx.createBuffer(1,Math.round(ctx.sampleRate*.6),ctx.sampleRate);
+      var d=noise.getChannelData(0);for(var i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+    }
+    var s=ctx.createBufferSource();s.buffer=noise;return s;
+  }
+  function note(f,at,dur,vol,type,out){
+    var o=ctx.createOscillator(),g=ctx.createGain();
+    o.type=type;o.frequency.value=f;
+    g.gain.setValueAtTime(.0001,at);g.gain.linearRampToValueAtTime(vol,at+.008);g.gain.exponentialRampToValueAtTime(.0001,at+dur);
+    o.connect(g);g.connect(out);o.start(at);o.stop(at+dur+.02);
+  }
+  function burst(at,dur,vol,type,f,out){   /* a slice of noise through one filter, with a fast decay */
+    var s=hiss(),fl=ctx.createBiquadFilter(),g=ctx.createGain();
+    fl.type=type;fl.frequency.value=f;
+    g.gain.setValueAtTime(vol,at);g.gain.exponentialRampToValueAtTime(.0001,at+dur);
+    s.connect(fl);fl.connect(g);g.connect(out||bus);s.start(at,Math.random()*.5,dur+.01);
+    return fl;
+  }
+  function can(){   /* the tab cracking, a few bright pops, then a short fizz settling: ~0.5s */
+    if(!on)return;wake();
+    var t=ctx.currentTime;
+    burst(t,.045,.34,'highpass',3200);
+    note(1700,t,.06,.1,'triangle',bus);
+    for(var k=0;k<6;k++)burst(t+.03+Math.random()*.24,.02,.05+Math.random()*.08,'highpass',5200);
+    var s=hiss(),bp=ctx.createBiquadFilter(),g=ctx.createGain();
+    bp.type='bandpass';bp.Q.value=.7;bp.frequency.setValueAtTime(4000,t+.04);bp.frequency.linearRampToValueAtTime(6800,t+.48);
+    g.gain.setValueAtTime(.0001,t+.04);g.gain.linearRampToValueAtTime(.12,t+.1);g.gain.exponentialRampToValueAtTime(.0001,t+.52);
+    s.connect(bp);bp.connect(g);g.connect(bus);s.start(t+.04,0,.5);
+  }
+  function level(){   /* a quick rising arpeggio and a bright landing: ~0.55s */
+    if(!on)return;wake();
+    var t=ctx.currentTime,lp=ctx.createBiquadFilter();
+    lp.type='lowpass';lp.frequency.value=2600;lp.connect(bus);
+    [523.25,659.25,783.99,1046.5].forEach(function(f,i){note(f,t+i*.055,.1,.06,'square',lp)});
+    note(1567.98,t+.23,.3,.05,'square',lp);note(2093,t+.23,.3,.04,'triangle',bus);
+  }
+  function chime(){   /* two soft bell partials, the second a beat later: ~0.5s */
+    if(!on)return;wake();
+    var t=ctx.currentTime;
+    note(1318.5,t,.46,.08,'sine',bus);note(3639,t,.16,.015,'sine',bus);note(1975.5,t+.07,.42,.055,'sine',bus);
+  }
+  /* the bar's two, a plate going on and coming off. The thud is below the bus's 220Hz high-pass, so it
+     has its own path to the speakers (still behind the mute: every sound here checks `on` first) */
+  var low=null;
+  function lowBus(){if(!low){low=ctx.createGain();low.gain.value=.5;low.connect(ctx.destination)}return low}
+  function thud(at,f0,f1,dur,vol,out){   /* a sine that drops as it dies: the weight of it */
+    var o=ctx.createOscillator(),g=ctx.createGain();
+    o.type='sine';o.frequency.setValueAtTime(f0,at);o.frequency.exponentialRampToValueAtTime(f1,at+dur*.7);
+    g.gain.setValueAtTime(.0001,at);g.gain.linearRampToValueAtTime(vol,at+.004);g.gain.exponentialRampToValueAtTime(.0001,at+dur);
+    o.connect(g);g.connect(out);o.start(at);o.stop(at+dur+.02);
+  }
+  function clank(){   /* a plate going on: a low thud, the rubber's knock and a short ring of the steel sleeve, ~0.35s */
+    if(!on)return;wake();
+    var t=ctx.currentTime,L=lowBus();
+    thud(t,140,48,.24,.5,L);thud(t,260,150,.1,.14,L);   /* the second is the body a phone's speaker can play */
+    burst(t,.05,.3,'lowpass',1100,L);
+    [[1210,.045,.3],[1837,.03,.22],[2764,.02,.15],[4011,.01,.09]].forEach(function(r){note(r[0],t+.006,r[2],r[1],'sine',bus)});
+  }
+  function unclank(){   /* a plate coming off: softer, a knock and the slide off the sleeve, ~0.25s */
+    if(!on)return;wake();
+    var t=ctx.currentTime,L=lowBus();
+    thud(t,120,70,.16,.2,L);
+    var fl=burst(t+.02,.16,.035,'bandpass',2600);fl.Q.value=1.4;
+    note(1520,t+.03,.12,.014,'sine',bus);
+  }
   var sounds={
     tap:function(){tick(1180,.09,.10)},          /* links, cards, options */
     go:function(){tick(760,.16,.12,'sine')},      /* primary buttons */
-    isle:function(){tick(430,.22,.13,'sine')},    /* an island opening */
-    soft:function(){tick(1560,.05,.045)}          /* small controls */
+    isle:function(){tick(430,.22,.13,'sine')},    /* an island, or a lid of the case, opening */
+    soft:function(){tick(1560,.05,.045)},         /* small controls */
+    can:can,level:level,chime:chime,              /* the product card opening (#pcard, by family) */
+    clank:clank,unclank:unclank,                  /* "Load this plate" and "Take it off the bar" (the rack's own event) */
+    /* a game-plan plate going on as the page scrolls down (#how): quieter and shorter than soft, a sine.
+       Scroll is not a gesture, so it never wakes audio on its own: it plays only once the visitor has
+       touched the page (userActivation, where the browser has it) or our audio is already running */
+    step:function(){var ua=navigator.userActivation;if(ctx&&ctx.state==='running'||ua&&ua.hasBeenActive)tick(1320,.04,.028,'sine')}
   };
+  doc.addEventListener('aspire:sfx',function(e){if(sounds[e.detail])sounds[e.detail]()});
   doc.addEventListener('pointerdown',function(e){
     var t=e.target.closest('a,button,.chip');
-    if(!t||t.id==='sound-toggle')return;
-    if(t.closest('.isle'))return sounds.isle();
+    if(!t||t.id==='sound-toggle'||t.hasAttribute('data-sfx')||t.classList.contains('rk-load'))return;   /* a pack or a product tile: its card has its own sound; the load button, its clank */
+    if(t.closest('.isle,.bay-lid'))return sounds.isle();
     if(t.classList.contains('btn'))return sounds.go();
     if(t.classList.contains('icon-btn')||t.classList.contains('chip'))return sounds.soft();
     sounds.tap();

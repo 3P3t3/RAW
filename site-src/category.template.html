@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#002E3B">
+{{HEAD_EXTRA}}<meta name="theme-color" content="#002E3B">
 <title>{{CAT_NAME}} · Aspire Health</title>
 <meta name="description" content="{{CAT_TAG}}">
 <meta property="og:type" content="website">
@@ -24,6 +24,8 @@
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
+<!-- the field: the site's one ground (the field block in style.css) -->
+<div class="field" aria-hidden="true"><span class="fg fg1"></span><span class="fg fg2"></span></div>
 <a class="skip" href="#main">Skip to content</a>
 
 {{ICONS}}
@@ -32,19 +34,20 @@
 
 <main id="main">
 
-  <!-- Category banner: generated backdrop, live caustics, the category set large -->
-  <section class="cat-hero" aria-labelledby="cat-title">
-    <img class="cat-bg" src="{{CAT_BG}}" alt="" width="1600" height="900" fetchpriority="high">
+  <!-- Category banner: generated backdrop (or, for a shelf in SHELF_PORTRAIT, a whole portrait beside the name), live caustics, the category set large -->
+  <section class="cat-hero{{CAT_HERO_CLASS}}" aria-labelledby="cat-title">
+    {{CAT_HERO_MEDIA}}
     <canvas class="caustics" data-caustics aria-hidden="true"></canvas>
     <div class="wrap cat-hero-in">
       <p class="label"><a href="{{HOME}}#goals">All shelves</a></p>
       <h1 id="cat-title">{{CAT_NAME}}</h1>
       <p class="sub">{{CAT_TAG}}</p>
       <p class="cat-count">{{CAT_COUNT}}</p>
+      <!-- DRAFT-COPY --><p class="cat-sample"><a href="{{SAMPLE_LINK}}">Ask for a free sample</a></p><!-- /DRAFT-COPY -->
     </div>
   </section>
 
-{{CAROUSEL}}
+{{CAT_EXTRA}}{{CAROUSEL}}
   <!-- Every product in this category; each one rises into frame as you scroll -->
   <section class="sec cat-shop" id="all" aria-labelledby="all-title">
     <div class="wrap">
@@ -81,7 +84,7 @@
 {{FOOTER}}
 
 {{DIALOGS}}
-
+{{PCARD}}
 <p class="vh" id="live" aria-live="polite"></p>
 
 {{SCRIPT}}

@@ -154,6 +154,10 @@ html.locked .mtab{transform:translateY(calc(100% + 2px));visibility:hidden}
 .mtab-call{background:var(--blue);color:#fff}
 .mtab a:active{opacity:.85}
 .mtab a:focus-visible{outline:2px solid var(--sand);outline-offset:-6px}
+/* at full tracking the two halves are 359px together: the call ran off the right edge under 360
+   and sat 0.4px from both edges at 360. Under 375 a little less tracking and padding brings them
+   to 312, whole on a 320 screen and clear of the edges at 360 */
+@media (max-width:374.98px){.mtab a{padding-inline:12px;letter-spacing:.08em}}
 /* 1024 and up the mast shows its own "Free call"; one call button on screen, never two */
 @media (min-width:1024px){.mtab-call{display:none!important}}
 html:not(.js) .mtab{display:none}
@@ -183,6 +187,131 @@ html:not(.js) .mtab{display:none}
 
 /* Sections */
 .sec{padding:var(--sec) 0}
+/* The game plan (#how): the path, four numbered steps and one thing to do. It sits on the page's
+   own ground between the hero and the shelves, closed off from them by a hairline. On a phone
+   each step is a row (number, words, arrow); from 768 they stand in two columns, from 1024 in four. */
+.how-sec{padding-bottom:0}
+.how-sec>.wrap{padding-bottom:var(--sec);border-bottom:1px solid var(--line);
+  width:calc(100% - 2 * var(--pad));max-width:1200px;padding-inline:0}
+.how-head{display:grid;gap:10px;margin-bottom:24px}
+.how-head h2{font-size:40px}
+.how-steps{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--line)}
+.how-steps li{border-bottom:1px solid var(--line)}
+.how-step{display:grid;grid-template-columns:40px minmax(0,1fr) 18px;column-gap:14px;row-gap:4px;
+  padding:16px 0;color:inherit;text-decoration:none}
+.how-n{grid-row:1 / span 2;font:800 28px/1 var(--display);font-stretch:72%;color:var(--teal)}
+.how-t{grid-column:2;font:600 17px/1.3 var(--sans);color:var(--ink)}
+.how-d{grid-column:2;font-size:15px;line-height:1.5;color:var(--text)}
+.how-ic{grid-column:3;grid-row:1 / span 2;align-self:center;color:var(--teal)}
+a.how-step:active{opacity:.7}
+@media (hover:hover){a.how-step:hover .how-t{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}}
+.how-go{display:flex;flex-wrap:wrap;align-items:center;gap:6px 28px;margin-top:28px}
+.how-go .btn{flex:1 1 100%}
+.how-fine{flex-basis:100%;font-size:14px;color:var(--text)}
+@media (min-width:768px){
+  .how-head{margin-bottom:40px}
+  .how-head h2{font-size:52px}
+  .how-steps{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px;border-top:0}
+  .how-steps li{border-bottom:0;border-top:1px solid var(--line)}
+  .how-step{grid-template-columns:minmax(0,1fr) 18px;row-gap:8px;padding:18px 0 28px}
+  .how-n{grid-row:auto;grid-column:1;font-size:44px}
+  .how-ic{grid-row:1;grid-column:2;align-self:start}
+  .how-t,.how-d{grid-column:1 / -1}
+  .how-go{margin-top:12px}
+  .how-go .btn{flex:none}
+}
+@media (min-width:1024px){.how-steps{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* The game plan in the bar theme (html.t-bar, with script): the steps hang on a steel shaft, each
+   number on a small bumper plate seen face on, the rack's rubber and the bar's steel. Down the left
+   on phones and tablets; from 1024 across the top of the four columns. As the section scrolls through
+   (_script.html) the shaft lights from the first plate on, a glint at its front, and each plate
+   slides on along the shaft as the light reaches it, overshooting a hair and settling back, as the
+   bar's plates do; its title comes up from quiet to full ink. The newest plate is the blue one, as
+   on the rack's guide. Until a plate is on, its place is an open ring with the number in it.
+   Quiet is still readable: the title at .74 is 5.6:1 or more on the field's darkest glow, the ring's
+   number the same, and the line under it never dims. Only transform and opacity change as it plays.
+   Reduced motion (no html.motion) shows every plate on and the shaft lit; with no script, the plain
+   list above. */
+.how-pl,.how-sh{display:none}
+.t-bar.js .how-steps{grid-template-columns:minmax(0,1fr);border-top:0;max-width:640px}
+.t-bar.js .how-steps li{position:relative;border:0}
+.t-bar.js .how-step{position:relative;grid-template-columns:44px minmax(0,1fr) 18px;column-gap:16px;row-gap:4px;padding:14px 0 22px}
+/* the place for a plate: an open ring, its number in the teal at .74 (5.5:1 or more) */
+.t-bar.js .how-n{position:relative;z-index:1;grid-row:1 / span 2;grid-column:1;align-self:start;display:grid;place-items:center;
+  width:44px;height:44px;margin-top:-11px;border-radius:50%;font:800 15px/1 var(--display);font-stretch:75%;letter-spacing:.03em;
+  color:rgba(0,46,59,.74);box-shadow:inset 0 0 0 1.5px rgba(0,46,59,.4)}
+.t-bar.js .how-t{grid-column:2}
+.t-bar.js .how-d{grid-column:2}
+.t-bar.js .how-ic{grid-column:3;grid-row:1 / span 2;align-self:center}
+/* the plate: teal rubber under the rack's satin light and grain, its edge showing below it, the rim
+   stepping down to the face, and a ring of turned steel round the number where the hub would be */
+.t-bar.js .how-pl{display:block;position:absolute;inset:0;border-radius:50%;font-style:normal;
+  background:var(--rubber),radial-gradient(120% 120% at 32% 16%,rgba(255,255,255,.16),rgba(255,255,255,.03) 40%,rgba(255,255,255,0) 58%),
+    radial-gradient(80% 80% at 72% 98%,rgba(0,0,0,.18),rgba(0,0,0,0) 58%),var(--teal);
+  background-size:120px 120px,auto,auto,auto;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.22),inset 0 -1.5px 1.5px rgba(0,0,0,.4),inset 0 0 0 .5px rgba(0,0,0,.3),
+    0 2px 0 #00161D,0 9px 12px -7px rgba(0,20,27,.55);
+  will-change:transform,opacity}
+/* the newest plate's face: the blue, over the teal */
+.t-bar.js .how-pl::before{content:"";position:absolute;inset:0;border-radius:50%;opacity:0;
+  background:var(--rubber),radial-gradient(120% 120% at 32% 16%,rgba(255,255,255,.18),rgba(255,255,255,.04) 40%,rgba(255,255,255,0) 58%),
+    radial-gradient(80% 80% at 72% 98%,rgba(0,0,0,.2),rgba(0,0,0,0) 58%),var(--blue);
+  background-size:120px 120px,auto,auto,auto}
+.t-bar.js .how-pl::after{content:attr(data-n);position:absolute;inset:7%;display:grid;place-items:center;border-radius:50%;
+  color:var(--chalk);text-shadow:0 -.75px 0 rgba(0,0,0,.45),0 .75px 0 rgba(255,255,255,.18);
+  background:radial-gradient(circle closest-side,rgba(0,0,0,0) 0 71%,rgba(8,12,15,.5) 71% 73.5%,#F2F4F5 73.5% 77%,#B7BFC3 77% 83%,#7C858B 83% 88%,rgba(8,12,15,.45) 88% 90.5%,rgba(0,0,0,0) 90.5%);
+  box-shadow:inset 0 1px 1px rgba(0,0,0,.35),inset 0 -1px 0 rgba(255,255,255,.14),0 -1px 0 rgba(0,0,0,.14),0 1px 0 rgba(255,255,255,.12)}
+/* the shaft, one stretch from each plate to the next: a dim steel rod until the light reaches it. The
+   lit steel (the bar's own gradient, turned) slides down inside it, and carries the glint at its front */
+.t-bar.js .how-sh{--steel:linear-gradient(90deg,#5E676D 0,#7D868C 12%,#C2C9CD 30%,#F3F5F6 44%,#E2E6E8 54%,#9BA4A9 76%,#646D73 100%);
+  display:block;position:absolute;z-index:0;left:6px;width:32px;top:51px;height:calc(100% - 52px);overflow:hidden;pointer-events:none}
+.t-bar.js .how-sh::before,.t-bar.js .how-sh>i::before{content:"";position:absolute;left:12px;width:8px;top:0;bottom:0;border-radius:2px;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 1px,transparent 1px 3px),var(--steel)}
+.t-bar.js .how-sh::before{opacity:.3}
+.t-bar.js .how-sh>i{position:absolute;inset:0;will-change:transform}
+.t-bar.js .how-sh>i::before{box-shadow:0 0 0 .5px rgba(30,38,44,.35)}
+.t-bar.js .how-sh>i::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:26px;opacity:0;
+  background:radial-gradient(closest-side,#fff,rgba(255,255,255,.85) 22%,rgba(170,190,255,.45) 52%,rgba(170,190,255,0))}
+.t-bar.motion .how-sh>i::after{will-change:opacity}
+.t-bar.js .how-sh.run>i::after{opacity:1}
+/* playing: plates wait above their places (the way the light comes), shafts dark, titles quiet */
+.t-bar.motion .how-steps .grow{opacity:1;transform:none;transition:none}
+.t-bar.motion .how-pl{opacity:0;transform:translate3d(0,-16px,0) scale(.94);
+  transition:transform 360ms cubic-bezier(.22,1.2,.36,1.04),opacity 140ms linear}
+.t-bar.motion .how-pl::before{transition:opacity 240ms linear;will-change:opacity}
+.t-bar.motion .how-sh>i{transform:translate3d(0,-100%,0)}
+.t-bar.motion .how-t,.t-bar.motion .how-ic{opacity:.74;transition:opacity 300ms linear;will-change:opacity}   /* each on its own layer from the start: fading it costs no layout */
+.t-bar.motion .how-ic{opacity:.45}
+.t-bar.motion .on .how-pl{opacity:1;transform:none}
+.t-bar.motion .on .how-t,.t-bar.motion .on .how-ic{opacity:1}
+.t-bar.motion .now .how-pl::before{opacity:1}
+@media (prefers-reduced-motion:reduce){.t-bar.motion .how-pl,.t-bar.motion .how-pl::before,.t-bar.motion .how-t,.t-bar.motion .how-ic{transition:none}}
+@media (min-width:768px){
+  .t-bar.js .how-steps{column-gap:0}
+  .t-bar.js .how-step{grid-template-columns:44px minmax(0,1fr) 18px;row-gap:6px;padding:16px 0 26px}
+  .t-bar.js .how-n{grid-row:1 / span 2;grid-column:1;font-size:15px}
+  .t-bar.js .how-ic{grid-row:1 / span 2;grid-column:3;align-self:center}
+  .t-bar.js .how-t,.t-bar.js .how-d{grid-column:2}
+  .t-bar.js .how-t{font-size:18px}
+  .t-bar.js .how-sh{top:53px}
+}
+/* from 1024: one bar across the top of the four columns, the plates on it, the light running left to right */
+@media (min-width:1024px){
+  .t-bar.js .how-steps{grid-template-columns:repeat(4,minmax(0,1fr));column-gap:24px;max-width:none}
+  .t-bar.js .how-step{grid-template-columns:minmax(0,1fr) 18px;row-gap:8px;padding:6px 0 28px}
+  .t-bar.js .how-n{grid-row:1;grid-column:1;width:56px;height:56px;margin:0 0 10px;font-size:18px}
+  .t-bar.js .how-t{grid-row:2;grid-column:1}
+  .t-bar.js .how-d{grid-row:3;grid-column:1 / -1}
+  .t-bar.js .how-ic{grid-row:2;grid-column:2;align-self:center}
+  .t-bar.js .how-sh{--steel:linear-gradient(#E2E6E8 0,#F3F5F6 16%,#C2C9CD 36%,#9BA4A9 62%,#737C82 88%,#5E676D 100%);
+    left:62px;top:18px;width:calc(100% - 44px);height:32px}
+  .t-bar.js .how-sh::before,.t-bar.js .how-sh>i::before{left:0;right:0;top:12px;bottom:auto;width:auto;height:9px;
+    background:repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,transparent 1px 3px),var(--steel)}
+  .t-bar.js .how-sh>i::after{left:auto;top:0;bottom:0;right:-12px;width:30px;height:auto}
+  .t-bar.motion .how-pl{transform:translate3d(-20px,0,0) scale(.94)}
+  .t-bar.motion .how-sh>i{transform:translate3d(-100%,0,0)}
+}
+
 /* Shelves: one tab per goal, one pack per panel */
 .shelves-sec .sec-head{margin-bottom:22px}
 .shelf-tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1 * var(--pad));
@@ -303,9 +432,6 @@ html:not(.js) .mtab{display:none}
 .c-nums-list li{display:grid;gap:4px;justify-items:center;min-width:0;padding:10px 2px;background:var(--tile);text-align:center}
 .c-nums-g{font:800 clamp(18px,5.6vw,24px)/1 var(--display);font-stretch:72%;color:var(--teal);white-space:nowrap}
 .c-nums .mc-lab{font-size:11px;letter-spacing:.06em}
-.c-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:10px;max-width:40ch}
-.c-list li{position:relative;padding-left:20px;font-size:16px;color:var(--text)}
-.c-list li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:1px;background:var(--teal)}
 /* Peter's proof, which closes #story: the before and after, all three views stacked, nothing
    to swipe. Every img carries its width and height, so nothing jumps when the lazy files land. */
 .c-proof{display:grid;gap:10px;width:100%;min-width:0;margin:4px 0 0}
@@ -322,6 +448,9 @@ html:not(.js) .mtab{display:none}
 @supports (backdrop-filter:blur(6px)){.c-card{backdrop-filter:blur(10px);background:rgba(244,242,236,.7)}}
 .c-q{margin:0;padding:0;border:0;min-width:0}
 .c-q legend{display:block;padding:0;margin-bottom:10px;font:600 15px/1.3 var(--sans);color:var(--ink)}
+/* the macro calculator's move to the form focuses its first question (or the calendar, once it
+   is up) so the reading position follows; a landing spot, not a control, so no ring, as .mc-q */
+.c-q legend:focus,.c-embed:focus{outline:none}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 /* the label wraps a hidden radio; the span is the pill, so :checked styles a sibling.
    max-width keeps the two long training answers inside the card at 320px: the pill shrinks
@@ -389,6 +518,197 @@ html:not(.js) .mtab{display:none}
   box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 40px 60px -40px rgba(0,30,39,.55)}
 /* calendly sets height="100%" as an attribute, which iframes ignore, so size it here */
 .c-embed iframe{display:block;width:100%;height:100%;border:0}
+
+/* Free sample (#sample): the consult's card, chips and fields, on the sand band. Only the
+   checkboxes, the hints and the errors are its own. */
+.sample-sec{background:var(--sand);color:var(--text)}
+.s-hint{font-size:14px;color:var(--text);margin:0}
+.s-mail-note{display:none;margin-top:10px}
+#sample-form:has(input[name="delivery"][value^="Mail"]:checked) .s-mail-note{display:block}
+.s-err{margin:0;font:600 14px/1.35 var(--sans);color:#9B2C1F}
+.s-err:empty{display:none}
+.c-field input[aria-invalid="true"]{border-color:#9B2C1F;box-shadow:inset 0 0 0 1px #9B2C1F}
+.s-checks{display:grid;gap:12px}
+.s-check{display:flex;gap:12px;align-items:flex-start;font:500 15px/1.4 var(--sans);color:var(--ink);cursor:pointer}
+.s-check input{flex:none;width:22px;height:22px;margin:0;accent-color:var(--teal)}
+.s-check em{font-style:normal;font-weight:400;color:var(--text)}
+#sample-form[aria-busy="true"] .btn{opacity:.7;cursor:progress}
+/* the thank-you: kept out of the layout until the script shows it (.on) or FormSubmit sends a
+   no-script visitor back to #sample-sent, when :target shows it and :has puts the form away */
+.s-done{display:none;gap:10px;align-content:start}
+.s-done.on,.s-done:target{display:grid}
+.s-done h3{font:800 28px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.s-done h3:focus{outline:none}
+.sample-sec:has(.s-done:target) #sample-form{display:none}
+/* what happens after "Request my sample": three numbered lines under the button */
+.s-next{list-style:none;margin:-8px 0 0;padding:0;display:grid;gap:8px;counter-reset:sn}
+.s-next li{position:relative;padding-left:32px;font-size:14px;line-height:1.45;color:var(--ink);counter-increment:sn}
+.s-next li::before{content:counter(sn);position:absolute;left:0;top:-1px;width:21px;height:21px;display:grid;place-items:center;
+  font:700 11px/1 var(--sans);color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+/* the quick call (step 4): under the form on a phone, beside it from 768 up, and again inside the
+   thank-you, where the one under the form steps aside. Its button is built by quick_call(). */
+.qc{display:grid;gap:12px;justify-items:start;padding:20px;box-shadow:inset 0 0 0 1px var(--line)}
+.qc-ask{font:600 17px/1.35 var(--sans);color:var(--ink);max-width:36ch}
+.qc .btn{width:100%}
+.s-done .qc{margin-top:8px;padding:18px 0 0;box-shadow:none;border-top:1px solid var(--line)}
+.s-step3{display:grid;gap:8px;justify-items:start;margin-top:8px}
+.sample-sec:has(.s-done.on) .qc-form,.sample-sec:has(.s-done:target) .qc-form{display:none}
+@media (min-width:768px){
+  .sample-sec .split{grid-template-rows:auto 1fr}
+  .sample-sec .split-text{grid-row:1}
+  .sample-sec .c-card{grid-row:1 / span 2}
+  .sample-sec .qc-form{grid-column:1 / 6;grid-row:2;align-self:start}
+  .qc .btn{width:auto}
+}
+/* The free sample (#sample) reads as a note to Peter: a fill-in-the-blank sentence in the display
+   type, in two short steps with script. Every field keeps its real label, visually hidden, and the
+   sentence around it is aria-hidden. The blanks grow as they fill (the script sizes them), the
+   chips sit in the sentence as words. All of it is under #sample, so the consult's card, chips and
+   fields, which this form borrows, never change. Without script nothing is hidden: one form. */
+#sample-form.s-two[data-step="1"] #s-step2,#sample-form.s-two[data-step="2"] #s-step1{display:none}
+#sample .c-card{position:relative;border-radius:30px;background:var(--chalk);padding:40px 22px 22px;
+  box-shadow:inset 0 0 0 2px var(--ink),8px 8px 0 var(--teal)}
+#sample .btn{border-radius:999px}
+#sample .s-step{display:block;min-width:0;font:400 28px/1.62 var(--display);color:var(--ink)}
+#sample .s-step:focus{outline:none}
+#sample .s-say{font-weight:800;font-stretch:75%;letter-spacing:-.005em}
+#sample .c-q{display:contents}
+#sample .s-ps{display:block}
+#sample .c-q legend,#sample .c-field label{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* the choices, as words in the sentence: dashed until picked, then a teal pill knocked askew */
+#sample .chips{display:inline}
+#sample .chip{display:inline-flex;vertical-align:baseline}
+#sample .chip span{min-height:44px;padding:0 .3em;border:2px dashed rgba(30,38,47,.34);border-radius:999px;
+  background:transparent;font:800 28px/1 var(--display);font-stretch:75%;color:var(--text)}
+#sample .chip input:checked + span{background:var(--teal);border:2px solid var(--ink);color:var(--chalk);
+  transform:rotate(-2deg);box-shadow:3px 3px 0 var(--ink)}
+@media (hover:hover){
+  #sample .chip:hover span{transform:none;color:var(--ink);border-color:var(--ink)}
+  #sample .chip:hover input:checked + span{transform:rotate(-2deg);color:var(--chalk)}
+}
+#sample .chip input:focus-visible + span{outline:3px solid var(--blue);outline-offset:3px}
+#sample .s-by .chip + .chip::before,#sample .s-deliv .chip + .chip::before{content:"/" / "";padding:0 .12em;
+  font:800 28px/44px var(--display);font-stretch:75%;color:rgba(30,38,47,.35)}
+#sample .s-deliv .chip + .chip::before{content:"or" / "";padding:0 .22em;color:var(--ink)}
+/* the full stop rides on the last choice, so a narrow line can never strand it on its own */
+#sample .s-deliv .chip + .chip::after{content:"." / "";padding-left:.06em;font-weight:800;font-stretch:75%;line-height:44px;color:var(--ink)}
+/* the blanks: a field and its error stacked in one inline box, so the sentence runs on after it */
+#sample .c-field{display:inline-flex;flex-direction:column;vertical-align:baseline;gap:4px;max-width:100%}
+#sample .c-field input,#sample .c-field textarea{min-width:4.4em;max-width:100%;border:0;border-radius:0;box-shadow:none;
+  field-sizing:content;font:800 28px/1 var(--display);font-stretch:75%;color:var(--blue);-webkit-appearance:none;appearance:none}
+#sample .c-field input{height:46px;padding:0 5px;border-bottom:3px solid var(--teal);background:transparent}
+#sample .c-field input::placeholder,#sample .c-field textarea::placeholder{color:transparent}
+#sample .c-field[data-by] input,#sample .s-f-item textarea{min-width:6.4em}
+#sample .c-field input:focus{outline:none;background:rgba(51,64,184,.08);border-bottom-color:var(--blue);box-shadow:0 3px 0 var(--blue)}
+#sample .c-field input[aria-invalid="true"]{border-bottom-color:#9B2C1F;background:rgba(155,44,31,.07);box-shadow:none}
+/* the product blank is a textarea so a long name wraps: every line gets its own underline */
+#sample .c-field textarea{--u:var(--teal);display:block;height:46px;padding:4px 5px 0;resize:none;overflow:hidden;
+  line-height:42px;overflow-wrap:break-word;background:repeating-linear-gradient(transparent 0 39px,var(--u) 39px 42px) content-box}
+#sample .c-field textarea:focus{--u:var(--blue);outline:none;background-color:rgba(51,64,184,.08)}
+#sample .c-field textarea[aria-invalid="true"]{--u:#9B2C1F;background-color:rgba(155,44,31,.07)}
+#sample .s-full + .s-say{display:none}
+/* no script: both contact blanks are there at once, so each shows its label above it */
+html:not(.js) #sample .c-field[data-by]{display:flex;margin:6px 0}
+html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:auto;margin:0;overflow:visible;clip:auto;
+  white-space:normal;font:600 13px/1.3 var(--sans);color:var(--text)}
+#sample .c-field .s-err{contain:inline-size;font-size:14px;line-height:1.35;font-stretch:100%}
+#sample .s-hint{font:400 14px/1.4 var(--sans)}
+#sample .s-step > .s-hint{margin-top:4px}
+#sample .s-deliv .s-hint,#sample .s-deliv .s-err{margin:4px 0 6px}
+/* what matches the product blank, from the datalist: tap one, or walk them with the arrow keys */
+#sample .s-sugg{list-style:none;margin:10px 0 2px;padding:0;display:grid;gap:6px;font:600 15px/1.3 var(--sans)}
+#sample .s-sugg li{display:flex;align-items:center;min-height:44px;padding:8px 16px;border-radius:22px;cursor:pointer;
+  background:#fff;box-shadow:inset 0 0 0 1.5px rgba(30,38,47,.22);color:var(--ink)}
+#sample .s-sugg li[aria-selected="true"]{background:var(--teal);color:var(--chalk);box-shadow:none}
+@media (hover:hover){#sample .s-sugg li:hover{box-shadow:inset 0 0 0 2px var(--ink)}}
+/* "Pick from the shelves" (_script.html): a pill under the product blank, and the chooser it opens in
+   the card's own flow (it pushes Next down rather than covering anything): first the shelves as small
+   plates in their rack colours, with the steel hub, then the tapped shelf's products, each with its
+   picture, in a list that scrolls inside itself. Sans type, off the sentence's display face. Hidden
+   ([hidden]) until the script shows it. #s-kept is the line that says a card's product went in the P.S. */
+#sample .s-pick{margin:12px 0 4px;font:500 15px/1.3 var(--sans)}
+#sample .s-pick[hidden],#sample .s-picker[hidden],#sample .sp-view[hidden],#sample .s-kept[hidden]{display:none}
+#sample .s-kept{margin:8px 0 2px;color:var(--ink);font-weight:600}
+.s-pick-go,.sp-back{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px 0 8px;border:0;border-radius:999px;cursor:pointer;
+  background:#fff;box-shadow:inset 0 0 0 1.5px rgba(30,38,47,.22);color:var(--ink);font:600 15px/1.2 var(--sans);-webkit-tap-highlight-color:transparent}
+.s-pick-go[aria-expanded="true"]{background:var(--teal);color:var(--chalk);box-shadow:none}
+.sp-back{gap:6px;padding:0 16px 0 12px;font-size:14px}
+.s-pick-go:focus-visible,.sp-back:focus-visible,.sp-plate:focus-visible,.sp-item:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.s-pick-go:hover,.sp-back:hover,.sp-item:hover{box-shadow:inset 0 0 0 2px var(--ink)}}
+/* the pill's mark: a plate, face on, with its hub */
+.s-pick-pl{flex:none;width:28px;height:28px;border-radius:50%;
+  background:radial-gradient(circle,var(--chalk) 0 13%,#8E979D 14% 17%,#E2E6E8 18% 27%,rgba(0,0,0,.25) 28% 31%,rgba(0,0,0,0) 32%),var(--pearl);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 1px rgba(0,0,0,.4)}
+.s-picker{margin-top:10px;padding:14px 12px 12px;border-radius:20px;background:color-mix(in srgb,var(--sand) 40%,var(--chalk));
+  box-shadow:inset 0 0 0 2px var(--ink)}
+.sp-t{margin:0 0 12px 4px;font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
+.sp-plates{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 6px}
+.sp-plate{display:grid;justify-items:center;align-content:start;gap:7px;width:100%;min-height:44px;margin:0;padding:6px 2px 8px;border:0;border-radius:14px;
+  background:none;cursor:pointer;color:var(--ink);font:700 13px/1.15 var(--sans);text-align:center;-webkit-tap-highlight-color:transparent}
+.sp-name{max-width:100%;text-wrap:balance;overflow-wrap:anywhere}
+.sp-disc{position:relative;display:block;width:52px;height:52px;border-radius:50%;
+  background:var(--rubber,none),radial-gradient(120% 120% at 32% 16%,rgba(255,255,255,.14),rgba(255,255,255,0) 58%),var(--c);
+  background-size:120px 120px,auto,auto;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.26),inset 0 -1.5px 1.5px rgba(0,0,0,.34),inset 0 0 0 1px rgba(0,0,0,.2),
+    0 2px 0 color-mix(in srgb,var(--c) 55%,#0B1115),0 8px 12px -8px rgba(0,20,27,.5);
+  transition:transform 200ms cubic-bezier(.2,.7,.2,1)}
+.sp-disc::before{content:"";position:absolute;inset:8%;border-radius:50%;box-shadow:inset 0 1px 1px rgba(0,0,0,.3),inset 0 -1px 0 rgba(255,255,255,.16)}
+.sp-hole{position:absolute;left:36%;top:36%;width:28%;height:28%;border-radius:50%;
+  background:conic-gradient(from -24deg,#F1F3F4,#A9B1B6 9%,#E2E6E8 19%,#8E979D 31%,#CDD3D6 43%,#FBFCFC 51%,#9AA3A8 62%,#D8DDE0 74%,#7E878D 87%,#F1F3F4);
+  box-shadow:0 0 0 1px rgba(10,14,17,.35)}
+.sp-hole::before{content:"";position:absolute;inset:28%;border-radius:50%;background:var(--chalk);box-shadow:inset 0 1px 1px rgba(0,20,27,.6)}
+@media (hover:hover){.sp-plate:hover .sp-disc{transform:translate3d(0,-2px,0)}.sp-plate:hover .sp-name{text-decoration:underline;text-underline-offset:3px}}
+.sp-plate:active .sp-disc{transform:translate3d(0,1px,0)}
+.sp-head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:0 0 10px}
+.sp-head .sp-t{margin:0;letter-spacing:.12em;font-size:13px;color:var(--ink)}
+.sp-items{list-style:none;margin:0;padding:2px;display:grid;gap:6px;max-height:min(50vh,380px);overflow-y:auto;overscroll-behavior:contain}
+.sp-item{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;margin:0;padding:6px 12px 6px 6px;border:0;border-radius:14px;cursor:pointer;
+  background:#fff;box-shadow:inset 0 0 0 1.5px rgba(30,38,47,.14);color:var(--ink);text-align:left;-webkit-tap-highlight-color:transparent}
+.sp-th{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:10px;overflow:hidden;background:color-mix(in srgb,var(--sand) 55%,var(--chalk))}
+.sp-th img{display:block;width:100%;height:100%;object-fit:contain}
+.sp-tx{display:grid;gap:2px;min-width:0}
+.sp-n{font:600 15px/1.25 var(--sans)}
+.sp-k{font:400 13px/1.3 var(--sans);color:var(--text)}
+@media (prefers-reduced-motion:reduce){.sp-disc{transition:none}}
+#sample .s-step > .btn{margin-top:16px}
+#sample .s-checks,#sample .s-acts,#sample .s-step > .s-err{margin-top:22px}
+#sample .s-next{margin-top:20px}
+#sample .c-fine{margin-top:18px;line-height:1.5}
+#sample .s-check input{width:24px;height:24px}
+.s-next-btn .ic{margin-right:-4px}
+#sample-form .s-acts{display:flex;gap:10px}
+#sample-form .s-acts .btn{flex:1 1 auto;width:auto}
+#sample-form .s-acts .s-back{flex:none;gap:6px;padding:0 18px}
+.s-mir{position:absolute;left:-9999px;top:0;visibility:hidden;white-space:pre;pointer-events:none}
+/* step 1, folded to a line at the top of step 2 */
+.s-recap{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px;padding:0 0 12px;border-bottom:2px dashed rgba(30,38,47,.22)}
+.s-recap-t{flex:1;min-width:0;margin:0;font:400 15px/1.45 var(--sans);color:var(--ink);overflow-wrap:anywhere}
+.s-recap-t b{font-weight:700}
+.s-edit{flex:none;min-height:44px;margin:-12px -6px -12px 0;padding:0 6px;border:0;background:none;cursor:pointer;
+  font:600 15px/1 var(--sans);color:var(--teal);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
+/* "1 of 2": a sticker slapped on the card's corner, never the old outlined "Step n of 4" tag */
+.s-prog{position:absolute;z-index:1;top:-32px;right:16px;display:grid;place-items:center;width:66px;height:66px;margin:0;
+  border-radius:50%;background:var(--sand);box-shadow:inset 0 0 0 2px var(--ink),3px 3px 0 var(--ink);
+  font:800 16px/1 var(--display);font-stretch:75%;color:var(--ink);transform:rotate(-12deg)}
+#sample .qc-form{border-radius:24px;box-shadow:inset 0 0 0 2px var(--ink)}
+/* under 360px the note drops two pixels of type and four of margin a side, so a line holds a
+   clause and a blank; it is still the heavy condensed cut, just a size down */
+@media (max-width:359px){
+  #sample .c-card{padding-left:18px;padding-right:18px}
+  #sample .s-step{font-size:26px}
+  #sample .chip span,#sample .c-field input,#sample .c-field textarea,#sample .s-by .chip + .chip::before,
+  #sample .s-deliv .chip + .chip::before{font-size:26px}
+}
+@media (min-width:768px){
+  #sample .c-card{padding:52px 36px 34px}
+  #sample .s-step{font-size:34px}
+  #sample .chip span,#sample .c-field input,#sample .c-field textarea,#sample .s-by .chip + .chip::before,
+  #sample .s-deliv .chip + .chip::before{font-size:34px}
+}
+
+/* the category banner's way to it */
+.cat-sample a{color:var(--sand);font-weight:600;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
 
 /* 8. Footer */
 .foot{background:#00222C;color:#C3CACD;padding:56px 0 calc(40px + env(safe-area-inset-bottom))}
@@ -516,6 +836,15 @@ html:not(.js) #results[hidden]{display:block!important}
   /* the primary action: same micro-type as its neighbours, filled */
   .nav-inline .btn{margin-left:8px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#fff}
   .js .mast:not(.s-open) .search,.search{display:flex;padding:0}
+}
+/* the mast's call reads "Book a free call" (the same words as every way to the call); that is
+   ~50px longer than the old "Free call", so under 1200 the nav items sit a little closer and
+   the nav keeps clear of the search field at 1024 */
+@media (min-width:1024px) and (max-width:1199px){
+  .nav-inline{gap:0}
+  .nav-inline a{padding:0 9px}
+  .nav-inline .btn{margin-left:6px;padding:0 14px}
+  .mast .search{min-width:138px}
 }
 
 /* ---------- 1200px ---------- */
@@ -650,7 +979,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-copy{display:grid;gap:12px;justify-items:start;width:100%}
 .st-copy p{max-width:36ch}   /* measured in each line's own type */
 .st-copy .st-line{max-width:none}   /* the display lines take the column */
-.st-line{font:800 clamp(30px,8.6vw,40px)/.95 var(--display);font-stretch:72%;text-transform:uppercase;
+.st-line{font:800 clamp(36px,11.3vw,52px)/.95 var(--display);   /* the headline of each pack beat: 44px at 390, 36px at 320 */font-stretch:72%;text-transform:uppercase;
   letter-spacing:-.005em;text-wrap:balance;color:var(--teal)}
 .st-dark .st-line{color:var(--chalk)}
 .st-say{font:500 19px/1.45 var(--sans);text-wrap:pretty}
@@ -662,7 +991,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-solo .st-say{font-size:clamp(22px,6.2vw,30px);line-height:1.3;font-weight:600}
 .st-copy .st-note{max-width:40ch}
 /* short phones: his longer paragraphs give a little, so the photo beside them keeps its size */
-@media (max-height:600px){.st-say{font-size:17px;line-height:1.4}}
+@media (max-height:600px){.st-say{font-size:17px;line-height:1.4}.st-line{font-size:clamp(33px,10.4vw,44px)}}   /* short phones: the pack keeps its room */
 /* the proof the stage lets go into: the three pairs, stacked */
 .st-proof{padding-top:48px;padding-bottom:var(--sec)}
 .st-proof .c-proof{max-width:680px;margin:0 auto}
@@ -671,8 +1000,10 @@ html:not(.js) #results[hidden]{display:block!important}
    mid-scrub, as the pour's is; the beats inside it to the small one, so a line and its link
    are never under the toolbar. Each beat clears the masthead at the top and the tab at the
    foot. Only the beat whose line is up can be tapped. */
-.story.is-live .st-run{height:900vh}
-@supports (height:100lvh){.story.is-live .st-run{height:900lvh}}
+/* 778: a unit is still 800lvh / 19.7 (~343px at 390x844), and the story is 16.7 of them (_script.html):
+   the call holds 2 and the five pack beats run ~40% quicker than they did (20.9 units, 949lvh) */
+.story.is-live .st-run{height:778vh}
+@supports (height:100lvh){.story.is-live .st-run{height:778lvh}}
 .story.is-live .st-stage{position:sticky;top:0;height:100vh;overflow:hidden;overflow:clip}
 @supports (height:100lvh){.story.is-live .st-stage{height:100lvh}}
 .story.is-live .st-bg{display:block;position:absolute;inset:0;background:var(--teal)}
@@ -716,9 +1047,38 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-book{margin-top:12px}
 .st-arc{display:none}
 .story.is-live .st-arc{display:block;position:relative;flex:0 0 auto;width:min(100%,380px);height:min(36vw,150px);margin-bottom:8px}
-.st-arc .st-pack{inset:auto;width:26%;aspect-ratio:1;left:calc(var(--x) - 13%);top:var(--y)}
+.st-arc .st-pack{inset:auto;width:24%;aspect-ratio:1;left:calc(var(--x) - 12%);top:var(--y)}
+/* the stack: the #goals case in miniature, the same seven compartments in the same order, along
+   the top of the stage. It comes up empty with the first pack's beat; each pack, once its line
+   has been read, shrinks and glides into its own shelf's compartment, so by the sleep beat five
+   are filled and two stand empty; at the call the whole case, packs and all, moves up into the
+   place above the button (.st-arc, an empty box) and lifts away after it. The script measures the
+   wells once per resize and moves the case with transform and opacity only. */
+.st-row{display:none}
+.story.is-live .st-row{display:block;position:absolute;z-index:0;left:var(--pad);right:var(--pad);top:calc(var(--mast) + 6px);height:62px;pointer-events:none;
+  opacity:0;transform-origin:50% 50%;will-change:transform,opacity}
+.story.is-live .st-beats{z-index:1}   /* the packs stand in the case, so they are drawn over it */
+.stc-body{display:flex;gap:3px;height:100%;padding:4px;border-radius:12px;
+  background:linear-gradient(165deg,color-mix(in srgb,var(--teal) 86%,var(--chalk)),var(--teal) 45%,color-mix(in srgb,var(--teal) 78%,#000));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px rgba(230,211,197,.24),0 14px 26px -14px rgba(0,20,27,.6)}
+.stc-bay{display:flex;flex-direction:column;flex:1 1 0;min-width:0;gap:4px}
+.stc-well{flex:1 1 0;min-height:0;border-radius:8px;background:linear-gradient(color-mix(in srgb,var(--sand) 55%,var(--chalk)),var(--sand));
+  box-shadow:inset 0 5px 8px -5px rgba(0,20,27,.5),inset 0 0 0 1px rgba(0,20,27,.14)}
+.stc-name{display:none}
+.story.is-live .st-warm{padding-top:calc(var(--mast) + 16px + 68px)}   /* the packs' own beats keep the case's band clear */
+.story.is-live .st-arc{height:clamp(62px,19vw,84px)}
+/* with the pour switched off the band above is flat teal, so there is no film's shade to carry over */
+.no-pour~.story .st-dusk{display:none}
 .story.is-live .st-solo{justify-content:center}
 .story.is-live .st-proof{padding-top:0}
+/* the opening pair: the same photo at the same size and place in both beats, so the turn can lay
+   its before exactly over the first one. Held to the top of its slot, and sized to leave room
+   for the words under it at every phone height. */
+@media (max-width:767px){
+  .story.is-live .st-open .st-hero{align-items:flex-start}
+  .story.is-live .st-open .st-photo{height:min(440px,calc(100vh - var(--mast) - 280px));max-height:none}
+  @supports (height:100svh){.story.is-live .st-open .st-photo{height:min(440px,calc(100svh - var(--mast) - 280px))}}
+}
 
 @media (min-width:768px){
   .st-beat{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;align-items:center;align-content:center;
@@ -733,7 +1093,7 @@ html:not(.js) #results[hidden]{display:block!important}
   .st-photo{width:auto;height:min(64vh,520px)}
   .st-fam .st-photo{height:min(52vh,400px)}
   .st-pair{width:min(46vw,520px)}
-  .st-line{font-size:clamp(44px,5vw,64px)}
+  .st-line{font-size:clamp(52px,6.2vw,84px)}
   .st-say{font-size:22px}
   .st-solo .st-say{font-size:clamp(30px,3.2vw,40px)}
   .story.is-live .st-beat{padding-top:calc(var(--mast) + 24px);padding-bottom:40px}
@@ -742,12 +1102,21 @@ html:not(.js) #results[hidden]{display:block!important}
   .story.is-live .st-photo{max-height:520px}
   .story.is-live .st-fam .st-photo{max-height:420px}
   .story.is-live .st-pair{max-height:416px}
+  .story.is-live .st-row{left:calc(50% + 12px);right:max(var(--pad),calc((100% - 1200px) / 2));top:calc(var(--mast) + 18px);height:104px}
+  .stc-body{gap:5px;padding:6px 6px 5px;border-radius:16px}
+  .stc-well{border-radius:10px}
+  .stc-name{display:block;min-height:2.3em;font:700 8.5px/1.15 var(--sans);letter-spacing:.14em;text-transform:uppercase;text-align:center;
+    color:var(--sand);text-wrap:balance;overflow:hidden}
+  .story.is-live .st-warm{padding-top:calc(var(--mast) + 24px + 116px)}
+  /* the call's place for the case is a band above its words, not a hero column: without this it took
+     the live hero height (up to 560px) and pushed the words and the button off a 900px-tall screen */
+  .story.is-live .st-solo .st-arc{width:min(100%,760px);height:min(10vw,136px)}
   .st-lamp-dark{background:radial-gradient(circle at 74% 50%,rgba(244,242,236,.15),transparent 45%)}
   .st-lamp-warm{background:radial-gradient(circle at 74% 50%,rgba(255,255,255,.35),transparent 45%)}
 }
 @media (min-width:1200px){
   .st-say{font-size:24px;line-height:1.45}
-  .st-line{font-size:clamp(52px,5.4vw,76px)}
+  .st-line{font-size:clamp(64px,6.8vw,96px)}
   .st-solo .st-say{font-size:clamp(30px,3.2vw,44px)}
 }
 
@@ -779,6 +1148,147 @@ html:not(.js) .isle{position:static;width:auto;margin:0}
   .archipelago{height:360px;margin-top:8px}
   .isle-name{font-size:19px}
   .isle-note{font-size:12px}
+}
+
+/* ---------- The stack case (#goals): the seven shelves as one case ---------- */
+/* One object: a dark teal case with seven compartments, one per shelf. Each lid is a button
+   (_script.html) with its shelf's name and line on it in small caps; it hinges up and away, and
+   the sand inside shows a few of that shelf's packs and the way to the shelf. Phones and tablets
+   hold the case upright, seven stacked; from 1024 it lies in one row of seven and the open
+   compartment takes a wider column. The section's ground is the page's: the case keeps its edge
+   on chalk and on deep teal alike (a sand hairline rim and a soft drop shadow). Without script
+   every compartment stands open with no lids. */
+.case{--lid:color-mix(in srgb,var(--teal) 87%,var(--chalk));--lid-lo:color-mix(in srgb,var(--teal) 95%,var(--chalk));
+  --well:color-mix(in srgb,var(--sand) 50%,var(--chalk));--hinge:320ms cubic-bezier(.3,.7,.2,1);
+  position:relative;max-width:520px;padding:10px;border-radius:24px;
+  background:linear-gradient(165deg,color-mix(in srgb,var(--teal) 90%,var(--chalk)) 0%,color-mix(in srgb,var(--teal) 88%,#000) 40%,color-mix(in srgb,var(--teal) 70%,#000) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(0,0,0,.4),0 0 0 1px rgba(230,211,197,.24),
+    0 34px 60px -30px rgba(0,20,27,.65),0 14px 24px -18px rgba(0,20,27,.5)}
+.case-bays{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.bay{position:relative;display:grid;grid-template-rows:auto auto;border-radius:14px;overflow:hidden;
+  background:linear-gradient(var(--well),var(--sand) 80%);
+  box-shadow:inset 0 9px 14px -9px rgba(0,20,27,.55),inset 0 0 0 1px rgba(0,20,27,.14)}
+.bay-lid{position:relative;z-index:1;display:grid;align-content:center;justify-items:start;gap:5px;width:100%;min-height:62px;
+  padding:12px 52px 12px 18px;border:0;border-radius:0;background:none;text-align:left}
+.bay-lid:focus-visible{outline:2px solid var(--sand);outline-offset:-6px}
+.bay.is-open .bay-lid:focus-visible{outline-color:var(--teal)}
+.bay-name,.bay-note{position:relative;z-index:1;text-transform:uppercase;transition:color var(--hinge)}
+.bay-name{font:700 13px/1.15 var(--sans);letter-spacing:.2em;color:var(--chalk)}
+.bay-note{font:600 10.5px/1.25 var(--sans);letter-spacing:.16em;color:var(--on-dark)}
+.bay.is-open .bay-name{color:var(--teal)}
+.bay.is-open .bay-note{color:var(--text)}
+/* the lid: teal on the teal case, a lit top edge, one soft sheen running across all seven, and a
+   thumb notch at its free edge. It hinges on its back edge and is gone by the time it is open. */
+.lid{position:absolute;inset:0;z-index:0;border-radius:inherit;
+  background:linear-gradient(172deg,transparent 30%,rgba(255,255,255,.075) 48%,transparent 64%) 0 calc(var(--i) * 100% / 6) / 100% 700% no-repeat,
+    linear-gradient(var(--lid),var(--lid-lo));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -2px 0 rgba(0,0,0,.3),0 0 0 1px rgba(0,12,16,.35);
+  transform-origin:50% 0;transition:transform var(--hinge),opacity 260ms cubic-bezier(.4,0,.2,1) 60ms}
+.lid::after{content:"";position:absolute;right:20px;top:50%;width:6px;height:24px;margin-top:-12px;border-radius:3px;
+  background:rgba(0,16,22,.5);box-shadow:0 1px 0 rgba(255,255,255,.12),inset 0 1px 2px rgba(0,0,0,.45)}
+.bay.is-open .lid{transform:perspective(640px) rotateX(-48deg) translate3d(0,-12px,0);opacity:0;pointer-events:none}
+@media (hover:hover){.bay:not(.is-open) .bay-lid:hover .lid{transform:perspective(640px) rotateX(-7deg)}}
+.bay-well{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--hinge)}
+.bay.is-open .bay-well{grid-template-rows:1fr}
+.bay-in{display:grid;align-content:start;justify-items:start;min-height:0;overflow:hidden;padding:0 18px}
+.bay-packs{list-style:none;margin:0;padding:2px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%}
+.bay-pack{position:relative;z-index:0;text-align:center;font:500 12px/1.3 var(--sans);color:var(--ink)}
+/* a pack: a link to Amway without script, a button that opens its product card with it */
+.bay-go{display:grid;justify-items:center;align-content:start;gap:4px;width:100%;margin:0;padding:0;border:0;border-radius:12px;
+  background:none;color:inherit;font:inherit;text-align:center;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.bay-go:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+/* a pack shot is its product on a square with room round it, standing at 91% down, drawn --s times
+   the cell's width. It is grown by layout, not by a transform: the compartment has to clip to fold
+   shut, and a scaled image paints outside its own box, so its top was cut (Peter, on his phone).
+   Its transparent sides overlap the next cell's; on a phone it grows downward, so the compartment
+   gains the headroom, and on a wide screen, where the compartment has a fixed height and free
+   space above its packs, it reaches up into that space by the same 91%-down baseline as before */
+.bay-go img{--w:min(100%,112px);--s:1.3;display:block;width:calc(var(--w) * var(--s));max-width:none;height:auto;
+  margin:0 calc((100% - var(--w) * var(--s)) / 2);filter:drop-shadow(0 7px 6px rgba(0,20,27,.2));
+  transition:transform 200ms cubic-bezier(.2,.7,.2,1),opacity 120ms linear}
+@media (hover:hover){.bay-go:hover img{transform:translate3d(0,-3px,0)}}
+.bay-go:active img{transform:translate3d(0,1px,0)}
+.bay-go.is-out img{opacity:0}   /* its card is open and the pack is in it */
+.bay-all{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:4px 0 8px;color:var(--teal);font:600 15px/1.2 var(--sans);
+  text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
+@media (hover:hover){.bay-all:hover{text-decoration-thickness:2.5px}}
+.motion .bay.is-open .bay-pack{animation:pack-in 420ms cubic-bezier(.2,.7,.2,1) calc(90ms + var(--k) * 55ms) backwards}
+@keyframes pack-in{from{opacity:0;transform:translate3d(0,14px,0) scale(.94)}}
+/* it arrives closed: the case rises in with the heading (.grow) and its lids settle into place */
+.motion .case.in .lid{animation:lid-settle 560ms cubic-bezier(.2,.7,.2,1) calc(140ms + var(--i) * 45ms) backwards}
+@keyframes lid-settle{from{transform:perspective(640px) rotateX(-9deg) translate3d(0,-3px,0)}}
+/* no script: every compartment open, no lids. Keyed to html.js (set in the head), not to the case's
+   own script, so with script the packs are never fetched before a lid is opened */
+html:not(.js) .lid{display:none}
+html:not(.js) .bay-in[hidden]{display:grid!important}
+html:not(.js) .bay-well{grid-template-rows:1fr}
+html:not(.js) .bay-lid{cursor:default}
+html:not(.js) .bay-name{color:var(--teal)}
+html:not(.js) .bay-note{color:var(--text)}
+@media (prefers-reduced-motion:reduce){.lid,.bay-well,.case-bays,.bay-name,.bay-note,.bay-go img{transition:none}}
+@media (min-width:768px){.case{margin-inline:auto}}
+@media (min-width:1024px){
+  .case{max-width:none;padding:12px;border-radius:28px}
+  .case-bays{grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;transition:grid-template-columns var(--hinge)}
+  .bay{grid-template-rows:auto minmax(0,1fr);height:320px;border-radius:18px;container-type:inline-size}   /* not less: the tallest packs need it to stand whole */
+  /* the lid covers the whole compartment, the button only its label: a tap on the lid is a tap on it */
+  .bay-lid{position:static;align-content:start;min-height:0;padding:22px 14px 10px}
+  .bay-name{font-size:clamp(9px,calc((100cqi - 28px) / 9.9),13px);letter-spacing:.18em}
+  .bay-note{font-size:clamp(8.5px,calc((100cqi - 28px) / 7.8),10.5px);letter-spacing:.14em}
+  .lid{background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.07) 48%,transparent 64%) calc(var(--i) * 100% / 6) 0 / 700% 100% no-repeat,
+    linear-gradient(var(--lid),var(--lid-lo))}
+  .lid::after{right:auto;left:50%;top:auto;bottom:18px;width:30px;height:6px;margin:0 0 0 -15px}
+  .bay-well,.bay.is-open .bay-well{grid-template-rows:1fr}
+  .bay-in{align-content:end;padding:0 14px 8px}
+  .bay-packs{gap:10px}
+  .bay-go img{--w:min(100%,124px);--s:1.42;margin-top:calc(var(--w) * (1 - var(--s)) * .91);margin-bottom:calc(var(--w) * (1 - var(--s)) * .09)}
+  .bay-all{margin-bottom:6px}
+}
+
+/* ---------- The product card (#pcard): a pack in an open compartment, up close ---------- */
+/* The case in small: a teal rim round a sand well, the pack standing in it, its name in the
+   display face, a line, a few facts as small-caps chips and the way to Amway. A modal <dialog>
+   (_script.html): a bottom sheet on a phone, a card in the middle from 700. The pack flies into it
+   from its compartment and a few sparks go off as it lands (transforms and opacity only, none of
+   it under reduced motion). html.locked, as for the menu, keeps the page still and the tab away. */
+.pcard{width:100%;max-width:none;max-height:none;margin:auto 0 0;padding:0;border:0;background:transparent;overflow:visible;color:var(--ink)}
+.pcard::backdrop{background:rgba(0,16,22,.62)}
+.motion .pcard[open]::backdrop{animation:pc-dim 240ms ease-out}
+.pcard.is-closing::backdrop{animation:pc-undim 220ms ease-in forwards}
+@keyframes pc-dim{from{opacity:0}}
+@keyframes pc-undim{to{opacity:0}}
+.pcard-in{position:relative;max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));border-radius:24px 24px 0 0;
+  background:linear-gradient(165deg,color-mix(in srgb,var(--teal) 90%,var(--chalk)) 0%,color-mix(in srgb,var(--teal) 88%,#000) 40%,color-mix(in srgb,var(--teal) 70%,#000) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 0 0 1px rgba(230,211,197,.24),0 -20px 50px -20px rgba(0,20,27,.6)}
+.pcard-art{position:relative;display:grid;place-items:center;padding:14px 0 0;border-radius:16px 16px 0 0;
+  background:linear-gradient(color-mix(in srgb,var(--sand) 50%,var(--chalk)),color-mix(in srgb,var(--sand) 72%,var(--chalk)));
+  box-shadow:inset 0 9px 14px -9px rgba(0,20,27,.55)}
+.pcard-art img{display:block;width:min(56vw,220px);height:auto;filter:drop-shadow(0 10px 10px rgba(0,20,27,.22))}
+.pcard-copy{display:grid;justify-items:start;gap:10px;padding:6px 20px 20px;border-radius:0 0 16px 16px;background:var(--sand)}
+.pcard-kind{margin:0;font:600 11px/1.35 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
+.pcard-name{margin:0;font:800 32px/.95 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal);text-wrap:balance}
+.pcard-line{margin:0;font:500 16px/1.4 var(--sans);color:var(--ink)}
+.pcard-facts{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 4px;padding:0}
+.pcard-facts li{display:inline-flex;align-items:center;min-height:28px;padding:0 11px;border-radius:999px;background:var(--teal);color:var(--sand);
+  font:600 11px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase}
+.pcard-facts[hidden]{display:none}
+.pcard-buy{width:100%}
+.pcard-x{position:absolute;z-index:2;top:14px;right:14px;border-radius:50%;background:rgba(244,242,236,.7);color:var(--teal)}
+.pcard-x:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+/* the pack in flight, and the sparks: fixed in the top layer, never in the way of a tap */
+.pcard-fly,.pcard-spark{position:fixed;left:0;top:0;pointer-events:none;will-change:transform,opacity}
+.pcard-fly{z-index:3;transform-origin:0 0;filter:drop-shadow(0 10px 10px rgba(0,20,27,.22))}
+.pcard-fly[hidden]{display:none}
+.pcard-spark{z-index:1;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%}
+@media (min-width:700px){
+  .pcard{width:min(680px,calc(100% - 48px));margin:auto}
+  .pcard-in{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);max-height:calc(100dvh - 48px);padding:10px;border-radius:28px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 0 0 1px rgba(230,211,197,.24),0 34px 60px -30px rgba(0,20,27,.65)}
+  .pcard-art{padding:24px 12px;border-radius:18px 0 0 18px}
+  .pcard-art img{width:min(100%,260px)}
+  .pcard-copy{align-content:center;padding:28px 28px 26px;border-radius:0 18px 18px 0}
+  .pcard-name{font-size:38px}
 }
 
 /* ── Opening curtain ───────────────────────────────────────────────────────────
@@ -924,4 +1434,595 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
   .mc-res-t{font-size:38px}
   .mc-macros{gap:12px}
   .mc-g{font-size:34px}
+}
+
+/* ---------- Load the bar (SHELF_VIEW 'bar'): the barbell, the plate rack, the pinned bar ---------- */
+/* The barbell, side on, drawn from its font-size: 1em is a tenth of the biggest plate. Two sleeves
+   either side of the collars, and the shaft between. It is drawn as the real thing, all in gradients:
+   a brushed shaft with its knurling (the centre patch and the two grips, a fine crosshatch that goes
+   to a matte grey tone when the bar is small), polished sleeves that catch a harder light, and
+   collars with their clamp. A plate is a bumper seen edge on: a thick rubber disc in its shelf's
+   colour with rounded edges, lit along its top edge and darker to its foot, the steel of its hub
+   showing where the sleeve goes through. It is as tall as its rank allows (--s) and sits --o steps
+   out from the collar: larger plates nearest it. An unloaded plate waits just past the end of its
+   sleeve, clipped, and slides on in 360ms, overshooting a hair onto the one before and settling
+   back, as a heavy thing does; under reduced motion it is simply there. Only transform and opacity
+   ever change. */
+/* rubber grain: a speckle of dark and light in about equal measure, so it leaves a plate's colour (and
+   the contrast of the words on it) where it was; laid over the rack's faces and the bar's plates */
+.t-bar{--rubber:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='d'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 1.4'/%3E%3C/filter%3E%3Cfilter id='l'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.4 -1'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23d)' opacity='.12'/%3E%3Crect width='120' height='120' filter='url(%23l)' opacity='.08'/%3E%3C/svg%3E")}
+.bbx{container-type:inline-size;min-width:0}
+.bb{--st:2.05em;--steel:linear-gradient(#EEF1F2,#D5DADD 22%,#A9B1B6 50%,#7D868C 78%,#646D73);
+  display:flex;align-items:center;height:10em;font-size:4px;line-height:0;overflow:clip visible}
+/* the sleeves: polished, a hard specular line a fifth of the way down, a chamfer at the outer end */
+.bb-sl{position:relative;flex:none;width:calc(var(--n,7) * var(--st) + 1.2em);height:1.5em;
+  background:linear-gradient(#F4F6F7 0,#FFFFFF 14%,#DDE2E4 26%,#B3BBC0 48%,#8A9399 70%,#A3ABB0 86%,#5F686E 100%)}
+.bb-l{border-radius:.5em .12em .12em .5em;box-shadow:inset .22em 0 .12em -.1em rgba(40,48,54,.55)}
+.bb-r{border-radius:.12em .5em .5em .12em;box-shadow:inset -.22em 0 .12em -.1em rgba(40,48,54,.55)}
+/* the collars: a turned steel ring, split, with the bolt that clamps it standing up at the top */
+.bb-co{position:relative;flex:none;width:1.1em;height:3em;border-radius:.3em/.24em;
+  background:linear-gradient(90deg,rgba(255,255,255,.3),rgba(255,255,255,0) 28%,rgba(0,0,0,0) 72%,rgba(0,0,0,.26)),
+    linear-gradient(#F4F6F7,#DCE1E3 16%,#A7B0B5 46%,#7B848A 76%,#5A636A);
+  box-shadow:inset 0 0 0 max(.5px,.06em) rgba(30,38,44,.45)}
+.bb-co::before{content:"";position:absolute;left:50%;width:max(.5px,.1em);margin-left:max(-.25px,-.05em);top:.18em;bottom:.18em;background:rgba(24,30,34,.6)}
+.bb-co::after{content:"";position:absolute;left:.26em;right:.26em;bottom:calc(100% - .12em);height:.55em;border-radius:.1em .1em 0 0;
+  background:linear-gradient(90deg,#5F686E,#D5DADD 40%,#8A9399 75%,#5F686E);box-shadow:inset 0 max(.5px,.06em) 0 rgba(255,255,255,.5)}
+/* the shaft: brushed, a softer light than the sleeves */
+.bb-sh{position:relative;flex:1 1 auto;min-width:3em;height:.95em;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 .05em,transparent .05em .13em),
+    linear-gradient(#E2E6E8 0,#F3F5F6 16%,#C2C9CD 36%,#9BA4A9 62%,#737C82 88%,#5E676D 100%)}
+/* the knurling: a diamond crosshatch cut into the steel, over the same light */
+.bb-kn,.bb-sh::before,.bb-sh::after{position:absolute;top:0;bottom:0;border-radius:.05em;
+  background:repeating-linear-gradient(62deg,rgba(28,34,38,.5) 0 .075em,transparent .075em .21em),
+    repeating-linear-gradient(-62deg,rgba(28,34,38,.5) 0 .075em,transparent .075em .21em),
+    linear-gradient(rgba(255,255,255,.22),transparent 40%,rgba(0,0,0,.14))}
+.bb-kn{left:45%;right:45%}
+/* under 4px a crosshatch only shimmers: the knurling is a matte, darker steel instead */
+.lbpin-bars .bb-kn,.lbpin-bars .bb-sh::before,.lbpin-bars .bb-sh::after{background:linear-gradient(#B4BBBF,#8D969B 45%,#646D73)}
+.bb-sh::before,.bb-sh::after{content:"";width:31%}
+.bb-sh::before{left:5%}
+.bb-sh::after{right:5%}
+/* a plate, edge on */
+.bb-p{position:absolute;top:50%;width:1.8em;height:calc(var(--s) * 10em);margin-top:calc(var(--s) * -5em);border-radius:.42em/.6em;
+  opacity:0;will-change:transform,opacity;
+  transition:transform 360ms cubic-bezier(.22,1.2,.36,1.04),opacity 140ms linear}
+/* the rubber: drawn over the hub (below), so the steel shows only where it stands proud of the faces */
+.bb-p::after{content:"";position:absolute;inset:0;border-radius:inherit;
+  background:var(--rubber),linear-gradient(90deg,rgba(0,0,0,.36),rgba(0,0,0,.08) 10%,rgba(0,0,0,0) 18%,rgba(0,0,0,0) 82%,rgba(0,0,0,.1) 90%,rgba(0,0,0,.42)),
+    linear-gradient(rgba(0,0,0,.12) 0,rgba(255,255,255,.4) 2.5%,rgba(255,255,255,.2) 9%,rgba(255,255,255,.07) 22%,rgba(255,255,255,0) 38%,
+      rgba(0,0,0,0) 50%,rgba(0,0,0,.16) 74%,rgba(0,0,0,.4) 93%,rgba(0,0,0,.3) 100%),
+    var(--c);
+  background-size:48px 48px,auto,auto,auto;
+  box-shadow:inset 0 0 0 max(.5px,.05em) rgba(0,0,0,.28),.18em .35em .55em -.2em rgba(0,15,20,.45)}
+/* its hub: the steel insert the sleeve goes through, standing just proud of the rubber on each face,
+   so it shows only as a sliver of steel between one plate and the next */
+.bb-p::before{content:"";position:absolute;left:-.14em;right:-.14em;top:50%;height:1.95em;margin-top:-.975em;border-radius:.14em;
+  background:linear-gradient(90deg,rgba(0,0,0,.25),transparent 30%,transparent 70%,rgba(0,0,0,.3)),
+    linear-gradient(#F4F6F7,#C9CFD3 30%,#8C959B 70%,#646D73);box-shadow:0 0 0 max(.4px,.04em) rgba(20,26,30,.35)}
+.bb-l .bb-p{right:.15em;transform:translate3d(calc((var(--n,7) + .5) * -1 * var(--st)),0,0)}
+.bb-r .bb-p{left:.15em;transform:translate3d(calc((var(--n,7) + .5) * var(--st)),0,0)}
+.bb-l .bb-p.on{opacity:1;transform:translate3d(calc(var(--o) * -1 * var(--st)),0,0)}
+.bb-r .bb-p.on{opacity:1;transform:translate3d(calc(var(--o) * var(--st)),0,0)}
+.bb-dk .bb-p::after{box-shadow:inset 0 0 0 max(.5px,.06em) rgba(244,242,236,.22),.18em .35em .55em -.2em rgba(0,0,0,.5)}   /* the dark plates keep an edge on teal */
+/* Peter's bar is scrubbed by the story frame by frame: no overshoot to fight the scroll */
+.bb-peter .bb-p{transition:transform 300ms cubic-bezier(.2,.75,.25,1),opacity 160ms linear}
+/* the newest plate's outline: flashed by the script, never left on */
+.bb-ring{position:absolute;inset:calc(-1 * max(3px,.4em));border:max(1.5px,.2em) solid var(--teal);border-radius:max(3px,.8em)/max(3px,1em);opacity:0}
+.bb-dk .bb-ring{border-color:var(--sand)}
+@media (prefers-reduced-motion:reduce){.bb-p,.bb-peter .bb-p{transition:none}}
+
+/* the hero's bar, under its two links: empty until the visitor loads a plate */
+.hbar{display:grid;gap:8px;width:100%;margin-top:8px}
+.hbar .bb{font-size:clamp(4px,calc(100cqi / 48),9px)}
+.hbar:not(.has) .hbar-cap{margin-top:-2.2em}   /* an empty bar is thin: its caption comes up under it */
+.hbar-cap{font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}   /* the hero is on the chalk field now, not teal */
+.hbar .hb-you,.hbar.has .hb-empty{display:none}
+.hbar.has .hb-you{display:inline}
+
+/* the pinned bar: under the masthead once the hero has gone, on phones and desktop. The visitor's
+   stack; through the story's stage (#st-run), Peter's (the two bars and their captions cross-fade).
+   From "His and hers" on it is the visitor's again, or gone if they have none. As slim as it can be
+   and still be read: a 31px bar and one 10px caption row. */
+.t-bar{--pin:52px;scroll-padding-top:calc(var(--mast) + var(--pin))}
+.lbpin{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + var(--mast));z-index:18;background:var(--chalk);
+  box-shadow:0 1px 0 var(--line),0 12px 18px -16px rgba(0,20,27,.55);
+  transform:translate3d(0,-100%,0);visibility:hidden;transition:transform 280ms cubic-bezier(.2,.7,.2,1),visibility 0s linear 280ms}
+.lbpin.on{transform:none;visibility:visible;transition:transform 280ms cubic-bezier(.2,.7,.2,1),visibility 0s}
+html.locked .lbpin{visibility:hidden}
+html:not(.js) .lbpin{display:none}
+.lbpin-in{display:grid;align-content:center;gap:3px;height:var(--pin);padding-top:1px}
+.lbpin-bars{display:grid}
+.lbpin-bars .bb{grid-area:1 / 1;font-size:3.1px;transition:opacity 220ms linear;will-change:opacity}
+.lbpin-cap{display:grid;font:600 10px/1.1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--text);white-space:nowrap}
+.lbc-set{grid-area:1 / 1;display:flex;justify-content:space-between;gap:12px;min-width:0;transition:opacity 220ms linear;will-change:opacity}
+.lbc-who,.lbc-new{display:grid;min-width:0}
+.lbc-new{justify-items:end;color:var(--teal)}
+.lbc{grid-area:1 / 1;overflow:hidden;text-overflow:ellipsis;opacity:0;will-change:opacity}
+.lbc-you,.lbc-p[data-n="0"]{opacity:1}
+.lbpin .bb-peter,.lbc-pset,.lbpin.is-peter .bb-you,.lbpin.is-peter .lbc-yset{opacity:0}
+.lbpin.is-peter .bb-peter,.lbpin.is-peter .lbc-pset{opacity:1}
+@media (prefers-reduced-motion:reduce){.lbpin,.lbpin.on,.lbpin-bars .bb,.lbc-set{transition:none}}
+/* a phone's strip is one 36px row: the caption on the left ("Your stack · 2", "Peter's · 3 of 5"),
+   the bar on the right, a 30px bar. "+ name" comes up over the caption for a moment, on the strip's
+   own chalk, and goes. With the masthead that is 96px; while the strip holds the visitor's stack
+   the bottom tab steps aside (html.pin-you, set by the script), so the fixed chrome outside the
+   story's stage is never more than 96px. */
+@media (max-width:767px){
+  .t-bar{--pin:36px}
+  .lbpin-in{grid-template-columns:auto minmax(0,1fr);align-items:center;gap:0 12px;padding-top:0}
+  .lbpin-cap{grid-row:1;grid-column:1;font-size:10px;letter-spacing:.1em}
+  .lbpin-bars{grid-row:1;grid-column:2}
+  .lbpin-bars .bb{font-size:3px}
+  .lbc-lg{display:none}
+  .lbc-set{display:grid}
+  .lbc-who,.lbc-new{grid-area:1 / 1}
+  .lbc-who{will-change:opacity}   /* its own layer from the start: fading it for "+ name" then costs no layout */
+  .lbc-new{justify-items:stretch}
+  .lbc-new .lbc{background:var(--chalk)}
+  html.pin-you .mtab{transform:translateY(calc(100% + 2px));visibility:hidden}
+}
+@media (min-width:768px){
+  .t-bar{--pin:60px}
+  .lbpin-in{max-width:780px;gap:4px}
+  .lbpin-bars .bb{font-size:3.7px}
+  .lbpin-cap{font-size:10.5px}
+}
+
+/* #goals as a plate rack: nine plates, front on, all on show. Phones two a row (four rows and the
+   ninth centred), each about 160px, so the line under a plate's name is 11px or more (it was 7.9px on
+   a phone with three a row); 768 to 1023 three rows of three, ~175px each; from 1024 five and four,
+   ~160px each (one row was 86-123px a plate at 768-1199, its line 7.5-9px). A plate is a button, drawn as a competition bumper standing on the page:
+   a matte rubber face in its shelf's colour with a fine grain, a raised rim (lit on top, in shade
+   underneath), a recessed ring round a machined steel hub with a bright edge to its bore, and a soft
+   contact shadow under it. Its name is moulded into the rubber above the hub (a light top edge, a dark
+   bottom edge) and its shelf's line under it, which reads "On the bar" once it is loaded. The one whose
+   panel is open wears an outline ring. */
+.rack-sec .sec-head{margin-bottom:22px}
+.rk-hint{font:500 16px/1.4 var(--sans);color:var(--text)}
+.rk-plates{--cols:2;--gap:18px;list-style:none;margin:0 auto;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:20px var(--gap);max-width:344px}
+.rk-plates li{flex:0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));min-width:0}
+.rk-plate{position:relative;display:block;width:100%;aspect-ratio:1;margin:0;padding:0;border:0;border-radius:50%;background:none;
+  color:var(--t);container-type:inline-size;-webkit-tap-highlight-color:transparent}
+.rk-plate:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
+/* the contact shadow: on the page, under the plate, drawn before it */
+.rk-plate::before{content:"";position:absolute;left:9%;right:9%;bottom:-6.5%;height:13%;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(0,20,27,.42),rgba(0,20,27,.16) 55%,rgba(0,20,27,0));transition:opacity 200ms,transform 200ms cubic-bezier(.2,.7,.2,1)}
+/* the face: the colour under a broad satin light from the top left, a fine rubber grain, and the rim's
+   curve in its edge (a highlight on top, shade underneath) */
+.rk-disc{position:absolute;inset:0;border-radius:50%;
+  background:var(--rubber),
+    radial-gradient(120% 120% at 32% 16%,rgba(255,255,255,.1),rgba(255,255,255,.02) 40%,rgba(255,255,255,0) 58%),
+    radial-gradient(80% 80% at 72% 98%,rgba(0,0,0,.1),rgba(0,0,0,0) 58%),
+    var(--c);
+  background-size:120px 120px,auto,auto,auto;
+  box-shadow:inset 0 max(1px,1.1cqi) max(1px,.9cqi) rgba(255,255,255,.26),inset 0 min(-1.5px,-1.6cqi) max(1.5px,1.6cqi) rgba(0,0,0,.34),
+    inset 0 0 0 max(.5px,.5cqi) rgba(0,0,0,.2),0 max(2px,2cqi) 0 color-mix(in srgb,var(--c) 55%,#0B1115),0 10px 16px -10px rgba(0,20,27,.5);
+  transition:transform 200ms cubic-bezier(.2,.7,.2,1),box-shadow 200ms}
+/* the rim steps down to the face: the step shades the face under the top of the rim and catches the
+   light at the bottom */
+.rk-disc::before{content:"";position:absolute;inset:7%;border-radius:50%;background:rgba(0,0,0,.035);
+  box-shadow:inset 0 max(1px,1.1cqi) max(1px,1.1cqi) rgba(0,0,0,.3),inset 0 min(-1px,-.7cqi) 0 rgba(255,255,255,.16),
+    0 min(-1px,-.6cqi) 0 rgba(0,0,0,.12),0 max(1px,.6cqi) 0 rgba(255,255,255,.14)}
+/* the recessed ring round the hub */
+.rk-disc::after{content:"";position:absolute;inset:32.5%;border-radius:50%;background:rgba(0,0,0,.045);
+  box-shadow:inset 0 max(1px,1cqi) max(1px,1.2cqi) rgba(0,0,0,.34),inset 0 min(-1px,-.6cqi) 0 rgba(255,255,255,.16),
+    0 max(1px,.6cqi) 0 rgba(255,255,255,.16),0 min(-1px,-.6cqi) 0 rgba(0,0,0,.14)}
+/* the hub: turned steel with a bevel, and its bore, with a bright chamfer at the edge and the page through it */
+.rk-hole{position:absolute;z-index:1;left:37%;top:37%;width:26%;height:26%;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,0,0,0) 0 62%,rgba(0,0,0,.16) 70%,rgba(0,0,0,0) 78%,rgba(0,0,0,0) 90%,rgba(0,0,0,.28) 100%),
+    conic-gradient(from -24deg,#F1F3F4,#A9B1B6 9%,#E2E6E8 19%,#8E979D 31%,#CDD3D6 43%,#FBFCFC 51%,#9AA3A8 62%,#D8DDE0 74%,#7E878D 87%,#F1F3F4);
+  box-shadow:0 0 0 max(1px,.8cqi) rgba(10,14,17,.35),inset 0 max(1px,.7cqi) 0 rgba(255,255,255,.9),inset 0 min(-1px,-.7cqi) max(1px,.6cqi) rgba(0,0,0,.35),
+    0 max(1px,1cqi) max(1px,1.2cqi) rgba(0,0,0,.35)}
+.rk-hole::before{content:"";position:absolute;inset:25%;border-radius:50%;background:var(--chalk);
+  box-shadow:inset 0 max(1.5px,1.8cqi) max(1.5px,1.6cqi) rgba(0,20,27,.6),inset 0 min(-1px,-.5cqi) 0 rgba(255,255,255,.5),
+    0 0 0 max(.75px,.6cqi) rgba(255,255,255,.85),0 0 0 max(1.25px,1.2cqi) rgba(70,78,84,.55)}
+/* the name, moulded in: a light top edge and a dark bottom edge */
+.rk-name{position:absolute;left:14%;right:14%;bottom:67.5%;text-align:center;font:800 clamp(13px,10.5cqi,15px)/1 var(--sans);font-stretch:75%;
+  letter-spacing:.05em;text-transform:uppercase;text-wrap:balance;
+  text-shadow:0 -.75px 0 rgba(255,255,255,.3),0 .75px 0 rgba(0,0,0,.34)}
+.rk-line,.rk-on{position:absolute;left:15%;right:15%;top:69%;text-align:center;font:700 clamp(11px,7.4cqi,12px)/1.1 var(--sans);letter-spacing:.07em;
+  text-transform:uppercase;text-wrap:balance;text-shadow:0 -.75px 0 rgba(255,255,255,.26),0 .75px 0 rgba(0,0,0,.3)}
+.rk-on{display:none}
+.rk-plate.is-on .rk-line{display:none}
+.rk-plate.is-on .rk-on{display:block}
+.rk-plate[aria-pressed="true"] .rk-disc{box-shadow:inset 0 max(1px,1.1cqi) max(1px,.9cqi) rgba(255,255,255,.26),inset 0 min(-1.5px,-1.6cqi) max(1.5px,1.6cqi) rgba(0,0,0,.34),
+  inset 0 0 0 max(.5px,.5cqi) rgba(0,0,0,.2),0 max(2px,2cqi) 0 color-mix(in srgb,var(--c) 55%,#0B1115),0 0 0 calc(max(2px,2cqi) + 3px) var(--chalk),0 0 0 calc(max(2px,2cqi) + 5.5px) var(--teal),0 16px 22px -12px rgba(0,20,27,.6)}
+@media (hover:hover){.rk-plate:hover .rk-disc{transform:translate3d(0,-3px,0)}.rk-plate:hover::before{opacity:.7;transform:scale(.94)}}
+.rk-plate:active .rk-disc{transform:translate3d(0,1px,0)}
+.rk-panel{margin-top:24px;padding:18px 18px 6px;border-radius:18px;background:color-mix(in srgb,var(--sand) 45%,var(--chalk));
+  box-shadow:inset 0 5px 0 var(--c),inset 0 0 0 1px rgba(0,20,27,.08)}
+.rk-head{display:grid;gap:5px;margin:4px 0 14px}
+.rk-title{font:800 28px/.95 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.rk-sub{font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
+.rk-acts{display:flex;flex-wrap:wrap;align-items:center;gap:4px 24px;margin-top:14px}
+.rk-load{flex:1 1 100%}
+.rk-load[aria-pressed="true"]{background:transparent;color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.motion .rk-panel .bay-pack{animation:pack-in 420ms cubic-bezier(.2,.7,.2,1) calc(60ms + var(--k) * 55ms) backwards}
+html:not(.js) .rk-panel[hidden]{display:block!important}
+@media (prefers-reduced-motion:reduce){.rk-disc,.rk-plate::before{transition:none}}
+@media (min-width:768px){
+  .rk-plates{--cols:3;max-width:560px;gap:22px var(--gap)}
+  .rk-panel{padding:24px 28px 10px}
+  .rk-load{flex:none}
+  .rk-panel .bay-packs{max-width:560px}
+}
+@media (min-width:1024px){.rk-plates{--cols:5;max-width:880px}}
+
+/* the story's pack beats: a quiet step label over each line, with its plate's colour */
+.st-step{display:flex;align-items:center;gap:8px;font:600 11px/1.2 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
+.st-step i{flex:none;width:4px;height:13px;border-radius:1.5px/2.5px;
+  background:linear-gradient(rgba(255,255,255,.45),rgba(255,255,255,0) 30%,rgba(0,0,0,0) 60%,rgba(0,0,0,.4)),var(--c);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.3)}
+/* the pinned bar is the story's stack: every beat clears it, as they cleared the case */
+.t-bar .story.is-live .st-beat,.t-bar .story.is-live .st-warm{padding-top:calc(var(--mast) + var(--pin) + 14px)}
+@media (max-width:767px){
+  .t-bar .story.is-live .st-open .st-photo{height:min(440px,calc(100vh - var(--mast) - var(--pin) - 270px))}
+  @supports (height:100svh){.t-bar .story.is-live .st-open .st-photo{height:min(440px,calc(100svh - var(--mast) - var(--pin) - 270px))}}
+}
+/* at the call the fully loaded bar stands above the button, where the case rose into */
+.t-bar .story.is-live .st-arc{display:flex;align-items:center;height:clamp(62px,19vw,84px)}
+.st-arc .bbx{width:100%}
+.st-arc .bb{font-size:clamp(6.2px,1.9vw,8.4px);will-change:transform,opacity;opacity:0}
+@media (min-width:768px){
+  .t-bar .story.is-live .st-beat,.t-bar .story.is-live .st-warm{padding-top:calc(var(--mast) + var(--pin) + 24px)}
+  .t-bar .story.is-live .st-solo .st-arc{width:min(100%,720px);height:min(9vw,120px)}
+  .st-arc .bb{font-size:min(.9vw,12px)}
+}
+
+/* after the story: his stack, drawn loaded, on teal */
+.mys-in{display:grid;justify-items:center;gap:20px;text-align:center}
+.mys h2{color:var(--chalk);font-size:clamp(46px,14vw,96px)}
+.mys-bar{width:100%;max-width:900px;margin:8px 0 4px}
+.mys-bar .bb{font-size:clamp(4px,calc(100cqi / 40),15px)}
+.mys-key{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:14px 6px;max-width:720px;
+  font:600 11px/1.25 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark)}
+/* the key: each plate's pack from the story, standing on a soft pool of light, and its shelf under it
+   with a sliver of the plate's own colour, edge on */
+.mys-key li{display:grid;justify-items:center;align-content:start;gap:6px;width:108px}
+.mys-th{position:relative;display:block;width:76px;height:76px}
+.mys-th::before{content:"";position:absolute;left:12%;right:12%;bottom:4%;height:16%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),rgba(0,0,0,0))}
+.mys-th img{position:relative;display:block;width:100%;height:100%;object-fit:contain;transform:scale(1.32);transform-origin:50% 62%}
+.mys-n{display:flex;align-items:flex-start;justify-content:center;gap:6px;text-align:left;text-wrap:balance}
+.mys-key i{flex:none;width:5px;height:15px;margin-top:-1px;border-radius:2px/3px;
+  background:linear-gradient(rgba(255,255,255,.45),rgba(255,255,255,0) 30%,rgba(0,0,0,0) 60%,rgba(0,0,0,.4)),var(--c);box-shadow:0 0 0 1px rgba(230,211,197,.35)}
+.mys-build{margin-top:18px;font:800 clamp(40px,11vw,72px)/.92 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--sand)}
+.mys-sub{max-width:38ch;font-size:17px;line-height:1.5;color:var(--on-dark);text-wrap:balance}
+.mys-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;width:100%;max-width:560px;margin-top:6px}
+.mys-acts .btn{flex:1 1 100%}
+.mys .btn-line{color:var(--sand);box-shadow:inset 0 0 0 1px var(--sand)}
+/* the plates go on as the bar comes up, collar out */
+.motion .mys-bar:not(.in) .bb-l .bb-p{opacity:0;transform:translate3d(calc((var(--n,7) + .5) * -1 * var(--st)),0,0)}
+.motion .mys-bar:not(.in) .bb-r .bb-p{opacity:0;transform:translate3d(calc((var(--n,7) + .5) * var(--st)),0,0)}
+.motion .mys-bar .bb-p{transition-duration:420ms,240ms;transition-delay:calc(260ms + var(--o) * 110ms)}
+@media (min-width:768px){.mys-acts .btn{flex:1 1 0}}
+
+/* ---------- Headline treatments: two-tone and extruded, for a few moments only ----------
+   (a) .hl-k: one word in the button blue inside a teal headline ("plan", "free"). .hl-2: a headline in
+   two lines of two sizes, a small teal lead over its keyword set large in the blue ("What are we /
+   MAXIMIZING?"). On teal (.hl-dk) the lead is the on-dark grey and the keyword chalk.
+   (b) .hl-3d: a solid extrusion for the hero line and the payoff. The face is blue on chalk (sand on
+   teal); seven hairline steps of text-shadow run down and right, the first a lit chamfer a shade
+   lighter than the face, then the side, darkening toward the back (deep teal on chalk; on teal, where
+   teal would vanish, the blue into indigo), and a soft cast shadow under it all. Everything is in em,
+   so the depth scales with the type (about 5px at 390, 9px at 1440); text-shadow only, so it costs
+   no layout and reads with no script and no motion. Contrast of the faces: blue on chalk 7.3:1 (5.1:1
+   on the field's warmest glow), sand on teal 10:1, chalk on teal 12.9:1; the leads, teal on chalk
+   12.9:1 and on-dark on teal 9.3:1. */
+.hl-k{color:var(--blue)}
+.hl-2 .hl-lead{display:block;margin-bottom:.1em;font-size:.5em;font-weight:700;line-height:1;letter-spacing:.04em;color:var(--teal)}
+.hl-2 .hl-k{display:block;font-size:1.3em;line-height:.9}
+.hl-2.hl-dk .hl-lead{color:var(--on-dark)}
+.hl-2.hl-dk .hl-k{color:var(--chalk)}
+.hl-3d{--u:.012em;--h:#5360D0;--s1:#0A3A48;--s2:#042A35;--s3:#001E27;--cast:rgba(0,20,27,.26);color:var(--blue);letter-spacing:.012em;
+  text-shadow:var(--u) var(--u) 0 var(--h),
+    calc(2 * var(--u)) calc(2 * var(--u)) 0 var(--s1),calc(3 * var(--u)) calc(3 * var(--u)) 0 var(--s1),
+    calc(4 * var(--u)) calc(4 * var(--u)) 0 var(--s2),calc(5 * var(--u)) calc(5 * var(--u)) 0 var(--s2),
+    calc(6 * var(--u)) calc(6 * var(--u)) 0 var(--s3),calc(7 * var(--u)) calc(7 * var(--u)) 0 var(--s3),
+    calc(7 * var(--u) + .03em) calc(7 * var(--u) + .07em) .1em var(--cast)}
+.hl-3d.hl-dk{--h:#FFF7EF;--s1:#3340B8;--s2:#2A3597;--s3:#222B7A;--cast:rgba(0,0,0,.42);color:var(--sand)}
+/* where they are used: the hero's last line, a step larger; the payoff's "Build yours.", larger still */
+.hero h1 .hl-3d{font-size:1.1em;margin-top:.02em;padding-bottom:.08em}
+.mys h2.hl-2{font-size:clamp(40px,12vw,80px)}
+.mys-build.hl-3d{font-size:clamp(50px,15vw,104px);margin-top:12px}
+/* "Scroll to load the bar." under the hero's bar: it was sand, from the teal hero; on the chalk field
+   that was 1.3:1. It takes the page's text grey (7.1:1). */
+.hbar-cap{color:var(--text)}
+
+/* the rack's three-step guide, under its heading: one line a step on a phone, each numbered on a
+   small plate. The step the visitor is on is the blue plate and the dark line; the steps behind them
+   are teal plates; the ones ahead are open rings. Colour only, so there is nothing to move under
+   reduced motion. Text is --text on chalk, 7.1:1, and ink for the step they are on. */
+.rk-guide{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:7px;counter-reset:none}
+.rk-guide li{display:flex;align-items:center;gap:10px;min-height:22px;font:500 15px/1.3 var(--sans);color:var(--text)}
+.rk-guide li.is-now{color:var(--ink);font-weight:650}
+.rg-n{position:relative;flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;
+  font:800 11px/1 var(--sans);font-stretch:75%;color:var(--teal);box-shadow:inset 0 0 0 1.5px rgba(0,46,59,.62);
+  transition:background-color 200ms,color 200ms,box-shadow 200ms}
+.rg-n::after{content:"";position:absolute;inset:3px;border-radius:50%;border:1px solid transparent}
+.is-done .rg-n{background:var(--teal);color:var(--chalk);box-shadow:none}
+.is-now .rg-n{background:var(--blue);color:#fff;box-shadow:0 0 0 3px rgba(51,64,184,.18)}
+.is-done .rg-n::after,.is-now .rg-n::after{border-color:rgba(255,255,255,.28)}
+.rk-guide a{color:var(--teal);font-weight:650;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px}
+.rk-guide .is-now a{color:var(--blue)}
+@media (prefers-reduced-motion:reduce){.rg-n{transition:none}}
+html:not(.js) .rk-guide{display:none}   /* without script every panel stands open and nothing loads: no steps to follow */
+@media (max-width:359px){.rk-guide li{font-size:14px;align-items:flex-start}.rk-guide .rg-t{padding-top:2px}}
+@media (min-width:768px){.rk-guide{margin-top:10px;gap:8px}.rk-guide li{font-size:16px}}
+
+/* the pinned strip only counts in the anchors' offset once there is a stack to show (html.has-stack,
+   set by the script); without one it is away outside the story, and the story pads for it itself.
+   .snap: when it comes up its contents are set at once, so it never arrives mid-fade. */
+.t-bar{scroll-padding-top:var(--mast)}
+.t-bar.has-stack{scroll-padding-top:calc(var(--mast) + var(--pin))}
+.lbpin.snap .lbpin-bars .bb,.lbpin.snap .lbc-set{transition:none}
+
+/* the product card: "Load this plate" beside "Add to cart on Amway", and "On your bar" once it is on */
+.pcard-acts{display:flex;flex-wrap:wrap;gap:10px;width:100%}
+.pcard-acts .btn{flex:1 1 100%}
+.pcard-load[aria-disabled="true"]{color:var(--teal);box-shadow:inset 0 0 0 1px rgba(0,46,59,.35);cursor:default}
+.pcard-load[aria-disabled="true"]::before{content:"";width:14px;height:8px;margin:-4px 2px 0 0;border:solid currentColor;border-width:0 0 2px 2px;transform:rotate(-45deg)}
+.pcard-load[aria-disabled="true"]:active{opacity:1}
+@media (min-width:768px){.pcard-acts .btn{flex:1 1 auto}}
+/* every product tile opens the card too; the buy button has a row to itself, the other one or two
+   ("Ask for a free sample", "Load this plate") share the next from 768 */
+.pcard-acts .pcard-buy{flex-basis:100%}
+.card-link.is-out img{opacity:0}   /* its card is open and its picture is in it */
+
+/* under "Build yours.": the visitor's stack, drawn like his a size down, with its key and a way back
+   to the rack; or, with none yet, one line inviting them to load one */
+.mys-you{display:grid;justify-items:center;gap:10px;width:100%;max-width:640px}
+html:not(.js) .mys-you{display:none}
+.mys-has{display:grid;justify-items:center;gap:10px;width:100%}
+.mys-has[hidden],.mys-none[hidden]{display:none}
+.mys-cap{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:4px 14px;margin:0;
+  font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--sand)}
+.mys-edit{display:inline-flex;align-items:center;min-height:44px;margin:-12px 0;color:var(--chalk);letter-spacing:.08em;
+  text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
+.mys-ybar{width:100%;max-width:560px}
+.mys-ybar .bb{font-size:clamp(3px,calc(100cqi / 50),10px)}
+.mys-none{max-width:34ch;margin:0;font:500 17px/1.5 var(--sans);color:var(--on-dark);text-wrap:balance}
+.mys-none a{color:var(--chalk);font-weight:650;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
+.mys :focus-visible{outline-color:var(--sand)}
+/* ===================================================================================
+   The field: one ground for the whole site, "warm chalk" (Peter's pick, B of the three mockups
+   on raw24/bg-mockups). Kept as one block, after everything it overrides, so it merges in one piece.
+
+   One fixed layer (.field, straight after <body> on every page) carries it all: the chalk base, a
+   still slanted band of warm light low down (the story's own 14-degree sweep, laid across the
+   page), two soft glows (sand high left, pale teal right) that drift over ~50s, and a fine grain
+   over them. The glows are pre-blurred radial gradients, each on its own layer, with no filter;
+   only their transform animates, so the drift costs no layout and no paint, and reduced motion
+   stops it. Every band that painted its own ground (the hero's copy, the sample, the trending
+   band, the story's grounds, the calculator's sand) goes transparent, so the one field runs all
+   the way down. Cards and panels keep a surface where reading needs one. The only break is the
+   footer, whose horizon is black-native artwork: it keeps its black, and the field darkens into
+   it over its first 120px, so the page ends at nightfall rather than at a ruled line.
+   =================================================================================== */
+:root{
+  --fb:#F4F2EC;                                   /* the chalk */
+  --fg1:226,200,174;--fg1a:.45;                   /* high glow: sand (.45, not .60: the top of a screen must not read peach) */
+  --fg2:169,202,203;--fg2a:.40;                   /* second glow: pale teal */
+  --lo:226,200,174;--loa:.25;                     /* the low slanted band: sand, so the low light is warm where it meets the teal glow */
+  --grain:.07;                                    /* registers on a phone; past .08 it greys the chalk */
+  --hollow-hi:#F6EFE7;--hollow:#EFE4D8;           /* inside a compartment: a step lighter than the sand glow, so it stays a hollow */
+}
+.field{position:fixed;left:0;top:0;z-index:-1;display:block;width:100%;height:100vh;overflow:hidden;pointer-events:none;contain:strict;
+  background:linear-gradient(166deg,rgba(var(--lo),0) 52%,rgba(var(--lo),var(--loa)) 74%,rgba(var(--lo),0) 96%),var(--fb)}
+@supports (height:100lvh){.field{height:100lvh}}
+.fg{position:absolute;display:block;width:120vmax;height:120vmax;will-change:transform;
+  background:radial-gradient(closest-side,rgba(var(--c),var(--a)) 0,rgba(var(--c),calc(var(--a) * .55)) 38%,rgba(var(--c),calc(var(--a) * .18)) 70%,rgba(var(--c),0) 100%)}
+.fg1{--c:var(--fg1);--a:var(--fg1a);left:-58vmax;top:-66vmax;animation:fg-drift1 52s ease-in-out infinite alternate}
+.fg2{--c:var(--fg2);--a:var(--fg2a);right:-70vmax;top:8vh;width:110vmax;height:110vmax;animation:fg-drift2 44s ease-in-out infinite alternate}
+@keyframes fg-drift1{from{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(22vw,6vh,0) scale(1.08)}to{transform:translate3d(38vw,-2vh,0) scale(.96)}}
+@keyframes fg-drift2{from{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-18vw,14vh,0) scale(1.1)}to{transform:translate3d(-6vw,30vh,0) scale(1)}}
+/* the grain: the fractal noise the page used as its paper overlay, moved under the content and over
+   the glows, so it breaks up their banding while cards and type stay clean. The raw noise is half
+   transparent and low in contrast, which at .07 barely showed on a phone; the tile is made opaque,
+   centred light (about 74% grey) and stretched 2x, so at .07 the grain is twice as strong as the raw
+   tile's while it darkens the chalk less (measured: 1.3 levels on average, against 1.9) */
+.field::after{content:"";position:absolute;inset:0;opacity:var(--grain);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='2' intercept='-.26'/%3E%3CfeFuncG type='linear' slope='2' intercept='-.26'/%3E%3CfeFuncB type='linear' slope='2' intercept='-.26'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px 180px}
+@media (prefers-reduced-motion:reduce){.fg{animation:none}}
+/* the field's grain replaces the old paper overlay; body lets the field through. html keeps its
+   teal-over-black canvas for the overscroll past the teal mast and the black footer. */
+body::before{display:none}
+body{background:transparent}
+
+/* the hero: its copy stands on the field in the page's dark type; the square film is untouched */
+.hero{background:transparent;color:var(--text)}
+.hero .label,.hero .sub{color:var(--text)}
+.hero h1{color:var(--teal)}
+.hero .tlink{color:var(--teal)}
+
+/* the bands that painted their own ground */
+.sample-sec,.macros-sec,.cat-macros,.story,.st-dark,.st-warm,.st-light,.story.is-live .st-bg{background:transparent}
+#sample .c-card{background:#FAF9F5}   /* the note: a sheet a shade whiter than the chalk it lies on */
+
+/* #trending without the pour (TRENDING_POUR = False) is a plain band: on the field, in dark type.
+   With the pour on, the band keeps its film and its light type; the film needs its dark. */
+.podium-sec.no-pour{background:transparent;color:var(--text)}
+.no-pour h2{color:var(--teal)}
+.no-pour :focus-visible{outline-color:var(--teal)}
+.no-pour .pod .card-link,.no-pour .pod .p-name{color:var(--ink)}
+.no-pour .pod-rank,.no-pour .pod-count{color:var(--teal)}
+.no-pour .pod .p-tag,.no-pour .pod .p-desc{color:var(--text)}
+.no-pour .pod .shot::after{background:radial-gradient(closest-side,rgba(30,38,47,.3),rgba(30,38,47,0))}
+/* ...and it is a compact band, not a podium: the three are cards like the shop's (the same glow
+   behind the pack and shadow under it), each rank on its pack's corner. One row of three from
+   560px; below that a swipe row that bleeds to the screen's edges, where the next card stands
+   half in view so it is plain there is more. The whole band fits one phone screen. */
+.podium-sec.no-pour{margin-top:0;padding-top:var(--sec)}
+.no-pour .sec-head{padding-top:0;margin-bottom:18px}
+.no-pour .podium{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:64%;gap:16px;
+  margin:0 calc(-1 * var(--pad));padding:4px var(--pad) 8px;overflow-x:auto;scroll-snap-type:x mandatory;
+  scroll-padding-inline:var(--pad);scrollbar-width:none;overscroll-behavior-x:contain}
+.no-pour .podium::-webkit-scrollbar{display:none}
+.no-pour .pod{perspective:none;scroll-snap-align:start;min-width:0}
+.no-pour .pod .shot{margin-top:0}
+.no-pour .pod .shot::before{content:"";position:absolute;left:4%;right:4%;top:2%;bottom:6%;z-index:-2;border-radius:50%;
+  background:radial-gradient(58% 52% at 50% 46%,rgba(255,255,255,.72),rgba(255,255,255,0) 78%)}
+.no-pour .pod .shot::after{left:22%;right:22%;bottom:3%;height:7%}
+.no-pour .pod-rank{position:absolute;top:2px;left:0;z-index:2;margin:0;font:800 28px/1 var(--display);font-stretch:72%;letter-spacing:.01em}
+.no-pour .pod-count{margin-top:6px}
+@media (min-width:560px){
+  .no-pour .podium{grid-auto-flow:row;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;
+    margin:0;padding:0;overflow:visible;scroll-snap-type:none}
+}
+@media (min-width:768px){
+  .no-pour .podium{gap:40px}
+  .no-pour .pod .shot{aspect-ratio:4/3}
+  .no-pour .pod-rank{font-size:34px}
+}
+
+/* the stack case, its strip in the story, and the product card: the sand inside a compartment sat
+   within a hair of the sand glow over chalk, so it goes a step lighter and takes an inset shadow on
+   every side, and reads as a hollow whatever the field behind the case is doing */
+.bay{background:linear-gradient(var(--hollow-hi),var(--hollow) 80%);
+  box-shadow:inset 0 10px 16px -9px rgba(0,20,27,.55),inset 0 -8px 12px -10px rgba(0,20,27,.22),inset 0 0 0 1px rgba(0,20,27,.16)}
+.stc-well{background:linear-gradient(var(--hollow-hi),var(--hollow));
+  box-shadow:inset 0 5px 8px -4px rgba(0,20,27,.55),inset 0 -4px 6px -5px rgba(0,20,27,.22),inset 0 0 0 1px rgba(0,20,27,.16)}
+.pcard-art{background:linear-gradient(var(--hollow-hi),var(--hollow))}
+
+/* the story: its grounds go, and it still warms as it goes, as tints of the field */
+.st-dark{color:var(--ink)}
+.st-dark .st-line{color:var(--teal)}
+.st-dark .st-say{color:var(--ink)}
+.st-dark .st-note{color:var(--text)}
+.st-dark .st-go{color:var(--teal)}
+.st-dark :focus-visible{outline-color:var(--teal)}
+.story.is-live .st-sand{background:linear-gradient(to right,rgba(230,211,197,0),rgba(230,211,197,.45) 21%)}
+.st-chalk{background:rgba(255,255,255,.35)}
+.st-shade{background:radial-gradient(ellipse,rgba(0,20,27,.28),transparent 70%)}
+/* the stage light: a white pool on chalk. closest-side keeps the whole pool inside its layer, so it
+   never shows an edge as the lamp follows the pack across. */
+.st-lamp-dark,.st-lamp-warm{background:radial-gradient(circle closest-side at 50% 38%,rgba(255,255,255,.5),rgba(255,255,255,.16) 60%,transparent)}
+@media (min-width:768px){
+  .st-lamp-dark,.st-lamp-warm{background:radial-gradient(circle closest-side at 74% 50%,rgba(255,255,255,.5),rgba(255,255,255,.16) 60%,transparent)}
+}
+/* the opening pair still goes dark to light. The ground under the before was the stage's teal; on
+   the field the teal is a panel round the photo alone, a deep mat in the case's teal. The after
+   brings its own chalk-white mat, and it wipes in with the photo (the wipe's window is widened by
+   the mat on every side), so the dark is lifted off exactly as far as the after has come. The
+   stage's chalk veil rises with the wipe as it always did. Transforms only, as before. */
+.st-open{--mat:14px}
+.st-open .st-photo{overflow:visible;box-shadow:0 0 0 var(--mat) var(--teal),0 34px 50px -26px rgba(0,20,27,.6)}
+.st-open .st-wipe{inset:calc(-1 * var(--mat))}
+.st-open .st-wipe-in{padding:var(--mat);background:#FBFAF6;box-shadow:inset 0 0 0 1px rgba(30,38,47,.14)}
+.st-open .st-wipe .st-tag{top:calc(8px + var(--mat));right:calc(8px + var(--mat))}
+/* the mat takes room of its own: on the stage a phone holds the pair to the top of its slot, where
+   the mat would touch the masthead, so it steps down; as plain content it keeps clear of the words */
+@media (max-width:767px){.story.is-live .st-open .st-hero{padding-top:var(--mat)}}
+.story:not(.is-live) .st-open .st-hero{padding-block:var(--mat)}
+@media (min-width:768px){.st-open{--mat:20px}}
+
+/* cards and panels: a translucent surface with a hairline, so forms still read as forms */
+.c-card,.c-embed{background:rgba(255,255,255,.5);backdrop-filter:none;-webkit-backdrop-filter:none;
+  box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 40px 60px -40px rgba(0,30,39,.45)}
+.mc-card{background:rgba(250,249,245,.82)}   /* its numbers stay on a near-solid ground */
+
+/* the footer: nightfall. Its first 120px carry the field down through the teal's own dark into
+   black, and the horizon and the type start below that, on black as before. The fade ends on the
+   horizon image's own darkest blue, so the picture starts without a seam. */
+.foot{--dusk:120px;padding-top:calc(var(--dusk) + var(--horizon) + 36px);
+  background:linear-gradient(rgba(0,46,59,0) 0,rgba(0,46,59,.12) 24px,rgba(0,42,54,.45) 54px,rgba(0,26,34,.8) 86px,rgb(6,11,14) var(--dusk),#000 calc(var(--dusk) + 1px))}
+.foot-glow{top:var(--dusk)}
+/* the proof's Before / After heads were --text at .62 on chalk; over the field's glow that fell to
+   about 2.5:1, so they take the full --text (5.3:1 at the field's darkest) */
+.c-cols span{opacity:1}
+
+/* ===================================================================================
+   HIS AND HERS: the proof after #story, his wife's story on Women's Health, and the DEXA cards
+   (build_homepage.py: HER_NAME, PETER_TRANSFORM, HER_DEXA, SHELF_EXTRA, SHELF_PORTRAIT). Her photos
+   are the hand-placed files in assets/her/, cut to one spec like Peter's, so the same 50% line
+   carries each stack's Before / After heads.
+   =================================================================================== */
+.pf-title{margin:0 0 26px;font:800 clamp(36px,10vw,60px)/.92 var(--display);font-stretch:72%;text-transform:uppercase;
+  color:var(--teal);text-align:center;text-wrap:balance}
+.pf-k{color:var(--blue)}
+.pf-duo{display:grid;gap:44px;max-width:680px;margin:0 auto}
+.pf-who{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;margin:0}
+.pf-name{font:800 24px/1 var(--display);font-stretch:72%;text-transform:uppercase;letter-spacing:.02em;color:var(--teal)}
+.pf-when{font:600 13px/1.2 var(--sans);letter-spacing:.06em;color:var(--text);font-variant-numeric:tabular-nums}
+.dx-duo{display:grid;gap:20px;max-width:680px;margin:52px auto 0}   /* the gap the photos' captions keep from the DEXA cards */
+/* wide: his three pairs and her two side by side, hers a little narrower so the columns end together
+   (three 3:2 pairs against two 0.78:1 pairs), and the two cards side by side under them */
+@media (min-width:1000px){
+  .pf-duo{max-width:none;grid-template-columns:minmax(0,1fr) minmax(0,.78fr);align-items:start;gap:48px}
+  .st-proof .pf-duo .c-proof{max-width:none;margin:0}
+  .dx-duo{max-width:none;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+}
+
+/* the DEXA card: numbers first, the two trends under them, the source last. The trends are zero-based
+   and time-true (dexa_chart); text in them is the page's text, never the line's colour. */
+.dx-card{container-type:inline-size;display:grid;gap:16px;min-width:0;padding:22px 18px 20px;background:#FAF9F5;
+  box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 30px 50px -36px rgba(0,30,39,.45)}
+.dx-head{display:grid;gap:6px}
+.dx-t{margin:0;font:800 26px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.dx-span{margin:0;font:600 13px/1.3 var(--sans);letter-spacing:.04em;color:var(--text);font-variant-numeric:tabular-nums}
+.dx-nums{display:grid;margin:0}
+.dx-n{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:2px 12px;padding:10px 0;border-top:1px solid var(--line)}
+.dx-n dt{font:600 12px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--text)}
+.dx-v{grid-column:2;grid-row:1 / span 2;align-self:center;margin:0;font:700 clamp(16px,5vw,20px)/1.1 var(--sans);color:var(--ink);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.dx-d{grid-column:1;margin:0;font-size:14px;color:var(--text);font-variant-numeric:tabular-nums}
+@container (min-width:520px){
+  .dx-nums{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:16px}
+  .dx-n{grid-template-columns:minmax(0,1fr);align-content:start}
+  .dx-v,.dx-d{grid-column:auto;grid-row:auto}
+  .dx-v{align-self:start;font-size:19px}
+}
+.dx-gapnote{margin:0;padding:10px 12px;font-size:14px;line-height:1.45;color:var(--text);background:rgba(65,83,101,.07)}
+.dx-charts{display:grid;gap:16px 22px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.dx-chart{margin:0;min-width:0}
+.dx-ct{display:flex;align-items:center;gap:8px;margin-bottom:6px;font:600 12px/1.2 var(--sans);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text)}
+.dx-ct i{flex:none;width:16px;height:2px;background:var(--c)}
+.dx-chart svg{display:block;width:100%;max-width:300px;height:auto;overflow:visible}
+.dx-grid{stroke:rgba(30,38,47,.14);stroke-width:1}
+.dx-base,.dx-tick{stroke:rgba(30,38,47,.45);stroke-width:1}
+.dx-yl,.dx-xl{font:500 13px var(--sans);fill:var(--text)}
+.dx-vl{font:700 14px var(--sans);fill:var(--ink);paint-order:stroke;stroke:#FAF9F5;stroke-width:4px;stroke-linejoin:round}
+.dx-line{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.dx-pt{stroke:#FAF9F5;stroke-width:2}
+.dx-gap{fill:rgba(65,83,101,.08)}
+.dx-gapl{font:600 13px var(--sans);letter-spacing:.04em;fill:var(--text)}
+.dx-src{display:grid;gap:4px;padding-top:12px;border-top:1px solid var(--line)}
+.dx-src p{margin:0;font-size:13px;line-height:1.45;color:var(--text)}
+/* on a shelf page the card stands alone, as wide as a reading column */
+.dx-one .dx-card{max-width:720px}
+.dx-sec{padding-bottom:0}
+
+/* Women's Health: her story, her two pairs, then her card, before the shelf's products */
+.her-sec{padding-bottom:0}
+.her-in{display:grid;gap:40px;align-items:start}
+.her-text{display:grid;gap:14px;justify-items:start}
+.her-text h2{font-size:clamp(42px,12vw,72px)}
+.her-text p:not(.label){max-width:46ch;margin:0;font-size:16px;line-height:1.55;color:var(--text)}
+.her-text .her-lead{font-size:18px;color:var(--ink)}
+.her-h{margin-top:10px}
+.her-text .c-list{margin:0}
+.her-text .her-fine{font-size:14px}
+.her-in .pf-hers{max-width:520px}
+.her-in .dx-card{max-width:720px}
+/* wide: the story and her card down the left, her two pairs down the right */
+@media (min-width:900px){
+  .her-in{grid-template-columns:minmax(0,1fr) minmax(0,.9fr);grid-template-rows:auto 1fr;gap:48px 56px}
+  .her-text{grid-area:1 / 1}
+  .her-in .pf-hers{grid-area:1 / 2 / 3 / 3}
+  .her-in .dx-card{grid-area:2 / 1;align-self:start}
+}
+
+/* her portrait with their daughter is Women's Health's hero: a real picture, shown whole, above the
+   name on a phone and beside it on wider screens (a banner's cover crop would cut into their faces) */
+.cat-hero-photo{min-height:0;align-items:end}
+.cat-pic{padding-top:calc(var(--mast) + 20px)}
+.cat-portrait{margin:0;width:100%;max-width:min(440px,56svh)}
+.cat-portrait img{display:block;width:100%;height:auto;box-shadow:0 34px 60px -34px rgba(0,0,0,.7)}
+.cat-hero-photo .cat-hero-in{padding-block:26px 40px}
+@media (min-width:760px){
+  .cat-hero-photo{min-height:64vh}
+  .cat-hero-photo>.wrap{grid-area:1 / 1}
+  .cat-pic{display:grid;justify-items:end;align-self:start;padding-block:calc(var(--mast) + 36px) 56px}
+  .cat-portrait{width:min(38vw,440px)}
+  .cat-hero-photo .cat-hero-in{align-self:end;padding-block:180px 56px;padding-right:calc(var(--pad) + min(38vw,440px) + 40px)}
 }
