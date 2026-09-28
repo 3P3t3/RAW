@@ -931,7 +931,7 @@ if(sform){
       if(!v||v===sPut||sKnown.indexOf(v)>-1){
         sSet(n);
         /* DRAFT-COPY: what a screen reader hears */
-        say('I’ve had my eye on '+n+'. 1 of 2: your name and how to reach you.');
+        say('I’ve had my eye on '+n+'. 1 of 2: now your name, and a number or an email.');
       }else{
         var note=sel('note'),cur=note.value.trim();
         if(cur.indexOf(n)<0)note.value=((cur?cur+' · ':'')+'Also: '+n).slice(0,300);
