@@ -221,6 +221,95 @@ a.how-step:active{opacity:.7}
   .how-go .btn{flex:none}
 }
 @media (min-width:1024px){.how-steps{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* The game plan in the bar theme (html.t-bar, with script): the steps hang on a steel shaft, each
+   number on a small bumper plate seen face on, the rack's rubber and the bar's steel. Down the left
+   on phones and tablets; from 1024 across the top of the four columns. As the section scrolls through
+   (_script.html) the shaft lights from the first plate on, a glint at its front, and each plate
+   slides on along the shaft as the light reaches it, overshooting a hair and settling back, as the
+   bar's plates do; its title comes up from quiet to full ink. The newest plate is the blue one, as
+   on the rack's guide. Until a plate is on, its place is an open ring with the number in it.
+   Quiet is still readable: the title at .74 is 5.6:1 or more on the field's darkest glow, the ring's
+   number the same, and the line under it never dims. Only transform and opacity change as it plays.
+   Reduced motion (no html.motion) shows every plate on and the shaft lit; with no script, the plain
+   list above. */
+.how-pl,.how-sh{display:none}
+.t-bar.js .how-steps{grid-template-columns:minmax(0,1fr);border-top:0;max-width:640px}
+.t-bar.js .how-steps li{position:relative;border:0}
+.t-bar.js .how-step{position:relative;grid-template-columns:44px minmax(0,1fr) 18px;column-gap:16px;row-gap:4px;padding:14px 0 22px}
+/* the place for a plate: an open ring, its number in the teal at .74 (5.5:1 or more) */
+.t-bar.js .how-n{position:relative;z-index:1;grid-row:1 / span 2;grid-column:1;align-self:start;display:grid;place-items:center;
+  width:44px;height:44px;margin-top:-11px;border-radius:50%;font:800 15px/1 var(--display);font-stretch:75%;letter-spacing:.03em;
+  color:rgba(0,46,59,.74);box-shadow:inset 0 0 0 1.5px rgba(0,46,59,.4)}
+.t-bar.js .how-t{grid-column:2}
+.t-bar.js .how-d{grid-column:2}
+.t-bar.js .how-ic{grid-column:3;grid-row:1 / span 2;align-self:center}
+/* the plate: teal rubber under the rack's satin light and grain, its edge showing below it, the rim
+   stepping down to the face, and a ring of turned steel round the number where the hub would be */
+.t-bar.js .how-pl{display:block;position:absolute;inset:0;border-radius:50%;font-style:normal;
+  background:var(--rubber),radial-gradient(120% 120% at 32% 16%,rgba(255,255,255,.16),rgba(255,255,255,.03) 40%,rgba(255,255,255,0) 58%),
+    radial-gradient(80% 80% at 72% 98%,rgba(0,0,0,.18),rgba(0,0,0,0) 58%),var(--teal);
+  background-size:120px 120px,auto,auto,auto;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.22),inset 0 -1.5px 1.5px rgba(0,0,0,.4),inset 0 0 0 .5px rgba(0,0,0,.3),
+    0 2px 0 #00161D,0 9px 12px -7px rgba(0,20,27,.55);
+  will-change:transform,opacity}
+/* the newest plate's face: the blue, over the teal */
+.t-bar.js .how-pl::before{content:"";position:absolute;inset:0;border-radius:50%;opacity:0;
+  background:var(--rubber),radial-gradient(120% 120% at 32% 16%,rgba(255,255,255,.18),rgba(255,255,255,.04) 40%,rgba(255,255,255,0) 58%),
+    radial-gradient(80% 80% at 72% 98%,rgba(0,0,0,.2),rgba(0,0,0,0) 58%),var(--blue);
+  background-size:120px 120px,auto,auto,auto}
+.t-bar.js .how-pl::after{content:attr(data-n);position:absolute;inset:7%;display:grid;place-items:center;border-radius:50%;
+  color:var(--chalk);text-shadow:0 -.75px 0 rgba(0,0,0,.45),0 .75px 0 rgba(255,255,255,.18);
+  background:radial-gradient(circle closest-side,rgba(0,0,0,0) 0 71%,rgba(8,12,15,.5) 71% 73.5%,#F2F4F5 73.5% 77%,#B7BFC3 77% 83%,#7C858B 83% 88%,rgba(8,12,15,.45) 88% 90.5%,rgba(0,0,0,0) 90.5%);
+  box-shadow:inset 0 1px 1px rgba(0,0,0,.35),inset 0 -1px 0 rgba(255,255,255,.14),0 -1px 0 rgba(0,0,0,.14),0 1px 0 rgba(255,255,255,.12)}
+/* the shaft, one stretch from each plate to the next: a dim steel rod until the light reaches it. The
+   lit steel (the bar's own gradient, turned) slides down inside it, and carries the glint at its front */
+.t-bar.js .how-sh{--steel:linear-gradient(90deg,#5E676D 0,#7D868C 12%,#C2C9CD 30%,#F3F5F6 44%,#E2E6E8 54%,#9BA4A9 76%,#646D73 100%);
+  display:block;position:absolute;z-index:0;left:6px;width:32px;top:51px;height:calc(100% - 52px);overflow:hidden;pointer-events:none}
+.t-bar.js .how-sh::before,.t-bar.js .how-sh>i::before{content:"";position:absolute;left:12px;width:8px;top:0;bottom:0;border-radius:2px;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 1px,transparent 1px 3px),var(--steel)}
+.t-bar.js .how-sh::before{opacity:.3}
+.t-bar.js .how-sh>i{position:absolute;inset:0;will-change:transform}
+.t-bar.js .how-sh>i::before{box-shadow:0 0 0 .5px rgba(30,38,44,.35)}
+.t-bar.js .how-sh>i::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:26px;opacity:0;
+  background:radial-gradient(closest-side,#fff,rgba(255,255,255,.85) 22%,rgba(170,190,255,.45) 52%,rgba(170,190,255,0))}
+.t-bar.js .how-sh.run>i::after{opacity:1}
+/* playing: plates wait above their places (the way the light comes), shafts dark, titles quiet */
+.t-bar.motion .how-steps .grow{opacity:1;transform:none;transition:none}
+.t-bar.motion .how-pl{opacity:0;transform:translate3d(0,-16px,0) scale(.94);
+  transition:transform 360ms cubic-bezier(.22,1.2,.36,1.04),opacity 140ms linear}
+.t-bar.motion .how-pl::before{transition:opacity 240ms linear}
+.t-bar.motion .how-sh>i{transform:translate3d(0,-100%,0)}
+.t-bar.motion .how-t,.t-bar.motion .how-ic{opacity:.74;transition:opacity 300ms linear}
+.t-bar.motion .how-ic{opacity:.45}
+.t-bar.motion .on .how-pl{opacity:1;transform:none}
+.t-bar.motion .on .how-t,.t-bar.motion .on .how-ic{opacity:1}
+.t-bar.motion .now .how-pl::before{opacity:1}
+@media (prefers-reduced-motion:reduce){.t-bar.motion .how-pl,.t-bar.motion .how-pl::before,.t-bar.motion .how-t,.t-bar.motion .how-ic{transition:none}}
+@media (min-width:768px){
+  .t-bar.js .how-steps{column-gap:0}
+  .t-bar.js .how-step{grid-template-columns:44px minmax(0,1fr) 18px;row-gap:6px;padding:16px 0 26px}
+  .t-bar.js .how-n{grid-row:1 / span 2;grid-column:1;font-size:15px}
+  .t-bar.js .how-ic{grid-row:1 / span 2;grid-column:3;align-self:center}
+  .t-bar.js .how-t,.t-bar.js .how-d{grid-column:2}
+  .t-bar.js .how-t{font-size:18px}
+  .t-bar.js .how-sh{top:53px}
+}
+/* from 1024: one bar across the top of the four columns, the plates on it, the light running left to right */
+@media (min-width:1024px){
+  .t-bar.js .how-steps{grid-template-columns:repeat(4,minmax(0,1fr));column-gap:24px;max-width:none}
+  .t-bar.js .how-step{grid-template-columns:minmax(0,1fr) 18px;row-gap:8px;padding:6px 0 28px}
+  .t-bar.js .how-n{grid-row:1;grid-column:1;width:56px;height:56px;margin:0 0 10px;font-size:18px}
+  .t-bar.js .how-t{grid-row:2;grid-column:1}
+  .t-bar.js .how-d{grid-row:3;grid-column:1 / -1}
+  .t-bar.js .how-ic{grid-row:2;grid-column:2;align-self:center}
+  .t-bar.js .how-sh{--steel:linear-gradient(#E2E6E8 0,#F3F5F6 16%,#C2C9CD 36%,#9BA4A9 62%,#737C82 88%,#5E676D 100%);
+    left:62px;top:18px;width:calc(100% - 44px);height:32px}
+  .t-bar.js .how-sh::before,.t-bar.js .how-sh>i::before{left:0;right:0;top:12px;bottom:auto;width:auto;height:9px;
+    background:repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,transparent 1px 3px),var(--steel)}
+  .t-bar.js .how-sh>i::after{left:auto;top:0;bottom:0;right:-12px;width:30px;height:auto}
+  .t-bar.motion .how-pl{transform:translate3d(-20px,0,0) scale(.94)}
+  .t-bar.motion .how-sh>i{transform:translate3d(-100%,0,0)}
+}
 
 /* Shelves: one tab per goal, one pack per panel */
 .shelves-sec .sec-head{margin-bottom:22px}
