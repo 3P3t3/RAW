@@ -158,7 +158,7 @@ CATEGORIES = [
     # shown whole beside the name (SHELF_PORTRAIT). The old placeholder, assets/bg-mens-health.webp (the Men's
     # Pack on a green field), is kept but no page shows it; drop the SHELF_PORTRAIT entry and it is the banner
     # again. His DEXA card sits between the hero and the products (SHELF_EXTRA).
-    ('mens-health', 'Men’s Health', 'For his everyday: the Men’s Pack, multivitamins, Prostate Health and organic herbal capsules.', 'Everything in Men’s Health', [
+    ('mens-health', 'Men’s Health', 'For his everyday: the Men’s Pack, multis and Prostate Health.', 'Everything in Men’s Health', [
         "Nutrilite Men's Pack", "Nutrilite Men's Daily Multivitamin Tablets", "Nutrilite Organics Men's Daily Multi Gummies",
         'Nutrilite Prostate Health', 'Nutrilite Organics Horny Goat Weed & Tribulus Capsules']),
 ]
