@@ -864,10 +864,10 @@ html:not(.js) #results[hidden]{display:block!important}
    mid-scrub, as the pour's is; the beats inside it to the small one, so a line and its link
    are never under the toolbar. Each beat clears the masthead at the top and the tab at the
    foot. Only the beat whose line is up can be tapped. */
-/* 933: the call's hold went from .8 to 1.6 units (_script.html), and the run grew by as much (a unit is
+/* 949: the call's hold went from .8 to 2 units (_script.html), and the run grew by as much (a unit is
    still 800lvh / 19.7 of the eight screens it scrubs over), so no other beat's pace changed */
-.story.is-live .st-run{height:933vh}
-@supports (height:100lvh){.story.is-live .st-run{height:933lvh}}
+.story.is-live .st-run{height:949vh}
+@supports (height:100lvh){.story.is-live .st-run{height:949lvh}}
 .story.is-live .st-stage{position:sticky;top:0;height:100vh;overflow:hidden;overflow:clip}
 @supports (height:100lvh){.story.is-live .st-stage{height:100lvh}}
 .story.is-live .st-bg{display:block;position:absolute;inset:0;background:var(--teal)}
@@ -1419,6 +1419,7 @@ html:not(.js) .lbpin{display:none}
   .lbc-lg{display:none}
   .lbc-set{display:grid}
   .lbc-who,.lbc-new{grid-area:1 / 1}
+  .lbc-who{will-change:opacity}   /* its own layer from the start: fading it for "+ name" then costs no layout */
   .lbc-new{justify-items:stretch}
   .lbc-new .lbc{background:var(--chalk)}
   html.pin-you .mtab{transform:translateY(calc(100% + 2px));visibility:hidden}

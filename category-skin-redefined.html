@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=8ff95fe4">
+<link rel="stylesheet" href="style.css?v=2ab843eb">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -1922,10 +1922,11 @@ var LB=null;
      height in style.css sets the pace (at 390x664 a unit is about 307px); this sets the rhythm.
      A change is 1.5 units, about 460px, so a swirl is long enough to be seen; every hold is
      still at least 180px. The turn (the before becoming the after) holds longest, since the
-     wipe happens while it is up. The call holds nearly as long (1.6, ~550px at 390x844), so a
-     ~700px flick through the end of the story comes to rest on "Book a free call" rather than
-     over it; the run in style.css grew with it (900 to 933lvh), so every other beat keeps its pace. */
-  var HOLD=[.9,1.7,.6,.6,.8,.6,.7,1.6,1],T=1.5,at=[],L=0;   /* before, the turn, five packs, the call, family */
+     wipe happens while it is up. The call holds longer still (2.0, ~690px at 390x844): it is the
+     moment that matters, and a ~700px flick through the end of the story should come to rest on
+     "Book a free call" rather than over it. The run in style.css grew with it (900 to 949lvh), so
+     every other beat keeps its pace. */
+  var HOLD=[.9,1.7,.6,.6,.8,.6,.7,2,1],T=1.5,at=[],L=0;   /* before, the turn, five packs, the call, family */
   beats.forEach(function(b,i){at.push(L);L+=(HOLD[i]||1)+(i<N-1?T:0)});
   var TURN=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('turn'),
       WARM=beats.map(function(b){return b.classList.contains('st-warm')}),
