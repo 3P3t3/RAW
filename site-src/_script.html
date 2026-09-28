@@ -1712,8 +1712,12 @@ var LB=null;
      moment that matters, and a ~700px flick through the end of the story should come to rest on
      "Book a free call" rather than over it. The run in style.css grew with it (900 to 949lvh), so
      every other beat keeps its pace. */
-  var HOLD=[.9,1.7,.6,.6,.8,.6,.7,2,1],T=1.5,at=[],L=0;   /* before, the turn, five packs, the call, family */
-  beats.forEach(function(b,i){at.push(L);L+=(HOLD[i]||1)+(i<N-1?T:0)});
+  /* The five pack beats run quicker (Peter: "it takes too long"): each holds about half a unit and
+     the change from one pack to the next is .8 (the one into the first pack 1), so a pack beat is ~1.3
+     units, not ~2.2. Everything else keeps its 1.5 change. TT[i] is the change INTO beat i. */
+  var HOLD=[.9,1.7,.45,.45,.55,.45,.5,2,1],TT=[0,1.5,1,.8,.8,.8,.8,1.5,1.5],at=[],L=0;   /* before, the turn, five packs, the call, family */
+  function Tn(i){return TT[i]||1.5}
+  beats.forEach(function(b,i){if(i)L+=Tn(i);at.push(L);L+=HOLD[i]||1});
   var TURN=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('turn'),
       WARM=beats.map(function(b){return b.classList.contains('st-warm')}),
       SAND=WARM.indexOf(true),CALL=WARM.lastIndexOf(true)+1;   /* the packs are on the sand; the call after them */
@@ -1750,11 +1754,9 @@ var LB=null;
       geo=null,rowA=0,rowZ=0,rowIn=0,cp={keys:{}},C={x0:0,y0:0,s:1,dx:0,dy:0,op:0};
   /* the bar theme: no case strip here; the pinned bar (LB, above) is the stack. Each pack's plate
      slides onto the pinned bar as the pack lands and its words come up, and is on by the time they
-     are (its beat's hold), so the strip counts the pack that is on the stage. Once its line is read
-     the pack shrinks up into that plate: this pack is that plate. The pinned bar is drawn over the
-     stage, so for that part of the way the pack is a copy in the bar's own layer (.lbt), laid exactly
-     over it, which fades into the plate as it gets there. */
-  var BARM=!rowEl&&!!LB,pinEl=BARM?$('#lbpin'):null,tags=null,tp={keys:{}};
+     are (its beat's hold), so the strip counts the pack that is on the stage. The pack itself stays
+     on the stage (the pile, below): each one after it gathers round it, and at the call they clear. */
+  var BARM=!rowEl&&!!LB,PB=[],PS=null,SLOT=null;
   if(BARM)cats=LB.cats;
   parts.forEach(function(p,i){
     if(p.kind!=='prod')return;
@@ -1765,29 +1767,48 @@ var LB=null;
     var mates=ITEMS.filter(function(o){return o.c===k.c});
     k.n=mates.length;k.j=mates.indexOf(k);
   });
-  if(pinEl){   /* the copies: no picture is asked for until the story is near (measure, below) */
-    tags=document.createElement('div');tags.className='lbpin-tags';
-    ITEMS.forEach(function(k){var t=document.createElement('img');t.className='lbt';t.alt='';t.decoding='async';k.tag=t;tags.appendChild(t)});
-    pinEl.appendChild(tags);
-  }
+  parts.forEach(function(p,i){if(p.kind==='prod')PB.push(i)});
+  ITEMS.forEach(function(k){k.pb=PB.indexOf(k.bi)});
+  /* The pile (the bar theme): each pack drops in and stays. Once the next beat starts, the packs
+     already in gather round the one arriving, on the same floor: the newest nearest it and in front,
+     each one before a step further out, higher and smaller, as a group shot stands; the first one
+     side, the next the other, and so on. Newer packs sit later in the page, so they are drawn over the older, as they stand in
+     front of them. A tier: its distance out from the arriving pack's edge, its rise off the floor
+     and its size, all in the art box's height; the whole group is centred in the hero column and
+     scaled to fit it. */
+  var TIER=[{o:.1,r:.06,z:.56},{o:.24,r:.15,z:.47},{o:.36,r:.26,z:.4}];
   function measure(){
     w=stage.offsetWidth;sh=stage.offsetHeight;
-    if(BARM){   /* each pack's place on its plate on the pinned bar, in the stage's frame once it holds (its top at 0) */
-      LB.measure();
-      var s0=stage.getBoundingClientRect(),P0=null;
-      geo={items:ITEMS.map(function(k){var b=k.pack.getBoundingClientRect(),P=LB.target(cats[k.c]||cats[0]),
-          S=P.h*1.25,m=Math.min(b.width,b.height)||1;   /* a square picture shows at the box's smaller side */
-        P0=P.top;
-        /* it ends on its plate, about the plate's height (a pack's picture is a little shorter than
-           its square); a pair a little either side of it */
-        return {cx:b.left+b.width/2-s0.left,cy:b.top+b.height/2-s0.top,W:b.width,H:b.height,
-                tx:P.x+(k.n>1?(k.j-(k.n-1)/2)*P.h*.45:0)-s0.left,ty:P.y,sc:S/m}})};
-      if(tags)ITEMS.forEach(function(k){   /* each copy on its pack's own box, in the pinned bar's frame */
-        var G=geo.items[k.g],t=k.tag.style;
-        t.left=f(G.cx-G.W/2+s0.left,1)+'px';t.top=f(G.cy-G.H/2-P0,1)+'px';t.width=f(G.W,1)+'px';t.height=f(G.H,1)+'px';
-        if(near&&!k.tag.getAttribute('src'))k.tag.src=k.img.currentSrc||k.img.src;   /* only once the story is close, as its own lazy pictures are */
+    if(BARM){   /* the pile: each pack beat's floor (its art box's foot), and every pack's pose at each beat from its own on */
+      var s0=stage.getBoundingClientRect(),
+          its=ITEMS.map(function(k){var b=k.pack.getBoundingClientRect();
+            return {cx:b.left+b.width/2-s0.left,cy:b.top+b.height/2-s0.top,B:Math.min(b.width,b.height)||1,rp:k.rx*w/100*.3}}),
+          AN=PB.map(function(i,c){var a=parts[i].art.getBoundingClientRect(),hr=$('.st-hero',parts[i].b).getBoundingClientRect(),
+            A=a.height||1,x0=a.left+a.width/2-s0.left,hw=0;
+            ITEMS.forEach(function(k,g){if(k.pb===c){var I=its[g];hw=Math.max(hw,(Math.abs(I.cx+I.rp-x0)+.3*I.B*k.rs)/A)}});
+            return {x:x0,x0:x0,b:a.bottom-s0.top,A:A,W:hr.width,hw:hw}});
+      /* where each gathered pack stands at beat c: its side (by the order they came in), and its tier
+         (by how many newer ones share that side) */
+      SLOT=function(k,c){
+        var side=k.g%2?1:-1,r=0;
+        ITEMS.forEach(function(o){if(o.pb<c&&o.g>k.g&&(o.g%2?1:-1)===side)r++});
+        return {s:side,t:TIER[Math.min(r,2)]};
+      };
+      AN.forEach(function(a,c){   /* the group's reach either side, and so where it centres and its scale, at beat c */
+        var lo=a.hw,hi=a.hw;
+        ITEMS.forEach(function(k){if(k.pb<c){var S=SLOT(k,c),e=a.hw+S.t.o+.3*S.t.z;if(S.s<0)lo=Math.max(lo,e);else hi=Math.max(hi,e)}});
+        a.f=Math.min(1,(a.W/2-6)/((lo+hi)/2*a.A));
+        a.x+=(lo-hi)/2*a.A*a.f;
       });
-      tp.keys={};
+      geo={items:ITEMS.map(function(k,g){var I=its[g],poses=[];
+        for(var c=0;c<PB.length;c++){
+          if(c<k.pb){poses.push(null);continue}
+          var a=AN[c],X,Y,s,rot;
+          if(c===k.pb){X=a.x+(I.cx+I.rp-a.x0)*a.f;Y=a.b+(I.cy-a.b)*a.f;s=k.rs*a.f;rot=k.tilt}   /* its own beat: its rest, scaled with the group */
+          else{var S=SLOT(k,c),Z=S.t.z*a.A*a.f;X=a.x+S.s*(a.hw+S.t.o)*a.A*a.f;Y=a.b-S.t.r*a.A*a.f-Z/2;s=Z/I.B;rot=k.tilt*.35}
+          poses.push({x:X-I.cx,y:Y-I.cy,s:s,r:rot});
+        }
+        return {B:I.B,poses:poses}})};
       return;
     }
     var s=stage.getBoundingClientRect(),rx=rowEl.offsetLeft,ry=rowEl.offsetTop,rw=rowEl.offsetWidth,rh=rowEl.offsetHeight,
@@ -1812,9 +1833,27 @@ var LB=null;
      lifts away from there. */
   var DROP={from:2.4,lift:.08,dip:.05,lean:8,hop:22};
   function lerp(a,b,t){return a+(b-a)*t}
-  function fly(k,G,q){   /* the bar theme's leaving: from its rest up to its place beside its plate, on a small arc */
-    var eb=smooth(Math.min(q,1)),rp=k.rx*w/100;
-    return {x:lerp(rp,G.tx-G.cx,eb),y:lerp(0,G.ty-G.cy,eb)-Math.sin(Math.PI*eb)*DROP.hop,s:lerp(k.rs,G.sc,eb),rot:lerp(k.tilt,0,eb)};
+  /* the pile's pack: its drop onto its rest in its own beat, then its place in the group, beat by beat
+     (PS: which beat's group is forming, how far, and how far the group has cleared for the call) */
+  function pile(p,k,i,u){
+    var G=geo&&geo.items[k.g];
+    if(!G||!PS)return 0;
+    var x,y,s,rot,rx=0,op=1,near=1,land=clamp(u/.8),bump=Math.sin(Math.PI*clamp((u-.8)/.2));
+    if(PS.c<=k.pb){                                   /* its own beat: from the lens onto its rest */
+      var R=G.poses[k.pb],g=land*land;
+      s=u<.8?R.s*(1+(DROP.from-1)*(1-g)):R.s*(1-DROP.dip*bump);
+      x=R.x;y=R.y-DROP.lift*sh*(1-g);rot=R.r+DROP.lean*(1-g);rx=10*(1-g);
+      op=smooth(clamp(land/.6));near=Math.pow(clamp((u-.55)/.25),2);
+    }else{                                            /* gathered: from where it stood to its place in the new group */
+      var A=G.poses[PS.c-1],Z=G.poses[PS.c],e=PS.g;
+      x=lerp(A.x,Z.x,e);y=lerp(A.y,Z.y,e)-Math.sin(Math.PI*e)*DROP.hop*.4;s=lerp(A.s,Z.s,e);rot=lerp(A.r,Z.r,e);bump=0;
+    }
+    if(PS.cl>0){op*=1-PS.cl;s*=1-.12*PS.cl;y+=PS.cl*.04*sh}   /* the group clears for the call */
+    put(p,k.img,'i'+i,mv(x,y,rx,rot,s),f(op,3));
+    /* its shadow, under it wherever it stands (its box's foot is .41 of the square below its middle) */
+    put(p,k.shade,'s'+i,'translate3d('+f(x,1)+'px,'+f(y+.41*G.B*(s-1),1)+'px,0) scale('+f(s*(.55+.45*near+.08*bump),3)+')',
+      f(Math.min(1,near*(1+.25*bump))*op*(PS.c<=k.pb?1:.8),3));
+    return PS.c<=k.pb&&PS.cl<1?near:0;
   }
   function mv(x,y,rx,rot,s){return 'translate3d('+f(x,1)+'px,'+f(y,1)+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotate('+f(rot,2)+'deg) scale('+f(s,3)+')'}
   function drop(p,k,i,u,q){
@@ -1826,9 +1865,6 @@ var LB=null;
       s=u<.8?k.rs*(1+(DROP.from-1)*(1-g)):k.rs*(1-DROP.dip*Math.sin(Math.PI*clamp((u-.8)/.2)));
       x=rp;y=-DROP.lift*sh*(1-g);rot=k.tilt+DROP.lean*(1-g);rx=10*(1-g);
       op=smooth(clamp(land/.6));near=Math.pow(clamp((u-.55)/.25),2);   /* from nothing at the lens to solid 60% of the way down */
-    }else if(BARM){                                   /* up beside its plate on the pinned bar; its copy there (.lbt) takes over */
-      var F=fly(k,G,q);x=F.x;y=F.y;s=F.s;rot=F.rot;
-      op=1-smooth(clamp((q-.74)/.26));             /* nearly there, and under the pinned bar, where only the copy is seen */
     }else if(q<1){
       var e=smooth(q);
       x=lerp(rp,sx,e);y=lerp(0,sy,e)-Math.sin(Math.PI*e)*DROP.hop;s=lerp(k.rs,sS,e);rot=lerp(k.tilt,0,e);
@@ -1860,11 +1896,16 @@ var LB=null;
         settle=clamp(1-top/(vh*.3)),                   /* the pour's shade lifts as the stage settles */
         wipe=TURN<0?0:smooth(clamp((x-at[TURN]-.1)/((HOLD[TURN]||1)*.55))),
         best=-1,bestV=.5,lit=[0,0],restV=0,restX=0,
-        kc=CALL<N?clamp((x-at[CALL]+T)/T):0,zc=CALL<N-1?clamp((x-at[CALL]-(HOLD[CALL]||1))/T):0;
-    rowA=clamp((kc-.1)/.55);rowZ=zc;                    /* the case rises into the place above the call, then lifts away */
+        kc=CALL<N?clamp((x-at[CALL]+Tn(CALL))/Tn(CALL)):0,zc=CALL<N-1?clamp((x-at[CALL]-(HOLD[CALL]||1))/Tn(CALL+1)):0;
+    rowA=clamp((kc-.1)/.55);rowZ=zc;
+    if(BARM&&PB.length){   /* the group forms in the first part of each change between two packs, while the words are out */
+      var pc=0,pg=1,il=PB[PB.length-1];
+      for(var m=1;m<PB.length;m++){var ii=PB[m],gm=smooth(clamp((x-at[ii]+Tn(ii))/(.45*Tn(ii))));if(gm>0){pc=m;pg=gm}}
+      PS={c:pc,g:pg,cl:il<N-1?smooth(clamp((x-at[il]-(HOLD[il]||1))/(.45*Tn(il+1)))):0};
+    }                    /* the case rises into the place above the call, then lifts away */
     /* the case: up with the first pack's beat, empty, as its line is read; filled by the sleep
        beat; then the whole of it, packs and all, moves up into the call's place and lifts away */
-    rowIn=SAND>0?smooth(clamp(((x-at[SAND]+T)/T-.2)/.5)):1;
+    rowIn=SAND>0?smooth(clamp(((x-at[SAND]+Tn(SAND))/Tn(SAND)-.2)/.5)):1;
     if(geo&&!BARM){
       var ra=smooth(rowA),rz=smooth(clamp(rowZ/.6));
       C.x0=geo.x0;C.y0=geo.y0;C.s=(1+(geo.Z-1)*ra)*(1-.12*rz);
@@ -1873,9 +1914,9 @@ var LB=null;
     }
     parts.forEach(function(p,i){
       var h=HOLD[i]||1,
-          kin=i?clamp((x-at[i]+T)/T):clamp(arrive),      /* 0..1 through the change into this beat */
-          kout=i<N-1?clamp((x-at[i]-h)/T):0,             /* 0..1 through the change out of it */
-          vis=kin>0&&(p.kind==='prod'&&!BARM?(CALL<N?(zc<1||kout<1):kout<1):kout<1);   /* a pack's beat stays up while its pack is in the stack */
+          kin=i?clamp((x-at[i]+Tn(i))/Tn(i)):clamp(arrive),      /* 0..1 through the change into this beat */
+          kout=i<N-1?clamp((x-at[i]-h)/Tn(i+1)):0,             /* 0..1 through the change out of it */
+          vis=kin>0&&(p.kind==='prod'?(BARM?PS.cl<1:CALL<N?(zc<1||kout<1):kout<1):kout<1);   /* a pack's beat stays up while its pack is in the stack, or on the stage */
       if(vis!==p.vis){p.vis=vis;p.b.style.opacity=vis?'1':'0'}   /* opacity, not visibility: its link stays reachable by Tab */
       /* the button is parked below the stage's edge while its words are not up, so the tab's
          observer sees it exactly while it can be seen */
@@ -1889,14 +1930,15 @@ var LB=null;
       if(p.book)put(p,p.book,'book',v<.02?'translate3d(0,120vh,0)':'translate3d(0,'+f((1-ce)*40,1)+'px,0)',f(v,3));
       if(v>bestV){bestV=v;best=i}
       if(p.arcbar)put(p,p.arcbar,'arcbar','translate3d(0,'+f((1-ce)*22-cq*22,1)+'px,0)',f(v,3));   /* the loaded bar above the call comes with its words */
-      var u=clamp((kin-.35)/.35);   /* the drop starts once the last words are gone (kin .35) and lands (u .8) as the new ones rise, kin .63 */
+      /* the drop: ~.27 units from the lens to the floor (it was ~.5), landing (u .8) at kin .62 as the new words rise */
+      var db=Math.min(.35,.28/Tn(i)),u=clamp((kin-(.62-.8*db))/db);
       if(!p.art)return;
       if(p.kind==='prod'){
         var rest=1;
         p.packs.forEach(function(k,j){                  /* a pair arrives and leaves one after the other */
           var qp=clamp((kout-.1)/.4),                   /* it tucks into the row (up, away from the words) as they drop, and is in its slot before the next pack is solid */
               uj=clamp((u-k.off)/(1-k.off)),qj=clamp((qp-k.off)/(1-k.off));
-          rest=Math.min(rest,drop(p,k,j,uj,qj));
+          rest=Math.min(rest,BARM?pile(p,k,j,uj):drop(p,k,j,uj,qj));
         });
         lit[p.warm?1:0]=Math.max(lit[p.warm?1:0],rest);
         if(rest>restV){restV=rest;restX=p.packs[0].rx}
@@ -1914,19 +1956,11 @@ var LB=null;
       }
     });
     parts.forEach(function(p,i){var on=i===best;if(on!==p.on){p.on=on;p.b.classList.toggle('is-on',on)}});
-    /* the copies on the pinned bar: each rides over its pack from the moment it leaves and fades into
-       its plate (already on) as it gets there */
-    if(tags&&geo)ITEMS.forEach(function(k){
-      var i=k.bi,ko=(x-at[i]-(HOLD[i]||1))/T,qj=clamp((clamp((ko-.1)/.4)-k.off)/(1-k.off)),G=geo.items[k.g];
-      if(qj<=0||qj>=1){put(tp,k.tag,'t'+k.g,'none','0');return}
-      var F=fly(k,G,qj);
-      put(tp,k.tag,'t'+k.g,mv(F.x,F.y,0,F.rot,F.s),f(smooth(clamp(qj/.12))*(1-smooth(clamp((qj-.7)/.3))),3));
-    });
     /* his plates: each slides on in the last part of the change into its beat, after its pack has
        landed (kin .63) and as its words rise (.6 to 1), and is on at the hold; the count turns at
        kin .85. Scrolling back takes it off at the same place. */
     if(BARM)LB.peter(parts.reduce(function(ps,p,i){
-      if(p.kind==='prod'){var ki=i?clamp((x-at[i]+T)/T):1;ps.push(smooth(clamp((ki-.7)/.3)))}
+      if(p.kind==='prod'){var ki=i?clamp((x-at[i]+Tn(i))/Tn(i)):1;ps.push(smooth(clamp((ki-.7)/.3)))}
       return ps},[]));
     /* the ground warms with the product: the sand sweeps in from the right behind the arriving
        can and has covered the words' column before they rise; chalk comes with the after */
@@ -1934,8 +1968,8 @@ var LB=null;
        sand is laid under the chalk once that is opaque, and the chalk lifts off it in the middle
        of the change into the first pack, while no words are up, so all five packs stand on the
        sand; it comes back the same way in the change into the call. */
-    var k1=SAND>0?clamp((x-at[SAND]+T)/T):0,k2=CALL<N?clamp((x-at[CALL]+T)/T):0,
-        ch=SAND>0&&x<at[SAND]-T?wipe:Math.max(1-smooth(clamp((k1-.35)/.25)),smooth(clamp((k2-.35)/.25)));
+    var k1=SAND>0?clamp((x-at[SAND]+Tn(SAND))/Tn(SAND)):0,k2=CALL<N?clamp((x-at[CALL]+Tn(CALL))/Tn(CALL)):0,
+        ch=SAND>0&&x<at[SAND]-Tn(SAND)?wipe:Math.max(1-smooth(clamp((k1-.35)/.25)),smooth(clamp((k2-.35)/.25)));
     sand.style.transform='translate3d('+(wipe>=1?'-32':'55')+'%,0,0) rotate(-14deg)';   /* under opaque chalk: -32% covers every corner, +55% is off the stage */
     chalk.style.opacity=f(ch,3);
     dusk.style.opacity=f(1-smooth(settle),3);
@@ -1950,7 +1984,7 @@ var LB=null;
   sec.classList.add('is-live');
   measure();now();
   addEventListener('scroll',wake,{passive:true});
-  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});cp.keys={};tp.keys={};now()});
+  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});cp.keys={};now()});
   new IntersectionObserver(function(es){near=es[0].isIntersecting;if(near){measure();now()}},
     {rootMargin:'200px 0px'}).observe(run);
   /* a link reached by keyboard brings its own beat on screen, where its line stands */
