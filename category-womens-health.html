@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=f4537253">
+<link rel="stylesheet" href="style.css?v=29613963">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -160,9 +160,9 @@
 
 <main id="main">
 
-  <!-- Category banner: generated backdrop, live caustics, the category set large -->
-  <section class="cat-hero" aria-labelledby="cat-title">
-    <img class="cat-bg" src="assets/bg-womens-health.webp" alt="" width="1600" height="900" fetchpriority="high">
+  <!-- Category banner: generated backdrop (or, for a shelf in SHELF_PORTRAIT, a whole portrait beside the name), live caustics, the category set large -->
+  <section class="cat-hero cat-hero-photo" aria-labelledby="cat-title">
+    <div class="wrap cat-pic"><figure class="cat-portrait"><img src="assets/her/with-daughter-640.webp" srcset="assets/her/with-daughter-640.webp 640w, assets/her/with-daughter-960.webp 960w" sizes="(min-width:760px) min(38vw, 440px), calc(100vw - 40px)" width="960" height="1200" alt="Yenni holding their baby daughter, both in matching lemon-print dresses" fetchpriority="high"></figure></div>
     <canvas class="caustics" data-caustics aria-hidden="true"></canvas>
     <div class="wrap cat-hero-in">
       <p class="label"><a href="homepage.html#goals">All shelves</a></p>
@@ -170,6 +170,42 @@
       <p class="sub">For her everyday: the Women’s Pack, multivitamins, iron and menopause support.</p>
       <p class="cat-count">5 products</p>
       <!-- DRAFT-COPY --><p class="cat-sample"><a href="homepage.html?try=Women%E2%80%99s%20Health#sample">Ask for a free sample</a></p><!-- /DRAFT-COPY -->
+    </div>
+  </section>
+
+  <!-- Her story: only the Women's Health shelf has this block (SHELF_EXTRA in build_homepage.py). Facts only;
+       no health claims, and nothing says a supplement caused the change: it was her whole plan. -->
+  <section class="sec her-sec" id="her" aria-labelledby="her-title">
+    <div class="wrap her-in">
+      <!-- DRAFT-COPY --><div class="her-text grow">
+        <p class="label">Who runs this shelf</p>
+        <h2 id="her-title">Yenni’s story</h2>
+        <p class="her-lead">Yenni Herschelman runs the women’s side of Aspire Health. She’s Peter’s wife.</p>
+        <p>Their daughter was born in September 2025. Yenni started lifting with progressive overload while she was pregnant.</p>
+        <p>Her before photos are from November 2025, two months after the birth, so they include the body fat a pregnancy adds. Her afters are from July 2026.</p>
+        <h3 class="her-h">What changed</h3>
+        <p>Not one thing, but her whole plan:</p>
+        <ul class="c-list">
+          <li>Progressive overload: lifting a little more over time</li>
+          <li>Counting calories</li>
+          <li>Solid supplementation</li>
+          <li>Creatine, for the first time</li>
+        </ul>
+        <p class="her-fine">Individual results vary.</p>
+      </div><!-- /DRAFT-COPY -->
+      <figure class="c-proof pf-hers grow">
+  <!-- DRAFT-COPY --><p class="pf-who"><span class="pf-name">Yenni</span> <span class="pf-when">Nov 2025 → Jul 2026</span></p><!-- /DRAFT-COPY -->
+  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
+  <div class="c-stack"><img src="assets/her/front-640.webp" srcset="assets/her/front-640.webp 640w, assets/her/front-768.webp 768w" sizes="(min-width:1000px) 460px, (min-width:760px) 560px, calc(100vw - 40px)" width="768" height="979" loading="lazy" decoding="async" alt="Yenni, before and after, from the front: Nov 2025 and Jul 2026"><img src="assets/her/back-640.webp" srcset="assets/her/back-640.webp 640w, assets/her/back-768.webp 768w" sizes="(min-width:1000px) 460px, (min-width:760px) 560px, calc(100vw - 40px)" width="768" height="979" loading="lazy" decoding="async" alt="Yenni, before and after, from the back: Nov 2025 and Jul 2026"></div>
+  <!-- DRAFT-COPY --><figcaption>Before: two months after the birth. After: ten months after.</figcaption><!-- /DRAFT-COPY -->
+</figure>
+      <!-- DRAFT-COPY --><article class="dx-card" aria-labelledby="dx-yenni-s-dexa-scans">
+<div class="dx-head"><h3 class="dx-t" id="dx-yenni-s-dexa-scans">Yenni’s DEXA scans</h3><p class="dx-span">Four scans, Jan 2024 → Aug 2026</p></div>
+<dl class="dx-nums"><div class="dx-n"><dt>Body fat</dt><dd class="dx-v">29.9% → 22.7%</dd><dd class="dx-d">−7.2 points</dd></div><div class="dx-n"><dt>Fat</dt><dd class="dx-v">41.2 → 30.2 lb</dd><dd class="dx-d">−11.0 lb</dd></div><div class="dx-n"><dt>Lean mass</dt><dd class="dx-v">92.1 → 98.1 lb</dd><dd class="dx-d">+6.0 lb</dd></div></dl>
+<p class="dx-gapnote">No scan between Dec 2024 and Aug 2026: her pregnancy and their daughter’s birth came in between.</p><div class="dx-charts"><figure class="dx-chart"><figcaption class="dx-ct"><i style="--c:#8A543E"></i>Fat mass, lb</figcaption><svg viewBox="0 0 300 132" width="300" height="132" aria-hidden="true" focusable="false"><line class="dx-grid dx-base" x1="36" x2="288" y1="106.0" y2="106.0"/><text class="dx-yl" x="29" y="110.0" text-anchor="end">0</text><line class="dx-grid" x1="36" x2="288" y1="63.0" y2="63.0"/><text class="dx-yl" x="29" y="67.0" text-anchor="end">25</text><line class="dx-grid" x1="36" x2="288" y1="20.0" y2="20.0"/><text class="dx-yl" x="29" y="24.0" text-anchor="end">50</text><line class="dx-tick" x1="36.0" x2="36.0" y1="106" y2="110"/><text class="dx-xl" x="32.0" y="125" text-anchor="start">2024</text><line class="dx-tick" x1="127.8" x2="127.8" y1="106" y2="110"/><text class="dx-xl" x="127.8" y="125" text-anchor="middle">2025</text><line class="dx-tick" x1="223.2" x2="223.2" y1="106" y2="110"/><text class="dx-xl" x="223.2" y="125" text-anchor="middle">2026</text><rect class="dx-gap" x="131.5" y="14" width="144.5" height="92"/><text class="dx-gapl" x="203.7" y="67.0" text-anchor="middle">no scans</text><polyline class="dx-line" points="36.0,35.1 83.7,34.1 123.5,38.9" stroke="#8A543E"/><circle class="dx-pt" cx="36.0" cy="35.1" r="4" fill="#8A543E"><title>Jan 2024: 41.2 lb</title></circle><circle class="dx-pt" cx="83.7" cy="34.1" r="4" fill="#8A543E"><title>Jul 2024: 41.8 lb</title></circle><circle class="dx-pt" cx="123.5" cy="38.9" r="4" fill="#8A543E"><title>Dec 2024: 39.0 lb</title></circle><circle class="dx-pt" cx="284.0" cy="54.1" r="4" fill="#8A543E"><title>Aug 2026: 30.2 lb</title></circle><text class="dx-vl" x="38.0" y="26.1" text-anchor="start">41.2</text><text class="dx-vl" x="290.0" y="45.1" text-anchor="end">30.2</text></svg></figure><figure class="dx-chart"><figcaption class="dx-ct"><i style="--c:#3340B8"></i>Lean mass, lb</figcaption><svg viewBox="0 0 300 132" width="300" height="132" aria-hidden="true" focusable="false"><line class="dx-grid dx-base" x1="36" x2="288" y1="106.0" y2="106.0"/><text class="dx-yl" x="29" y="110.0" text-anchor="end">0</text><line class="dx-grid" x1="36" x2="288" y1="63.0" y2="63.0"/><text class="dx-yl" x="29" y="67.0" text-anchor="end">55</text><line class="dx-grid" x1="36" x2="288" y1="20.0" y2="20.0"/><text class="dx-yl" x="29" y="24.0" text-anchor="end">110</text><line class="dx-tick" x1="36.0" x2="36.0" y1="106" y2="110"/><text class="dx-xl" x="32.0" y="125" text-anchor="start">2024</text><line class="dx-tick" x1="127.8" x2="127.8" y1="106" y2="110"/><text class="dx-xl" x="127.8" y="125" text-anchor="middle">2025</text><line class="dx-tick" x1="223.2" x2="223.2" y1="106" y2="110"/><text class="dx-xl" x="223.2" y="125" text-anchor="middle">2026</text><rect class="dx-gap" x="131.5" y="14" width="144.5" height="92"/><text class="dx-gapl" x="203.7" y="67.0" text-anchor="middle">no scans</text><polyline class="dx-line" points="36.0,34.0 83.7,31.2 123.5,34.9" stroke="#3340B8"/><circle class="dx-pt" cx="36.0" cy="34.0" r="4" fill="#3340B8"><title>Jan 2024: 92.1 lb</title></circle><circle class="dx-pt" cx="83.7" cy="31.2" r="4" fill="#3340B8"><title>Jul 2024: 95.7 lb</title></circle><circle class="dx-pt" cx="123.5" cy="34.9" r="4" fill="#3340B8"><title>Dec 2024: 90.9 lb</title></circle><circle class="dx-pt" cx="284.0" cy="29.3" r="4" fill="#3340B8"><title>Aug 2026: 98.1 lb</title></circle><text class="dx-vl" x="38.0" y="25.0" text-anchor="start">92.1</text><text class="dx-vl" x="290.0" y="20.3" text-anchor="end">98.1</text></svg></figure></div>
+<div class="vh"><table><caption>Yenni’s DEXA scans, every scan</caption><thead><tr><th scope="col">Scan</th><th scope="col">Body fat</th><th scope="col">Fat mass</th><th scope="col">Lean mass</th></tr></thead><tbody><tr><th scope="row">Jan 2024</th><td>29.9%</td><td>41.2 lb</td><td>92.1 lb</td></tr><tr><th scope="row">Jul 2024</th><td>29.4%</td><td>41.8 lb</td><td>95.7 lb</td></tr><tr><th scope="row">Dec 2024</th><td>29.0%</td><td>39.0 lb</td><td>90.9 lb</td></tr><tr><th scope="row">Aug 2026</th><td>22.7%</td><td>30.2 lb</td><td>98.1 lb</td></tr></tbody></table></div>
+<div class="dx-src"><p>Measured by DEXA scan at UC Davis Sports Medicine, Sacramento.</p><p>We’re not sponsored by or affiliated with UC Davis Health; we just use their DEXA service.</p><p>Individual results vary.</p></div>
+</article><!-- /DRAFT-COPY -->
     </div>
   </section>
 
