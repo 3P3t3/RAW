@@ -152,10 +152,11 @@ CASE_PICKS = 3  # packs an open compartment shows: one per family, in the shelf'
 # The text on a plate is white or ink, whichever the build finds clears 4.5:1 (it stops if neither does).
 # The colours are a satin rubber: Recovery is the XS blue taken down to a bumper plate's (the button's
 # --blue read as a toy on a plate), Fat Loss a shade deeper and Hydration a shade lighter, so white and ink
-# still clear 4.5:1 under the face's light and shade (measured on the rendered plates, not only here).
+# still clear 4.5:1 under the face's light and shade (measured on the rendered plates, not only here: at
+# every face pixel under a letter, since the rack's plates grew to ~160px; both moved a little further for it).
 PLATES = {
-    'recovery': ('#3D4794', 4), 'hydration': ('#8AB0B9', 2), 'energy-focus': ('#E2C8AE', 3),
-    'protein': ('#1E262F', 0), 'fat-loss': ('#925A42', 5), 'daily-foundations': ('#6B5646', 1),
+    'recovery': ('#3D4794', 4), 'hydration': ('#93B7C0', 2), 'energy-focus': ('#E2C8AE', 3),
+    'protein': ('#1E262F', 0), 'fat-loss': ('#8A543E', 5), 'daily-foundations': ('#6B5646', 1),
     'skin-redefined': ('#D6D4C9', 6),
 }
 # Peter's stack, in the order #story loads it; it must match the shelves his five pack beats link to
@@ -782,7 +783,7 @@ def main():
     bar_bits.update({f'{{{{STEP_{i + 1}}}}}': '' for i in range(len(PETER))})
     if BAR:
         pn = [(c, names[c]) for c, _ in PETER]
-        caps = ''.join(f'<span class="lbc lbc-p" data-n="{n}">Peter’s stack · {n} of {len(PETER)}</span>' for n in range(len(PETER) + 1))
+        caps = ''.join(f'<span class="lbc lbc-p" data-n="{n}">Peter’s<span class="lbc-lg"> stack</span> · {n} of {len(PETER)}</span>' for n in range(len(PETER) + 1))   # a phone's one-row strip drops "stack"
         news = ''.join(f'<span class="lbc lbc-pnew" data-cat="{c}">+ {n}</span>' for c, n in pn)
         bar_bits.update({
             '{{HTML_CLASS}}': ' class="t-bar"',
