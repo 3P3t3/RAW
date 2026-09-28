@@ -864,8 +864,10 @@ html:not(.js) #results[hidden]{display:block!important}
    mid-scrub, as the pour's is; the beats inside it to the small one, so a line and its link
    are never under the toolbar. Each beat clears the masthead at the top and the tab at the
    foot. Only the beat whose line is up can be tapped. */
-.story.is-live .st-run{height:900vh}
-@supports (height:100lvh){.story.is-live .st-run{height:900lvh}}
+/* 949: the call's hold went from .8 to 2 units (_script.html), and the run grew by as much (a unit is
+   still 800lvh / 19.7 of the eight screens it scrubs over), so no other beat's pace changed */
+.story.is-live .st-run{height:949vh}
+@supports (height:100lvh){.story.is-live .st-run{height:949lvh}}
 .story.is-live .st-stage{position:sticky;top:0;height:100vh;overflow:hidden;overflow:clip}
 @supports (height:100lvh){.story.is-live .st-stage{height:100lvh}}
 .story.is-live .st-bg{display:block;position:absolute;inset:0;background:var(--teal)}
@@ -1317,7 +1319,7 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
 .bb{--st:2.05em;--steel:linear-gradient(#EEF1F2,#D5DADD 22%,#A9B1B6 50%,#7D868C 78%,#646D73);
   display:flex;align-items:center;height:10em;font-size:4px;line-height:0;overflow:clip visible}
 /* the sleeves: polished, a hard specular line a fifth of the way down, a chamfer at the outer end */
-.bb-sl{position:relative;flex:none;width:calc(7 * var(--st) + 1.2em);height:1.5em;
+.bb-sl{position:relative;flex:none;width:calc(var(--n,7) * var(--st) + 1.2em);height:1.5em;
   background:linear-gradient(#F4F6F7 0,#FFFFFF 14%,#DDE2E4 26%,#B3BBC0 48%,#8A9399 70%,#A3ABB0 86%,#5F686E 100%)}
 .bb-l{border-radius:.5em .12em .12em .5em;box-shadow:inset .22em 0 .12em -.1em rgba(40,48,54,.55)}
 .bb-r{border-radius:.12em .5em .5em .12em;box-shadow:inset -.22em 0 .12em -.1em rgba(40,48,54,.55)}
@@ -1361,8 +1363,8 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
 .bb-p::before{content:"";position:absolute;left:-.14em;right:-.14em;top:50%;height:1.95em;margin-top:-.975em;border-radius:.14em;
   background:linear-gradient(90deg,rgba(0,0,0,.25),transparent 30%,transparent 70%,rgba(0,0,0,.3)),
     linear-gradient(#F4F6F7,#C9CFD3 30%,#8C959B 70%,#646D73);box-shadow:0 0 0 max(.4px,.04em) rgba(20,26,30,.35)}
-.bb-l .bb-p{right:.15em;transform:translate3d(calc(-7.5 * var(--st)),0,0)}
-.bb-r .bb-p{left:.15em;transform:translate3d(calc(7.5 * var(--st)),0,0)}
+.bb-l .bb-p{right:.15em;transform:translate3d(calc((var(--n,7) + .5) * -1 * var(--st)),0,0)}
+.bb-r .bb-p{left:.15em;transform:translate3d(calc((var(--n,7) + .5) * var(--st)),0,0)}
 .bb-l .bb-p.on{opacity:1;transform:translate3d(calc(var(--o) * -1 * var(--st)),0,0)}
 .bb-r .bb-p.on{opacity:1;transform:translate3d(calc(var(--o) * var(--st)),0,0)}
 .bb-dk .bb-p::after{box-shadow:inset 0 0 0 max(.5px,.06em) rgba(244,242,236,.22),.18em .35em .55em -.2em rgba(0,0,0,.5)}   /* the dark plates keep an edge on teal */
@@ -1403,6 +1405,25 @@ html:not(.js) .lbpin{display:none}
 .lbpin .bb-peter,.lbc-pset,.lbpin.is-peter .bb-you,.lbpin.is-peter .lbc-yset{opacity:0}
 .lbpin.is-peter .bb-peter,.lbpin.is-peter .lbc-pset{opacity:1}
 @media (prefers-reduced-motion:reduce){.lbpin,.lbpin.on,.lbpin-bars .bb,.lbc-set{transition:none}}
+/* a phone's strip is one 36px row: the caption on the left ("Your stack · 2", "Peter's · 3 of 5"),
+   the bar on the right, a 30px bar. "+ name" comes up over the caption for a moment, on the strip's
+   own chalk, and goes. With the masthead that is 96px; while the strip holds the visitor's stack
+   the bottom tab steps aside (html.pin-you, set by the script), so the fixed chrome outside the
+   story is never more than 96px. */
+@media (max-width:767px){
+  .t-bar{--pin:36px}
+  .lbpin-in{grid-template-columns:auto minmax(0,1fr);align-items:center;gap:0 12px;padding-top:0}
+  .lbpin-cap{grid-row:1;grid-column:1;font-size:10px;letter-spacing:.1em}
+  .lbpin-bars{grid-row:1;grid-column:2}
+  .lbpin-bars .bb{font-size:3px}
+  .lbc-lg{display:none}
+  .lbc-set{display:grid}
+  .lbc-who,.lbc-new{grid-area:1 / 1}
+  .lbc-who{will-change:opacity}   /* its own layer from the start: fading it for "+ name" then costs no layout */
+  .lbc-new{justify-items:stretch}
+  .lbc-new .lbc{background:var(--chalk)}
+  html.pin-you .mtab{transform:translateY(calc(100% + 2px));visibility:hidden}
+}
 @media (min-width:768px){
   .t-bar{--pin:60px}
   .lbpin-in{max-width:780px;gap:4px}
@@ -1410,8 +1431,10 @@ html:not(.js) .lbpin{display:none}
   .lbpin-cap{font-size:10.5px}
 }
 
-/* #goals as a plate rack: seven plates, front on, all on show. Phones 3, 3 and 1 (centred); from
-   768 one row of seven. A plate is a button, drawn as a competition bumper standing on the page:
+/* #goals as a plate rack: nine plates, front on, all on show. Phones two a row (four rows and the
+   ninth centred), each about 160px, so the line under a plate's name is 11px or more (it was 7.9px on
+   a phone with three a row); 768 to 1023 three rows of three, ~175px each; from 1024 five and four,
+   ~160px each (one row was 86-123px a plate at 768-1199, its line 7.5-9px). A plate is a button, drawn as a competition bumper standing on the page:
    a matte rubber face in its shelf's colour with a fine grain, a raised rim (lit on top, in shade
    underneath), a recessed ring round a machined steel hub with a bright edge to its bore, and a soft
    contact shadow under it. Its name is moulded into the rubber above the hub (a light top edge, a dark
@@ -1419,8 +1442,8 @@ html:not(.js) .lbpin{display:none}
    panel is open wears an outline ring. */
 .rack-sec .sec-head{margin-bottom:22px}
 .rk-hint{font:500 16px/1.4 var(--sans);color:var(--text)}
-.rk-plates{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 14px;max-width:420px}
-.rk-plates li:last-child:nth-child(3n+1){grid-column:2}
+.rk-plates{--cols:2;--gap:18px;list-style:none;margin:0 auto;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:20px var(--gap);max-width:344px}
+.rk-plates li{flex:0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));min-width:0}
 .rk-plate{position:relative;display:block;width:100%;aspect-ratio:1;margin:0;padding:0;border:0;border-radius:50%;background:none;
   color:var(--t);container-type:inline-size;-webkit-tap-highlight-color:transparent}
 .rk-plate:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
@@ -1457,10 +1480,10 @@ html:not(.js) .lbpin{display:none}
   box-shadow:inset 0 max(1.5px,1.8cqi) max(1.5px,1.6cqi) rgba(0,20,27,.6),inset 0 min(-1px,-.5cqi) 0 rgba(255,255,255,.5),
     0 0 0 max(.75px,.6cqi) rgba(255,255,255,.85),0 0 0 max(1.25px,1.2cqi) rgba(70,78,84,.55)}
 /* the name, moulded in: a light top edge and a dark bottom edge */
-.rk-name{position:absolute;left:14%;right:14%;bottom:67.5%;text-align:center;font:800 clamp(8px,10.5cqi,15px)/1 var(--sans);font-stretch:75%;
+.rk-name{position:absolute;left:14%;right:14%;bottom:67.5%;text-align:center;font:800 clamp(13px,10.5cqi,15px)/1 var(--sans);font-stretch:75%;
   letter-spacing:.05em;text-transform:uppercase;text-wrap:balance;
   text-shadow:0 -.75px 0 rgba(255,255,255,.3),0 .75px 0 rgba(0,0,0,.34)}
-.rk-line,.rk-on{position:absolute;left:16%;right:16%;top:69%;text-align:center;font:700 clamp(7.5px,7.4cqi,11px)/1.12 var(--sans);letter-spacing:.09em;
+.rk-line,.rk-on{position:absolute;left:15%;right:15%;top:69%;text-align:center;font:700 clamp(11px,7.4cqi,12px)/1.1 var(--sans);letter-spacing:.07em;
   text-transform:uppercase;text-wrap:balance;text-shadow:0 -.75px 0 rgba(255,255,255,.26),0 .75px 0 rgba(0,0,0,.3)}
 .rk-on{display:none}
 .rk-plate.is-on .rk-line{display:none}
@@ -1481,12 +1504,12 @@ html:not(.js) .lbpin{display:none}
 html:not(.js) .rk-panel[hidden]{display:block!important}
 @media (prefers-reduced-motion:reduce){.rk-disc,.rk-plate::before{transition:none}}
 @media (min-width:768px){
-  .rk-plates{grid-template-columns:repeat(7,minmax(0,1fr));max-width:none;gap:14px}
-  .rk-plates li:last-child:nth-child(3n+1){grid-column:auto}
+  .rk-plates{--cols:3;max-width:560px;gap:22px var(--gap)}
   .rk-panel{padding:24px 28px 10px}
   .rk-load{flex:none}
   .rk-panel .bay-packs{max-width:560px}
 }
+@media (min-width:1024px){.rk-plates{--cols:5;max-width:880px}}
 
 /* the story's pack beats: a quiet step label over each line, with its plate's colour */
 .st-step{display:flex;align-items:center;gap:8px;font:600 11px/1.2 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
@@ -1535,8 +1558,8 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
 .mys-acts .btn{flex:1 1 100%}
 .mys .btn-line{color:var(--sand);box-shadow:inset 0 0 0 1px var(--sand)}
 /* the plates go on as the bar comes up, collar out */
-.motion .mys-bar:not(.in) .bb-l .bb-p{opacity:0;transform:translate3d(calc(-7.5 * var(--st)),0,0)}
-.motion .mys-bar:not(.in) .bb-r .bb-p{opacity:0;transform:translate3d(calc(7.5 * var(--st)),0,0)}
+.motion .mys-bar:not(.in) .bb-l .bb-p{opacity:0;transform:translate3d(calc((var(--n,7) + .5) * -1 * var(--st)),0,0)}
+.motion .mys-bar:not(.in) .bb-r .bb-p{opacity:0;transform:translate3d(calc((var(--n,7) + .5) * var(--st)),0,0)}
 .motion .mys-bar .bb-p{transition-duration:420ms,240ms;transition-delay:calc(260ms + var(--o) * 110ms)}
 @media (min-width:768px){.mys-acts .btn{flex:1 1 0}}
 
