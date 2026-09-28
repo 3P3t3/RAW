@@ -70,7 +70,7 @@ Source (edit these):
 - `site-src/style.css` — copied to `style.css` at the repo root at build time; every page links it via
   `{{STYLE}}`, which the build fills in with a content-hash query string. It sits at the root, not under
   `assets/`, so its `url(assets/...)` backgrounds keep resolving against the page's own folder
-- `share-links.csv` (`product,share_link,photo`) — the product list, 65 rows
+- `share-links.csv` (`product,share_link,photo`) — the product list, 97 rows
 - `bestsellers.csv` (`product,units_this_week`) — top 3 rows become the podium; `product` must
   match a `share-links.csv` name or the build exits. Blank `units_this_week` just hides the count.
 
@@ -148,7 +148,7 @@ Daily Foundations and Hydration.
 
     python3 site-src/build_homepage.py     # from the repo root
 
-Takes ~0.05s and prints `65 products (65 with photos)` plus the per-category counts. Run it after
+Takes ~0.05s and prints `97 products (97 with photos)` plus the per-category counts. Run it after
 any source edit; nothing else regenerates the pages.
 
 ## Why a build sometimes takes ~50s instead of 0.05s
