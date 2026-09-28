@@ -943,6 +943,13 @@ html:not(.js) #results[hidden]{display:block!important}
    run has scrolled. The ground is the pour band's teal with the sand and the chalk faded in
    over it, so it warms without ever being a colour the site does not use. */
 .story{position:relative;background:var(--chalk)}
+/* its heading, before the stage: the same label-over-h2 as #how, on the chalk the band above it
+   ends on, with "this?" in the blue. It is outside #st-run, so the run's height (and every hold
+   in it) is untouched; it simply scrolls away as the stage comes up under it. */
+.st-head{padding:var(--sec) 0 30px}
+.st-head-in{display:grid;gap:10px}
+.st-head h2{font-size:40px}
+@media (min-width:768px){.st-head{padding-bottom:40px}.st-head h2{font-size:52px}}
 .st-beats{list-style:none;margin:0;padding:0}
 .st-bg{display:none}
 .st-beat{display:flex;flex-direction:column;align-items:center;gap:24px;padding:56px var(--pad)}
@@ -1848,25 +1855,40 @@ body{background:transparent}
 .no-pour .pod .p-tag,.no-pour .pod .p-desc{color:var(--text)}
 .no-pour .pod .shot::after{background:radial-gradient(closest-side,rgba(30,38,47,.3),rgba(30,38,47,0))}
 /* ...and it is a compact band, not a podium: the three are cards like the shop's (the same glow
-   behind the pack and shadow under it), each rank on its pack's corner. One row of three from
-   560px; below that a swipe row that bleeds to the screen's edges, where the next card stands
-   half in view so it is plain there is more. The whole band fits one phone screen. */
+   behind the pack and shadow under it), each rank on its pack's corner. It is one row of three at
+   every width — Peter, 2026-09-28: "I wonder if it's better if we show all three in one quick
+   snapshot. Like smaller on the same page." It used to be a swipe row below 560px, which was the
+   one thing on the page you had to scrub sideways. Nothing scrolls horizontally now: below 560px
+   the same three columns simply run small — square packs, the rank half the size, the type a
+   couple of steps down, and the descriptor dropped (the name, the shelf and the count carry the
+   card, and the whole line of it is 88px wide at 320). The descriptor and the full sizes come
+   back at 560px, where there is room for them. */
 .podium-sec.no-pour{margin-top:0;padding-top:var(--sec)}
 .no-pour .sec-head{padding-top:0;margin-bottom:18px}
-.no-pour .podium{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:64%;gap:16px;
-  margin:0 calc(-1 * var(--pad));padding:4px var(--pad) 8px;overflow-x:auto;scroll-snap-type:x mandatory;
-  scroll-padding-inline:var(--pad);scrollbar-width:none;overscroll-behavior-x:contain}
-.no-pour .podium::-webkit-scrollbar{display:none}
-.no-pour .pod{perspective:none;scroll-snap-align:start;min-width:0}
-.no-pour .pod .shot{margin-top:0}
+.no-pour .podium{grid-auto-flow:row;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(8px,2.6vw,16px);margin:0;padding:0;align-items:start}
+.no-pour .pod{perspective:none;min-width:0}
+.no-pour .pod .shot{margin-top:0;aspect-ratio:1;padding:0 4% 4%}
 .no-pour .pod .shot::before{content:"";position:absolute;left:4%;right:4%;top:2%;bottom:6%;z-index:-2;border-radius:50%;
   background:radial-gradient(58% 52% at 50% 46%,rgba(255,255,255,.72),rgba(255,255,255,0) 78%)}
 .no-pour .pod .shot::after{left:22%;right:22%;bottom:3%;height:7%}
-.no-pour .pod-rank{position:absolute;top:2px;left:0;z-index:2;margin:0;font:800 28px/1 var(--display);font-stretch:72%;letter-spacing:.01em}
-.no-pour .pod-count{margin-top:6px}
+.no-pour .pod-rank{position:absolute;top:0;left:0;z-index:2;margin:0;font:800 18px/1 var(--display);font-stretch:72%;letter-spacing:.01em}
+/* two lines' room for the shelf name, so the three product names start on the same line however
+   the shelf names above them wrap (one of the three is usually "Daily Foundations") */
+.no-pour .pod .p-tag{margin-top:6px;font-size:11px;line-height:1.25;min-height:2.5em}
+.no-pour .pod .p-name{margin-top:2px;font-size:13px;line-height:1.25;text-wrap:balance}
+.no-pour .pod .p-desc{display:none}
+.no-pour .pod-count{margin-top:4px;font-size:11px}
+.no-pour .pod-num{font-size:15px;margin-right:3px}
 @media (min-width:560px){
-  .no-pour .podium{grid-auto-flow:row;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;
-    margin:0;padding:0;overflow:visible;scroll-snap-type:none}
+  .no-pour .podium{gap:24px}
+  .no-pour .pod .shot{aspect-ratio:6/5;padding:0 6% 4%}
+  .no-pour .pod-rank{font-size:28px}
+  .no-pour .pod .p-tag{margin-top:10px;font-size:14px;line-height:1.3;min-height:0}
+  .no-pour .pod .p-name{margin-top:4px;font-size:16px;line-height:1.3}
+  .no-pour .pod .p-desc{display:block}
+  .no-pour .pod-count{margin-top:6px;font-size:14px}
+  .no-pour .pod-num{font-size:22px;margin-right:4px}
 }
 @media (min-width:768px){
   .no-pour .podium{gap:40px}

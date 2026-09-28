@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=540e41b4">
+<link rel="stylesheet" href="style.css?v=49443d2d">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -744,7 +744,8 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
   <!-- 4. Trending: three best sellers on a podium, oversized and breaking the band.
        The band's ground can be a 150-frame film of the pour, scrubbed by scroll (the pour markup
        below, switched by TRENDING_POUR in build_homepage.py; off, the band is a compact row of
-       three cards on the page's field, a swipe row on phones). It is
+       three cards on the page's field, all three in view at every width — small and side by
+       side on a phone, nothing to scrub sideways). It is
        scenery, not content: frames come only as the band nears, and reduced motion
        gets one still. It follows the shelves (and the free sample, #sample), and Peter's story (#story) follows it directly,
        starting in this band's dark. -->
@@ -774,7 +775,24 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
        tapped, and tabbing to one brings its beat on screen. The photos of Peter are the
        hand-placed files in assets/peter/; the pack shots are the build's own. -->
   <section class="story" id="story" aria-labelledby="story-title">
-    <h2 class="vh" id="story-title">Peter’s story</h2>
+    <!-- The story's own heading, in his voice (Peter, 2026-09-28: "maybe we could title my
+         journey... maybe we could call it like 'how did I get into this?'"). It used to be a
+         visually hidden h2, which left the stage opening on a photo with nothing to say what it
+         was. It is an ordinary section head now — the same label + h2 as #how, one keyword in
+         the blue — and it sits BEFORE the stage and scrolls away like any other block, so the
+         sticky run (#st-run) is exactly as long as it was and the stage is untouched. It reads
+         the same in the plain sequence (reduced motion, no script): the question, then his
+         before and his line. DRAFT-COPY. -->
+    <!-- DRAFT-COPY -->
+    <div class="st-head">
+      <div class="wrap">
+        <div class="st-head-in grow">
+          <p class="label">Peter’s story</p>
+          <h2 id="story-title">How did I get into <span class="hl-k">this?</span></h2>
+        </div>
+      </div>
+    </div>
+    <!-- /DRAFT-COPY -->
     <div class="st-run" id="st-run">
       <div class="st-stage">
         <div class="st-bg" aria-hidden="true"><span class="st-dusk"></span><span class="st-lamp st-lamp-dark"></span><span class="st-sand"></span><span class="st-lamp st-lamp-warm"></span><span class="st-chalk"></span></div>
@@ -804,9 +822,16 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
               <!-- PETER-COPY --><p class="st-say">For the first time my energy held all day — and that’s what made the rest stick. Lifting hard. Same wake-up. Same bedtime.</p><!-- /PETER-COPY -->
             </div>
           </li>
+          <!-- The five pack beats. Each pack's data-tilt is the angle it comes to rest at, and
+               every one of them is 0: once the packs stopped leaving the stage and started piling
+               up together, a group each leaning its own way read as clutter (Peter, 2026-09-28:
+               "now that they're going to be all on the screen, I think having them straight is
+               actually better"). They still lean on the way down — DROP.lean in _script.html tips
+               the fall and unwinds to nothing at the landing — so the drop keeps its weight and
+               the gathered group stands square. -->
           <li class="st-beat st-warm" data-kind="prod">
             <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-tilt="-6" data-x="-7" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Grass-Fed Whey Protein"></span>
+              <span class="st-pack" data-tilt="0" data-x="-7" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Grass-Fed Whey Protein"></span>
             </div></div>
             <div class="st-copy">
               <!-- DRAFT-COPY --><p class="st-step"><i style="--c:#1E262F"></i>Step 1 · Food</p><!-- PETER-COPY --><p class="st-line">I fixed my food and found someone who pushed me.</p><!-- /PETER-COPY -->
@@ -825,8 +850,8 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           <!-- his hydration stack, the two he actually takes: they arrive as a pair -->
           <li class="st-beat st-warm" data-kind="prod">
             <div class="st-hero"><div class="st-art st-pair">
-              <span class="st-pack" data-tilt="-4" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt="XS Creatine+"></span>
-              <span class="st-pack" data-tilt="7" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Twist Tubes 2GO"></span>
+              <span class="st-pack" data-tilt="0" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt="XS Creatine+"></span>
+              <span class="st-pack" data-tilt="0" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Twist Tubes 2GO"></span>
             </div></div>
             <div class="st-copy">
               <!-- DRAFT-COPY --><p class="st-step"><i style="--c:#93B7C0"></i>Step 3 · Water</p><!-- PETER-COPY --><p class="st-line">I focused way more on hydration and getting electrolytes.</p>
@@ -836,7 +861,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           </li>
           <li class="st-beat st-warm" data-kind="prod">
             <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-tilt="6" data-x="-9" data-scale="1.1"><span class="st-shade"></span><img src="assets/story/xs-elite-focus-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Elite + Focus Energy Drink"></span>
+              <span class="st-pack" data-tilt="0" data-x="-9" data-scale="1.1"><span class="st-shade"></span><img src="assets/story/xs-elite-focus-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Elite + Focus Energy Drink"></span>
             </div></div>
             <div class="st-copy">
               <!-- DRAFT-COPY --><p class="st-step"><i style="--c:#E2C8AE"></i>Step 4 · Energy</p><!-- PETER-COPY --><p class="st-line">I swapped out my huge coffee spikes for smoother energy.</p><!-- /PETER-COPY -->
@@ -845,7 +870,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           </li>
           <li class="st-beat st-warm" data-kind="prod">
             <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-tilt="-3" data-x="7" data-scale=".92"><span class="st-shade"></span><img src="assets/story/nutrilite-sleep-health-lit.webp" width="860" height="860" loading="lazy" decoding="async" alt="Nutrilite Sleep Health"></span>
+              <span class="st-pack" data-tilt="0" data-x="7" data-scale=".92"><span class="st-shade"></span><img src="assets/story/nutrilite-sleep-health-lit.webp" width="860" height="860" loading="lazy" decoding="async" alt="Nutrilite Sleep Health"></span>
             </div></div>
             <div class="st-copy">
               <!-- DRAFT-COPY --><p class="st-step"><i style="--c:#3D4794"></i>Step 5 · Sleep</p><!-- PETER-COPY --><p class="st-line">And I found ways to maximize my sleep, even during the newborn nights.</p><!-- /PETER-COPY -->
@@ -3225,7 +3250,9 @@ var LB=null;
    compartment of the case strip along the top (the #goals case in miniature: its shelf's
    compartment, so the two hydration packs share one and two compartments stay empty), and at
    the call the filled case rises into the place above the button. It only ever turns a few
-   degrees in its own plane, so a flat picture is never seen edge-on or mirrored. The photos of Peter do not move like that: they
+   degrees in its own plane, so a flat picture is never seen edge-on or mirrored; every pack's
+   data-tilt is 0, so that turn is the fall's lean alone and each one lands, and stands in the
+   group, upright. The photos of Peter do not move like that: they
    rise in and fall away, and at the turn the after wipes in over the before. */
 (function(){
   var run=$('#st-run');
@@ -3255,7 +3282,9 @@ var LB=null;
             book:$('.st-book',b),warm:b.classList.contains('st-warm'),
             packs:$$('.st-pack',b).map(function(k,j){
               /* a pair comes one after the other; the arc in the text beat, one after another */
-              /* where it comes to rest: its tilt, its offset across the stage (% of its width) and its size */
+              /* where it comes to rest: its tilt (0 on every pack now — they stand straight in the
+                 group; the lean below is the fall's alone), its offset across the stage (% of its
+                 width) and its size */
               return {pack:k,img:$('img',k),shade:$('.st-shade',k),tilt:+k.getAttribute('data-tilt')||0,
                       rx:+k.getAttribute('data-x')||0,rs:+k.getAttribute('data-scale')||1,
                       off:j*(b.getAttribute('data-kind')==='prod'?.15:.12)};
