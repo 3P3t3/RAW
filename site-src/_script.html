@@ -22,15 +22,20 @@ if(html.classList.contains('motion')){
    so a step loads as it reaches the eye. From 1024 the bar runs across the four columns, and the light
    crosses it while the row rises from 86% of the window to 44%. Per frame it reads one box and writes
    only what changed: one transform per stretch of shaft, and a class per step (its plate's slide and
-   settle are a CSS transition on transform and opacity), so a scroll through costs no layout. Silent:
-   a clank per step as the page scrolls would be noise, and the story's own loads are silent too.
-   Reduced motion or no IntersectionObserver: html.motion is off and style.css shows it all loaded. */
+   settle are a CSS transition on transform and opacity), so a scroll through costs no layout.
+   A plate going on as the page moves down asks for the softest tick there is (aspire:sfx 'step'; the
+   sound block below plays it only once the visitor has touched the page and sound is on, so scroll
+   alone never starts audio). Never on the way back up, once per step per pass (a pass starts over once
+   every plate is off again, above the walk), and at most one in any 120ms, so a fast flick that loads
+   several at once gives a single tick. No tick on load or after a resize, only on a scroll down.
+   Reduced motion or no IntersectionObserver: html.motion is off and style.css shows it all loaded,
+   silent. */
 (function(){
   var how=$('#how'),list=how&&$('.how-steps',how);
   if(!list||!html.classList.contains('t-bar')||!html.classList.contains('motion'))return;
   var lis=$$('li',list),marks=lis.map(function(li){return $('.how-n',li)}),segs=lis.map(function(li){return $('.how-sh',li)}),
       fills=segs.map(function(s){return s&&$('i',s)}),mast=$('.mast'),pin=$('#lbpin'),wide=matchMedia('(min-width:1024px)'),
-      geo=null,raf=0,near=false,on=[],now=-1,tf=[],run=[];
+      geo=null,raf=0,near=false,on=[],now=-1,tf=[],run=[],prev=null,ticked=[],lastTick=-1e4;
   function measure(){
     var r=list.getBoundingClientRect(),h=wide.matches;
     geo={h:h,top:mast?mast.offsetHeight:0,pin:pin?pin.offsetHeight:0,z:marks[0].offsetWidth,row:marks[0].getBoundingClientRect().top-r.top,
@@ -49,11 +54,15 @@ if(html.classList.contains('motion')){
       var top=g.top+(pin&&pin.classList.contains('on')?g.pin:0);
       f=top+(vh-top)*.58-r.top;
     }
+    var down=prev!==null&&f>prev,fresh=false;
+    prev=f;
     lis.forEach(function(li,i){
       var o=f>=g.mk[i]+g.z*.25;
       if(o)n=i;
-      if(on[i]!==o){on[i]=o;li.classList.toggle('on',o)}
+      if(on[i]!==o){on[i]=o;li.classList.toggle('on',o);if(o&&down&&!ticked[i]){ticked[i]=true;fresh=true}}
     });
+    if(n<0)ticked=[];   /* every plate off: back above the walk, so the next pass down may tick again */
+    if(fresh){var ms=performance.now();if(ms-lastTick>=120){lastTick=ms;doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:'step'}))}}
     if(n!==now){if(now>-1)lis[now].classList.remove('now');if(n>-1)lis[n].classList.add('now');now=n}
     fills.forEach(function(el,i){
       if(!el)return;
@@ -65,7 +74,7 @@ if(html.classList.contains('motion')){
   function ask(){if(near&&!raf)raf=requestAnimationFrame(frame)}
   new IntersectionObserver(function(es){near=es[0].isIntersecting;ask()},{rootMargin:'100% 0px 100% 0px'}).observe(how);
   addEventListener('scroll',ask,{passive:true});
-  function again(){geo=null;if(!raf)raf=requestAnimationFrame(frame)}
+  function again(){geo=null;prev=null;if(!raf)raf=requestAnimationFrame(frame)}   /* a new frame of reference: no tick from it */
   addEventListener('resize',again);
   if(window.ResizeObserver)new ResizeObserver(again).observe(list);
   if(pin&&window.MutationObserver)new MutationObserver(ask).observe(pin,{attributes:true,attributeFilter:['class']});
@@ -748,7 +757,7 @@ if(sform){
   };
   var sCheck2=function(){
     var bad=[],v=!!sval('delivery');            /* a radio group: the error sits in its fieldset */
-    $('#s-where-err').textContent=v?'':'Pick drop-off in Lincoln or mail.';
+    $('#s-where-err').textContent=v?'':'Pick drop-off near Lincoln or mail.';
     $$('input[name="delivery"]',sform).forEach(function(r){r.setAttribute('aria-invalid',v?'false':'true')});
     bad.push(v?null:$('input[name="delivery"]',sform));
     bad.push(sErr(sel('consent'),'s-consent-err',sel('consent').checked?'':'Please tick this so I’m allowed to reach you.'));
@@ -2065,7 +2074,11 @@ var LB=null;
     isle:function(){tick(430,.22,.13,'sine')},    /* an island, or a lid of the case, opening */
     soft:function(){tick(1560,.05,.045)},         /* small controls */
     can:can,level:level,chime:chime,              /* the product card opening (#pcard, by family) */
-    clank:clank,unclank:unclank                   /* "Load this plate" and "Take it off the bar" (the rack's own event) */
+    clank:clank,unclank:unclank,                  /* "Load this plate" and "Take it off the bar" (the rack's own event) */
+    /* a game-plan plate going on as the page scrolls down (#how): quieter and shorter than soft, a sine.
+       Scroll is not a gesture, so it never wakes audio on its own: it plays only once the visitor has
+       touched the page (userActivation, where the browser has it) or our audio is already running */
+    step:function(){var ua=navigator.userActivation;if(ctx&&ctx.state==='running'||ua&&ua.hasBeenActive)tick(1320,.04,.028,'sine')}
   };
   doc.addEventListener('aspire:sfx',function(e){if(sounds[e.detail])sounds[e.detail]()});
   doc.addEventListener('pointerdown',function(e){
