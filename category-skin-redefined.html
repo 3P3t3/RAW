@@ -1656,11 +1656,19 @@ if(mcForm){
      The bar's own line (cLead) is not the calculator's to clear, so it is left for noteFill to
      write again; mcA, the snapshot MCAUTO was read into at load, is emptied with the rest or it
      would go on vouching for a note that is no longer there. */
+  /* empty one control the site filled, and only while it still holds exactly what the site put
+     there. The goal is a row of radio chips, and a radio group's value setter can pick a button but
+     cannot unpick them all, so a group is walked instead of assigned. */
+  function mcUnset(el,was){
+    if(!el||!was||el.value!==was)return false;
+    if(el.tagName)el.value='';
+    else for(var i=0;i<el.length;i++)el[i].checked=false;
+    return true;
+  }
   function mcForget(){
     if(cform){
-      var goal=cform.elements.goal,note=cform.elements.note,moved=false;
-      if(goal&&mcAuto.goal&&goal.value===mcAuto.goal){goal.value='';moved=true}
-      if(note&&mcAuto.note&&note.value===mcAuto.note){note.value='';moved=true}
+      var moved=mcUnset(cform.elements.goal,mcAuto.goal);
+      if(mcUnset(cform.elements.note,mcAuto.note))moved=true;
       if(moved)cform.dispatchEvent(new Event('change'));
     }
     mcAuto.goal='';mcAuto.note='';mcFilled=false;mcSum='';
