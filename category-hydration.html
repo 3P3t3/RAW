@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=29ef70c9">
+<link rel="stylesheet" href="style.css?v=745192bb">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -767,6 +767,8 @@ if(arch){
     list.forEach(function(f){var li=doc.createElement('li');li.textContent=f;facts.appendChild(li)});
     facts.hidden=!list.length;
     buy.href=d.href;
+    var shelf=b.closest('.rk-panel');   /* the bar theme: its "Load this plate" loads the shelf it came from */
+    if(LB&&LB.card)LB.card(shelf?shelf.id.replace('rk-p-',''):'');
     doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:d.sfx||'chime'}));
     dlg.showModal();html.classList.add('locked');
     panel.scrollTop=0;
@@ -807,7 +809,7 @@ if(arch){
   /* Tab wraps inside the card rather than leaving the page for the browser's own controls */
   dlg.addEventListener('keydown',function(e){
     if(e.key!=='Tab')return;
-    var f=$$('button,a[href]',dlg),first=f[0],last=f[f.length-1];
+    var f=$$('button,a[href]',dlg).filter(function(e){return !e.hidden}),first=f[0],last=f[f.length-1];
     if(e.shiftKey&&doc.activeElement===first){e.preventDefault();last.focus()}
     else if(!e.shiftKey&&doc.activeElement===last){e.preventDefault();first.focus()}
   });
@@ -997,7 +999,7 @@ if(sform){
     if(!sStill()&&el.animate)el.animate([{opacity:0,transform:'translate3d('+dx+'px,0,0)'},{opacity:1,transform:'none'}],
       {duration:380,easing:'cubic-bezier(.2,.7,.2,1)'});
     /* the card changed height under the visitor: if its top went up behind the mast, bring it back */
-    var m=$('.mast'),top=sform.getBoundingClientRect().top-(m?m.offsetHeight:0)-12;
+    var top=sform.getBoundingClientRect().top-(parseFloat(getComputedStyle(html).scrollPaddingTop)||0)-12;   /* the mast, and the strip when it is up */
     if(top<0)scrollBy({top:top,behavior:sStill()?'auto':'smooth'});
   };
   var sRecap=function(){
@@ -1625,7 +1627,14 @@ if(mcForm){
    exactly what the site last put there. Through #story the pinned bar is Peter's instead: the story
    block below loads his five plates as its pack beats go by (LB.peter), and scrolling back takes them
    off. Plates slide on in 300ms (style.css); under reduced motion they are simply there, and the
-   story's plates go on as each pack beat reaches the middle of the screen. */
+   story's plates go on as each pack beat reaches the middle of the screen.
+   The pinned strip is a reward, not a fixture: it is not there until the first plate lands (or
+   #story starts, for Peter's), and it goes again when the last plate comes off, outside the story.
+   html.has-stack says a stack exists, so the anchors' offset (scroll-padding-top in style.css) counts
+   the strip only when it will be there. The rack's three-step guide follows the visitor (1 until a
+   plate is open, 2 while one is, 3 once one is loaded); under "Build yours." their own stack stands
+   next to Peter's; the product card can load its shelf's plate; and the sample's "I've had my eye on"
+   blank is offered the newest plate's shelf, on the same terms as the call form's note. */
 var LB=null;
 (function(){
   var pin=$('#lbpin');
@@ -1634,12 +1643,15 @@ var LB=null;
       rack=$('#rack'),plates=rack?$$('.rk-plate',rack):[],panels=plates.map(function(b){return $('#'+b.getAttribute('aria-controls'))}),
       loads=rack?$$('.rk-load',rack):[],NAME={},RANK={},stack=[],sel=-1,MS=320,
       youBars=$$('.bb-you'),capYou=$('.lbc-you',pin),capNew=$('.lbc-ynew',pin),hbar=$('.hbar'),hbYou=hbar&&$('.hb-you',hbar),
-      pBar=$('.bb-peter',pin),pCaps=$$('.lbc-p',pin),pNews=$$('.lbc-pnew',pin),PC=pNews.map(function(e){return e.getAttribute('data-cat')});
-  plates.forEach(function(b){NAME[b.getAttribute('data-cat')]=$('.rk-name',b).textContent;RANK[b.getAttribute('data-cat')]=+b.getAttribute('data-rank')});
+      pBar=$('.bb-peter',pin),pCaps=$$('.lbc-p',pin),pNews=$$('.lbc-pnew',pin),PC=pNews.map(function(e){return e.getAttribute('data-cat')}),
+      pinYou=$('.bb-you',pin),COL={},steps=$$('#rk-guide li'),
+      mys=$('#mys-you'),mysHas=mys&&$('.mys-has',mys),mysNone=mys&&$('.mys-none',mys),mysN=mys&&$('.mys-n',mys),mysKey=mys&&$('.mys-ykey',mys),
+      cLoad=$('#pcard-load'),cCat='',pdlg=$('#pcard');
+  plates.forEach(function(b){var c=b.getAttribute('data-cat');NAME[c]=$('.rk-name',b).textContent;RANK[c]=+b.getAttribute('data-rank');COL[c]=b.style.getPropertyValue('--c')});
   try{var sv=JSON.parse(localStorage.getItem(KEY)||'[]');
       if(Array.isArray(sv))stack=sv.filter(function(c,i){return NAME.hasOwnProperty(c)&&sv.indexOf(c)===i})}catch(e){}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(stack))}catch(e){}}
-  function count(n){return n?'Your stack · '+n+' plate'+(n===1?'':'s'):'Empty bar'}
+  function count(n){return n?'Your stack · '+n+' plate'+(n===1?'':'s'):''}   /* no plates, no caption: the strip is away */
   /* the newest plate's outline and its name, up for a moment and gone */
   function flash(els){
     els.forEach(function(el){
@@ -1668,17 +1680,64 @@ var LB=null;
       b.textContent=on?'Take it off the bar':'Load this plate';
     });
     if(cform)cLead.line=stack.length?'Interested in: '+stack.map(function(c){return NAME[c]}).join(', ')+'.':'';
-    if(newest){
-      capNew.textContent='+ '+NAME[newest];
-      hush($$('.bb-ring',youBars[youBars.length-1]));
-      flash([capNew].concat(rings(youBars[youBars.length-1],newest)));   /* the pinned one: the hero's is off screen */
+    guide();mysYou();cardSync();
+    html.classList.toggle('has-stack',stack.length>0);
+    if(newest)capNew.textContent='+ '+NAME[newest];
+    /* the strip comes up (or goes) and the newest plate flashes on it; behind the product card
+       the strip is hidden, so both wait for the card to close */
+    var go=function(){
+      pinSet();
+      if(newest){hush($$('.bb-ring',pinYou));flash([capNew].concat(rings(pinYou,newest)))}   /* the pinned one: the hero's is off screen */
       /* the weight arriving: as the plate settles, the bar gives a hair under it and comes back */
-      if(!reduce.matches)youBars.forEach(function(bar){
+      if(newest&&!reduce.matches)youBars.forEach(function(bar){
         if(bar.animate)bar.animate([{transform:'none'},{transform:'translate3d(0,.24em,0)',offset:.3},{transform:'none'}],
                                    {duration:320,delay:230,easing:'cubic-bezier(.3,.6,.4,1)'});
       });
-    }
+    };
+    if(pdlg&&pdlg.open){if(!pdlg.dataset.due){pdlg.dataset.due='1';pdlg.addEventListener('close',function(){delete pdlg.dataset.due;setTimeout(go,60)},{once:true})}}
+    else go();
+    sDue=true;if(sIn)sampleFill();
   }
+  /* the guide: the step the visitor is on, and the ones behind them */
+  function guide(){
+    var n=stack.length?2:sel>-1?1:0;
+    steps.forEach(function(li,i){
+      li.classList.toggle('is-done',i<n);li.classList.toggle('is-now',i===n);
+      if(i===n)li.setAttribute('aria-current','step');else li.removeAttribute('aria-current');
+    });
+  }
+  /* under "Build yours.": the visitor's own stack (its bar is one of youBars), or the way to start one */
+  function mysYou(){
+    if(!mys)return;
+    mysHas.hidden=!stack.length;mysNone.hidden=stack.length>0;
+    mysN.textContent=count(stack.length);
+    mysKey.textContent='';
+    stack.forEach(function(c){
+      var li=doc.createElement('li'),i=doc.createElement('i');
+      i.style.setProperty('--c',COL[c]);li.appendChild(i);li.appendChild(doc.createTextNode(NAME[c]));mysKey.appendChild(li);
+    });
+  }
+  /* the product card's "Load this plate": its pack's shelf. Once that plate is on it reads "On your
+     bar" and does nothing (aria-disabled, so it stays in the Tab order and says why); the rack's
+     own button takes a plate off */
+  function cardSync(){
+    if(!cLoad)return;
+    cLoad.hidden=!NAME.hasOwnProperty(cCat);
+    if(cLoad.hidden)return;
+    var on=stack.indexOf(cCat)>-1;
+    $('.pl-t',cLoad).textContent=on?'On your bar':'Load this plate';
+    $('.pl-cat',cLoad).textContent=' ('+NAME[cCat]+')';
+    cLoad.setAttribute('aria-disabled',on?'true':'false');
+    cLoad.classList.toggle('is-on',on);
+  }
+  function toggle(c){
+    var i=stack.indexOf(c),on=i<0;
+    if(on)stack.push(c);else stack.splice(i,1);
+    save();paint(on?c:null);noteDue=true;
+    doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:on?'clank':'unclank'}));   /* a visitor's plate only: the story's are silent */
+    say(NAME[c]+(on?' is on the bar. ':' is off the bar. ')+(stack.length?count(stack.length)+'.':'Nothing else is on it.'));
+  }
+  if(cLoad)cLoad.addEventListener('click',function(){if(cCat&&stack.indexOf(cCat)<0)toggle(cCat)});
   /* the rack: a plate shows its panel; the same plate again, Escape, or another plate puts it away */
   function show(i){   /* the panel, whole, on screen and clear of the pinned bar and the tab */
     setTimeout(function(){
@@ -1698,6 +1757,7 @@ var LB=null;
     plates.forEach(function(b,j){b.setAttribute('aria-pressed',j===sel?'true':'false')});
     panels.forEach(function(p,j){p.hidden=j!==sel});
     if(sel>-1)show(sel);
+    guide();
   }
   plates.forEach(function(b,i){
     b.addEventListener('click',function(){pick(i)});
@@ -1714,13 +1774,7 @@ var LB=null;
   });
   loads.forEach(function(b){
     b.hidden=false;
-    b.addEventListener('click',function(){
-      var c=b.getAttribute('data-cat'),i=stack.indexOf(c),on=i<0;
-      if(on)stack.push(c);else stack.splice(i,1);
-      save();paint(on?c:null);noteDue=true;
-      doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:on?'clank':'unclank'}));   /* a visitor's plate only: the story's are silent */
-      say(NAME[c]+(on?' is on the bar. ':' is off the bar. ')+count(stack.length)+'.');
-    });
+    b.addEventListener('click',function(){toggle(b.getAttribute('data-cat'))});
   });
   /* the call form's note: the bar's line goes in when the form is reached, and again after the stack
      changes, only over an empty note or one that still says what the site last wrote there (the
@@ -1744,16 +1798,41 @@ var LB=null;
     new IntersectionObserver(function(es){if(es[0].isIntersecting&&noteDue)noteFill()}).observe(cform);
     var cs0=cSync;cSync=function(){noteFill();if(cs0)cs0()};   /* and once more before booking */
   }
-  /* the pinned bar: up once the hero has gone under the masthead; Peter's while #story is under it */
-  var hero=$('.hero'),story=$('#story'),lineIO=null;
-  if(hero)new IntersectionObserver(function(es){pin.classList.toggle('on',!es[0].isIntersecting)},
+  /* the sample's "I've had my eye on ___": the newest plate's shelf ("something from Hydration"),
+     when the form comes into view and after the stack changes, only over an empty blank or one
+     that still says exactly what the site last put there (kept in localStorage, as the note's is),
+     and only while step 1 shows it. A ?try= link's product, and anything typed, are never touched. */
+  var SKEY='aspire-sample-auto',sLast='',sDue=true,sIn=false;
+  try{sLast=localStorage.getItem(SKEY)||''}catch(e){}
+  function sampleFill(){
+    if(!sform||sform.hidden||sStep()!==1)return;
+    sDue=false;
+    var v=sProd.value,c=stack[stack.length-1],want=c?'something from '+NAME[c]:'';
+    if(v&&v!==sLast||v===want)return;
+    sProd.value=want;sFit(sProd);
+    sLast=want;
+    try{localStorage.setItem(SKEY,want)}catch(e){}
+    sProd.dispatchEvent(new Event('change',{bubbles:true}));   /* a flagged blank re-checks, as a picked suggestion does */
+  }
+  if(sform)new IntersectionObserver(function(es){sIn=es[0].isIntersecting;if(sIn&&sDue)sampleFill()}).observe(sform);
+  /* the pinned bar: once the hero has gone under the masthead, and only with a plate on it or with
+     #story under it (Peter's). When it comes up its contents are set at once, not faded (.snap), so
+     it never arrives showing the other stack; when it goes it keeps what it showed, so nothing
+     changes on the way out. With it up at #story's edges the two stacks cross-fade as before. */
+  var hero=$('.hero'),story=$('#story'),lineIO=null,heroGone=!hero,inStory=false;
+  function pinSet(){
+    if(!(heroGone&&(inStory||stack.length>0))){pin.classList.remove('on');return}
+    if(pin.classList.contains('on')){pin.classList.toggle('is-peter',inStory);return}
+    pin.classList.add('snap');pin.classList.toggle('is-peter',inStory);pin.classList.add('on');
+    requestAnimationFrame(function(){requestAnimationFrame(function(){pin.classList.remove('snap')})});
+  }
+  if(hero)new IntersectionObserver(function(es){heroGone=!es[0].isIntersecting;pinSet()},
     {rootMargin:'-'+($('.mast')?$('.mast').offsetHeight:60)+'px 0px 0px 0px'}).observe(hero);
-  else pin.classList.add('on');
   function line(){   /* a one-pixel line at the pinned bar's foot: #story crossing it is the switch */
     if(lineIO)lineIO.disconnect();
     if(!story)return;
     var y=($('.mast')?$('.mast').offsetHeight:60)+pin.offsetHeight,b=Math.max(0,innerHeight-y-1);
-    lineIO=new IntersectionObserver(function(es){pin.classList.toggle('is-peter',es[0].isIntersecting)},{rootMargin:'-'+y+'px 0px -'+b+'px 0px'});
+    lineIO=new IntersectionObserver(function(es){inStory=es[0].isIntersecting;pinSet()},{rootMargin:'-'+y+'px 0px -'+b+'px 0px'});
     lineIO.observe(story);
   }
   line();
@@ -1765,6 +1844,7 @@ var LB=null;
   $$('.bb-r .bb-p',pBar).forEach(function(p){pr[p.getAttribute('data-cat')]=p});
   function wr(el,k,tf,op){var v=tf+'|'+op;if(keys[k]===v)return;keys[k]=v;el.style.transform=tf;el.style.opacity=op}
   LB={cats:PC,
+    card:function(c){cCat=c;cardSync()},
     measure:function(){st=parseFloat(getComputedStyle(pBar).fontSize)*2.05;keys={}},   /* --st in style.css */
     /* where plate c's centre sits on the pinned bar once it is down (the viewport's frame), and its
        height; the pinned bar's top and foot, and where its "+ name" caption starts */
