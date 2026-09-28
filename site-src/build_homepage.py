@@ -829,11 +829,24 @@ def main():
     counts = {c[0]: sum(1 for pr in products if on_shelf(pr, c[4])) for c in CATEGORIES}
     names = {c[0]: c[1] for c in CATEGORIES}
 
-    def card(pr, i=0, extra=''):
+    def card_data(pr):
+        """What the product card (#pcard) shows for a pack or a tile, carried on it as data-*, so there is
+        no second copy of TAGLINES and CARD_FACTS: its name, kind, line, facts and sound, and data-try, the
+        exact listing name that "Ask for a free sample" writes into the sample form's blank."""
+        fam = family(pr['product'])
+        facts = CARD_FACTS.get(pr['product'], ('', []))[1]
+        return (f'data-name="{esc(pr["name"])}" data-kind="{esc(pr["desc"])}" data-line="{esc(TAGLINES[fam])}" '
+                f'data-facts="{esc("|".join(facts))}" data-sfx="{CARD_SOUND.get(fam, "chime")}" data-try="{esc(pr["product"])}"')
+
+    def card(pr, i=0, extra='', shelves=False):
+        """A product tile: a link to its Amway page, which _script.html turns into the way to its product
+        card. The homepage grid's tiles also list every shelf they are on (data-shelves), for the sample
+        form's "Pick from the shelves"."""
         u = esc(pr['share_link'])
         tag = names.get(cat_of.get(pr['product']), 'Wellness')
+        on = (' data-shelves="' + ' '.join(c[0] for c in CATEGORIES if on_shelf(pr, c[4])) + '"') if shelves else ''
         return (f'        <li class="card grow" style="--d:{i % 4}" data-cat="{cat_of.get(pr["product"], "")}"{extra}>'
-                f'<a class="card-link" href="{u}" target="_blank" rel="noopener">{shot(pr)}'
+                f'<a class="card-link" href="{u}" target="_blank" rel="noopener" {card_data(pr)}{on}>{shot(pr)}'
                 f'<p class="p-tag">{tag}</p><h3 class="p-name">{esc(pr["name"])}</h3>'
                 f'<p class="p-desc">{esc(pr["desc"])}</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
 
@@ -921,12 +934,8 @@ def main():
         """A pack in a compartment: a link straight to its Amway page, carrying what its product card
         shows. With script _script.html turns it into a button that opens the card (#pcard); without,
         it stays the link. The card's words and facts ride on it, so there is no second copy of them."""
-        fam = family(pr['product'])
-        facts = CARD_FACTS.get(pr['product'], ('', []))[1]
         named = '' if label == pr['name'] else f'<span class="vh">{esc(pr["name"])}, </span>'
-        return (f'<a class="bay-go" href="{esc(pr["share_link"])}" target="_blank" rel="noopener" '
-                f'data-name="{esc(pr["name"])}" data-kind="{esc(pr["desc"])}" data-line="{esc(TAGLINES[fam])}" '
-                f'data-facts="{esc("|".join(facts))}" data-sfx="{CARD_SOUND.get(fam, "chime")}">'
+        return (f'<a class="bay-go" href="{esc(pr["share_link"])}" target="_blank" rel="noopener" {card_data(pr)}>'
                 f'<img src="{pr["img"]}" alt="" width="600" height="600" loading="lazy" decoding="async">'
                 f'{named}<span>{esc(label)}</span><span class="vh">, buy on Amway (opens in a new tab)</span></a>')
 
@@ -961,9 +970,12 @@ def main():
                 + card_dialog() +
                 '  </section>')
 
-    def card_dialog():
-        """The product card the case's packs open (_script.html fills it from the pack it opened from).
-        A modal <dialog>: without script, or without dialog support, nothing opens it and it never shows."""
+    def card_dialog(home=''):
+        """The product card every pack and product tile opens (_script.html fills it from the one it opened
+        from): the case's and the rack's packs, the homepage grid, Trending, and every shelf page's tiles.
+        A modal <dialog>: without script, or without dialog support, nothing opens it and it never shows.
+        "Ask for a free sample" goes to the sample form: on the homepage (home '') in place, on a shelf page
+        (home 'homepage.html') by the homepage's ?try= link, the exact product name in it."""
         return ('    <dialog class="pcard" id="pcard" aria-labelledby="pcard-name" aria-describedby="pcard-line">\n'
                 '      <div class="pcard-in">\n'
                 '        <button class="icon-btn pcard-x" type="button" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>\n'
@@ -975,9 +987,12 @@ def main():
                 '          <ul class="pcard-facts" id="pcard-facts" aria-label="Quick facts"></ul>\n'
                 '          <div class="pcard-acts"><a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Add to cart on Amway'
                 '<span class="vh"> (opens in a new tab)</span></a>'
+                # DRAFT-COPY. Never "Request a sample": that is the button on Peter's business partner's site
+                f'<a class="btn btn-line pcard-try" id="pcard-try" href="{home}#sample"'
+                + (f' data-home="{home}"' if home else '') + '>Ask for a free sample</a>'
                 # DRAFT-COPY: the script names the plate after it and reads "On your bar" once it is on
                 + ('<button class="btn btn-line pcard-load" id="pcard-load" type="button" hidden>'
-                   '<span class="pl-t">Load this plate</span><span class="vh pl-cat"></span></button>' if SHELF_VIEW == 'bar' else '')
+                   '<span class="pl-t">Load this plate</span><span class="vh pl-cat"></span></button>' if SHELF_VIEW == 'bar' and not home else '')
                 + '</div>\n'
                 '        </div>\n'
                 '      </div>\n'
@@ -1091,7 +1106,7 @@ def main():
     </div>''' if TRENDING_POUR else '<!-- TRENDING_POUR is off in build_homepage.py: a plain band -->')
 
     order = sorted(products, key=lambda pr: pr['name'].lower())
-    grid = [card(pr, i) for i, pr in enumerate(order)]
+    grid = [card(pr, i, shelves=True) for i, pr in enumerate(order)]
 
     part = lambda n: open(os.path.join(ROOT, 'site-src', n)).read()
     style, header, footer, dialogs, script, icons = (part('style.css'), part('_header.html'), part('_footer.html'),
@@ -1107,6 +1122,24 @@ def main():
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)),
               '{{TOTAL_PRODUCTS}}': plural(len(products), 'product', zero='products'), '{{CONSULT_URL}}': CONSULT_URL,
               '{{BASE}}': BASE}
+    # "Pick from the shelves", beside the sample form's product blank: the shelves as small plates in their
+    # rack colours; the script lists the one tapped's products from the homepage grid's tiles (data-shelves,
+    # card()). Hidden until the script shows it, so without script the blank is the whole question. DRAFT-COPY
+    sample_picker = ('<div class="s-pick" id="s-pick" hidden>\n'
+                     '            <button class="s-pick-go" type="button" id="s-pick-go" aria-expanded="false" aria-controls="s-picker">'
+                     '<span class="s-pick-pl" aria-hidden="true"></span>Pick from the shelves</button>\n'
+                     '            <div class="s-picker" id="s-picker" hidden>\n'
+                     '              <div class="sp-view" id="sp-shelves"><p class="sp-t" id="sp-shelves-t">Pick a shelf</p>\n'
+                     '                <ul class="sp-plates" aria-labelledby="sp-shelves-t">'
+                     + ''.join(f'<li><button class="sp-plate" type="button" data-cat="{s}" style="--c:{PLATES.get(s, ("#6B5646", 0))[0]}">'
+                               f'<span class="sp-disc" aria-hidden="true"><span class="sp-hole"></span></span>'
+                               f'<span class="sp-name">{n}</span></button></li>' for s, n, *_ in CATEGORIES) +
+                     '</ul></div>\n'
+                     '              <div class="sp-view" id="sp-list" hidden><div class="sp-head">'
+                     '<button class="sp-back" type="button" id="sp-back"><svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-back"/></svg>All shelves</button>'
+                     '<p class="sp-t" id="sp-list-t"></p></div>\n'
+                     '                <ul class="sp-items" id="sp-items" aria-labelledby="sp-list-t"></ul></div>\n'
+                     '            </div>\n          </div>')
     # what the sample form's "What would you like to try?" suggests: every family, by the name its cards carry
     sample_list = '\n'.join(f'          <option value="{esc(n)}"></option>'
                             for n in sorted({pr['name'] for pr in products}, key=str.lower))
@@ -1131,7 +1164,7 @@ def main():
         count = (f'<p class="pod-count"><span class="pod-num" data-count="{units}">0</span> '
                  f'bought this week</p>') if units.isdigit() else ''
         podium.append(
-            f'        <li class="pod pod-{i + 1}"><a class="card-link{tilt}" href="{esc(pr["share_link"])}" target="_blank" rel="noopener">'
+            f'        <li class="pod pod-{i + 1}"><a class="card-link{tilt}" href="{esc(pr["share_link"])}" target="_blank" rel="noopener" {card_data(pr)}>'
             f'<span class="pod-rank" aria-hidden="true">0{i + 1}</span>'
             f'{shot(pr, lazy=False)}<p class="p-tag">{names.get(cat_of.get(pr["product"]), "Wellness")}</p>'
             f'<h3 class="p-name">{esc(pr["name"])}</h3><p class="p-desc">{esc(pr["desc"])}</p>{count}'
@@ -1146,7 +1179,8 @@ def main():
                                 '{{PAGE_URL}}': BASE + page_name, '{{INTRO}}': intro,
                                 '{{GOALS}}': cat_rows(),
                                 '{{SAMPLE_ENDPOINT}}': SAMPLE_ENDPOINT, '{{SAMPLE_ACTION}}': SAMPLE_ACTION,
-                                '{{SAMPLE_NEXT}}': SAMPLE_NEXT.replace('homepage.html', page_name), '{{SAMPLE_PRODUCTS}}': sample_list, **quick_call(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves,
+                                '{{SAMPLE_NEXT}}': SAMPLE_NEXT.replace('homepage.html', page_name), '{{SAMPLE_PRODUCTS}}': sample_list,
+                                '{{SAMPLE_PICKER}}': sample_picker, '{{PCARD}}': '' if SHELF_VIEW in ('bar', 'case') else card_dialog(), **quick_call(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves,
                                 '{{CASE_STRIP}}': case_strip, '{{POUR}}': pour,
                                 '{{POUR_CLASS}}': '' if TRENDING_POUR else ' no-pour',
                                 '{{PROOF_HERS}}': proof_hers(), '{{DEXA_CARDS}}': dexa_cards(), **bar_bits}).items():
@@ -1171,7 +1205,7 @@ def main():
             flav = [pr for pr in items if family(pr['product']) == fam]
             items = [pr for pr in items if pr not in flav]
             slides = '\n'.join(
-                f'          <li class="slide"><a class="card-link" href="{esc(pr["share_link"])}" target="_blank" rel="noopener">'
+                f'          <li class="slide"><a class="card-link" href="{esc(pr["share_link"])}" target="_blank" rel="noopener" {card_data(pr)}>'
                 f'{shot(pr)}<h3 class="p-name">{esc(pr["desc"].split(" · ")[-1])}</h3>'
                 f'<span class="vh">{esc(pr["name"])}, buy on Amway (opens in a new tab)</span></a></li>' for pr in flav)
             carousel = f'''  <!-- Flavor carousel: glides on its own, arrows or swipe to take over -->
@@ -1198,7 +1232,7 @@ def main():
                 '{{SAMPLE_LINK}}': 'homepage.html?try=' + quote(html.unescape(name)) + '#sample',
                 '{{CAT_NAME}}': name, '{{CAT_TAG}}': tag, '{{CAT_HEADING}}': heading,
                 '{{CAT_COUNT}}': plural(counts[slug_], 'product', zero='No products yet'), '{{CAT_GRID}}': cgrid, '{{CAROUSEL}}': carousel,
-                '{{CAT_OTHERS}}': cat_rows(only={slug_}), **hero_media(slug_, name),
+                '{{CAT_OTHERS}}': cat_rows(only={slug_}), **hero_media(slug_, name), '{{PCARD}}': card_dialog('homepage.html'),
                 '{{CAT_EXTRA}}': SHELF_EXTRA.get(slug_, lambda: '')()}).items():
             page = page.replace(k, v)
         if DEMO:  # its own links, og:url included, name the demo copies (demo_links)
