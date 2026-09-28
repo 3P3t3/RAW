@@ -113,10 +113,11 @@ CASE_PICKS = 3  # packs an open compartment shows: one per family, in the shelf'
 # story loads it, so his bar builds outward and never reshuffles; the two he does not take come last.
 # The text on a plate is white or ink, whichever the build finds clears 4.5:1 (it stops if neither does).
 # The colours are a satin rubber: Recovery is the XS blue taken down to a bumper plate's (the button's
-# --blue read as a toy on a plate) and Fat Loss a shade deeper, so white clears 4.5:1 with the face's light on it.
+# --blue read as a toy on a plate), Fat Loss a shade deeper and Hydration a shade lighter, so white and ink
+# still clear 4.5:1 under the face's light and shade (measured on the rendered plates, not only here).
 PLATES = {
-    'recovery': ('#3D4794', 4), 'hydration': ('#7FA7B0', 2), 'energy-focus': ('#E2C8AE', 3),
-    'protein': ('#1E262F', 0), 'fat-loss': ('#975D44', 5), 'daily-foundations': ('#6B5646', 1),
+    'recovery': ('#3D4794', 4), 'hydration': ('#8AB0B9', 2), 'energy-focus': ('#E2C8AE', 3),
+    'protein': ('#1E262F', 0), 'fat-loss': ('#925A42', 5), 'daily-foundations': ('#6B5646', 1),
     'skin-redefined': ('#D6D4C9', 6),
 }
 # Peter's stack, in the order #story loads it; it must match the shelves his five pack beats link to

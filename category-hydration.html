@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=544b38a4">
+<link rel="stylesheet" href="style.css?v=beddddf1">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -1902,7 +1902,7 @@ var LB=null;
       if(tags)ITEMS.forEach(function(k){   /* each copy on its pack's own box, in the pinned bar's frame */
         var G=geo.items[k.g],t=k.tag.style;
         t.left=f(G.cx-G.W/2+s0.left,1)+'px';t.top=f(G.cy-G.H/2-P0,1)+'px';t.width=f(G.W,1)+'px';t.height=f(G.H,1)+'px';
-        if(!k.tag.getAttribute('src'))k.tag.src=k.img.currentSrc||k.img.src;
+        if(near&&!k.tag.getAttribute('src'))k.tag.src=k.img.currentSrc||k.img.src;   /* only once the story is close, as its own lazy pictures are */
       });
       tp.keys={};
       return;

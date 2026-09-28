@@ -1619,7 +1619,7 @@ var LB=null;
       if(tags)ITEMS.forEach(function(k){   /* each copy on its pack's own box, in the pinned bar's frame */
         var G=geo.items[k.g],t=k.tag.style;
         t.left=f(G.cx-G.W/2+s0.left,1)+'px';t.top=f(G.cy-G.H/2-P0,1)+'px';t.width=f(G.W,1)+'px';t.height=f(G.H,1)+'px';
-        if(!k.tag.getAttribute('src'))k.tag.src=k.img.currentSrc||k.img.src;
+        if(near&&!k.tag.getAttribute('src'))k.tag.src=k.img.currentSrc||k.img.src;   /* only once the story is close, as its own lazy pictures are */
       });
       tp.keys={};
       return;

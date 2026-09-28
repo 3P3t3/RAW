@@ -1310,8 +1310,9 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
    sleeve, clipped, and slides on in 360ms, overshooting a hair onto the one before and settling
    back, as a heavy thing does; under reduced motion it is simply there. Only transform and opacity
    ever change. */
-/* rubber grain: a speckle of light and dark, laid over a plate's colour (the rack's faces, the bar's plates) */
-.t-bar{--rubber:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.4 1.05'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E")}
+/* rubber grain: a speckle of dark and light in about equal measure, so it leaves a plate's colour (and
+   the contrast of the words on it) where it was; laid over the rack's faces and the bar's plates */
+.t-bar{--rubber:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='d'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 1.4'/%3E%3C/filter%3E%3Cfilter id='l'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2.4 -1'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23d)' opacity='.16'/%3E%3Crect width='120' height='120' filter='url(%23l)' opacity='.1'/%3E%3C/svg%3E")}
 .bbx{container-type:inline-size;min-width:0}
 .bb{--st:2.05em;--steel:linear-gradient(#EEF1F2,#D5DADD 22%,#A9B1B6 50%,#7D868C 78%,#646D73);
   display:flex;align-items:center;height:10em;font-size:4px;line-height:0;overflow:clip visible}
@@ -1376,7 +1377,7 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
 .hbar{display:grid;gap:8px;width:100%;margin-top:8px}
 .hbar .bb{font-size:clamp(4px,calc(100cqi / 48),9px)}
 .hbar:not(.has) .hbar-cap{margin-top:-2.2em}   /* an empty bar is thin: its caption comes up under it */
-.hbar-cap{font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--sand)}
+.hbar-cap{font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}   /* the hero is on the chalk field now, not teal */
 .hbar .hb-you,.hbar.has .hb-empty{display:none}
 .hbar.has .hb-you{display:inline}
 
@@ -1430,8 +1431,8 @@ html:not(.js) .lbpin{display:none}
    curve in its edge (a highlight on top, shade underneath) */
 .rk-disc{position:absolute;inset:0;border-radius:50%;
   background:var(--rubber),
-    radial-gradient(120% 120% at 32% 18%,rgba(255,255,255,.13),rgba(255,255,255,.03) 42%,rgba(255,255,255,0) 60%),
-    radial-gradient(90% 90% at 70% 88%,rgba(0,0,0,.16),rgba(0,0,0,0) 62%),
+    radial-gradient(120% 120% at 32% 16%,rgba(255,255,255,.1),rgba(255,255,255,.02) 40%,rgba(255,255,255,0) 58%),
+    radial-gradient(80% 80% at 72% 98%,rgba(0,0,0,.1),rgba(0,0,0,0) 58%),
     var(--c);
   background-size:120px 120px,auto,auto,auto;
   box-shadow:inset 0 max(1px,1.1cqi) max(1px,.9cqi) rgba(255,255,255,.26),inset 0 min(-1.5px,-1.6cqi) max(1.5px,1.6cqi) rgba(0,0,0,.34),
@@ -1443,7 +1444,7 @@ html:not(.js) .lbpin{display:none}
   box-shadow:inset 0 max(1px,1.1cqi) max(1px,1.1cqi) rgba(0,0,0,.3),inset 0 min(-1px,-.7cqi) 0 rgba(255,255,255,.16),
     0 min(-1px,-.6cqi) 0 rgba(0,0,0,.12),0 max(1px,.6cqi) 0 rgba(255,255,255,.14)}
 /* the recessed ring round the hub */
-.rk-disc::after{content:"";position:absolute;inset:30%;border-radius:50%;background:rgba(0,0,0,.07);
+.rk-disc::after{content:"";position:absolute;inset:32.5%;border-radius:50%;background:rgba(0,0,0,.045);
   box-shadow:inset 0 max(1px,1cqi) max(1px,1.2cqi) rgba(0,0,0,.34),inset 0 min(-1px,-.6cqi) 0 rgba(255,255,255,.16),
     0 max(1px,.6cqi) 0 rgba(255,255,255,.16),0 min(-1px,-.6cqi) 0 rgba(0,0,0,.14)}
 /* the hub: turned steel with a bevel, and its bore, with a bright chamfer at the edge and the page through it */
@@ -1456,10 +1457,10 @@ html:not(.js) .lbpin{display:none}
   box-shadow:inset 0 max(1.5px,1.8cqi) max(1.5px,1.6cqi) rgba(0,20,27,.6),inset 0 min(-1px,-.5cqi) 0 rgba(255,255,255,.5),
     0 0 0 max(.75px,.6cqi) rgba(255,255,255,.85),0 0 0 max(1.25px,1.2cqi) rgba(70,78,84,.55)}
 /* the name, moulded in: a light top edge and a dark bottom edge */
-.rk-name{position:absolute;left:14%;right:14%;bottom:65.5%;text-align:center;font:800 clamp(8px,10.5cqi,15px)/1 var(--sans);font-stretch:75%;
+.rk-name{position:absolute;left:14%;right:14%;bottom:67.5%;text-align:center;font:800 clamp(8px,10.5cqi,15px)/1 var(--sans);font-stretch:75%;
   letter-spacing:.05em;text-transform:uppercase;text-wrap:balance;
   text-shadow:0 -.75px 0 rgba(255,255,255,.3),0 .75px 0 rgba(0,0,0,.34)}
-.rk-line,.rk-on{position:absolute;left:16%;right:16%;top:67%;text-align:center;font:700 clamp(7.5px,7.4cqi,11px)/1.12 var(--sans);letter-spacing:.09em;
+.rk-line,.rk-on{position:absolute;left:16%;right:16%;top:69%;text-align:center;font:700 clamp(7.5px,7.4cqi,11px)/1.12 var(--sans);letter-spacing:.09em;
   text-transform:uppercase;text-wrap:balance;text-shadow:0 -.75px 0 rgba(255,255,255,.26),0 .75px 0 rgba(0,0,0,.3)}
 .rk-on{display:none}
 .rk-plate.is-on .rk-line{display:none}
