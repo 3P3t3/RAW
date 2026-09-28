@@ -476,7 +476,7 @@ def dexa_chart(d, k, colour, title):
     the last, and a y axis from zero, so a change is drawn at its real size. Where the scans have a gap the
     line stops, and the gap is a shaded band marked "no scans": nothing is drawn where nothing was measured.
     Only the first and last values are labelled; each point names its month and value on hover."""
-    W, H, L, R, T, B = 300, 132, 34, 16, 18, 26
+    W, H, L, R, T, B = 300, 132, 36, 16, 20, 26
     s, gap = d['scans'], d.get('gap')
     t = [when(r[0])[0] for r in s]
     v = [r[k] for r in s]

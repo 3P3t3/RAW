@@ -1845,12 +1845,12 @@ body{background:transparent}
 .dx-chart svg{display:block;width:100%;max-width:300px;height:auto;overflow:visible}
 .dx-grid{stroke:rgba(30,38,47,.14);stroke-width:1}
 .dx-base,.dx-tick{stroke:rgba(30,38,47,.45);stroke-width:1}
-.dx-yl,.dx-xl{font:500 12px var(--sans);fill:var(--text)}
-.dx-vl{font:700 13px var(--sans);fill:var(--ink);paint-order:stroke;stroke:#FAF9F5;stroke-width:4px;stroke-linejoin:round}
+.dx-yl,.dx-xl{font:500 13px var(--sans);fill:var(--text)}
+.dx-vl{font:700 14px var(--sans);fill:var(--ink);paint-order:stroke;stroke:#FAF9F5;stroke-width:4px;stroke-linejoin:round}
 .dx-line{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
 .dx-pt{stroke:#FAF9F5;stroke-width:2}
 .dx-gap{fill:rgba(65,83,101,.08)}
-.dx-gapl{font:600 12px var(--sans);letter-spacing:.04em;fill:var(--text)}
+.dx-gapl{font:600 13px var(--sans);letter-spacing:.04em;fill:var(--text)}
 .dx-src{display:grid;gap:4px;padding-top:12px;border-top:1px solid var(--line)}
 .dx-src p{margin:0;font-size:13px;line-height:1.45;color:var(--text)}
 /* on a shelf page the card stands alone, as wide as a reading column */
