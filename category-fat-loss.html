@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=745192bb">
+<link rel="stylesheet" href="style.css?v=2ab843eb">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -1632,7 +1632,7 @@ if(mcForm){
    the strip only when it will be there. The rack's three-step guide follows the visitor (1 until a
    plate is open, 2 while one is, 3 once one is loaded); under "Build yours." their own stack stands
    next to Peter's; the product card can load its shelf's plate; and the sample's "I've had my eye on"
-   blank is offered the newest plate's shelf, on the same terms as the call form's note. */
+   blank is offered the loaded plates' shelves (up to three), on the same terms as the call form's note. */
 var LB=null;
 (function(){
   var pin=$('#lbpin');
@@ -1650,17 +1650,29 @@ var LB=null;
       if(Array.isArray(sv))stack=sv.filter(function(c,i){return NAME.hasOwnProperty(c)&&sv.indexOf(c)===i})}catch(e){}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(stack))}catch(e){}}
   function count(n){return n?'Your stack · '+n+' plate'+(n===1?'':'s'):''}   /* no plates, no caption: the strip is away */
-  /* the newest plate's outline and its name, up for a moment and gone */
+  function capSet(n){   /* the strip's own: a phone's one-row strip drops " plates" (style.css) */
+    capYou.textContent=n?'Your stack · '+n:'';
+    if(n){var lg=doc.createElement('span');lg.className='lbc-lg';lg.textContent=' plate'+(n===1?'':'s');capYou.appendChild(lg)}
+  }
+  /* the newest plate's outline and its name, up for a moment and gone. On a phone's one-row strip
+     the name takes the caption's place: the count goes, the name comes, and back, never both at once */
+  var phone=matchMedia('(max-width: 767px)'),whos=$$('.lbc-who',pin);
   function flash(els){
     els.forEach(function(el){
       if(!el||!el.animate)return;
       el.getAnimations().forEach(function(a){a.cancel()});
-      el.animate(reduce.matches?[{opacity:1},{opacity:1}]:[{opacity:0},{opacity:1,offset:.1},{opacity:1,offset:.78},{opacity:0}],
-                 {duration:2400,easing:'linear'});   /* reduced motion: shown, then gone, with no fade */
+      var who=phone.matches&&el.classList.contains('lbc')?$('.lbc-who',el.closest('.lbc-set')):null,O={duration:2400,easing:'linear'};
+      if(!who){
+        el.animate(reduce.matches?[{opacity:1},{opacity:1}]:[{opacity:0},{opacity:1,offset:.1},{opacity:1,offset:.78},{opacity:0}],O);   /* reduced motion: shown, then gone, with no fade */
+        return;
+      }
+      hush([who]);
+      el.animate(reduce.matches?[{opacity:1},{opacity:1}]:[{opacity:0},{opacity:0,offset:.05},{opacity:1,offset:.1},{opacity:1,offset:.8},{opacity:0,offset:.85},{opacity:0}],O);
+      who.animate(reduce.matches?[{opacity:0},{opacity:0}]:[{opacity:1},{opacity:0,offset:.05},{opacity:0,offset:.85},{opacity:1,offset:.9},{opacity:1}],O);
     });
   }
   function rings(bar,c){return $$('.bb-p[data-cat="'+c+'"] .bb-ring',bar)}
-  function hush(els){els.forEach(function(e){e.getAnimations&&e.getAnimations().forEach(function(a){a.cancel()})})}   /* one newest at a time */
+  function hush(els){els.forEach(function(e){e&&e.getAnimations&&e.getAnimations().forEach(function(a){a.cancel()})})}   /* one newest at a time */
   function paint(newest){
     youBars.forEach(function(bar){
       $$('.bb-p',bar).forEach(function(p){
@@ -1669,7 +1681,7 @@ var LB=null;
         p.classList.toggle('on',on);
       });
     });
-    capYou.textContent=count(stack.length);
+    capSet(stack.length);
     if(hbar){hbar.classList.toggle('has',stack.length>0);hbYou.textContent=count(stack.length)}
     plates.forEach(function(b){b.classList.toggle('is-on',stack.indexOf(b.getAttribute('data-cat'))>-1)});
     loads.forEach(function(b){
@@ -1796,7 +1808,8 @@ var LB=null;
     new IntersectionObserver(function(es){if(es[0].isIntersecting&&noteDue)noteFill()}).observe(cform);
     var cs0=cSync;cSync=function(){noteFill();if(cs0)cs0()};   /* and once more before booking */
   }
-  /* the sample's "I've had my eye on ___": the newest plate's shelf ("something from Hydration"),
+  /* the sample's "I've had my eye on ___": the loaded plates' shelves, the newest three in the order
+     they went on ("something from Recovery, Hydration or Energy & Focus"), as the call's note names them,
      when the form comes into view and after the stack changes, only over an empty blank or one
      that still says exactly what the site last put there (kept in localStorage, as the note's is),
      and only while step 1 shows it. A ?try= link's product, and anything typed, are never touched. */
@@ -1805,7 +1818,8 @@ var LB=null;
   function sampleFill(){
     if(!sform||sform.hidden||sStep()!==1)return;
     sDue=false;
-    var v=sProd.value,c=stack[stack.length-1],want=c?'something from '+NAME[c]:'';
+    var ns=stack.slice(-3).map(function(c){return NAME[c]}),v=sProd.value,
+        want=ns.length?'something from '+(ns.length>1?ns.slice(0,-1).join(', ')+' or ':'')+ns[ns.length-1]:'';
     if(v&&v!==sLast||v===want)return;
     sProd.value=want;sFit(sProd);
     sLast=want;
@@ -1819,7 +1833,9 @@ var LB=null;
      changes on the way out. With it up at #story's edges the two stacks cross-fade as before. */
   var hero=$('.hero'),story=$('#story'),lineIO=null,heroGone=!hero,inStory=false;
   function pinSet(){
-    if(!(heroGone&&(inStory||stack.length>0))){pin.classList.remove('on');return}
+    var up=heroGone&&(inStory||stack.length>0);
+    html.classList.toggle('pin-you',up&&!inStory);   /* a phone's bottom tab steps aside while the strip holds the visitor's stack */
+    if(!up){pin.classList.remove('on');return}
     if(pin.classList.contains('on')){pin.classList.toggle('is-peter',inStory);return}
     pin.classList.add('snap');pin.classList.toggle('is-peter',inStory);pin.classList.add('on');
     requestAnimationFrame(function(){requestAnimationFrame(function(){pin.classList.remove('snap')})});
@@ -1863,7 +1879,7 @@ var LB=null;
       });
       if(n===lastN)return;
       pCaps.forEach(function(e,i){e.style.opacity=i===n?'1':'0'});
-      hush(pNews.concat($$('.bb-ring',pBar)));
+      hush(pNews.concat($$('.bb-ring',pBar),whos));
       if(lastN>-1&&n>lastN&&n>0)flash([pNews[n-1]].concat(rings(pBar,PC[n-1])));
       lastN=n;
     }};
@@ -1907,8 +1923,11 @@ var LB=null;
      height in style.css sets the pace (at 390x664 a unit is about 307px); this sets the rhythm.
      A change is 1.5 units, about 460px, so a swirl is long enough to be seen; every hold is
      still at least 180px. The turn (the before becoming the after) holds longest, since the
-     wipe happens while it is up. */
-  var HOLD=[.9,1.7,.6,.6,.8,.6,.7,.8,1],T=1.5,at=[],L=0;   /* before, the turn, five packs, the call, family */
+     wipe happens while it is up. The call holds longer still (2.0, ~690px at 390x844): it is the
+     moment that matters, and a ~700px flick through the end of the story should come to rest on
+     "Book a free call" rather than over it. The run in style.css grew with it (900 to 949lvh), so
+     every other beat keeps its pace. */
+  var HOLD=[.9,1.7,.6,.6,.8,.6,.7,2,1],T=1.5,at=[],L=0;   /* before, the turn, five packs, the call, family */
   beats.forEach(function(b,i){at.push(L);L+=(HOLD[i]||1)+(i<N-1?T:0)});
   var TURN=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('turn'),
       WARM=beats.map(function(b){return b.classList.contains('st-warm')}),
@@ -1944,11 +1963,12 @@ var LB=null;
   var ITEMS=[],arcEl=CALL<N?$('.st-arc',beats[CALL]):null,rowEl=$('.st-row',run),
       wells=$$('.stc-bay',rowEl),cats=wells.map(function(b){return b.getAttribute('data-cat')}),
       geo=null,rowA=0,rowZ=0,rowIn=0,cp={keys:{}},C={x0:0,y0:0,s:1,dx:0,dy:0,op:0};
-  /* the bar theme: no case strip here; the pinned bar (LB, above) is the stack. Each pack, once its
-     line is read, shrinks up onto the pinned bar and lands beside its own plate as the plate slides on:
-     this pack is that plate. The pinned bar is drawn over the stage, so for that part of the way the
-     pack is a copy in the bar's own layer (.lbt), laid exactly over it, which waits by its plate a
-     moment and goes as the next beat settles. */
+  /* the bar theme: no case strip here; the pinned bar (LB, above) is the stack. Each pack's plate
+     slides onto the pinned bar as the pack lands and its words come up, and is on by the time they
+     are (its beat's hold), so the strip counts the pack that is on the stage. Once its line is read
+     the pack shrinks up into that plate: this pack is that plate. The pinned bar is drawn over the
+     stage, so for that part of the way the pack is a copy in the bar's own layer (.lbt), laid exactly
+     over it, which fades into the plate as it gets there. */
   var BARM=!rowEl&&!!LB,pinEl=BARM?$('#lbpin'):null,tags=null,tp={keys:{}};
   if(BARM)cats=LB.cats;
   parts.forEach(function(p,i){
@@ -1967,16 +1987,16 @@ var LB=null;
   }
   function measure(){
     w=stage.offsetWidth;sh=stage.offsetHeight;
-    if(BARM){   /* each pack's place beside its plate on the pinned bar, in the stage's frame once it holds (its top at 0) */
+    if(BARM){   /* each pack's place on its plate on the pinned bar, in the stage's frame once it holds (its top at 0) */
       LB.measure();
       var s0=stage.getBoundingClientRect(),P0=null;
       geo={items:ITEMS.map(function(k){var b=k.pack.getBoundingClientRect(),P=LB.target(cats[k.c]||cats[0]),
-          S=(P.bot-P.top)*1.1,m=Math.min(b.width,b.height)||1;   /* a square picture shows at the box's smaller side */
+          S=P.h*1.25,m=Math.min(b.width,b.height)||1;   /* a square picture shows at the box's smaller side */
         P0=P.top;
-        /* it stands on the pinned bar's foot (a pack's picture ends about 90% down its square), just
-           before its "+ name", which comes up as its plate goes on; a pair side by side */
+        /* it ends on its plate, about the plate's height (a pack's picture is a little shorter than
+           its square); a pair a little either side of it */
         return {cx:b.left+b.width/2-s0.left,cy:b.top+b.height/2-s0.top,W:b.width,H:b.height,
-                tx:P.cap-S*(.3+(k.n-1-k.j)*.46)-s0.left,ty:P.bot-2-S*.4,sc:S/m}})};
+                tx:P.x+(k.n>1?(k.j-(k.n-1)/2)*P.h*.45:0)-s0.left,ty:P.y,sc:S/m}})};
       if(tags)ITEMS.forEach(function(k){   /* each copy on its pack's own box, in the pinned bar's frame */
         var G=geo.items[k.g],t=k.tag.style;
         t.left=f(G.cx-G.W/2+s0.left,1)+'px';t.top=f(G.cy-G.H/2-P0,1)+'px';t.width=f(G.W,1)+'px';t.height=f(G.H,1)+'px';
@@ -2109,17 +2129,19 @@ var LB=null;
       }
     });
     parts.forEach(function(p,i){var on=i===best;if(on!==p.on){p.on=on;p.b.classList.toggle('is-on',on)}});
-    /* the copies on the pinned bar: each rides over its pack from the moment it leaves, lands beside
-       its plate, waits there through the rest of the change and goes as the next beat's words settle */
+    /* the copies on the pinned bar: each rides over its pack from the moment it leaves and fades into
+       its plate (already on) as it gets there */
     if(tags&&geo)ITEMS.forEach(function(k){
       var i=k.bi,ko=(x-at[i]-(HOLD[i]||1))/T,qj=clamp((clamp((ko-.1)/.4)-k.off)/(1-k.off)),G=geo.items[k.g];
-      if(qj<=0||ko>=1.28){put(tp,k.tag,'t'+k.g,'none','0');return}
-      var F=fly(k,G,qj),gone=smooth(clamp((ko-1.02)/.26));
-      put(tp,k.tag,'t'+k.g,mv(F.x,F.y,0,F.rot,F.s*(1-.18*gone)),f(smooth(clamp(qj/.12))*(1-gone),3));
+      if(qj<=0||qj>=1){put(tp,k.tag,'t'+k.g,'none','0');return}
+      var F=fly(k,G,qj);
+      put(tp,k.tag,'t'+k.g,mv(F.x,F.y,0,F.rot,F.s),f(smooth(clamp(qj/.12))*(1-smooth(clamp((qj-.7)/.3))),3));
     });
-    /* his plates: each slides on as its pack arrives at the bar, in the change out of its beat */
+    /* his plates: each slides on in the last part of the change into its beat, after its pack has
+       landed (kin .63) and as its words rise (.6 to 1), and is on at the hold; the count turns at
+       kin .85. Scrolling back takes it off at the same place. */
     if(BARM)LB.peter(parts.reduce(function(ps,p,i){
-      if(p.kind==='prod'){var ko=i<N-1?clamp((x-at[i]-(HOLD[i]||1))/T):0;ps.push(smooth(clamp((clamp((ko-.1)/.4)-.62)/.36)))}
+      if(p.kind==='prod'){var ki=i?clamp((x-at[i]+T)/T):1;ps.push(smooth(clamp((ki-.7)/.3)))}
       return ps},[]));
     /* the ground warms with the product: the sand sweeps in from the right behind the arriving
        can and has covered the words' column before they rise; chalk comes with the after */
