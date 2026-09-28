@@ -272,14 +272,15 @@ a.how-step:active{opacity:.7}
 .t-bar.js .how-sh>i::before{box-shadow:0 0 0 .5px rgba(30,38,44,.35)}
 .t-bar.js .how-sh>i::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:26px;opacity:0;
   background:radial-gradient(closest-side,#fff,rgba(255,255,255,.85) 22%,rgba(170,190,255,.45) 52%,rgba(170,190,255,0))}
+.t-bar.motion .how-sh>i::after{will-change:opacity}
 .t-bar.js .how-sh.run>i::after{opacity:1}
 /* playing: plates wait above their places (the way the light comes), shafts dark, titles quiet */
 .t-bar.motion .how-steps .grow{opacity:1;transform:none;transition:none}
 .t-bar.motion .how-pl{opacity:0;transform:translate3d(0,-16px,0) scale(.94);
   transition:transform 360ms cubic-bezier(.22,1.2,.36,1.04),opacity 140ms linear}
-.t-bar.motion .how-pl::before{transition:opacity 240ms linear}
+.t-bar.motion .how-pl::before{transition:opacity 240ms linear;will-change:opacity}
 .t-bar.motion .how-sh>i{transform:translate3d(0,-100%,0)}
-.t-bar.motion .how-t,.t-bar.motion .how-ic{opacity:.74;transition:opacity 300ms linear}
+.t-bar.motion .how-t,.t-bar.motion .how-ic{opacity:.74;transition:opacity 300ms linear;will-change:opacity}   /* each on its own layer from the start: fading it costs no layout */
 .t-bar.motion .how-ic{opacity:.45}
 .t-bar.motion .on .how-pl{opacity:1;transform:none}
 .t-bar.motion .on .how-t,.t-bar.motion .on .how-ic{opacity:1}
