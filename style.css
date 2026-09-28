@@ -1410,8 +1410,10 @@ html:not(.js) .lbpin{display:none}
   .lbpin-cap{font-size:10.5px}
 }
 
-/* #goals as a plate rack: seven plates, front on, all on show. Phones 3, 3 and 1 (centred); from
-   768 one row of seven. A plate is a button, drawn as a competition bumper standing on the page:
+/* #goals as a plate rack: seven plates, front on, all on show. Phones two a row, the seventh
+   centred, each about 160px, so the line under a plate's name is 11px or more (it was 7.9px on a
+   phone with three a row); 768 to 1199 four and three (one row of seven was 86-123px a plate there,
+   its line 7.5-9px); from 1200 one row of seven, ~150-160px each. A plate is a button, drawn as a competition bumper standing on the page:
    a matte rubber face in its shelf's colour with a fine grain, a raised rim (lit on top, in shade
    underneath), a recessed ring round a machined steel hub with a bright edge to its bore, and a soft
    contact shadow under it. Its name is moulded into the rubber above the hub (a light top edge, a dark
@@ -1419,8 +1421,8 @@ html:not(.js) .lbpin{display:none}
    panel is open wears an outline ring. */
 .rack-sec .sec-head{margin-bottom:22px}
 .rk-hint{font:500 16px/1.4 var(--sans);color:var(--text)}
-.rk-plates{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 14px;max-width:420px}
-.rk-plates li:last-child:nth-child(3n+1){grid-column:2}
+.rk-plates{--cols:2;--gap:18px;list-style:none;margin:0 auto;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:20px var(--gap);max-width:344px}
+.rk-plates li{flex:0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));min-width:0}
 .rk-plate{position:relative;display:block;width:100%;aspect-ratio:1;margin:0;padding:0;border:0;border-radius:50%;background:none;
   color:var(--t);container-type:inline-size;-webkit-tap-highlight-color:transparent}
 .rk-plate:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
@@ -1457,10 +1459,10 @@ html:not(.js) .lbpin{display:none}
   box-shadow:inset 0 max(1.5px,1.8cqi) max(1.5px,1.6cqi) rgba(0,20,27,.6),inset 0 min(-1px,-.5cqi) 0 rgba(255,255,255,.5),
     0 0 0 max(.75px,.6cqi) rgba(255,255,255,.85),0 0 0 max(1.25px,1.2cqi) rgba(70,78,84,.55)}
 /* the name, moulded in: a light top edge and a dark bottom edge */
-.rk-name{position:absolute;left:14%;right:14%;bottom:67.5%;text-align:center;font:800 clamp(8px,10.5cqi,15px)/1 var(--sans);font-stretch:75%;
+.rk-name{position:absolute;left:14%;right:14%;bottom:67.5%;text-align:center;font:800 clamp(13px,10.5cqi,15px)/1 var(--sans);font-stretch:75%;
   letter-spacing:.05em;text-transform:uppercase;text-wrap:balance;
   text-shadow:0 -.75px 0 rgba(255,255,255,.3),0 .75px 0 rgba(0,0,0,.34)}
-.rk-line,.rk-on{position:absolute;left:16%;right:16%;top:69%;text-align:center;font:700 clamp(7.5px,7.4cqi,11px)/1.12 var(--sans);letter-spacing:.09em;
+.rk-line,.rk-on{position:absolute;left:15%;right:15%;top:69%;text-align:center;font:700 clamp(11px,7.4cqi,12px)/1.1 var(--sans);letter-spacing:.07em;
   text-transform:uppercase;text-wrap:balance;text-shadow:0 -.75px 0 rgba(255,255,255,.26),0 .75px 0 rgba(0,0,0,.3)}
 .rk-on{display:none}
 .rk-plate.is-on .rk-line{display:none}
@@ -1481,12 +1483,12 @@ html:not(.js) .lbpin{display:none}
 html:not(.js) .rk-panel[hidden]{display:block!important}
 @media (prefers-reduced-motion:reduce){.rk-disc,.rk-plate::before{transition:none}}
 @media (min-width:768px){
-  .rk-plates{grid-template-columns:repeat(7,minmax(0,1fr));max-width:none;gap:14px}
-  .rk-plates li:last-child:nth-child(3n+1){grid-column:auto}
+  .rk-plates{--cols:4;max-width:700px;gap:22px var(--gap)}
   .rk-panel{padding:24px 28px 10px}
   .rk-load{flex:none}
   .rk-panel .bay-packs{max-width:560px}
 }
+@media (min-width:1200px){.rk-plates{--cols:7;--gap:14px;max-width:none}}
 
 /* the story's pack beats: a quiet step label over each line, with its plate's colour */
 .st-step{display:flex;align-items:center;gap:8px;font:600 11px/1.2 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
