@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=5184de87">
+<link rel="stylesheet" href="style.css?v=f4537253">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -300,6 +300,62 @@ if(html.classList.contains('motion')){
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.15});
   $$('.grow').forEach(function(el){io.observe(el)});
 }
+
+/* The game plan (#how) in the bar theme: the shaft lights and the plates go on as the section scrolls
+   through (style.css draws them). A pure function of scroll: scrolling back takes them off again. On
+   a phone or tablet the shaft runs down the steps and the light's front sits on a reading line a
+   little below the middle of what the masthead (and the pinned strip, when it is up) leave in view,
+   so a step loads as it reaches the eye. From 1024 the bar runs across the four columns, and the light
+   crosses it while the row rises from 86% of the window to 44%. Per frame it reads one box and writes
+   only what changed: one transform per stretch of shaft, and a class per step (its plate's slide and
+   settle are a CSS transition on transform and opacity), so a scroll through costs no layout. Silent:
+   a clank per step as the page scrolls would be noise, and the story's own loads are silent too.
+   Reduced motion or no IntersectionObserver: html.motion is off and style.css shows it all loaded. */
+(function(){
+  var how=$('#how'),list=how&&$('.how-steps',how);
+  if(!list||!html.classList.contains('t-bar')||!html.classList.contains('motion'))return;
+  var lis=$$('li',list),marks=lis.map(function(li){return $('.how-n',li)}),segs=lis.map(function(li){return $('.how-sh',li)}),
+      fills=segs.map(function(s){return s&&$('i',s)}),mast=$('.mast'),pin=$('#lbpin'),wide=matchMedia('(min-width:1024px)'),
+      geo=null,raf=0,near=false,on=[],now=-1,tf=[],run=[];
+  function measure(){
+    var r=list.getBoundingClientRect(),h=wide.matches;
+    geo={h:h,top:mast?mast.offsetHeight:0,pin:pin?pin.offsetHeight:0,z:marks[0].offsetWidth,row:marks[0].getBoundingClientRect().top-r.top,
+      mk:marks.map(function(m){var b=m.getBoundingClientRect();return h?b.left-r.left:b.top-r.top}),
+      sg:segs.map(function(s){if(!s)return null;var b=s.getBoundingClientRect();return h?[b.left-r.left,b.width]:[b.top-r.top,b.height]})};
+    tf=[];
+  }
+  function frame(){
+    raf=0;
+    if(!geo)measure();
+    var r=list.getBoundingClientRect(),vh=innerHeight,g=geo,f,n=-1;
+    if(g.h){   /* the row's progress up the window, spread along the bar */
+      var y=r.top+g.row+g.z/2,p=Math.max(0,Math.min(1,(vh*.86-y)/(vh*.42))),a=g.mk[0]-1,b=g.mk[g.mk.length-1]+g.z;
+      f=p>0?a+p*(b-a):-1e4;
+    }else{     /* the reading line, in the list's own frame */
+      var top=g.top+(pin&&pin.classList.contains('on')?g.pin:0);
+      f=top+(vh-top)*.58-r.top;
+    }
+    lis.forEach(function(li,i){
+      var o=f>=g.mk[i]+g.z*.25;
+      if(o)n=i;
+      if(on[i]!==o){on[i]=o;li.classList.toggle('on',o)}
+    });
+    if(n!==now){if(now>-1)lis[now].classList.remove('now');if(n>-1)lis[n].classList.add('now');now=n}
+    fills.forEach(function(el,i){
+      if(!el)return;
+      var s=g.sg[i],x=Math.max(0,Math.min(1,(f-s[0])/s[1])),v=(x*100-100).toFixed(1),t=g.h?'translate3d('+v+'%,0,0)':'translate3d(0,'+v+'%,0)',u=x>0&&x<1;
+      if(tf[i]!==t){tf[i]=t;el.style.transform=t}
+      if(run[i]!==u){run[i]=u;segs[i].classList.toggle('run',u)}
+    });
+  }
+  function ask(){if(near&&!raf)raf=requestAnimationFrame(frame)}
+  new IntersectionObserver(function(es){near=es[0].isIntersecting;ask()},{rootMargin:'100% 0px 100% 0px'}).observe(how);
+  addEventListener('scroll',ask,{passive:true});
+  function again(){geo=null;if(!raf)raf=requestAnimationFrame(frame)}
+  addEventListener('resize',again);
+  if(window.ResizeObserver)new ResizeObserver(again).observe(list);
+  if(pin&&window.MutationObserver)new MutationObserver(ask).observe(pin,{attributes:true,attributeFilter:['class']});
+})();
 
 /* Hero glass video: plain H.264, so it plays everywhere; the poster shows until it does */
 var v=$('#glass-video'),vt=$('#glass-toggle'),userPaused=false;
