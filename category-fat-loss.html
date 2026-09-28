@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=946ff39c">
+<link rel="stylesheet" href="style.css?v=540e41b4">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -255,6 +255,10 @@
     <nav class="wrap menu-nav" aria-label="Menu">
       <ul class="menu-list">
         <!-- DRAFT-COPY --><li><a href="homepage.html#how">The game plan <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
+        <!-- the proof wall (#proof in homepage.template.html) sits past the story's stage, a long way
+             down: this is the way to it from anywhere, and from any shelf page, without another fixed
+             strip on a screen that has already given up enough to chrome. -->
+        <!-- DRAFT-COPY --><li><a href="homepage.html#proof">Our before &amp; afters <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
         <li><a href="homepage.html#goals">Goals <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="homepage.html#results" data-all>All products <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <!-- DRAFT-COPY --><li><a href="homepage.html#sample">Free sample <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
@@ -1593,9 +1597,15 @@ if(mcForm){
   });
   mcBack.addEventListener('click',function(){if(mcAt){mcAt--;mcStep(true);mcSave()}});
   $('#mc-edit').addEventListener('click',function(){mcStop();mcDone=false;mcShow();mcStep(true);mcSave()});
+  /* "Start over": the one path that clears the calculator. reset() puts the typed answers back to
+     empty and the radios back to the markup's own defaults; mcStep(true) shows question 1 and moves
+     focus to its legend; mcForget() drops what was saved for the consult. Everything the visitor
+     typed into the consult or the sample form is theirs and is left alone. */
   $('#mc-again').addEventListener('click',function(){
     mcStop();mcForm.reset();mcAt=0;mcDone=false;mcShow();mcStep(true);
     try{localStorage.removeItem(MCKEY)}catch(e){}
+    mcForget();
+    say('Your answers are cleared. Back to question 1: '+$('.mc-q',mcSteps[0]).textContent);
   });
   /* the targets go to the consult's own form. The button under the numbers carries them; so
      does scrolling to the form, which is what most people do instead. The button, being asked
@@ -1638,6 +1648,24 @@ if(mcForm){
     if(!keep)mcFilled=true;
     try{localStorage.setItem(MCAUTO,JSON.stringify(mcAuto))}catch(e){}
     if(moved)cform.dispatchEvent(new Event('change'));
+  }
+  /* the other half of "Start over": the calculator forgets the goal and the note it wrote into the
+     consult, in the fields and in MCAUTO, so the next calculation fills them fresh. A field is only
+     emptied while it still holds exactly what the site last put there — the moment the visitor has
+     typed anything of their own over it, or of their own in the first place, it is theirs and stays.
+     The bar's own line (cLead) is not the calculator's to clear, so it is left for noteFill to
+     write again; mcA, the snapshot MCAUTO was read into at load, is emptied with the rest or it
+     would go on vouching for a note that is no longer there. */
+  function mcForget(){
+    if(cform){
+      var goal=cform.elements.goal,note=cform.elements.note,moved=false;
+      if(goal&&mcAuto.goal&&goal.value===mcAuto.goal){goal.value='';moved=true}
+      if(note&&mcAuto.note&&note.value===mcAuto.note){note.value='';moved=true}
+      if(moved)cform.dispatchEvent(new Event('change'));
+    }
+    mcAuto.goal='';mcAuto.note='';mcFilled=false;mcSum='';
+    if(mcA){mcA.goal='';mcA.note=''}
+    try{localStorage.removeItem(MCAUTO)}catch(e){}
   }
   if(cform)cSync=function(){mcFill(false,true)};
   function mcInView(){

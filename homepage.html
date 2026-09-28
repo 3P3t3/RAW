@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=946ff39c">
+<link rel="stylesheet" href="style.css?v=540e41b4">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -884,9 +884,13 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
          between before and after sits at 50% in every file: the befores line up down the left, the
          afters down the right, and one pair of headings on that same 50% line labels each stack.
          Then the DEXA cards, on their own dates (build_homepage.py: PETER_TRANSFORM, HER_DEXA).
-         It is after the stage (#st-run), so none of it makes the story's run longer. -->
-    <div class="wrap st-proof">
-      <!-- DRAFT-COPY --><h3 class="pf-title"><span class="pf-k">His</span> and <span class="pf-k">hers</span></h3><!-- /DRAFT-COPY -->
+         It is after the stage (#st-run), so none of it makes the story's run longer.
+         It is a section of its own with an id, so it is a place on the page a visitor can be sent
+         to: the menu's "Our before & afters" is the way in from anywhere, on any page. html's
+         scroll-padding-top (style.css) clears the masthead, and .t-bar.has-stack the pinned strip
+         as well, so the heading lands under both. -->
+    <section class="wrap st-proof" id="proof" aria-labelledby="proof-t">
+      <!-- DRAFT-COPY --><h3 class="pf-title" id="proof-t"><span class="pf-k">His</span> and <span class="pf-k">hers</span></h3><!-- /DRAFT-COPY -->
       <div class="pf-duo">
       <figure class="c-proof pf-his">
         <p class="pf-who"><span class="pf-name">Peter</span></p>
@@ -908,8 +912,8 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <div class="dx-duo">
 <!-- DRAFT-COPY --><article class="dx-card" aria-labelledby="dx-peter-s-dexa-scans">
 <div class="dx-head"><h3 class="dx-t" id="dx-peter-s-dexa-scans">Peter’s DEXA scans</h3><p class="dx-span">Two scans, fifteen months apart</p></div>
-<dl class="dx-nums"><div class="dx-n"><dt>Body fat</dt><dd class="dx-v">22.1% → 7.4%</dd><dd class="dx-d">−14.7 points</dd></div><div class="dx-n"><dt>Weight</dt><dd class="dx-v">170 → 164 lb</dd><dd class="dx-d">−6 lb</dd></div></dl>
-<div class="dx-src"><p>Measured by DEXA scan.</p><p>Individual results vary.</p></div>
+<dl class="dx-nums dx-four"><div class="dx-n"><dt>Body fat</dt><dd class="dx-v">22.1% → 7.4%</dd><dd class="dx-d">−14.7 points</dd></div><div class="dx-n"><dt>Weight</dt><dd class="dx-v">170 → 164 lb</dd><dd class="dx-d">−6 lb</dd></div><div class="dx-n"><dt>Fat</dt><dd class="dx-v">38 → 12 lb</dd><dd class="dx-d">−25 lb</dd></div><div class="dx-n"><dt>Lean mass</dt><dd class="dx-v">132 → 152 lb</dd><dd class="dx-d">+19 lb</dd></div></dl>
+<div class="dx-src"><p>Measured by DEXA scan.</p><p>The fat and lean pounds aren’t on the scan — I worked them out from the weight and body fat it gave me, and rounded them, so they’re ballpark.</p><p>Individual results vary.</p></div>
 </article><!-- /DRAFT-COPY -->
 <!-- DRAFT-COPY --><article class="dx-card" aria-labelledby="dx-yenni-s-dexa-scans">
 <div class="dx-head"><h3 class="dx-t" id="dx-yenni-s-dexa-scans">Yenni’s DEXA scans</h3><p class="dx-span">Four scans, Jan 2024 → Aug 2026</p></div>
@@ -919,7 +923,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
 <div class="dx-src"><p>Measured by DEXA scan at UC Davis Sports Medicine, Sacramento.</p><p>We’re not sponsored by or affiliated with UC Davis Health; we’re just big fans of their DEXA service.</p><p>Individual results vary.</p></div>
 </article><!-- /DRAFT-COPY -->
       </div>
-    </div>
+    </section>
   </section>
 
   <!-- After the story: the stack his story loaded, drawn loaded, with its key, and the two ways on -->
@@ -1294,6 +1298,10 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     <nav class="wrap menu-nav" aria-label="Menu">
       <ul class="menu-list">
         <!-- DRAFT-COPY --><li><a href="#how">The game plan <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
+        <!-- the proof wall (#proof in homepage.template.html) sits past the story's stage, a long way
+             down: this is the way to it from anywhere, and from any shelf page, without another fixed
+             strip on a screen that has already given up enough to chrome. -->
+        <!-- DRAFT-COPY --><li><a href="#proof">Our before &amp; afters <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
         <li><a href="#goals">Goals <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="#results" data-all>All products <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <!-- DRAFT-COPY --><li><a href="#sample">Free sample <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
@@ -2619,9 +2627,15 @@ if(mcForm){
   });
   mcBack.addEventListener('click',function(){if(mcAt){mcAt--;mcStep(true);mcSave()}});
   $('#mc-edit').addEventListener('click',function(){mcStop();mcDone=false;mcShow();mcStep(true);mcSave()});
+  /* "Start over": the one path that clears the calculator. reset() puts the typed answers back to
+     empty and the radios back to the markup's own defaults; mcStep(true) shows question 1 and moves
+     focus to its legend; mcForget() drops what was saved for the consult. Everything the visitor
+     typed into the consult or the sample form is theirs and is left alone. */
   $('#mc-again').addEventListener('click',function(){
     mcStop();mcForm.reset();mcAt=0;mcDone=false;mcShow();mcStep(true);
     try{localStorage.removeItem(MCKEY)}catch(e){}
+    mcForget();
+    say('Your answers are cleared. Back to question 1: '+$('.mc-q',mcSteps[0]).textContent);
   });
   /* the targets go to the consult's own form. The button under the numbers carries them; so
      does scrolling to the form, which is what most people do instead. The button, being asked
@@ -2664,6 +2678,24 @@ if(mcForm){
     if(!keep)mcFilled=true;
     try{localStorage.setItem(MCAUTO,JSON.stringify(mcAuto))}catch(e){}
     if(moved)cform.dispatchEvent(new Event('change'));
+  }
+  /* the other half of "Start over": the calculator forgets the goal and the note it wrote into the
+     consult, in the fields and in MCAUTO, so the next calculation fills them fresh. A field is only
+     emptied while it still holds exactly what the site last put there — the moment the visitor has
+     typed anything of their own over it, or of their own in the first place, it is theirs and stays.
+     The bar's own line (cLead) is not the calculator's to clear, so it is left for noteFill to
+     write again; mcA, the snapshot MCAUTO was read into at load, is emptied with the rest or it
+     would go on vouching for a note that is no longer there. */
+  function mcForget(){
+    if(cform){
+      var goal=cform.elements.goal,note=cform.elements.note,moved=false;
+      if(goal&&mcAuto.goal&&goal.value===mcAuto.goal){goal.value='';moved=true}
+      if(note&&mcAuto.note&&note.value===mcAuto.note){note.value='';moved=true}
+      if(moved)cform.dispatchEvent(new Event('change'));
+    }
+    mcAuto.goal='';mcAuto.note='';mcFilled=false;mcSum='';
+    if(mcA){mcA.goal='';mcA.note=''}
+    try{localStorage.removeItem(MCAUTO)}catch(e){}
   }
   if(cform)cSync=function(){mcFill(false,true)};
   function mcInView(){

@@ -453,9 +453,16 @@ DEXA_NOTES = [f'Measured by DEXA scan at {DEXA_AT}.',
 # Hers. Set HER_DEXA = None and her card comes off every page. 'gap' is the index of the scan after which there
 # is none until the next: the trend is drawn broken there (no line across it), and the card says why.
 # Peter's card: his transformation, by DEXA scan at the start and end of the fifteen months his before/after
-# photos span: (weight lb, body fat %) before and after. Peter chose to show only these four numbers and no dates;
-# nothing is derived from them, and no clinic is named (his later scans at UC Davis are not used).
+# photos span: (weight lb, body fat %) before and after. Peter chose to show only these four numbers and no dates,
+# and no clinic is named (his later scans at UC Davis are not used).
 PETER_TRANSFORM = ((170, 22.1), (164, 7.4))
+# The pounds of fat and lean are NOT on his report: they are arithmetic on the four numbers above
+# (fat = weight x body fat %, lean = the rest), which is why the card says so under them. Peter asked for
+# the ballpark (2026-09-28) because his report does not break lean out. +19 lb of lean in fifteen months is
+# at the very top of what is plausible, and a DEXA lean figure carries water and glycogen that swing
+# pounds on their own, so the card labels these worked-out and rounded, never measured. Set
+# PETER_SHOW_COMPOSITION = False and both rows and that line come off the card in one edit.
+PETER_SHOW_COMPOSITION = True
 HER_DEXA = {
     'scans': [('2024-01', 137.8, 41.2, 92.1, 29.9), ('2024-07', 142.0, 41.8, 95.7, 29.4),
               ('2024-12', 134.5, 39.0, 90.9, 29.0), ('2026-08-21', 132.9, 30.2, 98.1, 22.7)],
@@ -542,15 +549,28 @@ def dexa_card(d, title, level=3, span_line=None):
 
 def peter_card(level=3):
     """Peter's DEXA card: the two scans of his transformation, fifteen months apart, as body fat and weight
-    only (PETER_TRANSFORM). No dates, no trend, no clinic: that is all he chose to show."""
+    (PETER_TRANSFORM), then — while PETER_SHOW_COMPOSITION is on — the pounds of fat and lean worked out
+    from them. No dates, no trend, no clinic: that is all he chose to show."""
     (w0, f0), (w1, f1) = PETER_TRANSFORM
     nums = [('Body fat', f'{f0:.1f}% → {f1:.1f}%', f'−{f0 - f1:.1f} points'),
             ('Weight', f'{w0} → {w1} lb', f'−{w0 - w1} lb')]
+    derived = ''
+    if PETER_SHOW_COMPOSITION:
+        fat0, fat1 = w0 * f0 / 100, w1 * f1 / 100       # pounds of fat each scan implies
+        lean0, lean1 = w0 - fat0, w1 - fat1             # everything that is not fat
+        # whole pounds: every figure rounded on its own, and each change rounded from the exact
+        # difference rather than from the two rounded ends, so a row can read a pound off its own
+        # endpoints (38 → 12 with −25). The line under the card says they are worked out and rounded.
+        nums += [('Fat', f'{fat0:.0f} → {fat1:.0f} lb', f'−{fat0 - fat1:.0f} lb'),
+                 ('Lean mass', f'{lean0:.0f} → {lean1:.0f} lb', f'+{lean1 - lean0:.0f} lb')]
+        derived = ('<p>The fat and lean pounds aren’t on the scan — I worked them out from the weight '
+                   'and body fat it gave me, and rounded them, so they’re ballpark.</p>')
     t = 'Peter’s DEXA scans'
     return (f'<!-- DRAFT-COPY --><article class="dx-card" aria-labelledby="dx-{slug(t)}">\n'
             f'<div class="dx-head"><h{level} class="dx-t" id="dx-{slug(t)}">{t}</h{level}><p class="dx-span">Two scans, fifteen months apart</p></div>\n'
-            '<dl class="dx-nums">' + ''.join(f'<div class="dx-n"><dt>{k}</dt><dd class="dx-v">{v}</dd><dd class="dx-d">{dd}</dd></div>' for k, v, dd in nums) + '</dl>\n'
-            '<div class="dx-src"><p>Measured by DEXA scan.</p><p>Individual results vary.</p></div>\n'
+            f'<dl class="dx-nums{" dx-four" if PETER_SHOW_COMPOSITION else ""}">'
+            + ''.join(f'<div class="dx-n"><dt>{k}</dt><dd class="dx-v">{v}</dd><dd class="dx-d">{dd}</dd></div>' for k, v, dd in nums) + '</dl>\n'
+            f'<div class="dx-src"><p>Measured by DEXA scan.</p>{derived}<p>Individual results vary.</p></div>\n'
             '</article><!-- /DRAFT-COPY -->')
 
 

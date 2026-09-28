@@ -1967,6 +1967,9 @@ body{background:transparent}
 .dx-d{grid-column:1;margin:0;font-size:14px;color:var(--text);font-variant-numeric:tabular-nums}
 @container (min-width:520px){
   .dx-nums{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:16px}
+  /* Peter's card carries four rows — weight and body fat, then the fat and lean worked out from
+     them — so it goes two by two rather than three across with one orphan underneath */
+  .dx-nums.dx-four{grid-template-columns:repeat(2,minmax(0,1fr))}
   .dx-n{grid-template-columns:minmax(0,1fr);align-content:start}
   .dx-v,.dx-d{grid-column:auto;grid-row:auto}
   .dx-v{align-self:start;font-size:19px}
