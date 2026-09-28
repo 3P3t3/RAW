@@ -154,6 +154,10 @@
             <p class="s-err" id="s-product-err"></p></div><span class="s-say" aria-hidden="true">.</span>
           <!-- the product names, for the script's suggestions under the blank -->
           <ul class="s-sugg" id="s-sugg" role="listbox" aria-label="Products that match" hidden></ul>
+          {{SAMPLE_PICKER}}
+          <!-- "Ask for a free sample" on a product card, over words the visitor typed here: the script keeps
+               them, puts the product in the P.S. and says so on this line -->
+          <p class="s-hint s-kept" id="s-kept" hidden></p>
           <p class="s-hint" id="s-product-hint">Not sure? Say so and I’ll suggest something.</p>
           <datalist id="sample-products">
 {{SAMPLE_PRODUCTS}}
@@ -617,7 +621,7 @@
 {{FOOTER}}
 
 {{DIALOGS}}
-
+{{PCARD}}
 <p class="vh" id="live" aria-live="polite"></p>
 
 {{SCRIPT}}
