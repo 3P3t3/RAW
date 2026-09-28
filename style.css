@@ -220,7 +220,7 @@ a.how-step:active{opacity:.7}
   .how-go{margin-top:12px}
   .how-go .btn{flex:none}
 }
-@media (min-width:1024px){.how-steps{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (min-width:1024px){.how-steps{grid-template-columns:repeat(5,minmax(0,1fr))}}
 /* The game plan in the bar theme (html.t-bar, with script): the steps hang on a steel shaft, each
    number on a small bumper plate seen face on, the rack's rubber and the bar's steel. Down the left
    on phones and tablets; from 1024 across the top of the four columns. As the section scrolls through
@@ -295,9 +295,11 @@ a.how-step:active{opacity:.7}
   .t-bar.js .how-t{font-size:18px}
   .t-bar.js .how-sh{top:53px}
 }
-/* from 1024: one bar across the top of the four columns, the plates on it, the light running left to right */
+/* from 1024: one bar across the top of the five columns, the plates on it, the light running left to
+   right. Five, not four, since the plan gained the macro-breakdown-or-a-call step: a fifth that wrapped
+   to a second row would sit off the end of the shaft, with nothing running into its plate. */
 @media (min-width:1024px){
-  .t-bar.js .how-steps{grid-template-columns:repeat(4,minmax(0,1fr));column-gap:24px;max-width:none}
+  .t-bar.js .how-steps{grid-template-columns:repeat(5,minmax(0,1fr));column-gap:20px;max-width:none}
   .t-bar.js .how-step{grid-template-columns:minmax(0,1fr) 18px;row-gap:8px;padding:6px 0 28px}
   .t-bar.js .how-n{grid-row:1;grid-column:1;width:56px;height:56px;margin:0 0 10px;font-size:18px}
   .t-bar.js .how-t{grid-row:2;grid-column:1}
@@ -563,12 +565,22 @@ a.how-step:active{opacity:.7}
 /* The free sample (#sample) reads as a note to Peter: a fill-in-the-blank sentence in the display
    type, in two short steps with script. Every field keeps its real label, visually hidden, and the
    sentence around it is aria-hidden. The blanks grow as they fill (the script sizes them), the
-   chips sit in the sentence as words. All of it is under #sample, so the consult's card, chips and
-   fields, which this form borrows, never change. Without script nothing is hidden: one form. */
+   chips sit in the sentence as words. Without script nothing is hidden: one form.
+   The card itself is no longer the sample's alone: the shell, the display face, the blanks and the
+   pills are .nc below, which the consult form wears too. What stays under #sample here is only what
+   the SENTENCE needs — the hidden legends, the inline chips, the separators, the growing blanks. */
 #sample-form.s-two[data-step="1"] #s-step2,#sample-form.s-two[data-step="2"] #s-step1{display:none}
-#sample .c-card{position:relative;border-radius:30px;background:var(--chalk);padding:40px 22px 22px;
-  box-shadow:inset 0 0 0 2px var(--ink),8px 8px 0 var(--teal)}
-#sample .btn{border-radius:999px}
+/* .nc is that note-card hand, lifted out of #sample so the consult form can wear it too: the shell,
+   the heavy condensed display face, the underlined blanks and the dashed choice pills. --ncs is the
+   face's size, set once per card and stepped at the breakpoints, so a card (or one fieldset) that
+   needs smaller words only changes that one number. Nothing below is #sample's any more. */
+.nc{--ncs:28px}
+.c-card.nc,.c-embed.nc{position:relative;border-radius:30px;background:var(--chalk);
+  box-shadow:inset 0 0 0 2px var(--ink),8px 8px 0 var(--teal);
+  backdrop-filter:none;-webkit-backdrop-filter:none}
+.c-card.nc{padding:40px 22px 22px}
+.c-embed.nc{overflow:hidden}   /* the calendar fills the shell, clipped to its radius, and keeps its 700px */
+#sample .btn,.nc .btn{border-radius:999px}
 #sample .s-step{display:block;min-width:0;font:400 28px/1.62 var(--display);color:var(--ink)}
 #sample .s-step:focus{outline:none}
 #sample .s-say{font-weight:800;font-stretch:75%;letter-spacing:-.005em}
@@ -579,29 +591,31 @@ a.how-step:active{opacity:.7}
 /* the choices, as words in the sentence: dashed until picked, then a teal pill knocked askew */
 #sample .chips{display:inline}
 #sample .chip{display:inline-flex;vertical-align:baseline}
-#sample .chip span{min-height:44px;padding:0 .3em;border:2px dashed rgba(30,38,47,.34);border-radius:999px;
-  background:transparent;font:800 28px/1 var(--display);font-stretch:75%;color:var(--text)}
-#sample .chip input:checked + span{background:var(--teal);border:2px solid var(--ink);color:var(--chalk);
+.nc .chip span{min-height:44px;padding:0 .3em;border:2px dashed rgba(30,38,47,.34);border-radius:999px;
+  background:transparent;font:800 var(--ncs)/1 var(--display);font-stretch:75%;color:var(--text)}
+.nc .chip input:checked + span{background:var(--teal);border:2px solid var(--ink);color:var(--chalk);
   transform:rotate(-2deg);box-shadow:3px 3px 0 var(--ink)}
 @media (hover:hover){
-  #sample .chip:hover span{transform:none;color:var(--ink);border-color:var(--ink)}
-  #sample .chip:hover input:checked + span{transform:rotate(-2deg);color:var(--chalk)}
+  .nc .chip:hover span{transform:none;color:var(--ink);border-color:var(--ink)}
+  .nc .chip:hover input:checked + span{transform:rotate(-2deg);color:var(--chalk)}
 }
-#sample .chip input:focus-visible + span{outline:3px solid var(--blue);outline-offset:3px}
+.nc .chip input:focus-visible + span{outline:3px solid var(--blue);outline-offset:3px}
 #sample .s-by .chip + .chip::before,#sample .s-deliv .chip + .chip::before{content:"/" / "";padding:0 .12em;
-  font:800 28px/44px var(--display);font-stretch:75%;color:rgba(30,38,47,.35)}
+  font:800 var(--ncs)/44px var(--display);font-stretch:75%;color:rgba(30,38,47,.35)}
 #sample .s-deliv .chip + .chip::before{content:"or" / "";padding:0 .22em;color:var(--ink)}
 /* the full stop rides on the last choice, so a narrow line can never strand it on its own */
 #sample .s-deliv .chip + .chip::after{content:"." / "";padding-left:.06em;font-weight:800;font-stretch:75%;line-height:44px;color:var(--ink)}
 /* the blanks: a field and its error stacked in one inline box, so the sentence runs on after it */
 #sample .c-field{display:inline-flex;flex-direction:column;vertical-align:baseline;gap:4px;max-width:100%}
-#sample .c-field input,#sample .c-field textarea{min-width:4.4em;max-width:100%;border:0;border-radius:0;box-shadow:none;
-  field-sizing:content;font:800 28px/1 var(--display);font-stretch:75%;color:var(--blue);-webkit-appearance:none;appearance:none}
-#sample .c-field input{height:46px;padding:0 5px;border-bottom:3px solid var(--teal);background:transparent}
-#sample .c-field input::placeholder,#sample .c-field textarea::placeholder{color:transparent}
+.nc .c-field input,.nc .c-field textarea{max-width:100%;border:0;border-radius:0;box-shadow:none;
+  font:800 var(--ncs)/1 var(--display);font-stretch:75%;color:var(--blue);-webkit-appearance:none;appearance:none}
+.nc .c-field input{height:46px;padding:0 5px;border-bottom:3px solid var(--teal);background:transparent}
+.nc .c-field input::placeholder,.nc .c-field textarea::placeholder{color:transparent}
+/* the sentence's blanks grow with what is typed in them; a question's blank holds its row */
+#sample .c-field input,#sample .c-field textarea{min-width:4.4em;field-sizing:content}
 #sample .c-field[data-by] input,#sample .s-f-item textarea{min-width:6.4em}
-#sample .c-field input:focus{outline:none;background:rgba(51,64,184,.08);border-bottom-color:var(--blue);box-shadow:0 3px 0 var(--blue)}
-#sample .c-field input[aria-invalid="true"]{border-bottom-color:#9B2C1F;background:rgba(155,44,31,.07);box-shadow:none}
+.nc .c-field input:focus{outline:none;background:rgba(51,64,184,.08);border-bottom-color:var(--blue);box-shadow:0 3px 0 var(--blue)}
+.nc .c-field input[aria-invalid="true"]{border-bottom-color:#9B2C1F;background:rgba(155,44,31,.07);box-shadow:none}
 /* the product blank is a textarea so a long name wraps: every line gets its own underline */
 #sample .c-field textarea{--u:var(--teal);display:block;height:46px;padding:4px 5px 0;resize:none;overflow:hidden;
   line-height:42px;overflow-wrap:break-word;background:repeating-linear-gradient(transparent 0 39px,var(--u) 39px 42px) content-box}
@@ -612,7 +626,7 @@ a.how-step:active{opacity:.7}
 html:not(.js) #sample .c-field[data-by]{display:flex;margin:6px 0}
 html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:auto;margin:0;overflow:visible;clip:auto;
   white-space:normal;font:600 13px/1.3 var(--sans);color:var(--text)}
-#sample .c-field .s-err{contain:inline-size;font-size:14px;line-height:1.35;font-stretch:100%}
+.nc .c-field .s-err{contain:inline-size;font-size:14px;line-height:1.35;font-stretch:100%}
 #sample .s-hint{font:400 14px/1.4 var(--sans)}
 #sample .s-step > .s-hint{margin-top:4px}
 #sample .s-deliv .s-hint,#sample .s-deliv .s-err{margin:4px 0 6px}
@@ -695,16 +709,42 @@ html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:
 /* under 360px the note drops two pixels of type and four of margin a side, so a line holds a
    clause and a blank; it is still the heavy condensed cut, just a size down */
 @media (max-width:359px){
-  #sample .c-card{padding-left:18px;padding-right:18px}
+  .nc{--ncs:26px}
+  .c-card.nc{padding-left:18px;padding-right:18px}
   #sample .s-step{font-size:26px}
-  #sample .chip span,#sample .c-field input,#sample .c-field textarea,#sample .s-by .chip + .chip::before,
-  #sample .s-deliv .chip + .chip::before{font-size:26px}
 }
 @media (min-width:768px){
-  #sample .c-card{padding:52px 36px 34px}
+  .nc{--ncs:34px}
+  .c-card.nc{padding:52px 36px 34px}
   #sample .s-step{font-size:34px}
-  #sample .chip span,#sample .c-field input,#sample .c-field textarea,#sample .s-by .chip + .chip::before,
-  #sample .s-deliv .chip + .chip::before{font-size:34px}
+}
+
+/* #consult wears the same note card (.nc above), so the two asks on the page read as one hand.
+   Only the questions differ: the sample hides its legends because the sentence around its blanks
+   says everything, while here the four questions ARE the card, so they keep the display face at a
+   steady size of their own (--ncq) and stay visible. The six training answers are whole sentences
+   rather than words, so that one fieldset steps its pills right down (--ncs on .c-q-long). */
+#consult-form{--ncs:26px;--ncq:25px;gap:26px}
+#consult-form .c-q legend{margin-bottom:14px;font:800 var(--ncq)/1.12 var(--display);font-stretch:75%;
+  letter-spacing:-.005em;color:var(--ink)}
+#consult-form .c-q-long{--ncs:18px}
+#consult-form .c-q-long .chip span{padding:0 .5em;line-height:1.15;text-align:left}
+#consult-form .chips{gap:10px 8px}
+#consult-form .c-field{gap:6px}
+#consult-form .c-field label{font:800 var(--ncq)/1.12 var(--display);font-stretch:75%;letter-spacing:-.005em;color:var(--ink)}
+#consult-form .c-field label span{font:400 14px/1.3 var(--sans);letter-spacing:0;color:var(--text)}
+#consult-form .c-field input{width:100%}
+/* the hint on a blank stays readable rather than hidden as it is in the sentence: small sans,
+   sitting on the underline, so the blank still says what belongs in it */
+#consult-form .c-field input::placeholder{color:rgba(65,83,101,.85);font:400 15px/46px var(--sans);font-stretch:100%}
+#consult-form .c-sum{margin-top:-14px;font:400 15px/1.45 var(--sans);color:var(--text)}
+@media (max-width:359px){
+  #consult-form{--ncs:23px;--ncq:22px}
+  #consult-form .c-q-long{--ncs:17px}
+}
+@media (min-width:768px){
+  #consult-form{--ncs:30px;--ncq:28px}
+  #consult-form .c-q-long{--ncs:19px}
 }
 
 /* the category banner's way to it */
@@ -1843,7 +1883,7 @@ body{background:transparent}
 
 /* the bands that painted their own ground */
 .sample-sec,.macros-sec,.cat-macros,.story,.st-dark,.st-warm,.st-light,.story.is-live .st-bg{background:transparent}
-#sample .c-card{background:#FAF9F5}   /* the note: a sheet a shade whiter than the chalk it lies on */
+.c-card.nc,.c-embed.nc{background:#FAF9F5}   /* the note: a sheet a shade whiter than the chalk it lies on */
 
 /* #trending without the pour (TRENDING_POUR = False) is a plain band: on the field, in dark type.
    With the pour on, the band keeps its film and its light type; the film needs its dark. */

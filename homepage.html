@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=49443d2d">
+<link rel="stylesheet" href="style.css?v=fc6fff90">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -375,22 +375,24 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <p class="label">Sports nutrition &amp; wellness</p>
         <h1 id="hero-title"><span>Picked</span> <span>for how</span> <span class="hl-3d">you train.</span></h1>
         <!-- PETER-COPY --><p class="sub">Hand-picked supplements. Free macros. A half-hour call on what’s worth taking.</p><!-- /PETER-COPY -->
-        <div class="hero-actions">
-          <a class="btn" href="#macros">Work out your macros</a>
+        <!-- the first thing offered is the plan, not a form: the calculator and the call are both
+             inside it (steps 01 and 04), so asking for the map first gives nothing up. -->
+        <!-- DRAFT-COPY --><div class="hero-actions">
+          <a class="btn" href="#how">See the game plan</a>
           <a class="tlink" href="#consult">Book a free call</a>
-        </div>
+        </div><!-- /DRAFT-COPY -->
         <div class="hbar"><div class="bbx"><div class="bb bb-dk bb-you" style="--n:9" aria-hidden="true"><span class="bb-sl bb-l"><i class="bb-p" data-cat="protein" style="--c:#1E262F;--s:1.00;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="daily-foundations" style="--c:#6B5646;--s:0.94;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="hydration" style="--c:#93B7C0;--s:0.88;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="energy-focus" style="--c:#E2C8AE;--s:0.82;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="recovery" style="--c:#3D4794;--s:0.76;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="fat-loss" style="--c:#8A543E;--s:0.70;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="skin-redefined" style="--c:#D6D4C9;--s:0.64;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="womens-health" style="--c:#76485F;--s:0.58;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="mens-health" style="--c:#39594A;--s:0.52;--o:0"><b class="bb-ring"></b></i></span><span class="bb-co"></span><span class="bb-sh"><span class="bb-kn"></span></span><span class="bb-co"></span><span class="bb-sl bb-r"><i class="bb-p" data-cat="protein" style="--c:#1E262F;--s:1.00;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="daily-foundations" style="--c:#6B5646;--s:0.94;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="hydration" style="--c:#93B7C0;--s:0.88;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="energy-focus" style="--c:#E2C8AE;--s:0.82;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="recovery" style="--c:#3D4794;--s:0.76;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="fat-loss" style="--c:#8A543E;--s:0.70;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="skin-redefined" style="--c:#D6D4C9;--s:0.64;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="womens-health" style="--c:#76485F;--s:0.58;--o:0"><b class="bb-ring"></b></i><i class="bb-p" data-cat="mens-health" style="--c:#39594A;--s:0.52;--o:0"><b class="bb-ring"></b></i></span></div></div><p class="hbar-cap" aria-hidden="true"><span class="hb-empty">Scroll to load the bar.</span><span class="hb-you"></span></p></div>
       </div>
     </div>
   </section>
 
-  <!-- 3b. The game plan (#how): the path through the page, before anything else asks for attention.
-       Four numbered steps, each linking to where it happens (#macros, #sample, #quick-call; step 3
-       has no section of its own, so it is not a link), then the one thing to do. The sections
-       themselves carry no step numbers: they sit in a different order on the page, so this list
-       alone is the map. Step 4's words switch with CONSULT_QUICK_URL in build_homepage.py, as
-       the quick-call button does. The sample is a request, never a promise: Peter decides what he
-       can send, so no line here or in #sample may guarantee one.
+  <!-- 3b. The game plan (#how): the path through the page, and the hero's own primary button leads
+       here, so it is the first thing a visitor is offered. Five numbered steps, each linking to where
+       it happens (#goals, #sample, #macros, #quick-call; step 03 has no section of its own, so it is
+       not a link), then the one thing to do. The sections themselves carry no step numbers: they sit
+       in a different order on the page, so this list alone is the map. Step 05's words switch with
+       CONSULT_QUICK_URL in build_homepage.py, as the quick-call button does. The sample is a request,
+       never a promise: Peter decides what he can send, so no line here or in #sample may guarantee one.
        In the bar theme (html.t-bar) the steps hang on a steel shaft, each number on a plate (.how-pl,
        drawn from its data-n); as the section scrolls through, the shaft lights and each plate slides
        on (_script.html). .how-sh is the stretch of shaft to the next plate. Other views hide both. -->
@@ -402,16 +404,19 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <h2 id="how-title"><span>The game</span> <span class="hl-k">plan</span></h2>
       </div>
       <ol class="how-steps">
-        <li class="grow" style="--d:1"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="#macros"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="01"></i>01</span>
-          <span class="how-t">Name your goal.</span>
-          <span class="how-d">Pick what you’re chasing, then get your numbers from the free macro calculator.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li class="grow" style="--d:1"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="#goals"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="01"></i>01</span>
+          <span class="how-t">Identify your goal.</span>
+          <span class="how-d">Let’s figure out what you’re chasing. Then we can build the best stack to optimize for that.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li class="grow" style="--d:2"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="#sample"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="02"></i>02</span>
           <span class="how-t">Request a free sample.</span>
-          <span class="how-d">On me, while supplies last, dropped off near Lincoln or mailed in the US.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+          <span class="how-d">On me, while supplies last.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li class="grow" style="--d:3"><i class="how-sh" aria-hidden="true"><i></i></i><div class="how-step"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="03"></i>03</span>
           <span class="how-t">Report back.</span>
-          <span class="how-d">A few days in, I’ll ask how you’re getting on. Say what worked and what didn’t, and I’ll tell you what I’d add next, if anything.</span></div></li>
-        <li class="grow" style="--d:4"><a class="how-step" href="#quick-call"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="04"></i>04</span>
+          <span class="how-d">A few days in, I’ll ask how you’re getting on. Say what worked and what didn’t, and I’ll tell you what I’d add, if anything.</span></div></li>
+        <li class="grow" style="--d:4"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="#macros"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="04"></i>04</span>
+          <span class="how-t">Get my read on it.</span>
+          <span class="how-d">Run your macros free, about a minute of typing — or bring your stack to the half-hour call and I’ll say what I’d keep and what I’d drop.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li class="grow" style="--d:5"><a class="how-step" href="#quick-call"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="05"></i>05</span>
           <span class="how-t">Make it part of your week.</span>
           <span class="how-d">A free call to find where it slots in, then order through my Amway link if it earns a spot.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ol>
@@ -552,7 +557,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <h2 id="sample-title"><span>Request a</span> <span><span class="hl-k">free</span> sample</span></h2>
         <p>On me, while supplies last. Dropped off near Lincoln, or mailed anywhere in the US.</p><!-- /DRAFT-COPY -->
       </div>
-      <form class="c-card grow" id="sample-form" action="https://formsubmit.co/peterherschelman@gmail.com" method="POST" data-endpoint="https://formsubmit.co/ajax/peterherschelman@gmail.com" style="--d:1">
+      <form class="c-card nc grow" id="sample-form" action="https://formsubmit.co/peterherschelman@gmail.com" method="POST" data-endpoint="https://formsubmit.co/ajax/peterherschelman@gmail.com" style="--d:1">
         <input type="hidden" name="_subject" value="Sample request · Aspire Health">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
@@ -715,7 +720,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       </form>
       <!-- the thank-you takes the form's place: shown by the script after a send, or by
            :target when FormSubmit sends a no-script visitor back to #sample-sent -->
-      <div class="c-card s-done" id="sample-sent">
+      <div class="c-card nc s-done" id="sample-sent">
         <!-- DRAFT-COPY --><h3 id="sample-done-title" tabindex="-1">Got it, thank you.</h3>
         <p>You’ll hear from me within a day or two about what I can send.</p><!-- /DRAFT-COPY -->
         <!-- DRAFT-COPY -->
@@ -1128,7 +1133,11 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <!-- the Amway disclosure stays wherever Peter recommends products (a paid endorsement must say so) -->
         <!-- PETER-COPY --><p>Disclaimer: I’m sponsored by Amway and paid based on products sold.</p><!-- /PETER-COPY -->
       </div>
-      <form class="c-card grow" id="consult-form" data-consult="https://calendly.com/3pete/explore" style="--d:1">
+      <!-- the same "note to Peter" card as the free sample (.nc in style.css): the thick ink border,
+           the hard teal drop-shadow, the heavy condensed display face, underlined blanks and dashed
+           choice pills. Only its questions differ: they stay visible, in that display face, because
+           here they are the card rather than a sentence's hidden labels. -->
+      <form class="c-card nc grow" id="consult-form" data-consult="https://calendly.com/3pete/explore" style="--d:1">
         <fieldset class="c-q">
           <legend>What are you trying to accomplish?</legend>
           <!-- the emblem lives inside the span, not beside it: the pill is styled as
@@ -1142,7 +1151,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
             <label class="chip"><input type="radio" name="goal" value="Stay healthy day to day"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-shield"/></svg>Stay healthy</span></label>
           </div>
         </fieldset>
-        <fieldset class="c-q">
+        <fieldset class="c-q c-q-long">
           <legend>How do you train right now?</legend>
           <!-- Peter's own six. The visible label is the value, so what arrives in the booking
                is the phrase the visitor actually read; _script.html's CTRAIN turns each one
@@ -1166,7 +1175,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <p class="c-sum" id="consult-sum" aria-live="polite"></p>
       </form>
       <!-- the calendar mounts here in place of the form, once someone has answered -->
-      <div class="c-embed" id="consult-embed" hidden></div>
+      <div class="c-embed nc" id="consult-embed" hidden></div>
     </div>
   </section>
 
