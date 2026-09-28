@@ -22,7 +22,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style-demo-bar.css?v=db42d556">
+<link rel="stylesheet" href="style-demo-bar.css?v=372cbd8a">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -1881,12 +1881,13 @@ if(mcForm){
    own. Loaded plates are the visitor's stack: kept in localStorage (a browser that refuses it still
    works, it just forgets), drawn on the hero's bar and on the bar pinned under the masthead, and
    named in the call form's note ("Interested in: ..."), only while that note is empty or still says
-   exactly what the site last put there. Through #story the pinned bar is Peter's instead: the story
+   exactly what the site last put there. Through the story's stage (#st-run) the pinned bar is Peter's
+   instead, and from the proof after it ("His and hers") it is the visitor's again: the story
    block below loads his five plates as its pack beats go by (LB.peter), and scrolling back takes them
    off. Plates slide on in 300ms (style.css); under reduced motion they are simply there, and the
    story's plates go on as each pack beat reaches the middle of the screen.
    The pinned strip is a reward, not a fixture: it is not there until the first plate lands (or
-   #story starts, for Peter's), and it goes again when the last plate comes off, outside the story.
+   the stage starts, for Peter's), and it goes again when the last plate comes off, outside the stage.
    html.has-stack says a stack exists, so the anchors' offset (scroll-padding-top in style.css) counts
    the strip only when it will be there. The rack's three-step guide follows the visitor (1 until a
    plate is open, 2 while one is, 3 once one is loaded); under "Build yours." their own stack stands
@@ -2087,10 +2088,12 @@ var LB=null;
   }
   if(sform)new IntersectionObserver(function(es){sIn=es[0].isIntersecting;if(sIn&&sDue)sampleFill()}).observe(sform);
   /* the pinned bar: once the hero has gone under the masthead, and only with a plate on it or with
-     #story under it (Peter's). When it comes up its contents are set at once, not faded (.snap), so
-     it never arrives showing the other stack; when it goes it keeps what it showed, so nothing
-     changes on the way out. With it up at #story's edges the two stacks cross-fade as before. */
-  var hero=$('.hero'),story=$('#story'),lineIO=null,heroGone=!hero,inStory=false;
+     the story's stage under it (Peter's). The stage (#st-run), not all of #story: the proof after it
+     ("His and hers") is the visitor's again, or no strip for a visitor with no stack. When it comes up
+     its contents are set at once, not faded (.snap), so it never arrives showing the other stack; when
+     it goes it keeps what it showed, so nothing changes on the way out. With it up at the stage's
+     edges the two stacks cross-fade as before. */
+  var hero=$('.hero'),story=$('#story'),edge=$('#st-run')||story,lineIO=null,heroGone=!hero,inStory=false;
   function pinSet(){
     var up=heroGone&&(inStory||stack.length>0);
     html.classList.toggle('pin-you',up&&!inStory);   /* a phone's bottom tab steps aside while the strip holds the visitor's stack */
@@ -2101,12 +2104,12 @@ var LB=null;
   }
   if(hero)new IntersectionObserver(function(es){heroGone=!es[0].isIntersecting;pinSet()},
     {rootMargin:'-'+($('.mast')?$('.mast').offsetHeight:60)+'px 0px 0px 0px'}).observe(hero);
-  function line(){   /* a one-pixel line at the pinned bar's foot: #story crossing it is the switch */
+  function line(){   /* a one-pixel line at the pinned bar's foot: the stage crossing it is the switch */
     if(lineIO)lineIO.disconnect();
-    if(!story)return;
+    if(!edge)return;
     var y=($('.mast')?$('.mast').offsetHeight:60)+pin.offsetHeight,b=Math.max(0,innerHeight-y-1);
     lineIO=new IntersectionObserver(function(es){inStory=es[0].isIntersecting;pinSet()},{rootMargin:'-'+y+'px 0px -'+b+'px 0px'});
-    lineIO.observe(story);
+    lineIO.observe(edge);
   }
   line();
   var rsz=0;addEventListener('resize',function(){clearTimeout(rsz);rsz=setTimeout(function(){line();LB.measure()},150)});
