@@ -64,6 +64,33 @@ FAMILIES = {
     'XS Sports Protein Shakes': ('Protein shake', 'LR', 'ready'),
     'XS Sports Twist Tubes': ('Drink mix tubes', 'E', 'powder'),
     'n* by Nutrilite Sweet Dreams': ('Sleep gummies', 'S', 'pills'),
+    # added 2026-09-27 from Peter's 43 new share links (the descriptors read off each pack's own label)
+    'Fitness Jump Start Solution': ('XS training bundle', 'LR', 'powder'),
+    'Nutrilite Advanced Omega': ('Omega softgels', 'S', 'pills'),
+    'Nutrilite Cal Mag D': ('Calcium & magnesium tablets', 'S', 'pills'),
+    'Nutrilite Carb Blocker': ('Mealtime tablets', 'L', 'pills'),
+    'Nutrilite Concentrated Fruits and Vegetables': ('Fruit & vegetable tablets', 'S', 'pills'),
+    'Nutrilite Daily Multivitamin Tablets': ('Multivitamin tablets', 'S', 'pills'),
+    'Nutrilite Double X Multivitamin': ('Multivitamin tablets', 'S', 'pills'),
+    'Nutrilite Hair, Skin & Nail Health': ('Biotin & collagen tablets', '', 'pills'),
+    'Nutrilite Immunity Defense Zinc + Holy Basil': ('Zinc & holy basil tablets', 'S', 'pills'),
+    'Nutrilite Joint Health': ('Glucosamine tablets', 'R', 'pills'),
+    'Nutrilite Lean Muscle': ('CLA softgels', 'L', 'pills'),
+    "Nutrilite Men's Pack": ('Daily supplement packets', 'S', 'pills'),
+    'Nutrilite Memory Builder Supplement': ('Cistanche tablets', 'E', 'pills'),
+    'Nutrilite Organics Daily Multi Gummies': ('Organic multivitamin gummies', 'S', 'pills'),
+    'Nutrilite Organics Ginger Mint Tea': ('Organic herbal tea', 'S', 'ready'),
+    "Nutrilite Organics Lion's Mane Mushroom Capsules": ('Organic mushroom capsules', 'E', 'pills'),
+    'Nutrilite Organics Turmeric Gummies': ('Organic turmeric gummies', 'R', 'pills'),
+    'Nutrilite Perfect Pack': ('Daily supplement packets', 'S', 'pills'),
+    'Nutrilite Prebiotic Fiber': ('Fiber stick packs', 'S', 'powder'),
+    'Nutrilite Slimmetry Dietary Supplement': ('Supplement tablets', 'L', 'pills'),
+    'Nutrilite Stress Relief Probiotic': ('Probiotic capsules', 'S', 'pills'),
+    'Nutrilite Ultra Focus Energy Pack': ('Daily supplement packets', 'E', 'pills'),
+    'Nutrilite Vitamin C Extended Release': ('Vitamin C tablets', 'S', 'pills'),
+    "Nutrilite Women's Pack": ('Daily supplement packets', 'S', 'pills'),
+    'Peak Performance Stack': ('XS training bundle', 'LR', 'powder'),
+    'n* by Nutrilite Go Shield': ('Elderberry gummies', 'S', 'pills'),
 }
 
 # Category pages: slug, name, tagline, heading, family prefixes that belong to it.
@@ -73,24 +100,35 @@ CATEGORIES = [
     ('recovery', 'Recovery', 'Wind down, repair and sleep: post-workout mixes, magnesium, herbals and topical creams.', 'Everything in Recovery', [
         'XS Post-Workout Recovery', 'XS Muscle Multiplier', 'XS CBD Cream', 'XS CBD Pro Cream',
         'Nutrilite Magnesium', 'Nutrilite Organics Ashwagandha Capsules', 'Nutrilite Organics Chamomile Tea',
-        'Nutrilite Sleep Health', 'n* by Nutrilite Sweet Dreams']),
+        'Nutrilite Sleep Health', 'n* by Nutrilite Sweet Dreams',
+        'Nutrilite Joint Health', 'Nutrilite Organics Turmeric Gummies', 'Nutrilite Stress Relief Probiotic',
+        'Peak Performance Stack']),
     ('hydration', 'Hydration', 'Electrolytes and drink mixes for long, hot and sweaty sessions.', 'Everything in Hydration', [
         'XS Sports Twist Tubes', 'Nutrilite Twist Tubes 2GO', 'XS CocoWater Hydration Drink Mix',
         'XS Creatine+']),  # also on Daily Foundations: it is half of Peter's hydration stack
     ('energy-focus', 'Energy &amp; Focus', 'Pre-workout, tablets and the full XS energy range.', 'Everything in Energy &amp; Focus', [
         'XS Pre-Workout Boost', 'XS Energy + Focus Dietary Supplement', 'XS Energy Drink 12 oz',
         'XS Energy + Burn 12 oz', 'XS Juiced and Burn 12 oz', 'XS Sparkling Juiced Energy 12 oz',
-        'XS Elite + Focus Energy Drink']),
+        'XS Elite + Focus Energy Drink',
+        'Nutrilite Ultra Focus Energy Pack', 'Nutrilite Memory Builder Supplement',
+        "Nutrilite Organics Lion's Mane Mushroom Capsules"]),
     ('protein', 'Protein Snack Pack', 'Powders, shakes, bars and crisps to hit your protein for the day.', 'Everything in Protein', [
         'XS Grass-Fed Whey Protein', 'XS Grass-Fed Whey Protein Powder Sachets', 'XS Sports Protein Bars',
-        'XS Sports Protein Shakes', 'XS Protein Crisps', 'Nutrilite Organics All-in-One Bars']),
-    ('fat-loss', 'Fat Loss', 'Thermogenic support to pair with your training.', 'Everything in Fat Loss', [
-        'XS Ignite Powder']),
-    ('daily-foundations', 'Daily Foundations', 'The everyday base: creatine, gut health and digestion.', 'Everything in Daily Foundations', [
-        'XS Creatine+', 'Nutrilite Begin Daily GI Primer', 'Nutrilite Balance Within Probiotic']),
+        'XS Sports Protein Shakes', 'XS Protein Crisps', 'Nutrilite Organics All-in-One Bars',
+        'Fitness Jump Start Solution']),  # a bundle built round a pouch of grass-fed whey, in its flavor
+    ('fat-loss', 'Fat Loss', 'Powders, tablets and softgels to pair with your training.', 'Everything in Fat Loss', [
+        'XS Ignite Powder', 'Nutrilite Carb Blocker', 'Nutrilite Slimmetry Dietary Supplement',
+        'Nutrilite Lean Muscle']),  # Lean Muscle's own label: "CLA helps lose fat, not muscle"
+    ('daily-foundations', 'Daily Foundations', 'The everyday base: multivitamins, daily packs, creatine, omega, fiber and gut health.', 'Everything in Daily Foundations', [
+        'XS Creatine+', 'Nutrilite Begin Daily GI Primer', 'Nutrilite Balance Within Probiotic',
+        'Nutrilite Double X Multivitamin', 'Nutrilite Daily Multivitamin Tablets', 'Nutrilite Organics Daily Multi Gummies',
+        "Nutrilite Men's Pack", "Nutrilite Women's Pack", 'Nutrilite Perfect Pack',
+        'Nutrilite Concentrated Fruits and Vegetables', 'Nutrilite Cal Mag D', 'Nutrilite Advanced Omega',
+        'Nutrilite Prebiotic Fiber', 'Nutrilite Organics Ginger Mint Tea',
+        'Nutrilite Vitamin C Extended Release', 'Nutrilite Immunity Defense Zinc + Holy Basil', 'n* by Nutrilite Go Shield']),
     ('skin-redefined', 'Skin Redefined', 'Artistry skincare, for the hours you are not training.', 'Everything in Skin Redefined', [
         'Artistry Skin Nutrition Renewing Softening Toner', 'Artistry Skin Nutrition Sleeping Mask',
-        'Artistry Studio Glow Boss Cleanser + Exfoliator']),
+        'Artistry Studio Glow Boss Cleanser + Exfoliator', 'Nutrilite Hair, Skin & Nail Health']),
 ]
 
 # The flavor carousel: category slug -> (family prefix to pull, heading, line)
@@ -175,6 +213,33 @@ TAGLINES = {
     'Artistry Skin Nutrition Renewing Softening Toner': 'A milky layer that leaves skin soft',
     'Artistry Skin Nutrition Sleeping Mask': 'Moisture to end the evening routine',
     'Artistry Studio Glow Boss Cleanser + Exfoliator': 'A fresh start for your skin, every day',
+    # DRAFT-COPY 2026-09-27, the new families: each is its format and how often, as printed on its label
+    'Nutrilite Double X Multivitamin': 'Morning and evening tablets, 22 vitamins and minerals',
+    'Nutrilite Daily Multivitamin Tablets': 'One tablet once a day, made for men or for women',
+    'Nutrilite Organics Daily Multi Gummies': 'The daily multi as an organic, chewable gummy',
+    "Nutrilite Men's Pack": 'One packet a day, put together for men',
+    "Nutrilite Women's Pack": 'One packet a day, put together for women',
+    'Nutrilite Perfect Pack': 'Two packets a day, with Double X inside',
+    'Nutrilite Concentrated Fruits and Vegetables': 'Fruit and vegetable concentrates, one tablet a day',
+    'Nutrilite Cal Mag D': 'Calcium, magnesium and D, a tablet three times a day',
+    'Nutrilite Advanced Omega': 'Omega softgels, two of them once a day',
+    'Nutrilite Prebiotic Fiber': 'One stick pack of fiber, once a day',
+    'Nutrilite Organics Ginger Mint Tea': 'Ginger and mint, steeped any time of day',
+    'Nutrilite Vitamin C Extended Release': 'One slow-release vitamin C tablet a day',
+    'Nutrilite Immunity Defense Zinc + Holy Basil': 'Zinc and holy basil, one tablet twice a day',
+    'n* by Nutrilite Go Shield': 'Elderberry lemon gummies with vitamin C and zinc',
+    'Nutrilite Joint Health': 'Glucosamine and chondroitin, two tablets twice a day',
+    'Nutrilite Organics Turmeric Gummies': 'Organic turmeric gummies in tangerine ginger',
+    'Nutrilite Stress Relief Probiotic': 'A once-a-day probiotic capsule',
+    'Peak Performance Stack': 'Pre-workout, recovery, Muscle Multiplier and creatine together',
+    'Nutrilite Ultra Focus Energy Pack': 'For the long days, one packet once or twice',
+    'Nutrilite Memory Builder Supplement': 'Made with cistanche, two tablets once a day',
+    "Nutrilite Organics Lion's Mane Mushroom Capsules": 'Organic lion’s mane mushroom, in capsule form',
+    'Fitness Jump Start Solution': 'Grass-fed whey plus the XS workout mixes, together',
+    'Nutrilite Carb Blocker': 'One to three tablets with your meals',
+    'Nutrilite Slimmetry Dietary Supplement': 'One tablet twice a day, alongside your training',
+    'Nutrilite Lean Muscle': 'Two CLA softgels, three times a day',
+    'Nutrilite Hair, Skin & Nail Health': 'Biotin and collagen, one tablet a day',
 }
 
 # The quick-fact chips on the case's product card, per listing: (the amway.com page they were read
@@ -244,7 +309,7 @@ CARD_FACTS = {
 # rising arpeggio) or, for anything not named here, 'chime'. _script.html synthesises all three
 # inside the interface sound, so the mute button covers them and there is nothing to download.
 CARD_SOUND = {
-    'XS Creatine+': 'level',
+    'XS Creatine+': 'level', 'Peak Performance Stack': 'level', 'Fitness Jump Start Solution': 'level',
     'XS Energy Drink 12 oz': 'can', 'XS Energy + Burn 12 oz': 'can', 'XS Juiced and Burn 12 oz': 'can',
     'XS Sparkling Juiced Energy 12 oz': 'can', 'XS Elite + Focus Energy Drink': 'can',
 }
