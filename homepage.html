@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=fc6fff90">
+<link rel="stylesheet" href="style.css?v=68b84528">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -3207,27 +3207,28 @@ var LB=null;
   var rsz=0;addEventListener('resize',function(){clearTimeout(rsz);rsz=setTimeout(function(){line();LB.measure()},150)});
   /* Peter's bar, for the story: ps[j] is 0..1, how far his j-th plate is on. Transform and opacity
      only, each written only when it changes; the caption's count switches when a plate is half on. */
-  var st=0,keys={},lastN=-1,pl={},pr={};
+  var st=0,PW=1.22,OFF=.85,keys={},lastN=-1,pl={},pr={};   /* --st, --pw, --off: read off the bar in measure() */
   $$('.bb-l .bb-p',pBar).forEach(function(p){pl[p.getAttribute('data-cat')]=p});
   $$('.bb-r .bb-p',pBar).forEach(function(p){pr[p.getAttribute('data-cat')]=p});
-  var NP=$$('.bb-r .bb-p',pBar).length;   /* plates a sleeve holds: an unloaded one waits half a step past the last (style.css) */
+  var NP=$$('.bb-r .bb-p',pBar).length;   /* plates a sleeve holds: an unloaded one waits --off of a step past the last (style.css) */
   function wr(el,k,tf,op){var v=tf+'|'+op;if(keys[k]===v)return;keys[k]=v;el.style.transform=tf;el.style.opacity=op}
   LB={cats:PC,
     card:function(c){cCat=c;cardSync()},
-    measure:function(){st=parseFloat(getComputedStyle(pBar).fontSize)*2.05;keys={}},   /* --st in style.css */
+    measure:function(){var cs=getComputedStyle(pBar);st=parseFloat(cs.getPropertyValue('--st'))*parseFloat(cs.fontSize);
+      PW=parseFloat(cs.getPropertyValue('--pw'));OFF=parseFloat(cs.getPropertyValue('--off'));keys={}},   /* the bar's own geometry, style.css */
     /* where plate c's centre sits on the pinned bar once it is down (the viewport's frame), and its
        height; the pinned bar's top and foot, and where its "+ name" caption starts */
     target:function(c){
       var p=pr[c],sl=p.parentNode.getBoundingClientRect(),fs=parseFloat(getComputedStyle(pBar).fontSize),
           tf=getComputedStyle(pin).transform,ty=tf&&tf!=='none'?new DOMMatrixReadOnly(tf).m42:0,
           h=parseFloat(p.style.getPropertyValue('--s'))*10*fs,pb=pin.getBoundingClientRect(),cap=pNews[PC.indexOf(c)];
-      return {x:sl.left+(.15+.9)*fs+RANK[c]*st,y:sl.top+sl.height/2-ty,h:h,
+      return {x:sl.left+(.15+PW/2)*fs+RANK[c]*st,y:sl.top+sl.height/2-ty,h:h,
               top:pb.top-ty,bot:pb.bottom-ty,cap:cap?cap.getBoundingClientRect().left:sl.left};
     },
     peter:function(ps){
       var n=0;
       PC.forEach(function(c,j){
-        var p=ps[j]||0,d=(RANK[c]+(1-p)*(NP+.5-RANK[c]))*st,op=p>=1?'1':Math.min(1,p*1.6).toFixed(3);
+        var p=ps[j]||0,d=(RANK[c]+(1-p)*(NP+OFF-RANK[c]))*st,op=p>=1?'1':Math.min(1,p*1.6).toFixed(3);
         wr(pl[c],'l'+c,'translate3d('+(-d).toFixed(1)+'px,0,0)',op);
         wr(pr[c],'r'+c,'translate3d('+d.toFixed(1)+'px,0,0)',op);
         if(p>=.5)n++;
