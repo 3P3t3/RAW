@@ -63,7 +63,7 @@ the source that produced it — the template, `style.css`, `_script.html`, or `b
 Source (edit these):
 - `site-src/build_homepage.py` — all layout logic, plus the `FAMILIES`, `CATEGORIES`,
   `FEATURED`, `GOAL_TILES`, `ISLANDS`, `CAROUSELS` tables
-- `site-src/homepage.template.html`, `site-src/category.template.html`
+- `site-src/homepage.template.html`, `site-src/category.template.html`, `site-src/about.template.html`
 - `site-src/_header.html`, `_footer.html`, `_dialogs.html`, `_icons.html`, `_script.html`, `_intro.html`
 - `site-src/mark-glow.svg` — the lit wave the opening curtain arrives on. JSON-encoded into the
   script as `{{GLOW_SVG}}`, so it never reaches the markup and a no-JS visitor is served none of it
@@ -76,6 +76,12 @@ Source (edit these):
 
 Generated (never hand-edit; the next build overwrites them):
 - `homepage.html`
+- `about.html` — the About us page, from `site-src/about.template.html`: their two portraits, who they
+  are (`peter_text`, and the same `her_text` block the Women's Health shelf carries), the proof wall
+  (`proof_wall`: his three pairs and her two), both DEXA cards, then the free sample and the call with
+  the Amway disclosure. It is where the menu's "About us" goes, from every page. The proof used to
+  close the homepage's story; Peter moved it here (2026-09-28: it "feels like too much in one thing"),
+  and the story now ends at the family beat with one link across to this page. Generated, never hand-edited.
 - `category-daily-foundations.html`, `-energy-focus.html`, `-fat-loss.html`, `-hydration.html`,
   `-protein.html`, `-recovery.html`, `-skin-redefined.html`, `-womens-health.html`, `-mens-health.html`
 - `style.css`, `assets/products/`, `assets/cutouts/`, `assets/.cut-version`

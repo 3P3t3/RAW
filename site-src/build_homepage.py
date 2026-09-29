@@ -590,15 +590,12 @@ def her_pairs(caption, cls='', unnamed='My wife'):
             '</figure>')
 
 
-def her_story():
-    """Women's Health only: Yenni's story, her pairs and her DEXA card, between the hero and the shelf."""
-    return f'''  <!-- Her story: only the Women's Health shelf has this block (SHELF_EXTRA in build_homepage.py). Facts only;
-       no health claims, and nothing says a supplement caused the change: it was her whole plan. -->
-  <section class="sec her-sec" id="her" aria-labelledby="her-title">
-    <div class="wrap her-in">
-      <!-- DRAFT-COPY --><div class="her-text grow">
-        <p class="label">Who runs this shelf</p>
-        <h2 id="her-title">{her_says('{n}’s story', 'Her story')}</h2>
+def her_text(label='Who runs this shelf', level=2, tid='her-title'):
+    """Yenni in words: who she is, when her photos were taken, and what changed. Shared by the Women's
+    Health shelf (through her_story) and by about.html, which gives it its own eyebrow and heading id."""
+    return f'''<!-- DRAFT-COPY --><div class="her-text grow">
+        <p class="label">{label}</p>
+        <h{level} id="{tid}">{her_says('{n}’s story', 'Her story')}</h{level}>
         <p class="her-lead">{her_says('{full} runs the women’s side of Aspire Health. She’s Peter’s wife.', 'She’s Peter’s wife, and she runs the women’s side of Aspire Health.')}</p>
         <p>Their daughter was born in September 2025. {her_says('{n}', 'She')} started lifting with progressive overload while she was pregnant.</p>
         <p>Her before photos are from November 2025, two months postpartum, so they include the body fat a pregnancy adds. Her afters are from July 2026.</p>
@@ -611,7 +608,37 @@ def her_story():
           <li>Creatine, for the first time</li>
         </ul>
         <p class="her-fine">Individual results vary.</p>
-      </div><!-- /DRAFT-COPY -->
+      </div><!-- /DRAFT-COPY -->'''
+
+
+def peter_text(label='Who we are', level=2, tid='his-title'):
+    """Peter in words, in his own voice: the bio line he wrote for the call, what Aspire Health is, and
+    his fifteen months in the same four-bullet shape as hers. about.html only."""
+    return f'''<div class="her-text grow">
+        <p class="label">{label}</p>
+        <h{level} id="{tid}">Peter’s story</h{level}>
+        <!-- PETER-COPY --><p class="her-lead">I’m Peter — husband, dad to a baby girl, and a Lincoln local. My wife’s as obsessed with biohacking and longevity as I am.</p><!-- /PETER-COPY -->
+        <!-- DRAFT-COPY --><p>Aspire Health is the two of us, out of Lincoln, California. {her_says('{n}', 'My wife')} runs the women’s side; the rest is mine.</p>
+        <p>My before and after are fifteen months apart, front, side and back.</p>
+        <h3 class="her-h">What changed</h3>
+        <p>Not one thing, but the whole plan:</p>
+        <ul class="c-list">
+          <li>Lifting hard, with progressive overload</li>
+          <li>Counting calories</li>
+          <li>Testing supplement after supplement to find what worked</li>
+          <li>The same wake-up and the same bedtime</li>
+        </ul>
+        <p class="her-fine">Individual results vary.</p><!-- /DRAFT-COPY -->
+      </div>'''
+
+
+def her_story():
+    """Women's Health only: Yenni's story, her pairs and her DEXA card, between the hero and the shelf."""
+    return f'''  <!-- Her story: only the Women's Health shelf has this block (SHELF_EXTRA in build_homepage.py). Facts only;
+       no health claims, and nothing says a supplement caused the change: it was her whole plan. -->
+  <section class="sec her-sec" id="her" aria-labelledby="her-title">
+    <div class="wrap her-in">
+      {her_text()}
       {her_pairs('Before: two months postpartum. After: ten months postpartum.', ' grow', 'Her photos')}
       {dexa_cards(3, ('her',))}
     </div>
@@ -653,9 +680,49 @@ def hero_media(slug_, name):
 
 
 
-def proof_hers():
-    """The homepage's proof after #story: her pairs beside Peter's, then the DEXA cards."""
-    return her_pairs('Before: two months postpartum.')
+def about_portraits():
+    """about.html's hero: their two portraits with their daughter, his then hers, taken from the same
+    SHELF_PORTRAIT rows the two his-and-hers shelves are headed with, so the files and the alt text
+    have one home. Shown whole, side by side, never cover-cropped."""
+    return '\n'.join(
+        f'      <figure class="cat-portrait"><img src="{b}-{w1}.webp" srcset="{b}-{w1}.webp {w1}w, {b}-{w2}.webp {w2}w" '
+        f'sizes="(min-width:760px) min(26vw, 300px), calc(50vw - 30px)" width="{w2}" height="{round(w2 * r)}" '
+        f'alt="{esc(a)}" fetchpriority="high"></figure>'
+        for b, w1, w2, r, a in (SHELF_PORTRAIT['mens-health'], SHELF_PORTRAIT['womens-health']))
+
+
+def his_pairs(caption='Fifteen-month transformation.'):
+    """Peter's three before/after views, front, side and back. Each file is one photo cut to one shared
+    framing spec with the seam at exactly 50%, so the befores line up down the left and the afters down
+    the right, and one pair of headings on that 50% line labels all three (CLAUDE.md: his body is never
+    retouched). Moved out of homepage.template.html when the proof became about.html."""
+    imgs = ''.join(
+        f'<img src="assets/peter/{v}-640.webp" srcset="assets/peter/{v}-640.webp 640w, assets/peter/{v}-960.webp 960w" '
+        f'sizes="(min-width:760px) 680px, calc(100vw - 40px)" width="960" height="640" loading="lazy" '
+        f'decoding="async" alt="Peter, before and after, from the {v}">' for v in ('front', 'side', 'back'))
+    return (f'<figure class="c-proof pf-his">\n'
+            f'  <p class="pf-who"><span class="pf-name">Peter</span></p>\n'
+            '  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>\n'
+            f'  <div class="c-stack">{imgs}</div>\n'
+            f'  <!-- PETER-COPY --><figcaption>{caption}</figcaption><!-- /PETER-COPY -->\n'
+            '</figure>')
+
+
+def proof_wall():
+    """The proof wall, his and hers: Peter's three views, and beside them (under them on a phone) his
+    wife's two, nothing to swipe. about.html's "what changed"; it used to close the homepage's story."""
+    return ('    <!-- DRAFT-COPY --><h2 class="pf-title" id="proof-t"><span class="pf-k">His</span> and <span class="pf-k">hers</span></h2><!-- /DRAFT-COPY -->\n'
+            '    <div class="pf-duo">\n      ' + his_pairs() + '\n      '
+            + her_pairs('Before: two months postpartum.') + '\n    </div>')
+
+
+# about.html's own two lines: its meta description (and og:description) and the line under its title.
+# DRAFT-COPY, both of them.
+ABOUT_TAG = her_says(
+    'Peter and {full}, the two people behind Aspire Health: who we are, our before and afters, and our DEXA scans.',
+    'The two people behind Aspire Health: who we are, our before and afters, and our DEXA scans.')
+ABOUT_SUB = her_says('Peter and {n} Herschelman. Who we are, what changed, and the scans behind it.',
+                     'Peter and his wife. Who we are, what changed, and the scans behind it.')
 
 
 def normalize(src, dst, size=600):
@@ -1209,7 +1276,7 @@ def main():
                                 '{{SAMPLE_PICKER}}': sample_picker, '{{PCARD}}': '' if SHELF_VIEW in ('bar', 'case') else card_dialog(), **quick_call(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves,
                                 '{{CASE_STRIP}}': case_strip, '{{POUR}}': pour,
                                 '{{POUR_CLASS}}': '' if TRENDING_POUR else ' no-pour',
-                                '{{PROOF_HERS}}': proof_hers(), '{{DEXA_CARDS}}': dexa_cards(), **bar_bits}).items():
+                                **bar_bits}).items():
         out = out.replace(k, v)
     left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', out)))
     if left:
@@ -1268,6 +1335,33 @@ def main():
             continue
         open(os.path.join(ROOT, f'category-{slug_}.html'), 'w').write(page)
 
+    # about.html: who we are, then what changed, then the numbers, then the way on. Its own page off the
+    # menu instead of a band at the end of the homepage, because all of it there was too much in one thing
+    # (Peter, 2026-09-28). Generated like the shelf pages: never hand-edit about.html. It needs no rack,
+    # no story stage and no macro calculator, and the shared script leaves out what a page does not have.
+    about_page = f'about{DEMO_SUFFIX}.html' if DEMO else 'about.html'
+    page = open(os.path.join(ROOT, 'site-src', 'about.template.html')).read()
+    for k, v in dict(shared, **{
+            '{{HEADER}}': header.replace('{{HOME}}', 'homepage.html'), '{{HOME}}': 'homepage.html',
+            '{{HEAD_EXTRA}}': ((f'<meta name="robots" content="noindex">\n<link rel="canonical" href="{BASE}{about_page}">\n')
+                               if DEMO else f'<link rel="canonical" href="{BASE}about.html">\n'),
+            '{{PAGE_URL}}': BASE + 'about.html',
+            '{{ABOUT_TAG}}': ABOUT_TAG, '{{ABOUT_SUB}}': ABOUT_SUB,
+            '{{ABOUT_PORTRAITS}}': about_portraits(),
+            '{{ABOUT_HIS}}': peter_text(), '{{ABOUT_HERS}}': her_text('Who runs the women’s side'),
+            '{{ABOUT_PROOF}}': proof_wall(), '{{ABOUT_DEXA}}': dexa_cards(),
+            '{{PCARD}}': ''}).items():
+        page = page.replace(k, v)
+    left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', page)))
+    if left:
+        raise SystemExit(f'unfilled placeholders in about.html: {left}')
+    if DEMO:
+        page = demo_links(page)
+        demo_pages[about_page] = page
+        open(os.path.join(DEMO, about_page), 'w').write(page)
+    else:
+        open(os.path.join(ROOT, 'about.html'), 'w').write(page)
+
     if DEMO:
         demo_report(demo_pages, style)
         return
@@ -1280,6 +1374,7 @@ def demo_links(page):
     """A demo page's links to the homepage and to every shelf, relative or absolute (og:url, the search's
     'homepage.html?q=', a card's '?try=' link), rewritten to name the demo copies beside it."""
     page = re.sub(r'(?<![\w-])homepage\.html', DEMO_PAGE, page)
+    page = re.sub(r'(?<![\w-])about\.html', f'about{DEMO_SUFFIX}.html', page)
     shelves = '|'.join(re.escape(c[0]) for c in CATEGORIES)
     return re.sub(rf'(?<![\w-])category-({shelves})\.html', rf'category-\1{DEMO_SUFFIX}.html', page)
 
