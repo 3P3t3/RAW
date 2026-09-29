@@ -2072,7 +2072,7 @@ body{background:transparent}
 /* wide: the story and her card down the left, her two pairs down the right */
 @media (min-width:900px){
   .her-in{grid-template-columns:minmax(0,1fr) minmax(0,.9fr);grid-template-rows:auto 1fr;gap:48px 56px}
-  .her-text{grid-area:1 / 1}
+  .her-in .her-text{grid-area:1 / 1}   /* the shelf's own three-cell layout; about.html lays its two out itself */
   .her-in .pf-hers{grid-area:1 / 2 / 3 / 3}
   .her-in .dx-card{grid-area:2 / 1;align-self:start}
 }
