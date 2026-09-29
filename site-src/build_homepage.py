@@ -195,10 +195,11 @@ PLATES = {
     'skin-redefined': ('#D6D4C9', 6), 'womens-health': ('#76485F', 7),
     'mens-health': ('#39594A', 8),
 }
-# Peter's stack, in the order #story loads it; it must match the shelves his five pack beats link to
-# (the build checks). DRAFT-COPY: the short tag after "Step n" on each of those beats.
-PETER = [('protein', 'Food'), ('daily-foundations', 'Mornings'), ('hydration', 'Water'),
-         ('energy-focus', 'Energy'), ('recovery', 'Sleep')]
+# Peter's stack, in the order #story loads it: the shelves his caption strip links to, in the order
+# its captions stand, which is also the order the packs land on the shelf (the build checks both).
+# The last two go on together, under the one line that folds their two old beats into it. Their places
+# ON the bar are PLATES' own ranks, so they fill his five in from his order, not left to right.
+PETER = ['protein', 'hydration', 'recovery', 'daily-foundations', 'energy-focus']
 
 # The rack's three-step guide, under "What are we maximizing?" (DRAFT-COPY). The script marks the
 # step the visitor is on (aria-current): 1 until a plate is open, 2 while one is, 3 once one is loaded.
@@ -1132,20 +1133,24 @@ def main():
 
     shelves = {'ring': ring_section, 'strip': strip_section, 'case': case_section, 'bar': rack_section}[SHELF_VIEW]()
     BAR = SHELF_VIEW == 'bar'
-    # the story's five pack beats link to Peter's shelves; the bar theme loads his plates in that order
+    # the story's caption strip links to Peter's shelves, and each pack on its shelf names the same
+    # one (data-cat); the bar theme loads his plates in that order
     story_src = open(SRC).read()
     story_cats = re.findall(r'class="tlink st-go" href="category-([a-z-]+)\.html"', story_src)
-    # each of those beats' first pack (the one "That's my stack" shows beside its plate), by shelf
-    story_pack = {m.group(2): m.group(1) for m in re.finditer(
-        r'<li class="st-beat[^"]*" data-kind="prod">.*?<img src="([^"]+)".*?class="tlink st-go" href="category-([a-z-]+)\.html"', story_src, re.S)}
-    if BAR and story_cats != [c for c, _ in PETER]:
-        raise SystemExit(f"PETER: the story's pack beats link {story_cats}, not {[c for c, _ in PETER]}")
-    if BAR and sorted(story_pack) != sorted(c for c, _ in PETER):
-        raise SystemExit(f"PETER: found a pack picture for {sorted(story_pack)} in the story's pack beats, not for each of {[c for c, _ in PETER]}")
+    # each shelf's first pack in the story (the one "That's my stack" shows beside its plate)
+    story_pack = {}
+    for m in re.finditer(r'<span class="st-pack" data-cat="([a-z-]+)"[^>]*>\s*<span class="st-shade"></span><img src="([^"]+)"', story_src):
+        story_pack.setdefault(m.group(1), m.group(2))
+    pack_cats = list(dict.fromkeys(re.findall(r'<span class="st-pack" data-cat="([a-z-]+)"', story_src)))
+    if BAR and story_cats != PETER:
+        raise SystemExit(f"PETER: the story's caption strip links {story_cats}, not {PETER}")
+    if BAR and pack_cats != PETER:
+        raise SystemExit(f"PETER: the story's packs land for {pack_cats}, not {PETER}")
+    if BAR and sorted(story_pack) != sorted(PETER):
+        raise SystemExit(f"PETER: found a pack picture for {sorted(story_pack)}, not for each of {PETER}")
     bar_bits = {k: '' for k in ('{{HTML_CLASS}}', '{{HERO_BAR}}', '{{PIN}}', '{{ARC_BAR}}', '{{MYSTACK}}')}
-    bar_bits.update({f'{{{{STEP_{i + 1}}}}}': '' for i in range(len(PETER))})
     if BAR:
-        pn = [(c, names[c]) for c, _ in PETER]
+        pn = [(c, names[c]) for c in PETER]
         caps = ''.join(f'<span class="lbc lbc-p" data-n="{n}">Peter’s<span class="lbc-lg"> stack</span> · {n} of {len(PETER)}</span>' for n in range(len(PETER) + 1))   # a phone's one-row strip drops "stack"
         news = ''.join(f'<span class="lbc lbc-pnew" data-cat="{c}">+ {n}</span>' for c, n in pn)
         bar_bits.update({
@@ -1158,11 +1163,11 @@ def main():
                         '<p class="lbpin-cap"><span class="lbc-set lbc-yset"><span class="lbc-who"><span class="lbc lbc-you"></span></span>'
                         '<span class="lbc-new"><span class="lbc lbc-ynew"></span></span></span>'
                         '<span class="lbc-set lbc-pset"><span class="lbc-who">' + caps + '</span><span class="lbc-new">' + news + '</span></span></p></div></div>'),
-            '{{ARC_BAR}}': '<div class="bbx">' + barbell('bb-arc', [c for c, _ in PETER]) + '</div>',
+            '{{ARC_BAR}}': '<div class="bbx">' + barbell('bb-arc', PETER) + '</div>',
             '{{MYSTACK}}': ('  <!-- After the story: the stack his story loaded, drawn loaded, with its key, and the two ways on -->\n'
                             '  <section class="sec dark mys" id="my-stack" aria-labelledby="mys-title">\n    <div class="wrap mys-in">\n'
                             '      <h2 class="grow hl-2 hl-dk" id="mys-title"><span class="hl-lead">That’s</span> <span class="hl-k">my stack.</span></h2>\n'
-                            '      <div class="mys-bar bbx grow" style="--d:1">' + barbell('bb-dk bb-big', [c for c, _ in PETER]) + '</div>\n'
+                            '      <div class="mys-bar bbx grow" style="--d:1">' + barbell('bb-dk bb-big', PETER) + '</div>\n'
                             '      <ul class="mys-key grow" style="--d:2" aria-label="The plates on it">'
                             + ''.join(f'<li><span class="mys-th"><img src="{story_pack[c]}" alt="" loading="lazy" decoding="async" width="96" height="96"></span>'
                                       f'<span class="mys-n"><i style="--c:{PLATES[c][0]}"></i>{n}</span></li>' for c, n in pn) + '</ul>\n'
@@ -1181,9 +1186,6 @@ def main():
                             '<a class="btn btn-line" href="#consult">Book a free call</a></div>\n'
                             '    </div>\n  </section>\n'),
         })
-        for i, (c, t) in enumerate(PETER):
-            bar_bits[f'{{{{STEP_{i + 1}}}}}'] = (f'<!-- DRAFT-COPY --><p class="st-step"><i style="--c:{PLATES[c][0]}"></i>'
-                                                 f'Step {i + 1} · {t}</p>')
     # the story's stack is the same case in miniature: the same seven compartments, in the same order,
     # empty until the story's packs tuck into them (_script.html measures them; nothing here moves)
     case_strip = '' if BAR else ('<div class="st-row st-case" aria-hidden="true"><span class="stc-body">'
