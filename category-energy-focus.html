@@ -2067,13 +2067,20 @@ var LB=null;
   }
   if(cLoad)cLoad.addEventListener('click',function(){if(cCat&&stack.indexOf(cCat)<0)toggle(cCat)});
   /* the rack: a plate shows its panel; the same plate again, Escape, or another plate puts it away */
-  function show(i){   /* the panel, whole, on screen and clear of the pinned bar and the tab */
+  function show(i){   /* the packs, on screen: the point of tapping a plate is to see what is on it */
     setTimeout(function(){
       if(sel!==i)return;
-      var r=panels[i].getBoundingClientRect(),pr=plates[i].getBoundingClientRect(),vh=innerHeight,tab=72,
-          top=parseFloat(getComputedStyle(html).scrollPaddingTop)||0,
-          dy=r.bottom>vh-tab?Math.min(r.bottom-(vh-tab),pr.top-top-12):0;
-      if(dy>1)scrollBy({top:dy,behavior:reduce.matches?'instant':'smooth'});
+      var r=panels[i].getBoundingClientRect(),vh=innerHeight,tab=72,
+          top=parseFloat(getComputedStyle(html).scrollPaddingTop)||0,   /* masthead + the pinned bar */
+          room=vh-top-tab,dy;
+      /* A panel that fits in the room left between the fixed chrome and the tab is brought fully
+         into view with the least movement. One taller than that room puts its TOP under the chrome
+         instead, so the packs are always what you land on. The old rule also refused to scroll the
+         plate itself above the masthead, which capped the move to a nudge for every plate but the
+         last row's: the panel stayed below the fold and Peter never saw the products. */
+      if(r.height<=room)dy=r.bottom>vh-tab?r.bottom-(vh-tab):(r.top<top?r.top-top:0);
+      else dy=r.top-top;
+      if(Math.abs(dy)>1)scrollBy({top:dy,behavior:reduce.matches?'instant':'smooth'});
     },reduce.matches?0:60);
   }
   /* the rack is one stop for Tab: the arrow keys, Home and End move between plates, so Tab goes
