@@ -453,15 +453,12 @@ DEXA_NOTES = [f'Measured by DEXA scan at {DEXA_AT}.',
 # Hers. Set HER_DEXA = None and her card comes off every page. 'gap' is the index of the scan after which there
 # is none until the next: the trend is drawn broken there (no line across it), and the card says why.
 # Peter's card: his transformation, by DEXA scan at the start and end of the fifteen months his before/after
-# photos span: (weight lb, body fat %) before and after. Peter chose to show only these four numbers and no dates,
-# and no clinic is named (his later scans at UC Davis are not used).
-PETER_TRANSFORM = ((170, 22.1), (164, 7.4))
-# The pounds of fat and lean are NOT on his report: they are arithmetic on the four numbers above
-# (fat = weight x body fat %, lean = the rest), which is why the card says so under them. Peter asked for
-# the ballpark (2026-09-28) because his report does not break lean out. +19 lb of lean in fifteen months is
-# at the very top of what is plausible, and a DEXA lean figure carries water and glycogen that swing
-# pounds on their own, so the card labels these worked-out and rounded, never measured. Set
-# PETER_SHOW_COMPOSITION = False and both rows and that line come off the card in one edit.
+# photos span, as (weight lb, body fat %, fat lb, lean lb) before and after. EVERY figure is read off his
+# reports — he relayed them rather than uploading (2026-09-28) — so nothing here is derived and the card
+# carries no worked-it-out line. The rows do not sum to the weight, and should not be made to: a DEXA total
+# also carries bone mineral. He chose no dates and no clinic (his later scans at UC Davis are not used).
+PETER_TRANSFORM = ((170, 22.1, 38.1, 132.7), (164, 7.4, 12.3, 152.1))
+# The fat and lean rows. Set PETER_SHOW_COMPOSITION = False and both come off the card in one edit.
 PETER_SHOW_COMPOSITION = True
 HER_DEXA = {
     'scans': [('2024-01', 137.8, 41.2, 92.1, 29.9), ('2024-07', 142.0, 41.8, 95.7, 29.4),
@@ -549,22 +546,14 @@ def dexa_card(d, title, level=3, span_line=None):
 
 def peter_card(level=3):
     """Peter's DEXA card: the two scans of his transformation, fifteen months apart, as body fat and weight
-    (PETER_TRANSFORM), then — while PETER_SHOW_COMPOSITION is on — the pounds of fat and lean worked out
-    from them. No dates, no trend, no clinic: that is all he chose to show."""
-    (w0, f0), (w1, f1) = PETER_TRANSFORM
+    (PETER_TRANSFORM), then — while PETER_SHOW_COMPOSITION is on — its pounds of fat and lean. Every
+    figure is off the report. No dates, no trend, no clinic: that is all he chose to show."""
+    (w0, f0, fat0, lean0), (w1, f1, fat1, lean1) = PETER_TRANSFORM
     nums = [('Body fat', f'{f0:.1f}% → {f1:.1f}%', f'−{f0 - f1:.1f} points'),
             ('Weight', f'{w0} → {w1} lb', f'−{w0 - w1} lb')]
     if PETER_SHOW_COMPOSITION:
-        fat0, fat1 = round(w0 * f0 / 100), round(w1 * f1 / 100)    # pounds of fat each scan implies
-        lean0, lean1 = round(w0 - w0 * f0 / 100), round(w1 - w1 * f1 / 100)   # everything that is not fat
-        # Whole pounds, rounded FIRST, and every change then taken from the two rounded ends, so a
-        # reader who subtracts what the row shows gets the number the row shows (38 → 12 is −26, not
-        # the exact −25.4); a card whose own arithmetic does not close reads as a mistake.
-        # These two rows are WORKED OUT from weight and body fat, not read off Peter's scan: he has
-        # the reports and is relaying them, so swap in the scan's own fat and lean pounds when he
-        # sends them (2026-09-28: he asked for the "I worked them out" line to come off).
-        nums += [('Fat', f'{fat0} → {fat1} lb', f'−{fat0 - fat1} lb'),
-                 ('Lean mass', f'{lean0} → {lean1} lb', f'+{lean1 - lean0} lb')]
+        nums += [('Fat', f'{fat0:.1f} → {fat1:.1f} lb', f'−{fat0 - fat1:.1f} lb'),
+                 ('Lean mass', f'{lean0:.1f} → {lean1:.1f} lb', f'+{lean1 - lean0:.1f} lb')]
     t = 'Peter’s DEXA scans'
     return (f'<!-- DRAFT-COPY --><article class="dx-card" aria-labelledby="dx-{slug(t)}">\n'
             f'<div class="dx-head"><h{level} class="dx-t" id="dx-{slug(t)}">{t}</h{level}><p class="dx-span">Two scans, fifteen months apart</p></div>\n'
