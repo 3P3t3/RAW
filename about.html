@@ -4,13 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
+<link rel="canonical" href="https://3p3t3.github.io/RAW/about.html">
 <meta name="theme-color" content="#002E3B">
-<title>Daily Foundations · Aspire Health</title>
-<meta name="description" content="The everyday base: multivitamins, daily packs, creatine, omega, fiber and gut health.">
+<title>About us · Aspire Health</title>
+<meta name="description" content="Peter and Yenni Herschelman, the two people behind Aspire Health: who we are, our before and afters, and our DEXA scans.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Daily Foundations · Aspire Health">
-<meta property="og:description" content="The everyday base: multivitamins, daily packs, creatine, omega, fiber and gut health.">
-<meta property="og:url" content="https://3p3t3.github.io/RAW/category-daily-foundations.html">
+<meta property="og:title" content="About us · Aspire Health">
+<meta property="og:description" content="Peter and Yenni Herschelman, the two people behind Aspire Health: who we are, our before and afters, and our DEXA scans.">
+<meta property="og:url" content="https://3p3t3.github.io/RAW/about.html">
 <meta property="og:image" content="https://3p3t3.github.io/RAW/assets/logo/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://3p3t3.github.io/RAW/assets/logo/og-image.png">
@@ -160,74 +161,124 @@
 
 <main id="main">
 
-  <!-- Category banner: generated backdrop (or, for a shelf in SHELF_PORTRAIT, a whole portrait beside the name), live caustics, the category set large -->
-  <section class="cat-hero" aria-labelledby="cat-title">
-    <img class="cat-bg" src="assets/bg-daily-foundations.webp" alt="" width="1600" height="900" fetchpriority="high">
+  <!-- About us: one page of its own, off the menu, because all of this hanging off the end of the
+       homepage was too much in one thing (Peter, 2026-09-28). It reads in one line: who we are,
+       then what changed (the photos), then the numbers (the DEXA cards), then the way on.
+       Generated from site-src/about.template.html; never hand-edit about.html. -->
+
+  <!-- 1. Their two portraits with their daughter, the same pair the his and hers shelves are headed
+          with, side by side: whole photos, not a cover crop, so nothing cuts into their faces. -->
+  <section class="cat-hero cat-hero-photo ab-hero" aria-labelledby="ab-title">
+    <div class="wrap cat-pic">
+      <div class="ab-pics">
+      <figure class="cat-portrait"><img src="assets/peter/with-daughter-640.webp" srcset="assets/peter/with-daughter-640.webp 640w, assets/peter/with-daughter-960.webp 960w" sizes="(min-width:760px) min(26vw, 300px), calc(50vw - 30px)" width="960" height="1200" alt="Peter holding their baby daughter" fetchpriority="high"></figure>
+      <figure class="cat-portrait"><img src="assets/her/with-daughter-640.webp" srcset="assets/her/with-daughter-640.webp 640w, assets/her/with-daughter-960.webp 960w" sizes="(min-width:760px) min(26vw, 300px), calc(50vw - 30px)" width="960" height="1200" alt="Yenni holding their baby daughter, both in matching lemon-print dresses" fetchpriority="high"></figure>
+      </div>
+    </div>
     <canvas class="caustics" data-caustics aria-hidden="true"></canvas>
     <div class="wrap cat-hero-in">
-      <p class="label"><a href="homepage.html#goals">All shelves</a></p>
-      <h1 id="cat-title">Daily Foundations</h1>
-      <p class="sub">The everyday base: multivitamins, daily packs, creatine, omega, fiber and gut health.</p>
-      <p class="cat-count">20 products</p>
-      <!-- DRAFT-COPY --><p class="cat-sample"><a href="homepage.html?try=Daily%20Foundations#sample">Ask for a free sample</a></p><!-- /DRAFT-COPY -->
+      <p class="label"><a href="homepage.html#top">Aspire Health</a></p>
+      <h1 id="ab-title">About us</h1>
+      <!-- DRAFT-COPY --><p class="sub">Peter and Yenni Herschelman. Who we are, what changed, and the scans behind it.</p><!-- /DRAFT-COPY -->
     </div>
   </section>
 
-
-  <!-- Every product in this category; each one rises into frame as you scroll -->
-  <section class="sec cat-shop" id="all" aria-labelledby="all-title">
-    <div class="wrap">
-      <div class="sec-head grow"><h2 id="all-title">Everything in Daily Foundations</h2></div>
-      <ul class="grid" id="grid">
-        <li class="card grow" style="--d:0" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/KNT0n1cCC" target="_blank" rel="noopener" data-name="n* by Nutrilite Go Shield" data-kind="Elderberry gummies · Immunity Gummies" data-line="Elderberry lemon gummies with vitamin C and zinc" data-facts="" data-sfx="chime" data-try="n* by Nutrilite Go Shield - Immunity Gummies"><span class="shot"><img src="assets/products/n-by-nutrilite-go-shield-immunity-gummies.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">n* by Nutrilite Go Shield</h3><p class="p-desc">Elderberry gummies · Immunity Gummies</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:1" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/8W1lm1pQL" target="_blank" rel="noopener" data-name="Nutrilite Advanced Omega" data-kind="Omega softgels" data-line="Omega softgels, two of them once a day" data-facts="" data-sfx="chime" data-try="Nutrilite Advanced Omega"><span class="shot"><img src="assets/products/nutrilite-advanced-omega.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Advanced Omega</h3><p class="p-desc">Omega softgels</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:2" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/k5GGxS-5u" target="_blank" rel="noopener" data-name="Nutrilite Balance Within Probiotic" data-kind="Daily probiotic" data-line="A daily stick pack, part of the routine" data-facts="30 stick packs|6.3 billion CFU|5 probiotic strains" data-sfx="chime" data-try="Nutrilite Balance Within Probiotic"><span class="shot"><img src="assets/products/nutrilite-balance-within-probiotic.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Balance Within Probiotic</h3><p class="p-desc">Daily probiotic</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:3" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/FOhn2MdGS" target="_blank" rel="noopener" data-name="Nutrilite Begin Daily GI Primer" data-kind="Daily digestive powder" data-line="A plant-rich drink to start your day" data-facts="30 servings|4 g fiber|30 calories|&lt;1 g sugar" data-sfx="chime" data-try="Nutrilite Begin Daily GI Primer"><span class="shot"><img src="assets/products/nutrilite-begin-daily-gi-primer.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Begin Daily GI Primer</h3><p class="p-desc">Daily digestive powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:0" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/t~~k1TXOS" target="_blank" rel="noopener" data-name="Nutrilite Cal Mag D" data-kind="Calcium &amp; magnesium tablets" data-line="Calcium, magnesium and D, a tablet three times a day" data-facts="" data-sfx="chime" data-try="Nutrilite Cal Mag D"><span class="shot"><img src="assets/products/nutrilite-cal-mag-d.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Cal Mag D</h3><p class="p-desc">Calcium &amp; magnesium tablets</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:1" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/yYbjD4OKt" target="_blank" rel="noopener" data-name="Nutrilite Concentrated Fruits and Vegetables" data-kind="Fruit &amp; vegetable tablets" data-line="Fruit and vegetable concentrates, one tablet a day" data-facts="" data-sfx="chime" data-try="Nutrilite Concentrated Fruits and Vegetables"><span class="shot"><img src="assets/products/nutrilite-concentrated-fruits-and-vegetables.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Concentrated Fruits and Vegetables</h3><p class="p-desc">Fruit &amp; vegetable tablets</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:2" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/BOzl6tIVe" target="_blank" rel="noopener" data-name="Nutrilite Double X Multivitamin" data-kind="Multivitamin tablets · 10 Day Supply" data-line="Morning and evening tablets, 22 vitamins and minerals" data-facts="" data-sfx="chime" data-try="Nutrilite Double X Multivitamin - 10 Day Supply"><span class="shot"><img src="assets/products/nutrilite-double-x-multivitamin-10-day-supply.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Double X Multivitamin</h3><p class="p-desc">Multivitamin tablets · 10 Day Supply</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:3" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/mXKMt~~MK" target="_blank" rel="noopener" data-name="Nutrilite Double X Multivitamin" data-kind="Multivitamin tablets · 31 Day Supply Refill" data-line="Morning and evening tablets, 22 vitamins and minerals" data-facts="" data-sfx="chime" data-try="Nutrilite Double X Multivitamin - 31 Day Supply Refill"><span class="shot"><img src="assets/products/nutrilite-double-x-multivitamin-31-day-supply-refill.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Double X Multivitamin</h3><p class="p-desc">Multivitamin tablets · 31 Day Supply Refill</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:0" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/CIVPfAgCg" target="_blank" rel="noopener" data-name="Nutrilite Immunity Defense Zinc + Holy Basil" data-kind="Zinc &amp; holy basil tablets · 60 tablets" data-line="Zinc and holy basil, one tablet twice a day" data-facts="" data-sfx="chime" data-try="Nutrilite Immunity Defense Zinc + Holy Basil - 60 Tablets"><span class="shot"><img src="assets/products/nutrilite-immunity-defense-zinc-holy-basil-60-tablets.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Immunity Defense Zinc + Holy Basil</h3><p class="p-desc">Zinc &amp; holy basil tablets · 60 tablets</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:1" data-cat="mens-health"><a class="card-link" href="https://amway.com/share-link/DR50q5hAy" target="_blank" rel="noopener" data-name="Nutrilite Men&#x27;s Daily Multivitamin Tablets" data-kind="Multivitamin tablets" data-line="One tablet once a day, made for men" data-facts="" data-sfx="chime" data-try="Nutrilite Men&#x27;s Daily Multivitamin Tablets"><span class="shot"><img src="assets/products/nutrilite-men-s-daily-multivitamin-tablets.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Men’s Health</p><h3 class="p-name">Nutrilite Men&#x27;s Daily Multivitamin Tablets</h3><p class="p-desc">Multivitamin tablets</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:2" data-cat="mens-health"><a class="card-link" href="https://amway.com/share-link/a8AXL-SDl" target="_blank" rel="noopener" data-name="Nutrilite Men&#x27;s Pack" data-kind="Daily supplement packets" data-line="One packet a day, put together for men" data-facts="" data-sfx="chime" data-try="Nutrilite Men&#x27;s Pack"><span class="shot"><img src="assets/products/nutrilite-men-s-pack.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Men’s Health</p><h3 class="p-name">Nutrilite Men&#x27;s Pack</h3><p class="p-desc">Daily supplement packets</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:3" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/8YMvYbDhv" target="_blank" rel="noopener" data-name="Nutrilite Organics Ginger Mint Tea" data-kind="Organic herbal tea" data-line="Ginger and mint, steeped any time of day" data-facts="" data-sfx="chime" data-try="Nutrilite Organics Ginger Mint Tea"><span class="shot"><img src="assets/products/nutrilite-organics-ginger-mint-tea.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Organics Ginger Mint Tea</h3><p class="p-desc">Organic herbal tea</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:0" data-cat="mens-health"><a class="card-link" href="https://amway.com/share-link/PvRKWQ22C~" target="_blank" rel="noopener" data-name="Nutrilite Organics Men&#x27;s Daily Multi Gummies" data-kind="Organic multivitamin gummies" data-line="The daily multi as an organic gummy, for men" data-facts="" data-sfx="chime" data-try="Nutrilite Organics Men&#x27;s Daily Multi Gummies"><span class="shot"><img src="assets/products/nutrilite-organics-men-s-daily-multi-gummies.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Men’s Health</p><h3 class="p-name">Nutrilite Organics Men&#x27;s Daily Multi Gummies</h3><p class="p-desc">Organic multivitamin gummies</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:1" data-cat="womens-health"><a class="card-link" href="https://amway.com/share-link/nQJXizu78" target="_blank" rel="noopener" data-name="Nutrilite Organics Women&#x27;s Daily Multi Gummies" data-kind="Organic multivitamin gummies" data-line="The daily multi as an organic gummy, for women" data-facts="" data-sfx="chime" data-try="Nutrilite Organics Women&#x27;s Daily Multi Gummies"><span class="shot"><img src="assets/products/nutrilite-organics-women-s-daily-multi-gummies.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Women’s Health</p><h3 class="p-name">Nutrilite Organics Women&#x27;s Daily Multi Gummies</h3><p class="p-desc">Organic multivitamin gummies</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:2" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/Zujw0VqxC" target="_blank" rel="noopener" data-name="Nutrilite Perfect Pack" data-kind="Daily supplement packets" data-line="Two packets a day, with Double X inside" data-facts="" data-sfx="chime" data-try="Nutrilite Perfect Pack"><span class="shot"><img src="assets/products/nutrilite-perfect-pack.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Perfect Pack</h3><p class="p-desc">Daily supplement packets</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:3" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/Q2bvlxV22C" target="_blank" rel="noopener" data-name="Nutrilite Prebiotic Fiber" data-kind="Fiber stick packs" data-line="One stick pack of fiber, once a day" data-facts="" data-sfx="chime" data-try="Nutrilite Prebiotic Fiber"><span class="shot"><img src="assets/products/nutrilite-prebiotic-fiber.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Prebiotic Fiber</h3><p class="p-desc">Fiber stick packs</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:0" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/hDSRPDB~i" target="_blank" rel="noopener" data-name="Nutrilite Vitamin C Extended Release" data-kind="Vitamin C tablets" data-line="One slow-release vitamin C tablet a day" data-facts="" data-sfx="chime" data-try="Nutrilite Vitamin C Extended Release"><span class="shot"><img src="assets/products/nutrilite-vitamin-c-extended-release.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">Nutrilite Vitamin C Extended Release</h3><p class="p-desc">Vitamin C tablets</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:1" data-cat="womens-health"><a class="card-link" href="https://amway.com/share-link/c7BJpfkBG" target="_blank" rel="noopener" data-name="Nutrilite Women&#x27;s Daily Multivitamin Tablets" data-kind="Multivitamin tablets" data-line="One tablet once a day, made for women" data-facts="" data-sfx="chime" data-try="Nutrilite Women&#x27;s Daily Multivitamin Tablets"><span class="shot"><img src="assets/products/nutrilite-women-s-daily-multivitamin-tablets.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Women’s Health</p><h3 class="p-name">Nutrilite Women&#x27;s Daily Multivitamin Tablets</h3><p class="p-desc">Multivitamin tablets</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:2" data-cat="womens-health"><a class="card-link" href="https://amway.com/share-link/IoA~cM07C" target="_blank" rel="noopener" data-name="Nutrilite Women&#x27;s Pack" data-kind="Daily supplement packets" data-line="One packet a day, put together for women" data-facts="" data-sfx="chime" data-try="Nutrilite Women&#x27;s Pack"><span class="shot"><img src="assets/products/nutrilite-women-s-pack.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Women’s Health</p><h3 class="p-name">Nutrilite Women&#x27;s Pack</h3><p class="p-desc">Daily supplement packets</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:3" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/TcFtuhPvJ" target="_blank" rel="noopener" data-name="XS Creatine+" data-kind="Creatine powder" data-line="A daily 5 g scoop, training day or not" data-facts="5 g creatine monohydrate|30 servings|Unflavored|Caffeine free" data-sfx="level" data-try="XS Creatine+"><span class="shot shot-studio"><img src="assets/products/xs-creatine.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">XS Creatine+</h3><p class="p-desc">Creatine powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-      </ul>
+  <!-- 2. Who we are: his words, then hers. Both blocks are built in build_homepage.py
+          (peter_text, her_text) and hers is the same block the Women's Health shelf carries. -->
+  <section class="sec ab-who" aria-label="Who we are">
+    <div class="wrap ab-two">
+      <div class="her-text grow">
+        <p class="label">Who we are</p>
+        <h2 id="his-title">Peter’s story</h2>
+        <!-- PETER-COPY --><p class="her-lead">I’m Peter — husband, dad to a baby girl, and a Lincoln local. My wife’s as obsessed with biohacking and longevity as I am.</p><!-- /PETER-COPY -->
+        <!-- DRAFT-COPY --><p>Aspire Health is the two of us, out of Lincoln, California. Yenni runs the women’s side; the rest is mine.</p>
+        <p>My before and after are fifteen months apart, front, side and back.</p>
+        <h3 class="her-h">What changed</h3>
+        <p>Not one thing, but the whole plan:</p>
+        <ul class="c-list">
+          <li>Lifting hard, with progressive overload</li>
+          <li>Counting calories</li>
+          <li>Testing supplement after supplement to find what worked</li>
+          <li>The same wake-up and the same bedtime</li>
+        </ul>
+        <p class="her-fine">Individual results vary.</p><!-- /DRAFT-COPY -->
+      </div>
+      <!-- DRAFT-COPY --><div class="her-text grow">
+        <p class="label">Who runs the women’s side</p>
+        <h2 id="her-title">Yenni’s story</h2>
+        <p class="her-lead">Yenni Herschelman runs the women’s side of Aspire Health. She’s Peter’s wife.</p>
+        <p>Their daughter was born in September 2025. Yenni started lifting with progressive overload while she was pregnant.</p>
+        <p>Her before photos are from November 2025, two months postpartum, so they include the body fat a pregnancy adds. Her afters are from July 2026.</p>
+        <h3 class="her-h">What changed</h3>
+        <p>Not one thing, but her whole plan:</p>
+        <ul class="c-list">
+          <li>Progressive overload: lifting a little more over time</li>
+          <li>Counting calories</li>
+          <li>Solid supplementation</li>
+          <li>Creatine, for the first time</li>
+        </ul>
+        <p class="her-fine">Individual results vary.</p>
+      </div><!-- /DRAFT-COPY -->
     </div>
   </section>
 
-  <!-- The other categories -->
-  <section class="sec cat-more" aria-labelledby="more-title">
-    <div class="wrap">
-      <div class="sec-head grow"><h2 id="more-title">Keep looking</h2></div>
-      <ul class="goal-index">
-          <li><a class="goal" href="category-recovery.html"><span class="goal-name">Recovery</span><span class="goal-desc">Wind down, repair and sleep</span><span class="goal-island"><img src="assets/thumbs/recovery.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-hydration.html"><span class="goal-name">Hydration</span><span class="goal-desc">Electrolytes and drink mixes for long, hot and sweaty sessions.</span><span class="goal-island"><img src="assets/thumbs/hydration.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-energy-focus.html"><span class="goal-name">Energy &amp; Focus</span><span class="goal-desc">Pre-workout, tablets and the full XS energy range.</span><span class="goal-island"><img src="assets/thumbs/energy-focus.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-protein.html"><span class="goal-name">Protein Snack Pack</span><span class="goal-desc">Powders, shakes, bars and crisps to hit your protein for the day.</span><span class="goal-island"><img src="assets/thumbs/protein.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-fat-loss.html"><span class="goal-name">Fat Loss</span><span class="goal-desc">Powders, tablets and softgels to pair with your training.</span><span class="goal-island"><img src="assets/thumbs/fat-loss.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-skin-redefined.html"><span class="goal-name">Skin Redefined</span><span class="goal-desc">Artistry skincare, for the hours you are not training.</span><span class="goal-island"><img src="assets/thumbs/skin-redefined.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-womens-health.html"><span class="goal-name">Women’s Health</span><span class="goal-desc">For her everyday</span><span class="goal-island"><img src="assets/thumbs/womens-health.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-mens-health.html"><span class="goal-name">Men’s Health</span><span class="goal-desc">For his everyday</span><span class="goal-island"><img src="assets/thumbs/mens-health.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-      </ul>
+  <!-- 3. What changed: the proof wall, his three views and her two (proof_wall in
+          build_homepage.py). Each set shares one crop, so the seam between before and after sits
+          at 50% in every file and one pair of headings on that line labels each stack. -->
+  <section class="wrap st-proof ab-proof" id="proof" aria-labelledby="proof-t">
+    <!-- DRAFT-COPY --><h2 class="pf-title" id="proof-t"><span class="pf-k">His</span> and <span class="pf-k">hers</span></h2><!-- /DRAFT-COPY -->
+    <div class="pf-duo">
+      <figure class="c-proof pf-his">
+  <p class="pf-who"><span class="pf-name">Peter</span></p>
+  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
+  <div class="c-stack"><img src="assets/peter/front-640.webp" srcset="assets/peter/front-640.webp 640w, assets/peter/front-960.webp 960w" sizes="(min-width:760px) 680px, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the front"><img src="assets/peter/side-640.webp" srcset="assets/peter/side-640.webp 640w, assets/peter/side-960.webp 960w" sizes="(min-width:760px) 680px, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the side"><img src="assets/peter/back-640.webp" srcset="assets/peter/back-640.webp 640w, assets/peter/back-960.webp 960w" sizes="(min-width:760px) 680px, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the back"></div>
+  <!-- PETER-COPY --><figcaption>Fifteen-month transformation.</figcaption><!-- /PETER-COPY -->
+</figure>
+      <figure class="c-proof pf-hers">
+  <!-- DRAFT-COPY --><p class="pf-who"><span class="pf-name">Yenni</span> <span class="pf-when">Nov 2025 → Jul 2026</span></p><!-- /DRAFT-COPY -->
+  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
+  <div class="c-stack"><img src="assets/her/front-640.webp" srcset="assets/her/front-640.webp 640w, assets/her/front-768.webp 768w" sizes="(min-width:1000px) 460px, (min-width:760px) 560px, calc(100vw - 40px)" width="768" height="979" loading="lazy" decoding="async" alt="Yenni, before and after, from the front: Nov 2025 and Jul 2026"><img src="assets/her/back-640.webp" srcset="assets/her/back-640.webp 640w, assets/her/back-768.webp 768w" sizes="(min-width:1000px) 460px, (min-width:760px) 560px, calc(100vw - 40px)" width="768" height="979" loading="lazy" decoding="async" alt="Yenni, before and after, from the back: Nov 2025 and Jul 2026"></div>
+  <!-- DRAFT-COPY --><figcaption>Before: two months postpartum.</figcaption><!-- /DRAFT-COPY -->
+</figure>
     </div>
   </section>
 
-  <!-- Macros: the calculator lives on the homepage, so this band is the way to it -->
-  <section class="sec cat-macros" aria-labelledby="cat-macros-title">
+  <!-- 4. The numbers: both DEXA cards, on their own dates and never presented as covering the same
+          months as the photos (build_homepage.py: PETER_TRANSFORM, HER_DEXA). -->
+  <section class="wrap ab-nums" id="numbers" aria-labelledby="nums-t">
+    <!-- DRAFT-COPY --><h2 class="pf-title" id="nums-t">The <span class="pf-k">numbers</span></h2><!-- /DRAFT-COPY -->
+    <div class="dx-duo">
+<!-- DRAFT-COPY --><article class="dx-card" aria-labelledby="dx-peter-s-dexa-scans">
+<div class="dx-head"><h3 class="dx-t" id="dx-peter-s-dexa-scans">Peter’s DEXA scans</h3><p class="dx-span">Two scans, fifteen months apart</p></div>
+<dl class="dx-nums dx-four"><div class="dx-n"><dt>Body fat</dt><dd class="dx-v">22.1% → 7.4%</dd><dd class="dx-d">−14.7 points</dd></div><div class="dx-n"><dt>Weight</dt><dd class="dx-v">170 → 164 lb</dd><dd class="dx-d">−6 lb</dd></div><div class="dx-n"><dt>Fat</dt><dd class="dx-v">38.1 → 12.3 lb</dd><dd class="dx-d">−25.8 lb</dd></div><div class="dx-n"><dt>Lean mass</dt><dd class="dx-v">132.7 → 152.1 lb</dd><dd class="dx-d">+19.4 lb</dd></div></dl>
+<div class="dx-src"><p>Measured by DEXA scan.</p><p>Individual results vary.</p></div>
+</article><!-- /DRAFT-COPY -->
+<!-- DRAFT-COPY --><article class="dx-card" aria-labelledby="dx-yenni-s-dexa-scans">
+<div class="dx-head"><h3 class="dx-t" id="dx-yenni-s-dexa-scans">Yenni’s DEXA scans</h3><p class="dx-span">Four scans, Jan 2024 → Aug 2026</p></div>
+<dl class="dx-nums"><div class="dx-n"><dt>Body fat</dt><dd class="dx-v">29.9% → 22.7%</dd><dd class="dx-d">−7.2 points</dd></div><div class="dx-n"><dt>Fat</dt><dd class="dx-v">41.2 → 30.2 lb</dd><dd class="dx-d">−11.0 lb</dd></div><div class="dx-n"><dt>Lean mass</dt><dd class="dx-v">92.1 → 98.1 lb</dd><dd class="dx-d">+6.0 lb</dd></div></dl>
+<p class="dx-gapnote">No scan between Dec 2024 and Aug 2026: we got pregnant and had our first in between.</p><div class="dx-charts"><figure class="dx-chart"><figcaption class="dx-ct"><i style="--c:#8A543E"></i>Fat mass, lb</figcaption><svg viewBox="0 0 300 132" width="300" height="132" aria-hidden="true" focusable="false"><line class="dx-grid dx-base" x1="36" x2="288" y1="106.0" y2="106.0"/><text class="dx-yl" x="29" y="110.0" text-anchor="end">0</text><line class="dx-grid" x1="36" x2="288" y1="63.0" y2="63.0"/><text class="dx-yl" x="29" y="67.0" text-anchor="end">25</text><line class="dx-grid" x1="36" x2="288" y1="20.0" y2="20.0"/><text class="dx-yl" x="29" y="24.0" text-anchor="end">50</text><line class="dx-tick" x1="36.0" x2="36.0" y1="106" y2="110"/><text class="dx-xl" x="32.0" y="125" text-anchor="start">2024</text><line class="dx-tick" x1="127.8" x2="127.8" y1="106" y2="110"/><text class="dx-xl" x="127.8" y="125" text-anchor="middle">2025</text><line class="dx-tick" x1="223.2" x2="223.2" y1="106" y2="110"/><text class="dx-xl" x="223.2" y="125" text-anchor="middle">2026</text><rect class="dx-gap" x="131.5" y="14" width="144.5" height="92"/><text class="dx-gapl" x="203.7" y="67.0" text-anchor="middle">no scans</text><polyline class="dx-line" points="36.0,35.1 83.7,34.1 123.5,38.9" stroke="#8A543E"/><circle class="dx-pt" cx="36.0" cy="35.1" r="4" fill="#8A543E"><title>Jan 2024: 41.2 lb</title></circle><circle class="dx-pt" cx="83.7" cy="34.1" r="4" fill="#8A543E"><title>Jul 2024: 41.8 lb</title></circle><circle class="dx-pt" cx="123.5" cy="38.9" r="4" fill="#8A543E"><title>Dec 2024: 39.0 lb</title></circle><circle class="dx-pt" cx="284.0" cy="54.1" r="4" fill="#8A543E"><title>Aug 2026: 30.2 lb</title></circle><text class="dx-vl" x="38.0" y="26.1" text-anchor="start">41.2</text><text class="dx-vl" x="290.0" y="45.1" text-anchor="end">30.2</text></svg></figure><figure class="dx-chart"><figcaption class="dx-ct"><i style="--c:#3340B8"></i>Lean mass, lb</figcaption><svg viewBox="0 0 300 132" width="300" height="132" aria-hidden="true" focusable="false"><line class="dx-grid dx-base" x1="36" x2="288" y1="106.0" y2="106.0"/><text class="dx-yl" x="29" y="110.0" text-anchor="end">0</text><line class="dx-grid" x1="36" x2="288" y1="63.0" y2="63.0"/><text class="dx-yl" x="29" y="67.0" text-anchor="end">55</text><line class="dx-grid" x1="36" x2="288" y1="20.0" y2="20.0"/><text class="dx-yl" x="29" y="24.0" text-anchor="end">110</text><line class="dx-tick" x1="36.0" x2="36.0" y1="106" y2="110"/><text class="dx-xl" x="32.0" y="125" text-anchor="start">2024</text><line class="dx-tick" x1="127.8" x2="127.8" y1="106" y2="110"/><text class="dx-xl" x="127.8" y="125" text-anchor="middle">2025</text><line class="dx-tick" x1="223.2" x2="223.2" y1="106" y2="110"/><text class="dx-xl" x="223.2" y="125" text-anchor="middle">2026</text><rect class="dx-gap" x="131.5" y="14" width="144.5" height="92"/><text class="dx-gapl" x="203.7" y="67.0" text-anchor="middle">no scans</text><polyline class="dx-line" points="36.0,34.0 83.7,31.2 123.5,34.9" stroke="#3340B8"/><circle class="dx-pt" cx="36.0" cy="34.0" r="4" fill="#3340B8"><title>Jan 2024: 92.1 lb</title></circle><circle class="dx-pt" cx="83.7" cy="31.2" r="4" fill="#3340B8"><title>Jul 2024: 95.7 lb</title></circle><circle class="dx-pt" cx="123.5" cy="34.9" r="4" fill="#3340B8"><title>Dec 2024: 90.9 lb</title></circle><circle class="dx-pt" cx="284.0" cy="29.3" r="4" fill="#3340B8"><title>Aug 2026: 98.1 lb</title></circle><text class="dx-vl" x="38.0" y="25.0" text-anchor="start">92.1</text><text class="dx-vl" x="290.0" y="20.3" text-anchor="end">98.1</text></svg></figure></div>
+<div class="vh"><table><caption>Yenni’s DEXA scans, every scan</caption><thead><tr><th scope="col">Scan</th><th scope="col">Body fat</th><th scope="col">Fat mass</th><th scope="col">Lean mass</th></tr></thead><tbody><tr><th scope="row">Jan 2024</th><td>29.9%</td><td>41.2 lb</td><td>92.1 lb</td></tr><tr><th scope="row">Jul 2024</th><td>29.4%</td><td>41.8 lb</td><td>95.7 lb</td></tr><tr><th scope="row">Dec 2024</th><td>29.0%</td><td>39.0 lb</td><td>90.9 lb</td></tr><tr><th scope="row">Aug 2026</th><td>22.7%</td><td>30.2 lb</td><td>98.1 lb</td></tr></tbody></table></div>
+<div class="dx-src"><p>Measured by DEXA scan at UC Davis Sports Medicine, Sacramento.</p><p>We’re not sponsored by or affiliated with UC Davis Health; we’re just big fans of their DEXA service.</p><p>Individual results vary.</p></div>
+</article><!-- /DRAFT-COPY -->
+    </div>
+  </section>
+
+  <!-- 5. The way on: the same two things the homepage asks for, in the same words. The Amway
+          disclosure belongs on any page where Peter recommends products or shows results, so it
+          sits here, directly under the numbers. -->
+  <section class="sec ab-next" aria-labelledby="ab-next-t">
     <div class="wrap split">
       <div class="split-text grow">
-        <p class="label">Your numbers</p>
-        <h2 id="cat-macros-title"><span>Not sure where</span> <span>to start?</span></h2>
-        <p>The math behind a higher you.</p>
-        <a class="btn" href="homepage.html#macros">Work out your macros</a>
+        <!-- DRAFT-COPY --><p class="label">Where to start</p>
+        <h2 id="ab-next-t"><span>Try it, then</span> <span>ask me <span class="hl-k">anything</span></span></h2>
+        <p>A free sample, on me, while supplies last. Dropped off near Lincoln, or mailed anywhere in the US.</p><!-- /DRAFT-COPY -->
+        <!-- PETER-COPY --><p>Then fifteen minutes, free. Bring your stack and your hard questions.</p><!-- /PETER-COPY -->
+        <!-- the Amway disclosure stays wherever Peter recommends products (a paid endorsement must say so) -->
+        <!-- PETER-COPY --><p>Disclaimer: I’m sponsored by Amway and paid based on products sold.</p><!-- /PETER-COPY -->
+        <div class="ab-acts">
+          <a class="btn" href="homepage.html#sample">Ask for a free sample</a>
+          <a class="btn btn-line" href="homepage.html#consult">Book a free call</a>
+        </div>
       </div>
     </div>
   </section>
@@ -301,19 +352,6 @@
   </div>
 </dialog>
 
-    <dialog class="pcard" id="pcard" aria-labelledby="pcard-name" aria-describedby="pcard-line">
-      <div class="pcard-in">
-        <button class="icon-btn pcard-x" type="button" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
-        <div class="pcard-art"><img id="pcard-img" alt="" width="600" height="600"></div>
-        <div class="pcard-copy">
-          <p class="pcard-kind" id="pcard-kind"></p>
-          <h3 class="pcard-name" id="pcard-name"></h3>
-          <p class="pcard-line" id="pcard-line"></p>
-          <ul class="pcard-facts" id="pcard-facts" aria-label="Quick facts"></ul>
-          <div class="pcard-acts"><a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Add to cart on Amway<span class="vh"> (opens in a new tab)</span></a><a class="btn btn-line pcard-try" id="pcard-try" href="homepage.html#sample" data-home="homepage.html">Ask for a free sample</a></div>
-        </div>
-      </div>
-    </dialog>
 
 <p class="vh" id="live" aria-live="polite"></p>
 

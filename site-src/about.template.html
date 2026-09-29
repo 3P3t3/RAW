@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+{{HEAD_EXTRA}}<meta name="theme-color" content="#002E3B">
+<title>About us · Aspire Health</title>
+<meta name="description" content="{{ABOUT_TAG}}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="About us · Aspire Health">
+<meta property="og:description" content="{{ABOUT_TAG}}">
+<meta property="og:url" content="{{PAGE_URL}}">
+<meta property="og:image" content="{{BASE}}assets/logo/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{BASE}}assets/logo/og-image.png">
+<link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/logo/favicon-32.png" sizes="32x32">
+<link rel="icon" href="assets/logo/favicon-16.png" sizes="16x16">
+<link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
+<link rel="stylesheet" href="{{STYLE}}">
+<script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
+</head>
+<body>
+<!-- the field: the site's one ground (the field block in style.css) -->
+<div class="field" aria-hidden="true"><span class="fg fg1"></span><span class="fg fg2"></span></div>
+<a class="skip" href="#main">Skip to content</a>
+
+{{ICONS}}
+
+{{HEADER}}
+
+<main id="main">
+
+  <!-- About us: one page of its own, off the menu, because all of this hanging off the end of the
+       homepage was too much in one thing (Peter, 2026-09-28). It reads in one line: who we are,
+       then what changed (the photos), then the numbers (the DEXA cards), then the way on.
+       Generated from site-src/about.template.html; never hand-edit about.html. -->
+
+  <!-- 1. Their two portraits with their daughter, the same pair the his and hers shelves are headed
+          with, side by side: whole photos, not a cover crop, so nothing cuts into their faces. -->
+  <section class="cat-hero cat-hero-photo ab-hero" aria-labelledby="ab-title">
+    <div class="wrap cat-pic">
+      <div class="ab-pics">
+{{ABOUT_PORTRAITS}}
+      </div>
+    </div>
+    <canvas class="caustics" data-caustics aria-hidden="true"></canvas>
+    <div class="wrap cat-hero-in">
+      <p class="label"><a href="{{HOME}}#top">Aspire Health</a></p>
+      <h1 id="ab-title">About us</h1>
+      <!-- DRAFT-COPY --><p class="sub">{{ABOUT_SUB}}</p><!-- /DRAFT-COPY -->
+    </div>
+  </section>
+
+  <!-- 2. Who we are: his words, then hers. Both blocks are built in build_homepage.py
+          (peter_text, her_text) and hers is the same block the Women's Health shelf carries. -->
+  <section class="sec ab-who" aria-label="Who we are">
+    <div class="wrap ab-two">
+      {{ABOUT_HIS}}
+      {{ABOUT_HERS}}
+    </div>
+  </section>
+
+  <!-- 3. What changed: the proof wall, his three views and her two (proof_wall in
+          build_homepage.py). Each set shares one crop, so the seam between before and after sits
+          at 50% in every file and one pair of headings on that line labels each stack. -->
+  <section class="wrap st-proof ab-proof" id="proof" aria-labelledby="proof-t">
+{{ABOUT_PROOF}}
+  </section>
+
+  <!-- 4. The numbers: both DEXA cards, on their own dates and never presented as covering the same
+          months as the photos (build_homepage.py: PETER_TRANSFORM, HER_DEXA). -->
+  <section class="wrap ab-nums" id="numbers" aria-labelledby="nums-t">
+    <!-- DRAFT-COPY --><h2 class="pf-title" id="nums-t">The <span class="pf-k">numbers</span></h2><!-- /DRAFT-COPY -->
+    <div class="dx-duo">
+{{ABOUT_DEXA}}
+    </div>
+  </section>
+
+  <!-- 5. The way on: the same two things the homepage asks for, in the same words. The Amway
+          disclosure belongs on any page where Peter recommends products or shows results, so it
+          sits here, directly under the numbers. -->
+  <section class="sec ab-next" aria-labelledby="ab-next-t">
+    <div class="wrap split">
+      <div class="split-text grow">
+        <!-- DRAFT-COPY --><p class="label">Where to start</p>
+        <h2 id="ab-next-t"><span>Try it, then</span> <span>ask me <span class="hl-k">anything</span></span></h2>
+        <p>A free sample, on me, while supplies last. Dropped off near Lincoln, or mailed anywhere in the US.</p><!-- /DRAFT-COPY -->
+        <!-- PETER-COPY --><p>Then fifteen minutes, free. Bring your stack and your hard questions.</p><!-- /PETER-COPY -->
+        <!-- the Amway disclosure stays wherever Peter recommends products (a paid endorsement must say so) -->
+        <!-- PETER-COPY --><p>Disclaimer: I’m sponsored by Amway and paid based on products sold.</p><!-- /PETER-COPY -->
+        <div class="ab-acts">
+          <a class="btn" href="{{HOME}}#sample">Ask for a free sample</a>
+          <a class="btn btn-line" href="{{HOME}}#consult">Book a free call</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{{FOOTER}}
+
+{{DIALOGS}}
+{{PCARD}}
+<p class="vh" id="live" aria-live="polite"></p>
+
+{{SCRIPT}}
+</body>
+</html>

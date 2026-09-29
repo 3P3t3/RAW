@@ -2091,3 +2091,28 @@ body{background:transparent}
   .cat-portrait{width:min(38vw,440px)}
   .cat-hero-photo .cat-hero-in{align-self:end;padding-block:180px 56px;padding-right:calc(var(--pad) + min(38vw,440px) + 40px)}
 }
+
+/* ---- about.html --------------------------------------------------------------------------------
+   Its own page off the menu: who we are, then what changed (the proof wall), then the numbers
+   (the DEXA cards), then the way on. Everything here is a variation on a pattern the site already
+   has — the shelf hero, .her-text, .pf-duo, .dx-duo, .split — so nothing new is invented for it. */
+/* the hero carries two portraits, his and hers, where a shelf's carries one */
+.ab-pics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%}
+.ab-pics .cat-portrait{width:100%;max-width:none}
+.ab-hero .cat-hero-in{padding-block:26px 40px}
+/* who we are: his words beside hers, each in the block the Women's Health shelf uses */
+.ab-two{display:grid;gap:52px;align-items:start}
+.ab-two .her-text h2{font-size:clamp(36px,9vw,52px)}
+/* the numbers, under the photos rather than after a caption, so .dx-duo's own top gap is too much */
+.ab-nums{padding-bottom:var(--sec)}
+.ab-nums .dx-duo{margin-top:26px}
+/* the way on: the free sample and the call, side by side once there is room */
+.ab-acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+@media (min-width:760px){
+  .ab-pics{width:min(46vw,520px);gap:18px}
+  .ab-hero .cat-hero-in{padding-right:calc(var(--pad) + min(46vw,520px) + 40px)}
+}
+@media (min-width:900px){.ab-two{grid-template-columns:repeat(2,minmax(0,1fr));gap:56px}}
+
+/* the homepage's story hands over to about.html here instead of carrying the proof wall itself */
+.st-more{display:flex;justify-content:center;margin:0;padding-top:34px;padding-bottom:var(--sec)}
