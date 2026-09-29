@@ -1626,8 +1626,10 @@ html:not(.js) .lbpin{display:none}
    a phone with three a row); 768 to 1023 three rows of three, ~175px each; from 1024 five and four,
    ~160px each (one row was 86-123px a plate at 768-1199, its line 7.5-9px). A plate is a button, drawn as a competition bumper standing on the page:
    a matte rubber face in its shelf's colour with a fine grain, a raised rim (lit on top, in shade
-   underneath), a recessed ring round a machined steel hub with a bright edge to its bore, and a soft
-   contact shadow under it. Its name is moulded into the rubber above the hub (a light top edge, a dark
+   underneath), a machined steel hub bolted through it on a six-bolt circle, a dark bore, a side wall
+   showing under the face so it reads as a thick disc, and a soft contact shadow under it. It used to
+   carry a second, recessed ring round the hub and a small bright hole in the middle: face on, that is
+   a record, so the ring is gone, the hub is bolted steel and the bore is a dark tube. Its name is moulded into the rubber above the hub (a light top edge, a dark
    bottom edge) and its shelf's line under it, which reads "On the bar" once it is loaded. The one whose
    panel is open wears an outline ring. */
 .rack-sec .sec-head{margin-bottom:22px}
@@ -1649,26 +1651,29 @@ html:not(.js) .lbpin{display:none}
     var(--c);
   background-size:120px 120px,auto,auto,auto;
   box-shadow:inset 0 max(1px,1.1cqi) max(1px,.9cqi) rgba(255,255,255,.26),inset 0 min(-1.5px,-1.6cqi) max(1.5px,1.6cqi) rgba(0,0,0,.34),
-    inset 0 0 0 max(.5px,.5cqi) rgba(0,0,0,.2),0 max(2px,2cqi) 0 color-mix(in srgb,var(--c) 55%,#0B1115),0 10px 16px -10px rgba(0,20,27,.5);
+    inset 0 0 0 max(.5px,.5cqi) rgba(0,0,0,.2),0 max(3px,3.4cqi) 0 color-mix(in srgb,var(--c) 50%,#0B1115),0 12px 18px -10px rgba(0,20,27,.5);
   transition:transform 200ms cubic-bezier(.2,.7,.2,1),box-shadow 200ms}
-/* the rim steps down to the face: the step shades the face under the top of the rim and catches the
-   light at the bottom */
-.rk-disc::before{content:"";position:absolute;inset:7%;border-radius:50%;background:rgba(0,0,0,.035);
-  box-shadow:inset 0 max(1px,1.1cqi) max(1px,1.1cqi) rgba(0,0,0,.3),inset 0 min(-1px,-.7cqi) 0 rgba(255,255,255,.16),
-    0 min(-1px,-.6cqi) 0 rgba(0,0,0,.12),0 max(1px,.6cqi) 0 rgba(255,255,255,.14)}
-/* the recessed ring round the hub */
-.rk-disc::after{content:"";position:absolute;inset:32.5%;border-radius:50%;background:rgba(0,0,0,.045);
-  box-shadow:inset 0 max(1px,1cqi) max(1px,1.2cqi) rgba(0,0,0,.34),inset 0 min(-1px,-.6cqi) 0 rgba(255,255,255,.16),
-    0 max(1px,.6cqi) 0 rgba(255,255,255,.16),0 min(-1px,-.6cqi) 0 rgba(0,0,0,.14)}
-/* the hub: turned steel with a bevel, and its bore, with a bright chamfer at the edge and the page through it */
-.rk-hole{position:absolute;z-index:1;left:37%;top:37%;width:26%;height:26%;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,0,0,0) 0 62%,rgba(0,0,0,.16) 70%,rgba(0,0,0,0) 78%,rgba(0,0,0,0) 90%,rgba(0,0,0,.28) 100%),
-    conic-gradient(from -24deg,#F1F3F4,#A9B1B6 9%,#E2E6E8 19%,#8E979D 31%,#CDD3D6 43%,#FBFCFC 51%,#9AA3A8 62%,#D8DDE0 74%,#7E878D 87%,#F1F3F4);
-  box-shadow:0 0 0 max(1px,.8cqi) rgba(10,14,17,.35),inset 0 max(1px,.7cqi) 0 rgba(255,255,255,.9),inset 0 min(-1px,-.7cqi) max(1px,.6cqi) rgba(0,0,0,.35),
-    0 max(1px,1cqi) max(1px,1.2cqi) rgba(0,0,0,.35)}
-.rk-hole::before{content:"";position:absolute;inset:25%;border-radius:50%;background:var(--chalk);
-  box-shadow:inset 0 max(1.5px,1.8cqi) max(1.5px,1.6cqi) rgba(0,20,27,.6),inset 0 min(-1px,-.5cqi) 0 rgba(255,255,255,.5),
-    0 0 0 max(.75px,.6cqi) rgba(255,255,255,.85),0 0 0 max(1.25px,1.2cqi) rgba(70,78,84,.55)}
+/* the rim: a raised band round the face, the way a bumper's moulded shoulder stands proud of it.
+   The step shades the face under the top of the rim and catches the light at the bottom. It is the
+   only ring on the plate: the recessed one that used to sit round the hub read as a record's groove. */
+.rk-disc::before{content:"";position:absolute;inset:8.5%;border-radius:50%;background:rgba(0,0,0,.05);
+  box-shadow:inset 0 max(1.5px,1.7cqi) max(1.5px,1.5cqi) rgba(0,0,0,.36),inset 0 min(-1.5px,-1.2cqi) 0 rgba(255,255,255,.2),
+    0 min(-1px,-1cqi) 0 rgba(0,0,0,.18),0 max(1.5px,1cqi) 0 rgba(255,255,255,.2)}
+/* the hub: the machined steel insert standing proud of the rubber, with its six bolt heads on a
+   circle. It is the one thing a record has not got, and it is what tells the two apart at a glance;
+   the bore through it is a dark steel tube now, not the bright spindle hole it used to be. */
+.rk-disc::after{content:"";position:absolute;inset:35%;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.55) 0 10%,#D2D8DB 10% 34%,#98A1A7 34% 52%,rgba(0,0,0,.22) 52% 62%,rgba(0,0,0,.45) 62% 74%,rgba(0,0,0,0) 76%),radial-gradient(circle,rgba(255,255,255,.55) 0 10%,#D2D8DB 10% 34%,#98A1A7 34% 52%,rgba(0,0,0,.22) 52% 62%,rgba(0,0,0,.45) 62% 74%,rgba(0,0,0,0) 76%),radial-gradient(circle,rgba(255,255,255,.55) 0 10%,#D2D8DB 10% 34%,#98A1A7 34% 52%,rgba(0,0,0,.22) 52% 62%,rgba(0,0,0,.45) 62% 74%,rgba(0,0,0,0) 76%),radial-gradient(circle,rgba(255,255,255,.55) 0 10%,#D2D8DB 10% 34%,#98A1A7 34% 52%,rgba(0,0,0,.22) 52% 62%,rgba(0,0,0,.45) 62% 74%,rgba(0,0,0,0) 76%),radial-gradient(circle,rgba(255,255,255,.55) 0 10%,#D2D8DB 10% 34%,#98A1A7 34% 52%,rgba(0,0,0,.22) 52% 62%,rgba(0,0,0,.45) 62% 74%,rgba(0,0,0,0) 76%),radial-gradient(circle,rgba(255,255,255,.55) 0 10%,#D2D8DB 10% 34%,#98A1A7 34% 52%,rgba(0,0,0,.22) 52% 62%,rgba(0,0,0,.45) 62% 74%,rgba(0,0,0,0) 76%),
+    conic-gradient(from -28deg,#E9ECED,#A8B0B5 11%,#DCE1E3 23%,#909A9F 36%,#CED4D7 48%,#F2F4F5 57%,#9EA7AC 69%,#D4D9DC 81%,#889197 91%,#E9ECED);
+  background-size:17% 17%,17% 17%,17% 17%,17% 17%,17% 17%,17% 17%,auto;
+  background-position:50% 7.8%,86.5% 28.9%,86.5% 71.1%,50% 92.2%,13.5% 71.1%,13.5% 28.9%,50% 50%;background-repeat:no-repeat;
+  box-shadow:0 0 0 max(.5px,.5cqi) rgba(10,14,17,.42),inset 0 max(1px,.8cqi) 0 rgba(255,255,255,.7),
+    inset 0 min(-1px,-.8cqi) max(1px,.7cqi) rgba(0,0,0,.35),0 max(1px,1cqi) max(1.5px,1.4cqi) -1px rgba(0,0,0,.45)}
+/* the bore */
+.rk-hole{position:absolute;z-index:1;left:44%;top:44%;width:12%;height:12%;border-radius:50%;
+  background:radial-gradient(circle,#232B31 0 62%,#39434A 80%,#1A2126 100%);
+  box-shadow:inset 0 max(1px,1.2cqi) max(1px,1cqi) rgba(0,0,0,.8),inset 0 min(-1px,-.5cqi) 0 rgba(255,255,255,.14),
+    0 0 0 max(.5px,.45cqi) rgba(255,255,255,.55),0 0 0 max(1px,.9cqi) rgba(56,64,70,.6)}
 /* the name, moulded in: a light top edge and a dark bottom edge */
 .rk-name{position:absolute;left:14%;right:14%;bottom:67.5%;text-align:center;font:800 clamp(13px,10.5cqi,15px)/1 var(--sans);font-stretch:75%;
   letter-spacing:.05em;text-transform:uppercase;text-wrap:balance;
@@ -1679,7 +1684,7 @@ html:not(.js) .lbpin{display:none}
 .rk-plate.is-on .rk-line{display:none}
 .rk-plate.is-on .rk-on{display:block}
 .rk-plate[aria-pressed="true"] .rk-disc{box-shadow:inset 0 max(1px,1.1cqi) max(1px,.9cqi) rgba(255,255,255,.26),inset 0 min(-1.5px,-1.6cqi) max(1.5px,1.6cqi) rgba(0,0,0,.34),
-  inset 0 0 0 max(.5px,.5cqi) rgba(0,0,0,.2),0 max(2px,2cqi) 0 color-mix(in srgb,var(--c) 55%,#0B1115),0 0 0 calc(max(2px,2cqi) + 3px) var(--chalk),0 0 0 calc(max(2px,2cqi) + 5.5px) var(--teal),0 16px 22px -12px rgba(0,20,27,.6)}
+  inset 0 0 0 max(.5px,.5cqi) rgba(0,0,0,.2),0 max(3px,3.4cqi) 0 color-mix(in srgb,var(--c) 50%,#0B1115),0 0 0 calc(max(3px,3.4cqi) + 3px) var(--chalk),0 0 0 calc(max(3px,3.4cqi) + 5.5px) var(--teal),0 16px 22px -12px rgba(0,20,27,.6)}
 @media (hover:hover){.rk-plate:hover .rk-disc{transform:translate3d(0,-3px,0)}.rk-plate:hover::before{opacity:.7;transform:scale(.94)}}
 .rk-plate:active .rk-disc{transform:translate3d(0,1px,0)}
 .rk-panel{margin-top:24px;padding:18px 18px 6px;border-radius:18px;background:color-mix(in srgb,var(--sand) 45%,var(--chalk));
