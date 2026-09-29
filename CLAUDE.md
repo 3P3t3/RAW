@@ -214,8 +214,9 @@ shelf pages and podium still use the catalogue images.
 The homepage runs hero → shelves → `#trending` (the week's three best sellers, all three in view at
 every width; the scroll-scrubbed can pour behind them is `TRENDING_POUR`, off) → `#story` →
 `#macros` → `#consult`. `#story` is a sticky, scroll-scrubbed stage telling Peter's 15 months in
-beats: his before, the before becoming the after, one growing shelf with three product beats and a
-fourth that lands the last two packs together,
+beats, in three movements ("Fatigue was a constant." / "Here's what I changed." / "Here's what I
+notice now.", his own phrases for them): his before, one growing shelf with three product beats and a
+fourth that lands the last two packs together, then the before becoming the after and his family,
 "That's what this call is for" with a "Book a free call" button, his family, then the proof wall:
 his three pairs, Yenni's two beside them, then the DEXA cards. The wall sits after the stage
 (`#st-run`), so it does not make the run any longer. It is its own `<section id="proof">` with a
@@ -227,15 +228,19 @@ his own words for it. Like the proof wall it is outside `#st-run`, so it scrolls
 the run is no longer for it.
 Peter's lines inside it are his, verbatim, in PETER-COPY markers.
 
-**His words are a caption strip, not one line at a time.** Under the shelf, `.st-caprail` holds his
-four lines in one column and the script slides its track so the caption belonging to the pack on the
-shelf sits on the reading line at full strength, with the ones above and below in a softer teal
+**His words are a caption strip, not one line at a time.** Under whatever the stage is showing,
+`.st-caprail` holds his six lines in one column and the script slides its track so the caption belonging to the pack on the
+stage sits on the reading line at full strength, with the ones above and below in a softer teal
 (5.3-5.9:1 on the ground: quiet, never unreadable); two or three are legible at once (Peter,
-2026-09-28: "it needs to be a lot easier to read... maybe I can read it in one go"). Three of the
-four are his verbatim (food, hydration with the water line, sleep); the fourth is DRAFT-COPY, the
-line that folds the old morning-routine and smoother-energy beats into one and still links Daily
-Foundations and Energy & Focus. Without the stage the strip is a plain block of those four lines,
-with their links, straight after the packs.
+2026-09-28: "it needs to be a lot easier to read... maybe I can read it in one go"). A caption belongs to the beat
+carrying `data-cap`, in order (his before, the four packs, the turn); his family beat has none,
+because the third movement's line is already up when it arrives. Two of the captions open a movement
+with a small `.st-mv` label in his words. All of them are his verbatim except one DRAFT-COPY line,
+the one that folds the old morning-routine and smoother-energy beats into one and still links Daily
+Foundations and Energy & Focus. The strip sits over the beats (`z-index`), so its links can be
+tapped, and the script gives it `.is-off` once it has faded so the ask's own button takes the tap.
+Without the stage it is a plain block of his six lines with their links, straight after his before,
+so a no-JS reader gets the whole story in his words and then the pictures it is about.
 Each pack carries `data-cat`, the shelf whose plate it puts on the pinned bar, so one beat can load
 two plates; the build checks those against `PETER`, which is in the story's order (protein,
 hydration, recovery, daily-foundations, energy-focus). His five plates load 1, 2, 3, then 4 and 5 a
@@ -244,13 +249,13 @@ The five packs all rest at `data-tilt="0"`: they stand straight in the group tha
 and the only turn left is the fall's own lean (`DROP.lean`), which unwinds to nothing at the landing.
 
 Its pace lives in two places: the `HOLD` table and the per-change lengths in the story block of
-`_script.html`, and the run height (600lvh) in `style.css`. `HOLD` is
-`[.9, 1.7, .35, .45, .35, .45, 2.6, 1]` with `TT` (the change INTO each beat)
-`[0, 1.5, 1, .7, .7, .7, 1.4, 1.5]`: the before, the turn, the four pack beats, the call, the family.
-The pack beats are deliberately quick (a change between two packs is .7 units, not 1.5) and their
-packs pile up on stage rather than swapping out; nothing has to wait for a line to be read, because
-the strip is already showing it. The call holds 2.6 (~717px at 390x844) so every flick through the
-end of the story comes to rest on "Book a free call". Changing any of these means re-running the
+`_script.html`, and the run height (400lvh) in `style.css`. `HOLD` is
+`[.45, .25, .25, .25, .25, .85, .3, 2.6]` with `TT` (the change INTO each beat)
+`[0, .6, .45, .45, .45, .6, .45, .9]`: his before, the four pack beats, the turn, his family, the
+ask. Every hold but two is short, because nothing waits for a line to be read — the strip is already
+showing it — and a hold is only the moment a picture stands on its own. The two long ones are the
+turn (.85, the wipe plays inside it) and the ask (2.6, ~723px at 390x844, so every flick through the
+end of the story comes to rest on "Book a free call" with the button whole on screen). Changing any of these means re-running the
 flick test before shipping. The stage renders from an eased copy of the scroll position with
 a speed cap and a backlog clamp, so a fast flick still plays each fall; it is still a pure function
 of scroll, so scrolling back plays it backwards. Transforms and opacity only (a full scrub costs 0
