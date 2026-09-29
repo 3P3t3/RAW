@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=be3bb288">
+<link rel="stylesheet" href="style.css?v=6b829457">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -803,89 +803,43 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <div class="st-stage">
         <div class="st-bg" aria-hidden="true"><span class="st-dusk"></span><span class="st-lamp st-lamp-dark"></span><span class="st-sand"></span><span class="st-lamp st-lamp-warm"></span><span class="st-chalk"></span></div>
         <ol class="st-beats">
-          <li class="st-beat st-dark st-open" data-kind="photo">
+          <!-- Three movements, in Peter's own words for them (2026-09-28: "less about how I was
+               feeling at work and everything and just go: 'Fatigue was a constant.' 'Here's what I
+               changed.' 'Here's what I notice now.'"). The first is his line over his before; the
+               other two are the labels that open their movement in the strip. Eight beats carry the
+               pictures; the reader feels three moves, because the words are one column. -->
+          <li class="st-beat st-dark st-open" data-kind="photo" data-cap>
             <div class="st-hero"><div class="st-art st-photo">
               <img src="assets/peter/side-before-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="Peter before, from the side">
               <span class="st-tag" aria-hidden="true">Before</span>
             </div></div>
-            <div class="st-copy">
-              <!-- PETER-COPY --><p class="st-say">Tired all the time. Work was good, but I was scraping by week to week — and I’d let myself go further than I wanted to admit.</p><!-- /PETER-COPY -->
-            </div>
           </li>
-          <!-- straight after the opening: the before holds, and the after wipes in over it from the
-               side it sits on in the pair, bringing the light. Without the stage only the after
-               stands here: the before is directly above. -->
-          <li class="st-beat st-light st-open" data-kind="turn">
-            <div class="st-hero"><div class="st-art st-photo">
-              <img class="st-was" src="assets/peter/side-before-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="">
-              <span class="st-tag st-was" aria-hidden="true">Before</span>
-              <div class="st-wipe"><div class="st-wipe-in">
-                <img src="assets/peter/side-after-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="Peter after, from the side, 15 months later">
-                <span class="st-tag" aria-hidden="true">After</span>
-              </div></div>
-            </div></div>
-            <div class="st-copy">
-              <!-- PETER-COPY --><p class="st-say">For the first time my energy held all day — and that’s what made the rest stick. Lifting hard. Same wake-up. Same bedtime.</p><!-- /PETER-COPY -->
-            </div>
-          </li>
-          <!-- The shelf, and the caption strip under it (Peter, 2026-09-28: "the scrolling the
-               text... doesn't grab me. It feels very plain... maybe I can read it in one go...
-               it just feels like it takes too long"). Four pack beats now, not five lines one at a
-               time: each one drops its pack onto the same shelf and the packs stay, gathering into a
-               group (the pile in _script.html), while his words run past underneath in .st-caprail
-               with two or three of them legible at once. The beats here carry only the pictures; every
-               word and every shelf link is in the strip below them, in the same order, so the plain
-               sequence (reduced motion, no script) reads the shelf and then his lines.
-               Each pack's data-cat is the shelf whose plate it puts on the pinned bar, and the build
-               checks those against PETER; data-tilt is the angle it comes to rest at, and every one of
-               them is 0: once the packs stopped leaving the stage and started piling up together, a
-               group each leaning its own way read as clutter (Peter, 2026-09-28: "now that they're
-               going to be all on the screen, I think having them straight is actually better"). They
-               still lean on the way down — DROP.lean in _script.html tips the fall and unwinds to
-               nothing at the landing — so the drop keeps its weight and the gathered group stands square. -->
-          <li class="st-beat st-warm" data-kind="prod">
-            <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-cat="protein" data-tilt="0" data-x="-7" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Grass-Fed Whey Protein"></span>
-            </div></div>
-          </li>
-          <!-- his hydration stack, the two he actually takes: they arrive as a pair -->
-          <li class="st-beat st-warm" data-kind="prod">
-            <div class="st-hero"><div class="st-art st-pair">
-              <span class="st-pack" data-cat="hydration" data-tilt="0" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt="XS Creatine+"></span>
-              <span class="st-pack" data-cat="hydration" data-tilt="0" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Twist Tubes 2GO"></span>
-            </div></div>
-          </li>
-          <li class="st-beat st-warm" data-kind="prod">
-            <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-cat="recovery" data-tilt="0" data-x="7" data-scale=".92"><span class="st-shade"></span><img src="assets/story/nutrilite-sleep-health-lit.webp" width="860" height="860" loading="lazy" decoding="async" alt="Nutrilite Sleep Health"></span>
-            </div></div>
-          </li>
-          <!-- the last two of his five arrive together, under the one line that folds the two beats
-               they used to have into it: the morning routine and the smoother energy -->
-          <li class="st-beat st-warm" data-kind="prod">
-            <div class="st-hero"><div class="st-art st-pair">
-              <span class="st-pack" data-cat="daily-foundations" data-tilt="0" data-x="0" data-scale=".96"><span class="st-shade"></span><img src="assets/story/nutrilite-begin-gi-primer-lit.webp" width="1008" height="1008" loading="lazy" decoding="async" alt="Nutrilite Begin Daily GI Primer"></span>
-              <span class="st-pack" data-cat="energy-focus" data-tilt="0" data-x="0" data-scale="1.1"><span class="st-shade"></span><img src="assets/story/xs-elite-focus-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Elite + Focus Energy Drink"></span>
-            </div></div>
-          </li>
-          <!-- The caption strip: his words, one continuous column of them under the shelf instead of
-               one line at a time. The script slides the track so the beat's own caption sits on the
-               strip's reading line at full strength, with the one before and the one after it quieter
-               (a softer teal, 5.2:1 on the sand — quiet, never unreadable) and still legible, so a
-               reader is always reading ahead. It is a pure function of the eased scroll, as the packs
-               are, so scrolling back runs it backwards; only the track's transform and the strip's
-               opacity are written per frame, and the colour changes only when the reading line moves
-               from one caption to the next. Without the stage it is a plain block of his four lines,
-               each with its shelf link, straight after the packs. -->
+          <!-- The caption strip: his words, one continuous column under whatever the stage is
+               showing, instead of one line at a time on each beat. The script slides the track so
+               the caption belonging to the beat on stage stands at the strip's reading line at full
+               strength, with the one before and the one after it quieter (a softer teal, over 5:1
+               on the ground — quiet, never unreadable) and still legible, so a reader is always
+               reading ahead. It is a pure function of the eased scroll, as the packs are, so
+               scrolling back runs it backwards; only the track's transform and the strip's opacity
+               are written per frame, and the colour changes only when the reading line moves from
+               one caption to the next.
+               It sits here, straight after his before, because without the stage (reduced motion, no
+               script) that is where it reads best: his whole story in his own words, with every
+               shelf link in it, and then the pictures it is about. On the stage its place is set by
+               style.css, and z-index keeps it over the beats so its links can be tapped. Each
+               caption belongs to the beat carrying data-cap in the same order. -->
           <li class="st-caprail" id="st-caps">
             <div class="st-captrack">
               <div class="st-cap">
+                <!-- PETER-COPY --><p class="st-line">Fatigue was a constant.</p><!-- /PETER-COPY -->
+              </div>
+              <div class="st-cap">
+                <!-- PETER-COPY --><p class="st-mv">Here’s what I changed.</p><!-- /PETER-COPY -->
                 <!-- PETER-COPY --><p class="st-line">I fixed my food and found someone who pushed me.</p><!-- /PETER-COPY -->
                 <a class="tlink st-go" href="category-protein.html">Protein Snack Pack<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
               </div>
               <div class="st-cap">
-                <!-- PETER-COPY --><p class="st-line">I focused way more on hydration and getting electrolytes.</p>
-                <p class="st-note">Not sure how much water is enough? Athletes aim for one ounce per pound of bodyweight.</p><!-- /PETER-COPY -->
+                <!-- PETER-COPY --><p class="st-line">I focused way more on hydration and getting electrolytes.</p><!-- /PETER-COPY -->
                 <a class="tlink st-go" href="category-hydration.html">Hydration<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
               </div>
               <div class="st-cap">
@@ -900,27 +854,79 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
                 <!-- DRAFT-COPY --><p class="st-line">I changed my mornings too, and swapped my huge coffee spikes for smoother energy.</p><!-- /DRAFT-COPY -->
                 <p class="st-caplinks"><a class="tlink st-go" href="category-daily-foundations.html">Daily Foundations<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="tlink st-go" href="category-energy-focus.html">Energy &amp; Focus<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
               </div>
+              <!-- the third movement: its label lands with the after, and the line that was on the
+                   family beat carries it. His other after line ("For the first time my energy held
+                   all day...") said the same thing a second time and came out (Peter, 2026-09-28:
+                   "yea cut the unnecessary duplicates just pick one"). -->
+              <div class="st-cap">
+                <!-- PETER-COPY --><p class="st-mv">Here’s what I notice now.</p><!-- /PETER-COPY -->
+                <!-- PETER-COPY --><p class="st-line">Now I’ve got energy left for my daughter and my wife after a full day’s work. I didn’t know how low my baseline was until I built a new one. There’s no going back.</p><!-- /PETER-COPY -->
+              </div>
             </div>
           </li>
+          <!-- The shelf: four beats, each dropping its pack onto the same shelf, where they stay and
+               gather into a group (the pile in _script.html). Each pack's data-cat is the shelf whose
+               plate it puts on the pinned bar, and the build checks those against PETER; data-tilt is
+               the angle it comes to rest at, and every one of them is 0: once the packs stopped
+               leaving the stage and started piling up together, a group each leaning its own way read
+               as clutter (Peter, 2026-09-28: "now that they're going to be all on the screen, I think
+               having them straight is actually better"). They still lean on the way down — DROP.lean
+               in _script.html tips the fall and unwinds to nothing at the landing. -->
+          <li class="st-beat st-warm" data-kind="prod" data-cap>
+            <div class="st-hero"><div class="st-art">
+              <span class="st-pack" data-cat="protein" data-tilt="0" data-x="-7" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Grass-Fed Whey Protein"></span>
+            </div></div>
+          </li>
+          <!-- his hydration stack, the two he actually takes: they arrive as a pair -->
+          <li class="st-beat st-warm" data-kind="prod" data-cap>
+            <div class="st-hero"><div class="st-art st-pair">
+              <span class="st-pack" data-cat="hydration" data-tilt="0" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt="XS Creatine+"></span>
+              <span class="st-pack" data-cat="hydration" data-tilt="0" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Twist Tubes 2GO"></span>
+            </div></div>
+          </li>
+          <li class="st-beat st-warm" data-kind="prod" data-cap>
+            <div class="st-hero"><div class="st-art">
+              <span class="st-pack" data-cat="recovery" data-tilt="0" data-x="7" data-scale=".92"><span class="st-shade"></span><img src="assets/story/nutrilite-sleep-health-lit.webp" width="860" height="860" loading="lazy" decoding="async" alt="Nutrilite Sleep Health"></span>
+            </div></div>
+          </li>
+          <!-- the last two of his five arrive together, under the one line that folds the two beats
+               they used to have into it: the morning routine and the smoother energy -->
+          <li class="st-beat st-warm" data-kind="prod" data-cap>
+            <div class="st-hero"><div class="st-art st-pair">
+              <span class="st-pack" data-cat="daily-foundations" data-tilt="0" data-x="0" data-scale=".96"><span class="st-shade"></span><img src="assets/story/nutrilite-begin-gi-primer-lit.webp" width="1008" height="1008" loading="lazy" decoding="async" alt="Nutrilite Begin Daily GI Primer"></span>
+              <span class="st-pack" data-cat="energy-focus" data-tilt="0" data-x="0" data-scale="1.1"><span class="st-shade"></span><img src="assets/story/xs-elite-focus-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Elite + Focus Energy Drink"></span>
+            </div></div>
+          </li>
+          <!-- the third movement opens here: his before comes back and the after wipes in over it,
+               from the side it sits on in the pair. It follows the shelf now, not the opening, so it
+               reads as what the shelf did. Without the stage only the after stands here. -->
+          <li class="st-beat st-light st-open" data-kind="turn" data-cap>
+            <div class="st-hero"><div class="st-art st-photo">
+              <img class="st-was" src="assets/peter/side-before-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="">
+              <span class="st-tag st-was" aria-hidden="true">Before</span>
+              <div class="st-wipe"><div class="st-wipe-in">
+                <img src="assets/peter/side-after-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="Peter after, from the side, 15 months later">
+                <span class="st-tag" aria-hidden="true">After</span>
+              </div></div>
+            </div></div>
+          </li>
+          <!-- the family photo the third movement's line is about; the line is already up, in the
+               strip, when it arrives -->
+          <li class="st-beat st-light st-fam" data-kind="photo">
+            <div class="st-hero"><div class="st-art st-photo">
+              <img src="assets/peter/family-320.webp" width="320" height="400" loading="lazy" decoding="async" alt="Peter with his wife and baby daughter">
+            </div></div>
+          </li>
           <li class="st-beat st-light st-solo" data-kind="text">
-            <!-- supplement after supplement: the place above the call that the filled case rises
-                 into. While the stage runs it is only a box: the case strip the visitor watched
-                 being filled moves up into it, packs and all. Without the stage it is not shown;
-                 the plain sequence has just shown each pack. -->
+            <!-- supplement after supplement: the place above the call that the loaded bar stands in.
+                 It is the last beat now — the story ends on the ask, after his family — and the strip
+                 has handed over, so his line here has the stage to itself. -->
             <div class="st-hero st-arc" aria-hidden="true"><div class="bbx"><div class="bb bb-arc" style="--n:7" aria-hidden="true"><span class="bb-sl bb-l"><i class="bb-p on" data-cat="protein" style="--c:#1E262F;--s:1.00;--o:0"><b class="bb-ring"></b></i><i class="bb-p on" data-cat="daily-foundations" style="--c:#6B5646;--s:0.94;--o:1"><b class="bb-ring"></b></i><i class="bb-p on" data-cat="hydration" style="--c:#93B7C0;--s:0.88;--o:2"><b class="bb-ring"></b></i><i class="bb-p on" data-cat="energy-focus" style="--c:#E2C8AE;--s:0.82;--o:3"><b class="bb-ring"></b></i><i class="bb-p on" data-cat="recovery" style="--c:#3D4794;--s:0.76;--o:4"><b class="bb-ring"></b></i></span><span class="bb-co"></span><span class="bb-sh"><span class="bb-kn"></span></span><span class="bb-co"></span><span class="bb-sl bb-r"><i class="bb-p on" data-cat="protein" style="--c:#1E262F;--s:1.00;--o:0"><b class="bb-ring"></b></i><i class="bb-p on" data-cat="daily-foundations" style="--c:#6B5646;--s:0.94;--o:1"><b class="bb-ring"></b></i><i class="bb-p on" data-cat="hydration" style="--c:#93B7C0;--s:0.88;--o:2"><b class="bb-ring"></b></i><i class="bb-p on" data-cat="energy-focus" style="--c:#E2C8AE;--s:0.82;--o:3"><b class="bb-ring"></b></i><i class="bb-p on" data-cat="recovery" style="--c:#3D4794;--s:0.76;--o:4"><b class="bb-ring"></b></i></span></div></div></div>
             <div class="st-copy">
               <!-- PETER-COPY --><p class="st-say">The hardest part was figuring it out alone, testing supplement after supplement to find what worked. That’s what this call is for. Book it and we’ll figure yours out together.</p><!-- /PETER-COPY -->
               <!-- the call, asked for where the story asks for it. The tab's own "Book a free call" steps aside
                    while this is on screen (it is one of the tab's zones in _script.html). -->
               <a class="btn st-book" href="#consult">Book a free call</a>
-            </div>
-          </li>
-          <li class="st-beat st-light st-fam" data-kind="photo">
-            <div class="st-hero"><div class="st-art st-photo">
-              <img src="assets/peter/family-320.webp" width="320" height="400" loading="lazy" decoding="async" alt="Peter with his wife and baby daughter">
-            </div></div>
-            <div class="st-copy">
-              <!-- PETER-COPY --><p class="st-say">Now I’ve got energy left for my daughter and my wife after a full day’s work. I didn’t know how low my baseline was until I built a new one. There’s no going back.</p><!-- /PETER-COPY -->
             </div>
           </li>
         </ol>
@@ -3300,19 +3306,22 @@ var LB=null;
      moment that matters, and a ~700px flick through the end of the story should come to rest on
      "Book a free call" rather than over it. The run in style.css grew with it (900 to 949lvh), so
      every other beat keeps its pace. */
-  /* The pack beats run quicker again (Peter: "it just feels like it takes too long"), and there are
-     four of them, not five: his words are no longer a slideshow waiting on them — they stand in the
-     caption strip below, two or three legible at once, so a change no longer has to hide one line and
-     bring the next. Each pack holds .35-.45 of a unit and the change from one to the next is .7 (the
-     one into the first pack 1), so a pack beat is ~1.1 units, not ~2.2, and the whole shelf is built in
-     4.4 units instead of 6.4. Everything else keeps its 1.5 change, and the run in style.css came down
-     with it (778 to 600lvh). TT[i] is the change INTO beat i. */
-  var HOLD=[.9,1.7,.35,.45,.35,.45,2.6,1],TT=[0,1.5,1,.7,.7,.7,1.4,1.5],at=[],L=0;   /* before, the turn, four packs, the call, family */
+  /* Three movements, and the whole story in 9.1 units where it was 16.7 (Peter, twice: "it just
+     feels like it takes too long"). Nothing here waits for a line to be read any more, because every
+     line is already up in the caption strip and two or three of them are legible at once: a hold is
+     only the moment a picture stands on its own before the next change starts. So the holds are short
+     (a pack .25 of a unit, ~70px at 390x844) and the changes are .45-.6 (~125-167px), which is still
+     long enough to watch a pack fall. The two that stay long are the turn (.85, the wipe plays inside
+     it) and the call (2.6, ~723px: a ~700px flick through the end of the story must come to rest on
+     "Book a free call" rather than over it). The run in style.css came down with all of it, 778 to 600
+     to 400lvh, and a unit is still ~278px. TT[i] is the change INTO beat i. */
+  var HOLD=[.45,.25,.25,.25,.25,.85,.3,2.6],TT=[0,.6,.45,.45,.45,.6,.45,.9],at=[],L=0;   /* his before, four packs, the turn, his family, the call */
   function Tn(i){return TT[i]||1.5}
   beats.forEach(function(b,i){if(i)L+=Tn(i);at.push(L);L+=HOLD[i]||1});
   var TURN=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('turn'),
       WARM=beats.map(function(b){return b.classList.contains('st-warm')}),
-      SAND=WARM.indexOf(true),CALL=WARM.lastIndexOf(true)+1;   /* the packs are on the sand; the call after them */
+      SAND=WARM.indexOf(true),LIGHT=WARM.lastIndexOf(true)+1,   /* the packs are on the sand; the chalk comes back with the beat after them (the turn) */
+      CALL=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('text');   /* the ask, last */
   var parts=beats.map(function(b){
     return {b:b,kind:b.getAttribute('data-kind'),art:$('.st-art',b),copy:$('.st-copy',b),
             book:$('.st-book',b),warm:b.classList.contains('st-warm'),
@@ -3384,9 +3393,12 @@ var LB=null;
      measured once per resize; per frame it is one transform on the track, the strip's own opacity, and
      a class on the caption that is on the line (so its colour is written only when the line moves). */
   var rail=$('.st-caprail',run),track=rail&&$('.st-captrack',rail),caps=rail?$$('.st-cap',rail):[],
-      CAPO=[],CAPA=[],capNow=-1,rk={keys:{}};
-  /* where each caption sits on the run: the middle of its beat's hold */
-  CAPA=PB.slice(0,caps.length).map(function(i){return at[i]+(HOLD[i]||1)*.5});
+      CAPO=[],CAPA=[],capNow=-1,railOff=null,rk={keys:{}};
+  /* where each caption sits on the run: the middle of the hold of the beat it belongs to (the beats
+     carrying data-cap, in order: his before, the four packs, the turn. His family beat has no caption
+     of its own — the third movement's line is already up when it arrives, and stays.) */
+  var CAPB=[];beats.forEach(function(b,i){if(b.hasAttribute('data-cap'))CAPB.push(i)});
+  CAPA=CAPB.slice(0,caps.length).map(function(i){return at[i]+(HOLD[i]||1)*.5});
   /* his plates: each pack's shelf goes onto the pinned bar over the last part of the change into its
      beat, once the pack has landed; a second pack in the same beat follows a slide and a half later,
      into its hold, so the strip counts them one at a time (the closing line's pair reads 4 of 5 for
@@ -3535,10 +3547,14 @@ var LB=null;
       }
       fi=Math.floor(ci);
       var co=fi>=CAPO.length-1?CAPO[CAPO.length-1]:lerp(CAPO[fi],CAPO[fi+1],ci-fi),
-          ri=smooth(clamp(((x-at[PB[0]]+Tn(PB[0]))/Tn(PB[0])-.3)/.5)),
-          ro=CALL<N?smooth(clamp((x-at[CALL]+Tn(CALL))/(Tn(CALL)*.5))):0;
+          ri=smooth(clamp(x/.3)),                       /* up with the stage, on his first line */
+          ro=CALL<N?smooth(clamp((x-at[CALL]+Tn(CALL))/(Tn(CALL)*.5))):0,   /* and away as the ask comes */
+          rv=Math.min(ri,1-ro);
       put(rk,track,'track','translate3d(0,'+f(-co,1)+'px,0)','1');
-      put(rk,rail,'rail','translate3d(0,'+f((1-ri)*24,1)+'px,0)',f(Math.min(ri,1-ro),3));
+      put(rk,rail,'rail','translate3d(0,'+f((1-ri)*24,1)+'px,0)',f(rv,3));
+      /* the strip lies over the beats (style.css), so once it has gone its links must stop taking
+         taps: the ask's own button is under it */
+      var roff=rv<.05;if(roff!==railOff){railOff=roff;rail.classList.toggle('is-off',roff)}
       var nw=Math.max(0,Math.min(caps.length-1,Math.round(ci)));
       if(nw!==capNow){if(caps[capNow])caps[capNow].classList.remove('is-now');caps[nw].classList.add('is-now');capNow=nw}
     }
@@ -3582,11 +3598,10 @@ var LB=null;
         lit[p.warm?1:0]=Math.max(lit[p.warm?1:0],rest);
         if(rest>restV){restV=rest;restX=p.packs[0].rx}
       }else{
+        /* the turn follows the shelf now, not the opening, so it rises and falls like any other
+           photo: it brings his before back at the same size and in the same place, and the after
+           wipes across it while it holds */
         var pe=i?smooth(clamp((kin-.45)/.55)):smooth(arrive),pq=smooth(clamp(kout/.35));
-        /* the opening pair is one photo: the before holds still, and the turn lays the very same
-           before over it (same size, same place) for the after to wipe across */
-        if(parts[i+1]&&parts[i+1].kind==='turn')pq=0;
-        if(p.kind==='turn'&&parts[i-1]&&parts[i-1].kind==='photo')pe=kin>0?1:0;
         put(p,p.art,'art','translate3d(0,'+f((1-pe)*36-pq*36,1)+'px,0) scale('+f(.94+.06*pe-.05*pq,4)+')',f(Math.min(pe,1-pq),3));
       }
       if(p.wipe){                                         /* the after slides in from its own side */
@@ -3601,13 +3616,13 @@ var LB=null;
     if(BARM){var ps=[];PLA.forEach(function(a){var pv=smooth(clamp((x-a.t0)/a.w));if(!(ps[a.c]>pv))ps[a.c]=pv});LB.peter(ps)}
     /* the ground warms with the product: the sand sweeps in from the right behind the arriving
        can and has covered the words' column before they rise; chalk comes with the after */
-    /* the ground: teal under the before, and the after brings the chalk as it wipes in. The
-       sand is laid under the chalk once that is opaque, and the chalk lifts off it in the middle
-       of the change into the first pack, while no words are up, so all five packs stand on the
-       sand; it comes back the same way in the change into the call. */
-    var k1=SAND>0?clamp((x-at[SAND]+Tn(SAND))/Tn(SAND)):0,k2=CALL<N?clamp((x-at[CALL]+Tn(CALL))/Tn(CALL)):0,
-        ch=SAND>0&&x<at[SAND]-Tn(SAND)?wipe:Math.max(1-smooth(clamp((k1-.35)/.25)),smooth(clamp((k2-.35)/.25)));
-    sand.style.transform='translate3d('+(wipe>=1?'-32':'55')+'%,0,0) rotate(-14deg)';   /* under opaque chalk: -32% covers every corner, +55% is off the stage */
+    /* the ground, one movement at a time: teal under his before, the sand sweeping in from the
+       right behind the first pack and holding under the whole shelf, and the chalk coming back with
+       the turn and staying for the after, his family and the ask. -32% covers every corner of the
+       stage, +55% is off it. */
+    var k1=SAND>0?clamp((x-at[SAND]+Tn(SAND))/Tn(SAND)):0,kL=LIGHT<N?clamp((x-at[LIGHT]+Tn(LIGHT))/Tn(LIGHT)):0,
+        sw=smooth(clamp((k1-.1)/.6)),ch=smooth(clamp((kL-.25)/.4));
+    sand.style.transform='translate3d('+f(55-87*sw,2)+'%,0,0) rotate(-14deg)';
     chalk.style.opacity=f(ch,3);
     dusk.style.opacity=f(1-smooth(settle),3);
     lampD.style.opacity=f(lit[0],3);lampW.style.opacity=f(lit[1],3);
@@ -3628,7 +3643,7 @@ var LB=null;
      in the strip, the beat whose pack it belongs to */
   run.addEventListener('focusin',function(ev){
     var cap=ev.target.closest('.st-cap'),
-        i=cap?PB[caps.indexOf(cap)]:beats.indexOf(ev.target.closest('.st-beat'));
+        i=cap?CAPB[caps.indexOf(cap)]:beats.indexOf(ev.target.closest('.st-beat'));
     if(!(i>=0))return;
     var r=run.getBoundingClientRect(),
         y=Math.round(scrollY+r.top+(r.height-sh)*(at[i]+(HOLD[i]||1)*.5)/L),

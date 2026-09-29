@@ -1914,19 +1914,22 @@ var LB=null;
      moment that matters, and a ~700px flick through the end of the story should come to rest on
      "Book a free call" rather than over it. The run in style.css grew with it (900 to 949lvh), so
      every other beat keeps its pace. */
-  /* The pack beats run quicker again (Peter: "it just feels like it takes too long"), and there are
-     four of them, not five: his words are no longer a slideshow waiting on them — they stand in the
-     caption strip below, two or three legible at once, so a change no longer has to hide one line and
-     bring the next. Each pack holds .35-.45 of a unit and the change from one to the next is .7 (the
-     one into the first pack 1), so a pack beat is ~1.1 units, not ~2.2, and the whole shelf is built in
-     4.4 units instead of 6.4. Everything else keeps its 1.5 change, and the run in style.css came down
-     with it (778 to 600lvh). TT[i] is the change INTO beat i. */
-  var HOLD=[.9,1.7,.35,.45,.35,.45,2.6,1],TT=[0,1.5,1,.7,.7,.7,1.4,1.5],at=[],L=0;   /* before, the turn, four packs, the call, family */
+  /* Three movements, and the whole story in 9.1 units where it was 16.7 (Peter, twice: "it just
+     feels like it takes too long"). Nothing here waits for a line to be read any more, because every
+     line is already up in the caption strip and two or three of them are legible at once: a hold is
+     only the moment a picture stands on its own before the next change starts. So the holds are short
+     (a pack .25 of a unit, ~70px at 390x844) and the changes are .45-.6 (~125-167px), which is still
+     long enough to watch a pack fall. The two that stay long are the turn (.85, the wipe plays inside
+     it) and the call (2.6, ~723px: a ~700px flick through the end of the story must come to rest on
+     "Book a free call" rather than over it). The run in style.css came down with all of it, 778 to 600
+     to 400lvh, and a unit is still ~278px. TT[i] is the change INTO beat i. */
+  var HOLD=[.45,.25,.25,.25,.25,.85,.3,2.6],TT=[0,.6,.45,.45,.45,.6,.45,.9],at=[],L=0;   /* his before, four packs, the turn, his family, the call */
   function Tn(i){return TT[i]||1.5}
   beats.forEach(function(b,i){if(i)L+=Tn(i);at.push(L);L+=HOLD[i]||1});
   var TURN=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('turn'),
       WARM=beats.map(function(b){return b.classList.contains('st-warm')}),
-      SAND=WARM.indexOf(true),CALL=WARM.lastIndexOf(true)+1;   /* the packs are on the sand; the call after them */
+      SAND=WARM.indexOf(true),LIGHT=WARM.lastIndexOf(true)+1,   /* the packs are on the sand; the chalk comes back with the beat after them (the turn) */
+      CALL=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('text');   /* the ask, last */
   var parts=beats.map(function(b){
     return {b:b,kind:b.getAttribute('data-kind'),art:$('.st-art',b),copy:$('.st-copy',b),
             book:$('.st-book',b),warm:b.classList.contains('st-warm'),
@@ -1998,9 +2001,12 @@ var LB=null;
      measured once per resize; per frame it is one transform on the track, the strip's own opacity, and
      a class on the caption that is on the line (so its colour is written only when the line moves). */
   var rail=$('.st-caprail',run),track=rail&&$('.st-captrack',rail),caps=rail?$$('.st-cap',rail):[],
-      CAPO=[],CAPA=[],capNow=-1,rk={keys:{}};
-  /* where each caption sits on the run: the middle of its beat's hold */
-  CAPA=PB.slice(0,caps.length).map(function(i){return at[i]+(HOLD[i]||1)*.5});
+      CAPO=[],CAPA=[],capNow=-1,railOff=null,rk={keys:{}};
+  /* where each caption sits on the run: the middle of the hold of the beat it belongs to (the beats
+     carrying data-cap, in order: his before, the four packs, the turn. His family beat has no caption
+     of its own — the third movement's line is already up when it arrives, and stays.) */
+  var CAPB=[];beats.forEach(function(b,i){if(b.hasAttribute('data-cap'))CAPB.push(i)});
+  CAPA=CAPB.slice(0,caps.length).map(function(i){return at[i]+(HOLD[i]||1)*.5});
   /* his plates: each pack's shelf goes onto the pinned bar over the last part of the change into its
      beat, once the pack has landed; a second pack in the same beat follows a slide and a half later,
      into its hold, so the strip counts them one at a time (the closing line's pair reads 4 of 5 for
@@ -2149,10 +2155,14 @@ var LB=null;
       }
       fi=Math.floor(ci);
       var co=fi>=CAPO.length-1?CAPO[CAPO.length-1]:lerp(CAPO[fi],CAPO[fi+1],ci-fi),
-          ri=smooth(clamp(((x-at[PB[0]]+Tn(PB[0]))/Tn(PB[0])-.3)/.5)),
-          ro=CALL<N?smooth(clamp((x-at[CALL]+Tn(CALL))/(Tn(CALL)*.5))):0;
+          ri=smooth(clamp(x/.3)),                       /* up with the stage, on his first line */
+          ro=CALL<N?smooth(clamp((x-at[CALL]+Tn(CALL))/(Tn(CALL)*.5))):0,   /* and away as the ask comes */
+          rv=Math.min(ri,1-ro);
       put(rk,track,'track','translate3d(0,'+f(-co,1)+'px,0)','1');
-      put(rk,rail,'rail','translate3d(0,'+f((1-ri)*24,1)+'px,0)',f(Math.min(ri,1-ro),3));
+      put(rk,rail,'rail','translate3d(0,'+f((1-ri)*24,1)+'px,0)',f(rv,3));
+      /* the strip lies over the beats (style.css), so once it has gone its links must stop taking
+         taps: the ask's own button is under it */
+      var roff=rv<.05;if(roff!==railOff){railOff=roff;rail.classList.toggle('is-off',roff)}
       var nw=Math.max(0,Math.min(caps.length-1,Math.round(ci)));
       if(nw!==capNow){if(caps[capNow])caps[capNow].classList.remove('is-now');caps[nw].classList.add('is-now');capNow=nw}
     }
@@ -2196,11 +2206,10 @@ var LB=null;
         lit[p.warm?1:0]=Math.max(lit[p.warm?1:0],rest);
         if(rest>restV){restV=rest;restX=p.packs[0].rx}
       }else{
+        /* the turn follows the shelf now, not the opening, so it rises and falls like any other
+           photo: it brings his before back at the same size and in the same place, and the after
+           wipes across it while it holds */
         var pe=i?smooth(clamp((kin-.45)/.55)):smooth(arrive),pq=smooth(clamp(kout/.35));
-        /* the opening pair is one photo: the before holds still, and the turn lays the very same
-           before over it (same size, same place) for the after to wipe across */
-        if(parts[i+1]&&parts[i+1].kind==='turn')pq=0;
-        if(p.kind==='turn'&&parts[i-1]&&parts[i-1].kind==='photo')pe=kin>0?1:0;
         put(p,p.art,'art','translate3d(0,'+f((1-pe)*36-pq*36,1)+'px,0) scale('+f(.94+.06*pe-.05*pq,4)+')',f(Math.min(pe,1-pq),3));
       }
       if(p.wipe){                                         /* the after slides in from its own side */
@@ -2215,13 +2224,13 @@ var LB=null;
     if(BARM){var ps=[];PLA.forEach(function(a){var pv=smooth(clamp((x-a.t0)/a.w));if(!(ps[a.c]>pv))ps[a.c]=pv});LB.peter(ps)}
     /* the ground warms with the product: the sand sweeps in from the right behind the arriving
        can and has covered the words' column before they rise; chalk comes with the after */
-    /* the ground: teal under the before, and the after brings the chalk as it wipes in. The
-       sand is laid under the chalk once that is opaque, and the chalk lifts off it in the middle
-       of the change into the first pack, while no words are up, so all five packs stand on the
-       sand; it comes back the same way in the change into the call. */
-    var k1=SAND>0?clamp((x-at[SAND]+Tn(SAND))/Tn(SAND)):0,k2=CALL<N?clamp((x-at[CALL]+Tn(CALL))/Tn(CALL)):0,
-        ch=SAND>0&&x<at[SAND]-Tn(SAND)?wipe:Math.max(1-smooth(clamp((k1-.35)/.25)),smooth(clamp((k2-.35)/.25)));
-    sand.style.transform='translate3d('+(wipe>=1?'-32':'55')+'%,0,0) rotate(-14deg)';   /* under opaque chalk: -32% covers every corner, +55% is off the stage */
+    /* the ground, one movement at a time: teal under his before, the sand sweeping in from the
+       right behind the first pack and holding under the whole shelf, and the chalk coming back with
+       the turn and staying for the after, his family and the ask. -32% covers every corner of the
+       stage, +55% is off it. */
+    var k1=SAND>0?clamp((x-at[SAND]+Tn(SAND))/Tn(SAND)):0,kL=LIGHT<N?clamp((x-at[LIGHT]+Tn(LIGHT))/Tn(LIGHT)):0,
+        sw=smooth(clamp((k1-.1)/.6)),ch=smooth(clamp((kL-.25)/.4));
+    sand.style.transform='translate3d('+f(55-87*sw,2)+'%,0,0) rotate(-14deg)';
     chalk.style.opacity=f(ch,3);
     dusk.style.opacity=f(1-smooth(settle),3);
     lampD.style.opacity=f(lit[0],3);lampW.style.opacity=f(lit[1],3);
@@ -2242,7 +2251,7 @@ var LB=null;
      in the strip, the beat whose pack it belongs to */
   run.addEventListener('focusin',function(ev){
     var cap=ev.target.closest('.st-cap'),
-        i=cap?PB[caps.indexOf(cap)]:beats.indexOf(ev.target.closest('.st-beat'));
+        i=cap?CAPB[caps.indexOf(cap)]:beats.indexOf(ev.target.closest('.st-beat'));
     if(!(i>=0))return;
     var r=run.getBoundingClientRect(),
         y=Math.round(scrollY+r.top+(r.height-sh)*(at[i]+(HOLD[i]||1)*.5)/L),
