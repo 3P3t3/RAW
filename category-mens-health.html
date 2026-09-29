@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=961b2db1">
+<link rel="stylesheet" href="style.css?v=2cecc5d5">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -267,10 +267,11 @@
     <nav class="wrap menu-nav" aria-label="Menu">
       <ul class="menu-list">
         <!-- DRAFT-COPY --><li><a href="homepage.html#how">The game plan <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
-        <!-- the proof wall (#proof in homepage.template.html) sits past the story's stage, a long way
-             down: this is the way to it from anywhere, and from any shelf page, without another fixed
-             strip on a screen that has already given up enough to chrome. -->
-        <!-- DRAFT-COPY --><li><a href="homepage.html#proof">Our before &amp; afters <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
+        <!-- About us: its own page (about.html, generated from site-src/about.template.html) rather than
+             a jump down the homepage, because who they are, the before and afters and the DEXA cards were
+             too much hanging off one page (Peter, 2026-09-28). A plain relative link, with no HOME prefix:
+             every page of the site sits in the same folder, so it is correct from all of them. -->
+        <!-- DRAFT-COPY --><li><a href="about.html">About us <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
         <li><a href="homepage.html#goals">Goals <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="homepage.html#results" data-all>All products <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <!-- DRAFT-COPY --><li><a href="homepage.html#sample">Free sample <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
