@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=5f4b8f55">
+<link rel="stylesheet" href="style.css?v=e9be8be8">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -152,8 +152,8 @@
 <!-- The calculator and the call, one tap from anywhere. The pair sits at the foot of the
      window and shows or hides as one: the script shows it only while nothing it could cover
      is in view (see the tab block in the script), never under the curtain or the menu, and
-     without script it never shows. From 1024 up the mast carries "Book a free call", so the tab
-     drops its own and there is still only one. -->
+     without script it never shows. From 1024 up the mast carries both (Macros in its nav, and
+     "Book a free call"), so the tab is not shown there at all. -->
 <div class="mtab" id="mtab"><a class="mtab-calc" href="homepage.html#macros">Macro calculator</a><a class="mtab-call" href="homepage.html#consult">Book a free call</a></div>
 
 
@@ -1075,7 +1075,7 @@ if(sform){
   if(sTry&&!sval('product'))sel('product').value=sPut=sTry;
   var sShow=function(){
     sform.hidden=true;sdone.classList.add('on');
-    /* the quick call under the form steps aside for the one in the thank-you: hand it the id */
+    /* the thank-you's quick call takes the id, so "#quick-call" lands on the invitation on screen */
     var qf=$('#quick-call'),qd=$('.qc',sdone);
     if(qf&&qd){qf.removeAttribute('id');qd.id='quick-call'}
     var h=$('#sample-done-title');h.focus({preventScroll:true});
@@ -1735,6 +1735,10 @@ if(mcForm){
   function mcGlide(){
     mcStop();
     if(!cform||!mcSec||$('body > .intro'))return; /* no consult on this page, or the curtain is still up */
+    /* only while the consult sits directly under the calculator: with the trending band, the story
+       and the stack between them (the homepage since 2026-10-01) a glide would carry the visitor
+       thousands of pixels past all of it, so the card stays put and its own button makes the trip */
+    if(mcForm.closest('section').nextElementSibling!==mcSec)return;
     mcY=scrollY;
     MCSTOP.forEach(function(ev){addEventListener(ev,mcNudge,{capture:true,passive:true})});
     doc.addEventListener('visibilitychange',mcStop);
