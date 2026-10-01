@@ -55,12 +55,17 @@
     </div>
   </section>
 
-  <!-- 2. Who we are: his words, then hers. Both blocks are built in build_homepage.py
-          (peter_text, her_text) and hers is the same block the Women's Health shelf carries. -->
-  <section class="sec ab-who" aria-label="Who we are">
-    <div class="wrap ab-two">
+  <!-- 2. Who we are: one heading over the two of them, then his words and hers under their names.
+          Both blocks are built in build_homepage.py (peter_text, her_text); hers is the same block
+          the Women's Health shelf carries, and it stays in the third person: it is about her, not
+          words put in her mouth. -->
+  <section class="sec ab-who" aria-labelledby="who-t">
+    <div class="wrap">
+      <!-- DRAFT-COPY --><h2 class="pf-title" id="who-t">Who <span class="pf-k">we are</span></h2><!-- /DRAFT-COPY -->
+      <div class="ab-two">
       {{ABOUT_HIS}}
       {{ABOUT_HERS}}
+      </div>
     </div>
   </section>
 
@@ -82,7 +87,8 @@
 
   <!-- 5. The way on: the same two things the homepage asks for, in the same words. The Amway
           disclosure belongs on any page where Peter recommends products or shows results, so it
-          sits here, directly under the numbers. -->
+          sits here, directly under the numbers. Centred, like the section titles above it, so the
+          page ends on a whole block rather than a left column beside an empty one. -->
   <section class="sec ab-next" aria-labelledby="ab-next-t">
     <div class="wrap split">
       <div class="split-text grow">

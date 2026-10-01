@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=5f4b8f55">
+<link rel="stylesheet" href="style.css?v=cf08b6c2">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -183,33 +183,33 @@
     </div>
   </section>
 
-  <!-- 2. Who we are: his words, then hers. Both blocks are built in build_homepage.py
-          (peter_text, her_text) and hers is the same block the Women's Health shelf carries. -->
-  <section class="sec ab-who" aria-label="Who we are">
-    <div class="wrap ab-two">
+  <!-- 2. Who we are: one heading over the two of them, then his words and hers under their names.
+          Both blocks are built in build_homepage.py (peter_text, her_text); hers is the same block
+          the Women's Health shelf carries, and it stays in the third person: it is about her, not
+          words put in her mouth. -->
+  <section class="sec ab-who" aria-labelledby="who-t">
+    <div class="wrap">
+      <!-- DRAFT-COPY --><h2 class="pf-title" id="who-t">Who <span class="pf-k">we are</span></h2><!-- /DRAFT-COPY -->
+      <div class="ab-two">
       <div class="her-text grow">
-        <p class="label">Who we are</p>
-        <h2 id="his-title">Peter’s story</h2>
+        <h3 id="his-title">Peter</h3>
         <!-- PETER-COPY --><p class="her-lead">I’m Peter — husband, dad to a baby girl, and a Lincoln local. My wife’s as obsessed with biohacking and longevity as I am.</p><!-- /PETER-COPY -->
         <!-- DRAFT-COPY --><p>Aspire Health is the two of us, out of Lincoln, California. Yenni runs the women’s side; the rest is mine.</p>
-        <p>My before and after are fifteen months apart, front, side and back.</p>
-        <h3 class="her-h">What changed</h3>
-        <p>Not one thing, but the whole plan:</p>
+        <h4 class="her-h">What changed</h4>
         <ul class="c-list">
-          <li>Lifting hard, with progressive overload</li>
-          <li>Counting calories</li>
-          <li>Testing supplement after supplement to find what worked</li>
-          <li>The same wake-up and the same bedtime</li>
+          <li>Lifting hard, with someone who pushed me</li>
+          <li>Fixing my food, which meant counting calories</li>
+          <li>Trying supplements myself until I knew what was worth taking</li>
+          <li>Making the most of my sleep, newborn nights included</li>
         </ul>
         <p class="her-fine">Individual results vary.</p><!-- /DRAFT-COPY -->
       </div>
       <!-- DRAFT-COPY --><div class="her-text grow">
-        <p class="label">Who runs the women’s side</p>
-        <h2 id="her-title">Yenni’s story</h2>
+        <h3 id="her-title">Yenni</h3>
         <p class="her-lead">Yenni Herschelman runs the women’s side of Aspire Health. She’s Peter’s wife.</p>
         <p>Their daughter was born in September 2025. Yenni started lifting with progressive overload while she was pregnant.</p>
         <p>Her before photos are from November 2025, two months postpartum, so they include the body fat a pregnancy adds. Her afters are from July 2026.</p>
-        <h3 class="her-h">What changed</h3>
+        <h4 class="her-h">What changed</h4>
         <p>Not one thing, but her whole plan:</p>
         <ul class="c-list">
           <li>Progressive overload: lifting a little more over time</li>
@@ -219,6 +219,7 @@
         </ul>
         <p class="her-fine">Individual results vary.</p>
       </div><!-- /DRAFT-COPY -->
+      </div>
     </div>
   </section>
 
@@ -265,7 +266,8 @@
 
   <!-- 5. The way on: the same two things the homepage asks for, in the same words. The Amway
           disclosure belongs on any page where Peter recommends products or shows results, so it
-          sits here, directly under the numbers. -->
+          sits here, directly under the numbers. Centred, like the section titles above it, so the
+          page ends on a whole block rather than a left column beside an empty one. -->
   <section class="sec ab-next" aria-labelledby="ab-next-t">
     <div class="wrap split">
       <div class="split-text grow">
