@@ -102,11 +102,13 @@ FAMILIES = {
     'Peak Performance Stack': ('XS training bundle', 'LR', 'powder'),
     'n* by Nutrilite Go Shield': ('Elderberry gummies', 'S', 'pills'),
     # added 2026-10-01 with the Everyday Health shelf: the four Peter parked when none of the nine fitted.
-    # Each descriptor is the format on the pack's own label, never what the name suggests it does.
-    'Nutrilite Cholesterol Health': ('Daily softgels', 'S', 'pills'),
-    'Nutrilite Liver Support': ('Daily tablets', 'S', 'pills'),
+    # Each descriptor is the format and how often, off the pack's own label (as Menopause Support's is),
+    # never what the name suggests it does. CoQ10 is the one ingredient any of the four names in legible
+    # type; the herbs in their photos are pictures, not words, so none of them is named here.
+    'Nutrilite Cholesterol Health': ('Once-daily softgels', 'S', 'pills'),
+    'Nutrilite Liver Support': ('Twice-daily tablets', 'S', 'pills'),
     'Nutrilite Heart Health CoQ10': ('CoQ10 softgels', 'S', 'pills'),
-    'Nutrilite Cellular Aging Support': ('Daily capsules', 'S', 'pills'),
+    'Nutrilite Cellular Aging Support': ('Twice-daily capsules', 'S', 'pills'),
 }
 
 # Category pages: slug, name, tagline, heading, family prefixes that belong to it.
@@ -128,7 +130,7 @@ CATEGORIES = [
         'XS Elite + Focus Energy Drink',
         'Nutrilite Ultra Focus Energy Pack', 'Nutrilite Memory Builder Supplement',
         "Nutrilite Organics Lion's Mane Mushroom Capsules"]),
-    ('protein', 'Protein Snack Pack', 'Powders, shakes, bars and crisps to hit your protein for the day.', 'Everything in Protein', [
+    ('protein', 'Protein', 'Powders, shakes, bars and crisps to hit your protein for the day.', 'Everything in Protein', [
         'XS Grass-Fed Whey Protein', 'XS Grass-Fed Whey Protein Powder Sachets', 'XS Sports Protein Bars',
         'XS Sports Protein Shakes', 'XS Protein Crisps', 'Nutrilite Organics All-in-One Bars',
         'Fitness Jump Start Solution']),  # a bundle built round a pouch of grass-fed whey, in its flavor
@@ -171,12 +173,14 @@ CATEGORIES = [
     # these four were parked when they were added because none of the nine fitted them, so they get their
     # own shelf rather than being bent onto Daily Foundations. Nothing here is on a second shelf, so this
     # is each one's home shelf and its card tag. Four names that invite claims (cholesterol, liver, heart,
-    # aging), so the line, the shelf line and every tagline name the thing and the dose and stop there.
+    # aging), so the line, the shelf line and every tagline name the thing and the dose and stop there:
+    # the line after the name says how they are taken (what the four labels print, softgels, tablets and
+    # capsules once or twice a day), and the part before its colon is the shelf's line in 'Keep looking'.
     # Its hero is assets/bg-everyday-health.webp, a still life in the same house look as the other seven
     # banners: four clear glass columns in an even row on sand against a deep petrol wall, which is also
     # what the shelf means. assets/thumbs|shelf|islands/everyday-health.webp
     # are the same pack's top, for the 'Keep looking' rows (and the idle strip and ring views).
-    ('everyday-health', 'Everyday Health', 'Four Nutrilite dailies: Cholesterol Health, Liver Support, Heart Health CoQ10 and Cellular Aging Support.', 'Everything in Everyday Health', [
+    ('everyday-health', 'Everyday Health', 'The quiet part of the routine: softgels, tablets and capsules, once or twice a day, nothing to mix.', 'Everything in Everyday Health', [
         'Nutrilite Cholesterol Health', 'Nutrilite Liver Support', 'Nutrilite Heart Health CoQ10',
         'Nutrilite Cellular Aging Support']),
 ]
@@ -198,7 +202,7 @@ CASE_PICKS = 3  # packs an open compartment shows: one per family, in the shelf'
 # The plates, one per shelf, fixed everywhere the bar theme shows them: colour, and rank on the bar.
 # Rank sets size (rank 0 is the full plate, each rank after it 6% smaller) and so place: a bar is
 # loaded larger plates nearest the collar. The first five ranks are Peter's stack in the order his
-# story loads it, so his bar builds outward and never reshuffles; the four he does not take come last.
+# story loads it, so his bar builds outward and never reshuffles; the five he does not take come last.
 # The text on a plate is white or ink, whichever the build finds clears 4.5:1 (it stops if neither does).
 # The colours are a satin rubber: Recovery is the XS blue taken down to a bumper plate's (the button's
 # --blue read as a toy on a plate), Fat Loss a shade deeper and Hydration a shade lighter, so white and ink
@@ -207,15 +211,21 @@ CASE_PICKS = 3  # packs an open compartment shows: one per family, in the shelf'
 # Women's Health (the eighth, 2026-09-27) is a satin plum, 7.3:1 under white flat and 4.69:1 at its lowest
 # rendered pixel anywhere in its words' line boxes on a 390px phone (5.3 at 820 and 1440). Men's Health
 # (the ninth, the same day) is a forest green: 7.8:1 flat, 4.81:1 at its lowest on a phone (5.6 wider).
-# Everyday Health (the tenth, 2026-10-01) is a satin petrol, the one dark blue-green the other nine leave
-# free: 9.0:1 under white flat; measured on the rendered plate it is 4.78 at 390, 4.69 at 820 and 4.84 at
-# 1440 at the lowest face pixel anywhere in its words' line boxes, and 6.76-6.88 under the glyphs themselves —
-# the strongest of the three satin plates (the same sweep puts Women's at 4.18 and Men's at 4.32 on a phone).
+# Everyday Health (the tenth, 2026-10-01) is a satin garnet, a red bumper plate's colour. It was a petrol
+# (#2B4E58) at first, which held at plate size but at chip size (the 5x15px key under "Build yours.", and
+# the pinned bar) was the same dark mark as Men's green: the two differed almost only along blue-yellow,
+# the axis a small patch loses first (CIEDE2000 13.3 apart; 8 once that axis is discounted). Garnet differs
+# from Men's on red-green instead (43 apart, 57 discounted); its nearest neighbours now are Fat Loss (16.5)
+# and Women's plum (15.0), and it is never within 6 of any plate under a simulated deutan or protan eye
+# (the petrol was 2.0 from Women's under protan). White on it is 9.6:1 flat. Rendered (2026-10-01, text
+# hidden, the face screenshotted, every pixel in its two lines' text line boxes), white's lowest is 5.89 at
+# 390, 7.68 at 820 and 5.78 at 1440 at 1x, and 5.50 / 7.55 / 5.53 at 2x; under the glyphs alone 5.84-7.80.
+# The same sweep puts Men's at 4.68 and Women's at 4.51 at their lowest (both at 2x).
 PLATES = {
     'recovery': ('#3D4794', 4), 'hydration': ('#93B7C0', 2), 'energy-focus': ('#E2C8AE', 3),
     'protein': ('#1E262F', 0), 'fat-loss': ('#8A543E', 5), 'daily-foundations': ('#6B5646', 1),
     'skin-redefined': ('#D6D4C9', 6), 'womens-health': ('#76485F', 7),
-    'mens-health': ('#39594A', 8), 'everyday-health': ('#2B4E58', 9),
+    'mens-health': ('#39594A', 8), 'everyday-health': ('#80222F', 9),
 }
 # Peter's stack, in the order #story loads it: the shelves his caption strip links to, in the order
 # its captions stand, which is also the order the packs land on the shelf (the build checks both).
@@ -306,13 +316,15 @@ TAGLINES = {
     'Nutrilite Slimmetry Dietary Supplement': 'One tablet twice a day, alongside your training',
     'Nutrilite Lean Muscle': 'Two CLA softgels, three times a day',
     'Nutrilite Hair, Skin & Nail Health': 'Biotin and collagen, one tablet a day',
-    # DRAFT-COPY 2026-10-01, the Everyday Health four: format and dose off each pack's own label and
-    # nothing else. Their names say more than we can stand behind, so no line here says what any of
-    # them is for; amway.com is blocked to us, so none of them carries fact chips either.
-    'Nutrilite Cholesterol Health': 'Softgels, two of them once a day',
-    'Nutrilite Liver Support': 'One tablet, twice a day',
-    'Nutrilite Heart Health CoQ10': 'Softgels, one to three once a day',
-    'Nutrilite Cellular Aging Support': 'Capsules, two of them twice a day',
+    # DRAFT-COPY 2026-10-01, the Everyday Health four: what is in the bottle and how it is taken, off
+    # each pack's own label ("60 SOFTGELS | 2 softgels, 1x a day") and nothing else. Their names say more
+    # than we can stand behind, so no line here says what any of them is for. CoQ10 is the only ingredient
+    # their labels name in legible type, so it is the only one named; amway.com is blocked to us, so none
+    # of them carries fact chips either.
+    'Nutrilite Cholesterol Health': 'Two softgels once a day, 60 to a bottle',
+    'Nutrilite Liver Support': 'One tablet twice a day, 60 to a bottle',
+    'Nutrilite Heart Health CoQ10': 'One to three CoQ10 softgels, once a day',
+    'Nutrilite Cellular Aging Support': 'Two capsules twice a day, 120 to a bottle',
 }
 
 # The quick-fact chips on the case's product card, per listing: (the amway.com page they were read
@@ -395,7 +407,7 @@ SHELF_LINE = {  # the line under each shelf name
     'protein': 'Hitting your protein', 'fat-loss': 'Training to lean out', 'daily-foundations': 'Everyday basics',
     'skin-redefined': 'Skin & overnight', 'womens-health': 'For her everyday',
     'mens-health': 'For his everyday',
-    'everyday-health': 'Four more dailies',  # DRAFT-COPY, all three
+    'everyday-health': 'Day in, day out',  # DRAFT-COPY, all three: a habit, like the others, not a count
 }
 
 CAT_THUMB = {  # the pack shown on the homepage row for each category
