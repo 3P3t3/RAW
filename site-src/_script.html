@@ -1673,7 +1673,7 @@ var LB=null;
       b.textContent=on?'Take it off the bar':'Load this plate';
     });
     if(cform)cLead.line=stack.length?'Interested in: '+stack.map(function(c){return NAME[c]}).join(', ')+'.':'';
-    guide();mysYou();cardSync();
+    guide();mysYou();cardSync();amwaySync();
     html.classList.toggle('has-stack',stack.length>0);
     if(newest)capNew.textContent='+ '+NAME[newest];
     /* the strip comes up (or goes) and the newest plate flashes on it; behind the product card
@@ -1732,18 +1732,34 @@ var LB=null;
   }
   if(cLoad)cLoad.addEventListener('click',function(){if(cCat&&stack.indexOf(cCat)<0)toggle(cCat)});
   /* the rack: a plate shows its panel; the same plate again, Escape, or another plate puts it away */
+  /* the open panel goes in under its own plate's row, however many the row holds (style.css .rack):
+     the plates after that row step past it with `order`, so nothing is cloned or moved in the DOM and
+     Tab still goes from the plate straight into the panel. A notch on the panel points up at its plate. */
+  function place(){
+    var cols=parseInt(getComputedStyle(rack).getPropertyValue('--cols'),10)||plates.length,
+        end=sel<0?-1:Math.min(plates.length-1,(Math.floor(sel/cols)+1)*cols-1);
+    plates.forEach(function(b,j){b.parentNode.style.order=sel>-1&&j>end?'2':''});
+    panels.forEach(function(p,j){p.style.order=j===sel?'1':'';p.classList.toggle('is-at',j===sel)});
+    if(sel<0)return;
+    var b=plates[sel].getBoundingClientRect(),r=panels[sel].getBoundingClientRect();
+    panels[sel].style.setProperty('--x',(b.left+b.width/2-r.left).toFixed(1)+'px');
+  }
+  if(rack)addEventListener('resize',function(){if(sel>-1)place()});   /* a row's length changes at 768 and 1024 */
   function show(i){   /* the packs, on screen: the point of tapping a plate is to see what is on it */
     setTimeout(function(){
       if(sel!==i)return;
-      var r=panels[i].getBoundingClientRect(),vh=innerHeight,tab=72,
+      var r=panels[i].getBoundingClientRect(),p=plates[i].getBoundingClientRect(),vh=innerHeight,
+          tab=12,   /* a breath above the foot: a phone's bottom tab steps away while an open panel is in view (the tab block's zones) */
           top=parseFloat(getComputedStyle(html).scrollPaddingTop)||0,   /* masthead + the pinned bar */
-          room=vh-top-tab,dy;
-      /* A panel that fits in the room left between the fixed chrome and the tab is brought fully
-         into view with the least movement. One taller than that room puts its TOP under the chrome
-         instead, so the packs are always what you land on. The old rule also refused to scroll the
-         plate itself above the masthead, which capped the move to a nudge for every plate but the
-         last row's: the panel stayed below the fold and Peter never saw the products. */
-      if(r.height<=room)dy=r.bottom>vh-tab?r.bottom-(vh-tab):(r.top<top?r.top-top:0);
+          room=vh-top-tab,lo=vh-tab,dy;
+      /* Peter: "When I click on one of the weights, it doesn't immediately snap me down to where the
+         items actually are." The panel opens right under the plate's row, so the plate and its packs
+         are one block. When the block fits between the fixed chrome and the tab it is brought fully
+         into view with the least movement (often none). When only the panel fits, the panel goes fully
+         into view with its foot on the tab and as much of the plate above it as there is room for.
+         A panel taller than the room puts its TOP under the chrome, so the packs are what you land on. */
+      if(r.bottom-p.top<=room)dy=r.bottom>lo?r.bottom-lo:(p.top<top?p.top-top:0);
+      else if(r.height<=room)dy=r.bottom-lo;
       else dy=r.top-top;
       if(Math.abs(dy)>1)scrollBy({top:dy,behavior:reduce.matches?'instant':'smooth'});
     },reduce.matches?0:60);
@@ -1756,6 +1772,7 @@ var LB=null;
     rove(i);
     plates.forEach(function(b,j){b.setAttribute('aria-pressed',j===sel?'true':'false')});
     panels.forEach(function(p,j){p.hidden=j!==sel});
+    place();
     if(sel>-1)show(sel);
     guide();
   }
@@ -1776,6 +1793,22 @@ var LB=null;
     b.hidden=false;
     b.addEventListener('click',function(){toggle(b.getAttribute('data-cat'))});
   });
+  /* from the rack straight to "Take my stack to Amway" (#sa), the panel under "Build yours.": each
+     open panel's "Take my stack to Amway", once a plate is on, and step 3's "Amway" link. Both work the
+     panel's own button (#sa-go), so the panel stays the one place that knows how; it hands focus back
+     to that button as it closes, and these take it back so the visitor is where they left from. A
+     browser without <dialog> never sees the button, and step 3's link just goes to #my-stack. */
+  var saGo=$('#sa-go'),saDlg=$('#sa'),saOK=!!(saGo&&saDlg&&typeof saDlg.showModal==='function'),
+      rkAms=rack?$$('.rk-amway',rack):[];
+  function toAmway(from){
+    if(!saOK||!stack.length||saGo.hidden)return false;
+    saGo.click();
+    if(saDlg.open)saDlg.addEventListener('close',function(){from.focus({preventScroll:true})},{once:true});
+    return true;
+  }
+  function amwaySync(){rkAms.forEach(function(b){b.hidden=!(saOK&&stack.length)})}
+  rkAms.forEach(function(b){b.addEventListener('click',function(){toAmway(b)})});
+  $$('#rk-guide .rg-amway').forEach(function(a){a.addEventListener('click',function(e){if(toAmway(a))e.preventDefault()})});
   /* the call form's note: the bar's line goes in when the form is reached, and again after the stack
      changes, only over an empty note or one that still says what the site last wrote there (the
      calculator's macros line rides behind it); the visitor's own words are never touched */

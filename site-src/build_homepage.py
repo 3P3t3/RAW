@@ -239,7 +239,7 @@ PETER = ['protein', 'hydration', 'recovery', 'daily-foundations', 'energy-focus'
 RACK_GUIDE = ('<!-- DRAFT-COPY --><ol class="rk-guide" id="rk-guide" role="list" aria-label="How the rack works">'
               '<li class="is-now" aria-current="step"><span class="rg-n" aria-hidden="true">1</span><span class="rg-t">Tap any plate to see the packs on it.</span></li>'
               '<li><span class="rg-n" aria-hidden="true">2</span><span class="rg-t">Load the ones you’d take. They ride up top.</span></li>'
-              '<li><span class="rg-n" aria-hidden="true">3</span><span class="rg-t">Bring it to a <a href="#consult">free call</a>, or ask for a <a href="#sample">sample</a>.</span></li>'
+              '<li><span class="rg-n" aria-hidden="true">3</span><span class="rg-t">Order it on <a class="rg-amway" href="#my-stack">Amway</a>, bring it to a <a href="#consult">free call</a>, or ask for a <a href="#sample">sample</a>.</span></li>'
               '</ol><!-- /DRAFT-COPY -->')
 
 # The trending band's ground: True scrubs the 150-frame pour behind the podium, False makes the
@@ -1167,8 +1167,10 @@ def main():
     def rack_section():
         """The plate rack: the seven shelves as seven plates, all on show, front on. A plate is a button
         (aria-pressed: its panel is the one showing); its panel has a few of the shelf's packs (each opens
-        the product card, as the case's do), "Load this plate" and a link to the shelf. Without script
-        every panel stands open under the rack and nothing loads."""
+        the product card, as the case's do), "Load this plate" and a link to the shelf. The plates and the
+        panels share one wrapping row (the list is display:contents), so the script can set the open
+        panel in under its own plate's row with `order` alone: one copy of each, ids and aria untouched.
+        Without script every panel stands open under the rack and nothing loads."""
         plates, panels = [], []
         for i, (slug_, name, tag, heading, fams) in enumerate(CATEGORIES):
             col, rank = PLATES[slug_]
@@ -1188,7 +1190,11 @@ def main():
                 f'          <div class="rk-head"><h3 class="rk-title" id="rk-t-{slug_}">{name}</h3><p class="rk-sub">{SHELF_LINE[slug_]}</p></div>\n'
                 f'          <ul class="bay-packs rk-packs">\n{cells}\n          </ul>\n'
                 f'          <div class="rk-acts"><button class="btn rk-load" type="button" aria-pressed="false" data-cat="{slug_}" hidden>Load this plate</button>'
-                f'<a class="bay-all rk-all" href="category-{slug_}.html">See all {name}<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>\n'
+                f'<a class="bay-all rk-all" href="category-{slug_}.html">See all {name}<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>'
+                # the way on to an order, from the rack itself: the same panel as "Build yours."'s button.
+                # Hidden until there is a stack and the script can open that panel (_script.html)
+                f'<!-- DRAFT-COPY --><button class="rk-amway" type="button" aria-haspopup="dialog" hidden>Take my stack to Amway'
+                f'<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></button><!-- /DRAFT-COPY --></div>\n'
                 f'        </div>')
         return ('  <!-- Shelves as a plate rack: one plate per shelf, all seven at once, nothing moving on its own.\n'
                 '       A plate is a button that shows its shelf\'s panel; "Load this plate" puts it on the visitor\'s\n'
@@ -1197,7 +1203,7 @@ def main():
                 '    <div class="wrap">\n'
                 '      <div class="sec-head grow"><div><h2 class="hl-2" id="goals-title"><span class="hl-lead">What are we</span> <span class="hl-k">maximizing?</span></h2>'
                 + RACK_GUIDE + '</div></div>\n'
-                '      <div class="rack grow" id="rack">\n        <ul class="rk-plates">\n'
+                '      <div class="rack grow" id="rack">\n        <ul class="rk-plates" role="list">\n'
                 + '\n'.join(plates) +
                 '\n        </ul>\n' + '\n'.join(panels) + '\n      </div>\n    </div>\n'
                 + card_dialog() +
