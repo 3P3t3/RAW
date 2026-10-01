@@ -220,7 +220,7 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#s-next,#sample-go,.bay-in,.rk-panel,.mys-acts,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#s-next,#sample-go,.bay-in,.rk-panel,.mys-amway,.mys-acts,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -1848,6 +1848,7 @@ var LB=null;
   function wr(el,k,tf,op){var v=tf+'|'+op;if(keys[k]===v)return;keys[k]=v;el.style.transform=tf;el.style.opacity=op}
   LB={cats:PC,
     card:function(c){cCat=c;cardSync()},
+    stack:function(){return stack.slice()},   /* the plates on the bar, in the order they went on */
     measure:function(){var cs=getComputedStyle(pBar);st=parseFloat(cs.getPropertyValue('--st'))*parseFloat(cs.fontSize);
       PW=parseFloat(cs.getPropertyValue('--pw'));OFF=parseFloat(cs.getPropertyValue('--off'));keys={}},   /* the bar's own geometry, style.css */
     /* where plate c's centre sits on the pinned bar once it is down (the viewport's frame), and its
@@ -1886,6 +1887,151 @@ var LB=null;
     addEventListener('scroll',function(){if(!tick)tick=requestAnimationFrame(upd)},{passive:true});
     upd();
   }
+})();
+
+/* "Take my stack to Amway" (#sa): the step that was missing. The plates on the visitor's bar are
+   shelves, not products, so the panel offers each loaded plate's picks — the very packs the rack's
+   own panel shows, read back out of those panels (.bay-go carries the share link, the photo and the
+   card's data-*), so there is no second list to keep in step and a new shelf needs nothing here.
+   A pack that sits on two shelves (XS Creatine+) is listed once, under the first plate that loaded it.
+   Two phases in the one panel. First the picks, ticked, to untick what they don't want. Then
+   "Open the first one on Amway": that one link opens in a new tab, and from then on every product
+   the visitor adds in that Amway session is credited to Peter — so the rest are a checklist to work
+   down in the same tab, each with its photo, its name and its own link, with a tick as it goes on.
+   Which ones are ticked off is kept in sessionStorage, so closing the panel mid-order and opening it
+   again comes back to the list rather than starting over ("Start over" does that on purpose).
+   The button that opens it sits inside .mys-has under "Build yours.", which the stack block shows
+   only once a plate is on the bar, and the button itself is hidden until this block unhides it: a
+   visitor with no stack, with no script, or with no <dialog> is never offered it. */
+(function(){
+  var go=$('#sa-go'),dlg=$('#sa');
+  if(!go||!dlg||typeof dlg.showModal!=='function'||!LB||!LB.stack)return;
+  var list=$('#sa-list',dlg),lead=$('#sa-lead',dlg),why=$('.sa-why',dlg),title=$('#sa-title',dlg),
+      start=$('#sa-start',dlg),again=$('#sa-again',dlg),shut=$('#sa-done',dlg),
+      DKEY='aspire-amway-done',items=[],off={},done={},run=false;
+  try{var sv=JSON.parse(sessionStorage.getItem(DKEY)||'null');if(sv&&typeof sv==='object')done=sv}catch(e){}
+  function keep(){try{sessionStorage.setItem(DKEY,JSON.stringify(done))}catch(e){}}
+  function el(t,c,p){var n=doc.createElement(t);if(c)n.className=c;if(p)p.appendChild(n);return n}
+  function shelf(c){var b=$('#rk-'+c);return{name:b?$('.rk-name',b).textContent:c,col:b?b.style.getPropertyValue('--c'):''}}
+  /* every pick on the loaded plates, plate by plate in the order they went on and inside a plate in
+     the order the rack lists them: the order a visitor would add them */
+  function gather(){
+    var out=[],seen={};
+    LB.stack().forEach(function(c){
+      var p=$('#rk-p-'+c);
+      if(!p)return;
+      $$('.bay-go',p).forEach(function(a){
+        var k=a.getAttribute('data-try')||a.getAttribute('href');
+        if(seen[k])return;
+        seen[k]=1;
+        var img=$('img',a);
+        out.push({k:k,cat:c,name:a.getAttribute('data-name')||k,kind:a.getAttribute('data-kind')||'',
+                  href:a.getAttribute('href'),img:img?img.getAttribute('src'):''});
+      });
+    });
+    return out;
+  }
+  function on(it){return !off[it.k]}
+  function picked(){return items.filter(on)}
+  function row(it,i,ul){
+    var li=el('li','sa-row',ul),lab=el('label','sa-tick',li),box=el('input','',lab);
+    box.type='checkbox';
+    li.setAttribute('data-k',it.k);
+    var vh=el('span','vh',lab);
+    vh.textContent=run?'Added: ':'Include ';
+    var th=el('span','sa-thumb',lab);
+    if(it.img){var im=el('img','',th);im.src=it.img;im.alt='';im.width=96;im.height=96;im.loading='lazy';im.decoding='async'}
+    var tx=el('span','sa-txt',lab);
+    el('span','sa-nm',tx).textContent=it.name;
+    if(it.kind)el('span','sa-kd',tx).textContent=it.kind;
+    if(run){
+      box.checked=!!done[it.k];
+      li.classList.toggle('is-done',!!done[it.k]);
+      box.addEventListener('change',function(){
+        if(box.checked)done[it.k]=1;else delete done[it.k];
+        keep();li.classList.toggle('is-done',box.checked);
+        say(it.name+(box.checked?' ticked off. ':' un-ticked. ')+left());
+      });
+      var a=el('a','sa-add',li);
+      a.href=it.href;a.target='_blank';a.rel='noopener';
+      a.appendChild(doc.createTextNode(i===0?'Open again':'Add'));
+      el('span','vh',a).textContent=' '+it.name+' on Amway (opens in a new tab)';
+      if(i===0)el('span','sa-badge',li).textContent='Opened first';
+    }else{
+      box.checked=true;
+      box.addEventListener('change',function(){
+        if(box.checked)delete off[it.k];else off[it.k]=1;
+        draw();say(it.name+(box.checked?' is in. ':' is out. ')+picked().length+' to add.');
+      });
+      if(i===0)el('span','sa-badge',li).textContent='Start here';
+    }
+  }
+  function left(){
+    var n=picked().filter(function(it){return !done[it.k]}).length;
+    return n?n+' still to add.':'That is the whole stack.';
+  }
+  function draw(){
+    var show=run?picked():items,cur='';
+    list.textContent='';
+    var ul=null,i=0;
+    show.forEach(function(it){
+      if(it.cat!==cur){
+        cur=it.cat;
+        var s=shelf(it.cat),li=el('li','sa-shelf',list),h=el('p','sa-sh',li);
+        el('i','',h).style.setProperty('--c',s.col);
+        h.appendChild(doc.createTextNode(s.name));
+        ul=el('ul','sa-sub',li);
+      }
+      row(it,i++,ul);
+    });
+    var n=picked().length;
+    if(run){
+      lead.textContent='Amway is open in the other tab. Add the rest there and tick them off as you go — nothing here needs to be in order.';
+      why.hidden=true;start.hidden=true;again.hidden=false;shut.textContent='Done';
+    }else{
+      lead.textContent='These are the picks off the '+LB.stack().length+' plate'+(LB.stack().length===1?'':'s')+
+                       ' on your bar. Untick anything you don’t want, then open the first one.';
+      why.hidden=false;start.hidden=false;again.hidden=true;shut.textContent='Close';
+      start.setAttribute('aria-disabled',n?'false':'true');
+      start.classList.toggle('is-off',!n);
+    }
+  }
+  function open_(){
+    items=gather();off={};
+    run=items.some(function(it){return done[it.k]});
+    if(!items.length)return;
+    draw();
+    dlg.showModal();html.classList.add('locked');
+    $('.sa-in',dlg).scrollTop=0;
+    title.focus({preventScroll:true});
+  }
+  go.hidden=false;
+  go.addEventListener('click',open_);
+  start.addEventListener('click',function(){
+    var ps=picked();
+    if(!ps.length){say('Nothing is ticked, so there is nothing to open.');return}
+    var first=ps[0];
+    window.open(first.href,'_blank','noopener');
+    done={};done[first.k]=1;keep();
+    run=true;draw();
+    title.focus({preventScroll:true});
+    say(first.name+' is open on Amway in a new tab. '+left()+' Add them in that tab and tick them off here.');
+  });
+  again.addEventListener('click',function(){
+    done={};keep();run=false;off={};draw();title.focus({preventScroll:true});
+  });
+  shut.addEventListener('click',function(){dlg.close()});
+  $('.sa-x',dlg).addEventListener('click',function(){dlg.close()});
+  dlg.addEventListener('click',function(e){if(e.target===dlg)dlg.close()});   /* a tap on the dimmed page */
+  dlg.addEventListener('close',function(){html.classList.remove('locked');go.focus({preventScroll:true})});
+  /* Tab stays in the panel rather than leaving the page for the browser's own controls */
+  dlg.addEventListener('keydown',function(e){
+    if(e.key!=='Tab')return;
+    var f=$$('button,a[href],input',dlg).filter(function(n){return !n.hidden&&!n.closest('[hidden]')}),
+        first=f[0],last=f[f.length-1];
+    if(e.shiftKey&&doc.activeElement===first){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&doc.activeElement===last){e.preventDefault();first.focus()}
+  });
 })();
 
 /* Peter's story: nine beats on one stage that holds the window for the length of the run.
