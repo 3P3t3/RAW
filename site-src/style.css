@@ -1227,10 +1227,19 @@ html:not(.js) #results[hidden]{display:block!important}
 /* the opening pair: the same photo at the same size and place in both beats, so the turn can lay
    its before exactly over the first one. Held to the top of its slot, and sized to leave room
    for the words under it at every phone height. */
+/* On a phone his photos take the room the caption strip leaves them (Peter, 2026-10-01: "when we get to my
+   story, the picture is too small"). The strip's top is empty while a photo is up — nothing stands above
+   "Fatigue was a constant.", and the closing caption is the last — so the script (measure in _script.html)
+   sets the line that his captions read on at the photo beats as low as the closing caption can stand whole,
+   and sizes the photos down to just above it: --st-ph for the before and the turn (one size, so the before
+   comes back as it was), --st-fh for the family, never past the stage's width or, for the family, its own
+   320x400 (it is enlarged no further than 1:1). ~306x408 at 390x844, where it was 236x315. The formulas
+   below are only the fallback until the script has measured. Both heroes stand at the top of their beat. */
 @media (max-width:767px){
-  .story.is-live .st-open .st-hero{align-items:flex-start}
-  .story.is-live .st-open .st-photo{height:min(440px,calc(100vh - var(--mast) - var(--cap-h) - 150px));max-height:none}
-  @supports (height:100svh){.story.is-live .st-open .st-photo{height:min(440px,calc(100svh - var(--mast) - var(--cap-h) - 150px))}}
+  .story.is-live .st-open .st-hero,.story.is-live .st-fam .st-hero{align-items:flex-start}
+  .story.is-live .st-open .st-photo{height:var(--st-ph,min(440px,calc(100vh - var(--mast) - var(--cap-h) - 150px)));max-height:none}
+  @supports (height:100svh){.story.is-live .st-open .st-photo{height:var(--st-ph,min(440px,calc(100svh - var(--mast) - var(--cap-h) - 150px)))}}
+  .story.is-live .st-fam .st-photo{height:var(--st-fh,min(40vh,300px));max-height:none}
 }
 
 @media (min-width:768px){
@@ -1281,12 +1290,20 @@ html:not(.js) #results[hidden]{display:block!important}
      beats, so the after still wipes exactly over the before. */
   .story.is-live .st-open .st-hero,.story.is-live .st-fam .st-hero{height:auto}
   .story.is-live .st-open .st-photo,.story.is-live .st-fam .st-photo{max-height:none;--ph:calc((50vw - var(--pad)) * 4 / 3 - 2 * var(--mat,0px));
-    height:min(760px,var(--ph),calc(100vh - var(--mast) - var(--pin,0px) - 64px - 2 * var(--mat,0px)))}
+    height:min(760px,var(--ph),calc(100vh - var(--mast) - var(--pin,0px) - var(--st-gap,64px) - 2 * var(--mat,0px)))}
   .story.is-live .st-fam .st-photo{--ph:calc((50vw - var(--pad)) * 5 / 4)}   /* and never wider than the half of the stage it stands in */
   @supports (height:100svh){.story.is-live .st-open .st-photo,.story.is-live .st-fam .st-photo{
-    height:min(760px,var(--ph),calc(100svh - var(--mast) - var(--pin,0px) - 64px - 2 * var(--mat,0px)))}}
+    height:min(760px,var(--ph),calc(100svh - var(--mast) - var(--pin,0px) - var(--st-gap,64px) - 2 * var(--mat,0px)))}}
   .st-lamp-dark{background:radial-gradient(circle at 74% 50%,rgba(244,242,236,.15),transparent 45%)}
   .st-lamp-warm{background:radial-gradient(circle at 74% 50%,rgba(255,255,255,.35),transparent 45%)}
+}
+/* From 1024 (no bottom tab) the before and the turn stand 16px clear of the pinned bar and of the screen's
+   foot, where they kept 24 and 40, and their mat is 14px (field theme): ~528x704 at 1440x900, where they were
+   495x660. That is as tall as a 900px screen allows; the side photos are 480x640, so this is ~1.1x. The
+   family keeps its size (560x700 there): at 320x400 it is already soft, and it is not enlarged further. */
+@media (min-width:1024px){
+  .story.is-live .st-open{--st-gap:32px}
+  .story.is-live .st-beat.st-open,.t-bar .story.is-live .st-beat.st-open{padding-top:calc(var(--mast) + var(--pin,0px) + 16px);padding-bottom:16px}
 }
 @media (min-width:1200px){
   .st-say{font-size:24px;line-height:1.45}
@@ -1855,8 +1872,8 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
 /* the pinned bar is the story's stack: every beat clears it, as they cleared the case */
 .t-bar .story.is-live .st-beat,.t-bar .story.is-live .st-warm{padding-top:calc(var(--mast) + var(--pin) + 14px)}
 @media (max-width:767px){
-  .t-bar .story.is-live .st-open .st-photo{height:min(440px,calc(100vh - var(--mast) - var(--pin) - var(--cap-h) - 112px))}
-  @supports (height:100svh){.t-bar .story.is-live .st-open .st-photo{height:min(440px,calc(100svh - var(--mast) - var(--pin) - var(--cap-h) - 112px))}}
+  .t-bar .story.is-live .st-open .st-photo{height:var(--st-ph,min(440px,calc(100vh - var(--mast) - var(--pin) - var(--cap-h) - 112px)))}
+  @supports (height:100svh){.t-bar .story.is-live .st-open .st-photo{height:var(--st-ph,min(440px,calc(100svh - var(--mast) - var(--pin) - var(--cap-h) - 112px)))}}
 }
 /* at the call the fully loaded bar stands above the button, where the case rose into */
 .t-bar .story.is-live .st-arc{display:flex;align-items:center;height:clamp(62px,19vw,84px)}
@@ -2126,7 +2143,7 @@ body{background:transparent}
    brings its own chalk-white mat, and it wipes in with the photo (the wipe's window is widened by
    the mat on every side), so the dark is lifted off exactly as far as the after has come. The
    stage's chalk veil rises with the wipe as it always did. Transforms only, as before. */
-.st-open{--mat:14px}
+.st-open{--mat:10px}   /* 14 and 20 until 2026-10-01: thinner, so his photo takes the room */
 .st-open .st-photo{overflow:visible;box-shadow:0 0 0 var(--mat) var(--teal),0 34px 50px -26px rgba(0,20,27,.6)}
 .st-open .st-wipe{inset:calc(-1 * var(--mat))}
 .st-open .st-wipe-in{padding:var(--mat);background:#FBFAF6;box-shadow:inset 0 0 0 1px rgba(30,38,47,.14)}
@@ -2137,8 +2154,14 @@ body{background:transparent}
 .story:not(.is-live) .st-open .st-hero{padding-block:var(--mat)}
 /* and its mat (the after's, which wipes in on the stage) never runs past a narrow phone's edge: the
    height gives way first, so the photo keeps its 3:4 and its crop (12px of sideways scroll at 320 wide) */
-.story:not(.is-live) .st-open .st-photo{height:min(56vh,420px,calc((100vw - 2 * var(--pad) - 2 * var(--mat)) * 4 / 3))}
-@media (min-width:768px){.st-open{--mat:20px}}
+/* (as plain content, no stage: as large as a phone's width allows, and on a desktop up to the photo's own
+   480x640; the family up to its own 320x400. They were 420 and 300 tall.) */
+.story:not(.is-live) .st-open .st-photo{height:min(72vh,640px,calc((100vw - 2 * var(--pad) - 2 * var(--mat)) * 4 / 3))}
+.story:not(.is-live) .st-fam .st-photo{height:min(64vh,400px,calc((100vw - 2 * var(--pad)) * 5 / 4))}
+@media (min-width:768px){   /* from 768 it stands in the right half of the 12 columns, not the full width */
+  .story:not(.is-live) .st-open .st-photo{height:min(72vh,640px,calc(((min(1200px,100vw - 2 * var(--pad)) - 24px) / 2 - 2 * var(--mat)) * 4 / 3))}
+}
+@media (min-width:768px){.st-open{--mat:14px}}
 
 /* cards and panels: a translucent surface with a hairline, so forms still read as forms */
 .c-card,.c-embed{background:rgba(255,255,255,.5);backdrop-filter:none;-webkit-backdrop-filter:none;
