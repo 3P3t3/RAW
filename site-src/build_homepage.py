@@ -33,6 +33,30 @@ DEMO_STYLE = 'style-demo.css'
 # _next. `--view VIEW` builds with that SHELF_VIEW instead of the one below (e.g. `--demo OUTDIR --view case`
 # for the case demo from this branch).
 
+# ---- the CCRX copy: one source, two published sites -----------------------------------------
+# Peter has a second, paid-referral business: CCRX (prescription compounded peptides and an
+# at-home blood panel, fulfilled by Avellum Health). He wants one site he can send to anyone and
+# one that also offers that route -- without a fork, because two copies drift and then leak. So
+# every build writes the site TWICE from this one source:
+#   the plain site  ->  the repo root   https://3p3t3.github.io/RAW/homepage.html
+#   the CCRX copy   ->  PLUS_DIR/       https://3p3t3.github.io/RAW/plus/homepage.html
+# CCRX below is the switch, and the link it carries is the ONLY difference between the two.
+# Peter, 2026-10-01, verbatim: "It's not a big deal if some peptide verbiage leaks into the
+# regular website. In fact, at some point, I probably will do that. The only thing to avoid is
+# having the specific uh, crystal clear RX website built into the other website. ... Just the
+# link itself." So words are free in both copies; the LINK is what the switch turns on and what
+# guard() refuses to let into the plain copy, whatever anyone edits.
+CCRX = False      # OFF for the plain site. The build's second pass turns it on; --ccrx on|off overrides it
+CCRX_URL = 'https://ccrx.health/n/HERSCHELMAN'     # Peter's referral link (his own, attribution included)
+CCRX_HOSTS = ('ccrx.health', 'avellumhealth.com')  # every host that link reaches; guard() bans all of them
+                                                   # from the plain copy. The WORDS "CCRX" and "Avellum
+                                                   # Health" are fine there (the footer already says one)
+PLUS_DIR = 'plus'  # the folder the CCRX copy builds into. Peter has not named it yet: rename it here
+                   # (and in the one .gitattributes line) and the whole copy moves with it
+PLUS = False       # set for the build's second pass, the one that writes PLUS_DIR/
+PLUS_BUILD = True  # write the copy at all; --no-plus skips it and leaves the plain site exactly as it is
+PLAIN_WRITTEN = []  # the plain files this build wrote, each one already past guard()
+
 # family prefix -> (type descriptor, goals, format). Longest prefix wins.
 # Goals: R Recovery, L Lean Mass, E Endurance, S Sleep & Longevity (first = primary).
 FAMILIES = {
@@ -934,6 +958,7 @@ def bestsellers():
 def main():
     global RECUT
     RECUT = not os.path.exists(STAMP) or open(STAMP).read().strip() != cut_version()
+    export = bool(DEMO) or PLUS  # a copy of the site: it photographs nothing and writes no cut stamp
     rows = list(csv.DictReader(open(os.path.join(ROOT, 'share-links.csv'), newline='')))
     os.makedirs(ASSETS, exist_ok=True)
     products = []
@@ -943,7 +968,7 @@ def main():
         studio = os.path.join(STUDIO, slug(r['product']) + '.webp')
         if os.path.exists(studio):
             fn = slug(r['product']) + '.webp'
-            if not DEMO:
+            if not export:
                 shutil.copyfile(studio, os.path.join(ASSETS, fn))
             p['img'] = 'assets/products/' + fn
             p['studio'] = True
@@ -951,7 +976,7 @@ def main():
             continue
         if src and os.path.exists(src):
             fn = slug(r['product']) + os.path.splitext(src)[1].lower()
-            if not DEMO:
+            if not export:
                 normalize(src, os.path.join(ASSETS, fn))
             p['img'] = 'assets/products/' + fn
         else:
@@ -1300,12 +1325,20 @@ def main():
     style, header, footer, dialogs, script, icons = (part('style.css'), part('_header.html'), part('_footer.html'),
                                                      part('_dialogs.html'), part('_script.html'), part('_icons.html'))
     intro = part('_intro.html')  # the opening curtain: homepage only, so it is not in `shared`
-    style_file = os.path.join(DEMO, DEMO_STYLE) if DEMO else STYLE_OUT
-    open(style_file, 'w').write(style)  # served once and cached, instead of inlined into all eight pages
-    style_href = os.path.basename(style_file) + '?v=' + hashlib.sha1(style.encode()).hexdigest()[:8]  # bust the cache when the css moves
+    style_hash = hashlib.sha1(style.encode()).hexdigest()[:8]  # bust the cache when the css moves
+    if PLUS:  # the copy links the one stylesheet at the repo root, so there can never be two of it
+        style_href = '../style.css?v=' + style_hash
+    else:
+        style_file = os.path.join(DEMO, DEMO_STYLE) if DEMO else STYLE_OUT
+        if DEMO:
+            open(style_file, 'w').write(style)
+        else:
+            write_plain('style.css', style)  # served once and cached, instead of inlined into every page
+        style_href = os.path.basename(style_file) + '?v=' + style_hash
     # the menu sheet lists every shelf; it follows {{DIALOGS}} in this dict so it fills the menu once it is in
     menu_shelves = '\n'.join(f'        <li><a href="category-{s}.html">{n}</a></li>' for s, n, *_ in CATEGORIES)
     shared = {'{{STYLE}}': style_href, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{MENU_SHELVES}}': menu_shelves,
+              '{{CCRX}}': ccrx_block(),  # after {{FOOTER}}, which is where the placeholder sits
               '{{SCRIPT}}': script,
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)),
               '{{TOTAL_PRODUCTS}}': plural(len(products), 'product', zero='products'), '{{CONSULT_URL}}': CONSULT_URL,
@@ -1332,7 +1365,7 @@ def main():
     sample_list = '\n'.join(f'          <option value="{esc(n)}"></option>'
                             for n in sorted({pr['name'] for pr in products}, key=str.lower))
 
-    if not DEMO:
+    if not export:
         os.makedirs(CUTS, exist_ok=True)
     podium = []
     # each of the three carries its family's TAGLINES line (.p-why), the same DRAFT-COPY its product card
@@ -1346,7 +1379,7 @@ def main():
         photo = next((row['photo'] for row in rows if row['product'] == r['product']), '')
         if photo and os.path.exists(os.path.join(PHOTOS, photo)):  # transparent cut-out for the dark band
             fn = slug(r['product']) + '.webp'
-            if not DEMO:
+            if not export:
                 normalize(os.path.join(PHOTOS, photo), os.path.join(CUTS, fn))
             pr['img'] = 'assets/cutouts/' + fn
             pr['studio'] = False
@@ -1362,8 +1395,10 @@ def main():
             f'<span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
 
     page_name = DEMO_PAGE if DEMO else 'homepage.html'
+    # the CCRX copy is findable on purpose (Peter wants it indexed), so it is NOT noindexed like a
+    # demo; it only needs a canonical of its own. plus_links() moves that to PLUS_DIR/ with the rest.
     head_extra = (f'<meta name="robots" content="noindex">\n<link rel="canonical" href="{BASE}{DEMO_PAGE}">\n'
-                  if DEMO else '')
+                  if DEMO else f'<link rel="canonical" href="{BASE}homepage.html">\n' if PLUS else '')
     out = open(SRC).read()
     for k, v in dict(shared, **{'{{HEADER}}': header.replace('{{HOME}}', ''), '{{HOME}}': '',
                                 '{{HEAD_EXTRA}}': head_extra,
@@ -1379,12 +1414,15 @@ def main():
     left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', out)))
     if left:
         raise SystemExit(f'unfilled placeholders in the homepage: {left}')
+    plus_pages = {}
     if DEMO:
         out = demo_links(out)
         open(os.path.join(DEMO, DEMO_PAGE), 'w').write(out)
         demo_pages = {DEMO_PAGE: out}
+    elif PLUS:
+        plus_pages['homepage.html'] = write_plus('homepage.html', out)
     else:
-        open(OUT, 'w').write(out)
+        write_plain('homepage.html', out)
 
     cat_tpl = open(os.path.join(ROOT, 'site-src', 'category.template.html')).read()
     for slug_, name, tag, heading, fams in CATEGORIES:
@@ -1418,7 +1456,7 @@ def main():
         for k, v in dict(shared, **{
                 '{{HEADER}}': header.replace('{{HOME}}', 'homepage.html'), '{{HOME}}': 'homepage.html',
                 '{{HEAD_EXTRA}}': (f'<meta name="robots" content="noindex">\n<link rel="canonical" href="{BASE}{cat_page}">\n'
-                                   if DEMO else ''),
+                                   if DEMO else f'<link rel="canonical" href="{BASE}category-{slug_}.html">\n' if PLUS else ''),
                 '{{PAGE_URL}}': BASE + f'category-{slug_}.html',
                 '{{SAMPLE_LINK}}': 'homepage.html?try=' + quote(html.unescape(name)) + '#sample',
                 '{{CAT_NAME}}': name, '{{CAT_TAG}}': tag, '{{CAT_HEADING}}': heading,
@@ -1431,7 +1469,10 @@ def main():
             demo_pages[cat_page] = page
             open(os.path.join(DEMO, cat_page), 'w').write(page)
             continue
-        open(os.path.join(ROOT, f'category-{slug_}.html'), 'w').write(page)
+        if PLUS:
+            plus_pages[cat_page] = write_plus(cat_page, page)
+            continue
+        write_plain(f'category-{slug_}.html', page)
 
     # about.html: who we are, then what changed, then the numbers, then the way on. Its own page off the
     # menu instead of a band at the end of the homepage, because all of it there was too much in one thing
@@ -1457,15 +1498,145 @@ def main():
         page = demo_links(page)
         demo_pages[about_page] = page
         open(os.path.join(DEMO, about_page), 'w').write(page)
+    elif PLUS:
+        plus_pages[about_page] = write_plus(about_page, page)
     else:
-        open(os.path.join(ROOT, 'about.html'), 'w').write(page)
+        write_plain('about.html', page)
 
     if DEMO:
         demo_report(demo_pages, style)
         return
+    if PLUS:
+        # the copy is a folder, so it needs two files of its own: a directory index, so that
+        # .../RAW/plus/ opens the copy's homepage, and a manifest whose start_url ('.') resolves
+        # inside the copy, so an installed shortcut cannot land a visitor on the plain site.
+        open(plus_path('index.html'), 'w').write(open(os.path.join(ROOT, 'index.html')).read())
+        man = open(os.path.join(ROOT, 'site.webmanifest')).read().replace('"src": "assets/', '"src": "../assets/')
+        open(plus_path('site.webmanifest'), 'w').write(man)
+        plus_report(plus_pages)
+        return
     open(STAMP, 'w').write(cut_version())  # last, so a crash leaves the old stamp and the next run re-cuts
+    guard_root()  # belt and braces: the files at the root that this build did not write
     print(f'{len(products)} products ({sum(1 for pr in products if pr["img"])} with photos) -> {OUT}')
     print('categories', counts, 'uncategorised', [pr['product'] for pr in products if pr['product'] not in cat_of])
+
+
+def ccrx_block():
+    """The CCRX route: the one thing the two published copies differ by (see CCRX at the top).
+
+    Switch off -> the empty string, so the plain pages are byte-for-byte what they were before any
+    of this existed. Switch on -> this one link, in the footer of every page of the copy.
+
+    DRAFT-COPY. This is a placeholder, not Peter's words, and it makes no claim about what the
+    products do: it names the two things CCRX sells and links his referral address. Peter's real
+    block (his wording, and wherever on the page he wants it) replaces the return below and nothing
+    else in the build has to change; if it wants a place of its own rather than the footer, put a
+    second {{CCRX}} in the template it belongs to and give this one a sibling.
+    """
+    if not CCRX:
+        return ''
+    return ('\n        <!-- DRAFT-COPY: placeholder for the CCRX route. Peter has not approved copy for it;\n'
+            '             it is here so the two builds genuinely differ and the guard has a link to catch. -->\n'
+            f'        <a href="{CCRX_URL}" target="_blank" rel="noopener">Prescription peptides and bloodwork'
+            '<span class="vh"> (opens in a new tab)</span></a>')
+
+
+def plus_path(name):
+    """A file of the CCRX copy, under PLUS_DIR/ in the repo."""
+    if not re.fullmatch(r'[a-z0-9-]+', PLUS_DIR):  # the copy's pages link ../assets/ and ../style.css,
+        raise SystemExit(f'PLUS_DIR must be one folder name, not {PLUS_DIR!r}')  # so it is one level down
+    d = os.path.join(ROOT, PLUS_DIR)
+    os.makedirs(d, exist_ok=True)
+    return os.path.join(d, name)
+
+
+def write_plus(name, page):
+    """Write one page of the CCRX copy, with its links pointed inside the copy first."""
+    page = plus_links(page)
+    open(plus_path(name), 'w').write(page)
+    return page
+
+
+def plus_links(page):
+    """Keep the CCRX copy's pages inside the CCRX copy, the way demo_links keeps a demo inside itself.
+
+    The copy's pages carry the SAME file names as the plain site's, one folder down, so every
+    relative link between them (homepage.html, about.html, category-*.html, '#top', '?try=') already
+    resolves inside PLUS_DIR/ and needs nothing done to it. Two kinds of reference do need work:
+      * an ABSOLUTE link to a page of the site -- og:url, the canonical, the sample form's _next --
+        which would otherwise send a visitor of the copy back to the plain site;
+      * a RELATIVE reference to a file the two copies share and only the root has: assets/ and the
+        root style.css. Those are one folder up. The lookbehind leaves alone anything already inside
+        a URL (BASE + 'assets/...' for og:image, 'assets.calendly.com/assets/...'), which is right:
+        those resolve on their own.
+    Nothing here renames a page, so the copy's URLs read like the plain site's with PLUS_DIR/ in
+    front, and its pages can be diffed against the plain ones line for line.
+    """
+    shelves = '|'.join(re.escape(c[0]) for c in CATEGORIES)
+    pages = rf'(?:homepage|about|category-(?:{shelves}))\.html'
+    page = re.sub(rf'({re.escape(BASE)})({pages})', rf'\1{PLUS_DIR}/\2', page)
+    return re.sub(r'(?<![\w./-])assets/', '../assets/', page)
+
+
+def guard(name, text, on_disk=False):
+    """THE GUARD. The plain site must never carry the link to Peter's CCRX storefront.
+
+    Peter, 2026-10-01: "The only thing to avoid is having the specific uh, crystal clear RX website
+    built into the other website. ... Actually, even the name crystal clear is fine. Just the link
+    itself." So this checks for the HOSTS in CCRX_HOSTS and for nothing else -- the words "CCRX",
+    "Avellum Health", "peptide" and "bloodwork" are all free to appear in either copy, and the
+    footer's ordering line already names Avellum Health.
+
+    It runs on the way to disk, so a leaked page is never even written, and it is unconditional:
+    no flag and no switch skips it. `--ccrx on` puts the link into the plain pass on purpose and
+    this is what stops it. If Peter one day decides the plain site SHOULD carry the link, this
+    function is the single place that has to be changed, deliberately, by someone reading this.
+    """
+    hits = [(i, h, line.strip()) for i, line in enumerate(text.splitlines(), 1)
+            for h in CCRX_HOSTS if h in line.lower()]
+    if not hits:
+        return text
+    where = '\n'.join(f'!!   {name}:{i}  names {h}\n!!     {ln[:140]}' for i, h, ln in hits)
+    what = (f'!! {name} already carries it at the repo root; this build did not write it.'
+            if on_disk else f'!! {name} was NOT written.')
+    raise SystemExit(
+        f'\n!! BUILD STOPPED: the CCRX link leaked into the plain site.\n'
+        f'{what} {len(hits)} occurrence(s):\n{where}\n'
+        f'!! Only the copy under {PLUS_DIR}/ may name {" or ".join(CCRX_HOSTS)}; the pages at the\n'
+        f'!! repo root are the site Peter sends to anyone, and they must never link it\n'
+        f'!! (Peter, 2026-10-01: "Just the link itself.").\n'
+        f'!! Put it behind the CCRX switch in {os.path.basename(__file__)} (see ccrx_block), then rebuild.')
+
+
+def write_plain(name, text):
+    """Write one file of the plain site at the repo root -- past the guard, or not at all."""
+    guard(name, text)
+    open(os.path.join(ROOT, name), 'w').write(text)
+    PLAIN_WRITTEN.append(name)
+    return text
+
+
+def guard_root():
+    """The same check over every page and stylesheet at the repo root as it now stands on disk, so
+    a hand-edited page, a stale generated one or a demo export dropped in beside them is caught too.
+    PLUS_DIR/ is a folder of its own and is not read here: it is the copy that is allowed the link."""
+    names = sorted(f for f in os.listdir(ROOT)
+                   if f.endswith(('.html', '.css', '.webmanifest')) and os.path.isfile(os.path.join(ROOT, f)))
+    for f in names:
+        guard(f, open(os.path.join(ROOT, f), encoding='utf-8', errors='replace').read(), on_disk=True)
+    print(f'guard: no {"/".join(CCRX_HOSTS)} link in the {len(names)} files of the plain site '
+          f'({len(PLAIN_WRITTEN)} of them written by this build)')
+
+
+def plus_report(pages):
+    """What the second pass wrote, and the proof that it really differs from the plain site."""
+    carries = [n for n, t in pages.items() if any(h in t.lower() for h in CCRX_HOSTS)]
+    if CCRX and not carries:
+        raise SystemExit(f'{PLUS_DIR}/: CCRX is on but not one page carries the link - the switch did nothing')
+    out = sorted(os.listdir(os.path.join(ROOT, PLUS_DIR)))
+    print(f'{PLUS_DIR}/: {len(pages)} pages + index.html + site.webmanifest ({len(out)} files), '
+          f'CCRX {"on" if CCRX else "off"}, {len(carries)} of them carry the link; '
+          f'they link ../style.css and ../assets/')
 
 
 def demo_links(page):
@@ -1505,7 +1676,8 @@ if __name__ == '__main__':
     def arg(flag):
         i = sys.argv.index(flag)
         if i + 1 >= len(sys.argv):
-            raise SystemExit('usage: build_homepage.py [--demo OUTDIR [--demo-name NAME]] [--view bar|case|strip|ring]')
+            raise SystemExit('usage: build_homepage.py [--ccrx on|off] [--no-plus]\n'
+                             '                         [--demo OUTDIR [--demo-name NAME]] [--view bar|case|strip|ring]')
         return sys.argv[i + 1]
     if '--view' in sys.argv:
         SHELF_VIEW = arg('--view')
@@ -1519,7 +1691,19 @@ if __name__ == '__main__':
             raise SystemExit('--demo-name: lower-case letters, digits and hyphens only')
         DEMO_SUFFIX = f'-demo-{name}'
         DEMO_PAGE, DEMO_STYLE = f'homepage{DEMO_SUFFIX}.html', f'style-demo-{name}.css'
+    if '--ccrx' in sys.argv:  # the switch, forced for this run; the second pass sets it on regardless
+        v = arg('--ccrx')
+        if v not in ('on', 'off'):
+            raise SystemExit("--ccrx: on or off")
+        CCRX = v == 'on'
+    if '--no-plus' in sys.argv:  # plain site only, e.g. while working on something else
+        PLUS_BUILD = False
     if '--demo' in sys.argv:
         DEMO = os.path.abspath(arg('--demo'))  # the repo root is fine: the export only adds its own files
         os.makedirs(DEMO, exist_ok=True)
     main()
+    if PLUS_BUILD and not DEMO:
+        # the second pass: the same source, the same products, the same photos, written into
+        # PLUS_DIR/ with the switch on. It is the only copy allowed to carry the CCRX link.
+        PLUS, CCRX = True, True
+        main()
