@@ -2156,19 +2156,53 @@ body{background:transparent}
 .ab-pics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%}
 .ab-pics .cat-portrait{width:100%;max-width:none}
 .ab-hero .cat-hero-in{padding-block:26px 40px}
-/* who we are: his words beside hers, each in the block the Women's Health shelf uses */
+/* who we are: one title over the two of them, then his words beside hers, each under its name, in
+   the block the Women's Health shelf uses (her_text, peter_text: the names are h3, "What changed" h4) */
+.ab-who .pf-title{margin-bottom:clamp(36px,5vw,56px)}
 .ab-two{display:grid;gap:52px;align-items:start}
-.ab-two .her-text h2{font-size:clamp(36px,9vw,52px)}
+.ab-two .her-text>h3{font:800 clamp(30px,8vw,46px)/.92 var(--display);font-stretch:72%;text-transform:uppercase;
+  letter-spacing:-.005em;color:var(--teal)}
+.ab-two .her-h{margin:10px 0 0;font:600 17px/1.3 var(--sans);color:var(--ink)}
 /* the numbers, under the photos rather than after a caption, so .dx-duo's own top gap is too much */
 .ab-nums{padding-bottom:var(--sec)}
 .ab-nums .dx-duo{margin-top:26px}
-/* the way on: the free sample and the call, side by side once there is room */
-.ab-acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+/* the way on: centred, like the section titles above it, so the page's last screen is one whole
+   block rather than a left column beside an empty one; the numbers' own foot is the gap above it */
+.ab-next{padding-top:0}
+.ab-next .split-text{justify-items:center;text-align:center}
+.ab-next .split-text p{text-wrap:balance}
+.ab-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:6px}
 @media (min-width:760px){
-  .ab-pics{width:min(46vw,520px);gap:18px}
-  .ab-hero .cat-hero-in{padding-right:calc(var(--pad) + min(46vw,520px) + 40px)}
+  /* the two portraits set the hero's height, and the title stands at their foot: the hero is
+     their height plus its padding, not a 64vh box they float in */
+  .ab-hero{--abw:min(54vw,780px);min-height:0}
+  .ab-hero .cat-pic{align-self:center;padding-block:48px}
+  .ab-pics{width:var(--abw);gap:18px}
+  .ab-hero .cat-hero-in{padding-block:48px;padding-right:calc(var(--pad) + var(--abw) + 40px)}
 }
+@media (min-width:768px){.ab-next .split-text{grid-column:1 / -1}}
 @media (min-width:900px){.ab-two{grid-template-columns:repeat(2,minmax(0,1fr));gap:56px}}
+@media (min-width:1000px){
+  /* the proof wall: each stack's caption at its foot, so his and hers sit on one line */
+  .ab-proof .pf-duo{align-items:stretch}
+  .ab-proof .c-proof{grid-template-rows:auto auto 1fr auto}
+  .ab-proof .c-stack{align-content:start}
+}
+/* below 1220 a card in the pair is too narrow for its numbers to run across, and hers would stack its
+   two trends, so the cards stand one above the other there, as they do on a tablet */
+@media (min-width:1000px) and (max-width:1219px){.ab-nums .dx-duo{max-width:680px;grid-template-columns:minmax(0,1fr)}}
+@media (min-width:1220px){
+  /* the two DEXA cards as equals: one height, the heads on one line, and the sources on one line at
+     the foot. His card has no trends, so its four numbers take that room as a list, one to a row,
+     each figure set larger on the right; the figures themselves are peter_card()'s, unchanged. */
+  .ab-nums .dx-duo{align-items:stretch}
+  .ab-nums .dx-card{display:flex;flex-direction:column}
+  .ab-nums .dx-src{margin-top:auto}
+  .ab-nums .dx-nums.dx-four{flex:1;grid-template-columns:minmax(0,1fr);align-content:stretch}
+  .ab-nums .dx-four .dx-n{grid-template-columns:minmax(0,1fr) auto;align-content:center}
+  .ab-nums .dx-four .dx-v{grid-column:2;grid-row:1 / span 2;align-self:center;font-size:26px}
+  .ab-nums .dx-four .dx-d{grid-column:1}
+}
 
 /* the homepage's story hands over to about.html here instead of carrying the proof wall itself */
 .st-more{display:flex;justify-content:center;margin:0;padding-top:34px;padding-bottom:var(--sec)}

@@ -625,16 +625,17 @@ def her_pairs(caption, cls='', unnamed='My wife'):
             '</figure>')
 
 
-def her_text(label='Who runs this shelf', level=2, tid='her-title'):
+def her_text(label='Who runs this shelf', level=2, tid='her-title', title=None):
     """Yenni in words: who she is, when her photos were taken, and what changed. Shared by the Women's
-    Health shelf (through her_story) and by about.html, which gives it its own eyebrow and heading id."""
+    Health shelf (through her_story) and by about.html, which puts her under its own "Who we are"
+    heading: no eyebrow (label=None), her name as the heading (title) one level down, and its id."""
+    label_p = f'<p class="label">{label}</p>\n        ' if label else ''
     return f'''<!-- DRAFT-COPY --><div class="her-text grow">
-        <p class="label">{label}</p>
-        <h{level} id="{tid}">{her_says('{n}’s story', 'Her story')}</h{level}>
+        {label_p}<h{level} id="{tid}">{title or her_says('{n}’s story', 'Her story')}</h{level}>
         <p class="her-lead">{her_says('{full} runs the women’s side of Aspire Health. She’s Peter’s wife.', 'She’s Peter’s wife, and she runs the women’s side of Aspire Health.')}</p>
         <p>Their daughter was born in September 2025. {her_says('{n}', 'She')} started lifting with progressive overload while she was pregnant.</p>
         <p>Her before photos are from November 2025, two months postpartum, so they include the body fat a pregnancy adds. Her afters are from July 2026.</p>
-        <h3 class="her-h">What changed</h3>
+        <h{level + 1} class="her-h">What changed</h{level + 1}>
         <p>Not one thing, but her whole plan:</p>
         <ul class="c-list">
           <li>Progressive overload: lifting a little more over time</li>
@@ -646,22 +647,21 @@ def her_text(label='Who runs this shelf', level=2, tid='her-title'):
       </div><!-- /DRAFT-COPY -->'''
 
 
-def peter_text(label='Who we are', level=2, tid='his-title'):
+def peter_text(level=3, tid='his-title'):
     """Peter in words, in his own voice: the bio line he wrote for the call, what Aspire Health is, and
-    his fifteen months in the same four-bullet shape as hers. about.html only."""
+    what changed over his fifteen months. The bullets are built from his own lines in the story (his
+    food, someone who pushed him, his sleep through the newborn nights, the supplement testing) without
+    repeating any of them word for word. about.html only, under its "Who we are" heading, beside hers."""
     return f'''<div class="her-text grow">
-        <p class="label">{label}</p>
-        <h{level} id="{tid}">Peter’s story</h{level}>
+        <h{level} id="{tid}">Peter</h{level}>
         <!-- PETER-COPY --><p class="her-lead">I’m Peter — husband, dad to a baby girl, and a Lincoln local. My wife’s as obsessed with biohacking and longevity as I am.</p><!-- /PETER-COPY -->
         <!-- DRAFT-COPY --><p>Aspire Health is the two of us, out of Lincoln, California. {her_says('{n}', 'My wife')} runs the women’s side; the rest is mine.</p>
-        <p>My before and after are fifteen months apart, front, side and back.</p>
-        <h3 class="her-h">What changed</h3>
-        <p>Not one thing, but the whole plan:</p>
+        <h{level + 1} class="her-h">What changed</h{level + 1}>
         <ul class="c-list">
-          <li>Lifting hard, with progressive overload</li>
-          <li>Counting calories</li>
-          <li>Testing supplement after supplement to find what worked</li>
-          <li>The same wake-up and the same bedtime</li>
+          <li>Lifting hard, with someone who pushed me</li>
+          <li>Fixing my food, which meant counting calories</li>
+          <li>Trying supplements myself until I knew what was worth taking</li>
+          <li>Making the most of my sleep, newborn nights included</li>
         </ul>
         <p class="her-fine">Individual results vary.</p><!-- /DRAFT-COPY -->
       </div>'''
@@ -1414,7 +1414,7 @@ def main():
             '{{PAGE_URL}}': BASE + 'about.html',
             '{{ABOUT_TAG}}': ABOUT_TAG, '{{ABOUT_SUB}}': ABOUT_SUB,
             '{{ABOUT_PORTRAITS}}': about_portraits(),
-            '{{ABOUT_HIS}}': peter_text(), '{{ABOUT_HERS}}': her_text('Who runs the women’s side'),
+            '{{ABOUT_HIS}}': peter_text(), '{{ABOUT_HERS}}': her_text(None, 3, 'her-title', her_says('{n}', 'My wife')),
             '{{ABOUT_PROOF}}': proof_wall(), '{{ABOUT_DEXA}}': dexa_cards(),
             '{{PCARD}}': ''}).items():
         page = page.replace(k, v)
