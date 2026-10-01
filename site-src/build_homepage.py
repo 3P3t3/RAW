@@ -516,6 +516,9 @@ HER_DEXA = {
 }
 # The before/after photos in assets/her/ (placed by hand; CLAUDE.md): their own dates, not the scans'
 HER_PHOTOS = ('Nov 2025', 'Jul 2026')
+# Peter's before/after are labelled by month of his fifteen, not by calendar date: his choice (2026-10-01).
+# The proof wall shows them where Yenni's dates go, and the story's Before/After tags carry them too.
+PETER_PHOTOS = ('Month 1', 'Month 15')
 
 MONTHS = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split()
 
@@ -638,17 +641,17 @@ def her_pairs(caption, cls='', unnamed='My wife'):
 
 
 def her_text(label='Who runs this shelf', level=2, tid='her-title', title=None):
-    """Yenni in words: who she is, when her photos were taken, and what changed. Shared by the Women's
+    """Yenni in words, in the first person (Peter asked for it on 2026-10-01; it stays DRAFT until she has read
+    it): who she is, when her photos were taken, and what changed. Shared by the Women's
     Health shelf (through her_story) and by about.html, which puts her under its own "Who we are"
     heading: no eyebrow (label=None), her name as the heading (title) one level down, and its id."""
     label_p = f'<p class="label">{label}</p>\n        ' if label else ''
     return f'''<!-- DRAFT-COPY --><div class="her-text grow">
         {label_p}<h{level} id="{tid}">{title or her_says('{n}’s story', 'Her story')}</h{level}>
-        <p class="her-lead">{her_says('{full} runs the women’s side of Aspire Health. She’s Peter’s wife.', 'She’s Peter’s wife, and she runs the women’s side of Aspire Health.')}</p>
-        <p>Their daughter was born in September 2025. {her_says('{n}', 'She')} started lifting with progressive overload while she was pregnant.</p>
-        <p>Her before photos are from November 2025, two months postpartum, so they include the body fat a pregnancy adds. Her afters are from July 2026.</p>
+        <p class="her-lead">{her_says('I’m {n} — Peter’s wife, and I run the women’s side of Aspire Health.', 'I’m Peter’s wife, and I run the women’s side of Aspire Health.')}</p>
+        <p>Our daughter was born in September 2025. I started lifting with progressive overload while I was pregnant.</p>
+        <p>My before photos are from November 2025, two months postpartum, so they include the body fat a pregnancy adds. My afters are from July 2026.</p>
         <h{level + 1} class="her-h">What changed</h{level + 1}>
-        <p>Not one thing, but her whole plan:</p>
         <ul class="c-list">
           <li>Progressive overload: lifting a little more over time</li>
           <li>Counting calories</li>
@@ -667,15 +670,15 @@ def peter_text(level=3, tid='his-title'):
     return f'''<div class="her-text grow">
         <h{level} id="{tid}">Peter</h{level}>
         <!-- PETER-COPY --><p class="her-lead">I’m Peter — husband, dad to a baby girl, and a Lincoln local. My wife’s as obsessed with biohacking and longevity as I am.</p><!-- /PETER-COPY -->
-        <!-- DRAFT-COPY --><p>Aspire Health is the two of us, out of Lincoln, California. {her_says('{n}', 'My wife')} runs the women’s side; the rest is mine.</p>
+        <!-- DRAFT-COPY --><p>Aspire Health is the two of us, out of Lincoln, California. {her_says('{n}', 'My wife')} runs the women’s side; the rest is mine.</p><!-- /DRAFT-COPY -->
         <h{level + 1} class="her-h">What changed</h{level + 1}>
-        <ul class="c-list">
+        <!-- PETER-COPY: approved 2026-10-01 --><ul class="c-list">
           <li>Lifting hard, with someone who pushed me</li>
           <li>Fixing my food, which meant counting calories</li>
           <li>Trying supplements myself until I knew what was worth taking</li>
           <li>Making the most of my sleep, newborn nights included</li>
-        </ul>
-        <p class="her-fine">Individual results vary.</p><!-- /DRAFT-COPY -->
+        </ul><!-- /PETER-COPY -->
+        <p class="her-fine">Individual results vary.</p>
       </div>'''
 
 
@@ -748,7 +751,8 @@ def his_pairs(caption='Fifteen-month transformation.'):
         f'sizes="(min-width:760px) 680px, calc(100vw - 40px)" width="960" height="640" loading="lazy" '
         f'decoding="async" alt="Peter, before and after, from the {v}">' for v in ('front', 'side', 'back'))
     return (f'<figure class="c-proof pf-his">\n'
-            f'  <p class="pf-who"><span class="pf-name">Peter</span></p>\n'
+            # PETER-COPY: his photos are labelled by month, not date (Peter, 2026-10-01: "month one, month 15")
+            f'  <p class="pf-who"><span class="pf-name">Peter</span> <span class="pf-when">{PETER_PHOTOS[0]} → {PETER_PHOTOS[1]}</span></p>\n'
             '  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>\n'
             f'  <div class="c-stack">{imgs}</div>\n'
             f'  <!-- PETER-COPY --><figcaption>{caption}</figcaption><!-- /PETER-COPY -->\n'
@@ -1129,7 +1133,9 @@ def main():
                 # share link, and the visitor puts it in the cart there (Amway has no add-to-cart link)
                 '          <div class="pcard-acts"><a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Buy on Amway'
                 '<span class="vh"> (opens in a new tab)</span></a>'
-                # DRAFT-COPY. Never "Request a sample": that is the button on Peter's business partner's site
+                # DRAFT-COPY. The buttons say "Ask for a free sample"; the sample section's heading and the game
+                # plan's step 02 say "Request a free sample", Peter's own words. That phrase is also his business
+                # partner's button, and Peter has said that is fine (2026-10-01), so neither is a mistake to fix.
                 f'<a class="btn btn-line pcard-try" id="pcard-try" href="{home}#sample"'
                 + (f' data-home="{home}"' if home else '') + '>Ask for a free sample</a>'
                 # DRAFT-COPY: the script names the plate after it and reads "On your bar" once it is on

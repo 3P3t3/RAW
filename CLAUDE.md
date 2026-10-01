@@ -83,9 +83,13 @@ Generated (never hand-edit; the next build overwrites them):
   the Amway disclosure. It is where the menu's "About us" goes, from every page. The proof used to
   close the homepage's story; Peter moved it here (2026-09-28: it "feels like too much in one thing"),
   and the story's ask carries one link across to this page. One "Who we are" title sits over the pair, with
-  "Peter" and "Yenni" as the headings (her text stays in the third person; his is PETER-COPY), so `her_text`
-  takes `label=None` and a `title`. His four "What changed" bullets are DRAFT, rebuilt from his own story
-  lines, and await his approval. From 760px the hero is as tall as its portraits; from 1220px the two DEXA
+  "Peter" and "Yenni" as the headings, so `her_text` takes `label=None` and a `title`. Both speak in the
+  first person: his lead is PETER-COPY, and Peter asked on 2026-10-01 for hers to be first person too
+  (`her_text`, shared with the Women's Health shelf; it stays DRAFT until Yenni has read it). His four "What
+  changed" bullets were rebuilt from his own story lines and Peter approved them (PETER-COPY, 2026-10-01).
+  His proof-wall pairs are labelled "Month 1 → Month 15" (`PETER_PHOTOS`) in the slot where Yenni's
+  "Nov 2025 → Jul 2026" sits, and the story's tags read "Before · Month 1" / "After · Month 15": months of
+  his fifteen, never calendar dates, which is his choice. His caption "Fifteen-month transformation." stays. From 760px the hero is as tall as its portraits; from 1220px the two DEXA
   cards are one height with their heads aligned (his four numbers one per row), and between 1000 and 1219px
   they stack. The closing block is centred. Generated, never hand-edited.
 - `category-daily-foundations.html`, `-energy-focus.html`, `-everyday-health.html`, `-fat-loss.html`,
@@ -279,7 +283,8 @@ The homepage runs hero → `#how` (the five-step game plan) → `#goals` (the pl
 every width; the scroll-scrubbed can pour behind them is `TRENDING_POUR`, off) → `#story` → `#my-stack`
 → `#consult`. The calculator moved up beside the free sample on 2026-10-01 (the game plan offers it as the
 alternative: "or run your macros first"); Peter had moved it below the story on 2026-09-26 because it "came
-too early" straight after the shelves, so that call is his. Because the consult no longer follows it, the
+too early" straight after the shelves; shown it again with the critic's score for it there (9/10), he chose
+to keep it beside the sample (2026-10-01). Because the consult no longer follows it, the
 automatic glide after "See my numbers" only runs when `#consult` directly follows the calculator's section;
 the result card's own "Book a free call" carries the numbers into the form. `#story` is a sticky, scroll-scrubbed stage telling Peter's 15 months in
 beats, in three movements ("Fatigue was a constant." / "Here's what I changed." / "Here's what I
