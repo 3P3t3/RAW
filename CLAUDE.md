@@ -132,7 +132,8 @@ if it was opened without noopener, and the first opens with noopener on purpose 
 opens a new tab. The panel scrolls to its top on every phase change, so its new lead is what shows. The
 credit line says Amway credits the order to Peter, the buyer pays Amway's normal price (Peter confirmed),
 and there is no code to enter. The rack points to it twice once a plate is loaded: the rack guide's step 3
-("Order it on Amway, …", `.rg-amway`) and a slim `.rk-amway` button in each open bay; both work `#sa-go`,
+("Order it on Amway, …", `.rg-amway`, which is plain text, an `<a>` with no href, until a plate is loaded:
+`amwaySync()` gives it its href on the same state that shows `.rk-amway`) and a slim `.rk-amway` button in each open bay; both work `#sa-go`,
 through `toAmway()` in the rack block. The product card's own button reads "Buy on Amway", never "Add to
 cart": it opens the product's page. The products offered
 are read back out of the rack's own panels (`#rk-p-<slug> .bay-go`, href moved to `data-href` by the
@@ -292,7 +293,10 @@ notice now.", his own phrases for them): his before, one growing shelf with thre
 fourth that lands the last two packs together, then the before becoming the after and his family,
 "That's what this call is for" with a "Book a free call" button and, under it, the one link across to
 `about.html` ("See Yenni's results and both our DEXA scans", DRAFT, `.st-more` inside the ask beat), which
-carries the proof wall and the DEXA cards. Nothing sits between `#st-run` and `#my-stack`.
+carries the proof wall and the DEXA cards. Nothing sits between `#st-run` and `#my-stack`. The pinned strip
+is Peter's only while `#st-run` crosses the strip's foot AND still reaches the window's foot (two one-pixel
+IntersectionObserver lines in `line()`): the moment the run ends and "That's my stack" starts coming up, it
+hands back to the visitor's own stack, or steps aside if they have none.
 The wall is not on the homepage any more (Peter, 2026-09-28: it "feels like too much in one thing"), and
 the menu's "About us" is the way to it from anywhere and from any shelf page — the site is not getting a
 third fixed layer for it. The story replaced the old `#hydrate` band (its water line now lives in the
@@ -358,7 +362,7 @@ whole panel (Peter, 2026-09-28: tapping a plate must show "where the items actua
 **The rest of the homepage.** The bottom tab (`.mtab`) is phones and tablets only: hidden whole from 1024 up,
 where the header nav already carries MACROS. The quick-call card that sat under the sample form is gone;
 `#quick-call` now marks the consult's `.wrap.split` until a sample is sent, when the script hands the id to the
-thank-you's call invitation, so the game plan's step 05 link still lands. The sample form's shelf picker uses
+thank-you's call invitation, so the game plan's step 05 link still lands. From 768 the sample section's text is centred vertically against its card. The sample form's shelf picker uses
 container queries so the ten sit evenly (two a row on phones, five on the desktop card). From 1024 the booking
 card fits 1440x900 under the masthead (745px, 797 with the summary showing) with every question and option
 unchanged: re-measure if one is added or reworded.
