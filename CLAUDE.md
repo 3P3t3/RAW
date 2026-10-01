@@ -82,17 +82,25 @@ Generated (never hand-edit; the next build overwrites them):
   (`proof_wall`: his three pairs and her two), both DEXA cards, then the free sample and the call with
   the Amway disclosure. It is where the menu's "About us" goes, from every page. The proof used to
   close the homepage's story; Peter moved it here (2026-09-28: it "feels like too much in one thing"),
-  and the story now ends at the family beat with one link across to this page. Generated, never hand-edited.
+  and the story's ask carries one link across to this page. One "Who we are" title sits over the pair, with
+  "Peter" and "Yenni" as the headings (her text stays in the third person; his is PETER-COPY), so `her_text`
+  takes `label=None` and a `title`. His four "What changed" bullets are DRAFT, rebuilt from his own story
+  lines, and await his approval. From 760px the hero is as tall as its portraits; from 1220px the two DEXA
+  cards are one height with their heads aligned (his four numbers one per row), and between 1000 and 1219px
+  they stack. The closing block is centred. Generated, never hand-edited.
 - `category-daily-foundations.html`, `-energy-focus.html`, `-everyday-health.html`, `-fat-loss.html`,
   `-hydration.html`, `-protein.html`, `-recovery.html`, `-skin-redefined.html`, `-womens-health.html`,
   `-mens-health.html` — ten shelves. Everyday Health (2026-10-01) is the tenth: Cholesterol Health,
   Liver Support, Heart Health CoQ10 and Cellular Aging Support, the four that fitted none of the other
-  nine. Its plate is the satin petrol #2B4E58 at rank 9, so the rack is two a row on a phone (five even
-  rows), three and a lone tenth from 768 to 1023, and two rows of five from 1024; the pinned bar carries
-  ten at 320 with room for about four more before its shaft hits the minimum. Its hero banner,
-  `assets/bg-everyday-health.webp`, is a placeholder (the Cellular Aging Support bottle on a petrol
-  field, the bottle cropped clear of its award badge and props): a real photo drops in by overwriting
-  that one file. Nothing on it carries fact chips, because amway.com is blocked to us.
+  nine. Its plate is a satin garnet, #80222F, at rank 9 (it was petrol #2B4E58 until 2026-10-01, which on
+  the barbell and in the "Your stack" key read as the same dark mark as Men's green; the PLATES comment has
+  the measurements). The rack is two a row on a phone (five even rows), three and a lone tenth from 768 to
+  1023, and two rows of five from 1024; the pinned bar carries ten at 320 with room for about four more
+  before its shaft hits the minimum. Its copy is count and dose off each pack's own label and never what it
+  does (CoQ10 is the one ingredient named, the only one printed legibly on any of the four); its plate line is
+  "Day in, day out". Its banner is described below. Nothing on it carries fact chips, because amway.com is
+  blocked to us. The Protein shelf was "Protein Snack Pack" until 2026-10-01; Peter approved "Protein".
+  On every shelf page "Keep looking" is rows on a phone and a tile grid from 768 (two across, three from 1024).
 - `style.css`, `assets/products/`, `assets/cutouts/`, `assets/.cut-version`
 
 `docs/macro-calculator.md` records the homepage macro calculator: where the maths came from, every
@@ -113,10 +121,21 @@ inside `.mys-has` under "Build yours." on the homepage only, and shows only when
 loaded and `<dialog>` is supported; the modal shell comes from `stack_dialog()` in the build and is
 filled by `_script.html`. There is no add-to-cart-by-URL at Amway (the only addresses are product and
 category pages), so the panel is: pick (every product ticked, untick to drop) → `window.open` the first
-one through its share link → a checklist of the rest to add in that same Amway tab. The products offered
+one through its share link → a checklist of the rest, where each "Add" opens that product's share link on
+Amway in a new tab and ticks its row (a tick can still come off by hand; "Open again" on the first row never
+unticks). They cannot share one named tab: measured in Chrome 2026-10-01, a named target reaches a tab only
+if it was opened without noopener, and the first opens with noopener on purpose — so the copy says each
+opens a new tab. The panel scrolls to its top on every phase change, so its new lead is what shows. The
+credit line says Amway credits the order to Peter, the buyer pays Amway's normal price (Peter confirmed),
+and there is no code to enter. The rack points to it twice once a plate is loaded: the rack guide's step 3
+("Order it on Amway, …", `.rg-amway`) and a slim `.rk-amway` button in each open bay; both work `#sa-go`,
+through `toAmway()` in the rack block. The product card's own button reads "Buy on Amway", never "Add to
+cart": it opens the product's page. The products offered
 are read back out of the rack's own panels (`#rk-p-<slug> .bay-go`, href moved to `data-href` by the
 product-card block), never a second table in Python — so a new shelf needs nothing here and the links can
-never drift from `share-links.csv`. Ticks live in `sessionStorage` (`aspire-amway-done`).
+never drift from `share-links.csv`. `sessionStorage` holds `aspire-amway-done` (the ticks) and
+`aspire-amway-run` (`{off, first}`: the picks left out and the one opened first), so a reopened checklist is
+the one the visitor started.
 
 `index.html` is a hand-written redirect to `homepage.html` and is not generated.
 
@@ -124,7 +143,10 @@ never drift from `share-links.csv`. Ticks live in `sessionStorage` (`aspire-amwa
 that was generated rather than shot or licensed: fal-ai/flux-pro/v1.1-ultra, 2026-10-01, from
 `~/Desktop/aspiree/tools/jobs-everyday-banner3.json` (three passes; passes 1 and 2 missed the house look and
 their prompts say how). It is four clear glass columns in an even row on sand against a deep petrol wall —
-the same still-life language as the seven shot banners, and what the shelf means. It carries no product, no
+the same still-life language as the seven shot banners, and what the shelf means. Its petrol wall no longer
+matches the shelf's plate (now garnet). A Fable critic scored it 3/10 (2026-10-01: centred, all in focus, no
+dispersion, and its pale horizon runs through the shelf name on a phone); Peter has parked it, so leave it
+until he asks. It carries no product, no
 pack and no lettering, so nothing in it can read as a claim. It is centre-cropped to 16:9 and resized once to
 1600x900, WebP q78; the frame it came from is kept at
 `~/Desktop/aspiree/assets/generated/raw-site/everyday-banner-v3-1.jpg`. It is placed by hand, so the build
@@ -146,7 +168,12 @@ x 0-1080 and y 226-1576, clear of the screenshot's black band on rows 0-6, with 
 the top and the baby's feet whole; converted P3 to sRGB so the colours hold once the profile is
 gone; then a uniform Lanczos resize. No retouching, no exposure or white-balance change, and no
 metadata: each file is a bare VP8 chunk (no EXIF, XMP or ICC). Peter chose to make them public; the repo is public because Pages
-requires it.
+requires it. `face-96.webp` / `face-192.webp` are the homepage hero's round portrait (`.hero-me`, beside
+the PETER-COPY fragment "I'm Peter — husband, dad to a baby girl, and a Lincoln local." and a DRAFT "My
+story" link to `#story`): the box (360,80)-(720,440) of `with-daughter-960.webp`, then one Lanczos resize,
+q90, bare VP8. A sliver of their daughter's head shows at its left edge. On phones the hero's label is hidden
+and its headline is 15vw so his face, his line and "See the game plan" all sit on the first screen after the
+curtain (the button's foot is at 831 of 844 at 390x844): any added hero height pushes the button off it.
 
 **What may be edited, and what may not.** Crop, exposure and white balance are always fine. Peter
 has also allowed extending BACKGROUND at the edges when framing needs it (2026-09-25) — plain wall
@@ -247,14 +274,20 @@ shelf pages and podium still use the catalogue images.
 
 ## The story (`#story`)
 
-The homepage runs hero → shelves → `#trending` (the week's three best sellers, all three in view at
-every width; the scroll-scrubbed can pour behind them is `TRENDING_POUR`, off) → `#story` →
-`#macros` → `#consult`. `#story` is a sticky, scroll-scrubbed stage telling Peter's 15 months in
+The homepage runs hero → `#how` (the five-step game plan) → `#goals` (the plate rack) → `#sample` →
+`#macros` → `#trending` (the week's three best sellers, each with its TAGLINES line, all three in view at
+every width; the scroll-scrubbed can pour behind them is `TRENDING_POUR`, off) → `#story` → `#my-stack`
+→ `#consult`. The calculator moved up beside the free sample on 2026-10-01 (the game plan offers it as the
+alternative: "or run your macros first"); Peter had moved it below the story on 2026-09-26 because it "came
+too early" straight after the shelves, so that call is his. Because the consult no longer follows it, the
+automatic glide after "See my numbers" only runs when `#consult` directly follows the calculator's section;
+the result card's own "Book a free call" carries the numbers into the form. `#story` is a sticky, scroll-scrubbed stage telling Peter's 15 months in
 beats, in three movements ("Fatigue was a constant." / "Here's what I changed." / "Here's what I
 notice now.", his own phrases for them): his before, one growing shelf with three product beats and a
 fourth that lands the last two packs together, then the before becoming the after and his family,
-"That's what this call is for" with a "Book a free call" button, then his family, which is where the
-story now ends — with one link across to `about.html`, which carries the proof wall and the DEXA cards.
+"That's what this call is for" with a "Book a free call" button and, under it, the one link across to
+`about.html` ("See Yenni's results and both our DEXA scans", DRAFT, `.st-more` inside the ask beat), which
+carries the proof wall and the DEXA cards. Nothing sits between `#st-run` and `#my-stack`.
 The wall is not on the homepage any more (Peter, 2026-09-28: it "feels like too much in one thing"), and
 the menu's "About us" is the way to it from anywhere and from any shelf page — the site is not getting a
 third fixed layer for it. The story replaced the old `#hydrate` band (its water line now lives in the
@@ -274,6 +307,14 @@ with a small `.st-mv` label in his words. All of them are his verbatim except on
 the one that folds the old morning-routine and smoother-energy beats into one and still links Daily
 Foundations and Energy & Focus. The strip sits over the beats (`z-index`), so its links can be
 tapped, and the script gives it `.is-off` once it has faded so the ask's own button takes the tap.
+Its edges fade over `--cap-fade` (about one and a half caption lines; 72px at desktop, registered with
+`@property` so the script can read it), and the script also writes each caption's own opacity per frame, so a
+line recedes rather than being sliced at the strip's edge. The strip fades in as the stage arrives, so the
+first pinned screen carries "Fatigue was a constant." with his before photo. At desktop it starts below the
+pinned bar, the before/after and family photos fill the stage height (up to 760px, never more than half the
+stage's width; 495x660 at 1440x900), and the ask is set in the captions' display type, centred.
+`family-320.webp` is only 320x400, so at desktop it is enlarged and soft; a sharper cut would come from
+Peter's originals.
 Without the stage it is a plain block of his six lines with their links, straight after his before,
 so a no-JS reader gets the whole story in his words and then the pictures it is about.
 Each pack carries `data-cat`, the shelf whose plate it puts on the pinned bar, so one beat can load
@@ -283,20 +324,39 @@ slide apart under the closing line, so the bar still reaches PETER'S · 5 OF 5.
 The five packs all rest at `data-tilt="0"`: they stand straight in the group that gathers on stage,
 and the only turn left is the fall's own lean (`DROP.lean`), which unwinds to nothing at the landing.
 
-Its pace lives in two places: the `HOLD` table and the per-change lengths in the story block of
-`_script.html`, and the run height (400lvh) in `style.css`. `HOLD` is
-`[.45, .25, .25, .25, .25, .85, .3, 2.6]` with `TT` (the change INTO each beat)
+Its pace lives in the story block of `_script.html`: the `HOLD` table and the per-change lengths. A unit is
+`UNIT=.33` of the stage (~278px at 844), and the script sets `#st-run`'s height in px on every resize; the
+350lvh in `style.css` is only the fallback until it measures. `HOLD` is
+`[.45, .25, .25, .25, .25, .85, .3, <measured>]` with `TT` (the change INTO each beat)
 `[0, .6, .45, .45, .45, .6, .45, .9]`: his before, the four pack beats, the turn, his family, the
 ask. Every hold but two is short, because nothing waits for a line to be read — the strip is already
 showing it — and a hold is only the moment a picture stands on its own. The two long ones are the
-turn (.85, the wipe plays inside it) and the ask (2.6, ~723px at 390x844, so every flick through the
-end of the story comes to rest on "Book a free call" with the button whole on screen). Changing any of these means re-running the
+turn (.85, the wipe plays inside it) and the ask, whose hold is measured per resize: the hold plus the
+button's own way off the screen equals `FLICK` (780px), never less than `CALLMIN` (.8 units). That is ~316px
+at 390x844 (run 2976px) and 246px at 1440x900 (run 3082px), and it is what makes every 700px flick that enters
+the ask come to rest with "Book a free call" whole on screen (re-measured on merged main 2026-10-01: a window of
+780px at 390x844 and 760px at 1440x900, 30/30 flicks each). Changing any of these means re-running the
 flick test before shipping. The stage renders from an eased copy of the scroll position with
 a speed cap and a backlog clamp, so a fast flick still plays each fall; it is still a pure function
 of scroll, so scrolling back plays it backwards. Transforms and opacity only (a full scrub costs 0
 layouts); keep it that way. Reduced motion and no JavaScript get the same beats as a plain vertical
 sequence. It was tuned over four Fable review rounds; the rounds are tagged `story-round-0` to
 `story-round-3`, and `PRE-STORYBOARD` is the site before it.
+
+**The rack (`#goals`).** Tapping a plate opens its bay directly under that plate's ROW: `.rack` is the flex
+container, `.rk-plates` is `display:contents` with `role="list"`, and `place()` in the rack block sets only
+`order` (the open panel 1, the plates after its row 2), reading the row length from `--cols`. There is one copy
+of each panel, so ids and aria stay single and Tab still goes plate → its panel. A notch on the panel's top edge
+points at the plate. `show()` brings the plate and its packs into view together when they fit, otherwise the
+whole panel (Peter, 2026-09-28: tapping a plate must show "where the items actually are").
+
+**The rest of the homepage.** The bottom tab (`.mtab`) is phones and tablets only: hidden whole from 1024 up,
+where the header nav already carries MACROS. The quick-call card that sat under the sample form is gone;
+`#quick-call` now marks the consult's `.wrap.split` until a sample is sent, when the script hands the id to the
+thank-you's call invitation, so the game plan's step 05 link still lands. The sample form's shelf picker uses
+container queries so the ten sit evenly (two a row on phones, five on the desktop card). From 1024 the booking
+card fits 1440x900 under the masthead (745px, 797 with the summary showing) with every question and option
+unchanged: re-measure if one is added or reworded.
 
 A product can sit on more than one shelf: a shelf page lists everything its own `CATEGORIES` entry
 names, while `cat_of` stays each product's single home shelf (its card tag). XS Creatine+ is on both
