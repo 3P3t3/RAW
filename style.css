@@ -1733,7 +1733,11 @@ html:not(.js) .lbpin{display:none}
    panel is open wears an outline ring. */
 .rack-sec .sec-head{margin-bottom:22px}
 .rk-hint{font:500 16px/1.4 var(--sans);color:var(--text)}
-.rk-plates{--cols:2;--gap:18px;list-style:none;margin:0 auto;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:20px var(--gap);max-width:344px}
+/* the plates and the panels wrap in one row: the list steps aside (display:contents, its role kept by
+   role="list"), so a panel can go in under the row of the plate that opened it. The script sets
+   `order` (the open panel 1, the plates after its row 2); without it every panel follows the ten. */
+.rack{--cols:2;--gap:18px;display:flex;flex-wrap:wrap;justify-content:center;gap:20px var(--gap);max-width:344px;margin:0 auto}
+.rk-plates{display:contents;list-style:none}
 .rk-plates li{flex:0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));min-width:0}
 .rk-plate{position:relative;display:block;width:100%;aspect-ratio:1;margin:0;padding:0;border:0;border-radius:50%;background:none;
   color:var(--t);container-type:inline-size;-webkit-tap-highlight-color:transparent}
@@ -1788,24 +1792,37 @@ html:not(.js) .lbpin{display:none}
   inset 0 0 0 max(.5px,.5cqi) rgba(0,0,0,.2),0 max(3px,3.4cqi) 0 color-mix(in srgb,var(--c) 50%,#0B1115),0 0 0 calc(max(3px,3.4cqi) + 3px) var(--chalk),0 0 0 calc(max(3px,3.4cqi) + 5.5px) var(--teal),0 16px 22px -12px rgba(0,20,27,.6)}
 @media (hover:hover){.rk-plate:hover .rk-disc{transform:translate3d(0,-3px,0)}.rk-plate:hover::before{opacity:.7;transform:scale(.94)}}
 .rk-plate:active .rk-disc{transform:translate3d(0,1px,0)}
-.rk-panel{margin-top:24px;padding:18px 18px 6px;border-radius:18px;background:color-mix(in srgb,var(--sand) 45%,var(--chalk));
+.rk-panel{position:relative;flex:0 0 100%;min-width:0;margin:4px 0;padding:18px 18px 6px;border-radius:18px;background:color-mix(in srgb,var(--sand) 45%,var(--chalk));
   box-shadow:inset 0 5px 0 var(--c),inset 0 0 0 1px rgba(0,20,27,.08)}
+/* a notch in the plate's colour on the panel's top edge, under the plate it belongs to (--x, set by
+   the script as it places the panel) */
+.rk-panel.is-at::before{content:"";position:absolute;top:-9px;left:calc(var(--x) - 10px);border:solid transparent;border-width:0 10px 10px;border-bottom-color:var(--c)}
 .rk-head{display:grid;gap:5px;margin:4px 0 14px}
 .rk-title{font:800 28px/.95 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
 .rk-sub{font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
 .rk-acts{display:flex;flex-wrap:wrap;align-items:center;gap:4px 24px;margin-top:14px}
 .rk-load{flex:1 1 100%}
 .rk-load[aria-pressed="true"]{background:transparent;color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+/* "Take my stack to Amway": slim, a link's weight beside "See all", shown once a plate is on the bar */
+.rk-amway{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:4px 0 8px;padding:0;border:0;background:none;cursor:pointer;
+  font:700 15px/1.2 var(--sans);color:var(--blue);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
+.rk-amway[hidden]{display:none}
+@media (hover:hover){.rk-amway:hover{text-decoration-thickness:2.5px}}
+.rk-amway:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
 .motion .rk-panel .bay-pack{animation:pack-in 420ms cubic-bezier(.2,.7,.2,1) calc(60ms + var(--k) * 55ms) backwards}
 html:not(.js) .rk-panel[hidden]{display:block!important}
 @media (prefers-reduced-motion:reduce){.rk-disc,.rk-plate::before{transition:none}}
 @media (min-width:768px){
-  .rk-plates{--cols:3;max-width:560px;gap:22px var(--gap)}
+  .rack{--cols:3;max-width:560px;gap:22px var(--gap)}
   .rk-panel{padding:24px 28px 10px}
   .rk-load{flex:none}
   .rk-panel .bay-packs{max-width:560px}
 }
-@media (min-width:1024px){.rk-plates{--cols:5;max-width:880px}}
+@media (min-width:1024px){.rack{--cols:5;max-width:880px}}
+/* from 768 --sec goes 72 -> 112, so this padding and the next section's top one grow 40px each and left a
+   ~250px void under the last row. The rack's bottom padding gives back both (32px), so the gap under the
+   last row is the phone's again: 174px from the plates to the next heading at every width */
+@media (min-width:768px){.rack-sec{padding-bottom:max(24px,calc(var(--sec) - 80px))}}
 
 /* the pinned bar is the story's stack: every beat clears it, as they cleared the case */
 .t-bar .story.is-live .st-beat,.t-bar .story.is-live .st-warm{padding-top:calc(var(--mast) + var(--pin) + 14px)}
