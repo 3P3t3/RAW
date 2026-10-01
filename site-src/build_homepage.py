@@ -286,16 +286,15 @@ PETER = ['protein', 'hydration', 'recovery', 'daily-foundations', 'energy-focus'
 
 # The rack's three-step guide, under "What are we maximizing?" (DRAFT-COPY). The script marks the
 # step the visitor is on (aria-current): 1 until a plate is open, 2 while one is, 3 once one is loaded.
-# Step 3's two links go where the stack is taken: the call and the sample. Its "Amway" is plain text (an
-# <a> with no href: not a link, not in the Tab order) until a plate is on the bar; then the script gives it
-# its href and it opens "Take my stack to Amway", as the rack's own .rk-amway buttons do (amwaySync in
-# _script.html). With nothing loaded it used to fall through to #my-stack and "Nothing on your bar yet".
-# step 3 is Peter's wording (2026-10-01): "add to cart or bring it to a free call or ask for a sample". "Add to
-# cart" is the .rg-amway link: plain text until a plate is loaded, then it opens the Amway panel.
+# Step 3's two links go where the stack is taken: the call and the sample. It named a third way out
+# for one day — an "Add to cart" link that opened an Amway stack panel — until Peter tested
+# that panel against Amway on 2026-10-01 and found a cart only ever holds the one product the link
+# opened: "it won't add it to their cart when they go to check out". The panel went, and step 3 is back
+# to naming the two things that do work.
 RACK_GUIDE = ('<!-- DRAFT-COPY --><ol class="rk-guide" id="rk-guide" role="list" aria-label="How the rack works">'
               '<li class="is-now" aria-current="step"><span class="rg-n" aria-hidden="true">1</span><span class="rg-t">Tap any plate to see the packs on it.</span></li>'
               '<li><span class="rg-n" aria-hidden="true">2</span><span class="rg-t">Load the ones you’d take. They ride up top.</span></li>'
-              '<li><span class="rg-n" aria-hidden="true">3</span><span class="rg-t"><a class="rg-amway">Add to cart</a>, bring it to a <a href="#consult">free call</a>, or ask for a <a href="#sample">sample</a>.</span></li>'
+              '<li><span class="rg-n" aria-hidden="true">3</span><span class="rg-t">Bring it to a <a href="#consult">free call</a>, or ask for a <a href="#sample">sample</a>.</span></li>'
               '</ol><!-- /DRAFT-COPY -->')
 
 # "Trending now": the week's three best sellers, between #macros and #story. It is OFF.
@@ -1211,30 +1210,6 @@ def main():
                 '      </div>\n'
                 '    </dialog>\n')
 
-    def stack_dialog():
-        """"Take my stack to Amway" (#sa): the panel under "Build yours." that turns the plates on the
-        visitor's bar into an order they can actually place. The shell only — _script.html fills the
-        list from the rack's own panels, so the products offered here are the picks the rack already
-        shows and there is no second copy of them, and a tenth shelf needs nothing here. A modal
-        <dialog>: without script, or without dialog support, nothing opens it and the button that
-        would is hidden. All of it is DRAFT-COPY."""
-        return ('    <!-- DRAFT-COPY -->\n'
-                '    <dialog class="sa" id="sa" aria-labelledby="sa-title">\n'
-                '      <div class="sa-in">\n'
-                '        <button class="icon-btn sa-x" type="button" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>\n'
-                '        <h2 class="sa-title" id="sa-title" tabindex="-1">Your stack on Amway</h2>\n'
-                '        <p class="sa-lead" id="sa-lead"></p>\n'
-                '        <p class="sa-why">When you order through my link, Amway credits the order to me \u2014 that\u2019s '
-                'how I get paid. You pay Amway\u2019s normal price, and there\u2019s no code to enter.</p>\n'
-                '        <ul class="sa-list" id="sa-list"></ul>\n'
-                '        <div class="sa-acts"><button class="btn sa-start" id="sa-start" type="button">'
-                'Open the first one on Amway<span class="vh"> (opens in a new tab)</span></button>'
-                '<button class="btn btn-line sa-again" id="sa-again" type="button" hidden>Start over</button>'
-                '<button class="btn btn-line sa-done" id="sa-done" type="button">Close</button></div>\n'
-                '      </div>\n'
-                '    </dialog>\n'
-                '    <!-- /DRAFT-COPY -->\n')
-
     def rack_section():
         """The plate rack: the seven shelves as seven plates, all on show, front on. A plate is a button
         (aria-pressed: its panel is the one showing); its panel has a few of the shelf's packs (each opens
@@ -1261,11 +1236,7 @@ def main():
                 f'          <div class="rk-head"><h3 class="rk-title" id="rk-t-{slug_}">{name}</h3><p class="rk-sub">{SHELF_LINE[slug_]}</p></div>\n'
                 f'          <ul class="bay-packs rk-packs">\n{cells}\n          </ul>\n'
                 f'          <div class="rk-acts"><button class="btn rk-load" type="button" aria-pressed="false" data-cat="{slug_}" hidden>Load this plate</button>'
-                f'<a class="bay-all rk-all" href="category-{slug_}.html">See all {name}<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>'
-                # the way on to an order, from the rack itself: the same panel as "Build yours."'s button.
-                # Hidden until there is a stack and the script can open that panel (_script.html)
-                f'<!-- DRAFT-COPY --><button class="rk-amway" type="button" aria-haspopup="dialog" hidden>Take my stack to Amway'
-                f'<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></button><!-- /DRAFT-COPY --></div>\n'
+                f'<a class="bay-all rk-all" href="category-{slug_}.html">See all {name}<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>\n'
                 f'        </div>')
         return ('  <!-- Shelves as a plate rack: one plate per shelf, all seven at once, nothing moving on its own.\n'
                 '       A plate is a button that shows its shelf\'s panel; "Load this plate" puts it on the visitor\'s\n'
@@ -1325,17 +1296,13 @@ def main():
                             '        <div class="mys-has" hidden><p class="mys-cap"><span class="mys-n">Your stack</span>'
                             '<a class="mys-edit" href="#goals">Change it</a></p>\n'
                             '        <div class="mys-ybar bbx">' + barbell('bb-dk bb-you') + '</div>\n'
-                            '        <ul class="mys-key mys-ykey" aria-label="The plates on yours"></ul>\n'
-                            # the way to actually buy it. Hidden until the script (and <dialog>) can run it, so
-                            # a no-JS visitor — who has no stack either — is never offered it
-                            '        <p class="mys-amway"><button class="btn sa-go" id="sa-go" type="button" aria-haspopup="dialog" hidden>Take my stack to Amway</button></p></div>\n'
+                            '        <ul class="mys-key mys-ykey" aria-label="The plates on yours"></ul></div>\n'
                             '        <p class="mys-none">Nothing on your bar yet. <a href="#goals">Load a plate or two</a> and bring them along.</p>\n'
                             '      </div><!-- /DRAFT-COPY -->\n'
                             '      <!-- DRAFT-COPY --><p class="mys-sub grow" style="--d:3">Fifteen minutes, free. Your macros, what you already take, and the smallest stack that moves your goal.</p>\n'
                             '      <div class="mys-acts grow" style="--d:3"><a class="btn" href="#macros">Work out your macros</a>'
                             '<a class="btn btn-line" href="#consult">Book a free call</a></div>\n'
-                            '    </div>\n  </section>\n'
-                            + stack_dialog()),
+                            '    </div>\n  </section>\n'),
         })
     # the story's stack is the same case in miniature: the same seven compartments, in the same order,
     # empty until the story's packs tuck into them (_script.html measures them; nothing here moves)

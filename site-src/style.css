@@ -1862,12 +1862,6 @@ html:not(.js) .lbpin{display:none}
 .rk-acts{display:flex;flex-wrap:wrap;align-items:center;gap:4px 24px;margin-top:14px}
 .rk-load{flex:1 1 100%}
 .rk-load[aria-pressed="true"]{background:transparent;color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
-/* "Take my stack to Amway": slim, a link's weight beside "See all", shown once a plate is on the bar */
-.rk-amway{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:4px 0 8px;padding:0;border:0;background:none;cursor:pointer;
-  font:700 15px/1.2 var(--sans);color:var(--blue);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
-.rk-amway[hidden]{display:none}
-@media (hover:hover){.rk-amway:hover{text-decoration-thickness:2.5px}}
-.rk-amway:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
 .motion .rk-panel .bay-pack{animation:pack-in 420ms cubic-bezier(.2,.7,.2,1) calc(60ms + var(--k) * 55ms) backwards}
 html:not(.js) .rk-panel[hidden]{display:block!important}
 @media (prefers-reduced-motion:reduce){.rk-disc,.rk-plate::before{transition:none}}
@@ -1970,7 +1964,6 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
 .is-done .rg-n::after,.is-now .rg-n::after{border-color:rgba(255,255,255,.28)}
 .rk-guide a{color:var(--teal);font-weight:650;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px}
 .rk-guide .is-now a{color:var(--blue)}
-.rk-guide a:not([href]){color:inherit;font-weight:inherit;text-decoration:none}   /* step 3's "Amway" until a plate is on the bar: plain text (_script.html amwaySync) */
 @media (prefers-reduced-motion:reduce){.rg-n{transition:none}}
 html:not(.js) .rk-guide{display:none}   /* without script every panel stands open and nothing loads: no steps to follow */
 @media (max-width:359px){.rk-guide li{font-size:14px;align-items:flex-start}.rk-guide .rg-t{padding-top:2px}}
@@ -2351,63 +2344,3 @@ body{background:transparent}
 .st-more .tlink{display:inline;min-height:0}   /* inline, so a line that wraps takes its arrow with its last word */
 .st-more .ic{margin-left:6px;vertical-align:-3px}
 .st-nw{white-space:nowrap}   /* the arrow never stands alone on a line */
-
-/* "Take my stack to Amway": the button under "Build yours." (inside .mys-has, so it is there only
-   once a plate is on the bar) and the panel it opens (#sa, a modal dialog like the product card).
-   The button is [hidden] in the markup until _script.html unhides it, so no script means no button. */
-.mys-amway{display:grid;width:100%;max-width:560px;margin:4px 0 0}
-.mys-amway .btn{width:100%}
-.sa{width:100%;max-width:none;max-height:none;margin:auto 0 0;padding:0;border:0;background:transparent;overflow:visible;color:var(--ink)}
-.sa::backdrop{background:rgba(0,16,22,.62)}
-.sa-in{position:relative;display:grid;justify-items:start;gap:12px;max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;
-  padding:20px 20px 24px;border-radius:16px 16px 0 0;background:var(--sand)}
-.sa-x{position:absolute;z-index:2;top:12px;right:12px;border-radius:50%;background:rgba(244,242,236,.7);color:var(--teal)}
-.sa-x:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
-.sa-title{margin:0;padding-right:50px;font:800 26px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal);text-wrap:balance}
-.sa-title:focus{outline:none}
-.sa-lead,.sa-why{margin:0;max-width:46ch;font:500 15px/1.45 var(--sans);color:var(--ink)}
-.sa-why{padding:10px 12px;border-radius:10px;background:rgba(0,46,59,.07);font-size:14px;color:var(--teal)}
-.sa-list,.sa-sub{list-style:none;margin:0;padding:0;width:100%}
-.sa-list{display:grid;gap:14px}
-.sa-sub{display:grid;gap:8px}
-.sa-sh{display:flex;align-items:center;gap:8px;margin:0 0 8px;font:600 11px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--teal)}
-.sa-sh i{flex:none;width:5px;height:15px;border-radius:2px/3px;background:var(--c,var(--teal));box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
-.sa-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:6px 8px;border-radius:12px;background:rgba(244,242,236,.6)}
-.sa-row.is-done{background:rgba(0,46,59,.1)}
-.sa-tick{flex:1 1 180px;display:flex;align-items:center;gap:10px;min-height:44px;cursor:pointer}
-.sa-tick input{appearance:none;-webkit-appearance:none;position:relative;flex:none;width:22px;height:22px;margin:0;border-radius:5px;
-  background:var(--chalk);box-shadow:inset 0 0 0 1.5px rgba(0,46,59,.5)}
-.sa-tick input:checked{background:var(--teal);box-shadow:inset 0 0 0 1.5px var(--teal)}
-.sa-tick input:checked::after{content:"";position:absolute;left:5px;top:5px;width:11px;height:6px;border:solid var(--sand);border-width:0 0 2px 2px;transform:rotate(-45deg)}
-.sa-tick input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
-.sa-thumb{flex:none;display:block;width:44px;height:44px}
-.sa-thumb img{display:block;width:100%;height:100%;object-fit:contain}
-.sa-txt{display:grid;gap:1px}
-.sa-nm{font:650 15px/1.2 var(--sans);color:var(--ink)}
-.sa-kd{font:500 12px/1.3 var(--sans);color:var(--text)}
-.sa-add{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:var(--r);
-  background:var(--teal);color:var(--sand);font:600 14px/1.2 var(--sans);text-decoration:none}
-.sa-add:active{opacity:.85}
-.sa-badge{display:inline-flex;align-items:center;min-height:24px;padding:0 9px;border-radius:999px;background:var(--teal);color:var(--sand);
-  font:600 10px/1.3 var(--sans);letter-spacing:.12em;text-transform:uppercase}
-.sa-row.is-done .sa-badge{background:rgba(0,46,59,.72)}
-.sa-row.is-first .sa-badge{order:-1;flex:1 1 100%}
-.sa-acts{position:sticky;bottom:-24px;z-index:1;justify-self:stretch;display:flex;flex-wrap:wrap;gap:10px;width:auto;margin:0 -20px -24px;padding:12px 20px 24px;background:var(--sand);box-shadow:0 -12px 16px -12px rgba(0,22,29,.35)}
-.sa-acts .btn{flex:1 1 100%}
-.sa-start.is-off{opacity:.55}
-@media (min-width:700px){
-  .sa{max-width:600px;margin:auto}
-  .sa-in{max-height:calc(100dvh - 72px);border-radius:16px}
-  .sa-acts{border-radius:0 0 16px 16px}
-  .sa-title{font-size:36px}
-  .sa-acts .btn{flex:1 1 auto}
-}
-.sa-row.is-out{background:transparent;box-shadow:inset 0 0 0 1px var(--line)}
-.sa-row.is-out .sa-nm,.sa-row.is-out .sa-kd{color:var(--text)}
-.sa-row.is-out .sa-thumb{opacity:.5}
-/* the panel is a sand sheet, wherever it is in the page: say so, rather than inherit a dark
-   section's chalk heading, sand line button and sand focus ring */
-.sa .sa-title{color:var(--teal)}
-.sa .btn-line{color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
-.sa :focus-visible{outline:2px solid var(--teal);outline-offset:2px}
-.sa .sa-title:focus,.sa .sa-title:focus-visible{outline:none}

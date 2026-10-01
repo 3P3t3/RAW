@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=9ced1d38">
+<link rel="stylesheet" href="../style.css?v=a923fd37">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -543,7 +543,7 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#s-next,#sample-go,.bay-in,.rk-panel,.mys-amway,.mys-acts,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#s-next,#sample-go,.bay-in,.rk-panel,.mys-acts,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -1824,7 +1824,7 @@ var LB=null;
       b.textContent=on?'Take it off the bar':'Load this plate';
     });
     if(cform)cLead.line=stack.length?'Interested in: '+stack.map(function(c){return NAME[c]}).join(', ')+'.':'';
-    guide();mysYou();cardSync();amwaySync();
+    guide();mysYou();cardSync();
     html.classList.toggle('has-stack',stack.length>0);
     if(newest)capNew.textContent='+ '+NAME[newest];
     /* the strip comes up (or goes) and the newest plate flashes on it; behind the product card
@@ -1944,28 +1944,6 @@ var LB=null;
     b.hidden=false;
     b.addEventListener('click',function(){toggle(b.getAttribute('data-cat'))});
   });
-  /* from the rack straight to "Take my stack to Amway" (#sa), the panel under "Build yours.": each
-     open panel's "Take my stack to Amway", once a plate is on, and step 3's "Amway" link. Both work the
-     panel's own button (#sa-go), so the panel stays the one place that knows how; it hands focus back
-     to that button as it closes, and these take it back so the visitor is where they left from. Step 3's
-     "Amway" is plain text (no href, so not a link and not in the Tab order) until those buttons show,
-     and a link to #my-stack while they do; the panel's button takes the click. A browser without
-     <dialog> never sees the button, and its step 3 keeps "Amway" as plain text. */
-  var saGo=$('#sa-go'),saDlg=$('#sa'),saOK=!!(saGo&&saDlg&&typeof saDlg.showModal==='function'),
-      rkAms=rack?$$('.rk-amway',rack):[],rgAms=$$('#rk-guide .rg-amway');
-  function toAmway(from){
-    if(!saOK||!stack.length||saGo.hidden)return false;
-    saGo.click();
-    if(saDlg.open)saDlg.addEventListener('close',function(){from.focus({preventScroll:true})},{once:true});
-    return true;
-  }
-  function amwaySync(){
-    var on=saOK&&stack.length>0;
-    rkAms.forEach(function(b){b.hidden=!on});
-    rgAms.forEach(function(a){if(on)a.setAttribute('href','#my-stack');else a.removeAttribute('href')});
-  }
-  rkAms.forEach(function(b){b.addEventListener('click',function(){toAmway(b)})});
-  rgAms.forEach(function(a){a.addEventListener('click',function(e){if(a.hasAttribute('href')&&toAmway(a))e.preventDefault()})});
   /* the call form's note: the bar's line goes in when the form is reached, and again after the stack
      changes, only over an empty note or one that still says what the site last wrote there (the
      calculator's macros line rides behind it); the visitor's own words are never touched */
@@ -2048,7 +2026,6 @@ var LB=null;
   function wr(el,k,tf,op){var v=tf+'|'+op;if(keys[k]===v)return;keys[k]=v;el.style.transform=tf;el.style.opacity=op}
   LB={cats:PC,
     card:function(c){cCat=c;cardSync()},
-    stack:function(){return stack.slice()},   /* the plates on the bar, in the order they went on */
     measure:function(){var cs=getComputedStyle(pBar);st=parseFloat(cs.getPropertyValue('--st'))*parseFloat(cs.fontSize);
       PW=parseFloat(cs.getPropertyValue('--pw'));OFF=parseFloat(cs.getPropertyValue('--off'));keys={}},   /* the bar's own geometry, style.css */
     /* where plate c's centre sits on the pinned bar once it is down (the viewport's frame), and its
@@ -2087,192 +2064,6 @@ var LB=null;
     addEventListener('scroll',function(){if(!tick)tick=requestAnimationFrame(upd)},{passive:true});
     upd();
   }
-})();
-
-/* "Take my stack to Amway" (#sa): the step that was missing. The plates on the visitor's bar are
-   shelves, not products, so the panel offers each loaded plate's picks — the very packs the rack's
-   own panel shows, read back out of those panels (.bay-go carries the share link, the photo and the
-   card's data-*), so there is no second list to keep in step and a new shelf needs nothing here.
-   A pack that sits on two shelves (XS Creatine+) is listed once, under the first plate that loaded it.
-   Two phases in the one panel. First the picks, ticked, to untick what they don't want. Then
-   "Open the first one on Amway": that one link opens in a new tab, and from then on every product
-   the visitor adds in that Amway session is credited to Peter — so the rest are a checklist, each
-   with its photo, its name and its own share link. Each "Add" opens on Amway in a new tab too, and
-   ticks its row off as it goes (a tick can still be taken off by hand). They cannot share one
-   named Amway tab: measured in Chrome 2026-10-01, a link targeting a name reaches a tab only if
-   that tab was opened without noopener, and the first one is opened with it. The panel scrolls back
-   to its top on each change of phase, so the lead that says what just happened is what they see.
-   Which ones are ticked off, which picks were left out and which one opened first are kept in
-   sessionStorage, so closing the panel mid-order and opening it again comes back to the same list
-   rather than starting over ("Start over" does that on purpose).
-   The button that opens it sits inside .mys-has under "Build yours.", which the stack block shows
-   only once a plate is on the bar, and the button itself is hidden until this block unhides it: a
-   visitor with no stack, with no script, or with no <dialog> is never offered it. */
-(function(){
-  var go=$('#sa-go'),dlg=$('#sa');
-  if(!go||!dlg||typeof dlg.showModal!=='function'||!LB||!LB.stack)return;
-  var list=$('#sa-list',dlg),lead=$('#sa-lead',dlg),why=$('.sa-why',dlg),title=$('#sa-title',dlg),
-      start=$('#sa-start',dlg),again=$('#sa-again',dlg),shut=$('#sa-done',dlg),
-      DKEY='aspire-amway-done',RKEY='aspire-amway-run',items=[],off={},done={},first='',run=false,inner=$('.sa-in',dlg);
-  try{var sv=JSON.parse(sessionStorage.getItem(DKEY)||'null');if(sv&&typeof sv==='object')done=sv}catch(e){}
-  function keep(){try{sessionStorage.setItem(DKEY,JSON.stringify(done))}catch(e){}}
-  /* the checklist's own shape: the picks left out and the one opened first, so a reopened list is
-     the list they started, not every pick on the bar again */
-  function keepRun(){try{sessionStorage.setItem(RKEY,JSON.stringify({off:off,first:first}))}catch(e){}}
-  function loadRun(){
-    off={};first='';
-    try{var r=JSON.parse(sessionStorage.getItem(RKEY)||'null');
-        if(r&&typeof r==='object'){if(r.off&&typeof r.off==='object')off=r.off;if(typeof r.first==='string')first=r.first}}catch(e){}
-  }
-  function el(t,c,p){var n=doc.createElement(t);if(c)n.className=c;if(p)p.appendChild(n);return n}
-  function shelf(c){var b=$('#rk-'+c);return{name:b?$('.rk-name',b).textContent:c,col:b?b.style.getPropertyValue('--c'):''}}
-  /* every pick on the loaded plates, plate by plate in the order they went on and inside a plate in
-     the order the rack lists them: the order a visitor would add them */
-  function gather(){
-    var out=[],seen={};
-    LB.stack().forEach(function(c){
-      var p=$('#rk-p-'+c);
-      if(!p)return;
-      $$('.bay-go',p).forEach(function(a){
-        var k=a.getAttribute('data-try')||a.getAttribute('href');
-        if(seen[k])return;
-        seen[k]=1;
-        var img=$('img',a);
-        out.push({k:k,cat:c,name:a.getAttribute('data-name')||k,kind:a.getAttribute('data-kind')||'',
-                  /* the product card's block has already turned these links into buttons and put
-                     the share link on data-href; without it (no <dialog>) they are still links */
-                  href:a.getAttribute('data-href')||a.getAttribute('href'),img:img?img.getAttribute('src'):''});
-      });
-    });
-    return out;
-  }
-  function on(it){return !off[it.k]}
-  function picked(){return items.filter(on)}
-  function row(it,i,ul){
-    var li=el('li','sa-row',ul),lab=el('label','sa-tick',li),box=el('input','',lab);
-    box.type='checkbox';
-    li.setAttribute('data-k',it.k);
-    var vh=el('span','vh',lab);
-    vh.textContent=run?'Added: ':'Include ';
-    var th=el('span','sa-thumb',lab);
-    if(it.img){var im=el('img','',th);im.src=it.img;im.alt='';im.width=96;im.height=96;im.loading='lazy';im.decoding='async'}
-    var tx=el('span','sa-txt',lab);
-    el('span','sa-nm',tx).textContent=it.name;
-    if(it.kind)el('span','sa-kd',tx).textContent=it.kind;
-    if(run){
-      var isFirst=first?it.k===first:i===0;
-      box.checked=!!done[it.k];
-      li.classList.toggle('is-done',!!done[it.k]);
-      box.addEventListener('change',function(){
-        if(box.checked)done[it.k]=1;else delete done[it.k];
-        keep();li.classList.toggle('is-done',box.checked);
-        say(it.name+(box.checked?' ticked off. ':' un-ticked. ')+left());
-      });
-      var a=el('a','sa-add',li);
-      a.href=it.href;a.target='_blank';a.rel='noopener';
-      a.appendChild(doc.createTextNode(isFirst?'Open again':'Add'));
-      el('span','vh',a).textContent=' '+it.name+' on Amway (opens in a new tab)';
-      if(isFirst)el('span','sa-badge',li).textContent='Opened first';
-      /* opening one ticks it off (never the other way, so "Open again" takes nothing off);
-         a middle click opens it too, so it counts as well */
-      function tick(e){
-        if(e.type==='auxclick'&&e.button!==1)return;
-        if(done[it.k])return;
-        done[it.k]=1;keep();box.checked=true;li.classList.add('is-done');
-        say(it.name+' is open on Amway in a new tab, and ticked off. '+left());
-      }
-      a.addEventListener('click',tick);
-      a.addEventListener('auxclick',tick);
-    }else{
-      box.checked=on(it);
-      box.addEventListener('change',function(){
-        if(box.checked)delete off[it.k];else off[it.k]=1;
-        marks();say(it.name+(box.checked?' is in. ':' is out. ')+picked().length+' to add.');
-      });
-    }
-  }
-  /* the picking phase: the first product still ticked is the one that will open, so the badge
-     that says so follows the ticks, and with nothing ticked there is nothing to open */
-  function marks(){
-    var ps=picked(),k=ps.length?ps[0].k:'';
-    $$('.sa-row',list).forEach(function(li){
-      var b=$('.sa-badge',li),is=li.getAttribute('data-k')===k,box=$('input',li);
-      if(is&&!b)el('span','sa-badge',li).textContent='Start here';
-      else if(!is&&b)b.parentNode.removeChild(b);
-      li.classList.toggle('is-first',is);
-      li.classList.toggle('is-out',!box.checked);
-    });
-    start.setAttribute('aria-disabled',ps.length?'false':'true');
-    start.classList.toggle('is-off',!ps.length);
-  }
-  function left(){
-    var n=picked().filter(function(it){return !done[it.k]}).length;
-    return n?n+' still to add.':'That is the whole stack.';
-  }
-  function draw(){
-    var show=run?picked():items,cur='';
-    list.textContent='';
-    var ul=null,i=0;
-    show.forEach(function(it){
-      if(it.cat!==cur){
-        cur=it.cat;
-        var s=shelf(it.cat),li=el('li','sa-shelf',list),h=el('p','sa-sh',li);
-        el('i','',h).style.setProperty('--c',s.col);
-        h.appendChild(doc.createTextNode(s.name));
-        ul=el('ul','sa-sub',li);
-      }
-      row(it,i++,ul);
-    });
-    if(run){   /* DRAFT-COPY, as everything the panel says is */
-      lead.textContent='I’ve opened your first pick on Amway in a new tab. Each “Add” opens the next one in a new tab too and ticks it off here. '+
-                       'Put each in your cart as it opens.';
-      why.hidden=true;start.hidden=true;again.hidden=false;shut.textContent='Done';
-    }else{
-      lead.textContent='These are the picks off the '+LB.stack().length+' plate'+(LB.stack().length===1?'':'s')+
-                       ' on your bar. Untick anything you don’t want, then open the first one.';
-      why.hidden=false;start.hidden=false;again.hidden=true;shut.textContent='Close';
-      marks();
-    }
-  }
-  function open_(){
-    items=gather();
-    run=items.some(function(it){return done[it.k]});
-    if(run)loadRun();else{off={};first=''}
-    if(!items.length)return;
-    draw();
-    dlg.showModal();html.classList.add('locked');
-    inner.scrollTop=0;
-    title.focus({preventScroll:true});
-  }
-  go.hidden=false;
-  go.addEventListener('click',open_);
-  start.addEventListener('click',function(){
-    var ps=picked();
-    if(!ps.length){say('Nothing is ticked, so there is nothing to open.');return}
-    var one=ps[0];
-    window.open(one.href,'_blank','noopener');
-    done={};done[one.k]=1;keep();
-    first=one.k;keepRun();
-    run=true;draw();
-    inner.scrollTop=0;   /* back to the top, where the lead says what just happened */
-    title.focus({preventScroll:true});
-    say(one.name+' is open on Amway in a new tab. '+left()+' Each Add opens the next one in a new tab and ticks it off here.');
-  });
-  again.addEventListener('click',function(){
-    done={};keep();run=false;off={};first='';keepRun();draw();inner.scrollTop=0;title.focus({preventScroll:true});
-  });
-  shut.addEventListener('click',function(){dlg.close()});
-  $('.sa-x',dlg).addEventListener('click',function(){dlg.close()});
-  dlg.addEventListener('click',function(e){if(e.target===dlg)dlg.close()});   /* a tap on the dimmed page */
-  dlg.addEventListener('close',function(){html.classList.remove('locked');go.focus({preventScroll:true})});
-  /* Tab stays in the panel rather than leaving the page for the browser's own controls */
-  dlg.addEventListener('keydown',function(e){
-    if(e.key!=='Tab')return;
-    var f=$$('button,a[href],input',dlg).filter(function(n){return !n.hidden&&!n.closest('[hidden]')}),
-        first=f[0],last=f[f.length-1];
-    if(e.shiftKey&&doc.activeElement===first){e.preventDefault();last.focus()}
-    else if(!e.shiftKey&&doc.activeElement===last){e.preventDefault();first.focus()}
-  });
 })();
 
 /* Peter's story: nine beats on one stage that holds the window for the length of the run.
