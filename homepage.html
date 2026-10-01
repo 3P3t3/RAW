@@ -3739,12 +3739,13 @@ var LB=null;
          taps: the ask's own button is under it */
       var roff=rv<.05;if(roff!==railOff){railOff=roff;rail.classList.toggle('is-off',roff)}
       /* each caption recedes on its own as it nears an edge of the strip: its opacity falls as its foot
-         goes into the top fade or its head passes the top edge, or as its head goes into the bottom
-         fade, so a line is never seen cut through.
+         goes into the top fade or its head passes the top edge, or as its head goes past the middle of
+         the bottom fade, so a line is never seen cut through (and the next caption, whose head sits in
+         the top of that fade on a phone, stays at its full colour, 5.6:1).
          The caption on the reading line, and the one coming to it, are whole whatever their size. */
       caps.forEach(function(c,q){
         var a=CAPT[q]-co,b=a+CAPH[q],rp=Math.min(CAPH[q]*.5,CAPF),
-            op=Math.max(Math.min(clamp((b-CAPF)/rp),clamp((a+rp)/rp),clamp((CAPR-CAPF-a)/rp)),1-Math.abs(ci-q));
+            op=Math.max(Math.min(clamp((b-CAPF)/rp),clamp((a+rp)/rp),clamp((CAPR-CAPF*.5-a)/rp)),1-Math.abs(ci-q));
         put(capk[q],c,'o','none',f(smooth(op),3));
       });
       var nw=Math.max(0,Math.min(caps.length-1,Math.round(ci)));
