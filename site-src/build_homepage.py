@@ -1113,7 +1113,9 @@ def main():
                 '          <h3 class="pcard-name" id="pcard-name"></h3>\n'
                 '          <p class="pcard-line" id="pcard-line"></p>\n'
                 '          <ul class="pcard-facts" id="pcard-facts" aria-label="Quick facts"></ul>\n'
-                '          <div class="pcard-acts"><a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Add to cart on Amway'
+                # DRAFT-COPY: "Buy on Amway", never "Add to cart": it opens the product's own page through Peter's
+                # share link, and the visitor puts it in the cart there (Amway has no add-to-cart link)
+                '          <div class="pcard-acts"><a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Buy on Amway'
                 '<span class="vh"> (opens in a new tab)</span></a>'
                 # DRAFT-COPY. Never "Request a sample": that is the button on Peter's business partner's site
                 f'<a class="btn btn-line pcard-try" id="pcard-try" href="{home}#sample"'
@@ -1139,8 +1141,8 @@ def main():
                 '        <button class="icon-btn sa-x" type="button" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>\n'
                 '        <h2 class="sa-title" id="sa-title" tabindex="-1">Your stack on Amway</h2>\n'
                 '        <p class="sa-lead" id="sa-lead"></p>\n'
-                '        <p class="sa-why">Open the first one from here and the whole order is credited to me \u2014 '
-                'anything you add after it counts too, so there\u2019s nothing for you to type in.</p>\n'
+                '        <p class="sa-why">When you order through my link, Amway credits the order to me \u2014 that\u2019s '
+                'how I get paid. You pay Amway\u2019s normal price, and there\u2019s no code to enter.</p>\n'
                 '        <ul class="sa-list" id="sa-list"></ul>\n'
                 '        <div class="sa-acts"><button class="btn sa-start" id="sa-start" type="button">'
                 'Open the first one on Amway<span class="vh"> (opens in a new tab)</span></button>'

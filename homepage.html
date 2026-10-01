@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=5f4b8f55">
+<link rel="stylesheet" href="style.css?v=774de96c">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -549,7 +549,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           <h3 class="pcard-name" id="pcard-name"></h3>
           <p class="pcard-line" id="pcard-line"></p>
           <ul class="pcard-facts" id="pcard-facts" aria-label="Quick facts"></ul>
-          <div class="pcard-acts"><a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Add to cart on Amway<span class="vh"> (opens in a new tab)</span></a><a class="btn btn-line pcard-try" id="pcard-try" href="#sample">Ask for a free sample</a><button class="btn btn-line pcard-load" id="pcard-load" type="button" hidden><span class="pl-t">Load this plate</span><span class="vh pl-cat"></span></button></div>
+          <div class="pcard-acts"><a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Buy on Amway<span class="vh"> (opens in a new tab)</span></a><a class="btn btn-line pcard-try" id="pcard-try" href="#sample">Ask for a free sample</a><button class="btn btn-line pcard-load" id="pcard-load" type="button" hidden><span class="pl-t">Load this plate</span><span class="vh pl-cat"></span></button></div>
         </div>
       </div>
     </dialog>
@@ -980,7 +980,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <button class="icon-btn sa-x" type="button" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
         <h2 class="sa-title" id="sa-title" tabindex="-1">Your stack on Amway</h2>
         <p class="sa-lead" id="sa-lead"></p>
-        <p class="sa-why">Open the first one from here and the whole order is credited to me — anything you add after it counts too, so there’s nothing for you to type in.</p>
+        <p class="sa-why">When you order through my link, Amway credits the order to me — that’s how I get paid. You pay Amway’s normal price, and there’s no code to enter.</p>
         <ul class="sa-list" id="sa-list"></ul>
         <div class="sa-acts"><button class="btn sa-start" id="sa-start" type="button">Open the first one on Amway<span class="vh"> (opens in a new tab)</span></button><button class="btn btn-line sa-again" id="sa-again" type="button" hidden>Start over</button><button class="btn btn-line sa-done" id="sa-done" type="button">Close</button></div>
       </div>
@@ -1876,10 +1876,10 @@ if(arch){
 
 /* The product card (#pcard). Each pack in an open compartment is a link to its Amway page in the
    markup; here it becomes a button that opens a card for it: photo, name, a line, a few facts and
-   "Add to cart on Amway" (the same share link). Every other product tile (the homepage grid, Trending,
+   "Buy on Amway" (the same share link). Every other product tile (the homepage grid, Trending,
    a shelf page's grid and flavor carousel) stays a link, so its heading stays a heading, but a plain
    click or tap on it opens the same card instead; a cmd-, ctrl- or middle-click still opens its Amway
-   page in a new tab, as a link does. Only "Add to cart on Amway" goes to Amway. "Ask for a free sample"
+   page in a new tab, as a link does. Only "Buy on Amway" goes to Amway. "Ask for a free sample"
    closes the card and fills the sample form's blank with the product's exact name: in place on the
    homepage (sAsk, in the sample block below), and through the homepage's ?try= link from a shelf page.
    The card is a modal <dialog>, so focus stays in it
@@ -3281,10 +3281,15 @@ var LB=null;
    A pack that sits on two shelves (XS Creatine+) is listed once, under the first plate that loaded it.
    Two phases in the one panel. First the picks, ticked, to untick what they don't want. Then
    "Open the first one on Amway": that one link opens in a new tab, and from then on every product
-   the visitor adds in that Amway session is credited to Peter — so the rest are a checklist to work
-   down in the same tab, each with its photo, its name and its own link, with a tick as it goes on.
-   Which ones are ticked off is kept in sessionStorage, so closing the panel mid-order and opening it
-   again comes back to the list rather than starting over ("Start over" does that on purpose).
+   the visitor adds in that Amway session is credited to Peter — so the rest are a checklist, each
+   with its photo, its name and its own share link. Each "Add" opens on Amway in a new tab too, and
+   ticks its row off as it goes (a tick can still be taken off by hand). They cannot share one
+   named Amway tab: measured in Chrome 2026-10-01, a link targeting a name reaches a tab only if
+   that tab was opened without noopener, and the first one is opened with it. The panel scrolls back
+   to its top on each change of phase, so the lead that says what just happened is what they see.
+   Which ones are ticked off, which picks were left out and which one opened first are kept in
+   sessionStorage, so closing the panel mid-order and opening it again comes back to the same list
+   rather than starting over ("Start over" does that on purpose).
    The button that opens it sits inside .mys-has under "Build yours.", which the stack block shows
    only once a plate is on the bar, and the button itself is hidden until this block unhides it: a
    visitor with no stack, with no script, or with no <dialog> is never offered it. */
@@ -3293,9 +3298,17 @@ var LB=null;
   if(!go||!dlg||typeof dlg.showModal!=='function'||!LB||!LB.stack)return;
   var list=$('#sa-list',dlg),lead=$('#sa-lead',dlg),why=$('.sa-why',dlg),title=$('#sa-title',dlg),
       start=$('#sa-start',dlg),again=$('#sa-again',dlg),shut=$('#sa-done',dlg),
-      DKEY='aspire-amway-done',items=[],off={},done={},run=false;
+      DKEY='aspire-amway-done',RKEY='aspire-amway-run',items=[],off={},done={},first='',run=false,inner=$('.sa-in',dlg);
   try{var sv=JSON.parse(sessionStorage.getItem(DKEY)||'null');if(sv&&typeof sv==='object')done=sv}catch(e){}
   function keep(){try{sessionStorage.setItem(DKEY,JSON.stringify(done))}catch(e){}}
+  /* the checklist's own shape: the picks left out and the one opened first, so a reopened list is
+     the list they started, not every pick on the bar again */
+  function keepRun(){try{sessionStorage.setItem(RKEY,JSON.stringify({off:off,first:first}))}catch(e){}}
+  function loadRun(){
+    off={};first='';
+    try{var r=JSON.parse(sessionStorage.getItem(RKEY)||'null');
+        if(r&&typeof r==='object'){if(r.off&&typeof r.off==='object')off=r.off;if(typeof r.first==='string')first=r.first}}catch(e){}
+  }
   function el(t,c,p){var n=doc.createElement(t);if(c)n.className=c;if(p)p.appendChild(n);return n}
   function shelf(c){var b=$('#rk-'+c);return{name:b?$('.rk-name',b).textContent:c,col:b?b.style.getPropertyValue('--c'):''}}
   /* every pick on the loaded plates, plate by plate in the order they went on and inside a plate in
@@ -3332,6 +3345,7 @@ var LB=null;
     el('span','sa-nm',tx).textContent=it.name;
     if(it.kind)el('span','sa-kd',tx).textContent=it.kind;
     if(run){
+      var isFirst=first?it.k===first:i===0;
       box.checked=!!done[it.k];
       li.classList.toggle('is-done',!!done[it.k]);
       box.addEventListener('change',function(){
@@ -3341,9 +3355,19 @@ var LB=null;
       });
       var a=el('a','sa-add',li);
       a.href=it.href;a.target='_blank';a.rel='noopener';
-      a.appendChild(doc.createTextNode(i===0?'Open again':'Add'));
+      a.appendChild(doc.createTextNode(isFirst?'Open again':'Add'));
       el('span','vh',a).textContent=' '+it.name+' on Amway (opens in a new tab)';
-      if(i===0)el('span','sa-badge',li).textContent='Opened first';
+      if(isFirst)el('span','sa-badge',li).textContent='Opened first';
+      /* opening one ticks it off (never the other way, so "Open again" takes nothing off);
+         a middle click opens it too, so it counts as well */
+      function tick(e){
+        if(e.type==='auxclick'&&e.button!==1)return;
+        if(done[it.k])return;
+        done[it.k]=1;keep();box.checked=true;li.classList.add('is-done');
+        say(it.name+' is open on Amway in a new tab, and ticked off. '+left());
+      }
+      a.addEventListener('click',tick);
+      a.addEventListener('auxclick',tick);
     }else{
       box.checked=on(it);
       box.addEventListener('change',function(){
@@ -3384,8 +3408,9 @@ var LB=null;
       }
       row(it,i++,ul);
     });
-    if(run){
-      lead.textContent='Amway is open in the other tab. Add the rest there and tick them off as you go — nothing here needs to be in order.';
+    if(run){   /* DRAFT-COPY, as everything the panel says is */
+      lead.textContent='I’ve opened your first pick on Amway in a new tab. Each “Add” opens the next one in a new tab too and ticks it off here. '+
+                       'Put each in your cart as it opens — it’s one cart, so check out from any tab.';
       why.hidden=true;start.hidden=true;again.hidden=false;shut.textContent='Done';
     }else{
       lead.textContent='These are the picks off the '+LB.stack().length+' plate'+(LB.stack().length===1?'':'s')+
@@ -3395,12 +3420,13 @@ var LB=null;
     }
   }
   function open_(){
-    items=gather();off={};
+    items=gather();
     run=items.some(function(it){return done[it.k]});
+    if(run)loadRun();else{off={};first=''}
     if(!items.length)return;
     draw();
     dlg.showModal();html.classList.add('locked');
-    $('.sa-in',dlg).scrollTop=0;
+    inner.scrollTop=0;
     title.focus({preventScroll:true});
   }
   go.hidden=false;
@@ -3408,15 +3434,17 @@ var LB=null;
   start.addEventListener('click',function(){
     var ps=picked();
     if(!ps.length){say('Nothing is ticked, so there is nothing to open.');return}
-    var first=ps[0];
-    window.open(first.href,'_blank','noopener');
-    done={};done[first.k]=1;keep();
+    var one=ps[0];
+    window.open(one.href,'_blank','noopener');
+    done={};done[one.k]=1;keep();
+    first=one.k;keepRun();
     run=true;draw();
+    inner.scrollTop=0;   /* back to the top, where the lead says what just happened */
     title.focus({preventScroll:true});
-    say(first.name+' is open on Amway in a new tab. '+left()+' Add them in that tab and tick them off here.');
+    say(one.name+' is open on Amway in a new tab. '+left()+' Each Add opens the next one in a new tab and ticks it off here.');
   });
   again.addEventListener('click',function(){
-    done={};keep();run=false;off={};draw();title.focus({preventScroll:true});
+    done={};keep();run=false;off={};first='';keepRun();draw();inner.scrollTop=0;title.focus({preventScroll:true});
   });
   shut.addEventListener('click',function(){dlg.close()});
   $('.sa-x',dlg).addEventListener('click',function(){dlg.close()});

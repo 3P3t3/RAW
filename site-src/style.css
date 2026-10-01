@@ -1858,7 +1858,7 @@ html:not(.js) .rk-guide{display:none}   /* without script every panel stands ope
 .t-bar.has-stack{scroll-padding-top:calc(var(--mast) + var(--pin))}
 .lbpin.snap .lbpin-bars .bb,.lbpin.snap .lbc-set{transition:none}
 
-/* the product card: "Load this plate" beside "Add to cart on Amway", and "On your bar" once it is on */
+/* the product card: "Load this plate" beside "Buy on Amway", and "On your bar" once it is on */
 .pcard-acts{display:flex;flex-wrap:wrap;gap:10px;width:100%}
 .pcard-acts .btn{flex:1 1 100%}
 .pcard-load[aria-disabled="true"]{color:var(--teal);box-shadow:inset 0 0 0 1px rgba(0,46,59,.35);cursor:default}
