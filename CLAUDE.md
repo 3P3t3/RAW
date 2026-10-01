@@ -118,29 +118,14 @@ shelf and `style-demo[-NAME].css`, all `noindex`, with every internal link rewri
 and their own stylesheet, so a preview can never change the live pages. RAW 0: EM copies them in and
 pushes. A preview's sample form really sends (FormSubmit), so only publish one Peter has asked for.
 
-**"Take my stack to Amway" (`#sa`).** The step from a loaded bar to a real order, added 2026-10-01 off
-Peter's own finding that Amway attribution is session-wide: one click on a share link credits him for
-everything added afterwards, including items the visitor finds by ordinary browsing. The button lives
-inside `.mys-has` under "Build yours." on the homepage only, and shows only when at least one plate is
-loaded and `<dialog>` is supported; the modal shell comes from `stack_dialog()` in the build and is
-filled by `_script.html`. There is no add-to-cart-by-URL at Amway (the only addresses are product and
-category pages), so the panel is: pick (every product ticked, untick to drop) → `window.open` the first
-one through its share link → a checklist of the rest, where each "Add" opens that product's share link on
-Amway in a new tab and ticks its row (a tick can still come off by hand; "Open again" on the first row never
-unticks). They cannot share one named tab: measured in Chrome 2026-10-01, a named target reaches a tab only
-if it was opened without noopener, and the first opens with noopener on purpose — so the copy says each
-opens a new tab. The panel scrolls to its top on every phase change, so its new lead is what shows. The
-credit line says Amway credits the order to Peter, the buyer pays Amway's normal price (Peter confirmed),
-and there is no code to enter. The rack points to it twice once a plate is loaded: the rack guide's step 3
-(Peter's wording: "Add to cart, bring it to a free call, or ask for a sample."; "Add to cart" is `.rg-amway`, which is plain text, an `<a>` with no href, until a plate is loaded:
-`amwaySync()` gives it its href on the same state that shows `.rk-amway`) and a slim `.rk-amway` button in each open bay; both work `#sa-go`,
-through `toAmway()` in the rack block. The product card's own button reads "Buy on Amway", never "Add to
-cart": it opens the product's page. The products offered
-are read back out of the rack's own panels (`#rk-p-<slug> .bay-go`, href moved to `data-href` by the
-product-card block), never a second table in Python — so a new shelf needs nothing here and the links can
-never drift from `share-links.csv`. `sessionStorage` holds `aspire-amway-done` (the ticks) and
-`aspire-amway-run` (`{off, first}`: the picks left out and the one opened first), so a reopened checklist is
-the one the visitor started.
+**There is no "take my stack to Amway" flow, and there must not be one.** It was built on 2026-10-01 off the
+finding that Amway's attribution is session-wide, and withdrawn the same day: Peter tested it against real Amway
+and a cart only ever holds the product the link opened — *"it won't add it to their cart when they go to check
+out. That's no bueno."* Attribution may still carry across a session, but it buys nothing without a shared cart,
+so a multi-product hand-off wastes the visitor's time and loses Peter the rest of the order. **One product
+through one share link is what works**, and that is what the product card's "Buy on Amway" button does. The
+rack guide's step 3 is back to "Bring it to a free call, or ask for a sample." Never rebuild the panel without
+Peter re-testing Amway's checkout end to end first. (The removed code is in commit `25c619e`'s parent.)
 
 **One source, two published sites.** Every build writes the site twice: the plain site at the repo root, and a
 copy under `plus/` (`PLUS_DIR`, the name Peter chose on 2026-10-01) that carries his CCRX route. Both ship from one
