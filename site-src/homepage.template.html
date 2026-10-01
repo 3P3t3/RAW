@@ -49,19 +49,22 @@
         <p class="label">Sports nutrition &amp; wellness</p>
         <h1 id="hero-title"><span>Picked</span> <span>for how</span> <span class="hl-3d">you train.</span></h1>
         <!-- PETER-COPY --><p class="sub">Hand-picked supplements. Free macros. A fifteen-minute call on what’s worth taking.</p><!-- /PETER-COPY -->
-        <!-- who "I" is, on the first screen and before anything asks for anything: his face (a crop of
-             assets/peter/with-daughter-960.webp, their daughter at its edge) and the first line of his
-             About introduction, verbatim, then the way through to his story further down the page. -->
+        <!-- who "I" is, on the first screen and before anything asks for anything: Peter holding their
+             baby daughter (a square crop of assets/peter/with-daughter-960.webp, both faces whole) and the
+             first line of his About introduction, verbatim, then the way through to his story further down
+             the page. The plan's two links stand in the same block, beside the picture where there is room
+             (style.css, .hero-me), so the picture can be large and "See the game plan" still sits on a
+             phone's first screen. The first thing offered is the plan, not a form: the calculator and the
+             call are both inside it (steps 01 and 04), so asking for the map first gives nothing up.
+             .hero-actions keeps its own box: the mobile tab's observer in _script.html watches it. -->
         <div class="hero-me">
-          <img src="assets/peter/face-96.webp" srcset="assets/peter/face-96.webp 96w, assets/peter/face-192.webp 192w" sizes="60px" width="60" height="60" alt="Peter" decoding="async">
+          <img src="assets/peter/hero-pair-160.webp" srcset="assets/peter/hero-pair-160.webp 160w, assets/peter/hero-pair-320.webp 320w" sizes="140px" width="160" height="160" alt="Peter holding their baby daughter" decoding="async">
           <p class="hero-me-line"><!-- PETER-COPY -->I’m Peter — husband, dad to a baby girl, and a Lincoln local.<!-- /PETER-COPY --> <!-- DRAFT-COPY --><a href="#story">My story</a><!-- /DRAFT-COPY --></p>
+          <!-- DRAFT-COPY --><div class="hero-actions">
+            <a class="btn" href="#how">See the game plan</a>
+            <a class="tlink" href="#consult">Book a free call</a>
+          </div><!-- /DRAFT-COPY -->
         </div>
-        <!-- the first thing offered is the plan, not a form: the calculator and the call are both
-             inside it (steps 01 and 04), so asking for the map first gives nothing up. -->
-        <!-- DRAFT-COPY --><div class="hero-actions">
-          <a class="btn" href="#how">See the game plan</a>
-          <a class="tlink" href="#consult">Book a free call</a>
-        </div><!-- /DRAFT-COPY -->
         {{HERO_BAR}}
       </div>
     </div>

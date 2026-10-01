@@ -181,22 +181,42 @@ html:not(.js) .mtab{display:none}
    above the buttons, so "Work out your macros" still sits whole on the first screen at
    375x812 after the curtain. Measured: the button's foot at 798, not 812. */
 @media (max-width:767px){.hero-copy{padding-top:20px}.hero-actions{margin-top:0}}
-/* Peter on the first screen: his face and the first line of his own introduction, between the
-   subhead (which ends on "a call") and the buttons, so the call has someone attached to it. */
-.hero-me{display:grid;grid-template-columns:60px minmax(0,1fr);align-items:center;column-gap:14px;max-width:420px}
-.hero-me img{display:block;width:60px;height:60px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--chalk),0 0 0 3px var(--line)}
-.hero-me-line{font-size:15px;line-height:1.4;color:var(--ink);text-wrap:balance}
+/* Peter on the first screen: Peter holding their daughter (a square crop, both faces whole), the first
+   line of his own introduction, and the plan's two links, between the subhead (which ends on "a call")
+   and the bar, so the call has someone attached to it. Peter asked for the picture bigger and with their
+   daughter in it (2026-10-01), so it stands beside his line AND the button rather than beside his line
+   alone: the button's height is paid for inside the picture's, which is how "See the game plan" still
+   sits whole on the first screen at 390x844 and 375x812 after the curtain. The block lays itself out by
+   the width the copy has (a container query), not the viewport: where the column beside the picture
+   would be too narrow for the button (a 320 phone; the 768 tablet's narrow copy column), the links drop
+   to a full row under the picture and his line. */
+.hero-copy{container-type:inline-size}
+/* the picture spans four rows and the line and links take the middle two, so where the picture is the
+   taller (desktop) they stand centred against it, and where they are the taller (phones) the picture's
+   top meets the line's. No row gap, or the empty rows would push the line down: the links' own top
+   margin is the space between them and the line. */
+.hero-me{--pic:min(36cqi,140px);display:grid;grid-template-columns:var(--pic) minmax(0,1fr);grid-template-rows:1fr auto auto 1fr;
+  grid-template-areas:"pic ." "pic line" "pic act" "pic .";align-items:start;gap:0 14px;width:100%}
+.hero-me img{grid-area:pic;display:block;width:var(--pic);height:auto;aspect-ratio:1;border-radius:14px;object-fit:cover;box-shadow:0 0 0 2px var(--chalk),0 0 0 3px var(--line)}
+.hero-me-line{grid-area:line;font-size:15px;line-height:1.4;color:var(--ink);text-wrap:balance}
 @media (min-width:768px){.hero-me-line{font-size:16px}}
 .hero-me-line a{font-weight:600;color:var(--teal);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px;white-space:nowrap}
-/* phones pay for that row so "See the game plan" still sits whole on the first screen at 390x844
-   after the curtain: the label goes (the subhead already says what this is), the headline is a
-   step smaller and the gaps a little tighter. Measured: the button's foot at 831 of 844, and at 809 of 812 at 375x812. */
+.hero-me .hero-actions{grid-area:act;margin-top:12px;column-gap:20px}
+.hero-me .btn{padding-inline:16px}
+@container (max-width:299px){
+  .hero-me{--pic:clamp(88px,40cqi,120px);grid-template-rows:auto auto;grid-template-areas:"pic line" "act act";align-items:center}
+  .hero-me .hero-actions{margin-top:14px}
+  .hero-me .btn{padding-inline:28px}
+}
+/* phones: the label goes (the subhead already says what this is) and the headline is a step smaller.
+   With Peter's picture beside the button the copy's top padding is 8, not 12, and the button sits 8
+   under his line. Measured after the curtain: the button's foot at 830 of 844 at 390x844, and 808 of
+   812 at 375x812. */
 @media (max-width:767px){
-  .hero-copy{gap:12px;padding-top:12px}
+  .hero-copy{gap:12px;padding-top:8px}
+  .hero-me .hero-actions{margin-top:8px}
   .hero .label{display:none}
   .hero h1{font-size:clamp(46px,15vw,72px)}
-  .hero-me{grid-template-columns:56px minmax(0,1fr);column-gap:12px}
-  .hero-me img{width:56px;height:56px}
 }
 .glass{position:relative;margin:0 calc(-1 * var(--pad));aspect-ratio:1;overflow:hidden}
 .glass video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:linear-gradient(90deg,var(--teal) 50%,var(--beige) 50%)}
