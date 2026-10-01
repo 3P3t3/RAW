@@ -232,6 +232,17 @@ html:not(.js) .mtab{display:none}
 
 /* Sections */
 .sec{padding:var(--sec) 0}
+/* Where two of them meet, each side lays a full --sec of ground on the join, so the boundary
+   reads as 2 x --sec of nothing: 144px on a phone and 224px at 1440, over and over down the page
+   (Peter, 2026-10-01: "it feels a little busy on the website... it feels like a freaking journey
+   for them to actually get where they want to go"). A join keeps one full --sec and half of the
+   other, so a band still stands clear of the one above it and nothing is cramped: 108px and 168px.
+   Only the lower section gives, and only where two really touch — the first band under the hero
+   keeps its own. .story is not a .sec, so it is named on both sides of its two joins (the stage
+   gives at .st-head, below), and the third selector is the join #my-stack / #consult, which has
+   the Amway <dialog> standing between them. The same idea as .how-sec's negative margin and
+   .rack-sec's trimmed foot, which both already pulled one join in; they still win, being later. */
+.sec + .sec,.story + .sec,.sec + dialog + .sec{padding-top:calc(var(--sec) * .5)}
 /* The game plan (#how): the path, four numbered steps and one thing to do. It sits on the page's
    own ground between the hero and the shelves, closed off from them by a hairline. On a phone
    each step is a row (number, words, arrow); from 768 they stand in two columns, from 1024 in four. */
@@ -385,7 +396,8 @@ a.how-step:active{opacity:.7}
 @media (hover:hover){.shelf-link:hover .shelf-go{text-decoration-thickness:2.5px}}
 /* Generated backdrops: one image per band, masked so it dissolves into the ground */
 .isles-sec,.results,.consult,.cat-shop{position:relative;isolation:isolate}
-/* Dark bands: the trending band carries the pour film, the rest stay flat */
+/* Dark bands. The trending band (off; TRENDING in build_homepage.py) is the only one left,
+   and .podium-sec.no-pour below puts it back on the page's own field. */
 .podium-sec{background:var(--teal)}
 /* Category pages: the sand band that sends you to the calculator */
 .cat-macros{background:var(--sand);color:var(--text)}
@@ -1038,39 +1050,21 @@ html:not(.js) #results[hidden]{display:block!important}
 
 }
 
-/* ---------- The pour: a scroll-scrubbed film behind the trending band ---------- */
-/* The stage is sized to the large viewport: mobile Safari's toolbar coming back must not
-   resize it mid-scrub. Sticky keeps it over whatever slice of the band is on screen, and
-   max-height keeps it inside a band shorter than the viewport, so it never needs clipping
-   (an overflow:hidden parent would stop the sticking). Teal underneath, so a band whose
-   frames are still coming, or never come, is still a band. */
-.pour-bg{position:absolute;inset:0;z-index:-1;background:var(--teal)}
-.pour-stage{position:sticky;top:0;height:100vh;max-height:100%}
-@supports (height:100lvh){.pour-stage{height:100lvh}}
-.pour-film,.pour-still{display:block;width:100%;height:100%;object-fit:cover}
-.pour-still{position:absolute;inset:0}
-/* The scrim. The podium sits on top of this, and the film runs to near-white where the
-   drink fills the frame, so it is heavy on purpose: .7 holds every text colour on the
-   band above 4.5:1 against a white pixel, and the ends go darker still for the heading
-   and for the edges the band shares with the light sections. */
-.pour-bg::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(rgba(0,20,27,.88) 0,rgba(0,20,27,.7) 18%,rgba(0,20,27,.7) 82%,rgba(0,20,27,.88) 100%)}
-
-/* ---------- Peter's story: a storyboard after the pour ---------- */
+/* ---------- Peter's story: a storyboard ---------- */
 /* Nine beats in reading order. As plain content (reduced motion, no script) they stand one
    under another, each on its own tone, dark to light. When the script takes the section over
    (.is-live) the stage sticks for the length of the run, the beats stack inside it, and the
    script moves each one with transform and opacity only, as a pure function of how far the
-   run has scrolled. The ground is the pour band's teal with the sand and the chalk faded in
+   run has scrolled. The ground is the site's teal with the sand and the chalk faded in
    over it, so it warms without ever being a colour the site does not use. */
 .story{position:relative;background:var(--chalk)}
 /* its heading, before the stage: the same label-over-h2 as #how, on the chalk the band above it
    ends on, with "this?" in the blue. It is outside #st-run, so the run's height (and every hold
    in it) is untouched; it simply scrolls away as the stage comes up under it. */
-.st-head{padding:var(--sec) 0 30px}
+.st-head{padding:calc(var(--sec) * .5) 0 24px}
 .st-head-in{display:grid;gap:10px}
 .st-head h2{font-size:40px}
-@media (min-width:768px){.st-head{padding-bottom:40px}.st-head h2{font-size:52px}}
+@media (min-width:768px){.st-head{padding-bottom:32px}.st-head h2{font-size:52px}}
 .st-beats{list-style:none;margin:0;padding:0}
 .st-bg{display:none}
 .st-beat{display:flex;flex-direction:column;align-items:center;gap:24px;padding:56px var(--pad)}
@@ -1146,7 +1140,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-proof .c-proof{max-width:680px;margin:0 auto}
 
 /* the stage. Sized to the large viewport so mobile Safari's toolbar cannot resize it
-   mid-scrub, as the pour's is; the beats inside it to the small one, so a line and its link
+   mid-scrub; the beats inside it to the small one, so a line and its link
    are never under the toolbar. Each beat clears the masthead at the top and the tab at the
    foot. Only the beat whose line is up can be tapped. */
 /* 400: the story is 9.1 units of ~278px at 390x844 (_script.html), where it was 16.7 of ~343px over
@@ -1166,8 +1160,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .story.is-live .st-bg{display:block;position:absolute;inset:0;background:var(--teal)}
 .st-bg span{position:absolute;inset:0;opacity:0}
 .st-sand{background:var(--sand)}
-/* the pour band's own scrim, carried over its bottom edge: the ground comes up out of the
-   pour's dark and lifts to teal as the stage settles, instead of meeting it at a hard line */
+/* the scrim the stage used to come up out of (see .story .st-dusk, below: it is down) */
 .st-dusk{background:linear-gradient(rgba(0,20,27,.88),rgba(0,20,27,0) 70%)}
 .st-chalk{background:var(--chalk)}
 /* the stage light: a soft pool where the pack stands, up only while a pack is at rest in it */
@@ -1246,8 +1239,11 @@ html:not(.js) #results[hidden]{display:block!important}
 .stc-name{display:none}
 .story.is-live .st-warm{padding-top:calc(var(--mast) + 16px + 68px)}   /* the packs' own beats keep the case's band clear */
 .story.is-live .st-arc{height:clamp(62px,19vw,84px)}
-/* with the pour switched off the band above is flat teal, so there is no film's shade to carry over */
-.no-pour~.story .st-dusk{display:none}
+/* the shade the stage used to come up out of: the band above it carried a film that ran to
+   near-white, and this carried its dark over the join. The film is gone (TRENDING in
+   build_homepage.py) and so is the band, so the stage opens on its own teal and the scrim
+   stays down. It was already down before the band came off: .no-pour~.story matched. */
+.story .st-dusk{display:none}
 .story.is-live .st-solo{justify-content:center}
 .story.is-live .st-proof{padding-top:0}
 /* the opening pair: the same photo at the same size and place in both beats, so the turn can lay
@@ -2070,8 +2066,8 @@ body{background:transparent}
 .sample-sec,.macros-sec,.cat-macros,.story,.st-dark,.st-warm,.st-light,.story.is-live .st-bg{background:transparent}
 .c-card.nc,.c-embed.nc{background:#FAF9F5}   /* the note: a sheet a shade whiter than the chalk it lies on */
 
-/* #trending without the pour (TRENDING_POUR = False) is a plain band: on the field, in dark type.
-   With the pour on, the band keeps its film and its light type; the film needs its dark. */
+/* #trending is a plain band: on the page's own field, in dark type. The .no-pour name is the
+   film that used to be able to run behind it; the band is always built with it now. */
 .podium-sec.no-pour{background:transparent;color:var(--text)}
 .no-pour h2{color:var(--teal)}
 .no-pour :focus-visible{outline-color:var(--teal)}
