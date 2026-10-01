@@ -142,6 +142,46 @@ never drift from `share-links.csv`. `sessionStorage` holds `aspire-amway-done` (
 `aspire-amway-run` (`{off, first}`: the picks left out and the one opened first), so a reopened checklist is
 the one the visitor started.
 
+**One source, two published sites.** Every build writes the site twice: the plain site at the repo root, and a
+copy under `plus/` (`PLUS_DIR`, the name Peter chose on 2026-10-01) that carries his CCRX route. Both ship from one
+push — `https://3p3t3.github.io/RAW/` and `https://3p3t3.github.io/RAW/plus/`, both indexed, Peter wants the copy
+findable. He asked for a fork; one source with a switch replaced it, because two copies drift and then leak.
+`CCRX = False` is the switch (`--ccrx on|off` overrides it for a run, `--no-plus` builds the plain site alone).
+The copy keeps the plain file names one folder down so relative links between its pages cannot drift; `plus_links()`
+(beside `demo_links()`) puts `PLUS_DIR/` on absolute page links and `../` on `assets/` and `style.css`, so there is
+only ever one stylesheet. It has its own `index.html` and `site.webmanifest` so `.../RAW/plus/` opens it and an
+installed shortcut starts inside it. **Never hand-edit or `Read` anything in `plus/`** — it is generated, and the
+pages are the same ~310k chars as the root's. Grep them; to know why one looks a certain way, read the plain source.
+
+**Peter's one hard constraint (2026-10-01):** peptide wording in the plain site is fine and may happen on purpose
+one day, and so is the name; *"Just the link itself."* So **the guard bans hosts and the page name, nothing else**:
+`CCRX_BANNED = CCRX_HOSTS + (CCRX_PAGE,)`. Every plain file goes through `guard()` on its way to disk and
+`guard_root()` re-checks the root afterwards; a hit stops the build (exit 1), names file and line, and the file is
+never written — verified by pasting the link into a plain template, by `--ccrx on`, and by editing `index.html`,
+which the build does not write. The post-merge hook reports the same failure. If Peter ever wants the plain site to
+carry the link, `guard()` is the one place to change, deliberately.
+
+**The CCRX route** (the second, paid-referral business: an at-home blood panel and prescription compounded peptides,
+fulfilled by Avellum Health). It appears in the copy and nowhere else, in three places: `#bloodwork` on the homepage
+directly after `#macros`, which it echoes ("your macros you can work out; this you cannot"); the menu, beside "About
+us"; and the footer. All of them go to `bloodwork.html`, never straight to CCRX — the page is where a visitor finds
+out what they are walking into — and only that page links `CCRX_URL`. `site-src/bloodwork.template.html` builds it,
+in the second pass only. Its order is deliberate: what the panel is → what a clinician may decide after it → Peter's
+disclosure → Avellum's own statement that compounded medications are not FDA-approved drugs → the one link out.
+**Nothing on it says what the panel or any peptide DOES**, only what a thing is and who decides; it carries **no
+price** and **nothing about where it ships** (both change, and their site states both); and it never says Amway
+works with, endorses or partners with CCRX or Avellum. Peter is **paid on the peptides only, not on the panel**, so
+his disclosure splits the two and is PETER-COPY: "I don't make anything on the panel. If a clinician ends up
+prescribing you something after it, I'm paid on that." His Amway disclosure is a different business and is never
+merged with it. Two constants beside `CCRX` expire and are each one line: `CCRX_PREORDER` (empty it the day the
+first kits ship, October 10 2026, and every "pre-order" word leaves) and `CCRX_PANEL_FREE` (his "I don't make
+anything on the panel", true only until the comp plan pays him on it). The route needed **no new CSS** on purpose:
+anything added for it would move `style.css`'s content hash and so the `?v=` on every page of both copies.
+
+`.gitattributes` already marks `plus/*.html` `merge=ours` through its no-slash patterns; `plus/index.html` and
+`plus/site.webmanifest` have their own two lines. Renaming `PLUS_DIR` is two edits: the constant and those lines.
+Publishing is unchanged: run the build, commit the root pages **and** the `plus/` folder, then RAW 0 pushes.
+
 `index.html` is a hand-written redirect to `homepage.html` and is not generated.
 
 `assets/bg-everyday-health.webp` is the Everyday Health shelf's hero banner, and the only one of the ten
@@ -173,16 +213,22 @@ x 0-1080 and y 226-1576, clear of the screenshot's black band on rows 0-6, with 
 the top and the baby's feet whole; converted P3 to sRGB so the colours hold once the profile is
 gone; then a uniform Lanczos resize. No retouching, no exposure or white-balance change, and no
 metadata: each file is a bare VP8 chunk (no EXIF, XMP or ICC). Peter chose to make them public; the repo is public because Pages
-requires it. `hero-pair-160.webp` / `hero-pair-320.webp` are the homepage hero's portrait (`.hero-me`): Peter holding their
-daughter, both faces whole, which is how he wants it (2026-10-01: "it also doesn't include my daughter, which I want
-it to"). They are the box (205,78)-(675,548) of `with-daughter-960.webp`, one Lanczos resize, q90, bare VP8, drawn
-as a 14px-radius rounded square (a circle would clip her bow and his hair). They sit beside the PETER-COPY line
-"I'm Peter — husband, dad to a baby girl, and a Lincoln local.", the DRAFT "My story" link and the plan's two links:
-`.hero-actions` lives inside `.hero-me`, so the button shares the picture's height instead of adding to it. The block
-lays itself out by the copy's own width (container query on `.hero-copy`); under 300px the links take a full row
-below. The picture is 126px at 390, 140px at 1440. On phones the hero label is hidden, the headline is 15vw and the
-copy's top padding is 8, so "See the game plan" ends at 830 of 844 (390x844) and 808 of 812 (375x812): any added
-height above it pushes it off the first screen.
+requires it. `hero-pair-240.webp` / `hero-pair-480.webp` (240x300 and 480x600, 4:5, q90, bare VP8) are the homepage hero's
+portrait (`.hero-me`): **the whole 960x1200 frame of `with-daughter-960.webp`, no crop at all**, one uniform Lanczos
+resize each, drawn as a 14px-radius rounded rectangle. Peter asked for it bigger and with their daughter in it
+(2026-10-01: "I think I want it bigger. I think I want the whole body shot"). It renders 161x201 at 390 and 204x255
+at 1440. `--pic` is `min(46cqi,204px)`; the 204 cap is what keeps the desktop hero at exactly 800px, including at
+1920 where the headline hits its 104px ceiling. On phones his PETER-COPY line ("I'm Peter — husband, dad to a baby
+girl, and a Lincoln local.") and the plan's two links sit at the picture's **top**, not centred against it, so the
+picture's height no longer moves the button at all; what caps `--pic` on a phone is his line's column, which takes a
+fourth row under ~165px. "See the game plan" ends at 830 of 844 (390x844) and 808 of 812 (375x812), unchanged by the
+bigger picture. About the top two thirds of the picture is above the fold on a phone; fitting all of it would mean
+dropping the headline from 58.5px to ~40px, which Peter has not asked for. Roughly a quarter of the frame's right
+side is empty background (chairs, a table); trimming it would make him larger in the same box, but he asked for the
+whole shot, so it is whole.
+**The hero has no barbell any more** (Peter, 2026-10-01: "we might also get rid of the first bar bubble... They only
+see the part at the top, and that's the part we'll keep"): no `{{HERO_BAR}}`, `.hbar`, `.hbar-cap`, `.hb-you` or
+`.hb-empty`. The pinned strip (`.lbpin`) is untouched and is the only bar before the rack.
 
 **What may be edited, and what may not.** Crop, exposure and white balance are always fine. Peter
 has also allowed extending BACKGROUND at the edges when framing needs it (2026-09-25) — plain wall
@@ -284,9 +330,15 @@ shelf pages and podium still use the catalogue images.
 ## The story (`#story`)
 
 The homepage runs hero → `#how` (the five-step game plan) → `#goals` (the plate rack) → `#sample` →
-`#macros` → `#trending` (the week's three best sellers, each with its TAGLINES line, all three in view at
-every width; the scroll-scrubbed can pour behind them is `TRENDING_POUR`, off) → `#story` → `#my-stack`
-→ `#consult`. The calculator moved up beside the free sample on 2026-10-01 (the game plan offers it as the
+`#macros` → `#story` → `#my-stack` → `#consult`, and in the `plus/` copy only, `#bloodwork` sits between
+`#macros` and `#story`. **`TRENDING = False`** (Peter, 2026-10-01: "maybe we should get rid of the trending
+now"): the week's three best sellers are off the page. The whole section is built in `build_homepage.py`
+behind that one switch and substituted into `{{TRENDING}}`, so setting it True puts the band back exactly
+where it was, with its CSS kept whole. The podium is still built either way, so `bestsellers.csv` is still
+read and the build still fails on a name that is not in `share-links.csv`. The 150-frame scroll-scrubbed can
+pour that could ground it (`TRENDING_POUR`) went with it — markup, ~145 lines of script and its CSS; the
+frames stay in `assets/pour/` and the code is in commit `8138242`. Nothing on the site now asks for those
+frames, so a publish no longer needs them. The calculator moved up beside the free sample on 2026-10-01 (the game plan offers it as the
 alternative: "or run your macros first"); Peter had moved it below the story on 2026-09-26 because it "came
 too early" straight after the shelves; shown it again with the critic's score for it there (9/10), he chose
 to keep it beside the sample (2026-10-01). Because the consult no longer follows it, the
@@ -343,17 +395,21 @@ The five packs all rest at `data-tilt="0"`: they stand straight in the group tha
 and the only turn left is the fall's own lean (`DROP.lean`), which unwinds to nothing at the landing.
 
 Its pace lives in the story block of `_script.html`: the `HOLD` table and the per-change lengths. A unit is
-`UNIT=.33` of the stage (~278px at 844), and the script sets `#st-run`'s height in px on every resize; the
+`UNIT=.19` of the stage (~160px at 844; it was .33 until 2026-10-01, when Peter said the page "feels like
+a freaking journey"), and the script sets `#st-run`'s height in px on every resize; the
 350lvh in `style.css` is only the fallback until it measures. `HOLD` is
-`[.45, .25, .25, .25, .25, .85, .3, <measured>]` with `TT` (the change INTO each beat)
+`[.45, .25, .25, .25, .25, .85, .3, <measured>]` (unchanged on 2026-10-01: the quarter came off the pace,
+not the beats. No beat was cut, and none should be without reading this — the caption strip holds ~220px of
+caption clear of its fades on a phone and his shortest adjacent pair of lines comes to ~257px, so folding two
+of his captions into one block puts one of his own sentences under the fade) with `TT` (the change INTO each beat)
 `[0, .6, .45, .45, .45, .6, .45, .9]`: his before, the four pack beats, the turn, his family, the
 ask. Every hold but two is short, because nothing waits for a line to be read — the strip is already
 showing it — and a hold is only the moment a picture stands on its own. The two long ones are the
 turn (.85, the wipe plays inside it) and the ask, whose hold is measured per resize: the hold plus the
-button's own way off the screen equals `FLICK` (780px), never less than `CALLMIN` (.8 units). That is ~316px
-at 390x844 (run 2976px) and 246px at 1440x900 (run 3082px), and it is what makes every 700px flick that enters
+button's own way off the screen equals `FLICK` (780px), never less than `CALLMIN` (.8 units). The run is 2208px at 390x844 and 2249px at 1440x900, and it is what makes every 700px flick that enters
 the ask come to rest with "Book a free call" whole on screen (re-measured on merged main 2026-10-01: a window of
-800px at 390x844 and 820px at 1440x900 after the bigger photos, 30/30 flicks each). Changing any of these means re-running the
+780px at 390x844 and 820px at 1440x900 on merged main, 30/30 flicks each — the window is `FLICK` by
+construction, whatever `UNIT` is). Changing any of these means re-running the
 flick test before shipping. The stage renders from an eased copy of the scroll position with
 a speed cap and a backlog clamp, so a fast flick still plays each fall; it is still a pure function
 of scroll, so scrolling back plays it backwards. Transforms and opacity only (a full scrub costs 0
@@ -367,6 +423,12 @@ container, `.rk-plates` is `display:contents` with `role="list"`, and `place()` 
 of each panel, so ids and aria stay single and Tab still goes plate → its panel. A notch on the panel's top edge
 points at the plate. `show()` brings the plate and its packs into view together when they fit, otherwise the
 whole panel (Peter, 2026-09-28: tapping a plate must show "where the items actually are").
+
+**Section joins.** Two sections that met each laid a full `--sec` on the join, so every boundary was two of them.
+`.sec + .sec,.story + .sec,.sec + dialog + .sec{padding-top:calc(var(--sec) * .5)}` sits next to `.sec{padding:var(--sec) 0}`
+and gives a join one full `--sec` and half the other. It applies to every page, so a new section added anywhere gets
+it. `.hero + .sec` is deliberately left out. `.st-dusk` is now hidden unconditionally, because the band whose film it
+carried over no longer exists.
 
 **The rest of the homepage.** The bottom tab (`.mtab`) is phones and tablets only: hidden whole from 1024 up,
 where the header nav already carries MACROS. The quick-call card that sat under the sample form is gone;
