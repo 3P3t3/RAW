@@ -50,22 +50,24 @@
         <h1 id="hero-title"><span>Picked</span> <span>for how</span> <span class="hl-3d">you train.</span></h1>
         <!-- PETER-COPY --><p class="sub">Hand-picked supplements. Free macros. A fifteen-minute call on what’s worth taking.</p><!-- /PETER-COPY -->
         <!-- who "I" is, on the first screen and before anything asks for anything: Peter holding their
-             baby daughter (a square crop of assets/peter/with-daughter-960.webp, both faces whole) and the
+             baby daughter — the whole of assets/peter/with-daughter-960.webp, not a square cut out of it
+             (Peter, 2026-10-01: "I think I want it bigger. I think I want the whole body shot") — and the
              first line of his About introduction, verbatim, then the way through to his story further down
-             the page. The plan's two links stand in the same block, beside the picture where there is room
-             (style.css, .hero-me), so the picture can be large and "See the game plan" still sits on a
-             phone's first screen. The first thing offered is the plan, not a form: the calculator and the
-             call are both inside it (steps 01 and 04), so asking for the map first gives nothing up.
+             the page. The 4:5 picture is far taller than a square, so on a phone it stands beside the
+             HEADLINE (style.css places it there; the headline's longest line is only ~2.46x its font-size
+             wide, so the picture takes the room the headline never used) and his line and the plan's two
+             links run full width under them. From 768 it stands beside his line and the links as before.
+             The first thing offered is the plan, not a form: the calculator and the call are both inside
+             it (steps 01 and 04), so asking for the map first gives nothing up.
              .hero-actions keeps its own box: the mobile tab's observer in _script.html watches it. -->
         <div class="hero-me">
-          <img src="assets/peter/hero-pair-160.webp" srcset="assets/peter/hero-pair-160.webp 160w, assets/peter/hero-pair-320.webp 320w" sizes="140px" width="160" height="160" alt="Peter holding their baby daughter" decoding="async">
+          <img src="assets/peter/hero-pair-240.webp" srcset="assets/peter/hero-pair-240.webp 240w, assets/peter/hero-pair-480.webp 480w" sizes="(min-width:1024px) 204px, (min-width:768px) 130px, calc(46vw - 18px)" width="240" height="300" alt="Peter holding their baby daughter" decoding="async">
           <p class="hero-me-line"><!-- PETER-COPY -->I’m Peter — husband, dad to a baby girl, and a Lincoln local.<!-- /PETER-COPY --> <!-- DRAFT-COPY --><a href="#story">My story</a><!-- /DRAFT-COPY --></p>
           <!-- DRAFT-COPY --><div class="hero-actions">
             <a class="btn" href="#how">See the game plan</a>
             <a class="tlink" href="#consult">Book a free call</a>
           </div><!-- /DRAFT-COPY -->
         </div>
-        {{HERO_BAR}}
       </div>
     </div>
   </section>
