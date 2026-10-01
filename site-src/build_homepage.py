@@ -55,6 +55,29 @@ CCRX_URL = 'https://ccrx.health/n/HERSCHELMAN'     # Peter's referral link (his 
 CCRX_HOSTS = ('ccrx.health', 'avellumhealth.com')  # every host that link reaches; guard() bans all of them
                                                    # from the plain copy. The WORDS "CCRX" and "Avellum
                                                    # Health" are fine there (the footer already says one)
+CCRX_PAGE = 'bloodwork.html'   # the route's own page: the panel first, then what a clinician may decide,
+                               # then the disclosures, then the one link out. Named for the panel, because
+                               # that is the honest front door -- the panel is the part anyone can simply
+                               # buy. It is built ONLY by the second pass, so it exists under PLUS_DIR/ and
+                               # nowhere else, which is why guard() bans its NAME from the plain site too.
+CCRX_BANNED = CCRX_HOSTS + (CCRX_PAGE,)  # what guard() refuses to let into a file of the plain site. The
+                               # hosts are Peter's own line ("Just the link itself."); the page name is here
+                               # because the homepage block links that page rather than ccrx.health, so
+                               # without it `--ccrx on` on the plain pass would slip past the guard and
+                               # leave the plain homepage pointing at a page that is not at the root.
+
+# ---- the two facts on that page that EXPIRE -------------------------------------------------
+# Both are true on 2026-10-01 and both will stop being true. Each is one line here and is written
+# nowhere else, so retiring one is one edit and no hunting through copy.
+CCRX_PREORDER = '10 October 2026'   # EXPIRES ON THIS DATE. The panel is a pre-order until the first kits
+                                    # ship. On the day they do, set this to '' and every "pre-order" word
+                                    # leaves the page with it (ccrx_preorder() is the only writer).
+CCRX_PANEL_FREE = 'I don’t make anything on the panel.'   # PETER-COPY, and TRUE TODAY ONLY: he is paid
+                                    # on a prescription, not on the panel. The day the comp plan changes,
+                                    # this sentence becomes a lie -- replace it with the new truth in his
+                                    # words, or set it to '' to drop it. The clause that follows it ("If a
+                                    # clinician ends up prescribing...") is about the prescription and holds
+                                    # either way, so it lives in the copy and not up here.
 PLUS_DIR = 'plus'  # the folder the CCRX copy builds into. Peter has not named it yet: rename it here
                    # (and in the one .gitattributes line) and the whole copy moves with it
 PLUS = False       # set for the build's second pass, the one that writes PLUS_DIR/
@@ -1343,6 +1366,7 @@ def main():
     menu_shelves = '\n'.join(f'        <li><a href="category-{s}.html">{n}</a></li>' for s, n, *_ in CATEGORIES)
     shared = {'{{STYLE}}': style_href, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{MENU_SHELVES}}': menu_shelves,
               '{{CCRX}}': ccrx_block(),  # after {{FOOTER}}, which is where the placeholder sits
+              '{{CCRX_MENU}}': ccrx_menu(),  # and after {{DIALOGS}}, which is where that one sits
               '{{SCRIPT}}': script,
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)),
               '{{TOTAL_PRODUCTS}}': plural(len(products), 'product', zero='products'), '{{CONSULT_URL}}': CONSULT_URL,
@@ -1407,6 +1431,7 @@ def main():
     for k, v in dict(shared, **{'{{HEADER}}': header.replace('{{HOME}}', ''), '{{HOME}}': '',
                                 '{{HEAD_EXTRA}}': head_extra,
                                 '{{PAGE_URL}}': BASE + page_name, '{{INTRO}}': intro,
+                                '{{CCRX_HOME}}': ccrx_home(),
                                 '{{GOALS}}': cat_rows(),
                                 '{{SAMPLE_ENDPOINT}}': SAMPLE_ENDPOINT, '{{SAMPLE_ACTION}}': SAMPLE_ACTION,
                                 '{{SAMPLE_NEXT}}': SAMPLE_NEXT.replace('homepage.html', page_name), '{{SAMPLE_PRODUCTS}}': sample_list,
@@ -1507,6 +1532,28 @@ def main():
     else:
         write_plain('about.html', page)
 
+    # CCRX_PAGE: the CCRX route's own page, and the only page that exists in one published copy
+    # and not the other. The homepage block, the menu and the footer all send a visitor here first
+    # rather than straight out to CCRX, because this is where they find out what they are walking
+    # into: what the panel is, who decides whether anything is prescribed after it, Peter's
+    # disclosure, Avellum's own statement, and then the one link out. Written by the second pass
+    # alone (PLUS and CCRX), so the plain site never has it and neither does a demo export.
+    if PLUS and ccrx_on():
+        page = open(os.path.join(ROOT, 'site-src', 'bloodwork.template.html')).read()
+        for k, v in dict(shared, **{
+                '{{HEADER}}': header.replace('{{HOME}}', 'homepage.html'), '{{HOME}}': 'homepage.html',
+                '{{HEAD_EXTRA}}': f'<link rel="canonical" href="{BASE}{CCRX_PAGE}">\n',
+                '{{PAGE_URL}}': BASE + CCRX_PAGE,
+                '{{CCRX_URL}}': CCRX_URL,
+                '{{CCRX_PREORDER}}': ccrx_preorder(),
+                '{{CCRX_DISCLOSURE}}': ccrx_disclosure(),
+                '{{PCARD}}': ''}).items():
+            page = page.replace(k, v)
+        left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', page)))
+        if left:
+            raise SystemExit(f'unfilled placeholders in {CCRX_PAGE}: {left}')
+        plus_pages[CCRX_PAGE] = write_plus(CCRX_PAGE, page)
+
     if DEMO:
         demo_report(demo_pages, style)
         return
@@ -1525,24 +1572,109 @@ def main():
     print('categories', counts, 'uncategorised', [pr['product'] for pr in products if pr['product'] not in cat_of])
 
 
-def ccrx_block():
-    """The CCRX route: the one thing the two published copies differ by (see CCRX at the top).
+def ccrx_on():
+    """Whether this pass shows the CCRX route at all.
 
-    Switch off -> the empty string, so the plain pages are byte-for-byte what they were before any
-    of this existed. Switch on -> this one link, in the footer of every page of the copy.
-
-    DRAFT-COPY. This is a placeholder, not Peter's words, and it makes no claim about what the
-    products do: it names the two things CCRX sells and links his referral address. Peter's real
-    block (his wording, and wherever on the page he wants it) replaces the return below and nothing
-    else in the build has to change; if it wants a place of its own rather than the footer, put a
-    second {{CCRX}} in the template it belongs to and give this one a sibling.
+    The switch, and never a demo export: CCRX_PAGE is written by the second pass alone, so a demo
+    built with `--ccrx on` would carry a block and a menu item linking a page that is not beside
+    them. The plain pass is stopped by guard() instead, loudly, which is where it belongs.
     """
-    if not CCRX:
+    return CCRX and not DEMO
+
+
+def ccrx_block():
+    """The CCRX route in the footer of every page of the copy: one link, to CCRX_PAGE.
+
+    It does NOT go straight out to ccrx.health. The page is where a visitor finds out what they
+    are walking into -- what the panel is, who decides about a prescription, and both disclosures
+    -- and the one link out lives at the foot of it. The footer and the menu both point there, so
+    the route is reachable from any page of the copy without a third fixed layer.
+
+    Switch off -> the empty string, so the plain pages are byte-for-byte what they were.
+    """
+    if not ccrx_on():
         return ''
-    return ('\n        <!-- DRAFT-COPY: placeholder for the CCRX route. Peter has not approved copy for it;\n'
-            '             it is here so the two builds genuinely differ and the guard has a link to catch. -->\n'
-            f'        <a href="{CCRX_URL}" target="_blank" rel="noopener">Prescription peptides and bloodwork'
-            '<span class="vh"> (opens in a new tab)</span></a>')
+    return ('\n        <!-- DRAFT-COPY -->'
+            f'<a href="{CCRX_PAGE}">Bloodwork &amp; peptides</a><!-- /DRAFT-COPY -->')
+
+
+def ccrx_menu():
+    """The same route in the menu sheet, beside "About us", on every page of the copy.
+
+    A plain relative link with no {{HOME}} prefix, like About us: every page of the copy sits in
+    the one folder, so it is correct from all of them. Off -> '' and the plain site's menu is
+    untouched, to the byte.
+    """
+    if not ccrx_on():
+        return ''
+    return ('\n        <!-- The CCRX route, beside About us: its own page, because none of this belongs on\n'
+            '             a shelf or in the story. This item exists in the copy under plus/ only\n'
+            "             (ccrx_menu in build_homepage.py); the plain site's menu never gains it. -->\n"
+            f'        <!-- DRAFT-COPY --><li><a href="{CCRX_PAGE}">Bloodwork &amp; peptides '
+            '<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->')
+
+
+def ccrx_home():
+    """The homepage block, directly after the macro calculator (#macros), which it echoes on purpose.
+
+    Same furniture as #macros and #sample: .split-text on the left and a .c-card beside it from
+    768 (.c-card takes columns 7-13 of a .split on its own, so this needs no new CSS at all and
+    the plain site's style.css -- and therefore every plain page's ?v= hash -- is untouched).
+
+    The copy is Peter's, approved 2026-10-01: the label, heading, body and button are DRAFT-COPY,
+    and the note under the button is PETER-COPY, his own disclosure, whose first sentence is the
+    CCRX_PANEL_FREE switch at the top of this file. His Amway disclosure is a different business
+    and stays exactly where it is; the two are never merged.
+
+    The button goes to CCRX_PAGE, not out to ccrx.health.
+    """
+    if not ccrx_on():
+        return ''
+    return (
+        '\n\n  <!-- 3d-bis. The bloodwork route: the calculator’s own argument, turned around. It sits\n'
+        '       directly after #macros because that is what it answers -- your macros you can work out;\n'
+        '       this you cannot. It is the one block the two published copies differ by on the homepage\n'
+        f'       (ccrx_home in build_homepage.py), and its button goes to {CCRX_PAGE} rather than\n'
+        '       straight out to CCRX, because that page is where someone finds out what they are\n'
+        '       walking into. -->\n'
+        '  <section class="sec" id="bloodwork" aria-labelledby="bw-title">\n'
+        '    <div class="wrap split">\n'
+        '      <div class="split-text grow">\n'
+        '        <!-- DRAFT-COPY --><p class="label">Your bloodwork</p>\n'
+        '        <h2 id="bw-title"><span>The numbers</span> <span>you can’t <span class="hl-k">work out</span></span></h2>\n'
+        '        <p>Your macros you can calculate. What’s going on inside you, you can’t. A blood panel,'
+        ' drawn at home — no prescription, no appointment.</p><!-- /DRAFT-COPY -->\n'
+        '      </div>\n'
+        '      <div class="c-card grow" style="--d:1">\n'
+        f'        <!-- DRAFT-COPY --><a class="btn" href="{CCRX_PAGE}">See the blood panel</a><!-- /DRAFT-COPY -->\n'
+        f'        <!-- PETER-COPY --><p class="c-fine">{ccrx_disclosure()}</p><!-- /PETER-COPY -->\n'
+        '      </div>\n'
+        '    </div>\n'
+        '  </section>')
+
+
+def ccrx_disclosure():
+    """Peter's approved disclosure for the CCRX route, in his words, as one paragraph of text.
+
+    Two clauses: what he is NOT paid on (CCRX_PANEL_FREE -- true today only, see the switch) and
+    what he IS paid on (true either way). Written once, here, and used by both the homepage block
+    and CCRX_PAGE, so retiring the first clause changes both at once.
+    """
+    return ' '.join(x for x in (
+        CCRX_PANEL_FREE,
+        'If a clinician ends up prescribing you something after it, I’m paid on that.') if x)
+
+
+def ccrx_preorder():
+    """The pre-order sentence on CCRX_PAGE, or nothing once CCRX_PREORDER is emptied.
+
+    One switch, one writer: the word "pre-order" appears nowhere else in the build or in the
+    templates, so on the day the kits ship, emptying CCRX_PREORDER takes it off the page.
+    """
+    if not CCRX_PREORDER:
+        return ''
+    return (f'\n        <!-- DRAFT-COPY --><p>Right now it’s a pre-order. The first kits ship '
+            f'{CCRX_PREORDER}.</p><!-- /DRAFT-COPY -->')
 
 
 def plus_path(name):
@@ -1577,7 +1709,7 @@ def plus_links(page):
     front, and its pages can be diffed against the plain ones line for line.
     """
     shelves = '|'.join(re.escape(c[0]) for c in CATEGORIES)
-    pages = rf'(?:homepage|about|category-(?:{shelves}))\.html'
+    pages = rf'(?:homepage|about|{re.escape(CCRX_PAGE[:-5])}|category-(?:{shelves}))\.html'
     page = re.sub(rf'({re.escape(BASE)})({pages})', rf'\1{PLUS_DIR}/\2', page)
     return re.sub(r'(?<![\w./-])assets/', '../assets/', page)
 
@@ -1591,22 +1723,28 @@ def guard(name, text, on_disk=False):
     "Avellum Health", "peptide" and "bloodwork" are all free to appear in either copy, and the
     footer's ordering line already names Avellum Health.
 
+    It also bans ONE file name, CCRX_PAGE, for a mechanical reason rather than a copy one: that
+    page is written by the second pass alone, and the homepage block and the menu entry link it
+    rather than linking ccrx.health. Without it in the list, `--ccrx on` on the plain pass would
+    put a block and a menu item into the plain site carrying no banned host at all, and the plain
+    site would point at a page that is not at the root. CCRX_BANNED is the hosts plus that name.
+
     It runs on the way to disk, so a leaked page is never even written, and it is unconditional:
     no flag and no switch skips it. `--ccrx on` puts the link into the plain pass on purpose and
     this is what stops it. If Peter one day decides the plain site SHOULD carry the link, this
     function is the single place that has to be changed, deliberately, by someone reading this.
     """
     hits = [(i, h, line.strip()) for i, line in enumerate(text.splitlines(), 1)
-            for h in CCRX_HOSTS if h in line.lower()]
+            for h in CCRX_BANNED if h in line.lower()]
     if not hits:
         return text
     where = '\n'.join(f'!!   {name}:{i}  names {h}\n!!     {ln[:140]}' for i, h, ln in hits)
     what = (f'!! {name} already carries it at the repo root; this build did not write it.'
             if on_disk else f'!! {name} was NOT written.')
     raise SystemExit(
-        f'\n!! BUILD STOPPED: the CCRX link leaked into the plain site.\n'
+        f'\n!! BUILD STOPPED: the CCRX route leaked into the plain site.\n'
         f'{what} {len(hits)} occurrence(s):\n{where}\n'
-        f'!! Only the copy under {PLUS_DIR}/ may name {" or ".join(CCRX_HOSTS)}; the pages at the\n'
+        f'!! Only the copy under {PLUS_DIR}/ may name {" or ".join(CCRX_BANNED)}; the pages at the\n'
         f'!! repo root are the site Peter sends to anyone, and they must never link it\n'
         f'!! (Peter, 2026-10-01: "Just the link itself.").\n'
         f'!! Put it behind the CCRX switch in {os.path.basename(__file__)} (see ccrx_block), then rebuild.')
@@ -1628,13 +1766,13 @@ def guard_root():
                    if f.endswith(('.html', '.css', '.webmanifest')) and os.path.isfile(os.path.join(ROOT, f)))
     for f in names:
         guard(f, open(os.path.join(ROOT, f), encoding='utf-8', errors='replace').read(), on_disk=True)
-    print(f'guard: no {"/".join(CCRX_HOSTS)} link in the {len(names)} files of the plain site '
+    print(f'guard: no {"/".join(CCRX_BANNED)} in the {len(names)} files of the plain site '
           f'({len(PLAIN_WRITTEN)} of them written by this build)')
 
 
 def plus_report(pages):
     """What the second pass wrote, and the proof that it really differs from the plain site."""
-    carries = [n for n, t in pages.items() if any(h in t.lower() for h in CCRX_HOSTS)]
+    carries = [n for n, t in pages.items() if any(h in t.lower() for h in CCRX_HOSTS)]  # the link itself
     if CCRX and not carries:
         raise SystemExit(f'{PLUS_DIR}/: CCRX is on but not one page carries the link - the switch did nothing')
     out = sorted(os.listdir(os.path.join(ROOT, PLUS_DIR)))

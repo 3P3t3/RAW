@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<link rel="canonical" href="https://3p3t3.github.io/RAW/plus/category-womens-health.html">
+<link rel="canonical" href="https://3p3t3.github.io/RAW/plus/bloodwork.html">
 <meta name="theme-color" content="#002E3B">
-<title>Women’s Health · Aspire Health</title>
-<meta name="description" content="For her everyday: the Women’s Pack, multivitamins, iron and menopause support.">
+<title>Bloodwork &amp; peptides · Aspire Health</title>
+<meta name="description" content="A blood panel, drawn at home — no prescription, no appointment — and what a licensed clinician may decide after it.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Women’s Health · Aspire Health">
-<meta property="og:description" content="For her everyday: the Women’s Pack, multivitamins, iron and menopause support.">
-<meta property="og:url" content="https://3p3t3.github.io/RAW/plus/category-womens-health.html">
+<meta property="og:title" content="Bloodwork &amp; peptides · Aspire Health">
+<meta property="og:description" content="A blood panel, drawn at home — no prescription, no appointment — and what a licensed clinician may decide after it.">
+<meta property="og:url" content="https://3p3t3.github.io/RAW/plus/bloodwork.html">
 <meta property="og:image" content="https://3p3t3.github.io/RAW/assets/logo/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://3p3t3.github.io/RAW/assets/logo/og-image.png">
@@ -161,95 +161,82 @@
 
 <main id="main">
 
-  <!-- Category banner: generated backdrop (or, for a shelf in SHELF_PORTRAIT, a whole portrait beside the name), live caustics, the category set large -->
-  <section class="cat-hero cat-hero-photo" aria-labelledby="cat-title">
-    <div class="wrap cat-pic"><figure class="cat-portrait"><img src="../assets/her/with-daughter-640.webp" srcset="../assets/her/with-daughter-640.webp 640w, ../assets/her/with-daughter-960.webp 960w" sizes="(min-width:760px) min(38vw, 440px), calc(100vw - 40px)" width="960" height="1200" alt="Yenni holding their baby daughter, both in matching lemon-print dresses" fetchpriority="high"></figure></div>
+  <!-- bloodwork.html: the CCRX route's own page, and the only page that exists in the copy under
+       plus/ and not at the repo root (CCRX_PAGE in build_homepage.py; the switch and the guard are
+       documented at the top of that file). Everything here is furniture the site already has — the
+       shelf hero without a photo, and .split-text for a column of words — so nothing new is
+       invented for it and style.css is not touched.
+
+       It reads in the one order a stranger needs it in: what the panel IS, then what a clinician
+       may decide after it, then how Peter is paid, then Avellum's own statement, then the one link
+       out. No page on this site says what the panel or any peptide DOES: what a thing is, and who
+       decides, is the whole of it. No prices and nothing about where it ships, either: both change,
+       and a stale one here is worse than none — their site states both. -->
+
+  <!-- 1. The hero, in the shelves' own frame: no backdrop photo, because there is no honest
+          picture of bloodwork that is not a claim or a stock prop. Teal, the caustics, the name. -->
+  <section class="cat-hero" aria-labelledby="bw-title">
     <canvas class="caustics" data-caustics aria-hidden="true"></canvas>
     <div class="wrap cat-hero-in">
-      <p class="label"><a href="homepage.html#goals">All shelves</a></p>
-      <h1 id="cat-title">Women’s Health</h1>
-      <p class="sub">For her everyday: the Women’s Pack, multivitamins, iron and menopause support.</p>
-      <p class="cat-count">5 products</p>
-      <!-- DRAFT-COPY --><p class="cat-sample"><a href="homepage.html?try=Women%E2%80%99s%20Health#sample">Ask for a free sample</a></p><!-- /DRAFT-COPY -->
+      <p class="label"><a href="homepage.html#top">Aspire Health</a></p>
+      <h1 id="bw-title">Bloodwork &amp; peptides</h1>
+      <!-- DRAFT-COPY --><p class="sub">Something else I can point you to, separate from everything else on this site. Here is exactly what it is.</p><!-- /DRAFT-COPY -->
     </div>
   </section>
 
-  <!-- Her story: only the Women's Health shelf has this block (SHELF_EXTRA in build_homepage.py). Facts only;
-       no health claims, and nothing says a supplement caused the change: it was her whole plan. -->
-  <section class="sec her-sec" id="her" aria-labelledby="her-title">
-    <div class="wrap her-in">
-      <!-- DRAFT-COPY --><div class="her-text grow">
-        <p class="label">Who runs this shelf</p>
-        <h2 id="her-title">Yenni’s story</h2>
-        <p class="her-lead">I’m Yenni — Peter’s wife, and I run the women’s side of Aspire Health.</p>
-        <p>Our daughter was born in September 2025. I started lifting with progressive overload while I was pregnant.</p>
-        <p>My before photos are from November 2025, two months postpartum, so they include the body fat a pregnancy adds. My afters are from July 2026.</p>
-        <h3 class="her-h">What changed</h3>
-        <ul class="c-list">
-          <li>Progressive overload: lifting a little more over time</li>
-          <li>Counting calories</li>
-          <li>Solid supplementation</li>
-          <li>Creatine, for the first time</li>
-        </ul>
-        <p class="her-fine">Individual results vary.</p>
-      </div><!-- /DRAFT-COPY -->
-      <figure class="c-proof pf-hers grow">
-  <!-- DRAFT-COPY --><p class="pf-who"><span class="pf-name">Yenni</span> <span class="pf-when">Nov 2025 → Jul 2026</span></p><!-- /DRAFT-COPY -->
-  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
-  <div class="c-stack"><img src="../assets/her/front-640.webp" srcset="../assets/her/front-640.webp 640w, ../assets/her/front-768.webp 768w" sizes="(min-width:1000px) 460px, (min-width:760px) 560px, calc(100vw - 40px)" width="768" height="979" loading="lazy" decoding="async" alt="Yenni, before and after, from the front: Nov 2025 and Jul 2026"><img src="../assets/her/back-640.webp" srcset="../assets/her/back-640.webp 640w, ../assets/her/back-768.webp 768w" sizes="(min-width:1000px) 460px, (min-width:760px) 560px, calc(100vw - 40px)" width="768" height="979" loading="lazy" decoding="async" alt="Yenni, before and after, from the back: Nov 2025 and Jul 2026"></div>
-  <!-- DRAFT-COPY --><figcaption>Before: two months postpartum. After: ten months postpartum.</figcaption><!-- /DRAFT-COPY -->
-</figure>
-      <!-- DRAFT-COPY --><article class="dx-card" aria-labelledby="dx-yenni-s-dexa-scans">
-<div class="dx-head"><h3 class="dx-t" id="dx-yenni-s-dexa-scans">Yenni’s DEXA scans</h3><p class="dx-span">Four scans, Jan 2024 → Aug 2026</p></div>
-<dl class="dx-nums"><div class="dx-n"><dt>Body fat</dt><dd class="dx-v">29.9% → 22.7%</dd><dd class="dx-d">−7.2 points</dd></div><div class="dx-n"><dt>Fat</dt><dd class="dx-v">41.2 → 30.2 lb</dd><dd class="dx-d">−11.0 lb</dd></div><div class="dx-n"><dt>Lean mass</dt><dd class="dx-v">92.1 → 98.1 lb</dd><dd class="dx-d">+6.0 lb</dd></div></dl>
-<p class="dx-gapnote">No scan between Dec 2024 and Aug 2026: we got pregnant and had our first in between.</p><div class="dx-charts"><figure class="dx-chart"><figcaption class="dx-ct"><i style="--c:#8A543E"></i>Fat mass, lb</figcaption><svg viewBox="0 0 300 132" width="300" height="132" aria-hidden="true" focusable="false"><line class="dx-grid dx-base" x1="36" x2="288" y1="106.0" y2="106.0"/><text class="dx-yl" x="29" y="110.0" text-anchor="end">0</text><line class="dx-grid" x1="36" x2="288" y1="63.0" y2="63.0"/><text class="dx-yl" x="29" y="67.0" text-anchor="end">25</text><line class="dx-grid" x1="36" x2="288" y1="20.0" y2="20.0"/><text class="dx-yl" x="29" y="24.0" text-anchor="end">50</text><line class="dx-tick" x1="36.0" x2="36.0" y1="106" y2="110"/><text class="dx-xl" x="32.0" y="125" text-anchor="start">2024</text><line class="dx-tick" x1="127.8" x2="127.8" y1="106" y2="110"/><text class="dx-xl" x="127.8" y="125" text-anchor="middle">2025</text><line class="dx-tick" x1="223.2" x2="223.2" y1="106" y2="110"/><text class="dx-xl" x="223.2" y="125" text-anchor="middle">2026</text><rect class="dx-gap" x="131.5" y="14" width="144.5" height="92"/><text class="dx-gapl" x="203.7" y="67.0" text-anchor="middle">no scans</text><polyline class="dx-line" points="36.0,35.1 83.7,34.1 123.5,38.9" stroke="#8A543E"/><circle class="dx-pt" cx="36.0" cy="35.1" r="4" fill="#8A543E"><title>Jan 2024: 41.2 lb</title></circle><circle class="dx-pt" cx="83.7" cy="34.1" r="4" fill="#8A543E"><title>Jul 2024: 41.8 lb</title></circle><circle class="dx-pt" cx="123.5" cy="38.9" r="4" fill="#8A543E"><title>Dec 2024: 39.0 lb</title></circle><circle class="dx-pt" cx="284.0" cy="54.1" r="4" fill="#8A543E"><title>Aug 2026: 30.2 lb</title></circle><text class="dx-vl" x="38.0" y="26.1" text-anchor="start">41.2</text><text class="dx-vl" x="290.0" y="45.1" text-anchor="end">30.2</text></svg></figure><figure class="dx-chart"><figcaption class="dx-ct"><i style="--c:#3340B8"></i>Lean mass, lb</figcaption><svg viewBox="0 0 300 132" width="300" height="132" aria-hidden="true" focusable="false"><line class="dx-grid dx-base" x1="36" x2="288" y1="106.0" y2="106.0"/><text class="dx-yl" x="29" y="110.0" text-anchor="end">0</text><line class="dx-grid" x1="36" x2="288" y1="63.0" y2="63.0"/><text class="dx-yl" x="29" y="67.0" text-anchor="end">55</text><line class="dx-grid" x1="36" x2="288" y1="20.0" y2="20.0"/><text class="dx-yl" x="29" y="24.0" text-anchor="end">110</text><line class="dx-tick" x1="36.0" x2="36.0" y1="106" y2="110"/><text class="dx-xl" x="32.0" y="125" text-anchor="start">2024</text><line class="dx-tick" x1="127.8" x2="127.8" y1="106" y2="110"/><text class="dx-xl" x="127.8" y="125" text-anchor="middle">2025</text><line class="dx-tick" x1="223.2" x2="223.2" y1="106" y2="110"/><text class="dx-xl" x="223.2" y="125" text-anchor="middle">2026</text><rect class="dx-gap" x="131.5" y="14" width="144.5" height="92"/><text class="dx-gapl" x="203.7" y="67.0" text-anchor="middle">no scans</text><polyline class="dx-line" points="36.0,34.0 83.7,31.2 123.5,34.9" stroke="#3340B8"/><circle class="dx-pt" cx="36.0" cy="34.0" r="4" fill="#3340B8"><title>Jan 2024: 92.1 lb</title></circle><circle class="dx-pt" cx="83.7" cy="31.2" r="4" fill="#3340B8"><title>Jul 2024: 95.7 lb</title></circle><circle class="dx-pt" cx="123.5" cy="34.9" r="4" fill="#3340B8"><title>Dec 2024: 90.9 lb</title></circle><circle class="dx-pt" cx="284.0" cy="29.3" r="4" fill="#3340B8"><title>Aug 2026: 98.1 lb</title></circle><text class="dx-vl" x="38.0" y="25.0" text-anchor="start">92.1</text><text class="dx-vl" x="290.0" y="20.3" text-anchor="end">98.1</text></svg></figure></div>
-<div class="vh"><table><caption>Yenni’s DEXA scans, every scan</caption><thead><tr><th scope="col">Scan</th><th scope="col">Body fat</th><th scope="col">Fat mass</th><th scope="col">Lean mass</th></tr></thead><tbody><tr><th scope="row">Jan 2024</th><td>29.9%</td><td>41.2 lb</td><td>92.1 lb</td></tr><tr><th scope="row">Jul 2024</th><td>29.4%</td><td>41.8 lb</td><td>95.7 lb</td></tr><tr><th scope="row">Dec 2024</th><td>29.0%</td><td>39.0 lb</td><td>90.9 lb</td></tr><tr><th scope="row">Aug 2026</th><td>22.7%</td><td>30.2 lb</td><td>98.1 lb</td></tr></tbody></table></div>
-<div class="dx-src"><p>Measured by DEXA scan at UC Davis Sports Medicine, Sacramento.</p><p>We’re not sponsored by or affiliated with UC Davis Health; we’re just big fans of their DEXA service.</p><p>Individual results vary.</p></div>
-</article><!-- /DRAFT-COPY -->
-    </div>
-  </section>
+  <!-- 2. The panel, and what can come after it: the two halves of the one thing, in the split the
+          homepage uses for #sample and #macros -- the words on the left, the sand card beside them
+          from 768 (.c-card takes columns 7-13 of a .split by itself). On a phone they stack in this
+          order, which is the order a stranger needs them in: what the panel IS first, then the part
+          that is a clinician's decision and not Peter's.
 
+          The sentence about the first kits shipping is written by ccrx_preorder(), off the one
+          constant that expires: empty CCRX_PREORDER the day they ship and that sentence -- the only
+          place on this site that says the panel is not shipping yet -- leaves the page with it.
 
-  <!-- Every product in this category; each one rises into frame as you scroll -->
-  <section class="sec cat-shop" id="all" aria-labelledby="all-title">
-    <div class="wrap">
-      <div class="sec-head grow"><h2 id="all-title">Everything in Women’s Health</h2></div>
-      <ul class="grid" id="grid">
-        <li class="card grow" style="--d:0" data-cat="womens-health"><a class="card-link" href="https://amway.com/share-link/Z29KKI5XB" target="_blank" rel="noopener" data-name="Nutrilite Complete Menopause Support" data-kind="Once-daily tablets" data-line="One tablet a day, made for the menopause years" data-facts="" data-sfx="chime" data-try="Nutrilite Complete Menopause Support"><span class="shot"><img src="../assets/products/nutrilite-complete-menopause-support.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Women’s Health</p><h3 class="p-name">Nutrilite Complete Menopause Support</h3><p class="p-desc">Once-daily tablets</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:1" data-cat="womens-health"><a class="card-link" href="https://amway.com/share-link/CcUJb0vCh" target="_blank" rel="noopener" data-name="Nutrilite Iron Folic" data-kind="Iron &amp; folic acid tablets" data-line="Iron and folic acid, one to three tablets a day" data-facts="" data-sfx="chime" data-try="Nutrilite Iron Folic"><span class="shot"><img src="../assets/products/nutrilite-iron-folic.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Women’s Health</p><h3 class="p-name">Nutrilite Iron Folic</h3><p class="p-desc">Iron &amp; folic acid tablets</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:2" data-cat="womens-health"><a class="card-link" href="https://amway.com/share-link/nQJXizu78" target="_blank" rel="noopener" data-name="Nutrilite Organics Women&#x27;s Daily Multi Gummies" data-kind="Organic multivitamin gummies" data-line="The daily multi as an organic gummy, for women" data-facts="" data-sfx="chime" data-try="Nutrilite Organics Women&#x27;s Daily Multi Gummies"><span class="shot"><img src="../assets/products/nutrilite-organics-women-s-daily-multi-gummies.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Women’s Health</p><h3 class="p-name">Nutrilite Organics Women&#x27;s Daily Multi Gummies</h3><p class="p-desc">Organic multivitamin gummies</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:3" data-cat="womens-health"><a class="card-link" href="https://amway.com/share-link/c7BJpfkBG" target="_blank" rel="noopener" data-name="Nutrilite Women&#x27;s Daily Multivitamin Tablets" data-kind="Multivitamin tablets" data-line="One tablet once a day, made for women" data-facts="" data-sfx="chime" data-try="Nutrilite Women&#x27;s Daily Multivitamin Tablets"><span class="shot"><img src="../assets/products/nutrilite-women-s-daily-multivitamin-tablets.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Women’s Health</p><h3 class="p-name">Nutrilite Women&#x27;s Daily Multivitamin Tablets</h3><p class="p-desc">Multivitamin tablets</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:0" data-cat="womens-health"><a class="card-link" href="https://amway.com/share-link/IoA~cM07C" target="_blank" rel="noopener" data-name="Nutrilite Women&#x27;s Pack" data-kind="Daily supplement packets" data-line="One packet a day, put together for women" data-facts="" data-sfx="chime" data-try="Nutrilite Women&#x27;s Pack"><span class="shot"><img src="../assets/products/nutrilite-women-s-pack.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Women’s Health</p><h3 class="p-name">Nutrilite Women&#x27;s Pack</h3><p class="p-desc">Daily supplement packets</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- The other categories -->
-  <section class="sec cat-more" aria-labelledby="more-title">
-    <div class="wrap">
-      <div class="sec-head grow"><h2 id="more-title">Keep looking</h2></div>
-      <ul class="goal-index">
-          <li><a class="goal" href="category-recovery.html"><span class="goal-name">Recovery</span><span class="goal-desc">Wind down, repair and sleep</span><span class="goal-island"><img src="../assets/thumbs/recovery.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-hydration.html"><span class="goal-name">Hydration</span><span class="goal-desc">Electrolytes and drink mixes for long, hot and sweaty sessions.</span><span class="goal-island"><img src="../assets/thumbs/hydration.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-energy-focus.html"><span class="goal-name">Energy &amp; Focus</span><span class="goal-desc">Pre-workout, tablets and the full XS energy range.</span><span class="goal-island"><img src="../assets/thumbs/energy-focus.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-protein.html"><span class="goal-name">Protein</span><span class="goal-desc">Powders, shakes, bars and crisps to hit your protein for the day.</span><span class="goal-island"><img src="../assets/thumbs/protein.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-fat-loss.html"><span class="goal-name">Fat Loss</span><span class="goal-desc">Powders, tablets and softgels to pair with your training.</span><span class="goal-island"><img src="../assets/thumbs/fat-loss.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-daily-foundations.html"><span class="goal-name">Daily Foundations</span><span class="goal-desc">The everyday base</span><span class="goal-island"><img src="../assets/thumbs/daily-foundations.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-skin-redefined.html"><span class="goal-name">Skin Redefined</span><span class="goal-desc">Artistry skincare, for the hours you are not training.</span><span class="goal-island"><img src="../assets/thumbs/skin-redefined.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-mens-health.html"><span class="goal-name">Men’s Health</span><span class="goal-desc">For his everyday</span><span class="goal-island"><img src="../assets/thumbs/mens-health.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-everyday-health.html"><span class="goal-name">Everyday Health</span><span class="goal-desc">The quiet part of the routine</span><span class="goal-island"><img src="../assets/thumbs/everyday-health.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Macros: the calculator lives on the homepage, so this band is the way to it -->
-  <section class="sec cat-macros" aria-labelledby="cat-macros-title">
+          Nothing here says what the panel or any peptide DOES. The categories CCRX sells are named
+          and that is all, because this is prescription medicine and because the clinician is the one
+          having that conversation. No prices and nothing about where it ships, either: both change,
+          and a stale one here is worse than none -- their own site states both. -->
+  <section class="sec" aria-labelledby="bw-panel-t">
     <div class="wrap split">
       <div class="split-text grow">
-        <p class="label">Your numbers</p>
-        <h2 id="cat-macros-title"><span>Not sure where</span> <span>to start?</span></h2>
-        <p>The math behind a higher you.</p>
-        <a class="btn" href="homepage.html#macros">Work out your macros</a>
+        <!-- DRAFT-COPY --><p class="label">The panel</p>
+        <h2 id="bw-panel-t"><span>What the</span> <span><span class="hl-k">panel</span> is</span></h2>
+        <p>It’s bloodwork, drawn at home. A kit comes to you, you take the sample yourself, and it goes back to the lab in the post.</p>
+        <p>No prescription to get first. No appointment to sit through. You pay for it once — it isn’t a subscription.</p>
+        <!-- DRAFT-COPY --><p>Right now it’s a pre-order. The first kits ship 10 October 2026.</p><!-- /DRAFT-COPY -->
+        <p>What the panel measures is listed on their site, and so is what it costs.</p><!-- /DRAFT-COPY -->
+      </div>
+      <div class="c-card grow" style="--d:1" aria-labelledby="bw-after-t">
+        <!-- DRAFT-COPY --><div>
+          <p class="label">After the panel</p>
+          <h2 id="bw-after-t">What can come after</h2>
+        </div>
+        <p>If you want to go further than the panel, that part is medicine, and it isn’t mine to hand out.</p>
+        <p>You fill in an intake. A licensed clinician reads it and decides whether a prescription is appropriate for you. They can also decide it isn’t, and say no.</p>
+        <p>What they can prescribe is compounded peptides. I’m not going to tell you what any of them is for — I’m not a clinician, and that conversation is yours to have with them.</p>
+        <p>A prescription is refilled every 28 days.</p><!-- /DRAFT-COPY -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Before you go: how Peter is paid here (PETER-COPY, his approved wording -- his Amway
+          disclosure is a different business and stays on the pages it is already on; the two are
+          never merged), then Avellum's own statement, which belongs on this page because it is
+          theirs, and then the one link out, in the card beside them. -->
+  <section class="sec" aria-labelledby="bw-go-t">
+    <div class="wrap split">
+      <div class="split-text grow">
+        <!-- DRAFT-COPY --><p class="label">Straight with you</p>
+        <h2 id="bw-go-t"><span>Before</span> <span><span class="hl-k">you go</span></span></h2><!-- /DRAFT-COPY -->
+        <!-- PETER-COPY --><p>I don’t make anything on the panel. If a clinician ends up prescribing you something after it, I’m paid on that.</p><!-- /PETER-COPY -->
+        <!-- Avellum Health's own statement about compounded medications, in their words -->
+        <p>Avellum Health, whose storefront this is, state it plainly: compounded medications are not FDA-approved drugs.</p>
+      </div>
+      <div class="c-card grow" style="--d:1">
+        <!-- DRAFT-COPY --><p>That’s their site, not mine. The price, what’s in the panel and where they can ship it are theirs to state, and they’re all on there.</p>
+        <a class="btn" href="https://ccrx.health/n/HERSCHELMAN" target="_blank" rel="noopener">See the panel on their site<span class="vh"> (opens in a new tab)</span></a><!-- /DRAFT-COPY -->
       </div>
     </div>
   </section>
@@ -329,19 +316,6 @@
   </div>
 </dialog>
 
-    <dialog class="pcard" id="pcard" aria-labelledby="pcard-name" aria-describedby="pcard-line">
-      <div class="pcard-in">
-        <button class="icon-btn pcard-x" type="button" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
-        <div class="pcard-art"><img id="pcard-img" alt="" width="600" height="600"></div>
-        <div class="pcard-copy">
-          <p class="pcard-kind" id="pcard-kind"></p>
-          <h3 class="pcard-name" id="pcard-name"></h3>
-          <p class="pcard-line" id="pcard-line"></p>
-          <ul class="pcard-facts" id="pcard-facts" aria-label="Quick facts"></ul>
-          <div class="pcard-acts"><a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Buy on Amway<span class="vh"> (opens in a new tab)</span></a><a class="btn btn-line pcard-try" id="pcard-try" href="homepage.html#sample" data-home="homepage.html">Ask for a free sample</a></div>
-        </div>
-      </div>
-    </dialog>
 
 <p class="vh" id="live" aria-live="polite"></p>
 

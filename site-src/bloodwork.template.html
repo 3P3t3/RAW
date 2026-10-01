@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+{{HEAD_EXTRA}}<meta name="theme-color" content="#002E3B">
+<title>Bloodwork &amp; peptides · Aspire Health</title>
+<meta name="description" content="A blood panel, drawn at home — no prescription, no appointment — and what a licensed clinician may decide after it.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bloodwork &amp; peptides · Aspire Health">
+<meta property="og:description" content="A blood panel, drawn at home — no prescription, no appointment — and what a licensed clinician may decide after it.">
+<meta property="og:url" content="{{PAGE_URL}}">
+<meta property="og:image" content="{{BASE}}assets/logo/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{BASE}}assets/logo/og-image.png">
+<link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/logo/favicon-32.png" sizes="32x32">
+<link rel="icon" href="assets/logo/favicon-16.png" sizes="16x16">
+<link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
+<link rel="stylesheet" href="{{STYLE}}">
+<script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
+</head>
+<body>
+<!-- the field: the site's one ground (the field block in style.css) -->
+<div class="field" aria-hidden="true"><span class="fg fg1"></span><span class="fg fg2"></span></div>
+<a class="skip" href="#main">Skip to content</a>
+
+{{ICONS}}
+
+{{HEADER}}
+
+<main id="main">
+
+  <!-- bloodwork.html: the CCRX route's own page, and the only page that exists in the copy under
+       plus/ and not at the repo root (CCRX_PAGE in build_homepage.py; the switch and the guard are
+       documented at the top of that file). Everything here is furniture the site already has — the
+       shelf hero without a photo, and .split-text for a column of words — so nothing new is
+       invented for it and style.css is not touched.
+
+       It reads in the one order a stranger needs it in: what the panel IS, then what a clinician
+       may decide after it, then how Peter is paid, then Avellum's own statement, then the one link
+       out. No page on this site says what the panel or any peptide DOES: what a thing is, and who
+       decides, is the whole of it. No prices and nothing about where it ships, either: both change,
+       and a stale one here is worse than none — their site states both. -->
+
+  <!-- 1. The hero, in the shelves' own frame: no backdrop photo, because there is no honest
+          picture of bloodwork that is not a claim or a stock prop. Teal, the caustics, the name. -->
+  <section class="cat-hero" aria-labelledby="bw-title">
+    <canvas class="caustics" data-caustics aria-hidden="true"></canvas>
+    <div class="wrap cat-hero-in">
+      <p class="label"><a href="{{HOME}}#top">Aspire Health</a></p>
+      <h1 id="bw-title">Bloodwork &amp; peptides</h1>
+      <!-- DRAFT-COPY --><p class="sub">Something else I can point you to, separate from everything else on this site. Here is exactly what it is.</p><!-- /DRAFT-COPY -->
+    </div>
+  </section>
+
+  <!-- 2. The panel, and what can come after it: the two halves of the one thing, in the split the
+          homepage uses for #sample and #macros -- the words on the left, the sand card beside them
+          from 768 (.c-card takes columns 7-13 of a .split by itself). On a phone they stack in this
+          order, which is the order a stranger needs them in: what the panel IS first, then the part
+          that is a clinician's decision and not Peter's.
+
+          The sentence about the first kits shipping is written by ccrx_preorder(), off the one
+          constant that expires: empty CCRX_PREORDER the day they ship and that sentence -- the only
+          place on this site that says the panel is not shipping yet -- leaves the page with it.
+
+          Nothing here says what the panel or any peptide DOES. The categories CCRX sells are named
+          and that is all, because this is prescription medicine and because the clinician is the one
+          having that conversation. No prices and nothing about where it ships, either: both change,
+          and a stale one here is worse than none -- their own site states both. -->
+  <section class="sec" aria-labelledby="bw-panel-t">
+    <div class="wrap split">
+      <div class="split-text grow">
+        <!-- DRAFT-COPY --><p class="label">The panel</p>
+        <h2 id="bw-panel-t"><span>What the</span> <span><span class="hl-k">panel</span> is</span></h2>
+        <p>It’s bloodwork, drawn at home. A kit comes to you, you take the sample yourself, and it goes back to the lab in the post.</p>
+        <p>No prescription to get first. No appointment to sit through. You pay for it once — it isn’t a subscription.</p>{{CCRX_PREORDER}}
+        <p>What the panel measures is listed on their site, and so is what it costs.</p><!-- /DRAFT-COPY -->
+      </div>
+      <div class="c-card grow" style="--d:1" aria-labelledby="bw-after-t">
+        <!-- DRAFT-COPY --><div>
+          <p class="label">After the panel</p>
+          <h2 id="bw-after-t">What can come after</h2>
+        </div>
+        <p>If you want to go further than the panel, that part is medicine, and it isn’t mine to hand out.</p>
+        <p>You fill in an intake. A licensed clinician reads it and decides whether a prescription is appropriate for you. They can also decide it isn’t, and say no.</p>
+        <p>What they can prescribe is compounded peptides. I’m not going to tell you what any of them is for — I’m not a clinician, and that conversation is yours to have with them.</p>
+        <p>A prescription is refilled every 28 days.</p><!-- /DRAFT-COPY -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Before you go: how Peter is paid here (PETER-COPY, his approved wording -- his Amway
+          disclosure is a different business and stays on the pages it is already on; the two are
+          never merged), then Avellum's own statement, which belongs on this page because it is
+          theirs, and then the one link out, in the card beside them. -->
+  <section class="sec" aria-labelledby="bw-go-t">
+    <div class="wrap split">
+      <div class="split-text grow">
+        <!-- DRAFT-COPY --><p class="label">Straight with you</p>
+        <h2 id="bw-go-t"><span>Before</span> <span><span class="hl-k">you go</span></span></h2><!-- /DRAFT-COPY -->
+        <!-- PETER-COPY --><p>{{CCRX_DISCLOSURE}}</p><!-- /PETER-COPY -->
+        <!-- Avellum Health's own statement about compounded medications, in their words -->
+        <p>Avellum Health, whose storefront this is, state it plainly: compounded medications are not FDA-approved drugs.</p>
+      </div>
+      <div class="c-card grow" style="--d:1">
+        <!-- DRAFT-COPY --><p>That’s their site, not mine. The price, what’s in the panel and where they can ship it are theirs to state, and they’re all on there.</p>
+        <a class="btn" href="{{CCRX_URL}}" target="_blank" rel="noopener">See the panel on their site<span class="vh"> (opens in a new tab)</span></a><!-- /DRAFT-COPY -->
+      </div>
+    </div>
+  </section>
+</main>
+
+{{FOOTER}}
+
+{{DIALOGS}}
+{{PCARD}}
+<p class="vh" id="live" aria-live="polite"></p>
+
+{{SCRIPT}}
+</body>
+</html>
