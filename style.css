@@ -158,8 +158,10 @@ html.locked .mtab{transform:translateY(calc(100% + 2px));visibility:hidden}
    and sat 0.4px from both edges at 360. Under 375 a little less tracking and padding brings them
    to 312, whole on a 320 screen and clear of the edges at 360 */
 @media (max-width:374.98px){.mtab a{padding-inline:12px;letter-spacing:.08em}}
-/* 1024 and up the mast shows its own "Free call"; one call button on screen, never two */
-@media (min-width:1024px){.mtab-call{display:none!important}}
+/* 1024 and up the mast carries both (MACROS in its nav, and its own free-call button), so the tab
+   is a phone's and a tablet's only: left on, its lone calculator half floated bottom-centre over
+   whatever was under it on every desktop page */
+@media (min-width:1024px){.mtab{display:none!important}}
 html:not(.js) .mtab{display:none}
 @media (prefers-reduced-motion:reduce){.mtab,.mtab.on{transition:none}}
 
@@ -547,19 +549,17 @@ a.how-step:active{opacity:.7}
 .s-next li{position:relative;padding-left:32px;font-size:14px;line-height:1.45;color:var(--ink);counter-increment:sn}
 .s-next li::before{content:counter(sn);position:absolute;left:0;top:-1px;width:21px;height:21px;display:grid;place-items:center;
   font:700 11px/1 var(--sans);color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
-/* the quick call (step 4): under the form on a phone, beside it from 768 up, and again inside the
-   thank-you, where the one under the form steps aside. Its button is built by quick_call(). */
+/* the quick call: inside the thank-you, once a sample is sent (the card that stood under the form
+   went on 2026-10-01: the calculator follows the sample now). Its button is built by quick_call(). */
 .qc{display:grid;gap:12px;justify-items:start;padding:20px;box-shadow:inset 0 0 0 1px var(--line)}
 .qc-ask{font:600 17px/1.35 var(--sans);color:var(--ink);max-width:36ch}
 .qc .btn{width:100%}
 .s-done .qc{margin-top:8px;padding:18px 0 0;box-shadow:none;border-top:1px solid var(--line)}
 .s-step3{display:grid;gap:8px;justify-items:start;margin-top:8px}
-.sample-sec:has(.s-done.on) .qc-form,.sample-sec:has(.s-done:target) .qc-form{display:none}
 @media (min-width:768px){
   .sample-sec .split{grid-template-rows:auto 1fr}
   .sample-sec .split-text{grid-row:1}
   .sample-sec .c-card{grid-row:1 / span 2}
-  .sample-sec .qc-form{grid-column:1 / 6;grid-row:2;align-self:start}
   .qc .btn{width:auto}
 }
 /* The free sample (#sample) reads as a note to Peter: a fill-in-the-blank sentence in the display
@@ -657,10 +657,22 @@ html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:
 .s-picker{margin-top:10px;padding:14px 12px 12px;border-radius:20px;background:color-mix(in srgb,var(--sand) 40%,var(--chalk));
   box-shadow:inset 0 0 0 2px var(--ink)}
 .sp-t{margin:0 0 12px 4px;font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
-.sp-plates{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 6px}
+/* ten shelves, laid out so none is left alone on a row (three a row left Everyday Health on a fourth):
+   always two a row or five. Container queries, so it follows the picker's own width, not the
+   window's: from 278px (a 390 phone) two a row with each plate beside its name, five short
+   rows; under 278 (320 to 375, where "Foundations" no longer fits beside a plate) two a row with the
+   name under the plate; from 440 (the desktop card) five a row, name under plate, two rows. */
+.s-picker{container-type:inline-size}
+.sp-plates{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 6px}
 .sp-plate{display:grid;justify-items:center;align-content:start;gap:7px;width:100%;min-height:44px;margin:0;padding:6px 2px 8px;border:0;border-radius:14px;
   background:none;cursor:pointer;color:var(--ink);font:700 13px/1.15 var(--sans);text-align:center;-webkit-tap-highlight-color:transparent}
 .sp-name{max-width:100%;text-wrap:balance;overflow-wrap:anywhere}
+@container (min-width:278px) and (max-width:439.98px){
+  .sp-plates{gap:6px}
+  .sp-plate{grid-template-columns:auto minmax(0,1fr);justify-items:start;align-items:center;align-content:center;gap:10px;padding:4px 4px 4px 2px;text-align:left}
+  .sp-plate .sp-disc{width:40px;height:40px}
+}
+@container (min-width:440px){.sp-plates{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px 6px}}
 .sp-disc{position:relative;display:block;width:52px;height:52px;border-radius:50%;
   background:var(--rubber,none),radial-gradient(120% 120% at 32% 16%,rgba(255,255,255,.14),rgba(255,255,255,0) 58%),var(--c);
   background-size:120px 120px,auto,auto;
@@ -705,7 +717,6 @@ html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:
 .s-prog{position:absolute;z-index:1;top:-32px;right:16px;display:grid;place-items:center;width:66px;height:66px;margin:0;
   border-radius:50%;background:var(--sand);box-shadow:inset 0 0 0 2px var(--ink),3px 3px 0 var(--ink);
   font:800 16px/1 var(--display);font-stretch:75%;color:var(--ink);transform:rotate(-12deg)}
-#sample .qc-form{border-radius:24px;box-shadow:inset 0 0 0 2px var(--ink)}
 /* under 360px the note drops two pixels of type and four of margin a side, so a line holds a
    clause and a blank; it is still the heavy condensed cut, just a size down */
 @media (max-width:359px){
@@ -745,6 +756,19 @@ html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:
 @media (min-width:768px){
   #consult-form{--ncs:30px;--ncq:28px}
   #consult-form .c-q-long{--ncs:19px}
+}
+/* from 1024 the card has to stand whole in a laptop's window under the masthead (1440x900: 824px
+   under the 76px mast; it was 913px, so its first question and "Pick a time" were never on screen
+   together). Every question and every answer stays, word for word: the six training answers go
+   two to a row, each the same width (5 rows of pills down to 3), the five goals take the phone's
+   size so they sit in two rows, not three (19px to spare at 1440), and the gaps close up a little.
+   745px at 1440, with room under it for the summary line a pick brings. */
+@media (min-width:1024px){
+  #consult-form{gap:22px}
+  .c-card.nc#consult-form{padding-top:42px;padding-bottom:30px}
+  #consult-form .c-q:not(.c-q-long){--ncs:26px}
+  #consult-form .c-q-long .chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  #consult-form .c-q-long .chip span{width:100%;min-height:52px;padding:0 .6em}
 }
 
 /* the category banner's way to it */
@@ -951,6 +975,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .pod .p-tag{color:var(--sand)}
 .pod .p-name{color:var(--chalk)}
 .pod .p-desc{color:var(--on-dark)}
+.pod .p-why{margin-top:4px;font-size:14px;line-height:1.4;color:var(--on-dark);overflow-wrap:anywhere}   /* its TAGLINES line: why it's worth a look */
 .pod-count{margin-top:10px;font-size:14px;color:var(--sand);font-variant-numeric:tabular-nums}
 .pod-num{font:800 22px/1 var(--display);font-stretch:72%;display:inline-block;margin-right:4px}
 @media (hover:hover){.pod .card-link:hover .p-name{text-decoration:underline;text-underline-offset:4px}}
@@ -1954,7 +1979,7 @@ body{background:transparent}
 .no-pour :focus-visible{outline-color:var(--teal)}
 .no-pour .pod .card-link,.no-pour .pod .p-name{color:var(--ink)}
 .no-pour .pod-rank,.no-pour .pod-count{color:var(--teal)}
-.no-pour .pod .p-tag,.no-pour .pod .p-desc{color:var(--text)}
+.no-pour .pod .p-tag,.no-pour .pod .p-desc,.no-pour .pod .p-why{color:var(--text)}
 .no-pour .pod .shot::after{background:radial-gradient(closest-side,rgba(30,38,47,.3),rgba(30,38,47,0))}
 /* ...and it is a compact band, not a podium: the three are cards like the shop's (the same glow
    behind the pack and shadow under it), each rank on its pack's corner. It is one row of three at
@@ -1965,7 +1990,9 @@ body{background:transparent}
    couple of steps down, and the descriptor dropped (the name, the shelf and the count carry the
    card, and the whole line of it is 88px wide at 320). The descriptor and the full sizes come
    back at 560px, where there is room for them. */
-.podium-sec.no-pour{margin-top:0;padding-top:var(--sec)}
+/* no padding of its own on top: the band before it (the calculator) already ends in a full --sec
+   of ground, and the two together stood ~150px of empty field over the heading on a phone */
+.podium-sec.no-pour{margin-top:0;padding-top:0}
 .no-pour .sec-head{padding-top:0;margin-bottom:18px}
 .no-pour .podium{grid-auto-flow:row;grid-template-columns:repeat(3,minmax(0,1fr));
   gap:clamp(8px,2.6vw,16px);margin:0;padding:0;align-items:start}
@@ -1980,6 +2007,9 @@ body{background:transparent}
 .no-pour .pod .p-tag{margin-top:6px;font-size:11px;line-height:1.25;min-height:2.5em}
 .no-pour .pod .p-name{margin-top:2px;font-size:13px;line-height:1.25;text-wrap:balance}
 .no-pour .pod .p-desc{display:none}
+/* the why stays at every width: on a phone it is the card's one line under the name, in place of
+   the descriptor, at the shelf tag's size (it wraps to three or four short lines in an 88px column) */
+.no-pour .pod .p-why{margin-top:4px;font-size:11.5px;line-height:1.3;text-wrap:pretty}
 .no-pour .pod-count{margin-top:4px;font-size:11px}
 .no-pour .pod-num{font-size:15px;margin-right:3px}
 @media (min-width:560px){
@@ -1989,6 +2019,7 @@ body{background:transparent}
   .no-pour .pod .p-tag{margin-top:10px;font-size:14px;line-height:1.3;min-height:0}
   .no-pour .pod .p-name{margin-top:4px;font-size:16px;line-height:1.3}
   .no-pour .pod .p-desc{display:block}
+  .no-pour .pod .p-why{margin-top:6px;font-size:14px;line-height:1.4;color:var(--ink)}
   .no-pour .pod-count{margin-top:6px;font-size:14px}
   .no-pour .pod-num{font-size:22px;margin-right:4px}
 }
