@@ -69,7 +69,7 @@ CCRX_BANNED = CCRX_HOSTS + (CCRX_PAGE,)  # what guard() refuses to let into a fi
 # ---- the two facts on that page that EXPIRE -------------------------------------------------
 # Both are true on 2026-10-01 and both will stop being true. Each is one line here and is written
 # nowhere else, so retiring one is one edit and no hunting through copy.
-CCRX_PREORDER = '10 October 2026'   # EXPIRES ON THIS DATE. The panel is a pre-order until the first kits
+CCRX_PREORDER = 'October 10, 2026'   # EXPIRES ON THIS DATE. The panel is a pre-order until the first kits
                                     # ship. On the day they do, set this to '' and every "pre-order" word
                                     # leaves the page with it (ccrx_preorder() is the only writer).
 CCRX_PANEL_FREE = 'I don’t make anything on the panel.'   # PETER-COPY, and TRUE TODAY ONLY: he is paid
