@@ -172,9 +172,9 @@ CATEGORIES = [
     # own shelf rather than being bent onto Daily Foundations. Nothing here is on a second shelf, so this
     # is each one's home shelf and its card tag. Four names that invite claims (cholesterol, liver, heart,
     # aging), so the line, the shelf line and every tagline name the thing and the dose and stop there.
-    # Its hero is the placeholder banner assets/bg-everyday-health.webp (the Cellular Aging Support bottle
-    # on a petrol field), made the way Women's and Men's Health got theirs before their portraits; a real
-    # photo drops straight in by overwriting that one file. assets/thumbs|shelf|islands/everyday-health.webp
+    # Its hero is assets/bg-everyday-health.webp, a still life in the same house look as the other seven
+    # banners: four clear glass columns in an even row on sand against a deep petrol wall, which is also
+    # what the shelf means. assets/thumbs|shelf|islands/everyday-health.webp
     # are the same pack's top, for the 'Keep looking' rows (and the idle strip and ring views).
     ('everyday-health', 'Everyday Health', 'Four Nutrilite dailies: Cholesterol Health, Liver Support, Heart Health CoQ10 and Cellular Aging Support.', 'Everything in Everyday Health', [
         'Nutrilite Cholesterol Health', 'Nutrilite Liver Support', 'Nutrilite Heart Health CoQ10',

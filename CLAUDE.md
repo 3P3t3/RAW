@@ -120,6 +120,16 @@ never drift from `share-links.csv`. Ticks live in `sessionStorage` (`aspire-amwa
 
 `index.html` is a hand-written redirect to `homepage.html` and is not generated.
 
+`assets/bg-everyday-health.webp` is the Everyday Health shelf's hero banner, and the only one of the ten
+that was generated rather than shot or licensed: fal-ai/flux-pro/v1.1-ultra, 2026-10-01, from
+`~/Desktop/aspiree/tools/jobs-everyday-banner3.json` (three passes; passes 1 and 2 missed the house look and
+their prompts say how). It is four clear glass columns in an even row on sand against a deep petrol wall —
+the same still-life language as the seven shot banners, and what the shelf means. It carries no product, no
+pack and no lettering, so nothing in it can read as a claim. It is centre-cropped to 16:9 and resized once to
+1600x900, WebP q78; the frame it came from is kept at
+`~/Desktop/aspiree/assets/generated/raw-site/everyday-banner-v3-1.jpg`. It is placed by hand, so the build
+never rewrites it, and a real photograph drops in by overwriting this one file.
+
 `assets/wave-horizon.webp` is the footer's horizon: Peter's lit wave, cropped to the wave band
 alone (his artwork carries the lockup type under it, which must never reach the page). It is
 placed by hand, not generated, so the build never rewrites it and nothing cleans it up.
