@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=e55f557d">
+<link rel="stylesheet" href="style.css?v=d92d39e0">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -2568,6 +2568,21 @@ var LB=null;
      of its own — the third movement's line is already up when it arrives, and stays.) */
   var CAPB=[];beats.forEach(function(b,i){if(b.hasAttribute('data-cap'))CAPB.push(i)});
   CAPA=CAPB.slice(0,caps.length).map(function(i){return at[i]+(HOLD[i]||1)*.5});
+  /* His photos on a phone (Peter, 2026-10-01: "the picture is too small"). They stand above the strip, and
+     while one is up the strip's top is empty: nothing comes before "Fatigue was a constant.", and the line
+     under the turn and his family is the last. So the captions that belong to a photo beat (PHC) read on a
+     line as low as the tallest of them can stand whole (never higher than the usual one), and measure sizes
+     the photos down to GAP above it (--st-ph, --st-fh in style.css). While a photo is up, a caption before
+     its own one fades as it rises past the photo's foot (PHY, in the strip's px), so no line is ever seen
+     over his picture. Desktop (the strip beside the photo) is untouched: PHY stays off. */
+  var PHONE=matchMedia('(max-width:767px)'),GAP=18,PHY=-1,
+      PHB=[],PHQ=[],PHC=[],opEl=$('.st-open .st-photo',run);
+  beats.forEach(function(b,i){var k=b.getAttribute('data-kind');if(k==='photo'||k==='turn'){
+    var q=-1;CAPB.forEach(function(j,c){if(j<=i)q=c});PHB.push(i);PHQ.push(q);if(q>=0&&PHC.indexOf(q)<0&&CAPB[q]===i)PHC.push(q)}});
+  function sized(ph,fh){   /* written only when it changes, so a measure that finds the same sizes costs nothing */
+    if(stage.style.getPropertyValue('--st-ph')!==ph)stage.style.setProperty('--st-ph',ph);
+    if(stage.style.getPropertyValue('--st-fh')!==fh)stage.style.setProperty('--st-fh',fh);
+  }
   /* his plates: each pack's shelf goes onto the pinned bar over the last part of the change into its
      beat, once the pack has landed; a second pack in the same beat follows a slide and a half later,
      into its hold, so the strip counts them one at a time (the closing line's pair reads 4 of 5 for
@@ -2586,7 +2601,21 @@ var LB=null;
          it is more than half into one, so nothing is ever read through the edge */
       var rh=CAPR=rail.clientHeight;CAPF=parseFloat(getComputedStyle(rail).getPropertyValue('--cap-fade'))||48;
       CAPT=caps.map(function(c){return c.offsetTop});CAPH=caps.map(function(c){return c.offsetHeight});
-      CAPO=caps.map(function(c){return c.offsetTop-Math.max(6,Math.min(Math.max(CAPF,rh*.22),rh-c.offsetHeight-CAPF))});
+      var lead=caps.map(function(c,q){return Math.max(6,Math.min(Math.max(CAPF,rh*.22),rh-CAPH[q]-CAPF))}),ph='',fh='';
+      PHY=-1;
+      if(PHONE.matches&&PHC.length&&opEl){   /* a photo beat's caption reads as low as the tallest of them stands whole */
+        var LP=Math.min.apply(null,PHC.map(function(q){return rh-CAPH[q]-CAPF}));
+        PHC.forEach(function(q){lead[q]=Math.max(lead[q],LP)});
+        var mat=parseFloat(getComputedStyle(opEl).getPropertyValue('--mat'))||0,
+            pad=parseFloat(getComputedStyle(html).getPropertyValue('--pad'))||20,
+            top=opEl.offsetTop-mat,   /* the frame's top in its beat (the beat is its offsetParent, at the stage's top) */
+            foot=rail.offsetTop+Math.min.apply(null,PHC.map(function(q){return lead[q]}))-GAP,
+            h=Math.floor(Math.max(160,Math.min(foot-top-2*mat,(w-2*pad-2*mat)*4/3)));
+        ph=h+'px';fh=Math.floor(Math.min(400,h+2*mat,(w-2*pad)*5/4))+'px';   /* the family: 320x400, never enlarged past 1:1 */
+        PHY=top+h+2*mat-rail.offsetTop;
+      }
+      sized(ph,fh);
+      CAPO=caps.map(function(c,q){return CAPT[q]-lead[q]});
     }
     if(CALL===N-1){   /* the call's hold (HOLD above): what FLICK needs beyond the button's own way off the screen */
       var bk=parts[CALL].book,cs=getComputedStyle(html),tail=0,U=UNIT*sh;
@@ -2671,6 +2700,12 @@ var LB=null;
       f(Math.min(1,near*(1+.25*bump))*op*(PS.c<=k.pb?1:.8),3));
     return PS.c<=k.pb&&PS.cl<1?near:0;
   }
+  /* a photo beat's rise (pe) and fall (pq): the first comes up with the stage, the others in the last part
+     of the change into them, and each goes in the first part of the change out */
+  function photoIn(i,x,arrive){
+    var kin=i?clamp((x-at[i]+Tn(i))/Tn(i)):0,kout=i<N-1?clamp((x-at[i]-(HOLD[i]||1))/Tn(i+1)):0;
+    return [i?smooth(clamp((kin-.45)/.55)):smooth(arrive),smooth(clamp(kout/.35))];
+  }
   function mv(x,y,rx,rot,s){return 'translate3d('+f(x,1)+'px,'+f(y,1)+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotate('+f(rot,2)+'deg) scale('+f(s,3)+')'}
   function drop(p,k,i,u,q){
     var G=geo&&geo.items[k.g],land=clamp(u/.8),g=land*land,rp=k.rx*w/100,x,y,s,rot,rx=0,op=1,near=0;
@@ -2720,7 +2755,9 @@ var LB=null;
       PS={c:pc,g:pg,cl:il<N-1?smooth(clamp((x-at[il]-(HOLD[il]||1))/(.45*Tn(il+1)))):0};
     }                    /* the case rises into the place above the call, then lifts away */
     if(track&&PB.length){   /* the caption strip: the track's place, and which caption is on the line */
-      var ci=0,fi=0;
+      var ci=0,fi=0,pv=0,pq=-1;
+      if(PHY>=0)PHB.forEach(function(i,n){   /* the photo up now (its own rise and fall, as below) and its caption */
+        var e=photoIn(i,x,arrive),v=Math.min(e[0],1-e[1]);if(v>pv){pv=v;pq=PHQ[n]}});
       if(x>=CAPA[CAPA.length-1])ci=CAPA.length-1;
       else if(x>CAPA[0])for(var cq=1;cq<CAPA.length;cq++){
         if(x<CAPA[cq]){var ck=(x-CAPA[cq-1])/(CAPA[cq]-CAPA[cq-1]);ci=cq-1+(.4*ck+.6*smooth(ck));break}
@@ -2743,6 +2780,7 @@ var LB=null;
       caps.forEach(function(c,q){
         var a=CAPT[q]-co,b=a+CAPH[q],rp=Math.min(CAPH[q]*.5,CAPF),
             op=Math.max(Math.min(clamp((b-CAPF)/rp),clamp((a+rp)/rp),clamp((CAPR-CAPF*.5-a)/rp)),1-Math.abs(ci-q));
+        if(q<pq)op*=1-clamp(pv*5)*clamp((PHY+4-a)/16);   /* gone from over his photo by the time it is a fifth of the way in */
         put(capk[q],c,'o','none',f(smooth(op),3));
       });
       var nw=Math.max(0,Math.min(caps.length-1,Math.round(ci)));
@@ -2791,7 +2829,7 @@ var LB=null;
         /* the turn follows the shelf now, not the opening, so it rises and falls like any other
            photo: it brings his before back at the same size and in the same place, and the after
            wipes across it while it holds */
-        var pe=i?smooth(clamp((kin-.45)/.55)):smooth(arrive),pq=smooth(clamp(kout/.35));
+        var pio=photoIn(i,x,arrive),pe=pio[0],pq=pio[1];
         put(p,p.art,'art','translate3d(0,'+f((1-pe)*36-pq*36,1)+'px,0) scale('+f(.94+.06*pe-.05*pq,4)+')',f(Math.min(pe,1-pq),3));
       }
       if(p.wipe){                                         /* the after slides in from its own side */
