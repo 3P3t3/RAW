@@ -828,15 +828,21 @@ html:not(.js) #results[hidden]{display:block!important}
   .shelf-name{font-size:52px}
   .sec-head{margin-bottom:48px}
   .sec-head h2,.split-text h2{font-size:52px}
-  .goal{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:none;column-gap:24px;padding:18px 0}
-  .goal-name{grid-area:auto;grid-column:1;font-size:30px;white-space:nowrap}
-  .goal-desc{grid-area:auto;grid-column:2}
+  /* 'Keep looking' (a shelf page's other nine): tiles, not full-width rows. As rows each one was 140px
+     with its pack ~1200px from its name, so on a four-product shelf the list was most of the page.
+     Two across here, three from 1024 (a 3x3 of the nine), the pack beside its name. */
+  .goal-index{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px;border-top:0;border-bottom:1px solid var(--line)}
+  .goal-index li{border-top:1px solid var(--line);border-bottom:0}
+  @media (min-width:1024px){.goal-index{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  .goal{grid-template-columns:88px minmax(0,1fr);grid-template-areas:"img name" "img desc";align-content:center;column-gap:18px;padding:16px 0}
+  .goal-name{grid-area:name;align-self:end;font-size:24px}
+  .goal-desc{grid-area:desc;align-self:start;font-size:15px}
   .goal-n{grid-area:auto;grid-column:3}
   .goal-img{grid-area:auto;grid-column:4}
-  .goal-desc{margin-top:0}
+  .goal-desc{margin-top:6px}
   .goal-n{margin-top:0}
   .goal-img{width:120px}
-  .goal-island{grid-area:auto;grid-column:4;align-self:center;justify-self:end;width:128px;height:104px}
+  .goal-island{grid-area:img;align-self:center;justify-self:start;justify-content:center;width:88px;height:76px}
 
   .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:48px 20px}
   .shop .grid{row-gap:0}
