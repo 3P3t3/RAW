@@ -1605,7 +1605,7 @@ if(mcForm){
    works, it just forgets), drawn on the hero's bar and on the bar pinned under the masthead, and
    named in the call form's note ("Interested in: ..."), only while that note is empty or still says
    exactly what the site last put there. Through the story's stage (#st-run) the pinned bar is Peter's
-   instead, and from the proof after it ("His and hers") it is the visitor's again: the story
+   instead, and from the moment the stage lets go ("That's my stack" coming up) it is the visitor's again: the story
    block below loads his five plates as its pack beats go by (LB.peter), and scrolling back takes them
    off. Plates slide on in 300ms (style.css); under reduced motion they are simply there, and the
    story's plates go on as each pack beat reaches the middle of the screen.
@@ -1796,19 +1796,25 @@ var LB=null;
   /* from the rack straight to "Take my stack to Amway" (#sa), the panel under "Build yours.": each
      open panel's "Take my stack to Amway", once a plate is on, and step 3's "Amway" link. Both work the
      panel's own button (#sa-go), so the panel stays the one place that knows how; it hands focus back
-     to that button as it closes, and these take it back so the visitor is where they left from. A
-     browser without <dialog> never sees the button, and step 3's link just goes to #my-stack. */
+     to that button as it closes, and these take it back so the visitor is where they left from. Step 3's
+     "Amway" is plain text (no href, so not a link and not in the Tab order) until those buttons show,
+     and a link to #my-stack while they do; the panel's button takes the click. A browser without
+     <dialog> never sees the button, and its step 3 keeps "Amway" as plain text. */
   var saGo=$('#sa-go'),saDlg=$('#sa'),saOK=!!(saGo&&saDlg&&typeof saDlg.showModal==='function'),
-      rkAms=rack?$$('.rk-amway',rack):[];
+      rkAms=rack?$$('.rk-amway',rack):[],rgAms=$$('#rk-guide .rg-amway');
   function toAmway(from){
     if(!saOK||!stack.length||saGo.hidden)return false;
     saGo.click();
     if(saDlg.open)saDlg.addEventListener('close',function(){from.focus({preventScroll:true})},{once:true});
     return true;
   }
-  function amwaySync(){rkAms.forEach(function(b){b.hidden=!(saOK&&stack.length)})}
+  function amwaySync(){
+    var on=saOK&&stack.length>0;
+    rkAms.forEach(function(b){b.hidden=!on});
+    rgAms.forEach(function(a){if(on)a.setAttribute('href','#my-stack');else a.removeAttribute('href')});
+  }
   rkAms.forEach(function(b){b.addEventListener('click',function(){toAmway(b)})});
-  $$('#rk-guide .rg-amway').forEach(function(a){a.addEventListener('click',function(e){if(toAmway(a))e.preventDefault()})});
+  rgAms.forEach(function(a){a.addEventListener('click',function(e){if(a.hasAttribute('href')&&toAmway(a))e.preventDefault()})});
   /* the call form's note: the bar's line goes in when the form is reached, and again after the stack
      changes, only over an empty note or one that still says what the site last wrote there (the
      calculator's macros line rides behind it); the visitor's own words are never touched */
@@ -1851,12 +1857,16 @@ var LB=null;
   }
   if(sform)new IntersectionObserver(function(es){sIn=es[0].isIntersecting;if(sIn&&sDue)sampleFill()}).observe(sform);
   /* the pinned bar: once the hero has gone under the masthead, and only with a plate on it or with
-     the story's stage under it (Peter's). The stage (#st-run), not all of #story: the proof after it
-     ("His and hers") is the visitor's again, or no strip for a visitor with no stack. When it comes up
-     its contents are set at once, not faded (.snap), so it never arrives showing the other stack; when
-     it goes it keeps what it showed, so nothing changes on the way out. With it up at the stage's
-     edges the two stacks cross-fade as before. */
-  var hero=$('.hero'),story=$('#story'),edge=$('#st-run')||story,lineIO=null,heroGone=!hero,inStory=false;
+     the story's stage under it (Peter's). The stage (#st-run), not all of #story, and only while it
+     still holds the window: it starts when the stage's top reaches the strip's foot, and it ends as
+     soon as the stage's foot comes up off the window's foot, which is the moment the run is over and
+     "That's my stack" (#my-stack, straight after it, with the same five plates) starts coming up.
+     It used to end only once the stage's foot had gone up past the strip, so "Peter's · 5 of 5" hung
+     over the whole of that band's top on its way in. From there it is the visitor's again, or no strip
+     for a visitor with no stack. When it comes up its contents are set at once, not faded (.snap), so
+     it never arrives showing the other stack; when it goes it keeps what it showed, so nothing changes
+     on the way out. With it up at the stage's edges the two stacks cross-fade as before. */
+  var hero=$('.hero'),story=$('#story'),edge=$('#st-run')||story,lineIO=null,footIO=null,atTop=false,atFoot=false,heroGone=!hero,inStory=false;
   function pinSet(){
     var up=heroGone&&(inStory||stack.length>0);
     html.classList.toggle('pin-you',up&&!inStory);   /* a phone's bottom tab steps aside while the strip holds the visitor's stack */
@@ -1867,12 +1877,14 @@ var LB=null;
   }
   if(hero)new IntersectionObserver(function(es){heroGone=!es[0].isIntersecting;pinSet()},
     {rootMargin:'-'+($('.mast')?$('.mast').offsetHeight:60)+'px 0px 0px 0px'}).observe(hero);
-  function line(){   /* a one-pixel line at the pinned bar's foot: the stage crossing it is the switch */
+  function line(){   /* two one-pixel lines: the stage must cross the one at the pinned bar's foot and still reach the one at the window's foot */
     if(lineIO)lineIO.disconnect();
+    if(footIO)footIO.disconnect();
     if(!edge)return;
     var y=($('.mast')?$('.mast').offsetHeight:60)+pin.offsetHeight,b=Math.max(0,innerHeight-y-1);
-    lineIO=new IntersectionObserver(function(es){inStory=es[0].isIntersecting;pinSet()},{rootMargin:'-'+y+'px 0px -'+b+'px 0px'});
-    lineIO.observe(edge);
+    lineIO=new IntersectionObserver(function(es){atTop=es[0].isIntersecting;inStory=atTop&&atFoot;pinSet()},{rootMargin:'-'+y+'px 0px -'+b+'px 0px'});
+    footIO=new IntersectionObserver(function(es){atFoot=es[0].isIntersecting;inStory=atTop&&atFoot;pinSet()},{rootMargin:'-'+Math.max(0,innerHeight-1)+'px 0px 0px 0px'});
+    lineIO.observe(edge);footIO.observe(edge);
   }
   line();
   var rsz=0;addEventListener('resize',function(){clearTimeout(rsz);rsz=setTimeout(function(){line();LB.measure()},150)});
