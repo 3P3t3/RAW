@@ -179,6 +179,23 @@ html:not(.js) .mtab{display:none}
    above the buttons, so "Work out your macros" still sits whole on the first screen at
    375x812 after the curtain. Measured: the button's foot at 798, not 812. */
 @media (max-width:767px){.hero-copy{padding-top:20px}.hero-actions{margin-top:0}}
+/* Peter on the first screen: his face and the first line of his own introduction, between the
+   subhead (which ends on "a call") and the buttons, so the call has someone attached to it. */
+.hero-me{display:grid;grid-template-columns:60px minmax(0,1fr);align-items:center;column-gap:14px;max-width:420px}
+.hero-me img{display:block;width:60px;height:60px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--chalk),0 0 0 3px var(--line)}
+.hero-me-line{font-size:15px;line-height:1.4;color:var(--ink);text-wrap:balance}
+@media (min-width:768px){.hero-me-line{font-size:16px}}
+.hero-me-line a{font-weight:600;color:var(--teal);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px;white-space:nowrap}
+/* phones pay for that row so "See the game plan" still sits whole on the first screen at 390x844
+   after the curtain: the label goes (the subhead already says what this is), the headline is a
+   step smaller and the gaps a little tighter. Measured: the button's foot at 831 of 844, and at 809 of 812 at 375x812. */
+@media (max-width:767px){
+  .hero-copy{gap:12px;padding-top:12px}
+  .hero .label{display:none}
+  .hero h1{font-size:clamp(46px,15vw,72px)}
+  .hero-me{grid-template-columns:56px minmax(0,1fr);column-gap:12px}
+  .hero-me img{width:56px;height:56px}
+}
 .glass{position:relative;margin:0 calc(-1 * var(--pad));aspect-ratio:1;overflow:hidden}
 .glass video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:linear-gradient(90deg,var(--teal) 50%,var(--beige) 50%)}
 .glass-toggle{position:absolute;z-index:3;left:14px;bottom:14px;width:40px;height:40px;border-radius:50%;background:var(--teal);color:var(--chalk)}
@@ -193,6 +210,9 @@ html:not(.js) .mtab{display:none}
 .how-sec{padding-bottom:0}
 .how-sec>.wrap{padding-bottom:var(--sec);border-bottom:1px solid var(--line);
   width:calc(100% - 2 * var(--pad));max-width:1200px;padding-inline:0}
+/* phones: the plan's close to the rack's heading was ~160px of empty field; the hairline now sits
+   32px under the plan and the section gives back 40px of the rack's top padding */
+@media (max-width:767px){.how-sec{margin-bottom:-40px}.how-sec>.wrap{padding-bottom:32px}}
 .how-head{display:grid;gap:10px;margin-bottom:24px}
 .how-head h2{font-size:40px}
 .how-steps{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--line)}
@@ -207,7 +227,8 @@ a.how-step:active{opacity:.7}
 @media (hover:hover){a.how-step:hover .how-t{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}}
 .how-go{display:flex;flex-wrap:wrap;align-items:center;gap:6px 28px;margin-top:28px}
 .how-go .btn{flex:1 1 100%}
-.how-fine{flex-basis:100%;font-size:14px;color:var(--text)}
+/* the plan's trust line, over its button in ink and a step up from body copy: the strongest line here */
+.how-fine{flex-basis:100%;margin-bottom:10px;font:600 18px/1.35 var(--sans);color:var(--ink);text-wrap:balance}
 @media (min-width:768px){
   .how-head{margin-bottom:40px}
   .how-head h2{font-size:52px}
@@ -809,8 +830,8 @@ html:not(.js) #results[hidden]{display:block!important}
   /* 12 columns, 24px gutters; column 6 starts every second-column element */
   .hero,.goal,.split,.foot-top{--g:24px}
   .hero-in,.goal,.split,.foot-top{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px}
-  .hero-in{align-items:center;min-height:clamp(560px,calc(100vh - 76px),800px);padding-top:56px;padding-bottom:56px}
-  .hero-copy{grid-column:1 / 6;grid-row:1;padding:0;gap:22px}
+  .hero-in{align-items:center;min-height:clamp(560px,calc(100vh - 76px),800px);padding-top:40px;padding-bottom:40px}   /* 40, not 56, with the 18px gap below: with Peter's row in, the hero keeps its 800px at 1440x900 */
+  .hero-copy{grid-column:1 / 6;grid-row:1;padding:0;gap:18px}
   .hero h1{font-size:clamp(72px,7vw,104px)}
   .hero .sub{font-size:18px;max-width:30ch}
   .hero-actions{width:auto}
@@ -1826,7 +1847,7 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
 .hero h1 .hl-3d{font-size:1.1em;margin-top:.02em;padding-bottom:.08em}
 .mys h2.hl-2{font-size:clamp(40px,12vw,80px)}
 .mys-build.hl-3d{font-size:clamp(50px,15vw,104px);margin-top:12px}
-/* "Scroll to load the bar." under the hero's bar: it was sand, from the teal hero; on the chalk field
+/* the caption under the hero's bar: it was sand, from the teal hero; on the chalk field
    that was 1.3:1. It takes the page's text grey (7.1:1). */
 .hbar-cap{color:var(--text)}
 
