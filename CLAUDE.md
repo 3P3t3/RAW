@@ -132,7 +132,7 @@ if it was opened without noopener, and the first opens with noopener on purpose 
 opens a new tab. The panel scrolls to its top on every phase change, so its new lead is what shows. The
 credit line says Amway credits the order to Peter, the buyer pays Amway's normal price (Peter confirmed),
 and there is no code to enter. The rack points to it twice once a plate is loaded: the rack guide's step 3
-("Order it on Amway, …", `.rg-amway`, which is plain text, an `<a>` with no href, until a plate is loaded:
+(Peter's wording: "Add to cart, bring it to a free call, or ask for a sample."; "Add to cart" is `.rg-amway`, which is plain text, an `<a>` with no href, until a plate is loaded:
 `amwaySync()` gives it its href on the same state that shows `.rk-amway`) and a slim `.rk-amway` button in each open bay; both work `#sa-go`,
 through `toAmway()` in the rack block. The product card's own button reads "Buy on Amway", never "Add to
 cart": it opens the product's page. The products offered
@@ -173,12 +173,16 @@ x 0-1080 and y 226-1576, clear of the screenshot's black band on rows 0-6, with 
 the top and the baby's feet whole; converted P3 to sRGB so the colours hold once the profile is
 gone; then a uniform Lanczos resize. No retouching, no exposure or white-balance change, and no
 metadata: each file is a bare VP8 chunk (no EXIF, XMP or ICC). Peter chose to make them public; the repo is public because Pages
-requires it. `face-96.webp` / `face-192.webp` are the homepage hero's round portrait (`.hero-me`, beside
-the PETER-COPY fragment "I'm Peter — husband, dad to a baby girl, and a Lincoln local." and a DRAFT "My
-story" link to `#story`): the box (360,80)-(720,440) of `with-daughter-960.webp`, then one Lanczos resize,
-q90, bare VP8. A sliver of their daughter's head shows at its left edge. On phones the hero's label is hidden
-and its headline is 15vw so his face, his line and "See the game plan" all sit on the first screen after the
-curtain (the button's foot is at 831 of 844 at 390x844): any added hero height pushes the button off it.
+requires it. `hero-pair-160.webp` / `hero-pair-320.webp` are the homepage hero's portrait (`.hero-me`): Peter holding their
+daughter, both faces whole, which is how he wants it (2026-10-01: "it also doesn't include my daughter, which I want
+it to"). They are the box (205,78)-(675,548) of `with-daughter-960.webp`, one Lanczos resize, q90, bare VP8, drawn
+as a 14px-radius rounded square (a circle would clip her bow and his hair). They sit beside the PETER-COPY line
+"I'm Peter — husband, dad to a baby girl, and a Lincoln local.", the DRAFT "My story" link and the plan's two links:
+`.hero-actions` lives inside `.hero-me`, so the button shares the picture's height instead of adding to it. The block
+lays itself out by the copy's own width (container query on `.hero-copy`); under 300px the links take a full row
+below. The picture is 126px at 390, 140px at 1440. On phones the hero label is hidden, the headline is 15vw and the
+copy's top padding is 8, so "See the game plan" ends at 830 of 844 (390x844) and 808 of 812 (375x812): any added
+height above it pushes it off the first screen.
 
 **What may be edited, and what may not.** Crop, exposure and white balance are always fine. Peter
 has also allowed extending BACKGROUND at the edges when framing needs it (2026-09-25) — plain wall
@@ -321,7 +325,12 @@ Its edges fade over `--cap-fade` (about one and a half caption lines; 72px at de
 line recedes rather than being sliced at the strip's edge. The strip fades in as the stage arrives, so the
 first pinned screen carries "Fatigue was a constant." with his before photo. At desktop it starts below the
 pinned bar, the before/after and family photos fill the stage height (up to 760px, never more than half the
-stage's width; 495x660 at 1440x900), and the ask is set in the captions' display type, centred.
+stage's width; 528x704 at 1440x900, 16px clear of the pinned bar and the screen's foot), and the ask is set in the
+captions' display type, centred. On phones the photo sizes are measured: `measure()` sets `--st-ph` (the before and the
+wipe, always one size) and `--st-fh` (the family, never past its own 320x400) once per resize, so the photos grow down
+into the empty top of the caption strip and stop 18px above the line their caption reads on (306x408 at 390x844, up
+from 236x315; Peter, 2026-10-01: "the picture is too small"). While a photo is up, an earlier caption fades as it
+rises past the photo's foot. The mat is 10px on phones, 14px from 768.
 `family-320.webp` is only 320x400, so at desktop it is enlarged and soft; a sharper cut would come from
 Peter's originals.
 Without the stage it is a plain block of his six lines with their links, straight after his before,
@@ -344,7 +353,7 @@ turn (.85, the wipe plays inside it) and the ask, whose hold is measured per res
 button's own way off the screen equals `FLICK` (780px), never less than `CALLMIN` (.8 units). That is ~316px
 at 390x844 (run 2976px) and 246px at 1440x900 (run 3082px), and it is what makes every 700px flick that enters
 the ask come to rest with "Book a free call" whole on screen (re-measured on merged main 2026-10-01: a window of
-780px at 390x844 and 760px at 1440x900, 30/30 flicks each). Changing any of these means re-running the
+800px at 390x844 and 820px at 1440x900 after the bigger photos, 30/30 flicks each). Changing any of these means re-running the
 flick test before shipping. The stage renders from an eased copy of the scroll position with
 a speed cap and a backlog clamp, so a fast flick still plays each fall; it is still a pure function
 of scroll, so scrolling back plays it backwards. Transforms and opacity only (a full scrub costs 0
