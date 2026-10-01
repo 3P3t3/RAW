@@ -899,6 +899,26 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     </div>
   </section>
 
+  <!-- 3d-bis. The bloodwork route: the calculator’s own argument, turned around. It sits
+       directly after #macros because that is what it answers -- your macros you can work out;
+       this you cannot. It is the one block the two published copies differ by on the homepage
+       (ccrx_home in build_homepage.py), and its button goes to bloodwork.html rather than
+       straight out to CCRX, because that page is where someone finds out what they are
+       walking into. -->
+  <section class="sec" id="bloodwork" aria-labelledby="bw-title">
+    <div class="wrap split">
+      <div class="split-text grow">
+        <!-- DRAFT-COPY --><p class="label">Your bloodwork</p>
+        <h2 id="bw-title"><span>The numbers</span> <span>you can’t <span class="hl-k">work out</span></span></h2>
+        <p>Your macros you can calculate. What’s going on inside you, you can’t. A blood panel, drawn at home — no prescription, no appointment.</p><!-- /DRAFT-COPY -->
+      </div>
+      <div class="c-card grow" style="--d:1">
+        <!-- DRAFT-COPY --><a class="btn" href="bloodwork.html">See the blood panel</a><!-- /DRAFT-COPY -->
+        <!-- PETER-COPY --><p class="c-fine">I don’t make anything on the panel. If a clinician ends up prescribing you something after it, I’m paid on that.</p><!-- /PETER-COPY -->
+      </div>
+    </div>
+  </section>
+
   <!-- 4. Trending now: the week's three best sellers. It is OFF (Peter, 2026-10-01: "maybe we
        should get rid of the trending now"), so this fills in as nothing. The whole section —
        its comment, its markup and its three cards — is built in build_homepage.py, behind one
@@ -1328,9 +1348,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <a href="#macros">Macro calculator</a>
         <a href="#consult">Book a free call</a>
         <a href="#results" data-all>All 105 products</a>
-        <!-- DRAFT-COPY: placeholder for the CCRX route. Peter has not approved copy for it;
-             it is here so the two builds genuinely differ and the guard has a link to catch. -->
-        <a href="https://ccrx.health/n/HERSCHELMAN" target="_blank" rel="noopener">Prescription peptides and bloodwork<span class="vh"> (opens in a new tab)</span></a>
+        <!-- DRAFT-COPY --><a href="bloodwork.html">Bloodwork &amp; peptides</a><!-- /DRAFT-COPY -->
       </nav>
     </div>
     <div class="foot-meta">
@@ -1358,6 +1376,10 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
              too much hanging off one page (Peter, 2026-09-28). A plain relative link, with no HOME prefix:
              every page of the site sits in the same folder, so it is correct from all of them. -->
         <!-- DRAFT-COPY --><li><a href="about.html">About us <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
+        <!-- The CCRX route, beside About us: its own page, because none of this belongs on
+             a shelf or in the story. This item exists in the copy under plus/ only
+             (ccrx_menu in build_homepage.py); the plain site's menu never gains it. -->
+        <!-- DRAFT-COPY --><li><a href="bloodwork.html">Bloodwork &amp; peptides <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
         <li><a href="#goals">Goals <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <li><a href="#results" data-all>All products <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
         <!-- DRAFT-COPY --><li><a href="#sample">Free sample <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->
