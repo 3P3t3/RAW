@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=f21addbf">
+<link rel="stylesheet" href="style.css?v=82e51f33">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -2473,7 +2473,15 @@ var LB=null;
      it) and the call (2.6, ~723px: a ~700px flick through the end of the story must come to rest on
      "Book a free call" rather than over it). The run in style.css came down with all of it, 778 to 600
      to 400lvh, and a unit is still ~278px. TT[i] is the change INTO beat i. */
-  var HOLD=[.45,.25,.25,.25,.25,.85,.3,2.6],TT=[0,.6,.45,.45,.45,.6,.45,.9],at=[],L=0;   /* his before, four packs, the turn, his family, the call */
+  /* The call's hold is no longer a fixed 2.6 units: it is set per resize (measure) to just what the
+     flick needs. Once the run ends the stage scrolls away with the button still whole on screen for
+     a while (the button's top minus the masthead and the pinned bar: ~480px at 390x844), so the hold
+     only has to make up the rest of FLICK, never less than CALLMIN units. At 390x844 that is ~1.1
+     units (~300px) where it was 723px, and the run is sized to match (UNIT: a unit stays a third of
+     the stage, ~278px), so every other beat keeps its pace. The 2.6 below is only its value before
+     the first measure. */
+  var HOLD=[.45,.25,.25,.25,.25,.85,.3,2.6],TT=[0,.6,.45,.45,.45,.6,.45,.9],at=[],L=0,   /* his before, four packs, the turn, his family, the call */
+      UNIT=.33,FLICK=780,CALLMIN=.8;
   function Tn(i){return TT[i]||1.5}
   beats.forEach(function(b,i){if(i)L+=Tn(i);at.push(L);L+=HOLD[i]||1});
   var TURN=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('turn'),
@@ -2551,7 +2559,7 @@ var LB=null;
      measured once per resize; per frame it is one transform on the track, the strip's own opacity, and
      a class on the caption that is on the line (so its colour is written only when the line moves). */
   var rail=$('.st-caprail',run),track=rail&&$('.st-captrack',rail),caps=rail?$$('.st-cap',rail):[],
-      CAPO=[],CAPA=[],capNow=-1,railOff=null,rk={keys:{}};
+      CAPO=[],CAPA=[],CAPT=[],CAPH=[],CAPF=48,CAPR=0,capNow=-1,railOff=null,rk={keys:{}},capk=caps.map(function(){return {keys:{}}});
   /* where each caption sits on the run: the middle of the hold of the beat it belongs to (the beats
      carrying data-cap, in order: his before, the four packs, the turn. His family beat has no caption
      of its own — the third movement's line is already up when it arrives, and stays.) */
@@ -2570,8 +2578,19 @@ var LB=null;
   function measure(){
     w=stage.offsetWidth;sh=stage.offsetHeight;
     if(track){
-      var rh=rail.clientHeight;
-      CAPO=caps.map(function(c){return c.offsetTop-Math.max(6,Math.min(rh*.22,rh-c.offsetHeight-6))});
+      /* the strip's soft edges (--cap-fade in style.css, a line and a half of its type): the caption on
+         the reading line stands clear of both, and each caption's own opacity (frame) is gone before
+         it is more than half into one, so nothing is ever read through the edge */
+      var rh=CAPR=rail.clientHeight;CAPF=parseFloat(getComputedStyle(rail).getPropertyValue('--cap-fade'))||48;
+      CAPT=caps.map(function(c){return c.offsetTop});CAPH=caps.map(function(c){return c.offsetHeight});
+      CAPO=caps.map(function(c){return c.offsetTop-Math.max(6,Math.min(Math.max(CAPF,rh*.22),rh-c.offsetHeight-CAPF))});
+    }
+    if(CALL===N-1){   /* the call's hold (HOLD above): what FLICK needs beyond the button's own way off the screen */
+      var bk=parts[CALL].book,cs=getComputedStyle(html),tail=0,U=UNIT*sh;
+      for(var e=bk;e&&e!==stage;e=e.offsetParent)tail+=e.offsetTop;   /* its top on the stage, at rest (offsets ignore the transforms) */
+      if(bk)tail-=(parseFloat(cs.getPropertyValue('--mast'))||0)+(parseFloat(cs.getPropertyValue('--pin'))||0);
+      HOLD[CALL]=Math.max(CALLMIN,(FLICK-tail)/U);L=at[CALL]+HOLD[CALL];
+      var rhgt=Math.round(sh+U*L)+'px';if(run.style.height!==rhgt)run.style.height=rhgt;
     }
     if(BARM){   /* the pile: each pack beat's floor (its art box's foot), and every pack's pose at each beat from its own on */
       var s0=stage.getBoundingClientRect(),
@@ -2705,7 +2724,7 @@ var LB=null;
       }
       fi=Math.floor(ci);
       var co=fi>=CAPO.length-1?CAPO[CAPO.length-1]:lerp(CAPO[fi],CAPO[fi+1],ci-fi),
-          ri=smooth(clamp(x/.3)),                       /* up with the stage, on his first line */
+          ri=smooth(clamp((arrive-.5)/.5)),              /* up with the stage as it arrives, so his first line is there with his before */
           ro=CALL<N?smooth(clamp((x-at[CALL]+Tn(CALL))/(Tn(CALL)*.5))):0,   /* and away as the ask comes */
           rv=Math.min(ri,1-ro);
       put(rk,track,'track','translate3d(0,'+f(-co,1)+'px,0)','1');
@@ -2713,6 +2732,16 @@ var LB=null;
       /* the strip lies over the beats (style.css), so once it has gone its links must stop taking
          taps: the ask's own button is under it */
       var roff=rv<.05;if(roff!==railOff){railOff=roff;rail.classList.toggle('is-off',roff)}
+      /* each caption recedes on its own as it nears an edge of the strip: its opacity falls as its foot
+         goes into the top fade or its head passes the top edge, or as its head goes past the middle of
+         the bottom fade, so a line is never seen cut through (and the next caption, whose head sits in
+         the top of that fade on a phone, stays at its full colour, 5.6:1).
+         The caption on the reading line, and the one coming to it, are whole whatever their size. */
+      caps.forEach(function(c,q){
+        var a=CAPT[q]-co,b=a+CAPH[q],rp=Math.min(CAPH[q]*.5,CAPF),
+            op=Math.max(Math.min(clamp((b-CAPF)/rp),clamp((a+rp)/rp),clamp((CAPR-CAPF*.5-a)/rp)),1-Math.abs(ci-q));
+        put(capk[q],c,'o','none',f(smooth(op),3));
+      });
       var nw=Math.max(0,Math.min(caps.length-1,Math.round(ci)));
       if(nw!==capNow){if(caps[capNow])caps[capNow].classList.remove('is-now');caps[nw].classList.add('is-now');capNow=nw}
     }

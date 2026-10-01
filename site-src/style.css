@@ -1124,10 +1124,14 @@ html:not(.js) #results[hidden]{display:block!important}
    778lvh, and 15.3 over 600. Three movements now, and his words stand in the caption strip two or
    three at a time whatever the stage is showing, so no hold has to wait for a line to be read: the
    run is a third shorter again (Peter, 2026-09-28: "it just feels like it takes too long", and then
-   "story feels a little too long still"). The call still holds 2.6 units, ~723px, so a ~700px flick
-   through the end comes to rest on "Book a free call". */
-.story.is-live .st-run{height:400vh}
-@supports (height:100lvh){.story.is-live .st-run{height:400lvh}}
+   "story feels a little too long still"). The call held 2.6 units, ~723px, so a ~700px flick through
+   the end came to rest on "Book a free call"; it now holds only what that flick needs beyond the
+   button's own way off the screen once the stage lets go (~316px at 390x844), see below. */
+/* The script sets the run's exact length (in px, per resize) once it has measured how long the
+   call has to hold for the flick (_script.html, HOLD); this is only its length until then, and is
+   about what it comes to on a phone, so the page barely moves when it does. */
+.story.is-live .st-run{height:350vh}
+@supports (height:100lvh){.story.is-live .st-run{height:350lvh}}
 .story.is-live .st-stage{position:sticky;top:0;height:100vh;overflow:hidden;overflow:clip}
 @supports (height:100lvh){.story.is-live .st-stage{height:100lvh}}
 .story.is-live .st-bg{display:block;position:absolute;inset:0;background:var(--teal)}
@@ -1169,16 +1173,21 @@ html:not(.js) #results[hidden]{display:block!important}
 .story.is-live .st-beat,.story.is-live .st-bg span{will-change:opacity}
 .story.is-live .st-sand{will-change:transform}
 /* on the stage: the strip is a window at the foot of it, the track slides inside it, and the packs'
-   own beats keep its band clear. Only the very edge of the window fades, so the caption above and the
-   one below are read at their own colour rather than through a fade. */
-.story.is-live{--cap-h:clamp(210px,38lvh,340px)}
+   own beats keep its band clear. Each edge of the window fades over --cap-fade, a line and a half of
+   the captions' type (it was 6% of the strip, ~19px against a ~28px line, and it cut letters in half
+   rather than fading them), and the script fades each caption's own opacity as it goes into either
+   edge, so the lines above and below recede instead of being sliced. The caption on the reading line
+   and the next one stand clear of both edges, at their own colours. --cap-fade is registered as a
+   length so the script can read it in px. */
+@property --cap-fade{syntax:'<length>';inherits:true;initial-value:48px}
+.story.is-live{--cap-h:clamp(210px,38lvh,340px);--cap-fade:clamp(44px,12.5vw,56px)}
 .story.is-live .st-caprail{position:absolute;left:var(--pad);right:var(--pad);
   bottom:calc(72px + env(safe-area-inset-bottom,0px));height:var(--cap-h);padding:0;background:none;
   overflow:hidden;overflow:clip;opacity:0;pointer-events:none;z-index:3;will-change:transform,opacity;
-  -webkit-mask-image:linear-gradient(transparent,#000 6%,#000 94%,transparent);
-  mask-image:linear-gradient(transparent,#000 6%,#000 94%,transparent)}
+  -webkit-mask-image:linear-gradient(transparent,#000 var(--cap-fade),#000 calc(100% - var(--cap-fade)),transparent);
+  mask-image:linear-gradient(transparent,#000 var(--cap-fade),#000 calc(100% - var(--cap-fade)),transparent)}
 .story.is-live .st-captrack{position:relative;will-change:transform}
-.story.is-live .st-cap{color:color-mix(in srgb,var(--teal) 74%,var(--sand))}
+.story.is-live .st-cap{color:color-mix(in srgb,var(--teal) 74%,var(--sand));will-change:opacity}
 .story.is-live .st-cap .st-line,.story.is-live .st-cap .st-note,.story.is-live .st-cap .st-go{color:inherit}
 .story.is-live .st-cap.is-now{color:var(--teal);pointer-events:auto}
 /* it lies over the beats, so once it has gone nothing in it may take a tap: the ask's button is under it */
@@ -1244,7 +1253,8 @@ html:not(.js) #results[hidden]{display:block!important}
   .story.is-live .st-fam .st-photo{max-height:420px}
   .story.is-live .st-pair{max-height:416px}
   .story.is-live .st-caprail{left:max(var(--pad),calc((100% - 1200px) / 2));right:auto;
-    width:min(44%,520px);top:calc(var(--mast) + 40px);bottom:56px;height:auto}
+    width:min(44%,520px);top:calc(var(--mast) + var(--pin,0px) + 24px);bottom:56px;height:auto}
+  .story.is-live{--cap-fade:72px}
   .story.is-live .st-beat:not([data-kind="text"]){padding-bottom:40px}
   .st-cap .st-line{font-size:clamp(30px,3.1vw,40px)}
   .story:not(.is-live) .st-beat[data-kind="prod"] .st-art{width:min(24vw,240px)}
@@ -1257,13 +1267,28 @@ html:not(.js) #results[hidden]{display:block!important}
   /* the call's place for the case is a band above its words, not a hero column: without this it took
      the live hero height (up to 560px) and pushed the words and the button off a 900px-tall screen */
   .story.is-live .st-solo .st-arc{width:min(100%,760px);height:min(10vw,136px)}
+  /* the ask closes the story in the story's own voice: the captions' display type, centred under the
+     loaded bar, rather than the body sans set left with a third of the stage empty beside it */
+  .st-solo .st-arc,.st-solo .st-copy{grid-column:1 / 13;justify-self:center}
+  .st-solo .st-copy{justify-items:center;text-align:center}
+  .st-solo .st-say{max-width:28ch;font:800 clamp(36px,3.4vw,48px)/1.08 var(--display);font-stretch:80%;
+    letter-spacing:-.012em;color:var(--teal);text-wrap:balance}
+  /* his photos as large as the stage allows under the masthead and the pinned bar, with the mat clear of
+     both: ~495px wide at 1440x900, where they were ~390. The opening pair stays one size in both of its
+     beats, so the after still wipes exactly over the before. */
+  .story.is-live .st-open .st-hero,.story.is-live .st-fam .st-hero{height:auto}
+  .story.is-live .st-open .st-photo,.story.is-live .st-fam .st-photo{max-height:none;--ph:calc((50vw - var(--pad)) * 4 / 3 - 2 * var(--mat,0px));
+    height:min(760px,var(--ph),calc(100vh - var(--mast) - var(--pin,0px) - 64px - 2 * var(--mat,0px)))}
+  .story.is-live .st-fam .st-photo{--ph:calc((50vw - var(--pad)) * 5 / 4)}   /* and never wider than the half of the stage it stands in */
+  @supports (height:100svh){.story.is-live .st-open .st-photo,.story.is-live .st-fam .st-photo{
+    height:min(760px,var(--ph),calc(100svh - var(--mast) - var(--pin,0px) - 64px - 2 * var(--mat,0px)))}}
   .st-lamp-dark{background:radial-gradient(circle at 74% 50%,rgba(244,242,236,.15),transparent 45%)}
   .st-lamp-warm{background:radial-gradient(circle at 74% 50%,rgba(255,255,255,.35),transparent 45%)}
 }
 @media (min-width:1200px){
   .st-say{font-size:24px;line-height:1.45}
   .st-line{font-size:clamp(64px,6.8vw,96px)}
-  .st-solo .st-say{font-size:clamp(30px,3.2vw,44px)}
+  .st-solo .st-say{font-size:clamp(36px,3.4vw,48px)}
 }
 
 /* ---------- Archipelago: seven floating islands ---------- */
@@ -2106,6 +2131,9 @@ body{background:transparent}
    the mat would touch the masthead, so it steps down; as plain content it keeps clear of the words */
 @media (max-width:767px){.story.is-live .st-open .st-hero{padding-top:var(--mat)}}
 .story:not(.is-live) .st-open .st-hero{padding-block:var(--mat)}
+/* and its mat (the after's, which wipes in on the stage) never runs past a narrow phone's edge: the
+   height gives way first, so the photo keeps its 3:4 and its crop (12px of sideways scroll at 320 wide) */
+.story:not(.is-live) .st-open .st-photo{height:min(56vh,420px,calc((100vw - 2 * var(--pad) - 2 * var(--mat)) * 4 / 3))}
 @media (min-width:768px){.st-open{--mat:20px}}
 
 /* cards and panels: a translucent surface with a hairline, so forms still read as forms */
@@ -2279,8 +2307,13 @@ body{background:transparent}
   .ab-nums .dx-four .dx-d{grid-column:1}
 }
 
-/* the homepage's story hands over to about.html here instead of carrying the proof wall itself */
-.st-more{display:flex;justify-content:center;margin:0;padding-top:34px;padding-bottom:var(--sec)}
+/* the homepage's story hands over to about.html here instead of carrying the proof wall itself: a quiet
+   text link under the call, in the last beat, so the call stays the one button and the stage lets go
+   straight into his stack */
+.st-more{margin:0;line-height:1.75}
+.st-more .tlink{display:inline;min-height:0}   /* inline, so a line that wraps takes its arrow with its last word */
+.st-more .ic{margin-left:6px;vertical-align:-3px}
+.st-nw{white-space:nowrap}   /* the arrow never stands alone on a line */
 
 /* "Take my stack to Amway": the button under "Build yours." (inside .mys-has, so it is there only
    once a plate is on the bar) and the panel it opens (#sa, a modal dialog like the product card).
