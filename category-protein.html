@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=a59e4d7e">
+<link rel="stylesheet" href="style.css?v=e37aac85">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -2242,7 +2242,9 @@ var LB=null;
         seen[k]=1;
         var img=$('img',a);
         out.push({k:k,cat:c,name:a.getAttribute('data-name')||k,kind:a.getAttribute('data-kind')||'',
-                  href:a.getAttribute('href'),img:img?img.getAttribute('src'):''});
+                  /* the product card's block has already turned these links into buttons and put
+                     the share link on data-href; without it (no <dialog>) they are still links */
+                  href:a.getAttribute('data-href')||a.getAttribute('href'),img:img?img.getAttribute('src'):''});
       });
     });
     return out;
@@ -2274,13 +2276,26 @@ var LB=null;
       el('span','vh',a).textContent=' '+it.name+' on Amway (opens in a new tab)';
       if(i===0)el('span','sa-badge',li).textContent='Opened first';
     }else{
-      box.checked=true;
+      box.checked=on(it);
       box.addEventListener('change',function(){
         if(box.checked)delete off[it.k];else off[it.k]=1;
-        draw();say(it.name+(box.checked?' is in. ':' is out. ')+picked().length+' to add.');
+        marks();say(it.name+(box.checked?' is in. ':' is out. ')+picked().length+' to add.');
       });
-      if(i===0)el('span','sa-badge',li).textContent='Start here';
     }
+  }
+  /* the picking phase: the first product still ticked is the one that will open, so the badge
+     that says so follows the ticks, and with nothing ticked there is nothing to open */
+  function marks(){
+    var ps=picked(),k=ps.length?ps[0].k:'';
+    $$('.sa-row',list).forEach(function(li){
+      var b=$('.sa-badge',li),is=li.getAttribute('data-k')===k,box=$('input',li);
+      if(is&&!b)el('span','sa-badge',li).textContent='Start here';
+      else if(!is&&b)b.parentNode.removeChild(b);
+      li.classList.toggle('is-first',is);
+      li.classList.toggle('is-out',!box.checked);
+    });
+    start.setAttribute('aria-disabled',ps.length?'false':'true');
+    start.classList.toggle('is-off',!ps.length);
   }
   function left(){
     var n=picked().filter(function(it){return !done[it.k]}).length;
@@ -2300,7 +2315,6 @@ var LB=null;
       }
       row(it,i++,ul);
     });
-    var n=picked().length;
     if(run){
       lead.textContent='Amway is open in the other tab. Add the rest there and tick them off as you go — nothing here needs to be in order.';
       why.hidden=true;start.hidden=true;again.hidden=false;shut.textContent='Done';
@@ -2308,8 +2322,7 @@ var LB=null;
       lead.textContent='These are the picks off the '+LB.stack().length+' plate'+(LB.stack().length===1?'':'s')+
                        ' on your bar. Untick anything you don’t want, then open the first one.';
       why.hidden=false;start.hidden=false;again.hidden=true;shut.textContent='Close';
-      start.setAttribute('aria-disabled',n?'false':'true');
-      start.classList.toggle('is-off',!n);
+      marks();
     }
   }
   function open_(){

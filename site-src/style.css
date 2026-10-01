@@ -2184,7 +2184,7 @@ body{background:transparent}
   padding:20px 20px 24px;border-radius:16px 16px 0 0;background:var(--sand)}
 .sa-x{position:absolute;z-index:2;top:12px;right:12px;border-radius:50%;background:rgba(244,242,236,.7);color:var(--teal)}
 .sa-x:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
-.sa-title{margin:0;padding-right:50px;font:800 30px/.98 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal);text-wrap:balance}
+.sa-title{margin:0;padding-right:50px;font:800 26px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal);text-wrap:balance}
 .sa-title:focus{outline:none}
 .sa-lead,.sa-why{margin:0;max-width:46ch;font:500 15px/1.45 var(--sans);color:var(--ink)}
 .sa-why{padding:10px 12px;border-radius:10px;background:rgba(0,46,59,.07);font-size:14px;color:var(--teal)}
@@ -2212,12 +2212,21 @@ body{background:transparent}
 .sa-badge{display:inline-flex;align-items:center;min-height:24px;padding:0 9px;border-radius:999px;background:var(--teal);color:var(--sand);
   font:600 10px/1.3 var(--sans);letter-spacing:.12em;text-transform:uppercase}
 .sa-row.is-done .sa-badge{background:rgba(0,46,59,.72)}
-.sa-acts{display:flex;flex-wrap:wrap;gap:10px;width:100%;margin-top:4px}
+.sa-row.is-first .sa-badge{order:-1;flex:1 1 100%}
+.sa-acts{position:sticky;bottom:-24px;z-index:1;justify-self:stretch;display:flex;flex-wrap:wrap;gap:10px;width:auto;margin:0 -20px -24px;padding:12px 20px 24px;background:var(--sand);box-shadow:0 -12px 16px -12px rgba(0,22,29,.35)}
 .sa-acts .btn{flex:1 1 100%}
 .sa-start.is-off{opacity:.55}
 @media (min-width:700px){
   .sa{max-width:600px;margin:auto}
   .sa-in{max-height:calc(100dvh - 72px);border-radius:16px}
+  .sa-acts{border-radius:0 0 16px 16px}
   .sa-title{font-size:36px}
   .sa-acts .btn{flex:1 1 auto}
 }
+.sa-row.is-out{background:transparent;box-shadow:inset 0 0 0 1px var(--line)}
+.sa-row.is-out .sa-nm,.sa-row.is-out .sa-kd{color:var(--text)}
+.sa-row.is-out .sa-thumb{opacity:.5}
+/* the panel is inside the dark .mys section, whose own rules would paint a line button and a focus
+   ring in sand: on the panel's sand ground that is nothing at all */
+.sa .btn-line{color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.sa :focus-visible{outline:2px solid var(--teal);outline-offset:2px}
