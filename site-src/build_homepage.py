@@ -1211,8 +1211,8 @@ def main():
                             '      <!-- DRAFT-COPY --><p class="mys-sub grow" style="--d:3">Fifteen minutes, free. Your macros, what you already take, and the smallest stack that moves your goal.</p>\n'
                             '      <div class="mys-acts grow" style="--d:3"><a class="btn" href="#macros">Work out your macros</a>'
                             '<a class="btn btn-line" href="#consult">Book a free call</a></div>\n'
-                            '    </div>\n'
-                            + stack_dialog() + '  </section>\n'),
+                            '    </div>\n  </section>\n'
+                            + stack_dialog()),
         })
     # the story's stack is the same case in miniature: the same seven compartments, in the same order,
     # empty until the story's packs tuck into them (_script.html measures them; nothing here moves)

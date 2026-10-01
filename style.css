@@ -2226,7 +2226,8 @@ body{background:transparent}
 .sa-row.is-out{background:transparent;box-shadow:inset 0 0 0 1px var(--line)}
 .sa-row.is-out .sa-nm,.sa-row.is-out .sa-kd{color:var(--text)}
 .sa-row.is-out .sa-thumb{opacity:.5}
-/* the panel is inside the dark .mys section, whose own rules would paint a line button and a focus
-   ring in sand: on the panel's sand ground that is nothing at all */
+/* the panel is a sand sheet, wherever it is in the page: say so, rather than inherit a dark
+   section's chalk heading, sand line button and sand focus ring */
+.sa .sa-title{color:var(--teal)}
 .sa .btn-line{color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
 .sa :focus-visible{outline:2px solid var(--teal);outline-offset:2px}
