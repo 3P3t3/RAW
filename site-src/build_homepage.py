@@ -235,11 +235,14 @@ PETER = ['protein', 'hydration', 'recovery', 'daily-foundations', 'energy-focus'
 
 # The rack's three-step guide, under "What are we maximizing?" (DRAFT-COPY). The script marks the
 # step the visitor is on (aria-current): 1 until a plate is open, 2 while one is, 3 once one is loaded.
-# Step 3's two links go where the stack is taken: the call and the sample.
+# Step 3's two links go where the stack is taken: the call and the sample. Its "Amway" is plain text (an
+# <a> with no href: not a link, not in the Tab order) until a plate is on the bar; then the script gives it
+# its href and it opens "Take my stack to Amway", as the rack's own .rk-amway buttons do (amwaySync in
+# _script.html). With nothing loaded it used to fall through to #my-stack and "Nothing on your bar yet".
 RACK_GUIDE = ('<!-- DRAFT-COPY --><ol class="rk-guide" id="rk-guide" role="list" aria-label="How the rack works">'
               '<li class="is-now" aria-current="step"><span class="rg-n" aria-hidden="true">1</span><span class="rg-t">Tap any plate to see the packs on it.</span></li>'
               '<li><span class="rg-n" aria-hidden="true">2</span><span class="rg-t">Load the ones you’d take. They ride up top.</span></li>'
-              '<li><span class="rg-n" aria-hidden="true">3</span><span class="rg-t">Order it on <a class="rg-amway" href="#my-stack">Amway</a>, bring it to a <a href="#consult">free call</a>, or ask for a <a href="#sample">sample</a>.</span></li>'
+              '<li><span class="rg-n" aria-hidden="true">3</span><span class="rg-t">Order it on <a class="rg-amway">Amway</a>, bring it to a <a href="#consult">free call</a>, or ask for a <a href="#sample">sample</a>.</span></li>'
               '</ol><!-- /DRAFT-COPY -->')
 
 # The trending band's ground: True scrubs the 150-frame pour behind the podium, False makes the

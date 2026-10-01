@@ -577,10 +577,13 @@ a.how-step:active{opacity:.7}
 .qc .btn{width:100%}
 .s-done .qc{margin-top:8px;padding:18px 0 0;box-shadow:none;border-top:1px solid var(--line)}
 .s-step3{display:grid;gap:8px;justify-items:start;margin-top:8px}
+/* From 768 the sample's words stand level with the card's middle, not at its top over an empty
+   column: the second row they shared was for the quick-call card, which went on 2026-10-01. Phones
+   keep the words above the card. */
 @media (min-width:768px){
-  .sample-sec .split{grid-template-rows:auto 1fr}
+  .sample-sec .split{align-items:center}
   .sample-sec .split-text{grid-row:1}
-  .sample-sec .c-card{grid-row:1 / span 2}
+  .sample-sec .c-card{grid-row:1}
   .qc .btn{width:auto}
 }
 /* The free sample (#sample) reads as a note to Peter: a fill-in-the-blank sentence in the display
@@ -1940,6 +1943,7 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
 .is-done .rg-n::after,.is-now .rg-n::after{border-color:rgba(255,255,255,.28)}
 .rk-guide a{color:var(--teal);font-weight:650;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px}
 .rk-guide .is-now a{color:var(--blue)}
+.rk-guide a:not([href]){color:inherit;font-weight:inherit;text-decoration:none}   /* step 3's "Amway" until a plate is on the bar: plain text (_script.html amwaySync) */
 @media (prefers-reduced-motion:reduce){.rg-n{transition:none}}
 html:not(.js) .rk-guide{display:none}   /* without script every panel stands open and nothing loads: no steps to follow */
 @media (max-width:359px){.rk-guide li{font-size:14px;align-items:flex-start}.rk-guide .rg-t{padding-top:2px}}
