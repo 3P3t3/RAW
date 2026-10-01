@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=d92d39e0">
+<link rel="stylesheet" href="style.css?v=1ded6bf1">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -582,35 +582,6 @@ if(bg&&html.classList.contains('motion')){
   },{passive:true});
 }
 
-/* Podium: packs tilt toward the pointer, and the week's count counts up */
-var tilts=$$('.tilt');
-if(tilts.length&&html.classList.contains('motion')){
-  var fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
-  if(fine){
-    tilts.forEach(function(el){
-      var box=el.parentNode;
-      box.addEventListener('pointermove',function(e){
-        var r=box.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
-        el.style.transform='rotateY('+(x*14).toFixed(2)+'deg) rotateX('+(-y*12).toFixed(2)+'deg) translate3d('+(x*10).toFixed(1)+'px,'+(y*8-6).toFixed(1)+'px,0) scale(1.03)';
-      });
-      box.addEventListener('pointerleave',function(){el.style.transform=''});
-    });
-  }else{
-    /* phones: a slow, shared drift so the packs still feel three-dimensional */
-    var t0=performance.now(),drift=function(){
-      var t=(performance.now()-t0)/1000;
-      tilts.forEach(function(el,i){
-        var a=t*.6+i*2.1;
-        el.style.transform='rotateY('+(Math.sin(a)*5).toFixed(2)+'deg) rotateX('+(Math.cos(a*.8)*3).toFixed(2)+'deg)';
-      });
-      requestAnimationFrame(drift);
-    };
-    var seen=false;
-    if('IntersectionObserver' in window)new IntersectionObserver(function(es){
-      if(es[0].isIntersecting&&!seen){seen=true;drift()}
-    },{threshold:.2}).observe(tilts[0].parentNode);
-  }
-}
 $$('.pod-num').forEach(function(el){
   var to=+el.dataset.count;
   if(!to)return;
@@ -1739,9 +1710,9 @@ if(mcForm){
   function mcGlide(){
     mcStop();
     if(!cform||!mcSec||$('body > .intro'))return; /* no consult on this page, or the curtain is still up */
-    /* only while the consult sits directly under the calculator: with the trending band, the story
-       and the stack between them (the homepage since 2026-10-01) a glide would carry the visitor
-       thousands of pixels past all of it, so the card stays put and its own button makes the trip */
+    /* only while the consult sits directly under the calculator: with the story and the stack
+       between them (the homepage since 2026-10-01) a glide would carry the visitor thousands of
+       pixels past both, so the card stays put and its own button makes the trip */
     if(mcForm.closest('section').nextElementSibling!==mcSec)return;
     mcY=scrollY;
     MCSTOP.forEach(function(ev){addEventListener(ev,mcNudge,{capture:true,passive:true})});
@@ -1762,150 +1733,6 @@ if(mcForm){
   mcShow();mcStep(false);
   if(mcDone)mcRender(false);
 }
-
-/* The pour: 150 frames of the can going into the glass, scrubbed by scroll position,
-   running as the ground of the trending band. Nothing is fetched until the band comes
-   near, and reduced motion gets one still. */
-(function(){
-  var run=$('#pour-bg');
-  if(!run)return;
-  var stage=$('.pour-stage',run),cv=$('#pour-film'),still=$('#pour-still');
-  /* phones take the light set, big screens the tall one; picked when the first
-     frame is actually wanted, so the window has been laid out by then */
-  var DIR='assets/pour/sm';
-  function pick(){
-    var big=innerWidth>900||((devicePixelRatio||1)>2&&innerWidth>480);
-    DIR='assets/pour/'+(big?'big':'sm');
-  }
-  var FRAMES=150,CACHE=28,AHEAD=10;
-  var MAXSTEP=3;     /* frames per display frame at most: a flick plays, never cuts */
-  var STILL=59;      /* the one frame reduced motion shows: the can mid-pour */
-  function url(i){return DIR+'/'+('000'+(i+1)).slice(-4)+'.webp'}
-
-  /* one frame, no scrub, and none of the other 149 fetched */
-  function poster(){
-    pick();still.src=url(STILL);still.hidden=false;cv.hidden=true;
-  }
-  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var gate='IntersectionObserver' in window;
-  if(!gate||!window.createImageBitmap){poster();return}   /* no gate, no bulk fetch */
-  if(reduced){
-    new IntersectionObserver(function(es,o){if(es[0].isIntersecting){poster();o.disconnect()}},
-      {rootMargin:'200px 0px'}).observe(run);
-    return;
-  }
-
-  var ctx=cv.getContext('2d',{alpha:false});
-  var blobs=new Array(FRAMES),bmps=new Array(FRAMES),used=[];
-  var w=0,h=0,pos=0,target=0,dir=1,raf=0,drawn='';
-
-  /* Load coarse to fine: every 8th frame first, then 4th, 2nd, the rest. A quick
-     scroll on a slow connection plays a rougher pour instead of stalling. */
-  function order(){
-    var seen={},out=[];
-    [8,4,2,1].forEach(function(s){for(var i=0;i<FRAMES;i+=s)if(!seen[i]){seen[i]=1;out.push(i)}});
-    if(!seen[FRAMES-1])out.splice(1,0,FRAMES-1);
-    return out;
-  }
-  function load(){
-    pick();
-    var queue=order(),live=0;
-    (function pump(){
-      while(live<4&&queue.length){                    /* a few requests in flight */
-        var k=queue.shift();live++;
-        (function(k){
-          fetch(url(k)).then(function(r){return r.blob()}).then(function(bl){
-            blobs[k]=bl;if(Math.abs(k-pos)<=AHEAD)decode(k);
-          }).catch(function(){}).then(function(){live--;pump()});
-        })(k);
-      }
-    })();
-  }
-
-  /* Decoded frames are big; keep a window around the playhead, not the whole clip. */
-  function decode(i){
-    if(i<0||i>=FRAMES||bmps[i]||!blobs[i])return;
-    bmps[i]='pending';
-    createImageBitmap(blobs[i]).then(function(bm){
-      bmps[i]=bm;used.push(i);
-      while(used.length>CACHE){                       /* drop the frame furthest away */
-        var far=0;
-        for(var j=1;j<used.length;j++)
-          if(Math.abs(used[j]-pos)>Math.abs(used[far]-pos))far=j;
-        var gone=used.splice(far,1)[0];
-        if(bmps[gone]&&bmps[gone].close)bmps[gone].close();
-        bmps[gone]=null;
-      }
-      paint(true);
-    }).catch(function(){bmps[i]=null});
-  }
-  function ready(i){return bmps[i]&&bmps[i]!=='pending'}
-  function nearest(i){
-    for(var d=0;d<FRAMES;d++){if(ready(i-d))return i-d;if(ready(i+d))return i+d}
-    return -1;
-  }
-  function blit(bm,alpha){
-    var s=Math.max(w/bm.width,h/bm.height),dw=bm.width*s,dh=bm.height*s;
-    ctx.globalAlpha=alpha;ctx.drawImage(bm,(w-dw)/2,(h-dh)/2,dw,dh);ctx.globalAlpha=1;
-  }
-  /* Draw the playhead between two frames: the next one fades over the first by the
-     fraction in between, so scroll positions between frames become motion. */
-  function paint(force){
-    var i=Math.floor(pos),f=pos-i,key;
-    for(var k=1;k<=AHEAD;k++)decode(i+k*dir);
-    decode(i);decode(i+1);decode(i-dir);
-    var a=ready(i)?i:nearest(i);
-    if(a<0)return;
-    var b=a===i&&f>0.02&&ready(i+1)?i+1:-1;
-    key=a+':'+(b<0?0:Math.round(f*20));
-    if(key===drawn&&!force)return;
-    drawn=key;
-    blit(bmps[a],1);
-    if(b>=0)blit(bmps[b],f);
-  }
-  function size(){
-    var r=Math.min(devicePixelRatio||1,2);
-    w=stage.offsetWidth;h=stage.offsetHeight;
-    cv.width=Math.round(w*r);cv.height=Math.round(h*r);
-    ctx.setTransform(r,0,0,r,0,0);
-    ctx.imageSmoothingQuality='high';
-    ctx.fillStyle='#002E3B';ctx.fillRect(0,0,w,h);    /* teal until a frame lands, and if none ever does */
-    drawn='';paint(true);
-  }
-  /* The band is its own scroll run: the film starts as the band's top reaches the bottom
-     of the window and ends as its bottom leaves the top. Measured live, since the band's
-     height and the sections above it both move as the shelf opens. */
-  function progress(){
-    var r=run.getBoundingClientRect(),vh=innerHeight||1;
-    return Math.min(1,Math.max(0,(vh-r.top)/(r.height+vh)));
-  }
-  /* The playhead eases toward the scroll position instead of jumping to it, so a
-     flick of the thumb plays through frames rather than cutting. */
-  function step(){
-    raf=0;
-    var d=target-pos;
-    if(Math.abs(d)<0.01)pos=target;
-    else{dir=d>0?1:-1;var v=d*0.22;pos+=Math.max(-MAXSTEP,Math.min(MAXSTEP,v))}
-    paint(false);
-    if(pos!==target)raf=requestAnimationFrame(step);
-  }
-  function onScroll(){
-    target=progress()*(FRAMES-1);
-    if(!raf)raf=requestAnimationFrame(step);
-  }
-  size();
-  addEventListener('scroll',onScroll,{passive:true});
-  addEventListener('resize',function(){
-    /* height-only changes (mobile Safari's toolbar) must not re-size the stage */
-    if(stage.offsetWidth===w&&stage.offsetHeight===h)return;
-    size();onScroll();
-  });
-  /* the gate: the first frame request happens here, not on page load */
-  new IntersectionObserver(function(es,o){
-    if(!es[0].isIntersecting)return;
-    o.disconnect();load();onScroll();
-  },{rootMargin:'400px 0px'}).observe(run);
-})();
 
 /* Load the bar (SHELF_VIEW 'bar' in build_homepage.py). #goals is a rack of plates (nine), one per
    shelf; a plate is a button that shows its shelf's panel (a few packs, each opening the product
@@ -2435,12 +2262,13 @@ var LB=null;
 
 /* Peter's story: nine beats on one stage that holds the window for the length of the run.
    Where each beat is, and how far in or out of its turn, is a function of how far the run has
-   scrolled, as the pour is: scrolling back up plays it backwards. The stage follows the scroll
+   scrolled: scrolling back up plays it backwards. The stage follows the scroll
    through an eased copy of it (each frame closes 18% of the gap, at most .14 of a unit, and
    the loop runs until the two agree), so a flick that crosses two beats still plays both
    swirls instead of cutting between them. Only the stage lags; the page scrolls as it always
-   does. The cap is the pour's MAXSTEP idea: the ease alone is front-loaded, and crossed a
-   whole change in the first three frames of a flick.
+   does. The cap: the ease alone is front-loaded, and crossed a whole change in the first three
+   frames of a flick. Both it and the backlog clamp are shares of a UNIT, so they come down with it
+   and a flick still spends the same number of frames on each change however short the run is.
    The script takes the section over (.is-live) only when motion is allowed; otherwise, and
    until it does, the beats are a plain vertical sequence. Everything written per frame is
    transform or opacity.
@@ -2471,11 +2299,23 @@ var LB=null;
      feels like it takes too long"). Nothing here waits for a line to be read any more, because every
      line is already up in the caption strip and two or three of them are legible at once: a hold is
      only the moment a picture stands on its own before the next change starts. So the holds are short
-     (a pack .25 of a unit, ~70px at 390x844) and the changes are .45-.6 (~125-167px), which is still
-     long enough to watch a pack fall. The two that stay long are the turn (.85, the wipe plays inside
-     it) and the call (2.6, ~723px: a ~700px flick through the end of the story must come to rest on
-     "Book a free call" rather than over it). The run in style.css came down with all of it, 778 to 600
-     to 400lvh, and a unit is still ~278px. TT[i] is the change INTO beat i. */
+     (a pack .25 of a unit) and the changes are .45-.6, which is still long enough to watch a pack
+     fall. The two that stay long are the turn (.85, the wipe plays inside it) and the call (2.6,
+     before it is measured: a ~700px flick through the end of the story must come to rest on
+     "Book a free call" rather than over it). TT[i] is the change INTO beat i.
+     UNIT is what the same beats cost in scroll: it was .33 of the stage (~278px at 390x844) and it is
+     .19 (~160px) since 2026-10-01, which is the whole of the story's second shortening (Peter: "maybe
+     the scroll should be a little faster for supplements or a little shorter on the explanation of how
+     I got into this... it feels like a freaking journey for them to actually get where they want to
+     go"). Nothing about the stage changed: every beat, every hold and every change is the same share
+     of the run as before, and the run is a quarter shorter (2976 -> 2208 at 390x844, 3068 -> 2249 at
+     1440x900). It plays the same, too — the ease's step cap and its backlog clamp are both .14 and 3.5
+     of a UNIT, so they shrink with it and a flick still spends the same number of FRAMES on each
+     change; only a slow, deliberate scroll gets there sooner. The beats themselves were left alone:
+     cutting one would have had to fold two of his captions into one block, and two of his lines will
+     not stand in the strip at once on a phone (the strip holds ~220px of caption clear of its fades;
+     his shortest pair comes to ~257px), so a line of his would have been read through the top fade.
+     His words set the floor here, not the pace. */
   /* The call's hold is no longer a fixed 2.6 units: it is set per resize (measure) to just what the
      flick needs. Once the run ends the stage scrolls away with the button still whole on screen for
      a while (the button's top minus the masthead and the pinned bar: ~480px at 390x844), so the hold
@@ -2484,7 +2324,7 @@ var LB=null;
      the stage, ~278px), so every other beat keeps its pace. The 2.6 below is only its value before
      the first measure. */
   var HOLD=[.45,.25,.25,.25,.25,.85,.3,2.6],TT=[0,.6,.45,.45,.45,.6,.45,.9],at=[],L=0,   /* his before, four packs, the turn, his family, the call */
-      UNIT=.33,FLICK=780,CALLMIN=.8;
+      UNIT=.19,FLICK=780,CALLMIN=.8;
   function Tn(i){return TT[i]||1.5}
   beats.forEach(function(b,i){if(i)L+=Tn(i);at.push(L);L+=HOLD[i]||1});
   var TURN=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('turn'),
@@ -2744,7 +2584,7 @@ var LB=null;
     var top=topS,
         x=clamp(-top/span)*L,
         arrive=clamp((vh-top)/(vh*.8)),                /* the first photo comes up with the stage, */
-        settle=clamp(1-top/(vh*.3)),                   /* the pour's shade lifts as the stage settles */
+        settle=clamp(1-top/(vh*.3)),                   /* the opening shade lifts as the stage settles */
         wipe=TURN<0?0:smooth(clamp((x-at[TURN]-.1)/((HOLD[TURN]||1)*.55))),
         best=-1,bestV=.5,lit=[0,0],restV=0,restX=0,
         kc=CALL<N?clamp((x-at[CALL]+Tn(CALL))/Tn(CALL)):0,zc=CALL<N-1?clamp((x-at[CALL]-(HOLD[CALL]||1))/Tn(CALL+1)):0;
@@ -3018,7 +2858,7 @@ var LB=null;
 })();
 
 /* The footer horizon: Peter's wave along the top edge of the footer. It is below the fold on
-   every page, so it is asked for only as the footer nears, as the pour's frames are. Without
+   every page, so it is asked for only as the footer nears. Without
    script it is never asked for at all and the footer is plain black. */
 (function(){
   var im=$('.foot-glow img');

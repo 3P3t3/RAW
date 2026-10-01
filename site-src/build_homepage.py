@@ -247,10 +247,18 @@ RACK_GUIDE = ('<!-- DRAFT-COPY --><ol class="rk-guide" id="rk-guide" role="list"
               '<li><span class="rg-n" aria-hidden="true">3</span><span class="rg-t"><a class="rg-amway">Add to cart</a>, bring it to a <a href="#consult">free call</a>, or ask for a <a href="#sample">sample</a>.</span></li>'
               '</ol><!-- /DRAFT-COPY -->')
 
-# The trending band's ground: True scrubs the 150-frame pour behind the podium, False makes the
-# band a compact row of three cards on the page's field and fetches none of it (the no-pour rules
-# in style.css). The frames and the script stay either way.
-TRENDING_POUR = False
+# "Trending now": the week's three best sellers, between #macros and #story. It is OFF.
+# Peter asked for it (2026-10-01: "maybe we should get rid of the trending now, category..."), the
+# page ran to thirteen phone screens, and two critics scored the band the weakest thing on the site
+# — the counts in bestsellers.csv are blank, so it was three small cards with no numbers on them.
+# TO BRING IT BACK: set TRENDING = True here and rebuild. Nothing else. The podium is built on every
+# build whether it is shown or not, so bestsellers.csv is still read, the build still fails when a
+# name in it is not in share-links.csv, and the three cut-outs are still made. Its markup is the
+# `trending` block further down and its CSS is the "Trending: podium" block in style.css, both kept
+# whole. The 150-frame pour that could run as the band's ground (TRENDING_POUR) went with it: its
+# markup, its ~145 lines of script and its CSS are out, so every page is that much smaller. The
+# frames are still in assets/pour/ and the code is one `git show` away.
+TRENDING = False
 
 # DRAFT-COPY for Peter's approval: the one line under the name on the case's product card, one per
 # family (from the one-liner draft of 2026-09-26). Written to stay clear of Amway's health claims:
@@ -1285,14 +1293,6 @@ def main():
                   + ''.join(f'<span class="stc-bay" data-cat="{s}"><span class="stc-well"></span>'
                             f'<span class="stc-name">{n}</span></span>' for s, n, *_ in CATEGORIES)
                   + '</span></div>')   # the bar theme's pinned bar is the story's stack instead
-    pour = ('''<div class="pour-bg" id="pour-bg" aria-hidden="true">
-      <div class="pour-stage">
-        <canvas class="pour-film" id="pour-film"></canvas>
-        <img class="pour-still" id="pour-still" alt="" decoding="async" hidden>
-        <noscript><img class="pour-still" src="assets/pour/sm/0060.webp" alt=""></noscript>
-      </div>
-    </div>''' if TRENDING_POUR else '<!-- TRENDING_POUR is off in build_homepage.py: a plain band -->')
-
     order = sorted(products, key=lambda pr: pr['name'].lower())
     grid = [card(pr, i, shelves=True) for i, pr in enumerate(order)]
 
@@ -1337,8 +1337,8 @@ def main():
     podium = []
     # each of the three carries its family's TAGLINES line (.p-why), the same DRAFT-COPY its product card
     # shows, so the band says why a pack is worth a look and not only what it is; no new claims here.
-    # the packs tilt toward the pointer over the pour; off it, they are plain cards like the shop's
-    tilt = ' tilt' if TRENDING_POUR else ''
+    # the podium is built on every build, shown or not: it is what checks bestsellers.csv against
+    # share-links.csv. TRENDING (top of this file) only decides whether the band goes on the page.
     for i, r in enumerate(bestsellers()[:3]):
         pr = dict(by.get(r['product']) or {})
         if not pr:
@@ -1354,12 +1354,29 @@ def main():
         count = (f'<p class="pod-count"><span class="pod-num" data-count="{units}">0</span> '
                  f'bought this week</p>') if units.isdigit() else ''
         podium.append(
-            f'        <li class="pod pod-{i + 1}"><a class="card-link{tilt}" href="{esc(pr["share_link"])}" target="_blank" rel="noopener" {card_data(pr)}>'
+            f'        <li class="pod pod-{i + 1}"><a class="card-link" href="{esc(pr["share_link"])}" target="_blank" rel="noopener" {card_data(pr)}>'
             f'<span class="pod-rank" aria-hidden="true">0{i + 1}</span>'
             f'{shot(pr, lazy=False)}<p class="p-tag">{names.get(cat_of.get(pr["product"]), "Wellness")}</p>'
             f'<h3 class="p-name">{esc(pr["name"])}</h3><p class="p-desc">{esc(pr["desc"])}</p>'
             f'<p class="p-why">{esc(TAGLINES[family(pr["product"])])}</p>{count}'
             f'<span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
+
+    # The band itself: {{TRENDING}} in homepage.template.html, and '' unless TRENDING (top of this
+    # file) is True — one switch, and the section comes back exactly where and as it was.
+    trending = (('''  <!-- 4. Trending: the week's three best sellers, each with its family's TAGLINES line, as
+       three compact cards on the page's own field, all three in view at every width. It sits
+       between the calculator (#macros) and Peter's story (#story). Switched by TRENDING in
+       build_homepage.py; the whole section is built there. -->
+  <section class="sec podium-sec no-pour" id="trending" aria-labelledby="trending-title">
+    <div class="wrap">
+      <div class="sec-head grow"><h2 id="trending-title">Trending now</h2></div>
+      <ul class="podium">
+'''
+                 + '\n'.join(podium) + '''
+      </ul>
+    </div>
+  </section>
+''') if TRENDING else '')
 
     page_name = DEMO_PAGE if DEMO else 'homepage.html'
     head_extra = (f'<meta name="robots" content="noindex">\n<link rel="canonical" href="{BASE}{DEMO_PAGE}">\n'
@@ -1371,9 +1388,8 @@ def main():
                                 '{{GOALS}}': cat_rows(),
                                 '{{SAMPLE_ENDPOINT}}': SAMPLE_ENDPOINT, '{{SAMPLE_ACTION}}': SAMPLE_ACTION,
                                 '{{SAMPLE_NEXT}}': SAMPLE_NEXT.replace('homepage.html', page_name), '{{SAMPLE_PRODUCTS}}': sample_list,
-                                '{{SAMPLE_PICKER}}': sample_picker, '{{PCARD}}': '' if SHELF_VIEW in ('bar', 'case') else card_dialog(), **quick_call(), '{{GRID}}': '\n'.join(grid), '{{PODIUM}}': '\n'.join(podium), '{{SHELVES}}': shelves,
-                                '{{CASE_STRIP}}': case_strip, '{{POUR}}': pour,
-                                '{{POUR_CLASS}}': '' if TRENDING_POUR else ' no-pour',
+                                '{{SAMPLE_PICKER}}': sample_picker, '{{PCARD}}': '' if SHELF_VIEW in ('bar', 'case') else card_dialog(), **quick_call(), '{{GRID}}': '\n'.join(grid), '{{TRENDING}}': trending, '{{SHELVES}}': shelves,
+                                '{{CASE_STRIP}}': case_strip,
                                 **bar_bits}).items():
         out = out.replace(k, v)
     left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', out)))
