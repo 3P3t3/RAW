@@ -34,7 +34,7 @@ builds are ~0.05s again.
 
 ## Merging: never merge the generated pages
 
-`.gitattributes` marks `homepage.html`, `category-*.html` and the root `style.css` as `merge=ours`, so
+`.gitattributes` marks `homepage.html`, `category-*.html`, `about.html` and the root `style.css` as `merge=ours`, so
 two branches that both rebuilt never conflict on them. A post-merge hook then rebuilds them from the
 merged source; commit what it rebuilt. The `ours` driver is local git config
 (`git config merge.ours.driver true`) — set it in any fresh clone, or git falls back to a normal
@@ -105,6 +105,18 @@ request. The build still has the export that made them: `python3 site-src/build_
 shelf and `style-demo[-NAME].css`, all `noindex`, with every internal link rewritten to the demo copies
 and their own stylesheet, so a preview can never change the live pages. RAW 0: EM copies them in and
 pushes. A preview's sample form really sends (FormSubmit), so only publish one Peter has asked for.
+
+**"Take my stack to Amway" (`#sa`).** The step from a loaded bar to a real order, added 2026-10-01 off
+Peter's own finding that Amway attribution is session-wide: one click on a share link credits him for
+everything added afterwards, including items the visitor finds by ordinary browsing. The button lives
+inside `.mys-has` under "Build yours." on the homepage only, and shows only when at least one plate is
+loaded and `<dialog>` is supported; the modal shell comes from `stack_dialog()` in the build and is
+filled by `_script.html`. There is no add-to-cart-by-URL at Amway (the only addresses are product and
+category pages), so the panel is: pick (every product ticked, untick to drop) → `window.open` the first
+one through its share link → a checklist of the rest to add in that same Amway tab. The products offered
+are read back out of the rack's own panels (`#rk-p-<slug> .bay-go`, href moved to `data-href` by the
+product-card block), never a second table in Python — so a new shelf needs nothing here and the links can
+never drift from `share-links.csv`. Ticks live in `sessionStorage` (`aspire-amway-done`).
 
 `index.html` is a hand-written redirect to `homepage.html` and is not generated.
 
@@ -181,15 +193,13 @@ Her photos have their own dates (`HER_PHOTOS`: Nov 2025 → Jul 2026), about two
 after their daughter's birth in Sep 2025. They are never presented as matching her DEXA scans.
 
 **The DEXA cards.** Peter's card (`peter_card()`, from `PETER_TRANSFORM`) shows the two scans of his
-transformation, fifteen months apart: body fat and weight, no dates, no trend, no clinic. That is Peter's choice
-(2026-09-28); his later UC Davis scans are deliberately not used anywhere. Under those two measured rows the card
-also carries **pounds of fat and of lean, worked out from them and not read off the report** (fat = weight x body
-fat %, lean = the rest), rounded to whole pounds: Fat 38 → 12 lb, −26 lb and Lean mass 132 → 152 lb, +20 lb. Each
-end is rounded first and the change is then taken from the two rounded ends, so a reader who subtracts what a row
-shows gets the number that row shows; the half-pound that costs is inside the ballpark the line claims. The line
-under the card says in Peter's voice that they are worked out and rounded, because +19 lb of lean in fifteen months
-is at the very top of what is plausible and a DEXA lean figure carries water and glycogen besides. `PETER_SHOW_COMPOSITION
-= False` takes both rows and that line off every page in one edit. Yenni's card shows fat and lean as her scans
+transformation, fifteen months apart: body fat, weight, and pounds of fat and of lean. No dates, no trend, no
+clinic — that is Peter's choice (2026-09-28), and his later UC Davis scans are deliberately not used anywhere.
+**Every one of the four rows is read off his reports** (2026-09-28: he relayed the figures rather than uploading
+the scans), so nothing on the card is derived and the card carries no worked-it-out line. `PETER_TRANSFORM` holds
+them as (weight lb, body fat %, fat lb, lean lb) before and after. The rows do not sum to the weight and must not
+be made to: a DEXA total also carries bone mineral. `PETER_SHOW_COMPOSITION = False` takes the fat and lean rows
+off every page in one edit. Yenni's card shows fat and lean as her scans
 measured them, and is not affected. `HER_DEXA` holds Yenni's scans as data
 rows: date, weight, fat, lean and body fat %, from UC Davis Sports Medicine in Sacramento. `dexa_card()` draws
 her card, with these parts:
@@ -204,7 +214,8 @@ which spans her pregnancy and their daughter's birth. Her trend is drawn broken 
 across the gap, and the card says why. Set `HER_DEXA = None` and her card comes off every page.
 
 Where it all shows:
-- The homepage proof after the story stage: her pairs beside Peter's, then both cards.
+- `about.html`: the proof wall — her pairs beside Peter's — then both cards. It used to close the
+  homepage's story; Peter moved it to About on 2026-09-28.
 - Women's Health: her portrait as the hero, drawn as a real `<img>` (`SHELF_PORTRAIT`), then her
   story, pairs and card (`SHELF_EXTRA`).
 - Men's Health: Peter's card (`SHELF_EXTRA`).
@@ -232,15 +243,14 @@ every width; the scroll-scrubbed can pour behind them is `TRENDING_POUR`, off) �
 beats, in three movements ("Fatigue was a constant." / "Here's what I changed." / "Here's what I
 notice now.", his own phrases for them): his before, one growing shelf with three product beats and a
 fourth that lands the last two packs together, then the before becoming the after and his family,
-"That's what this call is for" with a "Book a free call" button, his family, then the proof wall:
-his three pairs, Yenni's two beside them, then the DEXA cards. The wall sits after the stage
-(`#st-run`), so it does not make the run any longer. It is its own `<section id="proof">` with a
-labelled heading, and the menu sheet's "Our before & afters" is the way to it from anywhere and from
-any shelf page — the site is not getting a third fixed layer for it. The story replaced the old `#hydrate` band (its
-water line now lives in the hydration beat).
+"That's what this call is for" with a "Book a free call" button, then his family, which is where the
+story now ends — with one link across to `about.html`, which carries the proof wall and the DEXA cards.
+The wall is not on the homepage any more (Peter, 2026-09-28: it "feels like too much in one thing"), and
+the menu's "About us" is the way to it from anywhere and from any shelf page — the site is not getting a
+third fixed layer for it. The story replaced the old `#hydrate` band (its water line now lives in the
+hydration beat).
 A visible heading opens the section — PETER'S STORY over "How did I get into this?" (`.st-head`),
-his own words for it. Like the proof wall it is outside `#st-run`, so it scrolls away normally and
-the run is no longer for it.
+his own words for it. It sits outside `#st-run`, so it scrolls away normally and the run is no longer for it.
 Peter's lines inside it are his, verbatim, in PETER-COPY markers.
 
 **His words are a caption strip, not one line at a time.** Under whatever the stage is showing,
