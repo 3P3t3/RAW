@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=d92d39e0">
+<link rel="stylesheet" href="style.css?v=0900ede2">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -1919,7 +1919,9 @@ if(mcForm){
    shelf; a plate is a button that shows its shelf's panel (a few packs, each opening the product
    card, "Load this plate" and a link to the shelf), one panel at a time, and nothing opens on its
    own. Loaded plates are the visitor's stack: kept in localStorage (a browser that refuses it still
-   works, it just forgets), drawn on the hero's bar and on the bar pinned under the masthead, and
+   works, it just forgets), drawn on the bar pinned under the masthead (the hero's own bar came off on
+   2026-10-01: a visitor who has loaded nothing is past it before it can say anything, and the pinned
+   strip is the part they do see), and
    named in the call form's note ("Interested in: ..."), only while that note is empty or still says
    exactly what the site last put there. Through the story's stage (#st-run) the pinned bar is Peter's
    instead, and from the moment the stage lets go ("That's my stack" coming up) it is the visitor's again: the story
@@ -1940,7 +1942,7 @@ var LB=null;
   var reduce=matchMedia('(prefers-reduced-motion: reduce)'),KEY='aspire-stack',NKEY='aspire-consult-bar',
       rack=$('#rack'),plates=rack?$$('.rk-plate',rack):[],panels=plates.map(function(b){return $('#'+b.getAttribute('aria-controls'))}),
       loads=rack?$$('.rk-load',rack):[],NAME={},RANK={},stack=[],sel=-1,MS=320,
-      youBars=$$('.bb-you'),capYou=$('.lbc-you',pin),capNew=$('.lbc-ynew',pin),hbar=$('.hbar'),hbYou=hbar&&$('.hb-you',hbar),
+      youBars=$$('.bb-you'),capYou=$('.lbc-you',pin),capNew=$('.lbc-ynew',pin),
       pBar=$('.bb-peter',pin),pCaps=$$('.lbc-p',pin),pNews=$$('.lbc-pnew',pin),PC=pNews.map(function(e){return e.getAttribute('data-cat')}),
       pinYou=$('.bb-you',pin),COL={},steps=$$('#rk-guide li'),
       mys=$('#mys-you'),mysHas=mys&&$('.mys-has',mys),mysNone=mys&&$('.mys-none',mys),mysN=mys&&$('.mys-n',mys),mysKey=mys&&$('.mys-ykey',mys),
@@ -1982,7 +1984,6 @@ var LB=null;
       });
     });
     capSet(stack.length);
-    if(hbar){hbar.classList.toggle('has',stack.length>0);hbYou.textContent=count(stack.length)}
     plates.forEach(function(b){b.classList.toggle('is-on',stack.indexOf(b.getAttribute('data-cat'))>-1)});
     loads.forEach(function(b){
       var on=stack.indexOf(b.getAttribute('data-cat'))>-1;

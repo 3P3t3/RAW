@@ -1266,15 +1266,13 @@ def main():
         raise SystemExit(f"PETER: the story's packs land for {pack_cats}, not {PETER}")
     if BAR and sorted(story_pack) != sorted(PETER):
         raise SystemExit(f"PETER: found a pack picture for {sorted(story_pack)}, not for each of {PETER}")
-    bar_bits = {k: '' for k in ('{{HTML_CLASS}}', '{{HERO_BAR}}', '{{PIN}}', '{{ARC_BAR}}', '{{MYSTACK}}')}
+    bar_bits = {k: '' for k in ('{{HTML_CLASS}}', '{{PIN}}', '{{ARC_BAR}}', '{{MYSTACK}}')}
     if BAR:
         pn = [(c, names[c]) for c in PETER]
         caps = ''.join(f'<span class="lbc lbc-p" data-n="{n}">Peter’s<span class="lbc-lg"> stack</span> · {n} of {len(PETER)}</span>' for n in range(len(PETER) + 1))   # a phone's one-row strip drops "stack"
         news = ''.join(f'<span class="lbc lbc-pnew" data-cat="{c}">+ {n}</span>' for c, n in pn)
         bar_bits.update({
             '{{HTML_CLASS}}': ' class="t-bar"',
-            '{{HERO_BAR}}': ('<div class="hbar"><div class="bbx">' + barbell('bb-dk bb-you') + '</div>'
-                             '<p class="hbar-cap" aria-hidden="true"><span class="hb-empty"><!-- DRAFT-COPY -->Load it from the rack below.<!-- /DRAFT-COPY --></span><span class="hb-you"></span></p></div>'),
             # the pinned bar: the visitor's stack, or Peter's through #story; the script shows it once the hero has gone
             '{{PIN}}': ('<div class="lbpin" id="lbpin" aria-hidden="true"><div class="wrap lbpin-in">'
                         '<div class="lbpin-bars bbx">' + barbell('bb-you') + barbell('bb-peter') + '</div>'
