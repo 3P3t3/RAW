@@ -222,16 +222,140 @@
         </div>
         <!-- /DRAFT-COPY -->
       </div>
-      <!-- the quick call (step 4), under the form on a phone and beside it from 768 up. Once the
-           thank-you is up this copy steps aside for the one inside it, and the script hands
-           this id over to that one, so "#quick-call" always lands on the invitation on screen.
-           Words and button come from quick_call() in build_homepage.py. -->
-      <!-- DRAFT-COPY -->
-      <div class="qc qc-form" id="quick-call">
-        <p class="qc-ask">{{QUICK_ASK}}</p>
-        {{QUICK_CALL}}
+    </div>
+  </section>
+
+  <!-- 3d. Macros: seven questions, one per screen, then the numbers and one action.
+       It follows the free sample directly, so the page's two free things come together (the game
+       plan's "or run your macros first"); it used to sit at the foot of the page, after the story,
+       where almost no phone visitor reached it. The numbers still travel to the booking form
+       (mcFill in _script.html) when the card's "Book a free call" is tapped or when the form
+       scrolls into view; the automatic glide down after "See my numbers" only runs while the
+       consult sits directly under this section, so here the card stays put and is read. -->
+  <section class="sec macros-sec" id="macros" aria-labelledby="macros-title">
+    <div class="wrap split">
+      <div class="split-text grow">
+        <p class="label">Your numbers</p>
+        <h2 id="macros-title"><span>Work out</span> <span>your macros</span></h2>
+        <!-- DRAFT-COPY --><p>Seven quick questions and you’ll have your daily calories, protein, fat and carbs. It’s free.</p><!-- /DRAFT-COPY -->
       </div>
-      <!-- /DRAFT-COPY -->
+      <form class="mc-card grow" id="mc-form" style="--d:1" novalidate>
+        <p class="mc-nojs">This one needs JavaScript to do the arithmetic. <a class="tlink" href="#consult">Book a free call</a> and we will work your macros out together instead.</p>
+
+        <div class="mc-quiz" id="mc-quiz">
+          <p class="mc-count" id="mc-step-n">Step 1 of 7</p>
+          <div class="mc-prog" id="mc-prog" aria-hidden="true"><span class="is-on"></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+          <fieldset class="mc-step">
+            <legend class="mc-q" tabindex="-1">Male or female?</legend>
+            <div class="mc-opts cols">
+              <label class="mc-opt"><input type="radio" name="sex" value="female"><span>Female</span></label>
+              <label class="mc-opt"><input type="radio" name="sex" value="male"><span>Male</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="mc-step" hidden>
+            <legend class="mc-q" tabindex="-1">How old are you?</legend>
+            <div class="mc-field"><label for="mc-age">Age in years</label>
+              <input id="mc-age" name="age" type="number" inputmode="numeric" min="13" max="100" step="1" autocomplete="off"></div>
+          </fieldset>
+
+          <fieldset class="mc-step" hidden>
+            <legend class="mc-q" tabindex="-1">What do you weigh?</legend>
+            <div class="mc-field"><label for="mc-weight">Weight in pounds</label>
+              <input id="mc-weight" name="weight" type="number" inputmode="decimal" min="50" max="700" step="any" autocomplete="off"></div>
+          </fieldset>
+
+          <fieldset class="mc-step" hidden>
+            <legend class="mc-q" tabindex="-1">How tall are you?</legend>
+            <div class="mc-pair">
+              <div class="mc-field"><label for="mc-ft">Feet</label>
+                <input id="mc-ft" name="ft" type="number" inputmode="numeric" min="3" max="8" step="1" autocomplete="off"></div>
+              <div class="mc-field"><label for="mc-in">Inches</label>
+                <input id="mc-in" name="inch" type="number" inputmode="numeric" min="0" max="11" step="1" autocomplete="off"></div>
+            </div>
+          </fieldset>
+
+          <fieldset class="mc-step" hidden>
+            <legend class="mc-q" tabindex="-1">How much do you move in a week?</legend>
+            <div class="mc-opts">
+              <label class="mc-opt"><input type="radio" name="activity" value="1.2"><span>Sedentary &#183; desk job, little exercise</span></label>
+              <label class="mc-opt"><input type="radio" name="activity" value="1.375"><span>Light &#183; exercise 1&#8211;3&#215; a week</span></label>
+              <label class="mc-opt"><input type="radio" name="activity" value="1.55" checked><span>Moderate &#183; exercise 3&#8211;5&#215; a week</span></label>
+              <label class="mc-opt"><input type="radio" name="activity" value="1.725"><span>Very active &#183; exercise 6&#8211;7&#215; a week</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="mc-step" hidden>
+            <legend class="mc-q" tabindex="-1">Where are you at with training?</legend>
+            
+            <div class="mc-opts">
+              <label class="mc-opt"><input type="radio" name="basis" value="standard" checked><span>New to this</span></label>
+              <label class="mc-opt"><input type="radio" name="basis" value="better"><span>Training regularly</span></label>
+              <label class="mc-opt"><input type="radio" name="basis" value="trained"><span>Years in</span></label>
+            </div>
+            <p class="mc-note" id="mc-basis-note"></p>
+            <fieldset class="mc-sub" id="mc-frame" hidden>
+              <legend>Frame size</legend>
+              <div class="mc-opts cols3">
+                <label class="mc-opt"><input type="radio" name="frame" value="0.95"><span>Small</span></label>
+                <label class="mc-opt"><input type="radio" name="frame" value="1" checked><span>Medium</span></label>
+                <label class="mc-opt"><input type="radio" name="frame" value="1.15"><span>Large</span></label>
+              </div>
+            </fieldset>
+            <fieldset class="mc-sub" id="mc-trained" hidden>
+              <legend>Protein target</legend>
+              <div class="mc-opts cols">
+                <label class="mc-opt"><input type="radio" name="trained" value="1" checked><span>1&#8202;g per lb of bodyweight</span></label>
+                <label class="mc-opt"><input type="radio" name="trained" value="1.2"><span>1.2&#8202;g per lb of bodyweight</span></label>
+              </div>
+            </fieldset>
+          </fieldset>
+
+          <fieldset class="mc-step" hidden>
+            <legend class="mc-q" tabindex="-1">What are you after?</legend>
+            <div class="mc-opts cols">
+              <label class="mc-opt"><input type="radio" name="goal" value="loss"><span>Fat loss</span></label>
+              <label class="mc-opt"><input type="radio" name="goal" value="recomp"><span>Recomp</span></label>
+              <label class="mc-opt"><input type="radio" name="goal" value="maint" checked><span>Maintain</span></label>
+              <label class="mc-opt"><input type="radio" name="goal" value="gain"><span>Muscle gain</span></label>
+            </div>
+            <fieldset class="mc-sub" id="mc-loss" hidden>
+              <legend>How hard a deficit?</legend>
+              <div class="mc-opts">
+                <label class="mc-opt"><input type="radio" name="loss" value="0.85" checked><span>Moderate &#183; 15% under maintenance</span></label>
+                <label class="mc-opt"><input type="radio" name="loss" value="0.8"><span>Standard &#183; 20% under maintenance</span></label>
+                <label class="mc-opt"><input type="radio" name="loss" value="0.75"><span>Aggressive &#183; 25% under maintenance</span></label>
+              </div>
+            </fieldset>
+          </fieldset>
+
+          <p class="mc-err" id="mc-err" role="alert" hidden></p>
+          <div class="mc-nav">
+            <button class="tlink" type="button" id="mc-back" hidden>Back</button>
+            <button class="btn" type="submit" id="mc-next">Continue</button>
+          </div>
+        </div>
+
+        <div class="mc-res" id="mc-res" hidden>
+          <h3 class="mc-res-t" id="mc-res-t" tabindex="-1">Your day, in numbers</h3>
+          <dl class="mc-cals">
+            <div><dt>Maintenance</dt><dd id="mc-tdee">&#8212;</dd></div>
+            <div><dt>Your target</dt><dd id="mc-target">&#8212;</dd></div>
+          </dl>
+          <ul class="mc-macros">
+            <li><span class="mc-g" id="mc-p">&#8212;</span><span class="mc-lab">Protein</span><span class="mc-kc" id="mc-pc">&#8212;</span></li>
+            <li><span class="mc-g" id="mc-f">&#8212;</span><span class="mc-lab">Fat</span><span class="mc-kc" id="mc-fc">&#8212;</span></li>
+            <li><span class="mc-g" id="mc-c">&#8212;</span><span class="mc-lab">Carbs</span><span class="mc-kc" id="mc-cc">&#8212;</span></li>
+          </ul>
+          <div class="mc-notes" id="mc-notes"></div>
+          <a class="btn" id="mc-book" href="#consult">Book a free call</a>
+          <div class="mc-foot">
+            <button class="tlink" type="button" id="mc-edit">Change an answer</button>
+            <button class="tlink" type="button" id="mc-again">Start over</button>
+          </div>
+        </div>
+      </form>
     </div>
   </section>
 
@@ -241,7 +365,7 @@
        three cards on the page's field, all three in view at every width — small and side by
        side on a phone, nothing to scrub sideways). It is
        scenery, not content: frames come only as the band nears, and reduced motion
-       gets one still. It follows the shelves (and the free sample, #sample), and Peter's story (#story) follows it directly,
+       gets one still. It follows the free sample and the calculator (#sample, #macros), and Peter's story (#story) follows it directly,
        starting in this band's dark. -->
   <section class="sec podium-sec dark{{POUR_CLASS}}" id="trending" aria-labelledby="trending-title">
     {{POUR}}
@@ -430,146 +554,18 @@
   </section>
 
 {{MYSTACK}}
-  <!-- 6a. Macros: seven questions, one per screen, then the numbers and one action.
-       It sits after the story, not before it: straight after the shelves it came too early,
-       so Peter moved it below #trending and #story, and the story's closing chalk hands over
-       to its sand. The consult follows it directly, and must: the numbers are handed straight
-       into the booking form (mcFill in _script.html), and a fresh "See my numbers" glides the
-       page down onto it, so nothing may be put between the two. -->
-  <section class="sec macros-sec" id="macros" aria-labelledby="macros-title">
-    <div class="wrap split">
-      <div class="split-text grow">
-        <p class="label">Your numbers</p>
-        <h2 id="macros-title"><span>Work out</span> <span>your macros</span></h2>
-        <p>The math behind a higher you.</p>
-      </div>
-      <form class="mc-card grow" id="mc-form" style="--d:1" novalidate>
-        <p class="mc-nojs">This one needs JavaScript to do the arithmetic. <a class="tlink" href="#consult">Book a free call</a> and we will work your macros out together instead.</p>
 
-        <div class="mc-quiz" id="mc-quiz">
-          <p class="mc-count" id="mc-step-n">Step 1 of 7</p>
-          <div class="mc-prog" id="mc-prog" aria-hidden="true"><span class="is-on"></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-
-          <fieldset class="mc-step">
-            <legend class="mc-q" tabindex="-1">Male or female?</legend>
-            <div class="mc-opts cols">
-              <label class="mc-opt"><input type="radio" name="sex" value="female"><span>Female</span></label>
-              <label class="mc-opt"><input type="radio" name="sex" value="male"><span>Male</span></label>
-            </div>
-          </fieldset>
-
-          <fieldset class="mc-step" hidden>
-            <legend class="mc-q" tabindex="-1">How old are you?</legend>
-            <div class="mc-field"><label for="mc-age">Age in years</label>
-              <input id="mc-age" name="age" type="number" inputmode="numeric" min="13" max="100" step="1" autocomplete="off"></div>
-          </fieldset>
-
-          <fieldset class="mc-step" hidden>
-            <legend class="mc-q" tabindex="-1">What do you weigh?</legend>
-            <div class="mc-field"><label for="mc-weight">Weight in pounds</label>
-              <input id="mc-weight" name="weight" type="number" inputmode="decimal" min="50" max="700" step="any" autocomplete="off"></div>
-          </fieldset>
-
-          <fieldset class="mc-step" hidden>
-            <legend class="mc-q" tabindex="-1">How tall are you?</legend>
-            <div class="mc-pair">
-              <div class="mc-field"><label for="mc-ft">Feet</label>
-                <input id="mc-ft" name="ft" type="number" inputmode="numeric" min="3" max="8" step="1" autocomplete="off"></div>
-              <div class="mc-field"><label for="mc-in">Inches</label>
-                <input id="mc-in" name="inch" type="number" inputmode="numeric" min="0" max="11" step="1" autocomplete="off"></div>
-            </div>
-          </fieldset>
-
-          <fieldset class="mc-step" hidden>
-            <legend class="mc-q" tabindex="-1">How much do you move in a week?</legend>
-            <div class="mc-opts">
-              <label class="mc-opt"><input type="radio" name="activity" value="1.2"><span>Sedentary &#183; desk job, little exercise</span></label>
-              <label class="mc-opt"><input type="radio" name="activity" value="1.375"><span>Light &#183; exercise 1&#8211;3&#215; a week</span></label>
-              <label class="mc-opt"><input type="radio" name="activity" value="1.55" checked><span>Moderate &#183; exercise 3&#8211;5&#215; a week</span></label>
-              <label class="mc-opt"><input type="radio" name="activity" value="1.725"><span>Very active &#183; exercise 6&#8211;7&#215; a week</span></label>
-            </div>
-          </fieldset>
-
-          <fieldset class="mc-step" hidden>
-            <legend class="mc-q" tabindex="-1">Where are you at with training?</legend>
-            
-            <div class="mc-opts">
-              <label class="mc-opt"><input type="radio" name="basis" value="standard" checked><span>New to this</span></label>
-              <label class="mc-opt"><input type="radio" name="basis" value="better"><span>Training regularly</span></label>
-              <label class="mc-opt"><input type="radio" name="basis" value="trained"><span>Years in</span></label>
-            </div>
-            <p class="mc-note" id="mc-basis-note"></p>
-            <fieldset class="mc-sub" id="mc-frame" hidden>
-              <legend>Frame size</legend>
-              <div class="mc-opts cols3">
-                <label class="mc-opt"><input type="radio" name="frame" value="0.95"><span>Small</span></label>
-                <label class="mc-opt"><input type="radio" name="frame" value="1" checked><span>Medium</span></label>
-                <label class="mc-opt"><input type="radio" name="frame" value="1.15"><span>Large</span></label>
-              </div>
-            </fieldset>
-            <fieldset class="mc-sub" id="mc-trained" hidden>
-              <legend>Protein target</legend>
-              <div class="mc-opts cols">
-                <label class="mc-opt"><input type="radio" name="trained" value="1" checked><span>1&#8202;g per lb of bodyweight</span></label>
-                <label class="mc-opt"><input type="radio" name="trained" value="1.2"><span>1.2&#8202;g per lb of bodyweight</span></label>
-              </div>
-            </fieldset>
-          </fieldset>
-
-          <fieldset class="mc-step" hidden>
-            <legend class="mc-q" tabindex="-1">What are you after?</legend>
-            <div class="mc-opts cols">
-              <label class="mc-opt"><input type="radio" name="goal" value="loss"><span>Fat loss</span></label>
-              <label class="mc-opt"><input type="radio" name="goal" value="recomp"><span>Recomp</span></label>
-              <label class="mc-opt"><input type="radio" name="goal" value="maint" checked><span>Maintain</span></label>
-              <label class="mc-opt"><input type="radio" name="goal" value="gain"><span>Muscle gain</span></label>
-            </div>
-            <fieldset class="mc-sub" id="mc-loss" hidden>
-              <legend>How hard a deficit?</legend>
-              <div class="mc-opts">
-                <label class="mc-opt"><input type="radio" name="loss" value="0.85" checked><span>Moderate &#183; 15% under maintenance</span></label>
-                <label class="mc-opt"><input type="radio" name="loss" value="0.8"><span>Standard &#183; 20% under maintenance</span></label>
-                <label class="mc-opt"><input type="radio" name="loss" value="0.75"><span>Aggressive &#183; 25% under maintenance</span></label>
-              </div>
-            </fieldset>
-          </fieldset>
-
-          <p class="mc-err" id="mc-err" role="alert" hidden></p>
-          <div class="mc-nav">
-            <button class="tlink" type="button" id="mc-back" hidden>Back</button>
-            <button class="btn" type="submit" id="mc-next">Continue</button>
-          </div>
-        </div>
-
-        <div class="mc-res" id="mc-res" hidden>
-          <h3 class="mc-res-t" id="mc-res-t" tabindex="-1">Your day, in numbers</h3>
-          <dl class="mc-cals">
-            <div><dt>Maintenance</dt><dd id="mc-tdee">&#8212;</dd></div>
-            <div><dt>Your target</dt><dd id="mc-target">&#8212;</dd></div>
-          </dl>
-          <ul class="mc-macros">
-            <li><span class="mc-g" id="mc-p">&#8212;</span><span class="mc-lab">Protein</span><span class="mc-kc" id="mc-pc">&#8212;</span></li>
-            <li><span class="mc-g" id="mc-f">&#8212;</span><span class="mc-lab">Fat</span><span class="mc-kc" id="mc-fc">&#8212;</span></li>
-            <li><span class="mc-g" id="mc-c">&#8212;</span><span class="mc-lab">Carbs</span><span class="mc-kc" id="mc-cc">&#8212;</span></li>
-          </ul>
-          <div class="mc-notes" id="mc-notes"></div>
-          <a class="btn" id="mc-book" href="#consult">Book a free call</a>
-          <div class="mc-foot">
-            <button class="tlink" type="button" id="mc-edit">Change an answer</button>
-            <button class="tlink" type="button" id="mc-again">Start over</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </section>
-
-  <!-- 6b. Consult: four answers first, then a time on my calendar. It sits directly under
-       the calculator, so whoever finished seven questions is asked for something while the
-       numbers are still on screen, and the numbers ride in with them in the strip at its top.
+  <!-- 6b. Consult: four answers first, then a time on my calendar. It closes the page, after
+       Peter's stack; the calculator's numbers, if there are any, ride in with the visitor in the
+       strip at its top, and the calculator's "Book a free call" lands on the form below them.
        Peter himself (his bio, his journey, the before and after) is met in #story above, so
        this band is only the ask: the numbers, the offer, the disclosure, the form. -->
   <section class="sec consult" id="consult" aria-labelledby="consult-title">
-    <div class="wrap split">
+    <!-- id="quick-call": the game plan's step 05 links here. The quick-call card that used to sit
+         under the sample form is gone (the calculator follows the sample now, and three asks on
+         one phone screen was two too many), so the free call this band offers is where it lands.
+         Once a sample is sent, the script hands the id to the thank-you's own invitation. -->
+    <div class="wrap split" id="quick-call">
       <div class="split-text grow">
         <!-- the calculator's numbers, carried down: hidden until there are results, filled by
              mcRender in _script.html, restored with them on a return visit, and put away again

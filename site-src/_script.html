@@ -770,7 +770,7 @@ if(sform){
   if(sTry&&!sval('product'))sel('product').value=sPut=sTry;
   var sShow=function(){
     sform.hidden=true;sdone.classList.add('on');
-    /* the quick call under the form steps aside for the one in the thank-you: hand it the id */
+    /* the thank-you's quick call takes the id, so "#quick-call" lands on the invitation on screen */
     var qf=$('#quick-call'),qd=$('.qc',sdone);
     if(qf&&qd){qf.removeAttribute('id');qd.id='quick-call'}
     var h=$('#sample-done-title');h.focus({preventScroll:true});
@@ -1430,6 +1430,10 @@ if(mcForm){
   function mcGlide(){
     mcStop();
     if(!cform||!mcSec||$('body > .intro'))return; /* no consult on this page, or the curtain is still up */
+    /* only while the consult sits directly under the calculator: with the trending band, the story
+       and the stack between them (the homepage since 2026-10-01) a glide would carry the visitor
+       thousands of pixels past all of it, so the card stays put and its own button makes the trip */
+    if(mcForm.closest('section').nextElementSibling!==mcSec)return;
     mcY=scrollY;
     MCSTOP.forEach(function(ev){addEventListener(ev,mcNudge,{capture:true,passive:true})});
     doc.addEventListener('visibilitychange',mcStop);

@@ -1318,6 +1318,8 @@ def main():
     if not DEMO:
         os.makedirs(CUTS, exist_ok=True)
     podium = []
+    # each of the three carries its family's TAGLINES line (.p-why), the same DRAFT-COPY its product card
+    # shows, so the band says why a pack is worth a look and not only what it is; no new claims here.
     # the packs tilt toward the pointer over the pour; off it, they are plain cards like the shop's
     tilt = ' tilt' if TRENDING_POUR else ''
     for i, r in enumerate(bestsellers()[:3]):
@@ -1338,7 +1340,8 @@ def main():
             f'        <li class="pod pod-{i + 1}"><a class="card-link{tilt}" href="{esc(pr["share_link"])}" target="_blank" rel="noopener" {card_data(pr)}>'
             f'<span class="pod-rank" aria-hidden="true">0{i + 1}</span>'
             f'{shot(pr, lazy=False)}<p class="p-tag">{names.get(cat_of.get(pr["product"]), "Wellness")}</p>'
-            f'<h3 class="p-name">{esc(pr["name"])}</h3><p class="p-desc">{esc(pr["desc"])}</p>{count}'
+            f'<h3 class="p-name">{esc(pr["name"])}</h3><p class="p-desc">{esc(pr["desc"])}</p>'
+            f'<p class="p-why">{esc(TAGLINES[family(pr["product"])])}</p>{count}'
             f'<span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
 
     page_name = DEMO_PAGE if DEMO else 'homepage.html'
