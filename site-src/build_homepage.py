@@ -1228,7 +1228,7 @@ def main():
         bar_bits.update({
             '{{HTML_CLASS}}': ' class="t-bar"',
             '{{HERO_BAR}}': ('<div class="hbar"><div class="bbx">' + barbell('bb-dk bb-you') + '</div>'
-                             '<p class="hbar-cap" aria-hidden="true"><span class="hb-empty">Scroll to load the bar.</span><span class="hb-you"></span></p></div>'),
+                             '<p class="hbar-cap" aria-hidden="true"><span class="hb-empty"><!-- DRAFT-COPY -->Load it from the rack below.<!-- /DRAFT-COPY --></span><span class="hb-you"></span></p></div>'),
             # the pinned bar: the visitor's stack, or Peter's through #story; the script shows it once the hero has gone
             '{{PIN}}': ('<div class="lbpin" id="lbpin" aria-hidden="true"><div class="wrap lbpin-in">'
                         '<div class="lbpin-bars bbx">' + barbell('bb-you') + barbell('bb-peter') + '</div>'
