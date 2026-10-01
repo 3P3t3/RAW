@@ -2,6 +2,10 @@
 
 Run from the project folder:  python3 site-src/build_homepage.py
 Edit share-links.csv (product, share_link, photo) and re-run to update the site.
+
+One run writes the site TWICE: the plain site at the repo root, and the copy that offers Peter's
+CCRX route under PLUS_DIR/ (both are published, from one push). See "the CCRX copy" below for the
+switch, the guard that keeps the CCRX link out of the plain copy, and --ccrx / --no-plus.
 """
 import csv, hashlib, html, inspect, os, re, shutil, sys
 from urllib.parse import quote
