@@ -2,4 +2,5 @@
 # current side untouched, and the post-merge hook rebuilds them from the merged source.
 homepage.html merge=ours
 category-*.html merge=ours
+about.html merge=ours
 /style.css merge=ours

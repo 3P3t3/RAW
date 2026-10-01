@@ -1126,6 +1126,30 @@ def main():
                 '      </div>\n'
                 '    </dialog>\n')
 
+    def stack_dialog():
+        """"Take my stack to Amway" (#sa): the panel under "Build yours." that turns the plates on the
+        visitor's bar into an order they can actually place. The shell only — _script.html fills the
+        list from the rack's own panels, so the products offered here are the picks the rack already
+        shows and there is no second copy of them, and a tenth shelf needs nothing here. A modal
+        <dialog>: without script, or without dialog support, nothing opens it and the button that
+        would is hidden. All of it is DRAFT-COPY."""
+        return ('    <!-- DRAFT-COPY -->\n'
+                '    <dialog class="sa" id="sa" aria-labelledby="sa-title">\n'
+                '      <div class="sa-in">\n'
+                '        <button class="icon-btn sa-x" type="button" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>\n'
+                '        <h2 class="sa-title" id="sa-title" tabindex="-1">Your stack on Amway</h2>\n'
+                '        <p class="sa-lead" id="sa-lead"></p>\n'
+                '        <p class="sa-why">Open the first one from here and the whole order is credited to me \u2014 '
+                'anything you add after it counts too, so there\u2019s nothing for you to type in.</p>\n'
+                '        <ul class="sa-list" id="sa-list"></ul>\n'
+                '        <div class="sa-acts"><button class="btn sa-start" id="sa-start" type="button">'
+                'Open the first one on Amway<span class="vh"> (opens in a new tab)</span></button>'
+                '<button class="btn btn-line sa-again" id="sa-again" type="button" hidden>Start over</button>'
+                '<button class="btn btn-line sa-done" id="sa-done" type="button">Close</button></div>\n'
+                '      </div>\n'
+                '    </dialog>\n'
+                '    <!-- /DRAFT-COPY -->\n')
+
     def rack_section():
         """The plate rack: the seven shelves as seven plates, all on show, front on. A plate is a button
         (aria-pressed: its panel is the one showing); its panel has a few of the shelf's packs (each opens
@@ -1212,13 +1236,17 @@ def main():
                             '        <div class="mys-has" hidden><p class="mys-cap"><span class="mys-n">Your stack</span>'
                             '<a class="mys-edit" href="#goals">Change it</a></p>\n'
                             '        <div class="mys-ybar bbx">' + barbell('bb-dk bb-you') + '</div>\n'
-                            '        <ul class="mys-key mys-ykey" aria-label="The plates on yours"></ul></div>\n'
+                            '        <ul class="mys-key mys-ykey" aria-label="The plates on yours"></ul>\n'
+                            # the way to actually buy it. Hidden until the script (and <dialog>) can run it, so
+                            # a no-JS visitor — who has no stack either — is never offered it
+                            '        <p class="mys-amway"><button class="btn sa-go" id="sa-go" type="button" aria-haspopup="dialog" hidden>Take my stack to Amway</button></p></div>\n'
                             '        <p class="mys-none">Nothing on your bar yet. <a href="#goals">Load a plate or two</a> and bring them along.</p>\n'
                             '      </div><!-- /DRAFT-COPY -->\n'
                             '      <!-- DRAFT-COPY --><p class="mys-sub grow" style="--d:3">Fifteen minutes, free. Your macros, what you already take, and the smallest stack that moves your goal.</p>\n'
                             '      <div class="mys-acts grow" style="--d:3"><a class="btn" href="#macros">Work out your macros</a>'
                             '<a class="btn btn-line" href="#consult">Book a free call</a></div>\n'
-                            '    </div>\n  </section>\n'),
+                            '    </div>\n  </section>\n'
+                            + stack_dialog()),
         })
     # the story's stack is the same case in miniature: the same seven compartments, in the same order,
     # empty until the story's packs tuck into them (_script.html measures them; nothing here moves)
