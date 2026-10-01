@@ -373,33 +373,21 @@
     </div>
   </section>
 
-  <!-- 4. Trending: three best sellers on a podium, oversized and breaking the band.
-       The band's ground can be a 150-frame film of the pour, scrubbed by scroll (the pour markup
-       below, switched by TRENDING_POUR in build_homepage.py; off, the band is a compact row of
-       three cards on the page's field, all three in view at every width — small and side by
-       side on a phone, nothing to scrub sideways). It is
-       scenery, not content: frames come only as the band nears, and reduced motion
-       gets one still. It follows the free sample and the calculator (#sample, #macros), and Peter's story (#story) follows it directly,
-       starting in this band's dark. -->
-  <section class="sec podium-sec dark{{POUR_CLASS}}" id="trending" aria-labelledby="trending-title">
-    {{POUR}}
-    <div class="wrap">
-      <div class="sec-head grow"><h2 id="trending-title">Trending now</h2></div>
-      <ul class="podium">
-{{PODIUM}}
-      </ul>
-    </div>
-  </section>
-
+  <!-- 4. Trending now: the week's three best sellers. It is OFF (Peter, 2026-10-01: "maybe we
+       should get rid of the trending now"), so this fills in as nothing. The whole section —
+       its comment, its markup and its three cards — is built in build_homepage.py, behind one
+       switch: set TRENDING = True there and the band comes back here, between the calculator
+       and the story, exactly as it was. -->
+{{TRENDING}}
   <!-- 5. Peter's story, told as a storyboard: the stage holds on screen while each part of it
        arrives, and the products it is about drop onto one shelf and stay there, gathering into
-       his stack, while his words run past under them. It follows #trending and opens in its dark on his before; the after wipes
+       his stack, while his words run past under them. It follows the calculator (#macros) and opens in its own dark on his before; the after wipes
        in straight away and brings the light (chalk), which is what leads into why his stack is
        worth a look: his five packs then gather on one shelf on the sand, with his words running
        past underneath them as a caption strip, and the call and his family on chalk.
        Every beat is real content in reading order. The stage is only a way of showing them:
        the script takes the section over (.is-live) when motion is allowed, and positions each
-       beat as a pure function of how far the section has scrolled, as the pour does. Without
+       beat as a pure function of how far the section has scrolled. Without
        it (reduced motion, no script, or a script that never got here) the same beats stand
        as a plain vertical sequence, each on its own tone, so nobody can get stuck in it.
        The shelf links are real links; while the stage runs, only the beat on screen can be
