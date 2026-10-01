@@ -1668,10 +1668,10 @@ html:not(.js) .lbpin{display:none}
   .lbpin-cap{font-size:10.5px}
 }
 
-/* #goals as a plate rack: nine plates, front on, all on show. Phones two a row (four rows and the
-   ninth centred), each about 160px, so the line under a plate's name is 11px or more (it was 7.9px on
-   a phone with three a row); 768 to 1023 three rows of three, ~175px each; from 1024 five and four,
-   ~160px each (one row was 86-123px a plate at 768-1199, its line 7.5-9px). A plate is a button, drawn as a competition bumper standing on the page:
+/* #goals as a plate rack: ten plates, front on, all on show. Phones two a row (five even rows), each
+   about 163px at 390 and 131px at 320, so the line under a plate's name is 11px or more (it was 7.9px on
+   a phone with three a row); 768 to 1023 three rows of three and the tenth centred, ~175px each; from
+   1024 two rows of five, ~162px each (one row was 86-123px a plate at 768-1199, its line 7.5-9px). A plate is a button, drawn as a competition bumper standing on the page:
    a matte rubber face in its shelf's colour with a fine grain, a raised rim (lit on top, in shade
    underneath), a machined steel hub bolted through it on a six-bolt circle, a dark bore, a side wall
    showing under the face so it reads as a thick disc, and a soft contact shadow under it. It used to

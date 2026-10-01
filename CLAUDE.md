@@ -45,8 +45,9 @@ resolve the source, run the build, then commit.
 
 `homepage.html` is ~310k chars (~78k tokens). All ten generated pages together are ~1.81M
 chars (~453k tokens). All ten files in `site-src/` together are ~415k chars (~104k tokens).
-(Measured 2026-09-27 on the bar theme with 101 products and nine shelves; the pages grow with
-the script, the icon sprite and the product count, so re-measure rather than trusting these.)
+(Measured 2026-09-27 on the bar theme with 101 products and nine shelves; there are 105 products
+and ten shelves now, so there are eleven generated pages and every figure above is low. The pages
+grow with the script, the icon sprite and the product count, so re-measure rather than trusting these.)
 
 **One generated page costs as much as three-quarters of the entire source, and the ten
 together cost four times the source** — and every line of them is a copy of something
@@ -70,7 +71,7 @@ Source (edit these):
 - `site-src/style.css` — copied to `style.css` at the repo root at build time; every page links it via
   `{{STYLE}}`, which the build fills in with a content-hash query string. It sits at the root, not under
   `assets/`, so its `url(assets/...)` backgrounds keep resolving against the page's own folder
-- `share-links.csv` (`product,share_link,photo`) — the product list, 101 rows
+- `share-links.csv` (`product,share_link,photo`) — the product list, 105 rows
 - `bestsellers.csv` (`product,units_this_week`) — top 3 rows become the podium; `product` must
   match a `share-links.csv` name or the build exits. Blank `units_this_week` just hides the count.
 
@@ -82,8 +83,16 @@ Generated (never hand-edit; the next build overwrites them):
   the Amway disclosure. It is where the menu's "About us" goes, from every page. The proof used to
   close the homepage's story; Peter moved it here (2026-09-28: it "feels like too much in one thing"),
   and the story now ends at the family beat with one link across to this page. Generated, never hand-edited.
-- `category-daily-foundations.html`, `-energy-focus.html`, `-fat-loss.html`, `-hydration.html`,
-  `-protein.html`, `-recovery.html`, `-skin-redefined.html`, `-womens-health.html`, `-mens-health.html`
+- `category-daily-foundations.html`, `-energy-focus.html`, `-everyday-health.html`, `-fat-loss.html`,
+  `-hydration.html`, `-protein.html`, `-recovery.html`, `-skin-redefined.html`, `-womens-health.html`,
+  `-mens-health.html` — ten shelves. Everyday Health (2026-10-01) is the tenth: Cholesterol Health,
+  Liver Support, Heart Health CoQ10 and Cellular Aging Support, the four that fitted none of the other
+  nine. Its plate is the satin petrol #2B4E58 at rank 9, so the rack is two a row on a phone (five even
+  rows), three and a lone tenth from 768 to 1023, and two rows of five from 1024; the pinned bar carries
+  ten at 320 with room for about four more before its shaft hits the minimum. Its hero banner,
+  `assets/bg-everyday-health.webp`, is a placeholder (the Cellular Aging Support bottle on a petrol
+  field, the bottle cropped clear of its award badge and props): a real photo drops in by overwriting
+  that one file. Nothing on it carries fact chips, because amway.com is blocked to us.
 - `style.css`, `assets/products/`, `assets/cutouts/`, `assets/.cut-version`
 
 `docs/macro-calculator.md` records the homepage macro calculator: where the maths came from, every
@@ -287,7 +296,7 @@ form list every row, so a row on no shelf still shows up there, tagged "Wellness
 
     python3 site-src/build_homepage.py     # from the repo root
 
-Takes ~0.05s and prints `101 products (101 with photos)` plus the per-category counts. Run it after
+Takes ~0.05s and prints `105 products (105 with photos)` plus the per-category counts. Run it after
 any source edit; nothing else regenerates the pages.
 
 ## Why a build sometimes takes ~50s instead of 0.05s

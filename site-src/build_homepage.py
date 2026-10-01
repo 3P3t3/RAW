@@ -207,11 +207,15 @@ CASE_PICKS = 3  # packs an open compartment shows: one per family, in the shelf'
 # Women's Health (the eighth, 2026-09-27) is a satin plum, 7.3:1 under white flat and 4.69:1 at its lowest
 # rendered pixel anywhere in its words' line boxes on a 390px phone (5.3 at 820 and 1440). Men's Health
 # (the ninth, the same day) is a forest green: 7.8:1 flat, 4.81:1 at its lowest on a phone (5.6 wider).
+# Everyday Health (the tenth, 2026-10-01) is a satin petrol, the one dark blue-green the other nine leave
+# free: 9.0:1 under white flat; measured on the rendered plate it is 4.78 at 390, 4.69 at 820 and 4.84 at
+# 1440 at the lowest face pixel anywhere in its words' line boxes, and 6.76-6.88 under the glyphs themselves —
+# the strongest of the three satin plates (the same sweep puts Women's at 4.18 and Men's at 4.32 on a phone).
 PLATES = {
     'recovery': ('#3D4794', 4), 'hydration': ('#93B7C0', 2), 'energy-focus': ('#E2C8AE', 3),
     'protein': ('#1E262F', 0), 'fat-loss': ('#8A543E', 5), 'daily-foundations': ('#6B5646', 1),
     'skin-redefined': ('#D6D4C9', 6), 'womens-health': ('#76485F', 7),
-    'mens-health': ('#39594A', 8), 'everyday-health': ('#2F5560', 9),
+    'mens-health': ('#39594A', 8), 'everyday-health': ('#2B4E58', 9),
 }
 # Peter's stack, in the order #story loads it: the shelves his caption strip links to, in the order
 # its captions stand, which is also the order the packs land on the shelf (the build checks both).
