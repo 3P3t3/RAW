@@ -101,6 +101,12 @@ FAMILIES = {
     "Nutrilite Women's Pack": ('Daily supplement packets', 'S', 'pills'),
     'Peak Performance Stack': ('XS training bundle', 'LR', 'powder'),
     'n* by Nutrilite Go Shield': ('Elderberry gummies', 'S', 'pills'),
+    # added 2026-10-01 with the Everyday Health shelf: the four Peter parked when none of the nine fitted.
+    # Each descriptor is the format on the pack's own label, never what the name suggests it does.
+    'Nutrilite Cholesterol Health': ('Daily softgels', 'S', 'pills'),
+    'Nutrilite Liver Support': ('Daily tablets', 'S', 'pills'),
+    'Nutrilite Heart Health CoQ10': ('CoQ10 softgels', 'S', 'pills'),
+    'Nutrilite Cellular Aging Support': ('Daily capsules', 'S', 'pills'),
 }
 
 # Category pages: slug, name, tagline, heading, family prefixes that belong to it.
@@ -161,6 +167,18 @@ CATEGORIES = [
     ('mens-health', 'Men’s Health', 'For his everyday: the Men’s Pack, multis and Prostate Health.', 'Everything in Men’s Health', [
         "Nutrilite Men's Pack", "Nutrilite Men's Daily Multivitamin Tablets", "Nutrilite Organics Men's Daily Multi Gummies",
         'Nutrilite Prostate Health', 'Nutrilite Organics Horny Goat Weed & Tribulus Capsules']),
+    # DRAFT-COPY (the line after the name): Everyday Health, the tenth shelf, 2026-10-01. Peter's call:
+    # these four were parked when they were added because none of the nine fitted them, so they get their
+    # own shelf rather than being bent onto Daily Foundations. Nothing here is on a second shelf, so this
+    # is each one's home shelf and its card tag. Four names that invite claims (cholesterol, liver, heart,
+    # aging), so the line, the shelf line and every tagline name the thing and the dose and stop there.
+    # Its hero is the placeholder banner assets/bg-everyday-health.webp (the Cellular Aging Support bottle
+    # on a petrol field), made the way Women's and Men's Health got theirs before their portraits; a real
+    # photo drops straight in by overwriting that one file. assets/thumbs|shelf|islands/everyday-health.webp
+    # are the same pack's top, for the 'Keep looking' rows (and the idle strip and ring views).
+    ('everyday-health', 'Everyday Health', 'Four Nutrilite dailies: Cholesterol Health, Liver Support, Heart Health CoQ10 and Cellular Aging Support.', 'Everything in Everyday Health', [
+        'Nutrilite Cholesterol Health', 'Nutrilite Liver Support', 'Nutrilite Heart Health CoQ10',
+        'Nutrilite Cellular Aging Support']),
 ]
 
 # The flavor carousel: category slug -> (family prefix to pull, heading, line)
@@ -193,7 +211,7 @@ PLATES = {
     'recovery': ('#3D4794', 4), 'hydration': ('#93B7C0', 2), 'energy-focus': ('#E2C8AE', 3),
     'protein': ('#1E262F', 0), 'fat-loss': ('#8A543E', 5), 'daily-foundations': ('#6B5646', 1),
     'skin-redefined': ('#D6D4C9', 6), 'womens-health': ('#76485F', 7),
-    'mens-health': ('#39594A', 8),
+    'mens-health': ('#39594A', 8), 'everyday-health': ('#2F5560', 9),
 }
 # Peter's stack, in the order #story loads it: the shelves his caption strip links to, in the order
 # its captions stand, which is also the order the packs land on the shelf (the build checks both).
@@ -284,6 +302,13 @@ TAGLINES = {
     'Nutrilite Slimmetry Dietary Supplement': 'One tablet twice a day, alongside your training',
     'Nutrilite Lean Muscle': 'Two CLA softgels, three times a day',
     'Nutrilite Hair, Skin & Nail Health': 'Biotin and collagen, one tablet a day',
+    # DRAFT-COPY 2026-10-01, the Everyday Health four: format and dose off each pack's own label and
+    # nothing else. Their names say more than we can stand behind, so no line here says what any of
+    # them is for; amway.com is blocked to us, so none of them carries fact chips either.
+    'Nutrilite Cholesterol Health': 'Softgels, two of them once a day',
+    'Nutrilite Liver Support': 'One tablet, twice a day',
+    'Nutrilite Heart Health CoQ10': 'Softgels, one to three once a day',
+    'Nutrilite Cellular Aging Support': 'Capsules, two of them twice a day',
 }
 
 # The quick-fact chips on the case's product card, per listing: (the amway.com page they were read
@@ -356,13 +381,17 @@ CARD_SOUND = {
     'XS Creatine+': 'level', 'Peak Performance Stack': 'level', 'Fitness Jump Start Solution': 'level',
     'XS Energy Drink 12 oz': 'can', 'XS Energy + Burn 12 oz': 'can', 'XS Juiced and Burn 12 oz': 'can',
     'XS Sparkling Juiced Energy 12 oz': 'can', 'XS Elite + Focus Energy Drink': 'can',
+    # the Everyday Health four take the default chime; named here so the shelf is wired end to end
+    'Nutrilite Cholesterol Health': 'chime', 'Nutrilite Liver Support': 'chime',
+    'Nutrilite Heart Health CoQ10': 'chime', 'Nutrilite Cellular Aging Support': 'chime',
 }
 
 SHELF_LINE = {  # the line under each shelf name
     'recovery': 'After the session', 'hydration': 'Long, hot sessions', 'energy-focus': 'Before the session',
     'protein': 'Hitting your protein', 'fat-loss': 'Training to lean out', 'daily-foundations': 'Everyday basics',
     'skin-redefined': 'Skin & overnight', 'womens-health': 'For her everyday',
-    'mens-health': 'For his everyday',  # DRAFT-COPY, both
+    'mens-health': 'For his everyday',
+    'everyday-health': 'Four more dailies',  # DRAFT-COPY, all three
 }
 
 CAT_THUMB = {  # the pack shown on the homepage row for each category
@@ -374,6 +403,7 @@ CAT_THUMB = {  # the pack shown on the homepage row for each category
     'daily-foundations': 'XS Creatine+',
     'skin-redefined': 'Artistry Skin Nutrition Sleeping Mask',
     'womens-health': "Nutrilite Women's Pack", 'mens-health': "Nutrilite Men's Pack",
+    'everyday-health': 'Nutrilite Cellular Aging Support',
 }
 
 # Calendly link for the consult section; it embeds inline on submit rather than opening a tab.
