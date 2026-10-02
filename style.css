@@ -487,6 +487,13 @@ a.how-step:active{opacity:.7}
 /* 7. Consult: four answers, then a time on the calendar */
 .consult{overflow:hidden;overflow:clip;color:var(--text)}  /* clip, not hidden: hidden would make this a scroll box, and nothing sticky inside it could stick */
 .consult .split-text p:not(.label){max-width:40ch}
+/* the left column tightens up without losing a word of Peter's two lines: the offer and the
+   Amway disclaimer under it read as one block rather than three spaced paragraphs, and the
+   column sits closer to the card. 24px off the band at 390, and nothing is cramped — the
+   disclaimer is a footnote to the offer, which is where it now sits. */
+.consult .split-text{gap:10px}
+.consult .split-text p:not(.label) + p:not(.label){margin-top:-4px}
+.consult .wrap.split{row-gap:24px}
 .c-fine{font-size:14px;color:var(--text)}
 /* the calculator's numbers, carried into the consult after "See my numbers": the card's
    tiles and micro-labels, smaller, one row at every width. The script owns [hidden]. */
@@ -797,7 +804,7 @@ html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:
    says everything, while here the four questions ARE the card, so they keep the display face at a
    steady size of their own (--ncq) and stay visible. The six training answers are whole sentences
    rather than words, so that one fieldset steps its pills right down (--ncs on .c-q-long). */
-#consult-form{--ncs:26px;--ncq:25px;gap:26px}
+#consult-form{--ncs:26px;--ncq:25px;--cgap:26px;gap:var(--cgap)}
 #consult-form .c-q legend{margin-bottom:14px;font:800 var(--ncq)/1.12 var(--display);font-stretch:75%;
   letter-spacing:-.005em;color:var(--ink)}
 #consult-form .c-q-long{--ncs:18px}
@@ -811,6 +818,33 @@ html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:
    sitting on the underline, so the blank still says what belongs in it */
 #consult-form .c-field input::placeholder{color:rgba(65,83,101,.85);font:400 15px/46px var(--sans);font-stretch:100%}
 #consult-form .c-sum{margin-top:-14px;font:400 15px/1.45 var(--sans);color:var(--text)}
+
+/* One question at a time (cStep in _script.html), the macro calculator's furniture in this
+   card's hand so the two cards read as siblings: the same sans counter, the same 3px teal
+   pips, the same Back tlink beside the button, the same fade-up into each step. Three steps
+   here, so the pip row is three. */
+.c-quiz{display:grid;gap:16px}
+.c-count{font-size:14px;color:var(--text)}
+.c-prog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:-6px}
+.c-prog span{height:3px;background:rgba(0,46,59,.18)}
+.c-prog span.is-on{background:var(--teal)}
+/* a step is a fieldset and its legend is the question; the script owns [hidden] on the rest */
+.c-step{display:block;margin:0;padding:0;border:0;min-width:0}
+.c-in{animation:mc-in 260ms cubic-bezier(.2,.7,.2,1) both}   /* the calculator's own */
+.c-nav{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.c-nav .btn{flex:1 1 150px;width:auto}
+/* the error carries a rule and its own words, never colour alone, as .mc-err does */
+.c-err{padding:12px 14px;background:rgba(51,64,184,.07);box-shadow:inset 2px 0 0 var(--blue);
+  color:var(--ink);font:600 15px/1.55 var(--sans)}
+/* the last step holds both blanks, so it keeps the gap the form's own grid used to give them */
+#consult-form .c-step .c-field + .c-field{margin-top:var(--cgap)}
+/* No script: every question is there at once and the button still reads "Pick a time", exactly
+   as the card did before it was stepped. The furniture belongs to the script, so it goes away. */
+html:not(.js) #consult-form .c-step[hidden]{display:block!important}   /* line 71's [hidden] is !important */
+html:not(.js) #consult-form .c-step + .c-step{margin-top:var(--cgap)}
+html:not(.js) #c-step-n,html:not(.js) #c-prog,html:not(.js) #c-back{display:none}
+@media (prefers-reduced-motion:reduce){.c-in{animation:none}}
+
 @media (max-width:359px){
   #consult-form{--ncs:23px;--ncq:22px}
   #consult-form .c-q-long{--ncs:17px}
@@ -819,6 +853,20 @@ html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:
   #consult-form{--ncs:30px;--ncq:28px}
   #consult-form .c-q-long{--ncs:19px}
 }
+/* The five goals each took a whole row with half of it empty beside them ("Lose fat" on a line
+   of its own): the 22px emblem and the display face put any pair 7px over the row at 390, so
+   every one wrapped. Two even columns instead, the pill's own words allowed a second line, and
+   --ncs stepped down to the largest size that never clips one of them at any width here —
+   2-2-1 rows instead of 1-1-1-1-1, and 105px off that step at 390. Not a word changes.
+   Below 1024 only: from 1024 the row already takes three and two, which is shorter still, so
+   the block below is left exactly as it was measured. */
+@media (max-width:1023.98px){
+  #consult-form .c-q:not(.c-q-long){--ncs:21px}
+  #consult-form .c-q:not(.c-q-long) .chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  #consult-form .c-q:not(.c-q-long) .chip,
+  #consult-form .c-q:not(.c-q-long) .chip span{width:100%;max-width:none}
+  #consult-form .c-q:not(.c-q-long) .chip span{gap:6px;padding:0 .28em;line-height:1.12}
+}
 /* from 1024 the card has to stand whole in a laptop's window under the masthead (1440x900: 824px
    under the 76px mast; it was 913px, so its first question and "Pick a time" were never on screen
    together). Every question and every answer stays, word for word: the six training answers go
@@ -826,7 +874,7 @@ html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:
    size so they sit in two rows, not three (19px to spare at 1440), and the gaps close up a little.
    745px at 1440, with room under it for the summary line a pick brings. */
 @media (min-width:1024px){
-  #consult-form{gap:22px}
+  #consult-form{--cgap:22px}
   .c-card.nc#consult-form{padding-top:42px;padding-bottom:30px}
   #consult-form .c-q:not(.c-q-long){--ncs:26px}
   #consult-form .c-q-long .chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}

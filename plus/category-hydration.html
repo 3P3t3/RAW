@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=a923fd37">
+<link rel="stylesheet" href="../style.css?v=bbce1222">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -970,6 +970,7 @@ if(cform){
   var csum=$('#consult-sum'),cbox=$('#consult-embed'),
       val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()},
       cSync=null,     /* set by the calculator below: brings its own lines up to date before a1-a4 are read */
+      cTop=null,      /* and used by it: where a move to this form should land, now the form is stepped */
       /* the note ("Anything you want covered?") can carry two lines the site wrote: the bar's
          "Interested in: ..." (the bar block below sets .line) and the calculator's macros line, in
          that order. .last is the note exactly as the site last left it, so either writer can tell
@@ -990,9 +991,124 @@ if(cform){
     if(!g&&!t)return '';                        /* nothing picked: no sentence, and :empty pulls the line out of the layout */
     return 'Fifteen minutes on '+(CGOAL[g]||'your goal')+(CTRAIN[t]?', '+CTRAIN[t]:'')+'.';
   };
-  cform.addEventListener('change',function(){csum.textContent=line()});
+
+  /* One question at a time, the same machine as the macro calculator's (mcStep below): three
+     steps, a counter, pips, Back, and the card's own "Pick a time" on the last one. The band
+     was 1,458px at 390 and the second-longest thing on the page; Peter's words for it were
+     that the page "feels like a freaking journey" (2026-10-01).
+     Not a word of a question or an answer changes — the steps are the three fieldsets the card
+     already had, in the order it already asked them. */
+  var cQuiz=$('#c-quiz'),cSteps=$$('.c-step',cform),cCount=$('#c-step-n'),
+      cBars=$$('#c-prog span'),cErr=$('#c-err'),cBack=$('#c-back'),cNext=$('#consult-go'),
+      CKEY='aspire-consult',CFIELDS='goal training stack note'.split(' '),
+      CGOTEXT=cNext.textContent,                /* the card's own last-step wording, read off the markup */
+      cAt=0,cHop=0;
+  /* the two chip questions each need an answer; both blanks are the visitor's to leave empty,
+     and the second says Optional on its face. One message per step, for what that step asks. */
+  function cAsk(i){
+    /* DRAFT-COPY */
+    if(i===0&&!val('goal'))return 'Pick one so I know what the call is about.';
+    if(i===1&&!val('training'))return 'Pick the one that’s closest.';
+    /* /DRAFT-COPY */
+    return '';
+  }
+  /* where a step should put the reading position: its question, or, on the last one, the first
+     blank, so a visitor who has got that far can simply type */
+  function cFocus(i){
+    var s=cSteps[i];
+    return $('input:not([type=radio]),textarea',s)||$('legend',s);
+  }
+  function cStep(focus){
+    cSteps.forEach(function(el,i){el.hidden=i!==cAt});
+    cCount.textContent='Step '+(cAt+1)+' of '+cSteps.length;
+    cBars.forEach(function(b,i){b.className=i<=cAt?'is-on':''});
+    cBack.hidden=!cAt;
+    cNext.textContent=cAt===cSteps.length-1?CGOTEXT:'Continue';   /* DRAFT-COPY: Continue */
+    cErr.textContent='';cErr.hidden=true;
+    var s=cSteps[cAt];
+    s.classList.remove('c-in');void s.offsetWidth;s.classList.add('c-in');   /* restart the fade */
+    if(focus)cFocus(cAt).focus();
+  }
+  /* The answers outlive the page: a visitor who leaves and comes back finds the card where they
+     left it, with the step they were on, rather than back at question 1 with nothing in it.
+     Its own key, so "Start over" in the calculator cannot orphan it, and so the calculator's
+     record of what IT wrote here (MCAUTO below) stays separate. */
+  function cSave(){
+    var d={v:1,at:cAt};
+    CFIELDS.forEach(function(n){d[n]=val(n)});
+    try{localStorage.setItem(CKEY,JSON.stringify(d))}catch(e){}
+  }
+  function cLoad(){
+    var d=null;
+    try{d=JSON.parse(localStorage.getItem(CKEY)||'null')}catch(e){}
+    if(!d||d.v!==1)return;
+    CFIELDS.forEach(function(n){
+      var el=cform.elements[n],v=String(d[n]||'');
+      if(!el||!v)return;
+      if(el.tagName)el.value=v;                 /* a blank */
+      else for(var i=0;i<el.length;i++)el[i].checked=el[i].value===v;   /* a row of chips */
+    });
+    cAt=Math.max(0,Math.min(cSteps.length-1,d.at|0));
+  }
+  /* the first step still missing an answer, or the last one when they are all in */
+  function cGap(){
+    for(var i=0;i<cSteps.length;i++)if(cAsk(i))return i;
+    return cSteps.length-1;
+  }
+  /* the calculator's two routes to this form land here instead of on the form's first legend,
+     which may now be a question it has already answered on the visitor's behalf */
+  cTop=function(){
+    var i=cGap();
+    if(i!==cAt){cAt=i;cStep(false);cSave()}
+    return cFocus(cAt);
+  };
+  /* A picked chip goes on by itself: one choice is the whole step, and waiting for Continue
+     after it is a tap for nothing.
+     The hard part is telling a choice from a look. The arrow keys walk a row of radios by
+     checking each one as they pass, and Chrome fires a full click on every one of them
+     (measured, Chrome 154), so neither change nor click alone can be trusted: a visitor
+     reading through Peter's six training answers with the arrows would be carried off the
+     step by the first press. What a real pointer carries is e.detail, the click count — 1 for
+     a mouse click and 1 for a touch tap (both measured), 0 for anything a key synthesised.
+     So a pointer goes on by detail, and of the keys only Space is a choice, which its own
+     keydown lets through; the arrows browse, and Enter is the Continue button's job anyway.
+     One timer, cleared on every pick, so a second pick inside the pause replaces the first
+     rather than advancing twice. The pause is the step's own fade (260ms), long enough that
+     the pill is seen to light up; none at all under reduced motion. */
+  var cSpace=false;
+  cform.addEventListener('keydown',function(e){cSpace=e.key===' '||e.key==='Spacebar'},true);
+  cform.addEventListener('click',function(e){
+    var t=e.target,meant=e.detail>0||cSpace;
+    cSpace=false;
+    if(!t||t.type!=='radio'||!t.checked||!meant)return;
+    if(cAt>=cSteps.length-1||cSteps[cAt]!==t.closest('.c-step'))return;
+    clearTimeout(cHop);
+    var was=cAt;
+    cHop=setTimeout(function(){
+      cHop=0;
+      if(cAt!==was||cAsk(cAt))return;           /* moved, or the pick came off again */
+      cAt++;cStep(true);cSave();
+    },matchMedia('(prefers-reduced-motion: reduce)').matches?0:260);
+  });
+  cBack.addEventListener('click',function(){
+    clearTimeout(cHop);cHop=0;
+    if(cAt){cAt--;cStep(true);cSave()}
+  });
+
+  cform.addEventListener('change',function(){csum.textContent=line();cSave()});
   cform.addEventListener('submit',function(e){
     e.preventDefault();
+    /* the step in front of the visitor first; then, on the last step, every step above it, so
+       an answer taken back out (the calculator's "Start over" unpicks the goal it wrote) sends
+       them to the step that owns it rather than to a booking with a hole in it */
+    var miss=cAsk(cAt),i;
+    if(!miss&&cAt===cSteps.length-1)for(i=0;i<cAt;i++){
+      miss=cAsk(i);
+      if(miss){cAt=i;cStep(true);cSave();break}
+    }
+    /* shown first, then written: a role=alert revealed and filled in that order is announced */
+    if(miss){cErr.hidden=false;cErr.textContent=miss;return}
+    if(cAt<cSteps.length-1){clearTimeout(cHop);cHop=0;cAt++;cStep(true);cSave();return}
     var url=cform.dataset.consult;
     if(!url){                                   /* no calendar connected yet: say so rather than embed nothing */
       csum.textContent='Your answers are ready. The booking calendar connects here shortly.';
@@ -1028,6 +1144,14 @@ if(cform){
       csum.textContent='The calendar did not load. Try again in a moment.';
     });
   });
+
+  /* what they left last time, back where they left it. A step restored past a question that no
+     longer has an answer (the calculator can take its own goal back out) drops to that question
+     instead, exactly as the calculator's restore does. The summary line comes back with it. */
+  cLoad();
+  if(cAt&&cGap()<cAt)cAt=cGap();
+  cStep(false);
+  csum.textContent=line();
 }
 
 /* Free sample: the visitor's own details go to Peter's inbox through FormSubmit, as JSON, and
@@ -1685,11 +1809,16 @@ if(mcForm){
      Focus follows to the form's first question (the calendar box, once it is up), so keyboard
      and screen-reader users arrive there too; the section heading would be off screen now. */
   function mcLand(smooth){
+    /* the step first, then the measurement: the form is one question at a time now, and cTop
+       moves it to the first question still unanswered — which, coming from the calculator, is
+       not the first one, because the goal above has just been filled in. The form's top does
+       not move when the step does, but the landing spot is taken from it, so it is settled
+       before anything is measured or scrolled. */
+    var t=cform.hidden?cbox:(cTop?cTop():$('legend',cform));
     var el=cform.hidden?cbox:cform,r=el.getBoundingClientRect(),tf=getComputedStyle(el).transform,
         ty=tf&&tf!=='none'?new DOMMatrixReadOnly(tf).m42:0,
         pad=parseFloat(getComputedStyle(html).scrollPaddingTop)||0;
     scrollTo({top:Math.max(0,scrollY+r.top-ty-pad),behavior:smooth?'smooth':'auto'});
-    var t=cform.hidden?cbox:$('legend',cform);
     t.setAttribute('tabindex','-1');t.focus({preventScroll:true});
   }
 
