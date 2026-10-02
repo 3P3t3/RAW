@@ -341,6 +341,18 @@ mornings too, and swapped our huge coffee spikes for smoother energy." (plural r
 "unnecessary and implied with the transformation pictures", and the two sentences after it ("I didn't know how low
 my baseline was…", "There's no going back.") are about his own baseline and cannot go plural without putting words
 in Yenni's mouth, so they went too. They would work again only as a line of his own, in the first person.
+**The photographs sit behind a reveal, closed on every arrival** — a native `<details id="story-proof" class="st-rev">`
+whose summary reads "If you want to see pictures of our real journey, they're right here." (DRAFT). Peter,
+2026-10-01: "it opens a drop down so it stays in the same page... if they don't want to see, they can just keep
+scrolling, but if they do want to see, it's right there." It is his answer to wanting both a shorter page and the
+pictures: closed, `#story` is 1,364px at 390x844 on an 8,117px page (3,129 on 9,881 with the pictures always out);
+open, it adds about 100px over that. **Nothing in it is scripted, and nothing may become scripted**: the open, the
+close, Enter and Space, the expanded state and find-in-page auto-expand are all the browser's, and it works with
+JavaScript off. Nothing persists its state, so every visit meets it closed. Opening does not move the page (the
+summary stays put) and the five photographs are `loading="lazy"` — not downloaded at all while it is closed, and
+fetched on the toggle itself (measured, Chrome 154); re-measure if it is ever restyled with `content-visibility`.
+`.grow` goes on the `<details>`, never on what is inside it. "Here's what we notice now." stays outside, leading
+into the offer.
 The photographs are drawn by `proof_wall(title=None)` — the same function as about.html's wall, with its own
 heading suppressed; about.html is byte-identical with or without it. The five shelf links must match `PETER`
 (protein, hydration, recovery, daily-foundations, energy-focus) or the build exits; `PETER_PACKS` holds the pack
