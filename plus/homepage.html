@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=15fefb0b">
+<link rel="stylesheet" href="../style.css?v=9b18253e">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -379,8 +379,8 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <!-- who "I" is, on the first screen and before anything asks for anything: Peter holding their
              baby daughter — the whole of ../assets/peter/with-daughter-960.webp, not a square cut out of it
              (Peter, 2026-10-01: "I think I want it bigger. I think I want the whole body shot") — and the
-             first line of his About introduction, verbatim, then the way through to his story further down
-             the page. The 4:5 picture is far taller than a square, so on a phone it stands beside the
+             first line of his About introduction, verbatim, then the way into his story, the next
+             section down. The 4:5 picture is far taller than a square, so on a phone it stands beside the
              HEADLINE (style.css places it there; the headline's longest line is only ~2.46x its font-size
              wide, so the picture takes the room the headline never used) and his line and the plan's two
              links run full width under them. From 768 it stands beside his line and the links as before.
@@ -395,6 +395,144 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
             <a class="tlink" href="#consult">Book a free call</a>
           </div><!-- /DRAFT-COPY -->
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3a. Our story: how the two of them got into this, straight under the hero since 2026-10-02
+       (Peter: "should I put the story towards the top? That way they know when they get to
+       supplements it's about finding the ones that will support their transformation?"), so the proof
+       comes first, then the plan, then the products. It was a sticky, scroll-scrubbed stage of nine
+       beats — his before, five packs falling onto one shelf, the after wiping over the before, his
+       family, the ask, and his lines sliding past under them in a caption strip — until Peter asked
+       for it plainly (2026-10-01): "Instead of scrolling through it, lets just add before and after
+       pictures of Yenni and I side by side. We can change it to 'how we got into this'". So it is an
+       ordinary section now: their lines, their two before/after stacks, then the ask. Nothing in it
+       reads the scroll and nothing pins, so reduced motion and no script get exactly this page.
+       The lines are theirs in the plural, and each one links the shelf it is about; those five links
+       are checked against PETER in build_homepage.py, so the section can never stop naming the five
+       shelves "That's my stack" draws below it.
+       The photographs are the hand-placed files in ../assets/peter/ and ../assets/her/, drawn by
+       proof_wall() — the same pair of stacks about.html carries, with this section's own heading over
+       them. Each file is one photo whose before/after seam sits at exactly 50%, which is what lets one
+       pair of Before / After heads label a whole stack; never re-crop or retouch them (CLAUDE.md). -->
+  <section class="sec story" id="story" aria-labelledby="story-title">
+    <div class="wrap">
+      <div class="st-head grow">
+        <!-- DRAFT-COPY: the eyebrow is theirs now, where it said "Peter's story" -->
+        <p class="label">Our story</p>
+        <!-- PETER-COPY: 2026-10-01, "we can change it to 'how we got into this'" -->
+        <h2 id="story-title">How we got into <span class="hl-k">this</span></h2>
+      </div>
+      <!-- Their lines, in the order it happened, each under the shelf it is about. They were his six
+           in the first person; Peter asked for the plural. Two are his own new wording, verbatim
+           (2026-10-01), and the rest are his own sentences with nothing changed but the person, so
+           they stay DRAFT until he has read them. His closing line went at his request: "get rid of
+           the 'i've got energy left for my daughter and my wife' line, it's unnecessary and implied
+           with the transformation pictures" — and the two sentences behind it were his own singular
+           ("I didn't know how low my baseline was until I built a new one. There's no going back."),
+           which cannot be put in the plural without putting words in Yenni's mouth, so they went with
+           it and the photographs carry the movement instead. -->
+      <!-- .st-top holds the lines and the one open pair. Under 1024 it is nothing but a box, and they
+           run one under the other: the lines, "Here's what we notice now.", his side pair. From 1024 it
+           is two columns, the lines on the left and the heading with the pair under it on the right, so
+           the half of the screen beside the lines carries the proof instead of nothing. The source
+           order is the reading order at every width, and nothing here is scripted. -->
+      <div class="st-top">
+      <div class="st-lines grow">
+        <div class="st-bit">
+          <!-- PETER-COPY --><p class="st-line">Fatigue was a constant.</p><!-- /PETER-COPY -->
+        </div>
+        <div class="st-bit">
+          <!-- DRAFT-COPY --><p class="st-mv">Here’s what we changed.</p><!-- /DRAFT-COPY -->
+          <!-- PETER-COPY: his own wording, 2026-10-01 --><p class="st-line">We fixed our food and found someone to push us.</p><!-- /PETER-COPY -->
+          <a class="tlink st-go" href="category-protein.html">Protein<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+        <div class="st-bit">
+          <!-- PETER-COPY: his own wording, 2026-10-01 --><p class="st-line">We focused more on hydration.</p><!-- /PETER-COPY -->
+          <a class="tlink st-go" href="category-hydration.html">Hydration<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+        <div class="st-bit">
+          <!-- DRAFT-COPY --><p class="st-line">And we found ways to maximize our sleep, even during the newborn nights.</p><!-- /DRAFT-COPY -->
+          <a class="tlink st-go" href="category-recovery.html">Recovery<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+        <div class="st-bit">
+          <!-- DRAFT-COPY --><p class="st-line">We changed our mornings too, and swapped our huge coffee spikes for smoother energy.</p><!-- /DRAFT-COPY -->
+          <p class="st-caplinks"><a class="tlink st-go" href="category-daily-foundations.html">Daily Foundations<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="tlink st-go" href="category-energy-focus.html">Energy &amp; Focus<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+        </div>
+      </div>
+      <!-- the third movement's own label, his phrase for it in the plural, and its answer: Peter's side
+           pair, out in the open (2026-10-02). With every pair behind the reveal, a visitor who scrolled
+           past without opening it saw no proof on the homepage at all, and this heading stood over
+           nothing but the offer. The side view is his strongest single one and the one the old stage's
+           wipe used; it is the same file and framing as about.html's, with the 50% seam's Before / After
+           heads, "Peter Month 1 -> Month 15" and his caption (story_teaser in build_homepage.py). Its
+           two siblings and her two stay behind the reveal below, so it never shows twice. On a phone
+           the heading sits straight over it; from 1024 the two head the right-hand column together, so
+           the heading still reads as what the picture is. .grow is on the pair of them, not each. -->
+      <div class="st-see grow">
+        <!-- DRAFT-COPY --><h3 class="st-line st-now" id="story-now">Here’s what we notice now.</h3><!-- /DRAFT-COPY -->
+<figure class="c-proof pf-his">
+  <p class="pf-who"><span class="pf-name">Peter</span> <span class="pf-when">Month 1 → Month 15</span></p>
+  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
+  <div class="c-stack"><img src="../assets/peter/side-640.webp" srcset="../assets/peter/side-640.webp 640w, ../assets/peter/side-960.webp 960w" sizes="(min-width:1024px) min(44vw, 580px), (min-width:768px) 680px, calc(100vw - 40px)" width="960" height="640" decoding="async" alt="Peter, before and after, from the side"></div>
+  <!-- PETER-COPY --><figcaption>Fifteen-month transformation.</figcaption><!-- /PETER-COPY -->
+</figure>
+      </div>
+      </div>
+      <!-- their two stacks, behind a reveal the visitor opens, in place on this page (Peter,
+           2026-10-01: "We could have a button they click if they want to see it... And then it says,
+           if you want to see pictures of the real journey, click here. And then it opens a drop down
+           so it stays in the same page... if they don't want to see, they can just keep scrolling,
+           but if they do want to see, it's right there"). It closes the one gap between the two
+           things he has been asking for: the photographs on the homepage, and a shorter page.
+           A native details/summary, nothing scripted: it opens and closes with no JavaScript at all, the
+           summary is a button to the keyboard and announces itself expanded or collapsed to a screen
+           reader for free, and a no-JS visitor gets the pictures one tap away like everyone else.
+           It arrives closed on every visit and nothing remembers that it was opened — there is no
+           state to persist and none is written.
+           The stacks inside are proof_wall()'s: his front and back (his side is already out, above)
+           and her two, under one another on a phone and side by side from 760, each file's seam at 50%
+           under one pair of Before / After heads. The reveal only hides them; it never re-crops or
+           reorders a half.
+           .grow sits on the details element, not on what it holds, so the reveal itself rises in with
+           section and the photographs are at full strength the instant they are asked for. -->
+      <details class="st-rev grow" id="story-proof">
+        <summary class="st-rev-sum">
+          <!-- DRAFT-COPY: his dictated line, with "click here" dropped — the control is the thing
+               being clicked, and his own "it's right there" says where they land. "more" is the one
+               word added (2026-10-02), because one pair is already showing above it; "they're" still
+               means the pictures. -->
+          <span class="st-rev-say">If you want to see more pictures of our real journey, they’re right here.</span>
+          <span class="st-rev-ch" aria-hidden="true"></span><!-- /DRAFT-COPY -->
+        </summary>
+        <div class="st-pf">
+    <div class="pf-duo">
+      <figure class="c-proof pf-his">
+  <p class="pf-who"><span class="pf-name">Peter</span> <span class="pf-when">Month 1 → Month 15</span></p>
+  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
+  <div class="c-stack"><img src="../assets/peter/front-640.webp" srcset="../assets/peter/front-640.webp 640w, ../assets/peter/front-960.webp 960w" sizes="(min-width:1280px) 760px, (min-width:760px) 60vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the front"><img src="../assets/peter/back-640.webp" srcset="../assets/peter/back-640.webp 640w, ../assets/peter/back-960.webp 960w" sizes="(min-width:1280px) 760px, (min-width:760px) 60vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the back"></div>
+  <!-- PETER-COPY --><figcaption>Fifteen-month transformation.</figcaption><!-- /PETER-COPY -->
+</figure>
+      <figure class="c-proof pf-hers">
+  <!-- DRAFT-COPY --><p class="pf-who"><span class="pf-name">Yenni</span> <span class="pf-when">Nov 2025 → Jul 2026</span></p><!-- /DRAFT-COPY -->
+  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
+  <div class="c-stack"><img src="../assets/her/front-640.webp" srcset="../assets/her/front-640.webp 640w, ../assets/her/front-768.webp 768w" sizes="(min-width:1000px) 460px, (min-width:760px) 560px, calc(100vw - 40px)" width="768" height="979" loading="lazy" decoding="async" alt="Yenni, before and after, from the front: Nov 2025 and Jul 2026"><img src="../assets/her/back-640.webp" srcset="../assets/her/back-640.webp 640w, ../assets/her/back-768.webp 768w" sizes="(min-width:1000px) 460px, (min-width:760px) 560px, calc(100vw - 40px)" width="768" height="979" loading="lazy" decoding="async" alt="Yenni, before and after, from the back: Nov 2025 and Jul 2026"></div>
+  <!-- DRAFT-COPY --><figcaption>Before: two months postpartum.</figcaption><!-- /DRAFT-COPY -->
+</figure>
+    </div>
+        </div>
+      </details>
+      <!-- the ask, in his own words, unchanged: it never used the first person singular, so the
+           plural section did not touch it. The call is the one button on the block, and the link
+           across to about.html sits quietly under it. That link said "See Yenni's results and both
+           our DEXA scans" while the homepage showed neither; her results are on this page now, so
+           it names the one thing that is only over there. The tab's own "Book a free call" steps
+           aside while this button is on screen (.st-book is one of the tab's zones, _script.html). -->
+      <div class="st-ask grow">
+        <!-- PETER-COPY --><p class="st-say">The hardest part was figuring it out alone, testing supplement after supplement to find what worked. That’s what this call is for. Book it and we’ll figure yours out together.</p><!-- /PETER-COPY -->
+        <a class="btn st-book" href="#consult">Book a free call</a>
+        <p class="st-more"><!-- DRAFT-COPY --><a class="tlink" href="about.html">See both our DEXA <span class="st-nw">scans<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></span></a><!-- /DRAFT-COPY --></p>
       </div>
     </div>
   </section>
@@ -923,144 +1061,10 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
        should get rid of the trending now"), so this fills in as nothing. The whole section —
        its comment, its markup and its three cards — is built in build_homepage.py, behind one
        switch: set TRENDING = True there and the band comes back here, between the calculator
-       and the story, exactly as it was. -->
+       and Peter's stack, exactly as it was. -->
 
-  <!-- 5. Our story: how the two of them got into this. It was a sticky, scroll-scrubbed stage of nine
-       beats — his before, five packs falling onto one shelf, the after wiping over the before, his
-       family, the ask, and his lines sliding past under them in a caption strip — until Peter asked
-       for it plainly (2026-10-01): "Instead of scrolling through it, lets just add before and after
-       pictures of Yenni and I side by side. We can change it to 'how we got into this'". So it is an
-       ordinary section now: their lines, their two before/after stacks, then the ask. Nothing in it
-       reads the scroll and nothing pins, so reduced motion and no script get exactly this page.
-       The lines are theirs in the plural, and each one links the shelf it is about; those five links
-       are checked against PETER in build_homepage.py, so the section can never stop naming the five
-       shelves "That's my stack" draws below it.
-       The photographs are the hand-placed files in ../assets/peter/ and ../assets/her/, drawn by
-       proof_wall() — the same pair of stacks about.html carries, with this section's own heading over
-       them. Each file is one photo whose before/after seam sits at exactly 50%, which is what lets one
-       pair of Before / After heads label a whole stack; never re-crop or retouch them (CLAUDE.md). -->
-  <section class="sec story" id="story" aria-labelledby="story-title">
-    <div class="wrap">
-      <div class="st-head grow">
-        <!-- DRAFT-COPY: the eyebrow is theirs now, where it said "Peter's story" -->
-        <p class="label">Our story</p>
-        <!-- PETER-COPY: 2026-10-01, "we can change it to 'how we got into this'" -->
-        <h2 id="story-title">How we got into <span class="hl-k">this</span></h2>
-      </div>
-      <!-- Their lines, in the order it happened, each under the shelf it is about. They were his six
-           in the first person; Peter asked for the plural. Two are his own new wording, verbatim
-           (2026-10-01), and the rest are his own sentences with nothing changed but the person, so
-           they stay DRAFT until he has read them. His closing line went at his request: "get rid of
-           the 'i've got energy left for my daughter and my wife' line, it's unnecessary and implied
-           with the transformation pictures" — and the two sentences behind it were his own singular
-           ("I didn't know how low my baseline was until I built a new one. There's no going back."),
-           which cannot be put in the plural without putting words in Yenni's mouth, so they went with
-           it and the photographs carry the movement instead. -->
-      <!-- .st-top holds the lines and the one open pair. Under 1024 it is nothing but a box, and they
-           run one under the other: the lines, "Here's what we notice now.", his side pair. From 1024 it
-           is two columns, the lines on the left and the heading with the pair under it on the right, so
-           the half of the screen beside the lines carries the proof instead of nothing. The source
-           order is the reading order at every width, and nothing here is scripted. -->
-      <div class="st-top">
-      <div class="st-lines grow">
-        <div class="st-bit">
-          <!-- PETER-COPY --><p class="st-line">Fatigue was a constant.</p><!-- /PETER-COPY -->
-        </div>
-        <div class="st-bit">
-          <!-- DRAFT-COPY --><p class="st-mv">Here’s what we changed.</p><!-- /DRAFT-COPY -->
-          <!-- PETER-COPY: his own wording, 2026-10-01 --><p class="st-line">We fixed our food and found someone to push us.</p><!-- /PETER-COPY -->
-          <a class="tlink st-go" href="category-protein.html">Protein<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        </div>
-        <div class="st-bit">
-          <!-- PETER-COPY: his own wording, 2026-10-01 --><p class="st-line">We focused more on hydration.</p><!-- /PETER-COPY -->
-          <a class="tlink st-go" href="category-hydration.html">Hydration<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        </div>
-        <div class="st-bit">
-          <!-- DRAFT-COPY --><p class="st-line">And we found ways to maximize our sleep, even during the newborn nights.</p><!-- /DRAFT-COPY -->
-          <a class="tlink st-go" href="category-recovery.html">Recovery<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        </div>
-        <div class="st-bit">
-          <!-- DRAFT-COPY --><p class="st-line">We changed our mornings too, and swapped our huge coffee spikes for smoother energy.</p><!-- /DRAFT-COPY -->
-          <p class="st-caplinks"><a class="tlink st-go" href="category-daily-foundations.html">Daily Foundations<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="tlink st-go" href="category-energy-focus.html">Energy &amp; Focus<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
-        </div>
-      </div>
-      <!-- the third movement's own label, his phrase for it in the plural, and its answer: Peter's side
-           pair, out in the open (2026-10-02). With every pair behind the reveal, a visitor who scrolled
-           past without opening it saw no proof on the homepage at all, and this heading stood over
-           nothing but the offer. The side view is his strongest single one and the one the old stage's
-           wipe used; it is the same file and framing as about.html's, with the 50% seam's Before / After
-           heads, "Peter Month 1 -> Month 15" and his caption (story_teaser in build_homepage.py). Its
-           two siblings and her two stay behind the reveal below, so it never shows twice. On a phone
-           the heading sits straight over it; from 1024 the two head the right-hand column together, so
-           the heading still reads as what the picture is. .grow is on the pair of them, not each. -->
-      <div class="st-see grow">
-        <!-- DRAFT-COPY --><h3 class="st-line st-now" id="story-now">Here’s what we notice now.</h3><!-- /DRAFT-COPY -->
-<figure class="c-proof pf-his">
-  <p class="pf-who"><span class="pf-name">Peter</span> <span class="pf-when">Month 1 → Month 15</span></p>
-  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
-  <div class="c-stack"><img src="../assets/peter/side-640.webp" srcset="../assets/peter/side-640.webp 640w, ../assets/peter/side-960.webp 960w" sizes="(min-width:1024px) min(44vw, 580px), (min-width:768px) 680px, calc(100vw - 40px)" width="960" height="640" decoding="async" alt="Peter, before and after, from the side"></div>
-  <!-- PETER-COPY --><figcaption>Fifteen-month transformation.</figcaption><!-- /PETER-COPY -->
-</figure>
-      </div>
-      </div>
-      <!-- their two stacks, behind a reveal the visitor opens, in place on this page (Peter,
-           2026-10-01: "We could have a button they click if they want to see it... And then it says,
-           if you want to see pictures of the real journey, click here. And then it opens a drop down
-           so it stays in the same page... if they don't want to see, they can just keep scrolling,
-           but if they do want to see, it's right there"). It closes the one gap between the two
-           things he has been asking for: the photographs on the homepage, and a shorter page.
-           A native details/summary, nothing scripted: it opens and closes with no JavaScript at all, the
-           summary is a button to the keyboard and announces itself expanded or collapsed to a screen
-           reader for free, and a no-JS visitor gets the pictures one tap away like everyone else.
-           It arrives closed on every visit and nothing remembers that it was opened — there is no
-           state to persist and none is written.
-           The stacks inside are proof_wall()'s: his front and back (his side is already out, above)
-           and her two, under one another on a phone and side by side from 760, each file's seam at 50%
-           under one pair of Before / After heads. The reveal only hides them; it never re-crops or
-           reorders a half.
-           .grow sits on the details element, not on what it holds, so the reveal itself rises in with
-           section and the photographs are at full strength the instant they are asked for. -->
-      <details class="st-rev grow" id="story-proof">
-        <summary class="st-rev-sum">
-          <!-- DRAFT-COPY: his dictated line, with "click here" dropped — the control is the thing
-               being clicked, and his own "it's right there" says where they land. "more" is the one
-               word added (2026-10-02), because one pair is already showing above it; "they're" still
-               means the pictures. -->
-          <span class="st-rev-say">If you want to see more pictures of our real journey, they’re right here.</span>
-          <span class="st-rev-ch" aria-hidden="true"></span><!-- /DRAFT-COPY -->
-        </summary>
-        <div class="st-pf">
-    <div class="pf-duo">
-      <figure class="c-proof pf-his">
-  <p class="pf-who"><span class="pf-name">Peter</span> <span class="pf-when">Month 1 → Month 15</span></p>
-  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
-  <div class="c-stack"><img src="../assets/peter/front-640.webp" srcset="../assets/peter/front-640.webp 640w, ../assets/peter/front-960.webp 960w" sizes="(min-width:1280px) 760px, (min-width:760px) 60vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the front"><img src="../assets/peter/back-640.webp" srcset="../assets/peter/back-640.webp 640w, ../assets/peter/back-960.webp 960w" sizes="(min-width:1280px) 760px, (min-width:760px) 60vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the back"></div>
-  <!-- PETER-COPY --><figcaption>Fifteen-month transformation.</figcaption><!-- /PETER-COPY -->
-</figure>
-      <figure class="c-proof pf-hers">
-  <!-- DRAFT-COPY --><p class="pf-who"><span class="pf-name">Yenni</span> <span class="pf-when">Nov 2025 → Jul 2026</span></p><!-- /DRAFT-COPY -->
-  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
-  <div class="c-stack"><img src="../assets/her/front-640.webp" srcset="../assets/her/front-640.webp 640w, ../assets/her/front-768.webp 768w" sizes="(min-width:1000px) 460px, (min-width:760px) 560px, calc(100vw - 40px)" width="768" height="979" loading="lazy" decoding="async" alt="Yenni, before and after, from the front: Nov 2025 and Jul 2026"><img src="../assets/her/back-640.webp" srcset="../assets/her/back-640.webp 640w, ../assets/her/back-768.webp 768w" sizes="(min-width:1000px) 460px, (min-width:760px) 560px, calc(100vw - 40px)" width="768" height="979" loading="lazy" decoding="async" alt="Yenni, before and after, from the back: Nov 2025 and Jul 2026"></div>
-  <!-- DRAFT-COPY --><figcaption>Before: two months postpartum.</figcaption><!-- /DRAFT-COPY -->
-</figure>
-    </div>
-        </div>
-      </details>
-      <!-- the ask, in his own words, unchanged: it never used the first person singular, so the
-           plural section did not touch it. The call is the one button on the block, and the link
-           across to about.html sits quietly under it. That link said "See Yenni's results and both
-           our DEXA scans" while the homepage showed neither; her results are on this page now, so
-           it names the one thing that is only over there. The tab's own "Book a free call" steps
-           aside while this button is on screen (.st-book is one of the tab's zones, _script.html). -->
-      <div class="st-ask grow">
-        <!-- PETER-COPY --><p class="st-say">The hardest part was figuring it out alone, testing supplement after supplement to find what worked. That’s what this call is for. Book it and we’ll figure yours out together.</p><!-- /PETER-COPY -->
-        <a class="btn st-book" href="#consult">Book a free call</a>
-        <p class="st-more"><!-- DRAFT-COPY --><a class="tlink" href="about.html">See both our DEXA <span class="st-nw">scans<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></span></a><!-- /DRAFT-COPY --></p>
-      </div>
-    </div>
-  </section>
 
-  <!-- After the story: the five shelves its lines name, drawn loaded, with its key, and the two ways on -->
+  <!-- Peter's stack: the five shelves the story's lines name, drawn loaded, with its key, and the two ways on -->
   <section class="sec dark mys" id="my-stack" aria-labelledby="mys-title">
     <div class="wrap mys-in">
       <h2 class="grow hl-2 hl-dk" id="mys-title"><span class="hl-lead">That’s</span> <span class="hl-k">my stack.</span></h2>
