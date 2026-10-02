@@ -1123,12 +1123,40 @@ html:not(.js) #results[hidden]{display:block!important}
   letter-spacing:-.012em;text-wrap:balance;color:var(--teal)}
 .st-go .ic{margin-left:8px}
 .st-caplinks{display:flex;flex-wrap:wrap;align-items:center;gap:4px 24px;max-width:none;margin:0}
-/* the third movement's label, standing as the heading over the photographs */
+/* the third movement's label, leading into the reveal that holds the photographs */
 .st-now{margin:clamp(44px,8vw,64px) 0 0;max-width:34ch}
+/* The reveal: their photographs behind a control the visitor opens, in place on the page (Peter,
+   2026-10-01: "it opens a drop down so it stays in the same page... if they don't want to see,
+   they can just keep scrolling"). A native details/summary — no script, so reduced motion and no
+   JavaScript get the same working control, and the keyboard and screen-reader behaviour is the
+   browser's. Closed, it is one line on the chalk in a hairline box: an offer, quieter than the
+   ask's filled button below it, and plainly a thing to press. */
+.st-rev{margin-top:clamp(26px,5vw,36px)}
+.st-rev>summary{display:flex;align-items:center;justify-content:space-between;gap:18px;
+  max-width:42ch;padding:14px 18px;box-shadow:inset 0 0 0 1px var(--teal);color:var(--teal);
+  font:600 16px/1.45 var(--sans);cursor:pointer;list-style:none;text-wrap:pretty}
+.st-rev>summary::-webkit-details-marker{display:none}   /* the default triangle; the chevron says it instead */
+.st-rev>summary::marker{content:""}
+.st-rev>summary:active{opacity:.7}
+@media (hover:hover){.st-rev>summary:hover{background:var(--tile)}}
+/* the chevron: down while it is closed, up once it is open, so the control says which way it goes */
+.st-rev-ch{flex:none;width:10px;height:10px;margin-right:4px;border:solid currentColor;
+  border-width:0 2px 2px 0;transform:translateY(-3px) rotate(45deg);
+  transition:transform 200ms cubic-bezier(.2,.7,.2,1)}
+.st-rev[open]>summary .st-rev-ch{transform:translateY(2px) rotate(-135deg)}
 /* their two stacks: his three views, then her two, under one another on a phone. proof_wall()
    draws them; .pf-* and .c-* (the 50% seam's Before / After heads) are in the his-and-hers block
-   below, shared with about.html, and nothing here changes how that page draws them. */
+   below, shared with about.html, and nothing here changes how that page draws them. The reveal
+   hands them in on a short rise, so the open reads as the pictures arriving rather than the page
+   jumping; the control itself never moves, and the rise is vertical, so nothing can scroll
+   sideways while it plays. */
 .st-pf{margin-top:clamp(22px,4vw,30px)}
+.st-rev[open] .st-pf{animation:st-rev-in 260ms cubic-bezier(.2,.7,.2,1) both}
+@keyframes st-rev-in{from{opacity:0;transform:translate3d(0,10px,0)}}
+@media (prefers-reduced-motion:reduce){
+  .st-rev-ch{transition:none}
+  .st-rev[open] .st-pf{animation:none}
+}
 /* the ask closes the section in the story's own voice: the lines' display type, centred */
 .st-ask{display:grid;justify-items:center;text-align:center;gap:14px;margin-top:clamp(44px,8vw,64px)}
 .st-say{margin:0;font:800 clamp(26px,7vw,34px)/1.1 var(--display);font-stretch:80%;letter-spacing:-.012em;
