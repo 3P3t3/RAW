@@ -815,15 +815,21 @@ def about_portraits():
         for b, w1, w2, r, a in (SHELF_PORTRAIT['mens-health'], SHELF_PORTRAIT['womens-health']))
 
 
-def his_pairs(caption='Fifteen-month transformation.'):
+def his_pairs(caption='Fifteen-month transformation.', views=('front', 'side', 'back'), lazy=True,
+              sizes='(min-width:760px) 680px, calc(100vw - 40px)'):
     """Peter's three before/after views, front, side and back. Each file is one photo cut to one shared
     framing spec with the seam at exactly 50%, so the befores line up down the left and the afters down
     the right, and one pair of headings on that 50% line labels all three (CLAUDE.md: his body is never
-    retouched). Moved out of homepage.template.html when the proof became about.html."""
+    retouched). Moved out of homepage.template.html when the proof became about.html.
+    views picks which of the three files the stack carries, in that order; #story shows his side pair on
+    its own (story_teaser) and the rest behind its reveal. lazy=False is for a pair that can be on screen
+    the moment a visitor jumps to it, and sizes is the slot the pair actually fills. The defaults are
+    about.html's, so its wall is the same bytes whoever else asks for a stack."""
+    load = 'loading="lazy" ' if lazy else ''
     imgs = ''.join(
         f'<img src="assets/peter/{v}-640.webp" srcset="assets/peter/{v}-640.webp 640w, assets/peter/{v}-960.webp 960w" '
-        f'sizes="(min-width:760px) 680px, calc(100vw - 40px)" width="960" height="640" loading="lazy" '
-        f'decoding="async" alt="Peter, before and after, from the {v}">' for v in ('front', 'side', 'back'))
+        f'sizes="{sizes}" width="960" height="640" {load}'
+        f'decoding="async" alt="Peter, before and after, from the {v}">' for v in views)
     return (f'<figure class="c-proof pf-his">\n'
             # PETER-COPY: his photos are labelled by month, not date (Peter, 2026-10-01: "month one, month 15")
             f'  <p class="pf-who"><span class="pf-name">Peter</span> <span class="pf-when">{PETER_PHOTOS[0]} → {PETER_PHOTOS[1]}</span></p>\n'
@@ -833,15 +839,31 @@ def his_pairs(caption='Fifteen-month transformation.'):
             '</figure>')
 
 
-def proof_wall(title='<span class="pf-k">His</span> and <span class="pf-k">hers</span>', tid='proof-t'):
+def proof_wall(title='<span class="pf-k">His</span> and <span class="pf-k">hers</span>', tid='proof-t',
+               his_views=('front', 'side', 'back'), his_sizes='(min-width:760px) 680px, calc(100vw - 40px)'):
     """The proof wall, his and hers: Peter's three views, and beside them (under them on a phone) his
     wife's two, nothing to swipe. about.html's "what changed", under its own "His and hers"; and the
     homepage's #story, where the section's own heading stands over it instead, so it is asked for
-    there with title=None and the pair of stacks comes back on its own."""
+    there with title=None and the pair of stacks comes back on its own. #story also leaves his side
+    view out (his_views), because that one is already showing above its reveal (story_teaser)."""
     head = (f'    <!-- DRAFT-COPY --><h2 class="pf-title" id="{tid}">{title}</h2><!-- /DRAFT-COPY -->\n'
             if title else '')
-    return (head + '    <div class="pf-duo">\n      ' + his_pairs() + '\n      '
+    return (head + '    <div class="pf-duo">\n      ' + his_pairs(views=his_views, sizes=his_sizes) + '\n      '
             + her_pairs('Before: two months postpartum.') + '\n    </div>')
+
+
+# #story's one open pair: Peter's side view, outside the reveal, so a visitor who never opens it still
+# sees one before and after. The side is his strongest single view and the one the old stage's wipe
+# used. It is the same file at the same framing as about.html's, with the same Before / After heads on
+# its 50% seam, his "Month 1 -> Month 15" and his caption. Not lazy: the hero's "Our story" link jumps
+# straight to it, and a lazy file would only start loading on arrival (each is 23-38KB). Under 1024 it
+# is the full column, capped at 680px; from 1024 it is the right-hand half of the section.
+STORY_TEASER_VIEW = 'side'
+
+
+def story_teaser():
+    return his_pairs(views=(STORY_TEASER_VIEW,), lazy=False,
+                     sizes='(min-width:1024px) min(44vw, 580px), (min-width:768px) 680px, calc(100vw - 40px)')
 
 
 # about.html's own two lines: its meta description (and og:description) and the line under its title.
@@ -1418,8 +1440,13 @@ def main():
                                 '{{SAMPLE_NEXT}}': SAMPLE_NEXT.replace('homepage.html', page_name), '{{SAMPLE_PRODUCTS}}': sample_list,
                                 '{{SAMPLE_PICKER}}': sample_picker, '{{PCARD}}': '' if SHELF_VIEW in ('bar', 'case') else card_dialog(), **quick_call(), '{{GRID}}': '\n'.join(grid), '{{TRENDING}}': trending, '{{SHELVES}}': shelves,
                                 # #story's two before/after stacks: the same pair about.html carries, with the
-                                # section's own heading over them instead of its "His and hers"
-                                '{{STORY_PROOF}}': proof_wall(title=None),
+                                # section's own heading over them instead of its "His and hers", less his
+                                # side view, which is out in the open above the reveal
+                                '{{STORY_PROOF}}': proof_wall(title=None, his_views=tuple(
+                                    v for v in ('front', 'side', 'back') if v != STORY_TEASER_VIEW),
+                                    his_sizes='(min-width:1280px) 760px, (min-width:760px) 60vw, calc(100vw - 40px)'),
+                                # and the one pair shown outside the reveal
+                                '{{STORY_TEASER}}': story_teaser(),
                                 **bar_bits}).items():
         out = out.replace(k, v)
     left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', out)))
