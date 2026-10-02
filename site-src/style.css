@@ -1144,6 +1144,37 @@ html:not(.js) #results[hidden]{display:block!important}
   border-width:0 2px 2px 0;transform:translateY(-3px) rotate(45deg);
   transition:transform 200ms cubic-bezier(.2,.7,.2,1)}
 .st-rev[open]>summary .st-rev-ch{transform:translateY(2px) rotate(-135deg)}
+/* The nudge (Peter, 2026-10-01: "make the dropdown link wiggle... as people are going past it it
+   sort of pops out at them tempting them to click"). When the control is well into view the script
+   (_script.html, beside the .grow reveal) gives the summary .nudge, and for 720ms it leans out at the
+   visitor: it lifts 2px and swells 3%, settles back through a smaller second swell, its hover tint
+   washes in and out behind the words, and the chevron dips twice the way it opens. Then it is still.
+   It may play once more, 2.6s later, only if it is still on screen and still closed; never a third
+   time, and never again once it has been opened on this page view. Transforms and opacity only, so
+   nothing around it moves (layout shift 0, measured). Reduced motion and no JavaScript: it never
+   moves, and is the same hairline box. The tint sits 1px in so the hairline stays drawn over it. */
+.st-rev>summary{position:relative;isolation:isolate}
+.st-rev>summary::before{content:"";position:absolute;inset:1px;z-index:-1;background:var(--tile);opacity:0;pointer-events:none}
+@media (prefers-reduced-motion:no-preference){
+  .motion .st-rev>summary.nudge{animation:st-lean 720ms cubic-bezier(.3,.6,.3,1) 360ms both}
+  .motion .st-rev>summary.nudge::before{animation:st-tint 720ms ease-out 360ms both}
+  .motion .st-rev>summary.nudge .st-rev-ch{animation:st-dip 720ms ease-in-out 360ms both}
+}
+.st-rev[open]>summary,.st-rev[open]>summary::before,.st-rev[open]>summary .st-rev-ch{animation:none}
+@keyframes st-lean{
+  0%{transform:none}
+  20%{transform:translate3d(0,-2px,0) scale(1.03)}
+  40%{transform:translate3d(0,0,0) scale(.994)}
+  58%{transform:translate3d(0,-1px,0) scale(1.012)}
+  76%,100%{transform:none}
+}
+@keyframes st-tint{0%{opacity:0}22%{opacity:1}100%{opacity:0}}
+@keyframes st-dip{
+  0%,76%,100%{transform:translateY(-3px) rotate(45deg)}
+  20%{transform:translateY(2px) rotate(45deg)}
+  38%{transform:translateY(-3px) rotate(45deg)}
+  56%{transform:translateY(1px) rotate(45deg)}
+}
 /* their two stacks: his three views, then her two, under one another on a phone. proof_wall()
    draws them; .pf-* and .c-* (the 50% seam's Before / After heads) are in the his-and-hers block
    below, shared with about.html, and nothing here changes how that page draws them. The reveal

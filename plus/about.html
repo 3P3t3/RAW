@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=a28eabfe">
+<link rel="stylesheet" href="../style.css?v=5b089076">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -378,6 +378,34 @@ if(html.classList.contains('motion')){
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.15});
   $$('.grow').forEach(function(el){io.observe(el)});
 }
+
+/* The story's reveal leans out once as the visitor reaches it (style.css draws the nudge on
+   .nudge). This only notices: one IntersectionObserver on the summary, and the <details> itself
+   stays the browser's, opening, closing and keyboard alike; its toggle event is read only to stop
+   the nudge for good. A play counts once its animation starts: if the control leaves the screen in
+   the 360ms before it does, it waits for the next arrival. After the first, one more 2.6s later
+   only if the control is still on screen and still closed; never a third. Opened at any point on
+   this page view, it never plays again. html.motion is off under reduced motion, so nothing runs. */
+(function(){
+  var d=$('#story-proof'),s=d&&$('summary',d);
+  if(!s||!html.classList.contains('motion'))return;
+  var plays=0,on=false,live=false,done=false,t=0,
+      o=new IntersectionObserver(function(es){on=es[0].isIntersecting;if(on)go();else if(!live)s.classList.remove('nudge')},
+        {rootMargin:'-10% 0px -18% 0px',threshold:1});
+  function go(){if(!done&&!live&&!t&&plays<2&&!d.open)s.classList.add('nudge')}
+  function stop(){done=true;clearTimeout(t);o.disconnect();s.classList.remove('nudge')}
+  function mine(e){return e.target===s&&e.animationName==='st-lean'}   /* not the tint's or the chevron's */
+  s.addEventListener('animationstart',function(e){if(mine(e)){live=true;plays++}});
+  s.addEventListener('animationend',function(e){
+    if(!mine(e))return;
+    live=false;s.classList.remove('nudge');
+    if(plays>=2)return stop();
+    t=setTimeout(function(){t=0;if(on)go();else stop()},2600);
+  });
+  s.addEventListener('animationcancel',function(e){if(mine(e)&&live)stop()});
+  d.addEventListener('toggle',function(){if(d.open)stop()});
+  o.observe(s);
+})();
 
 /* The game plan (#how) in the bar theme: the shaft lights and the plates go on as the section scrolls
    through (style.css draws them). A pure function of scroll: scrolling back takes them off again. On
