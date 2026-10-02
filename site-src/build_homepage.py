@@ -1331,6 +1331,7 @@ def main():
     shared = {'{{STYLE}}': style_href, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{MENU_SHELVES}}': menu_shelves,
               '{{CCRX}}': ccrx_block(),  # after {{FOOTER}}, which is where the placeholder sits
               '{{CCRX_MENU}}': ccrx_menu(),  # and after {{DIALOGS}}, which is where that one sits
+              '{{FDA_SCOPE}}': '',  # in the footer too: empty on every page but CCRX_PAGE (ccrx_fda_scope)
               '{{SCRIPT}}': script,
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)),
               '{{TOTAL_PRODUCTS}}': plural(len(products), 'product', zero='products'), '{{CONSULT_URL}}': CONSULT_URL,
@@ -1529,6 +1530,7 @@ def main():
                 '{{CCRX_URL}}': CCRX_URL,
                 '{{CCRX_PREORDER}}': ccrx_preorder(),
                 '{{CCRX_DISCLOSURE}}': ccrx_disclosure(),
+                '{{FDA_SCOPE}}': ccrx_fda_scope(),
                 '{{PCARD}}': ''}).items():
             page = page.replace(k, v)
         left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', page)))
@@ -1581,7 +1583,13 @@ def ccrx_block():
 
 
 def ccrx_menu():
-    """The same route in the menu sheet, beside "About us", on every page of the copy.
+    """The same route in the menu sheet, on every page of the copy: last, after the shelves.
+
+    It sat third, under "About us" and above Goals, All products and the shelves, and a critic
+    read that as a paid medical referral outranking the business the site is about (2026-10-02).
+    So it follows everything the site sells, as its own small group in the shelves' type under
+    its own label -- not an eleventh shelf, which it is not, and not in the big list's display
+    type. The lone item spans both columns so its name stays on one line at 320.
 
     A plain relative link with no {{HOME}} prefix, like About us: every page of the copy sits in
     the one folder, so it is correct from all of them. Off -> '' and the plain site's menu is
@@ -1589,11 +1597,31 @@ def ccrx_menu():
     """
     if not ccrx_on():
         return ''
-    return ('\n        <!-- The CCRX route, beside About us: its own page, because none of this belongs on\n'
-            '             a shelf or in the story. This item exists in the copy under plus/ only\n'
-            "             (ccrx_menu in build_homepage.py); the plain site's menu never gains it. -->\n"
-            f'        <!-- DRAFT-COPY --><li><a href="{CCRX_PAGE}">Bloodwork &amp; peptides '
-            '<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li><!-- /DRAFT-COPY -->')
+    return ('\n      <!-- The CCRX route, last in the menu, after the shelves: its own page, because none of\n'
+            '           this belongs on a shelf or in the story. This group exists in the copy under plus/\n'
+            "           only (ccrx_menu in build_homepage.py); the plain site's menu never gains it. -->\n"
+            '      <!-- DRAFT-COPY --><p class="label menu-shelves-t" id="menu-ccrx-t">Beyond supplements</p>\n'
+            '      <ul class="menu-shelves" aria-labelledby="menu-ccrx-t">\n'
+            f'        <li style="grid-column:1 / -1"><a href="{CCRX_PAGE}">Bloodwork &amp; peptides</a></li>\n'
+            '      </ul><!-- /DRAFT-COPY -->')
+
+
+def ccrx_fda_scope():
+    """One line under the footer's supplement disclaimer, on CCRX_PAGE and nowhere else.
+
+    The disclaimer is the standard supplement wording and stays verbatim on every page, this one
+    included. Under a page about prescription medicine it read as "either wrong or evasive" (a
+    critic, 2026-10-02), so this page says what it covers: the supplements on the rest of the
+    site, and not the panel (a lab test) or the peptides (prescription medications). It wears the
+    disclaimer's own .foot-fda small print, so it reads as that line's footnote rather than louder
+    than it, and no CSS is added. Every other page fills {{FDA_SCOPE}} with '' and is byte-for-byte
+    what it was.
+    """
+    if not ccrx_on():
+        return ''
+    return ('\n      <!-- DRAFT-COPY --><p class="foot-fda">The line above is for the supplements on the rest of this site. This page '
+            'is about something different: a blood panel, which is a lab test, and peptides, which are '
+            'prescription medications. Neither is a supplement.</p><!-- /DRAFT-COPY -->')
 
 
 def ccrx_home():
