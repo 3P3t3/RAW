@@ -348,12 +348,21 @@ mornings too, and swapped our huge coffee spikes for smoother energy." (plural r
 "unnecessary and implied with the transformation pictures", and the two sentences after it ("I didn't know how low
 my baseline was…", "There's no going back.") are about his own baseline and cannot go plural without putting words
 in Yenni's mouth, so they went too. They would work again only as a line of his own, in the first person.
-**The photographs sit behind a reveal, closed on every arrival** — a native `<details id="story-proof" class="st-rev">`
-whose summary reads "If you want to see pictures of our real journey, they're right here." (DRAFT). Peter,
+**One pair is always out: Peter's side pair** (`.st-see`, drawn by `story_teaser()` through `his_pairs(views=('side',),
+lazy=False)`; `STORY_TEASER_VIEW = 'side'`), directly under "Here's what we notice now.", with its 50% heads, "Peter ·
+Month 1 → Month 15" and his caption. Peter chose it on 2026-10-02 after two critics dropped the story for showing no proof
+to anyone who did not tap (phone 8.5 → 6.5, laptop homepage 8 → 7), and it also gives that heading its answer. It is not
+lazy, because the hero's "Our story" link lands right on it. From 1024, `.st-top` is two equal columns: the lines on the
+left, the heading and the pair on the right, which fills what was an empty half; the reveal and the ask run full width
+beneath. Closed, `#story` is 1,703px on an 8,455px page at 390x844, and 1,662 on 7,070 at 1440.
+**The other four pairs sit behind a reveal, closed on every arrival** — a native `<details id="story-proof" class="st-rev">`
+whose summary reads "If you want to see more pictures of our real journey, they're right here." (DRAFT). It holds
+`proof_wall(title=None, his_views=('front','back'))` — his front and back, then Yenni's front and back — so the side pair
+never appears twice; from 760 its columns are `1fr .523fr` so his two and her two end together. `his_pairs` and
+`proof_wall` default to about.html's own output, which stays byte-identical. Peter,
 2026-10-01: "it opens a drop down so it stays in the same page... if they don't want to see, they can just keep
 scrolling, but if they do want to see, it's right there." It is his answer to wanting both a shorter page and the
-pictures: closed, `#story` is 1,364px at 390x844 on an 8,117px page (3,129 on 9,881 with the pictures always out);
-open, it adds about 100px over that. **Opening it is never scripted**: the open, the
+pictures. **Opening it is never scripted**: the open, the
 close, Enter and Space, the expanded state and find-in-page auto-expand are all the browser's, and it works with
 JavaScript off. Nothing persists its state, so every visit meets it closed.
 **The one exception is its nudge** (Peter, 2026-10-01: "make the dropdown link wiggle... it sort of pops out at them
