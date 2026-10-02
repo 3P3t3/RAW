@@ -328,79 +328,33 @@ alternative: "or run your macros first"); Peter had moved it below the story on 
 too early" straight after the shelves; shown it again with the critic's score for it there (9/10), he chose
 to keep it beside the sample (2026-10-01). Because the consult no longer follows it, the
 automatic glide after "See my numbers" only runs when `#consult` directly follows the calculator's section;
-the result card's own "Book a free call" carries the numbers into the form. `#story` is a sticky, scroll-scrubbed stage telling Peter's 15 months in
-beats, in three movements ("Fatigue was a constant." / "Here's what I changed." / "Here's what I
-notice now.", his own phrases for them): his before, one growing shelf with three product beats and a
-fourth that lands the last two packs together, then the before becoming the after and his family,
-"That's what this call is for" with a "Book a free call" button and, under it, the one link across to
-`about.html` ("See Yenni's results and both our DEXA scans", DRAFT, `.st-more` inside the ask beat), which
-carries the proof wall and the DEXA cards. Nothing sits between `#st-run` and `#my-stack`. The pinned strip
-is Peter's only while `#st-run` crosses the strip's foot AND still reaches the window's foot (two one-pixel
-IntersectionObserver lines in `line()`): the moment the run ends and "That's my stack" starts coming up, it
-hands back to the visitor's own stack, or steps aside if they have none.
-The wall is not on the homepage any more (Peter, 2026-09-28: it "feels like too much in one thing"), and
-the menu's "About us" is the way to it from anywhere and from any shelf page — the site is not getting a
-third fixed layer for it. The story replaced the old `#hydrate` band (its water line now lives in the
-hydration beat).
-A visible heading opens the section — PETER'S STORY over "How did I get into this?" (`.st-head`),
-his own words for it. It sits outside `#st-run`, so it scrolls away normally and the run is no longer for it.
-Peter's lines inside it are his, verbatim, in PETER-COPY markers.
+the result card's own "Book a free call" carries the numbers into the form. `#story` is **a plain section**, rebuilt 2026-10-01 at Peter's request ("Instead of scrolling through it, lets
+just add before and after pictures of Yenni and I side by side"). Nothing in it reads the scroll, pins or measures,
+and reduced motion and no-JS get exactly the same page. It runs: eyebrow "Our story" (DRAFT) over his heading "How
+we got into this" → five lines, each with the shelf link it is about → their before/afters → the ask ("The hardest
+part was figuring it out alone…", PETER-COPY) with "Book a free call" and the one link across to `about.html`,
+"See both our DEXA scans" (DRAFT). The lines are now in the plural: "Fatigue was a constant." (his, unchanged);
+"We fixed our food and found someone to push us." and "We focused more on hydration." (his own rewrites,
+PETER-COPY); "And we found ways to maximize our sleep, even during the newborn nights." and "We changed our
+mornings too, and swapped our huge coffee spikes for smoother energy." (plural rewrites of his lines, DRAFT).
+**His old closing line is gone whole** — Peter cut "Now I've got energy left for my daughter and my wife…" as
+"unnecessary and implied with the transformation pictures", and the two sentences after it ("I didn't know how low
+my baseline was…", "There's no going back.") are about his own baseline and cannot go plural without putting words
+in Yenni's mouth, so they went too. They would work again only as a line of his own, in the first person.
+The photographs are drawn by `proof_wall(title=None)` — the same function as about.html's wall, with its own
+heading suppressed; about.html is byte-identical with or without it. The five shelf links must match `PETER`
+(protein, hydration, recovery, daily-foundations, energy-focus) or the build exits; `PETER_PACKS` holds the pack
+picture per shelf for `#my-stack`'s key.
 
-**His words are a caption strip, not one line at a time.** Under whatever the stage is showing,
-`.st-caprail` holds his six lines in one column and the script slides its track so the caption belonging to the pack on the
-stage sits on the reading line at full strength, with the ones above and below in a softer teal
-(5.3-5.9:1 on the ground: quiet, never unreadable); two or three are legible at once (Peter,
-2026-09-28: "it needs to be a lot easier to read... maybe I can read it in one go"). A caption belongs to the beat
-carrying `data-cap`, in order (his before, the four packs, the turn); his family beat has none,
-because the third movement's line is already up when it arrives. Two of the captions open a movement
-with a small `.st-mv` label in his words. All of them are his verbatim except one DRAFT-COPY line,
-the one that folds the old morning-routine and smoother-energy beats into one and still links Daily
-Foundations and Energy & Focus. The strip sits over the beats (`z-index`), so its links can be
-tapped, and the script gives it `.is-off` once it has faded so the ask's own button takes the tap.
-Its edges fade over `--cap-fade` (about one and a half caption lines; 72px at desktop, registered with
-`@property` so the script can read it), and the script also writes each caption's own opacity per frame, so a
-line recedes rather than being sliced at the strip's edge. The strip fades in as the stage arrives, so the
-first pinned screen carries "Fatigue was a constant." with his before photo. At desktop it starts below the
-pinned bar, the before/after and family photos fill the stage height (up to 760px, never more than half the
-stage's width; 528x704 at 1440x900, 16px clear of the pinned bar and the screen's foot), and the ask is set in the
-captions' display type, centred. On phones the photo sizes are measured: `measure()` sets `--st-ph` (the before and the
-wipe, always one size) and `--st-fh` (the family, never past its own 320x400) once per resize, so the photos grow down
-into the empty top of the caption strip and stop 18px above the line their caption reads on (306x408 at 390x844, up
-from 236x315; Peter, 2026-10-01: "the picture is too small"). While a photo is up, an earlier caption fades as it
-rises past the photo's foot. The mat is 10px on phones, 14px from 768.
-`family-320.webp` is only 320x400, so at desktop it is enlarged and soft; a sharper cut would come from
-Peter's originals.
-Without the stage it is a plain block of his six lines with their links, straight after his before,
-so a no-JS reader gets the whole story in his words and then the pictures it is about.
-Each pack carries `data-cat`, the shelf whose plate it puts on the pinned bar, so one beat can load
-two plates; the build checks those against `PETER`, which is in the story's order (protein,
-hydration, recovery, daily-foundations, energy-focus). His five plates load 1, 2, 3, then 4 and 5 a
-slide apart under the closing line, so the bar still reaches PETER'S · 5 OF 5.
-The five packs all rest at `data-tilt="0"`: they stand straight in the group that gathers on stage,
-and the only turn left is the fall's own lean (`DROP.lean`), which unwinds to nothing at the landing.
-
-Its pace lives in the story block of `_script.html`: the `HOLD` table and the per-change lengths. A unit is
-`UNIT=.19` of the stage (~160px at 844; it was .33 until 2026-10-01, when Peter said the page "feels like
-a freaking journey"), and the script sets `#st-run`'s height in px on every resize; the
-350lvh in `style.css` is only the fallback until it measures. `HOLD` is
-`[.45, .25, .25, .25, .25, .85, .3, <measured>]` (unchanged on 2026-10-01: the quarter came off the pace,
-not the beats. No beat was cut, and none should be without reading this — the caption strip holds ~220px of
-caption clear of its fades on a phone and his shortest adjacent pair of lines comes to ~257px, so folding two
-of his captions into one block puts one of his own sentences under the fade) with `TT` (the change INTO each beat)
-`[0, .6, .45, .45, .45, .6, .45, .9]`: his before, the four pack beats, the turn, his family, the
-ask. Every hold but two is short, because nothing waits for a line to be read — the strip is already
-showing it — and a hold is only the moment a picture stands on its own. The two long ones are the
-turn (.85, the wipe plays inside it) and the ask, whose hold is measured per resize: the hold plus the
-button's own way off the screen equals `FLICK` (780px), never less than `CALLMIN` (.8 units). The run is 2208px at 390x844 and 2249px at 1440x900, and it is what makes every 700px flick that enters
-the ask come to rest with "Book a free call" whole on screen (re-measured on merged main 2026-10-01: a window of
-780px at 390x844 and 820px at 1440x900 on merged main, 30/30 flicks each — the window is `FLICK` by
-construction, whatever `UNIT` is). Changing any of these means re-running the
-flick test before shipping. The stage renders from an eased copy of the scroll position with
-a speed cap and a backlog clamp, so a fast flick still plays each fall; it is still a pure function
-of scroll, so scrolling back plays it backwards. Transforms and opacity only (a full scrub costs 0
-layouts); keep it that way. Reduced motion and no JavaScript get the same beats as a plain vertical
-sequence. It was tuned over four Fable review rounds; the rounds are tagged `story-round-0` to
-`story-round-3`, and `PRE-STORYBOARD` is the site before it.
+**What went with the stage, so nobody looks for it:** the sticky run `#st-run`, the caption strip, the
+before→after wipe, the `HOLD`/`TT`/`UNIT`/`FLICK`/`CALLMIN` pace tables, the eased scrub renderer, and the flick
+test (there is nothing left to flick-test). **The pinned bar no longer has a Peter mode**: the stage was the only
+thing that loaded his five plates, so "Peter's stack · 0 of 5 → 5 of 5" is gone and the strip is only ever the
+visitor's own stack. `#my-stack` ("That's my stack.") still draws his five, now from `PETER_PACKS`. The story's
+four Fable review rounds are tagged `story-round-0` to `story-round-3` and `PRE-STORYBOARD` is the site before the
+stage existed, if the old version is ever wanted. `assets/peter/side-before-480.webp`, `side-after-480.webp` and
+`family-320.webp` belonged to the stage and **no page uses them now**; they stay in the repo. `assets/story/`'s
+relit packs are used only by `#my-stack`'s key.
 
 **The rack (`#goals`).** Tapping a plate opens its bay directly under that plate's ROW: `.rack` is the flex
 container, `.rk-plates` is `display:contents` with `role="list"`, and `place()` in the rack block sets only
@@ -410,10 +364,9 @@ points at the plate. `show()` brings the plate and its packs into view together 
 whole panel (Peter, 2026-09-28: tapping a plate must show "where the items actually are").
 
 **Section joins.** Two sections that met each laid a full `--sec` on the join, so every boundary was two of them.
-`.sec + .sec,.story + .sec,.sec + dialog + .sec{padding-top:calc(var(--sec) * .5)}` sits next to `.sec{padding:var(--sec) 0}`
+`.sec + .sec,.sec + dialog + .sec{padding-top:calc(var(--sec) * .5)}` (`#story` is a `.sec` now) sits next to `.sec{padding:var(--sec) 0}`
 and gives a join one full `--sec` and half the other. It applies to every page, so a new section added anywhere gets
-it. `.hero + .sec` is deliberately left out. `.st-dusk` is now hidden unconditionally, because the band whose film it
-carried over no longer exists.
+it. `.hero + .sec` is deliberately left out.
 
 **The rest of the homepage.** The bottom tab (`.mtab`) is phones and tablets only: hidden whole from 1024 up,
 where the header nav already carries MACROS. The quick-call card that sat under the sample form is gone;
