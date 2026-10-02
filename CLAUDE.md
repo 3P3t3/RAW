@@ -148,11 +148,18 @@ carry the link, `guard()` is the one place to change, deliberately.
 
 **The CCRX route** (the second, paid-referral business: an at-home blood panel and prescription compounded peptides,
 fulfilled by Avellum Health). It appears in the copy and nowhere else, in three places: `#bloodwork` on the homepage
-directly after `#macros`, which it echoes ("your macros you can work out; this you cannot"); the menu, beside "About
-us"; and the footer. All of them go to `bloodwork.html`, never straight to CCRX — the page is where a visitor finds
+directly after `#macros`, which it echoes ("your macros you can work out; this you cannot"); the menu, **last**, as
+its own small "Beyond supplements" group after the shelves (DRAFT label; it sat third until 2026-10-02, when a critic
+said that gave "a paid medical referral more rank than the business the site is about"); and the footer, last. All of them go to `bloodwork.html`, never straight to CCRX — the page is where a visitor finds
 out what they are walking into — and only that page links `CCRX_URL`. `site-src/bloodwork.template.html` builds it,
 in the second pass only. Its order is deliberate: what the panel is → what a clinician may decide after it → Peter's
 disclosure → Avellum's own statement that compounded medications are not FDA-approved drugs → the one link out.
+The site-wide supplement disclaimer (`.foot-fda`) stays word for word on every page, this one included; under it,
+on `bloodwork.html` only, `ccrx_fda_scope()` fills `{{FDA_SCOPE}}` (empty on every other page of both copies) with
+a line in the same small print, DRAFT: "The line above is for the supplements on the rest of this site. This page is
+about something different: a blood panel, which is a lab test, and peptides, which are prescription medications.
+Neither is a supplement." Any new page template that fills the footer without `shared` must fill `{{FDA_SCOPE}}`
+too, or the unfilled-placeholder check fails the build.
 **Nothing on it says what the panel or any peptide DOES**, only what a thing is and who decides; it carries **no
 price** and **nothing about where it ships** (both change, and their site states both); and it never says Amway
 works with, endorses or partners with CCRX or Avellum. Peter is **paid on the peptides only, not on the panel**, so
