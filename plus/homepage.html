@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=5b089076">
+<link rel="stylesheet" href="../style.css?v=15fefb0b">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -956,6 +956,12 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
            ("I didn't know how low my baseline was until I built a new one. There's no going back."),
            which cannot be put in the plural without putting words in Yenni's mouth, so they went with
            it and the photographs carry the movement instead. -->
+      <!-- .st-top holds the lines and the one open pair. Under 1024 it is nothing but a box, and they
+           run one under the other: the lines, "Here's what we notice now.", his side pair. From 1024 it
+           is two columns, the lines on the left and the heading with the pair under it on the right, so
+           the half of the screen beside the lines carries the proof instead of nothing. The source
+           order is the reading order at every width, and nothing here is scripted. -->
+      <div class="st-top">
       <div class="st-lines grow">
         <div class="st-bit">
           <!-- PETER-COPY --><p class="st-line">Fatigue was a constant.</p><!-- /PETER-COPY -->
@@ -978,11 +984,25 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           <p class="st-caplinks"><a class="tlink st-go" href="category-daily-foundations.html">Daily Foundations<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="tlink st-go" href="category-energy-focus.html">Energy &amp; Focus<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
         </div>
       </div>
-      <!-- the third movement's own label, his phrase for it in the plural. It stood as the heading
-           over the two before/after stacks until the stacks went behind the reveal below; it leads
-           into the offer now instead, which is the same place in the telling — what they notice now
-           is what the photographs show, and the next line is where to see them. -->
-      <!-- DRAFT-COPY --><h3 class="st-line st-now grow" id="story-now">Here’s what we notice now.</h3><!-- /DRAFT-COPY -->
+      <!-- the third movement's own label, his phrase for it in the plural, and its answer: Peter's side
+           pair, out in the open (2026-10-02). With every pair behind the reveal, a visitor who scrolled
+           past without opening it saw no proof on the homepage at all, and this heading stood over
+           nothing but the offer. The side view is his strongest single one and the one the old stage's
+           wipe used; it is the same file and framing as about.html's, with the 50% seam's Before / After
+           heads, "Peter Month 1 -> Month 15" and his caption (story_teaser in build_homepage.py). Its
+           two siblings and her two stay behind the reveal below, so it never shows twice. On a phone
+           the heading sits straight over it; from 1024 the two head the right-hand column together, so
+           the heading still reads as what the picture is. .grow is on the pair of them, not each. -->
+      <div class="st-see grow">
+        <!-- DRAFT-COPY --><h3 class="st-line st-now" id="story-now">Here’s what we notice now.</h3><!-- /DRAFT-COPY -->
+<figure class="c-proof pf-his">
+  <p class="pf-who"><span class="pf-name">Peter</span> <span class="pf-when">Month 1 → Month 15</span></p>
+  <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
+  <div class="c-stack"><img src="../assets/peter/side-640.webp" srcset="../assets/peter/side-640.webp 640w, ../assets/peter/side-960.webp 960w" sizes="(min-width:1024px) min(44vw, 580px), (min-width:768px) 680px, calc(100vw - 40px)" width="960" height="640" decoding="async" alt="Peter, before and after, from the side"></div>
+  <!-- PETER-COPY --><figcaption>Fifteen-month transformation.</figcaption><!-- /PETER-COPY -->
+</figure>
+      </div>
+      </div>
       <!-- their two stacks, behind a reveal the visitor opens, in place on this page (Peter,
            2026-10-01: "We could have a button they click if they want to see it... And then it says,
            if you want to see pictures of the real journey, click here. And then it opens a drop down
@@ -994,16 +1014,19 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
            reader for free, and a no-JS visitor gets the pictures one tap away like everyone else.
            It arrives closed on every visit and nothing remembers that it was opened — there is no
            state to persist and none is written.
-           The stacks inside are proof_wall()'s, unchanged: his three views and her two, under one
-           another on a phone and side by side from 760, each file's seam at 50% under one pair of
-           Before / After heads. The reveal only hides them; it never re-crops or reorders a half.
+           The stacks inside are proof_wall()'s: his front and back (his side is already out, above)
+           and her two, under one another on a phone and side by side from 760, each file's seam at 50%
+           under one pair of Before / After heads. The reveal only hides them; it never re-crops or
+           reorders a half.
            .grow sits on the details element, not on what it holds, so the reveal itself rises in with
            section and the photographs are at full strength the instant they are asked for. -->
       <details class="st-rev grow" id="story-proof">
         <summary class="st-rev-sum">
           <!-- DRAFT-COPY: his dictated line, with "click here" dropped — the control is the thing
-               being clicked, and his own "it's right there" says where they land -->
-          <span class="st-rev-say">If you want to see pictures of our real journey, they’re right here.</span>
+               being clicked, and his own "it's right there" says where they land. "more" is the one
+               word added (2026-10-02), because one pair is already showing above it; "they're" still
+               means the pictures. -->
+          <span class="st-rev-say">If you want to see more pictures of our real journey, they’re right here.</span>
           <span class="st-rev-ch" aria-hidden="true"></span><!-- /DRAFT-COPY -->
         </summary>
         <div class="st-pf">
@@ -1011,7 +1034,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <figure class="c-proof pf-his">
   <p class="pf-who"><span class="pf-name">Peter</span> <span class="pf-when">Month 1 → Month 15</span></p>
   <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
-  <div class="c-stack"><img src="../assets/peter/front-640.webp" srcset="../assets/peter/front-640.webp 640w, ../assets/peter/front-960.webp 960w" sizes="(min-width:760px) 680px, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the front"><img src="../assets/peter/side-640.webp" srcset="../assets/peter/side-640.webp 640w, ../assets/peter/side-960.webp 960w" sizes="(min-width:760px) 680px, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the side"><img src="../assets/peter/back-640.webp" srcset="../assets/peter/back-640.webp 640w, ../assets/peter/back-960.webp 960w" sizes="(min-width:760px) 680px, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the back"></div>
+  <div class="c-stack"><img src="../assets/peter/front-640.webp" srcset="../assets/peter/front-640.webp 640w, ../assets/peter/front-960.webp 960w" sizes="(min-width:1280px) 760px, (min-width:760px) 60vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the front"><img src="../assets/peter/back-640.webp" srcset="../assets/peter/back-640.webp 640w, ../assets/peter/back-960.webp 960w" sizes="(min-width:1280px) 760px, (min-width:760px) 60vw, calc(100vw - 40px)" width="960" height="640" loading="lazy" decoding="async" alt="Peter, before and after, from the back"></div>
   <!-- PETER-COPY --><figcaption>Fifteen-month transformation.</figcaption><!-- /PETER-COPY -->
 </figure>
       <figure class="c-proof pf-hers">
