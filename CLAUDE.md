@@ -346,9 +346,17 @@ whose summary reads "If you want to see pictures of our real journey, they're ri
 2026-10-01: "it opens a drop down so it stays in the same page... if they don't want to see, they can just keep
 scrolling, but if they do want to see, it's right there." It is his answer to wanting both a shorter page and the
 pictures: closed, `#story` is 1,364px at 390x844 on an 8,117px page (3,129 on 9,881 with the pictures always out);
-open, it adds about 100px over that. **Nothing in it is scripted, and nothing may become scripted**: the open, the
+open, it adds about 100px over that. **Opening it is never scripted**: the open, the
 close, Enter and Space, the expanded state and find-in-page auto-expand are all the browser's, and it works with
-JavaScript off. Nothing persists its state, so every visit meets it closed. Opening does not move the page (the
+JavaScript off. Nothing persists its state, so every visit meets it closed.
+**The one exception is its nudge** (Peter, 2026-10-01: "make the dropdown link wiggle... it sort of pops out at them
+tempting them to click"). When the summary is fully in view, a short block just after the `.grow` fade-in in
+`_script.html` gives it `.nudge`: after 360ms, for 720ms, it lifts 2px and swells 3%, settles through a smaller
+swell, its hover tint fades in and out (`::before`, 1px inside the outline) and the chevron dips twice. It plays at
+most twice — the second 2.6s after the first, only while still on screen and still closed — and never again once
+opened on that page view (the `toggle` event is read only to record that). Transforms and opacity only, layout shift
+0 measured; reduced motion or no JavaScript means it never moves. The knobs, if Peter wants it bolder, are the 3%
+swell and the tint. It is deliberately not a loop: constant motion reads as an ad and is an accessibility problem. Opening does not move the page (the
 summary stays put) and the five photographs are `loading="lazy"` — not downloaded at all while it is closed, and
 fetched on the toggle itself (measured, Chrome 154); re-measure if it is ever restyled with `content-visibility`.
 `.grow` goes on the `<details>`, never on what is inside it. "Here's what we notice now." stays outside, leading
