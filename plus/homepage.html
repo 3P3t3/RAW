@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=406105e8">
+<link rel="stylesheet" href="../style.css?v=a28eabfe">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -978,12 +978,35 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
           <p class="st-caplinks"><a class="tlink st-go" href="category-daily-foundations.html">Daily Foundations<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="tlink st-go" href="category-energy-focus.html">Energy &amp; Focus<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
         </div>
       </div>
-      <!-- the third movement's own label, his phrase for it in the plural, standing as the heading
-           over the two before/after stacks: what they notice now is what the photographs show -->
+      <!-- the third movement's own label, his phrase for it in the plural. It stood as the heading
+           over the two before/after stacks until the stacks went behind the reveal below; it leads
+           into the offer now instead, which is the same place in the telling — what they notice now
+           is what the photographs show, and the next line is where to see them. -->
       <!-- DRAFT-COPY --><h3 class="st-line st-now grow" id="story-now">Here’s what we notice now.</h3><!-- /DRAFT-COPY -->
-      <!-- their two stacks: his three views and her two, under one another on a phone and side by
-           side from 760. proof_wall() in build_homepage.py, asked for without its own heading. -->
-      <div class="st-pf grow">
+      <!-- their two stacks, behind a reveal the visitor opens, in place on this page (Peter,
+           2026-10-01: "We could have a button they click if they want to see it... And then it says,
+           if you want to see pictures of the real journey, click here. And then it opens a drop down
+           so it stays in the same page... if they don't want to see, they can just keep scrolling,
+           but if they do want to see, it's right there"). It closes the one gap between the two
+           things he has been asking for: the photographs on the homepage, and a shorter page.
+           A native details/summary, nothing scripted: it opens and closes with no JavaScript at all, the
+           summary is a button to the keyboard and announces itself expanded or collapsed to a screen
+           reader for free, and a no-JS visitor gets the pictures one tap away like everyone else.
+           It arrives closed on every visit and nothing remembers that it was opened — there is no
+           state to persist and none is written.
+           The stacks inside are proof_wall()'s, unchanged: his three views and her two, under one
+           another on a phone and side by side from 760, each file's seam at 50% under one pair of
+           Before / After heads. The reveal only hides them; it never re-crops or reorders a half.
+           .grow sits on the details element, not on what it holds, so the reveal itself rises in with
+           section and the photographs are at full strength the instant they are asked for. -->
+      <details class="st-rev grow" id="story-proof">
+        <summary class="st-rev-sum">
+          <!-- DRAFT-COPY: his dictated line, with "click here" dropped — the control is the thing
+               being clicked, and his own "it's right there" says where they land -->
+          <span class="st-rev-say">If you want to see pictures of our real journey, they’re right here.</span>
+          <span class="st-rev-ch" aria-hidden="true"></span><!-- /DRAFT-COPY -->
+        </summary>
+        <div class="st-pf">
     <div class="pf-duo">
       <figure class="c-proof pf-his">
   <p class="pf-who"><span class="pf-name">Peter</span> <span class="pf-when">Month 1 → Month 15</span></p>
@@ -998,7 +1021,8 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
   <!-- DRAFT-COPY --><figcaption>Before: two months postpartum.</figcaption><!-- /DRAFT-COPY -->
 </figure>
     </div>
-      </div>
+        </div>
+      </details>
       <!-- the ask, in his own words, unchanged: it never used the first person singular, so the
            plural section did not touch it. The call is the one button on the block, and the link
            across to about.html sits quietly under it. That link said "See Yenni's results and both
