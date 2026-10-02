@@ -419,9 +419,29 @@ carried over no longer exists.
 where the header nav already carries MACROS. The quick-call card that sat under the sample form is gone;
 `#quick-call` now marks the consult's `.wrap.split` until a sample is sent, when the script hands the id to the
 thank-you's call invitation, so the game plan's step 05 link still lands. From 768 the sample section's text is centred vertically against its card. The sample form's shelf picker uses
-container queries so the ten sit evenly (two a row on phones, five on the desktop card). From 1024 the booking
-card fits 1440x900 under the masthead (745px, 797 with the summary showing) with every question and option
-unchanged: re-measure if one is added or reworded.
+container queries so the ten sit evenly (two a row on phones, five on the desktop card). **The booking card (`#consult-form`) asks one question at a time**, on the macro calculator's own machinery so
+the two cards read as siblings: a step counter, three progress pips, a `Back` link, and a Continue button that
+reads the card's own "Pick a time" back on the last step. The three steps are the question blocks it already had,
+in the order it already asked them — the five goals, Peter's six training answers, then both blanks in one
+fieldset whose legend is furniture and visually hidden (its two field labels are the real questions, and those
+could not change). `cStep()` in `_script.html` owns `[hidden]`; the markup hides steps 2 and 3 so nothing flashes,
+and `html:not(.js)` puts them all back with the furniture away, so a no-script visitor gets the single card it
+always was. **Not a word of a question, an answer, a label, a placeholder or the button changed**; the only new
+copy is the furniture and two validation lines, all DRAFT-COPY.
+**A picked chip advances by itself**, and telling a real choice from a look is the trick: Chrome fires a full
+`click` on every radio the arrow keys walk past (measured, Chrome 154), so a visitor reading Peter's six training
+answers with the arrows would be carried off the step. What a pointer carries is `e.detail` — 1 for a mouse click
+or a touch tap, 0 for anything a key synthesised — so a pointer advances on `detail`, and of the keys only Space
+does, through its own keydown. **Re-measure that if the Chrome version moves**, and note a scripted `.click()`
+deliberately will NOT advance, so test this with `Input.dispatchMouseEvent`, not JavaScript.
+Answers and the step survive a reload under `aspire-consult` (its own key, so the calculator's "Start over" cannot
+orphan it). **Steps 1 and 2 now require an answer** where the form could once be submitted blank; both blanks on
+step 3 stay optional, and the last step re-checks the steps above it. Arriving from the calculator lands on step 2,
+because the goal above has just been filled in.
+The five goal chips sit two across below 1024 (they each took a whole row with half of it empty). From 1024 the row
+already took three and two, so that block is untouched and its measured laptop fit still holds: the card was 745px
+at 1440x900 with every question showing, and is 507-615px by step now. At 390x844 `#consult` went from 1458px to
+720/888/793 by step. Re-measure if a question is added or reworded.
 
 A product can sit on more than one shelf: a shelf page lists everything its own `CATEGORIES` entry
 names, while `cat_of` stays each product's single home shelf (its card tag). XS Creatine+ is on both
