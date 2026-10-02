@@ -1123,8 +1123,24 @@ html:not(.js) #results[hidden]{display:block!important}
   letter-spacing:-.012em;text-wrap:balance;color:var(--teal)}
 .st-go .ic{margin-left:8px}
 .st-caplinks{display:flex;flex-wrap:wrap;align-items:center;gap:4px 24px;max-width:none;margin:0}
-/* the third movement's label, leading into the reveal that holds the photographs */
-.st-now{margin:clamp(44px,8vw,64px) 0 0;max-width:34ch}
+/* the third movement's label and its answer, Peter's side pair, out in the open (2026-10-02): a
+   visitor who never opens the reveal below still sees one before and after. Under 1024 the heading
+   stands straight over the pair, after the lines; the pair keeps proof_wall's own furniture (.c-proof,
+   .c-cols on the 50% seam, .pf-who) and is capped at the 680px the wall's stacks are. */
+.st-see{margin-top:clamp(44px,8vw,64px)}
+.st-now{margin:0;max-width:34ch}
+.st-see .c-proof{max-width:680px;margin-top:clamp(18px,4vw,24px)}
+/* From 1024 the lines and the pair stand side by side: the lines on the left as before, and on the
+   right the heading with the pair under it, so the half of the screen beside the lines carries the
+   proof. The right column is centred against the lines (it is the shorter), the heading keeps its
+   place over the picture it names, and the reveal and the ask run full width beneath both. */
+@media (min-width:1024px){
+  .st-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;
+    gap:clamp(40px,5vw,80px);margin-top:clamp(28px,6vw,40px)}
+  .st-top>.st-lines{margin-top:0}
+  .st-see{margin-top:0}
+  .st-see .c-proof{max-width:none}
+}
 /* The reveal: their photographs behind a control the visitor opens, in place on the page (Peter,
    2026-10-01: "it opens a drop down so it stays in the same page... if they don't want to see,
    they can just keep scrolling"). A native details/summary — no script, so reduced motion and no
@@ -1198,10 +1214,11 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-proof .c-proof{max-width:680px;margin:0 auto}
 
 @media (min-width:760px){
-  /* side by side from 760, as Peter asked: his three 3:2 pairs and her two a little narrower, so
-     the two columns end together, and each stack's caption at its foot so they sit on one line.
-     Scoped to .st-pf, so .pf-duo's own 1000px breakpoint on about.html is untouched. */
-  .st-pf .pf-duo{max-width:none;grid-template-columns:minmax(0,1fr) minmax(0,.78fr);
+  /* side by side from 760, as Peter asked: his two 3:2 pairs (front and back; the side is out above
+     the reveal) and her two much narrower, so the two columns end together (2 x 2/3 of his width =
+     2 x 979/768 of hers, so hers is .523 of his), and each stack's caption at its foot so they sit
+     on one line. Scoped to .st-pf, so .pf-duo's own 1000px breakpoint on about.html is untouched. */
+  .st-pf .pf-duo{max-width:none;grid-template-columns:minmax(0,1fr) minmax(0,.523fr);
     align-items:stretch;gap:clamp(24px,3.4vw,48px)}
   .st-pf .pf-duo .c-proof{max-width:none;margin:0;grid-template-rows:auto auto 1fr auto}
   .st-pf .c-stack{align-content:start}
