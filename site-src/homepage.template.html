@@ -62,7 +62,7 @@
              .hero-actions keeps its own box: the mobile tab's observer in _script.html watches it. -->
         <div class="hero-me">
           <img src="assets/peter/hero-pair-240.webp" srcset="assets/peter/hero-pair-240.webp 240w, assets/peter/hero-pair-480.webp 480w" sizes="(min-width:1024px) 204px, (min-width:768px) 130px, calc(46vw - 18px)" width="240" height="300" alt="Peter holding their baby daughter" decoding="async">
-          <p class="hero-me-line"><!-- PETER-COPY -->I’m Peter — husband, dad to a baby girl, and a Lincoln local.<!-- /PETER-COPY --> <!-- DRAFT-COPY --><a href="#story">My story</a><!-- /DRAFT-COPY --></p>
+          <p class="hero-me-line"><!-- PETER-COPY -->I’m Peter — husband, dad to a baby girl, and a Lincoln local.<!-- /PETER-COPY --> <!-- DRAFT-COPY --><a href="#story">Our story</a><!-- /DRAFT-COPY --></p>
           <!-- DRAFT-COPY --><div class="hero-actions">
             <a class="btn" href="#how">See the game plan</a>
             <a class="tlink" href="#consult">Book a free call</a>
@@ -379,184 +379,79 @@
        switch: set TRENDING = True there and the band comes back here, between the calculator
        and the story, exactly as it was. -->
 {{TRENDING}}
-  <!-- 5. Peter's story, told as a storyboard: the stage holds on screen while each part of it
-       arrives, and the products it is about drop onto one shelf and stay there, gathering into
-       his stack, while his words run past under them. It follows the calculator (#macros) and opens in its own dark on his before; the after wipes
-       in straight away and brings the light (chalk), which is what leads into why his stack is
-       worth a look: his five packs then gather on one shelf on the sand, with his words running
-       past underneath them as a caption strip, and the call and his family on chalk.
-       Every beat is real content in reading order. The stage is only a way of showing them:
-       the script takes the section over (.is-live) when motion is allowed, and positions each
-       beat as a pure function of how far the section has scrolled. Without
-       it (reduced motion, no script, or a script that never got here) the same beats stand
-       as a plain vertical sequence, each on its own tone, so nobody can get stuck in it.
-       The shelf links are real links; while the stage runs, only the beat on screen can be
-       tapped, and tabbing to one brings its beat on screen. The photos of Peter are the
-       hand-placed files in assets/peter/; the pack shots are the build's own. -->
-  <section class="story" id="story" aria-labelledby="story-title">
-    <!-- The story's own heading, in his voice (Peter, 2026-09-28: "maybe we could title my
-         journey... maybe we could call it like 'how did I get into this?'"). It used to be a
-         visually hidden h2, which left the stage opening on a photo with nothing to say what it
-         was. It is an ordinary section head now — the same label + h2 as #how, one keyword in
-         the blue — and it sits BEFORE the stage and scrolls away like any other block, so the
-         sticky run (#st-run) is exactly as long as it was and the stage is untouched. It reads
-         the same in the plain sequence (reduced motion, no script): the question, then his
-         before and his line. DRAFT-COPY. -->
-    <!-- DRAFT-COPY -->
-    <div class="st-head">
-      <div class="wrap">
-        <div class="st-head-in grow">
-          <p class="label">Peter’s story</p>
-          <h2 id="story-title">How did I get into <span class="hl-k">this?</span></h2>
+  <!-- 5. Our story: how the two of them got into this. It was a sticky, scroll-scrubbed stage of nine
+       beats — his before, five packs falling onto one shelf, the after wiping over the before, his
+       family, the ask, and his lines sliding past under them in a caption strip — until Peter asked
+       for it plainly (2026-10-01): "Instead of scrolling through it, lets just add before and after
+       pictures of Yenni and I side by side. We can change it to 'how we got into this'". So it is an
+       ordinary section now: their lines, their two before/after stacks, then the ask. Nothing in it
+       reads the scroll and nothing pins, so reduced motion and no script get exactly this page.
+       The lines are theirs in the plural, and each one links the shelf it is about; those five links
+       are checked against PETER in build_homepage.py, so the section can never stop naming the five
+       shelves "That's my stack" draws below it.
+       The photographs are the hand-placed files in assets/peter/ and assets/her/, drawn by
+       proof_wall() — the same pair of stacks about.html carries, with this section's own heading over
+       them. Each file is one photo whose before/after seam sits at exactly 50%, which is what lets one
+       pair of Before / After heads label a whole stack; never re-crop or retouch them (CLAUDE.md). -->
+  <section class="sec story" id="story" aria-labelledby="story-title">
+    <div class="wrap">
+      <div class="st-head grow">
+        <!-- DRAFT-COPY: the eyebrow is theirs now, where it said "Peter's story" -->
+        <p class="label">Our story</p>
+        <!-- PETER-COPY: 2026-10-01, "we can change it to 'how we got into this'" -->
+        <h2 id="story-title">How we got into <span class="hl-k">this</span></h2>
+      </div>
+      <!-- Their lines, in the order it happened, each under the shelf it is about. They were his six
+           in the first person; Peter asked for the plural. Two are his own new wording, verbatim
+           (2026-10-01), and the rest are his own sentences with nothing changed but the person, so
+           they stay DRAFT until he has read them. His closing line went at his request: "get rid of
+           the 'i've got energy left for my daughter and my wife' line, it's unnecessary and implied
+           with the transformation pictures" — and the two sentences behind it were his own singular
+           ("I didn't know how low my baseline was until I built a new one. There's no going back."),
+           which cannot be put in the plural without putting words in Yenni's mouth, so they went with
+           it and the photographs carry the movement instead. -->
+      <div class="st-lines grow">
+        <div class="st-bit">
+          <!-- PETER-COPY --><p class="st-line">Fatigue was a constant.</p><!-- /PETER-COPY -->
+        </div>
+        <div class="st-bit">
+          <!-- DRAFT-COPY --><p class="st-mv">Here’s what we changed.</p><!-- /DRAFT-COPY -->
+          <!-- PETER-COPY: his own wording, 2026-10-01 --><p class="st-line">We fixed our food and found someone to push us.</p><!-- /PETER-COPY -->
+          <a class="tlink st-go" href="category-protein.html">Protein<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+        <div class="st-bit">
+          <!-- PETER-COPY: his own wording, 2026-10-01 --><p class="st-line">We focused more on hydration.</p><!-- /PETER-COPY -->
+          <a class="tlink st-go" href="category-hydration.html">Hydration<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+        <div class="st-bit">
+          <!-- DRAFT-COPY --><p class="st-line">And we found ways to maximize our sleep, even during the newborn nights.</p><!-- /DRAFT-COPY -->
+          <a class="tlink st-go" href="category-recovery.html">Recovery<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+        <div class="st-bit">
+          <!-- DRAFT-COPY --><p class="st-line">We changed our mornings too, and swapped our huge coffee spikes for smoother energy.</p><!-- /DRAFT-COPY -->
+          <p class="st-caplinks"><a class="tlink st-go" href="category-daily-foundations.html">Daily Foundations<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="tlink st-go" href="category-energy-focus.html">Energy &amp; Focus<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
         </div>
       </div>
-    </div>
-    <!-- /DRAFT-COPY -->
-    <div class="st-run" id="st-run">
-      <div class="st-stage">
-        <div class="st-bg" aria-hidden="true"><span class="st-dusk"></span><span class="st-lamp st-lamp-dark"></span><span class="st-sand"></span><span class="st-lamp st-lamp-warm"></span><span class="st-chalk"></span></div>
-        <ol class="st-beats">
-          <!-- Three movements, in Peter's own words for them (2026-09-28: "less about how I was
-               feeling at work and everything and just go: 'Fatigue was a constant.' 'Here's what I
-               changed.' 'Here's what I notice now.'"). The first is his line over his before; the
-               other two are the labels that open their movement in the strip. Eight beats carry the
-               pictures; the reader feels three moves, because the words are one column. -->
-          <li class="st-beat st-dark st-open" data-kind="photo" data-cap>
-            <div class="st-hero"><div class="st-art st-photo">
-              <img src="assets/peter/side-before-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="Peter before, from the side, month one">
-              <span class="st-tag" aria-hidden="true">Before · Month 1</span>
-            </div></div>
-          </li>
-          <!-- The caption strip: his words, one continuous column under whatever the stage is
-               showing, instead of one line at a time on each beat. The script slides the track so
-               the caption belonging to the beat on stage stands at the strip's reading line at full
-               strength, with the one before and the one after it quieter (a softer teal, over 5:1
-               on the ground — quiet, never unreadable) and still legible, so a reader is always
-               reading ahead. It is a pure function of the eased scroll, as the packs are, so
-               scrolling back runs it backwards; only the track's transform and the strip's opacity
-               are written per frame, and the colour changes only when the reading line moves from
-               one caption to the next.
-               It sits here, straight after his before, because without the stage (reduced motion, no
-               script) that is where it reads best: his whole story in his own words, with every
-               shelf link in it, and then the pictures it is about. On the stage its place is set by
-               style.css, and z-index keeps it over the beats so its links can be tapped. Each
-               caption belongs to the beat carrying data-cap in the same order. -->
-          <li class="st-caprail" id="st-caps">
-            <div class="st-captrack">
-              <div class="st-cap">
-                <!-- PETER-COPY --><p class="st-line">Fatigue was a constant.</p><!-- /PETER-COPY -->
-              </div>
-              <div class="st-cap">
-                <!-- PETER-COPY --><p class="st-mv">Here’s what I changed.</p><!-- /PETER-COPY -->
-                <!-- PETER-COPY --><p class="st-line">I fixed my food and found someone who pushed me.</p><!-- /PETER-COPY -->
-                <a class="tlink st-go" href="category-protein.html">Protein<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-              </div>
-              <div class="st-cap">
-                <!-- PETER-COPY --><p class="st-line">I focused way more on hydration and getting electrolytes.</p><!-- /PETER-COPY -->
-                <a class="tlink st-go" href="category-hydration.html">Hydration<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-              </div>
-              <div class="st-cap">
-                <!-- PETER-COPY --><p class="st-line">And I found ways to maximize my sleep, even during the newborn nights.</p><!-- /PETER-COPY -->
-                <a class="tlink st-go" href="category-recovery.html">Recovery<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-              </div>
-              <!-- the two beats that came out, folded into one closing line in his voice, with both
-                   shelves still reachable from the story. DRAFT-COPY: his words are the two it folds
-                   ("I changed my morning routine." / "I swapped out my huge coffee spikes for smoother
-                   energy."), but the sentence joining them is not one he said. -->
-              <div class="st-cap">
-                <!-- DRAFT-COPY --><p class="st-line">I changed my mornings too, and swapped my huge coffee spikes for smoother energy.</p><!-- /DRAFT-COPY -->
-                <p class="st-caplinks"><a class="tlink st-go" href="category-daily-foundations.html">Daily Foundations<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="tlink st-go" href="category-energy-focus.html">Energy &amp; Focus<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
-              </div>
-              <!-- the third movement: its label lands with the after, and the line that was on the
-                   family beat carries it. His other after line ("For the first time my energy held
-                   all day...") said the same thing a second time and came out (Peter, 2026-09-28:
-                   "yea cut the unnecessary duplicates just pick one"). -->
-              <div class="st-cap">
-                <!-- PETER-COPY --><p class="st-mv">Here’s what I notice now.</p><!-- /PETER-COPY -->
-                <!-- PETER-COPY --><p class="st-line">Now I’ve got energy left for my daughter and my wife after a full day’s work. I didn’t know how low my baseline was until I built a new one. There’s no going back.</p><!-- /PETER-COPY -->
-              </div>
-            </div>
-          </li>
-          <!-- The shelf: four beats, each dropping its pack onto the same shelf, where they stay and
-               gather into a group (the pile in _script.html). Each pack's data-cat is the shelf whose
-               plate it puts on the pinned bar, and the build checks those against PETER; data-tilt is
-               the angle it comes to rest at, and every one of them is 0: once the packs stopped
-               leaving the stage and started piling up together, a group each leaning its own way read
-               as clutter (Peter, 2026-09-28: "now that they're going to be all on the screen, I think
-               having them straight is actually better"). They still lean on the way down — DROP.lean
-               in _script.html tips the fall and unwinds to nothing at the landing. -->
-          <li class="st-beat st-warm" data-kind="prod" data-cap>
-            <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-cat="protein" data-tilt="0" data-x="-7" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-grass-fed-whey-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Grass-Fed Whey Protein"></span>
-            </div></div>
-          </li>
-          <!-- his hydration stack, the two he actually takes: they arrive as a pair -->
-          <li class="st-beat st-warm" data-kind="prod" data-cap>
-            <div class="st-hero"><div class="st-art st-pair">
-              <span class="st-pack" data-cat="hydration" data-tilt="0" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/story/xs-creatine-lit.webp" width="680" height="680" loading="lazy" decoding="async" alt="XS Creatine+"></span>
-              <span class="st-pack" data-cat="hydration" data-tilt="0" data-x="0" data-scale="1"><span class="st-shade"></span><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" width="600" height="600" loading="lazy" decoding="async" alt="Nutrilite Twist Tubes 2GO"></span>
-            </div></div>
-          </li>
-          <li class="st-beat st-warm" data-kind="prod" data-cap>
-            <div class="st-hero"><div class="st-art">
-              <span class="st-pack" data-cat="recovery" data-tilt="0" data-x="7" data-scale=".92"><span class="st-shade"></span><img src="assets/story/nutrilite-sleep-health-lit.webp" width="860" height="860" loading="lazy" decoding="async" alt="Nutrilite Sleep Health"></span>
-            </div></div>
-          </li>
-          <!-- the last two of his five arrive together, under the one line that folds the two beats
-               they used to have into it: the morning routine and the smoother energy -->
-          <li class="st-beat st-warm" data-kind="prod" data-cap>
-            <div class="st-hero"><div class="st-art st-pair">
-              <span class="st-pack" data-cat="daily-foundations" data-tilt="0" data-x="0" data-scale=".96"><span class="st-shade"></span><img src="assets/story/nutrilite-begin-gi-primer-lit.webp" width="1008" height="1008" loading="lazy" decoding="async" alt="Nutrilite Begin Daily GI Primer"></span>
-              <span class="st-pack" data-cat="energy-focus" data-tilt="0" data-x="0" data-scale="1.1"><span class="st-shade"></span><img src="assets/story/xs-elite-focus-lit.webp" width="1048" height="1048" loading="lazy" decoding="async" alt="XS Elite + Focus Energy Drink"></span>
-            </div></div>
-          </li>
-          <!-- the third movement opens here: his before comes back and the after wipes in over it,
-               from the side it sits on in the pair. It follows the shelf now, not the opening, so it
-               reads as what the shelf did. Without the stage only the after stands here. -->
-          <li class="st-beat st-light st-open" data-kind="turn" data-cap>
-            <div class="st-hero"><div class="st-art st-photo">
-              <img class="st-was" src="assets/peter/side-before-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="">
-              <span class="st-tag st-was" aria-hidden="true">Before · Month 1</span>
-              <div class="st-wipe"><div class="st-wipe-in">
-                <img src="assets/peter/side-after-480.webp" width="480" height="640" loading="lazy" decoding="async" alt="Peter after, from the side, month fifteen">
-                <span class="st-tag" aria-hidden="true">After · Month 15</span>
-              </div></div>
-            </div></div>
-          </li>
-          <!-- the family photo the third movement's line is about; the line is already up, in the
-               strip, when it arrives -->
-          <li class="st-beat st-light st-fam" data-kind="photo">
-            <div class="st-hero"><div class="st-art st-photo">
-              <img src="assets/peter/family-320.webp" width="320" height="400" loading="lazy" decoding="async" alt="Peter with his wife and baby daughter">
-            </div></div>
-          </li>
-          <li class="st-beat st-light st-solo" data-kind="text">
-            <!-- supplement after supplement: the place above the call that the loaded bar stands in.
-                 It is the last beat now — the story ends on the ask, after his family — and the strip
-                 has handed over, so his line here has the stage to itself. -->
-            <div class="st-hero st-arc" aria-hidden="true">{{ARC_BAR}}</div>
-            <div class="st-copy">
-              <!-- PETER-COPY --><p class="st-say">The hardest part was figuring it out alone, testing supplement after supplement to find what worked. That’s what this call is for. Book it and we’ll figure yours out together.</p><!-- /PETER-COPY -->
-              <!-- the call, asked for where the story asks for it. The tab's own "Book a free call" steps aside
-                   while this is on screen (it is one of the tab's zones in _script.html). -->
-              <a class="btn st-book" href="#consult">Book a free call</a>
-              <!-- the one link across to about.html, under the call as a quiet text link (the call stays the
-                   only button on the screen). It used to be a box of its own after the stage, alone on a
-                   near-empty screen that read as the end of the page, and it said "See our before &
-                   afters" straight after his before and after. It names what is new over there instead. -->
-              <p class="st-more"><!-- DRAFT-COPY --><a class="tlink" href="about.html">See Yenni’s results and both our DEXA <span class="st-nw">scans<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></span></a><!-- /DRAFT-COPY --></p>
-            </div>
-          </li>
-        </ol>
-        <!-- the case the stack is built in: the #goals case in miniature, its seven compartments
-             generated from the same shelves (build_homepage.py); style.css sets its size and place -->
-        {{CASE_STRIP}}
+      <!-- the third movement's own label, his phrase for it in the plural, standing as the heading
+           over the two before/after stacks: what they notice now is what the photographs show -->
+      <!-- DRAFT-COPY --><h3 class="st-line st-now grow" id="story-now">Here’s what we notice now.</h3><!-- /DRAFT-COPY -->
+      <!-- their two stacks: his three views and her two, under one another on a phone and side by
+           side from 760. proof_wall() in build_homepage.py, asked for without its own heading. -->
+      <div class="st-pf grow">
+{{STORY_PROOF}}
+      </div>
+      <!-- the ask, in his own words, unchanged: it never used the first person singular, so the
+           plural section did not touch it. The call is the one button on the block, and the link
+           across to about.html sits quietly under it. That link said "See Yenni's results and both
+           our DEXA scans" while the homepage showed neither; her results are on this page now, so
+           it names the one thing that is only over there. The tab's own "Book a free call" steps
+           aside while this button is on screen (.st-book is one of the tab's zones, _script.html). -->
+      <div class="st-ask grow">
+        <!-- PETER-COPY --><p class="st-say">The hardest part was figuring it out alone, testing supplement after supplement to find what worked. That’s what this call is for. Book it and we’ll figure yours out together.</p><!-- /PETER-COPY -->
+        <a class="btn st-book" href="#consult">Book a free call</a>
+        <p class="st-more"><!-- DRAFT-COPY --><a class="tlink" href="about.html">See both our DEXA <span class="st-nw">scans<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></span></a><!-- /DRAFT-COPY --></p>
       </div>
     </div>
-    <!-- the stage lets go straight into his stack. Peter's three before/after views, his wife's two and
-         both DEXA cards used to hang off the end of the story here; they are the whole of about.html now,
-         because all of it on one page "feels like too much in one thing" (Peter, 2026-09-28). The link
-         across to it is under the call, in the last beat; the menu's "About us" is the other way in. -->
   </section>
 
 {{MYSTACK}}
@@ -564,7 +459,7 @@
   <!-- 6b. Consult: four answers first, then a time on my calendar. It closes the page, after
        Peter's stack; the calculator's numbers, if there are any, ride in with the visitor in the
        strip at its top, and the calculator's "Book a free call" lands on the form below them.
-       Peter himself (his bio, his journey, the before and after) is met in #story above, so
+       The two of them (their lines, their before and afters) are met in #story above, so
        this band is only the ask: the numbers, the offer, the disclosure, the form. -->
   <section class="sec consult" id="consult" aria-labelledby="consult-title">
     <!-- id="quick-call": the game plan's step 05 links here. The quick-call card that used to sit

@@ -243,7 +243,8 @@ CAROUSELS = {
 
 # 'bar' is the barbell: the seven shelves as seven weight plates on a rack, each a button that opens a
 # panel of that shelf's packs with "Load this plate"; the visitor's loaded plates ride on a bar pinned
-# under the masthead, which becomes Peter's bar through #story. 'case' is the stack case: the seven shelves as the seven compartments of one case, each lid a
+# under the masthead, and is only ever theirs (it carried Peter's stack through the story's stage until
+# 2026-10-01, when the stage went). 'case' is the stack case: the seven shelves as the seven compartments of one case, each lid a
 # button that opens onto a few of that shelf's packs. 'strip' is the tabbed goal strip; 'ring'
 # brings back the rotating archipelago. All three are built from the same shelf data, so switching
 # is this one word plus a rebuild; the ring's script and styles stay in, idle while it is off.
@@ -278,11 +279,21 @@ PLATES = {
     'skin-redefined': ('#D6D4C9', 6), 'womens-health': ('#76485F', 7),
     'mens-health': ('#39594A', 8), 'everyday-health': ('#80222F', 9),
 }
-# Peter's stack, in the order #story loads it: the shelves his caption strip links to, in the order
-# its captions stand, which is also the order the packs land on the shelf (the build checks both).
-# The last two go on together, under the one line that folds their two old beats into it. Their places
-# ON the bar are PLATES' own ranks, so they fill his five in from his order, not left to right.
+# Their stack: the five shelves #story names, in the order its lines name them (the build checks the
+# section's own links against this). Nothing loads them onto the pinned bar any more — the scrubbed
+# stage that did went on 2026-10-01 — so this is the order "That's my stack" (#my-stack) draws them in,
+# and it is still the first five ranks in PLATES, so that bar builds outward and never reshuffles.
 PETER = ['protein', 'hydration', 'recovery', 'daily-foundations', 'energy-focus']
+# The pack picture beside each plate in "That's my stack". It was read back out of the story's own pack
+# beats until those went with the stage; the five relit shots in assets/story/ and the one catalogue
+# cut-out are the same files those beats carried, so the key is unchanged. A shelf here must be in PETER.
+PETER_PACKS = {
+    'protein': 'assets/story/xs-grass-fed-whey-lit.webp',
+    'hydration': 'assets/story/xs-creatine-lit.webp',
+    'recovery': 'assets/story/nutrilite-sleep-health-lit.webp',
+    'daily-foundations': 'assets/story/nutrilite-begin-gi-primer-lit.webp',
+    'energy-focus': 'assets/story/xs-elite-focus-lit.webp',
+}
 
 # The rack's three-step guide, under "What are we maximizing?" (DRAFT-COPY). The script marks the
 # step the visitor is on (aria-current): 1 until a plate is open, 2 while one is, 3 once one is loaded.
@@ -822,11 +833,14 @@ def his_pairs(caption='Fifteen-month transformation.'):
             '</figure>')
 
 
-def proof_wall():
+def proof_wall(title='<span class="pf-k">His</span> and <span class="pf-k">hers</span>', tid='proof-t'):
     """The proof wall, his and hers: Peter's three views, and beside them (under them on a phone) his
-    wife's two, nothing to swipe. about.html's "what changed"; it used to close the homepage's story."""
-    return ('    <!-- DRAFT-COPY --><h2 class="pf-title" id="proof-t"><span class="pf-k">His</span> and <span class="pf-k">hers</span></h2><!-- /DRAFT-COPY -->\n'
-            '    <div class="pf-duo">\n      ' + his_pairs() + '\n      '
+    wife's two, nothing to swipe. about.html's "what changed", under its own "His and hers"; and the
+    homepage's #story, where the section's own heading stands over it instead, so it is asked for
+    there with title=None and the pair of stacks comes back on its own."""
+    head = (f'    <!-- DRAFT-COPY --><h2 class="pf-title" id="{tid}">{title}</h2><!-- /DRAFT-COPY -->\n'
+            if title else '')
+    return (head + '    <div class="pf-duo">\n      ' + his_pairs() + '\n      '
             + her_pairs('Before: two months postpartum.') + '\n    </div>')
 
 
@@ -1253,41 +1267,32 @@ def main():
 
     shelves = {'ring': ring_section, 'strip': strip_section, 'case': case_section, 'bar': rack_section}[SHELF_VIEW]()
     BAR = SHELF_VIEW == 'bar'
-    # the story's caption strip links to Peter's shelves, and each pack on its shelf names the same
-    # one (data-cat); the bar theme loads his plates in that order
+    # #story names their five shelves, in PETER's order, and those links are the only thing in the
+    # section that can drift from it: the plain-text lines are copy, the pictures are their photos.
     story_src = open(SRC).read()
     story_cats = re.findall(r'class="tlink st-go" href="category-([a-z-]+)\.html"', story_src)
-    # each shelf's first pack in the story (the one "That's my stack" shows beside its plate)
-    story_pack = {}
-    for m in re.finditer(r'<span class="st-pack" data-cat="([a-z-]+)"[^>]*>\s*<span class="st-shade"></span><img src="([^"]+)"', story_src):
-        story_pack.setdefault(m.group(1), m.group(2))
-    pack_cats = list(dict.fromkeys(re.findall(r'<span class="st-pack" data-cat="([a-z-]+)"', story_src)))
     if BAR and story_cats != PETER:
-        raise SystemExit(f"PETER: the story's caption strip links {story_cats}, not {PETER}")
-    if BAR and pack_cats != PETER:
-        raise SystemExit(f"PETER: the story's packs land for {pack_cats}, not {PETER}")
-    if BAR and sorted(story_pack) != sorted(PETER):
-        raise SystemExit(f"PETER: found a pack picture for {sorted(story_pack)}, not for each of {PETER}")
-    bar_bits = {k: '' for k in ('{{HTML_CLASS}}', '{{PIN}}', '{{ARC_BAR}}', '{{MYSTACK}}')}
+        raise SystemExit(f"PETER: the story's lines link {story_cats}, not {PETER}")
+    if BAR and sorted(PETER_PACKS) != sorted(PETER):
+        raise SystemExit(f"PETER: PETER_PACKS covers {sorted(PETER_PACKS)}, not each of {PETER}")
+    bar_bits = {k: '' for k in ('{{HTML_CLASS}}', '{{PIN}}', '{{MYSTACK}}')}
     if BAR:
         pn = [(c, names[c]) for c in PETER]
-        caps = ''.join(f'<span class="lbc lbc-p" data-n="{n}">Peter’s<span class="lbc-lg"> stack</span> · {n} of {len(PETER)}</span>' for n in range(len(PETER) + 1))   # a phone's one-row strip drops "stack"
-        news = ''.join(f'<span class="lbc lbc-pnew" data-cat="{c}">+ {n}</span>' for c, n in pn)
         bar_bits.update({
             '{{HTML_CLASS}}': ' class="t-bar"',
-            # the pinned bar: the visitor's stack, or Peter's through #story; the script shows it once the hero has gone
+            # the pinned bar: the visitor's own stack and nothing else, shown once the hero has gone.
+            # It had a second bar and a second caption set for Peter's five until 2026-10-01, which only
+            # the scrubbed story stage ever filled; the stage went and so did they.
             '{{PIN}}': ('<div class="lbpin" id="lbpin" aria-hidden="true"><div class="wrap lbpin-in">'
-                        '<div class="lbpin-bars bbx">' + barbell('bb-you') + barbell('bb-peter') + '</div>'
+                        '<div class="lbpin-bars bbx">' + barbell('bb-you') + '</div>'
                         '<p class="lbpin-cap"><span class="lbc-set lbc-yset"><span class="lbc-who"><span class="lbc lbc-you"></span></span>'
-                        '<span class="lbc-new"><span class="lbc lbc-ynew"></span></span></span>'
-                        '<span class="lbc-set lbc-pset"><span class="lbc-who">' + caps + '</span><span class="lbc-new">' + news + '</span></span></p></div></div>'),
-            '{{ARC_BAR}}': '<div class="bbx">' + barbell('bb-arc', PETER) + '</div>',
-            '{{MYSTACK}}': ('  <!-- After the story: the stack his story loaded, drawn loaded, with its key, and the two ways on -->\n'
+                        '<span class="lbc-new"><span class="lbc lbc-ynew"></span></span></span></p></div></div>'),
+            '{{MYSTACK}}': ('  <!-- After the story: the five shelves its lines name, drawn loaded, with its key, and the two ways on -->\n'
                             '  <section class="sec dark mys" id="my-stack" aria-labelledby="mys-title">\n    <div class="wrap mys-in">\n'
                             '      <h2 class="grow hl-2 hl-dk" id="mys-title"><span class="hl-lead">That’s</span> <span class="hl-k">my stack.</span></h2>\n'
                             '      <div class="mys-bar bbx grow" style="--d:1">' + barbell('bb-dk bb-big', PETER) + '</div>\n'
                             '      <ul class="mys-key grow" style="--d:2" aria-label="The plates on it">'
-                            + ''.join(f'<li><span class="mys-th"><img src="{story_pack[c]}" alt="" loading="lazy" decoding="async" width="96" height="96"></span>'
+                            + ''.join(f'<li><span class="mys-th"><img src="{PETER_PACKS[c]}" alt="" loading="lazy" decoding="async" width="96" height="96"></span>'
                                       f'<span class="mys-n"><i style="--c:{PLATES[c][0]}"></i>{n}</span></li>' for c, n in pn) + '</ul>\n'
                             '      <p class="mys-build grow hl-3d hl-dk" style="--d:2">Build yours.</p>\n'
                             # the visitor's stack beside his, from the saved stack (_script.html fills it); none yet, an
@@ -1304,12 +1309,6 @@ def main():
                             '<a class="btn btn-line" href="#consult">Book a free call</a></div>\n'
                             '    </div>\n  </section>\n'),
         })
-    # the story's stack is the same case in miniature: the same seven compartments, in the same order,
-    # empty until the story's packs tuck into them (_script.html measures them; nothing here moves)
-    case_strip = '' if BAR else ('<div class="st-row st-case" aria-hidden="true"><span class="stc-body">'
-                  + ''.join(f'<span class="stc-bay" data-cat="{s}"><span class="stc-well"></span>'
-                            f'<span class="stc-name">{n}</span></span>' for s, n, *_ in CATEGORIES)
-                  + '</span></div>')   # the bar theme's pinned bar is the story's stack instead
     order = sorted(products, key=lambda pr: pr['name'].lower())
     grid = [card(pr, i, shelves=True) for i, pr in enumerate(order)]
 
@@ -1418,7 +1417,9 @@ def main():
                                 '{{SAMPLE_ENDPOINT}}': SAMPLE_ENDPOINT, '{{SAMPLE_ACTION}}': SAMPLE_ACTION,
                                 '{{SAMPLE_NEXT}}': SAMPLE_NEXT.replace('homepage.html', page_name), '{{SAMPLE_PRODUCTS}}': sample_list,
                                 '{{SAMPLE_PICKER}}': sample_picker, '{{PCARD}}': '' if SHELF_VIEW in ('bar', 'case') else card_dialog(), **quick_call(), '{{GRID}}': '\n'.join(grid), '{{TRENDING}}': trending, '{{SHELVES}}': shelves,
-                                '{{CASE_STRIP}}': case_strip,
+                                # #story's two before/after stacks: the same pair about.html carries, with the
+                                # section's own heading over them instead of its "His and hers"
+                                '{{STORY_PROOF}}': proof_wall(title=None),
                                 **bar_bits}).items():
         out = out.replace(k, v)
     left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', out)))

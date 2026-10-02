@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=bbce1222">
+<link rel="stylesheet" href="style.css?v=406105e8">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -510,9 +510,9 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    in view. That is the calculator and the consult's booking UI on the homepage — the form
    and, once it takes the form's place, the calendar. Not the whole consult section: it sits
    directly under the calculator, so watching all of it would put the tab away across the
-   offer and the disclosure, which is where the visitor decides. Peter's story (#story) is
+   offer and the disclosure, which is where the visitor decides. Their story (#story) is
    not watched either: the tab rides over it, except while the story's own "Book a free call"
-   is up (.st-book: the story parks it off its stage while its beat is not). The form is hidden (no box, so no intersection) once
+   is up (.st-book). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
    which sit where the tab does on a phone and go to the same places, "The game plan"'s "Ask
    for a free sample" (#how-go), the quick-call buttons (.q-go) and the sample form's Next and Send
@@ -1867,18 +1867,21 @@ if(mcForm){
    2026-10-01: a visitor who has loaded nothing is past it before it can say anything, and the pinned
    strip is the part they do see), and
    named in the call form's note ("Interested in: ..."), only while that note is empty or still says
-   exactly what the site last put there. Through the story's stage (#st-run) the pinned bar is Peter's
-   instead, and from the moment the stage lets go ("That's my stack" coming up) it is the visitor's again: the story
-   block below loads his five plates as its pack beats go by (LB.peter), and scrolling back takes them
-   off. Plates slide on in 300ms (style.css); under reduced motion they are simply there, and the
-   story's plates go on as each pack beat reaches the middle of the screen.
-   The pinned strip is a reward, not a fixture: it is not there until the first plate lands (or
-   the stage starts, for Peter's), and it goes again when the last plate comes off, outside the stage.
+   exactly what the site last put there. The strip is the visitor's own stack and nothing else.
+   It had a second mode until 2026-10-01: through the story's scroll-scrubbed stage it carried Peter's
+   five plates instead and counted them on ("Peter's stack · 3 of 5"), on two IntersectionObserver
+   lines that watched the stage hold the window. Peter replaced that stage with a plain section, so
+   there is no longer anything that could load his plates, and the mode went with it — the second bar,
+   its captions, and the lines that switched between them. Plates slide on in 300ms (style.css); under
+   reduced motion they are simply there.
+   The pinned strip is a reward, not a fixture: it is not there until the first plate lands, and it
+   goes again when the last plate comes off.
    html.has-stack says a stack exists, so the anchors' offset (scroll-padding-top in style.css) counts
    the strip only when it will be there. The rack's three-step guide follows the visitor (1 until a
    plate is open, 2 while one is, 3 once one is loaded); under "Build yours." their own stack stands
-   next to Peter's; the product card can load its shelf's plate; and the sample's "I've had my eye on"
-   blank is offered the loaded plates' shelves (up to three), on the same terms as the call form's note. */
+   next to the five shelves the story names; the product card can load its shelf's plate; and the
+   sample's "I've had my eye on" blank is offered the loaded plates' shelves (up to three), on the
+   same terms as the call form's note. */
 var LB=null;
 (function(){
   var pin=$('#lbpin');
@@ -1887,7 +1890,6 @@ var LB=null;
       rack=$('#rack'),plates=rack?$$('.rk-plate',rack):[],panels=plates.map(function(b){return $('#'+b.getAttribute('aria-controls'))}),
       loads=rack?$$('.rk-load',rack):[],NAME={},RANK={},stack=[],sel=-1,MS=320,
       youBars=$$('.bb-you'),capYou=$('.lbc-you',pin),capNew=$('.lbc-ynew',pin),
-      pBar=$('.bb-peter',pin),pCaps=$$('.lbc-p',pin),pNews=$$('.lbc-pnew',pin),PC=pNews.map(function(e){return e.getAttribute('data-cat')}),
       pinYou=$('.bb-you',pin),COL={},steps=$$('#rk-guide li'),
       mys=$('#mys-you'),mysHas=mys&&$('.mys-has',mys),mysNone=mys&&$('.mys-none',mys),mysN=mys&&$('.mys-n',mys),mysKey=mys&&$('.mys-ykey',mys),
       cLoad=$('#pcard-load'),cCat='',pdlg=$('#pcard');
@@ -1902,7 +1904,7 @@ var LB=null;
   }
   /* the newest plate's outline and its name, up for a moment and gone. On a phone's one-row strip
      the name takes the caption's place: the count goes, the name comes, and back, never both at once */
-  var phone=matchMedia('(max-width: 767px)'),whos=$$('.lbc-who',pin);
+  var phone=matchMedia('(max-width: 767px)');
   function flash(els){
     els.forEach(function(el){
       if(!el||!el.animate)return;
@@ -1989,7 +1991,7 @@ var LB=null;
     var i=stack.indexOf(c),on=i<0;
     if(on)stack.push(c);else stack.splice(i,1);
     save();paint(on?c:null);noteDue=true;
-    doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:on?'clank':'unclank'}));   /* a visitor's plate only: the story's are silent */
+    doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:on?'clank':'unclank'}));   /* the visitor's own plate, loaded by hand */
     say(NAME[c]+(on?' is on the bar. ':' is off the bar. ')+(stack.length?count(stack.length)+'.':'Nothing else is on it.'));
   }
   if(cLoad)cLoad.addEventListener('click',function(){if(cCat&&stack.indexOf(cCat)<0)toggle(cCat)});
@@ -2096,545 +2098,23 @@ var LB=null;
     sProd.dispatchEvent(new Event('change',{bubbles:true}));   /* a flagged blank re-checks, as a picked suggestion does */
   }
   if(sform)new IntersectionObserver(function(es){sIn=es[0].isIntersecting;if(sIn&&sDue)sampleFill()}).observe(sform);
-  /* the pinned bar: once the hero has gone under the masthead, and only with a plate on it or with
-     the story's stage under it (Peter's). The stage (#st-run), not all of #story, and only while it
-     still holds the window: it starts when the stage's top reaches the strip's foot, and it ends as
-     soon as the stage's foot comes up off the window's foot, which is the moment the run is over and
-     "That's my stack" (#my-stack, straight after it, with the same five plates) starts coming up.
-     It used to end only once the stage's foot had gone up past the strip, so "Peter's · 5 of 5" hung
-     over the whole of that band's top on its way in. From there it is the visitor's again, or no strip
-     for a visitor with no stack. When it comes up its contents are set at once, not faded (.snap), so
-     it never arrives showing the other stack; when it goes it keeps what it showed, so nothing changes
-     on the way out. With it up at the stage's edges the two stacks cross-fade as before. */
-  var hero=$('.hero'),story=$('#story'),edge=$('#st-run')||story,lineIO=null,footIO=null,atTop=false,atFoot=false,heroGone=!hero,inStory=false;
+  /* the pinned bar: once the hero has gone under the masthead, and only with a plate on it. It also
+     came up over the story's scroll-scrubbed stage, carrying Peter's five plates, on two one-pixel
+     IntersectionObserver lines that watched the stage hold the window; the stage went on 2026-10-01
+     and both lines went with it. When it comes up its contents are set at once, not faded (.snap). */
+  var hero=$('.hero'),heroGone=!hero;
   function pinSet(){
-    var up=heroGone&&(inStory||stack.length>0);
-    html.classList.toggle('pin-you',up&&!inStory);   /* a phone's bottom tab steps aside while the strip holds the visitor's stack */
+    var up=heroGone&&stack.length>0;
+    html.classList.toggle('pin-you',up);   /* a phone's bottom tab steps aside while the strip is up */
     if(!up){pin.classList.remove('on');return}
-    if(pin.classList.contains('on')){pin.classList.toggle('is-peter',inStory);return}
-    pin.classList.add('snap');pin.classList.toggle('is-peter',inStory);pin.classList.add('on');
+    if(pin.classList.contains('on'))return;
+    pin.classList.add('snap');pin.classList.add('on');
     requestAnimationFrame(function(){requestAnimationFrame(function(){pin.classList.remove('snap')})});
   }
   if(hero)new IntersectionObserver(function(es){heroGone=!es[0].isIntersecting;pinSet()},
     {rootMargin:'-'+($('.mast')?$('.mast').offsetHeight:60)+'px 0px 0px 0px'}).observe(hero);
-  function line(){   /* two one-pixel lines: the stage must cross the one at the pinned bar's foot and still reach the one at the window's foot */
-    if(lineIO)lineIO.disconnect();
-    if(footIO)footIO.disconnect();
-    if(!edge)return;
-    var y=($('.mast')?$('.mast').offsetHeight:60)+pin.offsetHeight,b=Math.max(0,innerHeight-y-1);
-    lineIO=new IntersectionObserver(function(es){atTop=es[0].isIntersecting;inStory=atTop&&atFoot;pinSet()},{rootMargin:'-'+y+'px 0px -'+b+'px 0px'});
-    footIO=new IntersectionObserver(function(es){atFoot=es[0].isIntersecting;inStory=atTop&&atFoot;pinSet()},{rootMargin:'-'+Math.max(0,innerHeight-1)+'px 0px 0px 0px'});
-    lineIO.observe(edge);footIO.observe(edge);
-  }
-  line();
-  var rsz=0;addEventListener('resize',function(){clearTimeout(rsz);rsz=setTimeout(function(){line();LB.measure()},150)});
-  /* Peter's bar, for the story: ps[j] is 0..1, how far his j-th plate is on. Transform and opacity
-     only, each written only when it changes; the caption's count switches when a plate is half on. */
-  var st=0,PW=1.22,OFF=.85,keys={},lastN=-1,pl={},pr={};   /* --st, --pw, --off: read off the bar in measure() */
-  $$('.bb-l .bb-p',pBar).forEach(function(p){pl[p.getAttribute('data-cat')]=p});
-  $$('.bb-r .bb-p',pBar).forEach(function(p){pr[p.getAttribute('data-cat')]=p});
-  var NP=$$('.bb-r .bb-p',pBar).length;   /* plates a sleeve holds: an unloaded one waits --off of a step past the last (style.css) */
-  function wr(el,k,tf,op){var v=tf+'|'+op;if(keys[k]===v)return;keys[k]=v;el.style.transform=tf;el.style.opacity=op}
-  LB={cats:PC,
-    card:function(c){cCat=c;cardSync()},
-    measure:function(){var cs=getComputedStyle(pBar);st=parseFloat(cs.getPropertyValue('--st'))*parseFloat(cs.fontSize);
-      PW=parseFloat(cs.getPropertyValue('--pw'));OFF=parseFloat(cs.getPropertyValue('--off'));keys={}},   /* the bar's own geometry, style.css */
-    /* where plate c's centre sits on the pinned bar once it is down (the viewport's frame), and its
-       height; the pinned bar's top and foot, and where its "+ name" caption starts */
-    target:function(c){
-      var p=pr[c],sl=p.parentNode.getBoundingClientRect(),fs=parseFloat(getComputedStyle(pBar).fontSize),
-          tf=getComputedStyle(pin).transform,ty=tf&&tf!=='none'?new DOMMatrixReadOnly(tf).m42:0,
-          h=parseFloat(p.style.getPropertyValue('--s'))*10*fs,pb=pin.getBoundingClientRect(),cap=pNews[PC.indexOf(c)];
-      return {x:sl.left+(.15+PW/2)*fs+RANK[c]*st,y:sl.top+sl.height/2-ty,h:h,
-              top:pb.top-ty,bot:pb.bottom-ty,cap:cap?cap.getBoundingClientRect().left:sl.left};
-    },
-    peter:function(ps){
-      var n=0;
-      PC.forEach(function(c,j){
-        var p=ps[j]||0,d=(RANK[c]+(1-p)*(NP+OFF-RANK[c]))*st,op=p>=1?'1':Math.min(1,p*1.6).toFixed(3);
-        wr(pl[c],'l'+c,'translate3d('+(-d).toFixed(1)+'px,0,0)',op);
-        wr(pr[c],'r'+c,'translate3d('+d.toFixed(1)+'px,0,0)',op);
-        if(p>=.5)n++;
-      });
-      if(n===lastN)return;
-      pCaps.forEach(function(e,i){e.style.opacity=i===n?'1':'0'});
-      hush(pNews.concat($$('.bb-ring',pBar),whos));
-      if(lastN>-1&&n>lastN&&n>0)flash([pNews[n-1]].concat(rings(pBar,PC[n-1])));
-      lastN=n;
-    }};
-  LB.measure();LB.peter([]);
+  LB={card:function(c){cCat=c;cardSync()}};
   paint(null);
-  /* no stage (reduced motion, or no IntersectionObserver-driven motion): his plates go on as each
-     pack beat reaches the middle of the screen, and come off as it goes back below it */
-  if(!html.classList.contains('motion')&&story){
-    var spacks=$$('.st-pack[data-cat]',story),tick=0;
-    var upd=function(){tick=0;var mid=innerHeight*.55,ps=[];
-      spacks.forEach(function(k){var j=PC.indexOf(k.getAttribute('data-cat'));
-        if(j>=0&&k.getBoundingClientRect().top<mid)ps[j]=1});
-      LB.peter(ps)};
-    addEventListener('scroll',function(){if(!tick)tick=requestAnimationFrame(upd)},{passive:true});
-    upd();
-  }
-})();
-
-/* Peter's story: nine beats on one stage that holds the window for the length of the run.
-   Where each beat is, and how far in or out of its turn, is a function of how far the run has
-   scrolled: scrolling back up plays it backwards. The stage follows the scroll
-   through an eased copy of it (each frame closes 18% of the gap, at most .14 of a unit, and
-   the loop runs until the two agree), so a flick that crosses two beats still plays both
-   swirls instead of cutting between them. Only the stage lags; the page scrolls as it always
-   does. The cap: the ease alone is front-loaded, and crossed a whole change in the first three
-   frames of a flick. Both it and the backlog clamp are shares of a UNIT, so they come down with it
-   and a flick still spends the same number of frames on each change however short the run is.
-   The script takes the section over (.is-live) only when motion is allowed; otherwise, and
-   until it does, the beats are a plain vertical sequence. Everything written per frame is
-   transform or opacity.
-   A pack drops from the camera: it starts at the lens, large and unseen, falls away onto the
-   stage and lands with a small squash while its line is read; then it shrinks up into its own
-   compartment of the case strip along the top (the #goals case in miniature: its shelf's
-   compartment, so the two hydration packs share one and two compartments stay empty), and at
-   the call the filled case rises into the place above the button. It only ever turns a few
-   degrees in its own plane, so a flat picture is never seen edge-on or mirrored; every pack's
-   data-tilt is 0, so that turn is the fall's lean alone and each one lands, and stands in the
-   group, upright. The photos of Peter do not move like that: they
-   rise in and fall away, and at the turn the after wipes in over the before. */
-(function(){
-  var run=$('#st-run');
-  if(!run||!html.classList.contains('motion'))return;
-  var sec=run.parentNode,stage=$('.st-stage',run),beats=$$('.st-beat',run),N=beats.length,
-      dusk=$('.st-dusk',run),sand=$('.st-sand',run),chalk=$('.st-chalk',run),
-      lampD=$('.st-lamp-dark',run),lampW=$('.st-lamp-warm',run);
-  /* How long each beat holds, and each change between two beats (T), in one unit. The run's
-     height in style.css sets the pace (at 390x664 a unit is about 307px); this sets the rhythm.
-     A change is 1.5 units, about 460px, so a swirl is long enough to be seen; every hold is
-     still at least 180px. The turn (the before becoming the after) holds longest, since the
-     wipe happens while it is up. The call holds longer still (2.0, ~690px at 390x844): it is the
-     moment that matters, and a ~700px flick through the end of the story should come to rest on
-     "Book a free call" rather than over it. The run in style.css grew with it (900 to 949lvh), so
-     every other beat keeps its pace. */
-  /* Three movements, and the whole story in 9.1 units where it was 16.7 (Peter, twice: "it just
-     feels like it takes too long"). Nothing here waits for a line to be read any more, because every
-     line is already up in the caption strip and two or three of them are legible at once: a hold is
-     only the moment a picture stands on its own before the next change starts. So the holds are short
-     (a pack .25 of a unit) and the changes are .45-.6, which is still long enough to watch a pack
-     fall. The two that stay long are the turn (.85, the wipe plays inside it) and the call (2.6,
-     before it is measured: a ~700px flick through the end of the story must come to rest on
-     "Book a free call" rather than over it). TT[i] is the change INTO beat i.
-     UNIT is what the same beats cost in scroll: it was .33 of the stage (~278px at 390x844) and it is
-     .19 (~160px) since 2026-10-01, which is the whole of the story's second shortening (Peter: "maybe
-     the scroll should be a little faster for supplements or a little shorter on the explanation of how
-     I got into this... it feels like a freaking journey for them to actually get where they want to
-     go"). Nothing about the stage changed: every beat, every hold and every change is the same share
-     of the run as before, and the run is a quarter shorter (2976 -> 2208 at 390x844, 3068 -> 2249 at
-     1440x900). It plays the same, too — the ease's step cap and its backlog clamp are both .14 and 3.5
-     of a UNIT, so they shrink with it and a flick still spends the same number of FRAMES on each
-     change; only a slow, deliberate scroll gets there sooner. The beats themselves were left alone:
-     cutting one would have had to fold two of his captions into one block, and two of his lines will
-     not stand in the strip at once on a phone (the strip holds ~220px of caption clear of its fades;
-     his shortest pair comes to ~257px), so a line of his would have been read through the top fade.
-     His words set the floor here, not the pace. */
-  /* The call's hold is no longer a fixed 2.6 units: it is set per resize (measure) to just what the
-     flick needs. Once the run ends the stage scrolls away with the button still whole on screen for
-     a while (the button's top minus the masthead and the pinned bar: ~480px at 390x844), so the hold
-     only has to make up the rest of FLICK, never less than CALLMIN units. At 390x844 that is ~1.1
-     units (~300px) where it was 723px, and the run is sized to match (UNIT: a unit stays a third of
-     the stage, ~278px), so every other beat keeps its pace. The 2.6 below is only its value before
-     the first measure. */
-  var HOLD=[.45,.25,.25,.25,.25,.85,.3,2.6],TT=[0,.6,.45,.45,.45,.6,.45,.9],at=[],L=0,   /* his before, four packs, the turn, his family, the call */
-      UNIT=.19,FLICK=780,CALLMIN=.8;
-  function Tn(i){return TT[i]||1.5}
-  beats.forEach(function(b,i){if(i)L+=Tn(i);at.push(L);L+=HOLD[i]||1});
-  var TURN=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('turn'),
-      WARM=beats.map(function(b){return b.classList.contains('st-warm')}),
-      SAND=WARM.indexOf(true),LIGHT=WARM.lastIndexOf(true)+1,   /* the packs are on the sand; the chalk comes back with the beat after them (the turn) */
-      CALL=beats.map(function(b){return b.getAttribute('data-kind')}).indexOf('text');   /* the ask, last */
-  var parts=beats.map(function(b){
-    return {b:b,kind:b.getAttribute('data-kind'),art:$('.st-art',b),copy:$('.st-copy',b),
-            book:$('.st-book',b),warm:b.classList.contains('st-warm'),
-            packs:$$('.st-pack',b).map(function(k,j){
-              /* a pair comes one after the other; the arc in the text beat, one after another */
-              /* where it comes to rest: its tilt (0 on every pack now — they stand straight in the
-                 group; the lean below is the fall's alone), its offset across the stage (% of its
-                 width) and its size */
-              return {pack:k,img:$('img',k),shade:$('.st-shade',k),tilt:+k.getAttribute('data-tilt')||0,
-                      rx:+k.getAttribute('data-x')||0,rs:+k.getAttribute('data-scale')||1,ji:j,
-                      off:j*(b.getAttribute('data-kind')==='prod'?.15:.12)};
-            }),
-            wipe:$('.st-wipe',b),win:$('.st-wipe-in',b),arcbar:$('.st-arc .bb',b),vis:null,on:null,keys:{}};
-  });
-  var w=0,sh=0,raf=0,near=false,snap=true,topS=0,D=Math.PI/180,lampX=null;
-  function clamp(x){return x<0?0:x>1?1:x}
-  function smooth(x){return x*x*(3-2*x)}
-  function out3(x){return 1-Math.pow(1-x,3)}
-  function f(n,d){return n.toFixed(d)}
-  function put(p,el,name,tf,op){        /* write only what changed */
-    if(!el)return;
-    var k=tf+'|'+op;
-    if(p.keys[name]===k)return;
-    p.keys[name]=k;el.style.transform=tf;el.style.opacity=op;
-  }
-  /* The stack: every pack of the five pack beats (six, with the pair), in order, each bound for
-     the compartment of the shelf its beat links to, and the place above the call the filled case
-     rises into. Where each pack rests, where it stands in its compartment and where that place is
-     are measured here once per resize: the packs and the place from boxes nothing transforms, the
-     case from its offsets (the frame does transform it); a frame only moves pictures. */
-  var ITEMS=[],arcEl=CALL<N?$('.st-arc',beats[CALL]):null,rowEl=$('.st-row',run),
-      wells=$$('.stc-bay',rowEl),cats=wells.map(function(b){return b.getAttribute('data-cat')}),
-      geo=null,rowA=0,rowZ=0,rowIn=0,cp={keys:{}},C={x0:0,y0:0,s:1,dx:0,dy:0,op:0};
-  /* the bar theme: no case strip here; the pinned bar (LB, above) is the stack. Each pack's plate
-     slides onto the pinned bar as the pack lands and its words come up, and is on by the time they
-     are (its beat's hold), so the strip counts the pack that is on the stage. The pack itself stays
-     on the stage (the pile, below): each one after it gathers round it, and at the call they clear. */
-  var BARM=!rowEl&&!!LB,PB=[],PS=null,SLOT=null;
-  if(BARM)cats=LB.cats;
-  parts.forEach(function(p,i){
-    if(p.kind!=='prod')return;
-    /* each pack names its own shelf (data-cat in the template, checked against PETER by the build):
-       one beat can land packs for two shelves, as the closing line's pair does */
-    p.packs.forEach(function(k){k.g=ITEMS.length;k.c=cats.indexOf(k.pack.getAttribute('data-cat'));k.bi=i;ITEMS.push(k)});
-  });
-  ITEMS.forEach(function(k){   /* packs that share a compartment stand side by side in it */
-    var mates=ITEMS.filter(function(o){return o.c===k.c});
-    k.n=mates.length;k.j=mates.indexOf(k);
-  });
-  parts.forEach(function(p,i){if(p.kind==='prod')PB.push(i)});
-  ITEMS.forEach(function(k){k.pb=PB.indexOf(k.bi)});
-  /* The pile (the bar theme): each pack drops in and stays. Once the next beat starts, the packs
-     already in gather round the one arriving, on the same floor: the newest nearest it and in front,
-     each one before a step further out, higher and smaller, as a group shot stands; the first one
-     side, the next the other, and so on. Newer packs sit later in the page, so they are drawn over the older, as they stand in
-     front of them. A tier: its distance out from the arriving pack's edge, its rise off the floor
-     and its size, all in the art box's height; the whole group is centred in the hero column and
-     scaled to fit it. */
-  var TIER=[{o:.1,r:.06,z:.56},{o:.24,r:.15,z:.47},{o:.36,r:.26,z:.4}];
-  /* The caption strip under the shelf (Peter, 2026-09-28: "as we scroll, it needs to be a lot easier
-     to read... maybe I can read it in one go"). His lines stand in one column in the track; the strip
-     shows about three of them at a time and the track slides so that the caption belonging to the beat
-     on the shelf starts just below the strip's top, about a fifth of the way down, so the tail of the
-     one before is still up there and the one after it is read below — and a caption too tall for that
-     gets as much of the lead as still lets it fit whole, so the line being read is never clipped on a
-     short phone. ci is where the reading line is, measured in captions: caption q is exactly on it at
-     the middle of its beat's hold, and between two of those the track is always moving, slowly near a
-     caption and quickly between them — nothing waits and nothing snaps. The track's offsets are
-     measured once per resize; per frame it is one transform on the track, the strip's own opacity, and
-     a class on the caption that is on the line (so its colour is written only when the line moves). */
-  var rail=$('.st-caprail',run),track=rail&&$('.st-captrack',rail),caps=rail?$$('.st-cap',rail):[],
-      CAPO=[],CAPA=[],CAPT=[],CAPH=[],CAPF=48,CAPR=0,capNow=-1,railOff=null,rk={keys:{}},capk=caps.map(function(){return {keys:{}}});
-  /* where each caption sits on the run: the middle of the hold of the beat it belongs to (the beats
-     carrying data-cap, in order: his before, the four packs, the turn. His family beat has no caption
-     of its own — the third movement's line is already up when it arrives, and stays.) */
-  var CAPB=[];beats.forEach(function(b,i){if(b.hasAttribute('data-cap'))CAPB.push(i)});
-  CAPA=CAPB.slice(0,caps.length).map(function(i){return at[i]+(HOLD[i]||1)*.5});
-  /* His photos on a phone (Peter, 2026-10-01: "the picture is too small"). They stand above the strip, and
-     while one is up the strip's top is empty: nothing comes before "Fatigue was a constant.", and the line
-     under the turn and his family is the last. So the captions that belong to a photo beat (PHC) read on a
-     line as low as the tallest of them can stand whole (never higher than the usual one), and measure sizes
-     the photos down to GAP above it (--st-ph, --st-fh in style.css). While a photo is up, a caption before
-     its own one fades as it rises past the photo's foot (PHY, in the strip's px), so no line is ever seen
-     over his picture. Desktop (the strip beside the photo) is untouched: PHY stays off. */
-  var PHONE=matchMedia('(max-width:767px)'),GAP=18,PHY=-1,
-      PHB=[],PHQ=[],PHC=[],opEl=$('.st-open .st-photo',run);
-  beats.forEach(function(b,i){var k=b.getAttribute('data-kind');if(k==='photo'||k==='turn'){
-    var q=-1;CAPB.forEach(function(j,c){if(j<=i)q=c});PHB.push(i);PHQ.push(q);if(q>=0&&PHC.indexOf(q)<0&&CAPB[q]===i)PHC.push(q)}});
-  function sized(ph,fh){   /* written only when it changes, so a measure that finds the same sizes costs nothing */
-    if(stage.style.getPropertyValue('--st-ph')!==ph)stage.style.setProperty('--st-ph',ph);
-    if(stage.style.getPropertyValue('--st-fh')!==fh)stage.style.setProperty('--st-fh',fh);
-  }
-  /* his plates: each pack's shelf goes onto the pinned bar over the last part of the change into its
-     beat, once the pack has landed; a second pack in the same beat follows a slide and a half later,
-     into its hold, so the strip counts them one at a time (the closing line's pair reads 4 of 5 for
-     ~85px of scroll before it reads 5 of 5) and his five are all on by the end of the strip. */
-  var PLA=[];
-  if(BARM)ITEMS.forEach(function(k){
-    if(k.c<0)return;
-    var wv=.3*Tn(k.bi);
-    PLA.push({c:k.c,t0:at[k.bi]-wv+k.ji*1.5*wv,w:wv});
-  });
-  function measure(){
-    w=stage.offsetWidth;sh=stage.offsetHeight;
-    if(track){
-      /* the strip's soft edges (--cap-fade in style.css, a line and a half of its type): the caption on
-         the reading line stands clear of both, and each caption's own opacity (frame) is gone before
-         it is more than half into one, so nothing is ever read through the edge */
-      var rh=CAPR=rail.clientHeight;CAPF=parseFloat(getComputedStyle(rail).getPropertyValue('--cap-fade'))||48;
-      CAPT=caps.map(function(c){return c.offsetTop});CAPH=caps.map(function(c){return c.offsetHeight});
-      var lead=caps.map(function(c,q){return Math.max(6,Math.min(Math.max(CAPF,rh*.22),rh-CAPH[q]-CAPF))}),ph='',fh='';
-      PHY=-1;
-      if(PHONE.matches&&PHC.length&&opEl){   /* a photo beat's caption reads as low as the tallest of them stands whole */
-        var LP=Math.min.apply(null,PHC.map(function(q){return rh-CAPH[q]-CAPF}));
-        PHC.forEach(function(q){lead[q]=Math.max(lead[q],LP)});
-        var mat=parseFloat(getComputedStyle(opEl).getPropertyValue('--mat'))||0,
-            pad=parseFloat(getComputedStyle(html).getPropertyValue('--pad'))||20,
-            top=opEl.offsetTop-mat,   /* the frame's top in its beat (the beat is its offsetParent, at the stage's top) */
-            foot=rail.offsetTop+Math.min.apply(null,PHC.map(function(q){return lead[q]}))-GAP,
-            h=Math.floor(Math.max(160,Math.min(foot-top-2*mat,(w-2*pad-2*mat)*4/3)));
-        ph=h+'px';fh=Math.floor(Math.min(400,h+2*mat,(w-2*pad)*5/4))+'px';   /* the family: 320x400, never enlarged past 1:1 */
-        PHY=top+h+2*mat-rail.offsetTop;
-      }
-      sized(ph,fh);
-      CAPO=caps.map(function(c,q){return CAPT[q]-lead[q]});
-    }
-    if(CALL===N-1){   /* the call's hold (HOLD above): what FLICK needs beyond the button's own way off the screen */
-      var bk=parts[CALL].book,cs=getComputedStyle(html),tail=0,U=UNIT*sh;
-      for(var e=bk;e&&e!==stage;e=e.offsetParent)tail+=e.offsetTop;   /* its top on the stage, at rest (offsets ignore the transforms) */
-      if(bk)tail-=(parseFloat(cs.getPropertyValue('--mast'))||0)+(parseFloat(cs.getPropertyValue('--pin'))||0);
-      HOLD[CALL]=Math.max(CALLMIN,(FLICK-tail)/U);L=at[CALL]+HOLD[CALL];
-      var rhgt=Math.round(sh+U*L)+'px';if(run.style.height!==rhgt)run.style.height=rhgt;
-    }
-    if(BARM){   /* the pile: each pack beat's floor (its art box's foot), and every pack's pose at each beat from its own on */
-      var s0=stage.getBoundingClientRect(),
-          its=ITEMS.map(function(k){var b=k.pack.getBoundingClientRect();
-            return {cx:b.left+b.width/2-s0.left,cy:b.top+b.height/2-s0.top,B:Math.min(b.width,b.height)||1,rp:k.rx*w/100*.3}}),
-          AN=PB.map(function(i,c){var a=parts[i].art.getBoundingClientRect(),hr=$('.st-hero',parts[i].b).getBoundingClientRect(),
-            A=a.height||1,x0=a.left+a.width/2-s0.left,hw=0;
-            ITEMS.forEach(function(k,g){if(k.pb===c){var I=its[g];hw=Math.max(hw,(Math.abs(I.cx+I.rp-x0)+.3*I.B*k.rs)/A)}});
-            return {x:x0,x0:x0,b:a.bottom-s0.top,A:A,W:hr.width,hw:hw}});
-      /* where each gathered pack stands at beat c: its side (by the order they came in), and its tier
-         (by how many newer ones share that side) */
-      SLOT=function(k,c){
-        var side=k.g%2?1:-1,r=0;
-        ITEMS.forEach(function(o){if(o.pb<c&&o.g>k.g&&(o.g%2?1:-1)===side)r++});
-        return {s:side,t:TIER[Math.min(r,2)]};
-      };
-      AN.forEach(function(a,c){   /* the group's reach either side, and so where it centres and its scale, at beat c */
-        var lo=a.hw,hi=a.hw;
-        ITEMS.forEach(function(k){if(k.pb<c){var S=SLOT(k,c),e=a.hw+S.t.o+.3*S.t.z;if(S.s<0)lo=Math.max(lo,e);else hi=Math.max(hi,e)}});
-        a.f=Math.min(1,(a.W/2-6)/((lo+hi)/2*a.A));
-        a.x+=(lo-hi)/2*a.A*a.f;
-      });
-      geo={items:ITEMS.map(function(k,g){var I=its[g],poses=[];
-        for(var c=0;c<PB.length;c++){
-          if(c<k.pb){poses.push(null);continue}
-          var a=AN[c],X,Y,s,rot;
-          if(c===k.pb){X=a.x+(I.cx+I.rp-a.x0)*a.f;Y=a.b+(I.cy-a.b)*a.f;s=k.rs*a.f;rot=k.tilt}   /* its own beat: its rest, scaled with the group */
-          else{var S=SLOT(k,c),Z=S.t.z*a.A*a.f;X=a.x+S.s*(a.hw+S.t.o)*a.A*a.f;Y=a.b-S.t.r*a.A*a.f-Z/2;s=Z/I.B;rot=k.tilt*.35}
-          poses.push({x:X-I.cx,y:Y-I.cy,s:s,r:rot});
-        }
-        return {B:I.B,poses:poses}})};
-      return;
-    }
-    var s=stage.getBoundingClientRect(),rx=rowEl.offsetLeft,ry=rowEl.offsetTop,rw=rowEl.offsetWidth,rh=rowEl.offsetHeight,
-        a=arcEl&&arcEl.getBoundingClientRect();
-    var bays=wells.map(function(b){var e=$('.stc-well',b);   /* each well's offsets are the case's own (it is their offsetParent) */
-      return {x:rx+e.offsetLeft,y:ry+e.offsetTop,w:e.offsetWidth,h:e.offsetHeight}});
-    geo={x0:rx+rw/2,y0:ry+rh/2,
-      /* the place above the call: the case fits it, centred, never past its own width */
-      Z:a&&a.width?Math.min(a.width/rw,a.height/rh):1,ax:a?a.left+a.width/2-s.left:0,ay:a?a.top+a.height/2-s.top:0,
-      items:ITEMS.map(function(k){var b=k.pack.getBoundingClientRect(),B=bays[k.c]||bays[0],
-          /* a pack square stands on its baseline (91% down); it fills its well and may stand a little proud of it */
-          S=Math.min(B.w*1.22,B.h*1.2)*(k.n>1?.8:1),off=k.n>1?(k.j-(k.n-1)/2)*B.w*.36:0;
-        return {cx:b.left+b.width/2-s.left,cy:b.top+b.height/2-s.top,B:b.width||1,
-                tx:B.x+B.w/2+off,ty:B.y+B.h-2-S*.41,S:S}})};
-  }
-  /* Drop from the camera, then into the stack. u: 0..1 through its arrival (it lands at .8); q:
-     0..1 through its leaving. It starts right at the lens: 2.4 times its size, invisible, a little
-     high; it falls away onto the stage, shrinking faster as it goes, as a dropped thing does, then
-     lands with a small squash (a 5% dip in size) and settles, and its shadow grows and darkens as it
-     touches down. Leaving, it shrinks and glides up into its slot in the row, on a small arc; it
-     stays there while the rest of the stack arrives, rides the row up into the arc at the call, and
-     lifts away from there. */
-  var DROP={from:2.4,lift:.08,dip:.05,lean:8,hop:22};
-  function lerp(a,b,t){return a+(b-a)*t}
-  /* the pile's pack: its drop onto its rest in its own beat, then its place in the group, beat by beat
-     (PS: which beat's group is forming, how far, and how far the group has cleared for the call) */
-  function pile(p,k,i,u){
-    var G=geo&&geo.items[k.g];
-    if(!G||!PS)return 0;
-    var x,y,s,rot,rx=0,op=1,near=1,land=clamp(u/.8),bump=Math.sin(Math.PI*clamp((u-.8)/.2));
-    if(PS.c<=k.pb){                                   /* its own beat: from the lens onto its rest */
-      var R=G.poses[k.pb],g=land*land;
-      s=u<.8?R.s*(1+(DROP.from-1)*(1-g)):R.s*(1-DROP.dip*bump);
-      x=R.x;y=R.y-DROP.lift*sh*(1-g);rot=R.r+DROP.lean*(1-g);rx=10*(1-g);
-      op=smooth(clamp(land/.6));near=Math.pow(clamp((u-.55)/.25),2);
-    }else{                                            /* gathered: from where it stood to its place in the new group */
-      var A=G.poses[PS.c-1],Z=G.poses[PS.c],e=PS.g;
-      x=lerp(A.x,Z.x,e);y=lerp(A.y,Z.y,e)-Math.sin(Math.PI*e)*DROP.hop*.4;s=lerp(A.s,Z.s,e);rot=lerp(A.r,Z.r,e);bump=0;
-    }
-    if(PS.cl>0){op*=1-PS.cl;s*=1-.12*PS.cl;y+=PS.cl*.04*sh}   /* the group clears for the call */
-    put(p,k.img,'i'+i,mv(x,y,rx,rot,s),f(op,3));
-    /* its shadow, under it wherever it stands (its box's foot is .41 of the square below its middle) */
-    put(p,k.shade,'s'+i,'translate3d('+f(x,1)+'px,'+f(y+.41*G.B*(s-1),1)+'px,0) scale('+f(s*(.55+.45*near+.08*bump),3)+')',
-      f(Math.min(1,near*(1+.25*bump))*op*(PS.c<=k.pb?1:.8),3));
-    return PS.c<=k.pb&&PS.cl<1?near:0;
-  }
-  /* a photo beat's rise (pe) and fall (pq): the first comes up with the stage, the others in the last part
-     of the change into them, and each goes in the first part of the change out */
-  function photoIn(i,x,arrive){
-    var kin=i?clamp((x-at[i]+Tn(i))/Tn(i)):0,kout=i<N-1?clamp((x-at[i]-(HOLD[i]||1))/Tn(i+1)):0;
-    return [i?smooth(clamp((kin-.45)/.55)):smooth(arrive),smooth(clamp(kout/.35))];
-  }
-  function mv(x,y,rx,rot,s){return 'translate3d('+f(x,1)+'px,'+f(y,1)+'px,0) perspective(900px) rotateX('+f(rx,2)+'deg) rotate('+f(rot,2)+'deg) scale('+f(s,3)+')'}
-  function drop(p,k,i,u,q){
-    var G=geo&&geo.items[k.g],land=clamp(u/.8),g=land*land,rp=k.rx*w/100,x,y,s,rot,rx=0,op=1,near=0;
-    if(!G)return 0;
-    /* its place in its compartment, wherever the case is now, as a move from its rest */
-    var sx=C.x0+(G.tx-C.x0)*C.s+C.dx-G.cx,sy=C.y0+(G.ty-C.y0)*C.s+C.dy-G.cy,sS=G.S*C.s/G.B;
-    if(q<=0){
-      s=u<.8?k.rs*(1+(DROP.from-1)*(1-g)):k.rs*(1-DROP.dip*Math.sin(Math.PI*clamp((u-.8)/.2)));
-      x=rp;y=-DROP.lift*sh*(1-g);rot=k.tilt+DROP.lean*(1-g);rx=10*(1-g);
-      op=smooth(clamp(land/.6));near=Math.pow(clamp((u-.55)/.25),2);   /* from nothing at the lens to solid 60% of the way down */
-    }else if(q<1){
-      var e=smooth(q);
-      x=lerp(rp,sx,e);y=lerp(0,sy,e)-Math.sin(Math.PI*e)*DROP.hop;s=lerp(k.rs,sS,e);rot=lerp(k.tilt,0,e);
-    }else{
-      x=sx;y=sy;s=sS;rot=0;op=C.op;                     /* in its compartment: it goes where the case goes */
-    }
-    put(p,k.img,'i'+i,mv(x,y,rx,rot,s),f(op,3));
-    /* the shadow keeps to the floor under its rest, grows and darkens on touchdown, and goes with it */
-    put(p,k.shade,'s'+i,'translate3d('+f(rp,1)+'px,0,0) scale('+f(k.rs*(.55+.45*near+.08*Math.sin(Math.PI*clamp((u-.8)/.2))),3)+')',
-      f(Math.min(1,near*(1+.25*Math.sin(Math.PI*clamp((u-.8)/.2))))*(1-clamp(q*3)),3));
-    return near*(1-q);
-  }
-  function frame(){
-    raf=0;
-    var r=run.getBoundingClientRect(),vh=innerHeight||1,span=Math.max(1,r.height-sh);
-    /* the eased copy of the run's position: everything below is read off it, so the wipe, the
-       ground and the arrival move together. A jump (a link, a reload, the band coming near)
-       snaps it instead. */
-    if(snap){topS=r.top;snap=false}
-    else{
-      var B=3.5*span/L;                                 /* never more than about 950px behind the finger at 390 (a unit is ~271px), so one 900px flick still plays whole */
-      if(r.top-topS>B)topS=r.top-B;else if(topS-r.top>B)topS=r.top+B;
-      var d=(r.top-topS)*.18,cap=.14*span/L;topS+=d>cap?cap:d<-cap?-cap:d}   /* and never more than .14 of a unit a frame, so each change in a flick still gets its frames */
-    var still=Math.abs(r.top-topS)*L/span<.002;
-    if(still)topS=r.top;
-    var top=topS,
-        x=clamp(-top/span)*L,
-        arrive=clamp((vh-top)/(vh*.8)),                /* the first photo comes up with the stage, */
-        settle=clamp(1-top/(vh*.3)),                   /* the opening shade lifts as the stage settles */
-        wipe=TURN<0?0:smooth(clamp((x-at[TURN]-.1)/((HOLD[TURN]||1)*.55))),
-        best=-1,bestV=.5,lit=[0,0],restV=0,restX=0,
-        kc=CALL<N?clamp((x-at[CALL]+Tn(CALL))/Tn(CALL)):0,zc=CALL<N-1?clamp((x-at[CALL]-(HOLD[CALL]||1))/Tn(CALL+1)):0;
-    rowA=clamp((kc-.1)/.55);rowZ=zc;
-    if(BARM&&PB.length){   /* the group forms in the first part of each change between two packs, while the words are out */
-      var pc=0,pg=1,il=PB[PB.length-1];
-      for(var m=1;m<PB.length;m++){var ii=PB[m],gm=smooth(clamp((x-at[ii]+Tn(ii))/(.45*Tn(ii))));if(gm>0){pc=m;pg=gm}}
-      PS={c:pc,g:pg,cl:il<N-1?smooth(clamp((x-at[il]-(HOLD[il]||1))/(.45*Tn(il+1)))):0};
-    }                    /* the case rises into the place above the call, then lifts away */
-    if(track&&PB.length){   /* the caption strip: the track's place, and which caption is on the line */
-      var ci=0,fi=0,pv=0,pq=-1;
-      if(PHY>=0)PHB.forEach(function(i,n){   /* the photo up now (its own rise and fall, as below) and its caption */
-        var e=photoIn(i,x,arrive),v=Math.min(e[0],1-e[1]);if(v>pv){pv=v;pq=PHQ[n]}});
-      if(x>=CAPA[CAPA.length-1])ci=CAPA.length-1;
-      else if(x>CAPA[0])for(var cq=1;cq<CAPA.length;cq++){
-        if(x<CAPA[cq]){var ck=(x-CAPA[cq-1])/(CAPA[cq]-CAPA[cq-1]);ci=cq-1+(.4*ck+.6*smooth(ck));break}
-      }
-      fi=Math.floor(ci);
-      var co=fi>=CAPO.length-1?CAPO[CAPO.length-1]:lerp(CAPO[fi],CAPO[fi+1],ci-fi),
-          ri=smooth(clamp((arrive-.5)/.5)),              /* up with the stage as it arrives, so his first line is there with his before */
-          ro=CALL<N?smooth(clamp((x-at[CALL]+Tn(CALL))/(Tn(CALL)*.5))):0,   /* and away as the ask comes */
-          rv=Math.min(ri,1-ro);
-      put(rk,track,'track','translate3d(0,'+f(-co,1)+'px,0)','1');
-      put(rk,rail,'rail','translate3d(0,'+f((1-ri)*24,1)+'px,0)',f(rv,3));
-      /* the strip lies over the beats (style.css), so once it has gone its links must stop taking
-         taps: the ask's own button is under it */
-      var roff=rv<.05;if(roff!==railOff){railOff=roff;rail.classList.toggle('is-off',roff)}
-      /* each caption recedes on its own as it nears an edge of the strip: its opacity falls as its foot
-         goes into the top fade or its head passes the top edge, or as its head goes past the middle of
-         the bottom fade, so a line is never seen cut through (and the next caption, whose head sits in
-         the top of that fade on a phone, stays at its full colour, 5.6:1).
-         The caption on the reading line, and the one coming to it, are whole whatever their size. */
-      caps.forEach(function(c,q){
-        var a=CAPT[q]-co,b=a+CAPH[q],rp=Math.min(CAPH[q]*.5,CAPF),
-            op=Math.max(Math.min(clamp((b-CAPF)/rp),clamp((a+rp)/rp),clamp((CAPR-CAPF*.5-a)/rp)),1-Math.abs(ci-q));
-        if(q<pq)op*=1-clamp(pv*5)*clamp((PHY+4-a)/16);   /* gone from over his photo by the time it is a fifth of the way in */
-        put(capk[q],c,'o','none',f(smooth(op),3));
-      });
-      var nw=Math.max(0,Math.min(caps.length-1,Math.round(ci)));
-      if(nw!==capNow){if(caps[capNow])caps[capNow].classList.remove('is-now');caps[nw].classList.add('is-now');capNow=nw}
-    }
-    /* the case: up with the first pack's beat, empty, as its line is read; filled by the sleep
-       beat; then the whole of it, packs and all, moves up into the call's place and lifts away */
-    rowIn=SAND>0?smooth(clamp(((x-at[SAND]+Tn(SAND))/Tn(SAND)-.2)/.5)):1;
-    if(geo&&!BARM){
-      var ra=smooth(rowA),rz=smooth(clamp(rowZ/.6));
-      C.x0=geo.x0;C.y0=geo.y0;C.s=(1+(geo.Z-1)*ra)*(1-.12*rz);
-      C.dx=(geo.ax-geo.x0)*ra+40*rz;C.dy=(geo.ay-geo.y0)*ra-30*rz;C.op=1-rz;
-      put(cp,rowEl,'case','translate3d('+f(C.dx,1)+'px,'+f(C.dy,1)+'px,0) scale('+f(C.s,4)+')',f(Math.min(rowIn,C.op),3));
-    }
-    parts.forEach(function(p,i){
-      var h=HOLD[i]||1,
-          kin=i?clamp((x-at[i]+Tn(i))/Tn(i)):clamp(arrive),      /* 0..1 through the change into this beat */
-          kout=i<N-1?clamp((x-at[i]-h)/Tn(i+1)):0,             /* 0..1 through the change out of it */
-          vis=kin>0&&(p.kind==='prod'?(BARM?PS.cl<1:CALL<N?(zc<1||kout<1):kout<1):kout<1);   /* a pack's beat stays up while its pack is in the stack, or on the stage */
-      if(vis!==p.vis){p.vis=vis;p.b.style.opacity=vis?'1':'0'}   /* opacity, not visibility: its link stays reachable by Tab */
-      /* the button is parked below the stage's edge while its words are not up, so the tab's
-         observer sees it exactly while it can be seen */
-      if(!vis){if(p.book)put(p,p.book,'book','translate3d(0,120vh,0)','0');return}
-      /* the words: out in the first part of a change, in at the end of it, never both at once */
-      var ce=i?smooth(clamp((kin-.6)/.4)):smooth(clamp(x/.35)),   /* the first words wait for the stage to hold */
-          cq=smooth(clamp(kout/.4));
-      if(p.kind==='turn')ce=smooth(clamp((wipe-.6)/.4));  /* his words come up with the after, once its light is mostly in */
-      var v=Math.min(ce,1-cq);
-      put(p,p.copy,'copy','translate3d(0,'+f((1-ce)*28-cq*28,1)+'px,0)',f(v,3));
-      if(p.book)put(p,p.book,'book',v<.02?'translate3d(0,120vh,0)':'translate3d(0,'+f((1-ce)*40,1)+'px,0)',f(v,3));
-      if(v>bestV){bestV=v;best=i}
-      if(p.arcbar)put(p,p.arcbar,'arcbar','translate3d(0,'+f((1-ce)*22-cq*22,1)+'px,0)',f(v,3));   /* the loaded bar above the call comes with its words */
-      /* the drop: ~.27 units from the lens to the floor (it was ~.5), landing (u .8) at kin .62 as the new words rise */
-      var db=Math.min(.35,.28/Tn(i)),u=clamp((kin-(.62-.8*db))/db);
-      if(!p.art)return;
-      if(p.kind==='prod'){
-        var rest=1;
-        p.packs.forEach(function(k,j){                  /* a pair arrives and leaves one after the other */
-          var qp=clamp((kout-.1)/.4),                   /* it tucks into the row (up, away from the words) as they drop, and is in its slot before the next pack is solid */
-              uj=clamp((u-k.off)/(1-k.off)),qj=clamp((qp-k.off)/(1-k.off));
-          rest=Math.min(rest,BARM?pile(p,k,j,uj):drop(p,k,j,uj,qj));
-        });
-        lit[p.warm?1:0]=Math.max(lit[p.warm?1:0],rest);
-        if(rest>restV){restV=rest;restX=p.packs[0].rx}
-      }else{
-        /* the turn follows the shelf now, not the opening, so it rises and falls like any other
-           photo: it brings his before back at the same size and in the same place, and the after
-           wipes across it while it holds */
-        var pio=photoIn(i,x,arrive),pe=pio[0],pq=pio[1];
-        put(p,p.art,'art','translate3d(0,'+f((1-pe)*36-pq*36,1)+'px,0) scale('+f(.94+.06*pe-.05*pq,4)+')',f(Math.min(pe,1-pq),3));
-      }
-      if(p.wipe){                                         /* the after slides in from its own side */
-        put(p,p.wipe,'wipe','translate3d('+f((1-wipe)*100,2)+'%,0,0)','1');
-        put(p,p.win,'win','translate3d('+f((wipe-1)*100,2)+'%,0,0)','1');
-      }
-    });
-    parts.forEach(function(p,i){var on=i===best;if(on!==p.on){p.on=on;p.b.classList.toggle('is-on',on)}});
-    /* his plates (PLA above): each slides on in the last part of the change into its pack's beat,
-       after the pack has landed, and is on at the hold; the count turns when it is half on. Scrolling
-       back takes it off at the same place. */
-    if(BARM){var ps=[];PLA.forEach(function(a){var pv=smooth(clamp((x-a.t0)/a.w));if(!(ps[a.c]>pv))ps[a.c]=pv});LB.peter(ps)}
-    /* the ground warms with the product: the sand sweeps in from the right behind the arriving
-       can and has covered the words' column before they rise; chalk comes with the after */
-    /* the ground, one movement at a time: teal under his before, the sand sweeping in from the
-       right behind the first pack and holding under the whole shelf, and the chalk coming back with
-       the turn and staying for the after, his family and the ask. -32% covers every corner of the
-       stage, +55% is off it. */
-    var k1=SAND>0?clamp((x-at[SAND]+Tn(SAND))/Tn(SAND)):0,kL=LIGHT<N?clamp((x-at[LIGHT]+Tn(LIGHT))/Tn(LIGHT)):0,
-        sw=smooth(clamp((k1-.1)/.6)),ch=smooth(clamp((kL-.25)/.4));
-    sand.style.transform='translate3d('+f(55-87*sw,2)+'%,0,0) rotate(-14deg)';
-    chalk.style.opacity=f(ch,3);
-    dusk.style.opacity=f(1-smooth(settle),3);
-    lampD.style.opacity=f(lit[0],3);lampW.style.opacity=f(lit[1],3);
-    if(restV>0&&restX!==lampX){                          /* the light moves only when the resting pack does */
-      lampX=restX;lampD.style.transform=lampW.style.transform='translate3d('+restX+'%,0,0)';
-    }
-    if(!still)raf=requestAnimationFrame(frame);        /* keep easing until the stage has caught up */
-  }
-  function wake(){if(near&&!raf)raf=requestAnimationFrame(frame)}
-  function now(){if(raf)cancelAnimationFrame(raf);raf=0;snap=true;frame()}
-  sec.classList.add('is-live');
-  measure();now();
-  addEventListener('scroll',wake,{passive:true});
-  addEventListener('resize',function(){measure();parts.forEach(function(p){p.keys={}});cp.keys={};now()});
-  new IntersectionObserver(function(es){near=es[0].isIntersecting;if(near){measure();now()}},
-    {rootMargin:'200px 0px'}).observe(run);
-  /* a link reached by keyboard brings its own beat on screen, where its line stands: for a caption
-     in the strip, the beat whose pack it belongs to */
-  run.addEventListener('focusin',function(ev){
-    var cap=ev.target.closest('.st-cap'),
-        i=cap?CAPB[caps.indexOf(cap)]:beats.indexOf(ev.target.closest('.st-beat'));
-    if(!(i>=0))return;
-    var r=run.getBoundingClientRect(),
-        y=Math.round(scrollY+r.top+(r.height-sh)*(at[i]+(HOLD[i]||1)*.5)/L),
-        go=function(){if(Math.abs(scrollY-y)>1)scrollTo({top:y,behavior:'instant'});now()};
-    go();requestAnimationFrame(go);                   /* again after the browser's own scroll to the focus */
-  });
 })();
 
 /* Interface sound: short glassy ticks, synthesised here so there is nothing to download */
