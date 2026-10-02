@@ -366,13 +366,16 @@ pictures. **Opening it is never scripted**: the open, the
 close, Enter and Space, the expanded state and find-in-page auto-expand are all the browser's, and it works with
 JavaScript off. Nothing persists its state, so every visit meets it closed.
 **The one exception is its nudge** (Peter, 2026-10-01: "make the dropdown link wiggle... it sort of pops out at them
-tempting them to click"). When the summary is fully in view, a short block just after the `.grow` fade-in in
-`_script.html` gives it `.nudge`: after 360ms, for 720ms, it lifts 2px and swells 3%, settles through a smaller
-swell, its hover tint fades in and out (`::before`, 1px inside the outline) and the chevron dips twice. It plays at
-most twice — the second 2.6s after the first, only while still on screen and still closed — and never again once
-opened on that page view (the `toggle` event is read only to record that). Transforms and opacity only, layout shift
-0 measured; reduced motion or no JavaScript means it never moves. The knobs, if Peter wants it bolder, are the 3%
-swell and the tint. It is deliberately not a loop: constant motion reads as an ad and is an accessibility problem. Opening does not move the page (the
+tempting them to click"; 2026-10-02: "make it 300% louder"). When the summary is fully in view, a short block just after
+the `.grow` fade-in in `_script.html` gives it `.nudge`: after 360ms, for 1000ms, it lifts 6px and swells 10%, shakes like a
+notification bell (−4°, +4°, −3°, +2°, −1°, 0), drops back through a smaller 4% swell, lights up `--sand` (`::before`, 1px
+inside the hairline) inside a 2px `--blue` ring (`::after`, 2px outside), and the chevron dips 9px three times. It plays at
+most twice — the second ~4s after the first, only while still on screen and still closed — and never again once opened on
+that page view (the `toggle` event is read only to record that). Transforms and opacity only, layout shift 0 measured;
+reduced motion or no JavaScript means it never moves. **`#story` carries `overflow-x:clip`** so the 10% swell can never make
+a narrow phone scroll sideways (without it 320 and 390 scrolled 1-3px and the fixed `.fg` glow shifted); if `#story` ever
+stops being full-width, move that clip to an ancestor that is. The knobs are the 10% swell, the 4° shake and the sand/blue
+light. It is deliberately not a loop: constant motion reads as an ad and is an accessibility problem. Opening does not move the page (the
 summary stays put) and the five photographs are `loading="lazy"` — not downloaded at all while it is closed, and
 fetched on the toggle itself (measured, Chrome 154); re-measure if it is ever restyled with `content-visibility`.
 `.grow` goes on the `<details>`, never on what is inside it. "Here's what we notice now." stays outside, leading
