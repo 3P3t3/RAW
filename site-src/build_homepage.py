@@ -497,12 +497,12 @@ CONSULT_URL = 'https://calendly.com/3pete/explore'
 # free call" and goes to #consult, the 30-minute booking already on the page.
 CONSULT_QUICK_URL = ''
 
-# The free-sample form (#sample on the homepage) posts to FormSubmit, which needs no account: the
-# first real request sends an activation email to this inbox, and once it is confirmed FormSubmit
-# offers a random alias to use instead. Swap the address for that alias here; nothing else names it.
+# The free-sample form (#sample on the homepage) posts to FormSubmit, which needs no account. This is
+# FormSubmit's random alias for Peter's inbox (swapped in 2026-10-01), NOT his address: it delivers to
+# the same place while keeping his email out of a public page's source. Never put the address back.
 # With script the form posts JSON to the ajax endpoint; without, it is a plain POST to the action,
 # and FormSubmit sends the visitor back to SAMPLE_NEXT, where :target shows the thank-you.
-SAMPLE_TO = 'peterherschelman@gmail.com'
+SAMPLE_TO = '9d3394db0b2af4dec0b04a4788aa6283'
 
 # Where the site actually lives. Everything else on the site is linked relatively; this is
 # only for the absolute URLs that Open Graph and Twitter cards require. GitHub Pages serves
