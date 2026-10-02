@@ -1161,35 +1161,55 @@ html:not(.js) #results[hidden]{display:block!important}
   transition:transform 200ms cubic-bezier(.2,.7,.2,1)}
 .st-rev[open]>summary .st-rev-ch{transform:translateY(2px) rotate(-135deg)}
 /* The nudge (Peter, 2026-10-01: "make the dropdown link wiggle... as people are going past it it
-   sort of pops out at them tempting them to click"). When the control is well into view the script
-   (_script.html, beside the .grow reveal) gives the summary .nudge, and for 720ms it leans out at the
-   visitor: it lifts 2px and swells 3%, settles back through a smaller second swell, its hover tint
-   washes in and out behind the words, and the chevron dips twice the way it opens. Then it is still.
-   It may play once more, 2.6s later, only if it is still on screen and still closed; never a third
-   time, and never again once it has been opened on this page view. Transforms and opacity only, so
-   nothing around it moves (layout shift 0, measured). Reduced motion and no JavaScript: it never
-   moves, and is the same hairline box. The tint sits 1px in so the hairline stays drawn over it. */
+   sort of pops out at them tempting them to click"; 2026-10-02: "Nudge isn't bold enough, make it
+   300% louder"). When the control is well into view the script (_script.html, beside the .grow
+   reveal) gives the summary .nudge, and for 1000ms it jumps out at the visitor: it lifts 6px and
+   swells 10%, shakes side to side the way a notification bell does (4deg either way, dying to 0),
+   drops back through a smaller second swell, lights up sand with a blue ring round it, and the
+   chevron dips hard three times the way it opens. Then it is still. It may play once more, 2.6s
+   later, only if it is still on screen and still closed; never a third time, and never again once
+   it has been opened on this page view. Transforms and opacity only, so nothing around it moves
+   (layout shift 0, measured); the swell may overlap its neighbours for that second, which is the
+   point. #story clips sideways overflow (overflow-x:clip, below) so the swell and the shake can never
+   make a narrow phone scroll sideways. Reduced motion and no JavaScript: it never moves, and is the
+   same hairline box. The light (::before, --sand) sits 1px in so the hairline stays drawn over it;
+   the ring (::after, --blue) sits 2px out. Teal on sand is ~10:1, so the words stay readable at the
+   peak. */
 .st-rev>summary{position:relative;isolation:isolate}
-.st-rev>summary::before{content:"";position:absolute;inset:1px;z-index:-1;background:var(--tile);opacity:0;pointer-events:none}
+.st-rev>summary::before,.st-rev>summary::after{content:"";position:absolute;z-index:-1;opacity:0;pointer-events:none}
+.st-rev>summary::before{inset:1px;background:var(--sand)}
+.st-rev>summary::after{inset:-2px;box-shadow:0 0 0 2px var(--blue)}
+#story{overflow-x:clip}
 @media (prefers-reduced-motion:no-preference){
-  .motion .st-rev>summary.nudge{animation:st-lean 720ms cubic-bezier(.3,.6,.3,1) 360ms both}
-  .motion .st-rev>summary.nudge::before{animation:st-tint 720ms ease-out 360ms both}
-  .motion .st-rev>summary.nudge .st-rev-ch{animation:st-dip 720ms ease-in-out 360ms both}
+  .motion .st-rev>summary.nudge{animation:st-lean 1000ms cubic-bezier(.3,.6,.3,1) 360ms both}
+  .motion .st-rev>summary.nudge::before{animation:st-tint 1000ms ease-out 360ms both}
+  .motion .st-rev>summary.nudge::after{animation:st-ring 1000ms ease-out 360ms both}
+  .motion .st-rev>summary.nudge .st-rev-ch{animation:st-dip 1000ms ease-in-out 360ms both}
 }
-.st-rev[open]>summary,.st-rev[open]>summary::before,.st-rev[open]>summary .st-rev-ch{animation:none}
+.st-rev[open]>summary,.st-rev[open]>summary::before,.st-rev[open]>summary::after,
+.st-rev[open]>summary .st-rev-ch{animation:none}
 @keyframes st-lean{
   0%{transform:none}
-  20%{transform:translate3d(0,-2px,0) scale(1.03)}
-  40%{transform:translate3d(0,0,0) scale(.994)}
-  58%{transform:translate3d(0,-1px,0) scale(1.012)}
-  76%,100%{transform:none}
+  12%{transform:translate3d(0,-6px,0) scale(1.1) rotate(0)}
+  21%{transform:translate3d(0,-6px,0) scale(1.1) rotate(-4deg)}
+  30%{transform:translate3d(0,-6px,0) scale(1.1) rotate(4deg)}
+  39%{transform:translate3d(0,-5px,0) scale(1.09) rotate(-3deg)}
+  48%{transform:translate3d(0,-4px,0) scale(1.08) rotate(2deg)}
+  57%{transform:translate3d(0,-3px,0) scale(1.06) rotate(-1deg)}
+  68%{transform:translate3d(0,0,0) scale(.985) rotate(0)}
+  80%{transform:translate3d(0,-3px,0) scale(1.04) rotate(0)}
+  92%,100%{transform:none}
 }
-@keyframes st-tint{0%{opacity:0}22%{opacity:1}100%{opacity:0}}
+@keyframes st-tint{0%{opacity:0}10%,62%{opacity:1}100%{opacity:0}}
+@keyframes st-ring{0%{opacity:0}10%,50%{opacity:1}80%,100%{opacity:0}}
 @keyframes st-dip{
-  0%,76%,100%{transform:translateY(-3px) rotate(45deg)}
-  20%{transform:translateY(2px) rotate(45deg)}
-  38%{transform:translateY(-3px) rotate(45deg)}
-  56%{transform:translateY(1px) rotate(45deg)}
+  0%,92%,100%{transform:translateY(-3px) rotate(45deg)}
+  14%{transform:translateY(6px) rotate(45deg) scale(1.3)}
+  26%{transform:translateY(-3px) rotate(45deg)}
+  40%{transform:translateY(6px) rotate(45deg) scale(1.3)}
+  52%{transform:translateY(-3px) rotate(45deg)}
+  66%{transform:translateY(4px) rotate(45deg) scale(1.15)}
+  78%{transform:translateY(-3px) rotate(45deg)}
 }
 /* their two stacks: his three views, then her two, under one another on a phone. proof_wall()
    draws them; .pf-* and .c-* (the 50% seam's Before / After heads) are in the his-and-hers block
