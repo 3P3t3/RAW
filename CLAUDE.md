@@ -174,6 +174,9 @@ anything added for it would move `style.css`'s content hash and so the `?v=` on 
 `plus/site.webmanifest` have their own two lines. Renaming `PLUS_DIR` is two edits: the constant and those lines.
 Publishing is unchanged: run the build, commit the root pages **and** the `plus/` folder, then RAW 0 pushes.
 
+(`.gitattributes` also carries `bloodwork.html merge=ours`: it is generated but no other pattern matched it, and it
+conflicted on the 2026-10-02 merge.)
+
 `index.html` is a hand-written redirect to `homepage.html` and is not generated.
 
 `assets/bg-everyday-health.webp` is the Everyday Health shelf's hero banner, and the only one of the ten
@@ -321,9 +324,19 @@ shelf pages and podium still use the catalogue images.
 
 ## The story (`#story`)
 
-The homepage runs hero → `#how` (the five-step game plan) → `#goals` (the plate rack) → `#sample` →
-`#macros` → `#story` → `#my-stack` → `#consult`, and in the `plus/` copy only, `#bloodwork` sits between
-`#macros` and `#story`. **`TRENDING = False`** (Peter, 2026-10-01: "maybe we should get rid of the trending
+The homepage runs hero → `#story` → `#how` (the five-step game plan) → `#goals` (the plate rack) → `#sample` →
+`#macros` → `#my-stack` → `#consult`, and in the `plus/` copy only, `#bloodwork` sits between `#macros` and
+`#my-stack`. **The story comes straight after the hero** (Peter, 2026-10-02: "should I put the story towards the top?
+That way they know when they get to supplements it's about finding the ones that will support their
+transformation?"; a Fable critic's first finding was that he "arrives too late on his own site"): proof, then the
+process, then the products. Let the order make that connection — the page never says supplements caused the
+change. The hero's main button reads "See how we did it" and goes to `#story` (it said "See the game plan" and jumped
+over the story); the game plan's eyebrow is "Where to start" (was "New here?", which came late after a whole story);
+`#my-stack` carries a "From our story" eyebrow over "That's my stack." because it now arrives ~4,000px after the
+story, and its first button is "Load your own plates" → `#goals` (it pointed back at the calculator just passed).
+All four are DRAFT and Peter-approved. `.story + .how-sec` puts a hairline over the game plan's heading, so the plan
+reads as a framed stretch between the story above and the rack below. `#story` starts at 934px at 390x844 and 876 at
+1440; his side pair's photo is at 1,915 and 1,393. **`TRENDING = False`** (Peter, 2026-10-01: "maybe we should get rid of the trending
 now"): the week's three best sellers are off the page. The whole section is built in `build_homepage.py`
 behind that one switch and substituted into `{{TRENDING}}`, so setting it True puts the band back exactly
 where it was, with its CSS kept whole. The podium is still built either way, so `bestsellers.csv` is still
@@ -354,7 +367,7 @@ Month 1 → Month 15" and his caption. Peter chose it on 2026-10-02 after two cr
 to anyone who did not tap (phone 8.5 → 6.5, laptop homepage 8 → 7), and it also gives that heading its answer. It is not
 lazy, because the hero's "Our story" link lands right on it. From 1024, `.st-top` is two equal columns: the lines on the
 left, the heading and the pair on the right, which fills what was an empty half; the reveal and the ask run full width
-beneath. Closed, `#story` is 1,703px on an 8,455px page at 390x844, and 1,662 on 7,070 at 1440.
+beneath. Closed, `#story` is 1,703px tall at 390x844 and 1,662 at 1440.
 **The other four pairs sit behind a reveal, closed on every arrival** — a native `<details id="story-proof" class="st-rev">`
 whose summary reads "If you want to see more pictures of our real journey, they're right here." (DRAFT). It holds
 `proof_wall(title=None, his_views=('front','back'))` — his front and back, then Yenni's front and back — so the side pair

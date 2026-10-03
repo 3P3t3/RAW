@@ -1311,6 +1311,7 @@ def main():
                         '<span class="lbc-new"><span class="lbc lbc-ynew"></span></span></span></p></div></div>'),
             '{{MYSTACK}}': ('  <!-- Peter\'s stack: the five shelves the story\'s lines name, drawn loaded, with its key, and the two ways on -->\n'
                             '  <section class="sec dark mys" id="my-stack" aria-labelledby="mys-title">\n    <div class="wrap mys-in">\n'
+                            '      <!-- DRAFT-COPY --><p class="label grow">From our story</p><!-- /DRAFT-COPY -->\n'
                             '      <h2 class="grow hl-2 hl-dk" id="mys-title"><span class="hl-lead">That’s</span> <span class="hl-k">my stack.</span></h2>\n'
                             '      <div class="mys-bar bbx grow" style="--d:1">' + barbell('bb-dk bb-big', PETER) + '</div>\n'
                             '      <ul class="mys-key grow" style="--d:2" aria-label="The plates on it">'
@@ -1327,7 +1328,7 @@ def main():
                             '        <p class="mys-none">Nothing on your bar yet. <a href="#goals">Load a plate or two</a> and bring them along.</p>\n'
                             '      </div><!-- /DRAFT-COPY -->\n'
                             '      <!-- DRAFT-COPY --><p class="mys-sub grow" style="--d:3">Fifteen minutes, free. Your macros, what you already take, and the smallest stack that moves your goal.</p>\n'
-                            '      <div class="mys-acts grow" style="--d:3"><a class="btn" href="#macros">Work out your macros</a>'
+                            '      <div class="mys-acts grow" style="--d:3"><a class="btn" href="#goals">Load your own plates</a>'
                             '<a class="btn btn-line" href="#consult">Book a free call</a></div>\n'
                             '    </div>\n  </section>\n'),
         })
