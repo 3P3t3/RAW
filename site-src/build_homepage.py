@@ -308,7 +308,7 @@ RACK_GUIDE = ('<!-- DRAFT-COPY --><ol class="rk-guide" id="rk-guide" role="list"
               '<li><span class="rg-n" aria-hidden="true">3</span><span class="rg-t">Bring it to a <a href="#consult">free call</a>, or ask for a <a href="#sample">sample</a>.</span></li>'
               '</ol><!-- /DRAFT-COPY -->')
 
-# "Trending now": the week's three best sellers, between #macros and #story. It is OFF.
+# "Trending now": the week's three best sellers, between #macros and #my-stack. It is OFF.
 # Peter asked for it (2026-10-01: "maybe we should get rid of the trending now, category..."), the
 # page ran to thirteen phone screens, and two critics scored the band the weakest thing on the site
 # — the counts in bestsellers.csv are blank, so it was three small cards with no numbers on them.
@@ -1309,7 +1309,7 @@ def main():
                         '<div class="lbpin-bars bbx">' + barbell('bb-you') + '</div>'
                         '<p class="lbpin-cap"><span class="lbc-set lbc-yset"><span class="lbc-who"><span class="lbc lbc-you"></span></span>'
                         '<span class="lbc-new"><span class="lbc lbc-ynew"></span></span></span></p></div></div>'),
-            '{{MYSTACK}}': ('  <!-- After the story: the five shelves its lines name, drawn loaded, with its key, and the two ways on -->\n'
+            '{{MYSTACK}}': ('  <!-- Peter\'s stack: the five shelves the story\'s lines name, drawn loaded, with its key, and the two ways on -->\n'
                             '  <section class="sec dark mys" id="my-stack" aria-labelledby="mys-title">\n    <div class="wrap mys-in">\n'
                             '      <h2 class="grow hl-2 hl-dk" id="mys-title"><span class="hl-lead">That’s</span> <span class="hl-k">my stack.</span></h2>\n'
                             '      <div class="mys-bar bbx grow" style="--d:1">' + barbell('bb-dk bb-big', PETER) + '</div>\n'
@@ -1413,7 +1413,7 @@ def main():
     # file) is True — one switch, and the section comes back exactly where and as it was.
     trending = (('''  <!-- 4. Trending: the week's three best sellers, each with its family's TAGLINES line, as
        three compact cards on the page's own field, all three in view at every width. It sits
-       between the calculator (#macros) and Peter's story (#story). Switched by TRENDING in
+       between the calculator (#macros) and Peter's stack (#my-stack). Switched by TRENDING in
        build_homepage.py; the whole section is built there. -->
   <section class="sec podium-sec no-pour" id="trending" aria-labelledby="trending-title">
     <div class="wrap">

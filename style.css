@@ -244,7 +244,7 @@ html:not(.js) .mtab{display:none}
    .rack-sec's trimmed foot, which both already pulled one join in; they still win, being later. */
 .sec + .sec,.sec + dialog + .sec{padding-top:calc(var(--sec) * .5)}
 /* The game plan (#how): the path, four numbered steps and one thing to do. It sits on the page's
-   own ground between the hero and the shelves, closed off from them by a hairline. On a phone
+   own ground between the story and the shelves, closed off from each by a hairline. On a phone
    each step is a row (number, words, arrow); from 768 they stand in two columns, from 1024 in four. */
 .how-sec{padding-bottom:0}
 .how-sec>.wrap{padding-bottom:var(--sec);border-bottom:1px solid var(--line);
@@ -252,6 +252,14 @@ html:not(.js) .mtab{display:none}
 /* phones: the plan's close to the rack's heading was ~160px of empty field; the hairline now sits
    32px under the plan and the section gives back 40px of the rack's top padding */
 @media (max-width:767px){.how-sec{margin-bottom:-40px}.how-sec>.wrap{padding-bottom:32px}}
+/* the story sits straight under the hero now and the plan follows it (2026-10-02), both on the same
+   field, so the turn from their story to the steps was only more empty ground under a centred ask. The
+   plan takes a hairline over its head too, the same rule that closes it off from the rack below, so it
+   reads as its own framed stretch between the story and the shelves. The join keeps its size: the
+   section's half --sec moves inside, under the line, so the line sits a full --sec under the story's
+   last link and half of one over "New here?". */
+.story + .how-sec{padding-top:0}
+.story + .how-sec>.wrap{border-top:1px solid var(--line);padding-top:calc(var(--sec) * .5)}
 .how-head{display:grid;gap:10px;margin-bottom:24px}
 .how-head h2{font-size:40px}
 .how-steps{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--line)}
@@ -1789,7 +1797,7 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
    last row is the phone's again: 174px from the plates to the next heading at every width */
 @media (min-width:768px){.rack-sec{padding-bottom:max(24px,calc(var(--sec) - 80px))}}
 
-/* after the story: his stack, drawn loaded, on teal */
+/* his stack, the five shelves the story names, drawn loaded, on teal */
 .mys-in{display:grid;justify-items:center;gap:20px;text-align:center}
 .mys h2{color:var(--chalk);font-size:clamp(46px,14vw,96px)}
 .mys-bar{width:100%;max-width:900px;margin:8px 0 4px}

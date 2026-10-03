@@ -3,6 +3,7 @@
 homepage.html merge=ours
 category-*.html merge=ours
 about.html merge=ours
+bloodwork.html merge=ours
 /style.css merge=ours
 # the CCRX copy under plus/ (PLUS_DIR in build_homepage.py). Its pages are already covered by the
 # patterns above, which match at any depth; these two are the copy's own folder files. Rename the
