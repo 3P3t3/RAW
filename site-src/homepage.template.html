@@ -452,8 +452,11 @@
             <!-- DRAFT-COPY --><legend class="vh">Last two questions</legend><!-- /DRAFT-COPY -->
             <div class="c-field"><label for="c-stack">What are you taking at the moment?</label>
               <input id="c-stack" name="stack" type="text" autocomplete="off" placeholder="Whey, creatine, a multivitamin…"></div>
+            <!-- the note is a textarea, as the sample's product blank is, so a long line the site writes into
+                 it (the calculator's macros, the bar's "Interested in: …") wraps onto underlined lines rather
+                 than running out of its box (2026-10-04: 636px of text in a 516px blank at 1440, cut mid-number) -->
             <div class="c-field"><label for="c-note">Anything you want covered? <span>Optional</span></label>
-              <input id="c-note" name="note" type="text" autocomplete="off" placeholder="Eating around shift work…"></div>
+              <textarea id="c-note" name="note" rows="1" autocomplete="off" placeholder="Eating around shift work…"></textarea></div>
           </fieldset>
 
           <p class="c-err" id="c-err" role="alert" hidden></p>

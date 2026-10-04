@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=2c457ad8">
+<link rel="stylesheet" href="style.css?v=2d40d84b">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -566,29 +566,29 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <ol class="why-list">
         <li class="why-card grow" style="--d:1">
           <p class="why-n" aria-hidden="true">01</p>
-          <h3 class="why-t">Build and keep lean mass</h3>
-          <p>It’s the number both our scans track. Lean mass is worth building at any age, and worth keeping as you get older.</p>
-          <a class="tlink why-go" href="about.html#numbers">See both our DEXA scans<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        </li>
-        <li class="why-card grow" style="--d:2">
-          <p class="why-n" aria-hidden="true">02</p>
-          <h3 class="why-t">Fuel it</h3>
-          <p>Your macros first: the calories, protein, fat and carbs your day needs. Then targeted nutrition, the few products that fit your goal and nothing you don’t need.</p>
-          <p class="why-gos"><a class="tlink why-go" href="#macros">Work out your macros<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="tlink why-go" href="shop.html">See the products<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
-        </li>
-        <li class="why-card grow" style="--d:3">
-          <p class="why-n" aria-hidden="true">03</p>
           <h3 class="why-t">Know your numbers</h3>
           <p>Bloodwork is a lab test: your biomarkers, measured from your own blood, collected at home with a Tasso. It goes through Avellum Health, and a licensed clinician reads it, not me.</p>
           <!-- PETER-COPY --><p class="why-status">We are currently in the early access phase only. We will go live for all clients November 2nd.</p><!-- /PETER-COPY -->
-          <a class="tlink why-go" href="bloodwork.html#panel">What the bloodwork is<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="tlink why-go" href="bloodwork.html#panel">What the bloodwork <span class="why-end">is<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
+        </li>
+        <li class="why-card grow" style="--d:2">
+          <p class="why-n" aria-hidden="true">02</p>
+          <h3 class="why-t">Build and keep lean mass</h3>
+          <p>It’s the number both our scans track. Lean mass is worth building at any age, and worth keeping as you get older.</p>
+          <a class="tlink why-go" href="about.html#numbers">See both our DEXA <span class="why-end">scans<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
+        </li>
+        <li class="why-card grow" style="--d:3">
+          <p class="why-n" aria-hidden="true">03</p>
+          <h3 class="why-t">Fuel it</h3>
+          <p>Your macros first: the calories, protein, fat and carbs your day needs. Then targeted nutrition, the few products that fit your goal and nothing you don’t need.</p>
+          <p class="why-gos"><a class="tlink why-go" href="#macros">Work out your <span class="why-end">macros<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></span></a><a class="tlink why-go" href="shop.html">See the <span class="why-end">products<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></span></a></p>
         </li>
         <li class="why-card grow" style="--d:4">
           <p class="why-n" aria-hidden="true">04</p>
           <h3 class="why-t">Peptide protocols</h3>
           <p>Peptides are prescription medications. Whether one is right for you is a licensed clinician’s call, through Avellum Health, and they can say no.</p>
           <!-- PETER-COPY --><p class="why-status">We are currently in the early access phase only. We will go live for all clients November 2nd.</p><!-- /PETER-COPY -->
-          <a class="tlink why-go" href="bloodwork.html#protocols">Who decides, and how<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="tlink why-go" href="bloodwork.html#protocols">Who decides, and <span class="why-end">how<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></span></a>
         </li>
       </ol>
       <p class="why-roles grow">Who does what: licensed clinicians read your bloodwork and decide on any protocol. I don’t read labs and I don’t prescribe. My part is your nutrition and the products.</p>
@@ -858,8 +858,11 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
             <!-- DRAFT-COPY --><legend class="vh">Last two questions</legend><!-- /DRAFT-COPY -->
             <div class="c-field"><label for="c-stack">What are you taking at the moment?</label>
               <input id="c-stack" name="stack" type="text" autocomplete="off" placeholder="Whey, creatine, a multivitamin…"></div>
+            <!-- the note is a textarea, as the sample's product blank is, so a long line the site writes into
+                 it (the calculator's macros, the bar's "Interested in: …") wraps onto underlined lines rather
+                 than running out of its box (2026-10-04: 636px of text in a 516px blank at 1440, cut mid-number) -->
             <div class="c-field"><label for="c-note">Anything you want covered? <span>Optional</span></label>
-              <input id="c-note" name="note" type="text" autocomplete="off" placeholder="Eating around shift work…"></div>
+              <textarea id="c-note" name="note" rows="1" autocomplete="off" placeholder="Eating around shift work…"></textarea></div>
           </fieldset>
 
           <p class="c-err" id="c-err" role="alert" hidden></p>
@@ -1701,7 +1704,23 @@ if(cform){
     cErr.textContent='';cErr.hidden=true;
     var s=cSteps[cAt];
     s.classList.remove('c-in');void s.offsetWidth;s.classList.add('c-in');   /* restart the fade */
+    cGrow();
     if(focus)cFocus(cAt).focus();
+  }
+  /* The note is a textarea (2026-10-04), so a long line the site wrote into it wraps instead of running
+     out of the box. field-sizing makes it as tall as its words; where that is not supported it is grown
+     here, the sample's way, whenever its words can have changed (both of the site's writers dispatch
+     change). Enter keeps the meaning it had in a one-line blank: go on, as the button does. */
+  var cNote=cform.elements.note,cGrow=function(){};
+  if(cNote&&cNote.tagName==='TEXTAREA'){
+    if(!(window.CSS&&CSS.supports&&CSS.supports('field-sizing','content')))
+      cGrow=function(){if(cNote.offsetParent){cNote.style.height='';cNote.style.height=cNote.scrollHeight+'px'}};
+    cNote.addEventListener('input',function(){cGrow()});
+    cNote.addEventListener('keydown',function(e){
+      if(e.key!=='Enter'||e.shiftKey||e.isComposing)return;
+      e.preventDefault();
+      if(cform.requestSubmit)cform.requestSubmit();else cNext.click();
+    });
   }
   /* The answers outlive the page: a visitor who leaves and comes back finds the card where they
      left it, with the step they were on, rather than back at question 1 with nothing in it.
@@ -1769,7 +1788,7 @@ if(cform){
     if(cAt){cAt--;cStep(true);cSave()}
   });
 
-  cform.addEventListener('change',function(){csum.textContent=line();cSave()});
+  cform.addEventListener('change',function(){csum.textContent=line();cGrow();cSave()});
   cform.addEventListener('submit',function(e){
     e.preventDefault();
     /* the step in front of the visitor first; then, on the last step, every step above it, so

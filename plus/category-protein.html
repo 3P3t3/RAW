@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=2c457ad8">
+<link rel="stylesheet" href="../style.css?v=2d40d84b">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -1078,7 +1078,23 @@ if(cform){
     cErr.textContent='';cErr.hidden=true;
     var s=cSteps[cAt];
     s.classList.remove('c-in');void s.offsetWidth;s.classList.add('c-in');   /* restart the fade */
+    cGrow();
     if(focus)cFocus(cAt).focus();
+  }
+  /* The note is a textarea (2026-10-04), so a long line the site wrote into it wraps instead of running
+     out of the box. field-sizing makes it as tall as its words; where that is not supported it is grown
+     here, the sample's way, whenever its words can have changed (both of the site's writers dispatch
+     change). Enter keeps the meaning it had in a one-line blank: go on, as the button does. */
+  var cNote=cform.elements.note,cGrow=function(){};
+  if(cNote&&cNote.tagName==='TEXTAREA'){
+    if(!(window.CSS&&CSS.supports&&CSS.supports('field-sizing','content')))
+      cGrow=function(){if(cNote.offsetParent){cNote.style.height='';cNote.style.height=cNote.scrollHeight+'px'}};
+    cNote.addEventListener('input',function(){cGrow()});
+    cNote.addEventListener('keydown',function(e){
+      if(e.key!=='Enter'||e.shiftKey||e.isComposing)return;
+      e.preventDefault();
+      if(cform.requestSubmit)cform.requestSubmit();else cNext.click();
+    });
   }
   /* The answers outlive the page: a visitor who leaves and comes back finds the card where they
      left it, with the step they were on, rather than back at question 1 with nothing in it.
@@ -1146,7 +1162,7 @@ if(cform){
     if(cAt){cAt--;cStep(true);cSave()}
   });
 
-  cform.addEventListener('change',function(){csum.textContent=line();cSave()});
+  cform.addEventListener('change',function(){csum.textContent=line();cGrow();cSave()});
   cform.addEventListener('submit',function(e){
     e.preventDefault();
     /* the step in front of the visitor first; then, on the last step, every step above it, so

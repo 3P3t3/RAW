@@ -477,7 +477,10 @@ a.how-step:active{opacity:.7}
 .consult-dusk{background:#141A26;color:var(--chalk);padding-top:var(--sec)}
 .c-dusk{position:absolute;inset:0;z-index:-1}
 .c-dusk img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 58%}
-.c-dusk::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,14,24,.55),rgba(8,14,24,.2) 45%,rgba(8,14,24,.1) 70%,rgba(8,14,24,.45))}
+/* the scrim's last 200px (the band's 112px foot and a little above it, clear of the copy) dissolve into the
+   section's own dark, so the picture never stops on a hard line where the footer begins (2026-10-04) */
+.c-dusk::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,14,24,.55),rgba(8,14,24,.2) 45%,rgba(8,14,24,.1) 70%,
+  rgba(8,14,24,.45) calc(100% - 200px),#141A26 calc(100% - 24px))}
 .consult-dusk .split-text,.consult-dusk .split-text h2{color:var(--chalk)}
 .consult-dusk .split-text .label{color:var(--sand)}
 .consult-dusk .split-text p:not(.label){opacity:.92}
@@ -487,15 +490,18 @@ a.how-step:active{opacity:.7}
 @media (min-width:768px){.c-dusk{overflow:hidden}.c-dusk img{width:140%;max-width:none;margin-left:-40%}}
 /* phones: the card covers most of the band, so the dusk is its own strip above the heading, fading into the
    dark field the copy and the card sit on (a critic, 2026-10-03: "the dusk lake is invisible on a phone") */
+/* 2026-10-04: at 390 "Book a free call" landed on ~316px of lake, so the strip is ~160px, and an arrival at
+   #consult (a negative scroll-margin past the join's half --sec, the strip and its margin) puts the eyebrow just under the
+   masthead with the heading and the card's first question on the first screen; scrolling past still shows it */
 @media (max-width:767px){
-  .consult-dusk{padding-top:0}
-  .c-dusk{position:relative;inset:auto;z-index:auto;height:clamp(200px,58vw,300px);margin-bottom:28px}
+  .consult-dusk{--dusk-h:clamp(140px,41vw,180px);padding-top:0;scroll-margin-top:calc(16px - var(--sec) * .5 - var(--dusk-h) - 28px)}
+  .c-dusk{position:relative;inset:auto;z-index:auto;height:var(--dusk-h);margin-bottom:28px}
   .c-dusk img{object-position:50% 60%}
   .c-dusk::after{background:linear-gradient(180deg,rgba(20,26,38,.15),rgba(20,26,38,0) 40%,rgba(20,26,38,0) 60%,#141A26)}
 }
 /* and the footer's nightfall starts from the dusk's own dark instead of fading in over the page's light
    ground, which put a pale strip between the dusk and the night (a critic, 2026-10-03) */
-body:has(.consult-dusk) .foot{background:linear-gradient(#10141D 0,rgb(6,11,14) var(--dusk),#000 calc(var(--dusk) + 1px))}
+body:has(.consult-dusk) .foot{background:linear-gradient(#141A26 0,rgb(6,11,14) var(--dusk),#000 calc(var(--dusk) + 1px))}
 /* the calculator's numbers, carried into the consult after "See my numbers": the card's
    tiles and micro-labels, smaller, one row at every width. The script owns [hidden]. */
 .c-nums{display:grid;gap:8px;width:100%;max-width:40ch;margin-bottom:10px}
@@ -687,10 +693,10 @@ body:has(.consult-dusk) .foot{background:linear-gradient(#10141D 0,rgb(6,11,14) 
 .nc .c-field input:focus{outline:none;background:rgba(51,64,184,.08);border-bottom-color:var(--blue);box-shadow:0 3px 0 var(--blue)}
 .nc .c-field input[aria-invalid="true"]{border-bottom-color:#9B2C1F;background:rgba(155,44,31,.07);box-shadow:none}
 /* the product blank is a textarea so a long name wraps: every line gets its own underline */
-#sample .c-field textarea{--u:var(--teal);display:block;height:46px;padding:4px 5px 0;resize:none;overflow:hidden;
+#sample .c-field textarea,#consult-form .c-field textarea{--u:var(--teal);display:block;height:46px;padding:4px 5px 0;resize:none;overflow:hidden;
   line-height:42px;overflow-wrap:break-word;background:repeating-linear-gradient(transparent 0 39px,var(--u) 39px 42px) content-box}
-#sample .c-field textarea:focus{--u:var(--blue);outline:none;background-color:rgba(51,64,184,.08)}
-#sample .c-field textarea[aria-invalid="true"]{--u:#9B2C1F;background-color:rgba(155,44,31,.07)}
+#sample .c-field textarea:focus,#consult-form .c-field textarea:focus{--u:var(--blue);outline:none;background-color:rgba(51,64,184,.08)}
+#sample .c-field textarea[aria-invalid="true"],#consult-form .c-field textarea[aria-invalid="true"]{--u:#9B2C1F;background-color:rgba(155,44,31,.07)}
 #sample .s-full + .s-say{display:none}
 /* small phones (a critic, 2026-10-03, at 320: "Text me" jumped right and "/ Email me" stood alone): the two
    choices keep to one line together, and the sentence's face steps down to 24px so they fit it */
@@ -820,10 +826,14 @@ html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:
 #consult-form .c-field{gap:6px}
 #consult-form .c-field label{font:800 var(--ncq)/1.12 var(--display);font-stretch:75%;letter-spacing:-.005em;color:var(--ink)}
 #consult-form .c-field label span{font:400 14px/1.3 var(--sans);letter-spacing:0;color:var(--text)}
-#consult-form .c-field input{width:100%}
+#consult-form .c-field input,#consult-form .c-field textarea{width:100%}
+/* the note's blank is as tall as what is in it (2026-10-04: the calculator's macros line ran out of a one-line
+   blank); _script.html grows it where field-sizing is not supported */
+#consult-form .c-field textarea{height:auto;min-height:46px;field-sizing:content;background-clip:padding-box}   /* underlines as wide as the blank above */
 /* the hint on a blank stays readable rather than hidden as it is in the sentence: small sans,
    sitting on the underline, so the blank still says what belongs in it */
 #consult-form .c-field input::placeholder{color:rgba(65,83,101,.85);font:400 15px/46px var(--sans);font-stretch:100%}
+#consult-form .c-field textarea::placeholder{color:rgba(65,83,101,.85);font:400 15px/42px var(--sans);font-stretch:100%}
 #consult-form .c-sum{margin-top:-14px;font:400 15px/1.45 var(--sans);color:var(--text)}
 
 /* One question at a time (cStep in _script.html), the macro calculator's furniture in this
@@ -2311,18 +2321,27 @@ body{background:transparent}
 .sec.why{padding-top:0}
 .why-band{height:clamp(200px,52vw,420px);margin-bottom:clamp(36px,7vw,64px);overflow:hidden;background:#9DB9CF}
 .why-band img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 64%}
+/* from 768 it was up to 420px of sky with nothing on it; about 240 at laptop widths (2026-10-04), steered so
+   the horizon (66% down the frame) sits at the strip's middle with the hills and their reflection whole */
+@media (min-width:768px){.why-band{height:clamp(220px,17vw,300px)}.why-band img{object-position:50% 73%}}
 .why-head{display:grid;gap:12px;justify-items:start;margin-bottom:28px}
 .why-head h2{font-size:40px}
 .why-head h2 span{display:block}
 .why-lead{max-width:44ch;font-size:17px;line-height:1.5;color:var(--ink)}
 .why-lead + .why-lead{color:var(--text)}
 .why-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.why-card{display:grid;grid-template-rows:auto auto 1fr auto;gap:8px;padding:22px 20px 14px;background:#FAF9F5;border:1px solid var(--line)}
+/* content sits at the top of each card; the links follow their text rather than pinning to a foot that left
+   90-150px of empty card above them at 1440 (2026-10-04) */
+.why-card{display:grid;align-content:start;gap:8px;padding:22px 20px 14px;background:#FAF9F5;border:1px solid var(--line)}
 .why-n{font:800 28px/1 var(--display);font-stretch:72%;color:var(--blue)}
 .why-t{font:600 19px/1.25 var(--sans);color:var(--ink)}
 .why-card p:not(.why-n){font-size:15px;line-height:1.5}
 .why-gos{display:flex;flex-wrap:wrap;column-gap:22px}
-.why-go{align-self:end;justify-self:start;font-size:15px;gap:4px}
+/* a link that wraps (1024: "See both our DEXA / scans") keeps its arrow on its last word: inline, not flex,
+   with the word and the arrow in one unbreakable .why-end (why_section() in build_homepage.py) */
+.why-go{display:inline-block;justify-self:start;padding-block:11px;font-size:15px;line-height:1.5;min-height:0;text-underline-offset:4px;text-wrap:balance}
+.why-end{white-space:nowrap}
+.why-go .ic{display:inline-block;margin-left:4px;vertical-align:-.2em}
 .why-status{font-size:14px!important;color:var(--text)}
 .why-status a{color:var(--teal);font-weight:600;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px}
 .why-soon{display:inline-block;margin-left:8px;padding:1px 8px;border:1px dashed var(--teal);font:600 11px/1.5 var(--sans);letter-spacing:.12em;

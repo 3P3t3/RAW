@@ -1780,14 +1780,19 @@ def why_section():
     """
     pv = provider()
     # A pillar whose provider link does not exist yet (the plain site until Avellum's link, ~2026-11-01)
-    # says so in one quiet line, and the cards that work
-    # today come first (two critics, 2026-10-03: two "Coming soon" chips among the first cards read as an
-    # unfinished page). Once both links exist the order is 01 numbers, 02 lean mass, 03 fuel, 04 protocols.
-    # The line is Peter's own (2026-10-03). It names a date, so it is tied to the missing link: the day
+    # says so in one quiet line. The order is always the launch order, 01 numbers, 02 lean mass, 03 fuel,
+    # 04 protocols, link or no link: the live cards used to come first while the links were empty (two
+    # critics, 2026-10-03), but Peter, 2026-10-04, wants it built as if it is live, because this is the
+    # beta for the November 2 launch. The line is Peter's own (2026-10-03). It names a date, so it is tied to the missing link: the day
     # AVELLUM_URL is filled it leaves with the link's absence. If November 2 passes with no link, change it.
     soon = lambda url: ('' if url else '\n          <!-- PETER-COPY --><p class="why-status">We are currently in the early access '
                         'phase only. We will go live for all clients November 2nd.</p><!-- /PETER-COPY -->')
     arrow = '<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg>'
+    # a link's last word and its arrow wrap together (2026-10-04: at 1024 "See both our DEXA / scans" left the
+    # arrow stranded beside a two-line label); the words are unchanged
+    def go(href, label):
+        head, _, last = label.rpartition(' ')
+        return f'<a class="tlink why-go" href="{href}">{head} <span class="why-end">{last}{arrow}</span></a>'
     disc = (f'\n      <!-- {pv["disclosure_mark"]} --><p class="why-fine">{pv["disclosure"]}</p><!-- /{pv["disclosure_mark"]} -->'
             if pv['disclosure'] else '')
     def card(tpl, i):
@@ -1796,32 +1801,31 @@ def why_section():
           <p class="why-n" aria-hidden="true">{{n}}</p>
           <h3 class="why-t">Know your numbers</h3>
           <p>Bloodwork is a lab test: your biomarkers, measured from your own blood, collected at home with a Tasso. It goes through {pv["name"]}, and a licensed clinician reads it, not me.</p>{soon(pv["panel"])}
-          <a class="tlink why-go" href="{CCRX_PAGE}#panel">What the bloodwork is{arrow}</a>
+          {go(f"{CCRX_PAGE}#panel", "What the bloodwork is")}
         </li>
 '''
     lean_li = f'''        <li class="why-card grow">
           <p class="why-n" aria-hidden="true">{{n}}</p>
           <h3 class="why-t">Build and keep lean mass</h3>
           <p>It’s the number both our scans track. Lean mass is worth building at any age, and worth keeping as you get older.</p>
-          <a class="tlink why-go" href="about.html#numbers">See both our DEXA scans{arrow}</a>
+          {go("about.html#numbers", "See both our DEXA scans")}
         </li>
 '''
     fuel_li = f'''        <li class="why-card grow">
           <p class="why-n" aria-hidden="true">{{n}}</p>
           <h3 class="why-t">Fuel it</h3>
           <p>Your macros first: the calories, protein, fat and carbs your day needs. Then targeted nutrition, the few products that fit your goal and nothing you don’t need.</p>
-          <p class="why-gos"><a class="tlink why-go" href="#macros">Work out your macros{arrow}</a><a class="tlink why-go" href="{SHOP_PAGE}">See the products{arrow}</a></p>
+          <p class="why-gos">{go("#macros", "Work out your macros")}{go(SHOP_PAGE, "See the products")}</p>
         </li>
 '''
     protocols_li = f'''        <li class="why-card grow">
           <p class="why-n" aria-hidden="true">{{n}}</p>
           <h3 class="why-t">Peptide protocols</h3>
           <p>Peptides are prescription medications. Whether one is right for you is a licensed clinician’s call, through {pv["name"]}, and they can say no.</p>{soon(pv["protocols"])}
-          <a class="tlink why-go" href="{CCRX_PAGE}#protocols">Who decides, and how{arrow}</a>
+          {go(f"{CCRX_PAGE}#protocols", "Who decides, and how")}
         </li>
 '''
-    live = bool(pv['panel']) and bool(pv['protocols'])
-    order = [numbers_li, lean_li, fuel_li, protocols_li] if live else [lean_li, fuel_li, numbers_li, protocols_li]
+    order = [numbers_li, lean_li, fuel_li, protocols_li]
     items = ''.join(card(t, i) for i, t in enumerate(order, 1))
     return f'''  <!-- 3b. Understand why: bloodwork, biomarkers, macros and targeted nutrition -- what this is all
        building towards (Peter, 2026-10-03). Built by why_section() in build_homepage.py, in both copies;
