@@ -2251,8 +2251,10 @@ body{background:transparent}
    READABILITY WITH ANY PHOTOGRAPH: the text never relies on the picture. .hh-bg::after lays a light
    tint over all of it (mood only), and the copy carries its own scrim (.hero-copy::before): rgba(0,24,32,.76)
    under every line, fading out above the copy on phones and to its right from 768. Over a pure-white
-   picture that is chalk at 7.4:1, sand at 5.7:1 and the on-dark grey at 5.3:1 (measured on the rendered
-   page with a white test image in the slot); any darker picture only raises them. */
+   picture the lowest is 6.4:1 (the sand "Understand why." at 768, where its end nears the fade), and
+   otherwise chalk 9.0:1 and sand 6.9:1 at 320, 390, 1440 and 1920 (measured 2026-10-03 on the rendered
+   page, a white test image in the slot, the text's own colour against the brightest pixel behind it);
+   any darker picture only raises them. Over the palette ground the lowest is 10.5:1. */
 .hero.hh{position:relative;isolation:isolate;overflow:hidden;display:grid;align-items:end;background:var(--teal);color:var(--chalk);
   min-height:min(calc(100svh - var(--mh)),640px)}
 .hh-bg{position:absolute;inset:0;z-index:-2}
@@ -2321,3 +2323,12 @@ body{background:transparent}
    that it had under the story */
 .macros-sec + .how-sec{padding-top:0}
 .macros-sec + .how-sec>.wrap{border-top:1px solid var(--line);padding-top:calc(var(--sec) * .5)}
+
+/* the footer carries four links in both copies now (the bloodwork route joined the plain site on
+   2026-10-03), and up to 1199 the column had room for three: "Book a free call" broke over two or three
+   lines. There the links take their own full-width row under the brand, each on one line */
+@media (min-width:768px) and (max-width:1199px){
+  .foot-top .foot-brand{grid-column:1 / 13}
+  .foot-links{grid-column:1 / 13;justify-content:flex-start;margin-top:8px}
+  .foot-links a{white-space:nowrap}
+}
