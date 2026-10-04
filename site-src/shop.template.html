@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en"{{HTML_CLASS}}>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+{{HEAD_EXTRA}}<meta name="theme-color" content="#002E3B">
+<title>Shop · Aspire Health</title>
+<!-- DRAFT-COPY --><meta name="description" content="Nutrilite and XS sports nutrition, hydration and sleep support, picked for how you train. Pick your goal, build your stack, or ask for a free sample.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Shop · Aspire Health">
+<meta property="og:description" content="Nutrilite and XS sports nutrition, hydration and sleep support, picked for how you train. Pick your goal, build your stack, or ask for a free sample."><!-- /DRAFT-COPY -->
+<meta property="og:url" content="{{PAGE_URL}}">
+<meta property="og:image" content="{{BASE}}assets/logo/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{BASE}}assets/logo/og-image.png">
+<link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/logo/favicon-32.png" sizes="32x32">
+<link rel="icon" href="assets/logo/favicon-16.png" sizes="16x16">
+<link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
+<link rel="stylesheet" href="{{STYLE}}">
+<script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
+</head>
+<body>
+<!-- the field: the one ground behind the whole page (chalk, two drifting glows, a low band of light
+     and grain); see the field block at the end of style.css -->
+<div class="field" aria-hidden="true"><span class="fg fg1"></span><span class="fg fg2"></span></div>
+<a class="skip" href="#main">Skip to content</a>
+
+{{ICONS}}
+
+{{HEADER}}
+{{PIN}}
+
+<main id="main">
+
+  <!-- 1. Hero, Tab 2 (the shop): the square glass film and its copy, as the homepage carried them
+       until 2026-10-03, when Peter split the site in two ("I'm thinking the hero video we currently
+       have could be the hero video for our product tab"). The film and its framing are unchanged;
+       Peter's portrait and his line went to the homepage's hero, and the two ways on here are the
+       shop's own: the rack and the free sample, both on this page. -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero-in">
+      <div class="glass">
+        <video id="glass-video" muted loop playsinline preload="none" poster="assets/glass-poster.webp" width="1080" height="1080" aria-hidden="true"></video>
+        <button class="icon-btn glass-toggle" id="glass-toggle" type="button" aria-label="Pause animation" hidden><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>
+      </div>
+      <div class="hero-copy">
+        <p class="label">Sports nutrition &amp; wellness</p>
+        <h1 id="hero-title"><span>Picked</span> <span>for how</span> <span class="hl-3d">you train.</span></h1>
+        <!-- PETER-COPY --><p class="sub">Hand-picked supplements. Free macros. A fifteen-minute call on what’s worth taking.</p><!-- /PETER-COPY -->
+        <!-- DRAFT-COPY --><div class="hero-actions">
+          <a class="btn" href="#goals">Pick your goal</a>
+          <a class="tlink" href="#sample">Ask for a free sample</a>
+        </div><!-- /DRAFT-COPY -->
+      </div>
+    </div>
+  </section>
+
+{{SHELVES}}
+
+  <!-- Free sample: visitors leave their own contact details and Peter reaches out; his phone and
+       email are never shown. Self-contained, so moving it is a cut-and-paste of this block.
+       With script it posts JSON to FormSubmit (_script.html); without, it is a plain POST and
+       FormSubmit sends the visitor back to #sample-sent, which :target shows in style.css.
+       The addresses come from SAMPLE_TO in build_homepage.py. -->
+  <section class="sec sample-sec" id="sample" aria-labelledby="sample-title">
+    <div class="wrap split">
+      <div class="split-text grow">
+        <!-- DRAFT-COPY --><p class="label">Try it first</p>
+        <h2 id="sample-title"><span>Request a</span> <span><span class="hl-k">free</span> sample</span></h2>
+        <p>On me, while supplies last. Dropped off near Lincoln, or mailed anywhere in the US.</p><!-- /DRAFT-COPY -->
+      </div>
+      <form class="c-card nc grow" id="sample-form" action="{{SAMPLE_ACTION}}" method="POST" data-endpoint="{{SAMPLE_ENDPOINT}}" style="--d:1">
+        <input type="hidden" name="_subject" value="Sample request · Aspire Health">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="{{SAMPLE_NEXT}}">
+        <!-- the honeypot: people never see or reach it, bots fill it, FormSubmit drops those -->
+        <div class="vh" aria-hidden="true"><label for="s-honey">Leave this empty</label><input id="s-honey" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
+        <!-- Two short steps with script: step 1 is who you are and what you'd like, step 2 is where
+             it goes and the send. Without script nothing here is hidden, so it is one form and a
+             plain POST, as before. The count, Next, Back and the recap are [hidden] until the script
+             takes over. The form reads as a note to Peter, a fill-in-the-blank sentence: .s-say is
+             the sentence, aria-hidden, since every field keeps its own real (visually hidden) label. -->
+        <p class="s-prog" id="s-prog" hidden><span id="s-prog-t">1 of 2</span></p>
+        <!-- DRAFT-COPY -->
+        <div class="s-step" id="s-step1" role="group" tabindex="-1" aria-label="Your details">
+          <span class="s-say" aria-hidden="true">Hey Peter, I’m</span>
+          <div class="c-field"><label for="s-name">Your name</label>
+            <input id="s-name" name="name" type="text" autocomplete="name" required aria-describedby="s-name-err">
+            <p class="s-err" id="s-name-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <fieldset class="c-q s-by">
+            <legend>Text or email?</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="contact_by" value="Text" checked><span>Text me</span></label>
+              <label class="chip"><input type="radio" name="contact_by" value="Email"><span>Email me</span></label>
+            </div>
+          </fieldset>
+          <span class="s-say" aria-hidden="true">at</span>
+          <div class="c-field" data-by="Text"><label for="s-phone">Your phone number</label>
+            <input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="s-phone-err">
+            <p class="s-err" id="s-phone-err"></p></div>
+          <div class="c-field" data-by="Email"><label for="s-email">Your email</label>
+            <input id="s-email" name="email" type="email" autocomplete="email" aria-describedby="s-email-err">
+            <p class="s-err" id="s-email-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <span class="s-say" aria-hidden="true">I’ve had my eye on</span>
+          <!-- a textarea, not an input, so a long product name wraps inside its blank instead of
+               scrolling out of sight. One line, and Enter means Next (the script sees to both). -->
+          <div class="c-field s-f-item"><label for="s-product">What would you like to try?</label>
+            <textarea id="s-product" name="product" rows="1" autocomplete="off" required
+                   aria-describedby="s-product-hint s-product-err"></textarea>
+            <p class="s-err" id="s-product-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+          <!-- the product names, for the script's suggestions under the blank -->
+          <ul class="s-sugg" id="s-sugg" role="listbox" aria-label="Products that match" hidden></ul>
+          {{SAMPLE_PICKER}}
+          <!-- "Ask for a free sample" on a product card, over words the visitor typed here: the script keeps
+               them, puts the product in the P.S. and says so on this line -->
+          <p class="s-hint s-kept" id="s-kept" hidden></p>
+          <p class="s-hint" id="s-product-hint">Not sure? Say so and I’ll suggest something.</p>
+          <datalist id="sample-products">
+{{SAMPLE_PRODUCTS}}
+          </datalist>
+          <button class="btn s-next-btn" type="button" id="s-next" hidden>Next<svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
+        </div>
+        <div class="s-step" id="s-step2">
+          <!-- step 1, folded to a line once Next has checked it: filled in by the script -->
+          <div class="s-recap" id="s-recap" hidden>
+            <p class="s-recap-t"><b id="s-r-name"></b> · <span id="s-r-how"></span> · <span id="s-r-item"></span></p>
+            <button class="s-edit" type="button" id="s-edit">Edit<span class="vh"> your name, number or email, and pick</span></button>
+          </div>
+          <span class="s-say" aria-hidden="true">You can</span>
+          <fieldset class="c-q s-deliv" id="s-where" aria-describedby="s-where-err">
+            <legend>Where should it go?</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="delivery" value="Drop it off near Lincoln" required><span>drop it off, I’m near Lincoln</span></label>
+              <label class="chip"><input type="radio" name="delivery" value="Mail it (US)" aria-describedby="s-mail-note"><span>mail it, I’m in the US</span></label>
+            </div>
+            <p class="s-hint s-mail-note" id="s-mail-note">No need for your address yet. I’ll ask for it if it’s one I can mail.</p>
+            <p class="s-err" id="s-where-err"></p>
+          </fieldset>
+          <div class="s-ps"><span class="s-say" aria-hidden="true">P.S.</span>
+          <div class="c-field s-f-note"><label for="s-note">Anything else? <span>Optional</span></label>
+            <input id="s-note" name="note" type="text" autocomplete="off" maxlength="300" placeholder="A flavor you like, a good time to text…"></div></div>
+          <div class="s-checks">
+            <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this.</span></label>
+            <p class="s-err" id="s-consent-err"></p>
+            <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and the odd update after that is fine too. <em>Optional</em></span></label>
+          </div>
+          <div class="s-acts">
+            <button class="btn btn-line s-back" type="button" id="s-back" hidden><svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-back"/></svg>Back</button>
+            <button class="btn" type="submit" id="sample-go">Send it to Peter</button>
+          </div>
+          <p class="s-err" id="sample-fail" tabindex="-1"></p>
+          <ol class="s-next" aria-label="What happens next">
+            <li>You hear from me directly, by text or email, whichever you chose.</li>
+            <li>If it’s one I can send, we pick a drop-off near Lincoln, or I ask for your address to mail it.</li>
+            <li>Give it a real try, then give me your honest take. You don’t owe me an order.</li>
+          </ol>
+          <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
+        </div>
+        <!-- /DRAFT-COPY -->
+      </form>
+      <!-- the thank-you takes the form's place: shown by the script after a send, or by
+           :target when FormSubmit sends a no-script visitor back to #sample-sent -->
+      <div class="c-card nc s-done" id="sample-sent">
+        <!-- DRAFT-COPY --><h3 id="sample-done-title" tabindex="-1">Got it, thank you.</h3>
+        <p>You’ll hear from me within a day or two about what I can send.</p><!-- /DRAFT-COPY -->
+        <!-- DRAFT-COPY -->
+        <div class="s-step3">
+          <p>If I can send it, give it a few days, then I’ll ask how you’re getting on. Be honest about what worked and what didn’t, and I’ll say what I’d add next, if anything.</p>
+        </div>
+        <div class="qc qc-done">
+          <p class="qc-ask">{{QUICK_ASK}}</p>
+          {{QUICK_CALL}}
+        </div>
+        <!-- /DRAFT-COPY -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Trending now: the week's three best sellers. It is OFF (Peter, 2026-10-01: "maybe we
+       should get rid of the trending now"), so this fills in as nothing. The whole section —
+       its comment, its markup and its three cards — is built in build_homepage.py, behind one
+       switch: set TRENDING = True there and the band comes back here, on the shop tab between
+       the free sample and Peter's stack. -->
+{{TRENDING}}
+
+{{MYSTACK}}
+
+  <!-- The full shelf. It stays out of the way until you search or ask for it ("All products" in the
+       menu, the masthead and the footer, from any page, lands here as shop.html#results), and it
+       sits last on the shop tab, so opening it never splits the rack from the sample. -->
+  <section class="sec shop results" id="results" aria-labelledby="shop-title" hidden>
+    <div class="wrap">
+      <div class="sec-head"><h2 id="shop-title" tabindex="-1">All products</h2></div>
+      <div class="filter" id="filter" hidden><p id="filter-text"></p><button class="tlink" type="button" id="filter-clear">Close</button></div>
+      <ul class="grid" id="grid">
+{{GRID}}
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+{{FOOTER}}
+
+{{DIALOGS}}
+{{PCARD}}
+<p class="vh" id="live" aria-live="polite"></p>
+
+{{SCRIPT}}
+</body>
+</html>

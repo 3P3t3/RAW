@@ -4,13 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
+<link rel="canonical" href="https://3p3t3.github.io/RAW/bloodwork.html">
 <meta name="theme-color" content="#002E3B">
-<title>Hydration · Aspire Health</title>
-<meta name="description" content="Electrolytes and drink mixes for long, hot and sweaty sessions.">
+<title>Bloodwork &amp; peptides · Aspire Health</title>
+<meta name="description" content="A blood panel through Avellum Health, and what a licensed clinician may decide after it.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Hydration · Aspire Health">
-<meta property="og:description" content="Electrolytes and drink mixes for long, hot and sweaty sessions.">
-<meta property="og:url" content="https://3p3t3.github.io/RAW/category-hydration.html">
+<meta property="og:title" content="Bloodwork &amp; peptides · Aspire Health">
+<meta property="og:description" content="A blood panel through Avellum Health, and what a licensed clinician may decide after it.">
+<meta property="og:url" content="https://3p3t3.github.io/RAW/bloodwork.html">
 <meta property="og:image" content="https://3p3t3.github.io/RAW/assets/logo/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://3p3t3.github.io/RAW/assets/logo/og-image.png">
@@ -171,63 +172,81 @@
 
 <main id="main">
 
-  <!-- Category banner: generated backdrop (or, for a shelf in SHELF_PORTRAIT, a whole portrait beside the name), live caustics, the category set large -->
-  <section class="cat-hero" aria-labelledby="cat-title">
-    <img class="cat-bg" src="assets/bg-hydration.webp" alt="" width="1600" height="900" fetchpriority="high">
+  <!-- bloodwork.html: the bloodwork route's own page, in BOTH published copies since 2026-10-03, each
+       with its own provider (provider() in build_homepage.py): the plain site's goes to Avellum Health,
+       the copy under plus/ to CCRX (Peter: "Avellum links can go on the regular site, crystal clear
+       links will go on the plus site. Both still want the split."). The {{BW_*}} pieces are the only
+       parts that differ, and only where a sentence states something true of one provider and not
+       known of the other. Everything here is furniture the site already has — the shelf hero without
+       a photo, and .split-text for a column of words.
+
+       It reads in the one order a stranger needs it in: what the panel IS, then what a clinician
+       may decide after it, then how Peter is paid, then Avellum's own statement, then the one link
+       out. No page on this site says what the panel or any peptide DOES: what a thing is, and who
+       decides, is the whole of it. No prices and nothing about where it ships, either: both change,
+       and a stale one here is worse than none — their site states both. -->
+
+  <!-- 1. The hero, in the shelves' own frame: no backdrop photo, because there is no honest
+          picture of bloodwork that is not a claim or a stock prop. Teal, the caustics, the name. -->
+  <section class="cat-hero" aria-labelledby="bw-title">
     <canvas class="caustics" data-caustics aria-hidden="true"></canvas>
     <div class="wrap cat-hero-in">
-      <p class="label"><a href="shop.html#goals">All shelves</a></p>
-      <h1 id="cat-title">Hydration</h1>
-      <p class="sub">Electrolytes and drink mixes for long, hot and sweaty sessions.</p>
-      <p class="cat-count">8 products</p>
-      <!-- DRAFT-COPY --><p class="cat-sample"><a href="shop.html?try=Hydration#sample">Ask for a free sample</a></p><!-- /DRAFT-COPY -->
+      <p class="label"><a href="homepage.html#top">Aspire Health</a></p>
+      <h1 id="bw-title">Bloodwork &amp; peptides</h1>
+      <!-- DRAFT-COPY --><p class="sub">Something else I can point you to, separate from everything else on this site. Here is exactly what it is.</p><!-- /DRAFT-COPY -->
     </div>
   </section>
 
+  <!-- 2. The panel, and what can come after it: the two halves of the one thing, in the split the
+          homepage uses for #sample and #macros -- the words on the left, the sand card beside them
+          from 768 (.c-card takes columns 7-13 of a .split by itself). On a phone they stack in this
+          order, which is the order a stranger needs them in: what the panel IS first, then the part
+          that is a clinician's decision and not Peter's.
 
-  <!-- Every product in this category; each one rises into frame as you scroll -->
-  <section class="sec cat-shop" id="all" aria-labelledby="all-title">
-    <div class="wrap">
-      <div class="sec-head grow"><h2 id="all-title">Everything in Hydration</h2></div>
-      <ul class="grid" id="grid">
-        <li class="card grow" style="--d:0" data-cat="hydration"><a class="card-link" href="https://amway.com/share-link/DlxRIsXr0" target="_blank" rel="noopener" data-name="Nutrilite Twist Tubes 2GO" data-kind="Drink mix tubes · Immunity Health Strawberry Kiwi" data-line="Three everyday mixes to twist into water" data-facts="" data-sfx="chime" data-try="Nutrilite Twist Tubes 2GO - Immunity Health Strawberry Kiwi"><span class="shot"><img src="assets/products/nutrilite-twist-tubes-2go-immunity-health-strawberry-kiwi.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Hydration</p><h3 class="p-name">Nutrilite Twist Tubes 2GO</h3><p class="p-desc">Drink mix tubes · Immunity Health Strawberry Kiwi</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:1" data-cat="hydration"><a class="card-link" href="https://amway.com/share-link/Z4g8mq2wd" target="_blank" rel="noopener" data-name="Nutrilite Twist Tubes 2GO" data-kind="Drink mix tubes · Joint Health Raspberry" data-line="Three everyday mixes to twist into water" data-facts="" data-sfx="chime" data-try="Nutrilite Twist Tubes 2GO - Joint Health Raspberry"><span class="shot"><img src="assets/products/nutrilite-twist-tubes-2go-joint-health-raspberry.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Hydration</p><h3 class="p-name">Nutrilite Twist Tubes 2GO</h3><p class="p-desc">Drink mix tubes · Joint Health Raspberry</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:2" data-cat="hydration"><a class="card-link" href="https://amway.com/share-link/s8elwQ-bb" target="_blank" rel="noopener" data-name="Nutrilite Twist Tubes 2GO" data-kind="Drink mix tubes · Variety Pack" data-line="Three everyday mixes to twist into water" data-facts="20 tubes|3 flavors|5–30 calories a tube" data-sfx="chime" data-try="Nutrilite Twist Tubes 2GO - Variety Pack"><span class="shot"><img src="assets/products/nutrilite-twist-tubes-2go-variety-pack.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Hydration</p><h3 class="p-name">Nutrilite Twist Tubes 2GO</h3><p class="p-desc">Drink mix tubes · Variety Pack</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:3" data-cat="hydration"><a class="card-link" href="https://amway.com/share-link/enbKVnLlx" target="_blank" rel="noopener" data-name="XS CocoWater Hydration Drink Mix" data-kind="Hydration mix · Pineapple/Coconut" data-line="Before, during and after the long, hot ones" data-facts="" data-sfx="chime" data-try="XS CocoWater Hydration Drink Mix - Pineapple/Coconut"><span class="shot"><img src="assets/products/xs-cocowater-hydration-drink-mix-pineapple-coconut.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Hydration</p><h3 class="p-name">XS CocoWater Hydration Drink Mix</h3><p class="p-desc">Hydration mix · Pineapple/Coconut</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:0" data-cat="hydration"><a class="card-link" href="https://amway.com/share-link/Dts4kqijP" target="_blank" rel="noopener" data-name="XS CocoWater Hydration Drink Mix" data-kind="Hydration mix · Strawberry/Watermelon" data-line="Before, during and after the long, hot ones" data-facts="" data-sfx="chime" data-try="XS CocoWater Hydration Drink Mix - Strawberry/Watermelon"><span class="shot"><img src="assets/products/xs-cocowater-hydration-drink-mix-strawberry-watermelon.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Hydration</p><h3 class="p-name">XS CocoWater Hydration Drink Mix</h3><p class="p-desc">Hydration mix · Strawberry/Watermelon</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:1" data-cat="daily-foundations"><a class="card-link" href="https://amway.com/share-link/TcFtuhPvJ" target="_blank" rel="noopener" data-name="XS Creatine+" data-kind="Creatine powder" data-line="A daily 5 g scoop, training day or not" data-facts="5 g creatine monohydrate|30 servings|Unflavored|Caffeine free" data-sfx="level" data-try="XS Creatine+"><span class="shot shot-studio"><img src="assets/products/xs-creatine.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Daily Foundations</p><h3 class="p-name">XS Creatine+</h3><p class="p-desc">Creatine powder</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:2" data-cat="hydration"><a class="card-link" href="https://amway.com/share-link/XjBUQPtjO" target="_blank" rel="noopener" data-name="XS Sports Twist Tubes" data-kind="Drink mix tubes · Fruit Punch" data-line="Turns your water bottle into a sports drink" data-facts="" data-sfx="chime" data-try="XS Sports Twist Tubes - Fruit Punch"><span class="shot"><img src="assets/products/xs-sports-twist-tubes-fruit-punch.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Hydration</p><h3 class="p-name">XS Sports Twist Tubes</h3><p class="p-desc">Drink mix tubes · Fruit Punch</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-        <li class="card grow" style="--d:3" data-cat="hydration"><a class="card-link" href="https://amway.com/share-link/hzkCx98xw" target="_blank" rel="noopener" data-name="XS Sports Twist Tubes" data-kind="Drink mix tubes · Raspberry Lemonade" data-line="Turns your water bottle into a sports drink" data-facts="20 tubes|5 g sugar|25 calories|120 mg sodium" data-sfx="chime" data-try="XS Sports Twist Tubes - Raspberry Lemonade"><span class="shot shot-studio"><img src="assets/products/xs-sports-twist-tubes-raspberry-lemonade.webp" alt="" loading="lazy" width="600" height="600"></span><p class="p-tag">Hydration</p><h3 class="p-name">XS Sports Twist Tubes</h3><p class="p-desc">Drink mix tubes · Raspberry Lemonade</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>
-      </ul>
-    </div>
-  </section>
+          The sentence about the first kits shipping is written by ccrx_preorder(), off the one
+          constant that expires: empty CCRX_PREORDER the day they ship and that sentence -- the only
+          place on this site that says the panel is not shipping yet -- leaves the page with it.
 
-  <!-- The other categories -->
-  <section class="sec cat-more" aria-labelledby="more-title">
-    <div class="wrap">
-      <div class="sec-head grow"><h2 id="more-title">Keep looking</h2></div>
-      <ul class="goal-index">
-          <li><a class="goal" href="category-recovery.html"><span class="goal-name">Recovery</span><span class="goal-desc">Wind down, repair and sleep</span><span class="goal-island"><img src="assets/thumbs/recovery.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-energy-focus.html"><span class="goal-name">Energy &amp; Focus</span><span class="goal-desc">Pre-workout, tablets and the full XS energy range.</span><span class="goal-island"><img src="assets/thumbs/energy-focus.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-protein.html"><span class="goal-name">Protein</span><span class="goal-desc">Powders, shakes, bars and crisps to hit your protein for the day.</span><span class="goal-island"><img src="assets/thumbs/protein.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-fat-loss.html"><span class="goal-name">Fat Loss</span><span class="goal-desc">Powders, tablets and softgels to pair with your training.</span><span class="goal-island"><img src="assets/thumbs/fat-loss.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-daily-foundations.html"><span class="goal-name">Daily Foundations</span><span class="goal-desc">The everyday base</span><span class="goal-island"><img src="assets/thumbs/daily-foundations.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-skin-redefined.html"><span class="goal-name">Skin Redefined</span><span class="goal-desc">Artistry skincare, for the hours you are not training.</span><span class="goal-island"><img src="assets/thumbs/skin-redefined.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-womens-health.html"><span class="goal-name">Women’s Health</span><span class="goal-desc">For her everyday</span><span class="goal-island"><img src="assets/thumbs/womens-health.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-mens-health.html"><span class="goal-name">Men’s Health</span><span class="goal-desc">For his everyday</span><span class="goal-island"><img src="assets/thumbs/mens-health.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-          <li><a class="goal" href="category-everyday-health.html"><span class="goal-name">Everyday Health</span><span class="goal-desc">The quiet part of the routine</span><span class="goal-island"><img src="assets/thumbs/everyday-health.webp" alt="" width="440" height="440" loading="lazy"></span></a></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Macros: the calculator lives on the homepage, so this band is the way to it -->
-  <section class="sec cat-macros" aria-labelledby="cat-macros-title">
+          Nothing here says what the panel or any peptide DOES. The categories CCRX sells are named
+          and that is all, because this is prescription medicine and because the clinician is the one
+          having that conversation. No prices and nothing about where it ships, either: both change,
+          and a stale one here is worse than none -- their own site states both. -->
+  <section class="sec" id="panel" aria-labelledby="bw-panel-t">
     <div class="wrap split">
       <div class="split-text grow">
-        <p class="label">Your numbers</p>
-        <h2 id="cat-macros-title"><span>Not sure where</span> <span>to start?</span></h2>
-        <p>The math behind a higher you.</p>
-        <a class="btn" href="homepage.html#macros">Work out your macros</a>
+        <!-- DRAFT-COPY --><p class="label">The panel</p>
+        <h2 id="bw-panel-t"><span>What the</span> <span><span class="hl-k">panel</span> is</span></h2>
+        <p>It’s bloodwork: a lab panel of your biomarkers, measured from your own blood, through Avellum Health.</p>
+        <p>What the panel measures, how the sample is taken and what it costs are all listed on their site.</p><!-- /DRAFT-COPY -->
+      </div>
+      <div class="c-card grow" id="protocols" style="--d:1" aria-labelledby="bw-after-t">
+        <!-- DRAFT-COPY --><div>
+          <p class="label">After the panel</p>
+          <h2 id="bw-after-t">What can come after</h2>
+        </div>
+        <p>If you want to go further than the panel, that part is medicine, and it isn’t mine to hand out.</p>
+        <p>You fill in an intake. A licensed clinician reads it and decides whether a prescription is appropriate for you. They can also decide it isn’t, and say no.</p>
+        <p>What they can prescribe is compounded peptides. I’m not going to tell you what any of them is for — I’m not a clinician, and that conversation is yours to have with them.</p><!-- /DRAFT-COPY -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Before you go: how Peter is paid here (PETER-COPY, his approved wording -- his Amway
+          disclosure is a different business and stays on the pages it is already on; the two are
+          never merged), then Avellum's own statement, which belongs on this page because it is
+          theirs, and then the one link out, in the card beside them. -->
+  <section class="sec" aria-labelledby="bw-go-t">
+    <div class="wrap split">
+      <div class="split-text grow">
+        <!-- DRAFT-COPY --><p class="label">Straight with you</p>
+        <h2 id="bw-go-t"><span>Before</span> <span><span class="hl-k">you go</span></span></h2><!-- /DRAFT-COPY -->
+        <!-- DRAFT-COPY --><p>I don’t make anything when you go through to Avellum Health, on the bloodwork or on anything a clinician prescribes.</p><!-- /DRAFT-COPY -->
+        <!-- Avellum Health's own statement about compounded medications, in their words -->
+        <p>Avellum Health state it plainly: compounded medications are not FDA-approved drugs.</p>
+      </div>
+      <div class="c-card grow" style="--d:1">
+        <!-- DRAFT-COPY --><p>The link to Avellum Health goes here as soon as it’s ready. The price, what’s in the panel and where they can ship it will be theirs to state, on their site, not mine.</p>
+        <p class="soon"><span class="soon-tag">Coming soon</span></p><!-- /DRAFT-COPY -->
       </div>
     </div>
   </section>
@@ -255,6 +274,7 @@
     <div class="foot-meta">
       <p id="ordering">Checkout, fulfillment and delivery occur through our partner vendors, Amway or Avellum Health.</p>
       <p class="foot-fda">These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure or prevent any disease.</p>
+      <!-- DRAFT-COPY --><p class="foot-fda">The line above is for the supplements on the rest of this site. This page is about something different: a blood panel, which is a lab test, and peptides, which are prescription medications. Neither is a supplement.</p><!-- /DRAFT-COPY -->
       <p>© 2026 Aspire Health</p>
     </div>
   </div>
@@ -310,19 +330,6 @@
   </div>
 </dialog>
 
-    <dialog class="pcard" id="pcard" aria-labelledby="pcard-name" aria-describedby="pcard-line">
-      <div class="pcard-in">
-        <button class="icon-btn pcard-x" type="button" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
-        <div class="pcard-art"><img id="pcard-img" alt="" width="600" height="600"></div>
-        <div class="pcard-copy">
-          <p class="pcard-kind" id="pcard-kind"></p>
-          <h3 class="pcard-name" id="pcard-name"></h3>
-          <p class="pcard-line" id="pcard-line"></p>
-          <ul class="pcard-facts" id="pcard-facts" aria-label="Quick facts"></ul>
-          <div class="pcard-acts"><a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Buy on Amway<span class="vh"> (opens in a new tab)</span></a><a class="btn btn-line pcard-try" id="pcard-try" href="shop.html#sample" data-home="shop.html">Ask for a free sample</a></div>
-        </div>
-      </div>
-    </dialog>
 
 <p class="vh" id="live" aria-live="polite"></p>
 

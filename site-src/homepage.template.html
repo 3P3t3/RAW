@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 {{HEAD_EXTRA}}<meta name="theme-color" content="#002E3B">
-<title>Aspire Health · Sports nutrition &amp; wellness</title>
-<meta name="description" content="Nutrilite and XS sports nutrition, hydration and sleep support, picked for how you train.">
+<title>Aspire Health · Feel your best. Understand why.</title>
+<!-- DRAFT-COPY --><meta name="description" content="Feel your best. Understand why. Our story, your macros, bloodwork and biomarkers, and a free call with Peter in Lincoln, CA.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Aspire Health">
-<meta property="og:description" content="Nutrilite and XS sports nutrition, hydration and sleep support, picked for how you train.">
+<meta property="og:description" content="Feel your best. Understand why. Our story, your macros, bloodwork and biomarkers, and a free call with Peter in Lincoln, CA."><!-- /DRAFT-COPY -->
 <meta property="og:url" content="{{PAGE_URL}}">
 <meta property="og:image" content="{{BASE}}assets/logo/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -38,31 +38,25 @@
 
 <main id="main">
 
-  <!-- 3. Hero -->
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="wrap hero-in">
-      <div class="glass">
-        <video id="glass-video" muted loop playsinline preload="none" poster="assets/glass-poster.webp" width="1080" height="1080" aria-hidden="true"></video>
-        <button class="icon-btn glass-toggle" id="glass-toggle" type="button" aria-label="Pause animation" hidden><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>
-      </div>
+  <!-- 3. Hero, Tab 1 (Peter, 2026-10-03: "1 tab is for products, 1 tab is to bring people through the
+       story and book a call"). The tagline is the headline, Peter's own: "Feel your best. Understand why.
+       Aspire health." The brand rides above it as the label, because under 420px the masthead shows the
+       wave alone and the name would otherwise never be on a phone's first screen after the curtain.
+       Behind it, a full-bleed photograph from HOME_BG in build_homepage.py ({{HOME_BG}}: a <picture>
+       when one is named, and otherwise the palette ground .hh-ph), under a scrim that keeps every line
+       here at 4.5:1 or better whatever the picture is (style.css, the Tab 1 hero block). The square
+       film moved to the shop tab with its copy. Then who "I" is: Peter holding their baby daughter, the
+       first line of his About introduction, verbatim, and the two ways on: his story, the next section
+       down, and the call. .hero-actions keeps its own box: the mobile tab's observer watches it. -->
+  <section class="hero hh" aria-labelledby="hero-title">
+{{HOME_BG}}
+    <div class="wrap hh-in">
       <div class="hero-copy">
-        <p class="label">Sports nutrition &amp; wellness</p>
-        <h1 id="hero-title"><span>Picked</span> <span>for how</span> <span class="hl-3d">you train.</span></h1>
-        <!-- PETER-COPY --><p class="sub">Hand-picked supplements. Free macros. A fifteen-minute call on what’s worth taking.</p><!-- /PETER-COPY -->
-        <!-- who "I" is, on the first screen and before anything asks for anything: Peter holding their
-             baby daughter — the whole of assets/peter/with-daughter-960.webp, not a square cut out of it
-             (Peter, 2026-10-01: "I think I want it bigger. I think I want the whole body shot") — and the
-             first line of his About introduction, verbatim, then the way into his story, the next
-             section down. The 4:5 picture is far taller than a square, so on a phone it stands beside the
-             HEADLINE (style.css places it there; the headline's longest line is only ~2.46x its font-size
-             wide, so the picture takes the room the headline never used) and his line and the plan's two
-             links run full width under them. From 768 it stands beside his line and the links as before.
-             The first thing offered is the plan, not a form: the calculator and the call are both inside
-             it (steps 01 and 04), so asking for the map first gives nothing up.
-             .hero-actions keeps its own box: the mobile tab's observer in _script.html watches it. -->
+        <p class="label">Aspire Health</p>
+        <!-- PETER-COPY: his tagline, 2026-10-03 --><h1 id="hero-title"><span>Feel your best.</span> <span class="hh-k">Understand why.</span></h1><!-- /PETER-COPY -->
         <div class="hero-me">
-          <img src="assets/peter/hero-pair-240.webp" srcset="assets/peter/hero-pair-240.webp 240w, assets/peter/hero-pair-480.webp 480w" sizes="(min-width:1024px) 204px, (min-width:768px) 130px, calc(46vw - 18px)" width="240" height="300" alt="Peter holding their baby daughter" decoding="async">
-          <p class="hero-me-line"><!-- PETER-COPY -->I’m Peter — husband, dad to a baby girl, and a Lincoln local.<!-- /PETER-COPY --> <!-- DRAFT-COPY --><a href="#story">Our story</a><!-- /DRAFT-COPY --></p>
+          <img src="assets/peter/hero-pair-240.webp" srcset="assets/peter/hero-pair-240.webp 240w, assets/peter/hero-pair-480.webp 480w" sizes="(min-width:1024px) 180px, (min-width:768px) 150px, 120px" width="240" height="300" alt="Peter holding their baby daughter" decoding="async">
+          <p class="hero-me-line"><!-- PETER-COPY -->I’m Peter — husband, dad to a baby girl, and a Lincoln local.<!-- /PETER-COPY --></p>
           <!-- DRAFT-COPY --><div class="hero-actions">
             <a class="btn" href="#story">See how we did it</a>
             <a class="tlink" href="#consult">Book a free call</a>
@@ -192,178 +186,12 @@
     </div>
   </section>
 
-  <!-- 3b. The game plan (#how): the path through the page, and the hero's own primary button leads
-       here, so it is the first thing a visitor is offered. Five numbered steps, each linking to where
-       it happens (#goals, #sample, #macros, #quick-call; step 03 has no section of its own, so it is
-       not a link), then the one thing to do. The sections themselves carry no step numbers: they sit
-       in a different order on the page, so this list alone is the map. Step 05's words switch with
-       CONSULT_QUICK_URL in build_homepage.py, as the quick-call button does. The sample is a request,
-       never a promise: Peter decides what he can send, so no line here or in #sample may guarantee one.
-       In the bar theme (html.t-bar) the steps hang on a steel shaft, each number on a plate (.how-pl,
-       drawn from its data-n); as the section scrolls through, the shaft lights and each plate slides
-       on (_script.html). .how-sh is the stretch of shaft to the next plate. Other views hide both. -->
-  <section class="sec how-sec" id="how" aria-labelledby="how-title">
-    <div class="wrap">
-      <!-- DRAFT-COPY -->
-      <div class="how-head grow">
-        <p class="label">Where to start</p>
-        <h2 id="how-title"><span>The game</span> <span class="hl-k">plan</span></h2>
-      </div>
-      <ol class="how-steps">
-        <li class="grow" style="--d:1"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="#goals"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="01"></i>01</span>
-          <span class="how-t">Identify your goal.</span>
-          <span class="how-d">Let’s figure out what you’re chasing. Then we can build the best stack to optimize for that.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-        <li class="grow" style="--d:2"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="#sample"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="02"></i>02</span>
-          <span class="how-t">Request a free sample.</span>
-          <span class="how-d">On me, while supplies last.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-        <li class="grow" style="--d:3"><i class="how-sh" aria-hidden="true"><i></i></i><div class="how-step"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="03"></i>03</span>
-          <span class="how-t">Report back.</span>
-          <span class="how-d">A few days in, I’ll ask how you’re getting on. Say what worked and what didn’t, and I’ll tell you what I’d add, if anything.</span></div></li>
-        <li class="grow" style="--d:4"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="#macros"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="04"></i>04</span>
-          <span class="how-t">Get my read on it.</span>
-          <span class="how-d">Run your macros free, about a minute of typing — or bring your stack to the fifteen-minute call and I’ll say what I’d keep and what I’d drop.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-        <li class="grow" style="--d:5"><a class="how-step" href="#quick-call"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="05"></i>05</span>
-          <span class="how-t">Make it part of your week.</span>
-          <span class="how-d">{{QUICK_STEP}}, then order through my Amway link if it earns a spot.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
-      </ol>
-      <!-- the plan's one trust line stands over its button, in ink, so it is read before the ask (the
-           no-break space keeps "I" off the end of a phone's first line) -->
-      <div class="how-go grow">
-        <p class="how-fine">Sixty seconds of typing. I&nbsp;answer every one myself.</p>
-        <a class="btn" id="how-go" href="#sample">Ask for a free sample</a>
-        <a class="tlink" href="#macros">or run your macros first</a>
-      </div>
-      <!-- /DRAFT-COPY -->
-    </div>
-  </section>
+{{WHY}}
 
-{{SHELVES}}
-
-  <!-- Free sample: visitors leave their own contact details and Peter reaches out; his phone and
-       email are never shown. Self-contained, so moving it is a cut-and-paste of this block.
-       With script it posts JSON to FormSubmit (_script.html); without, it is a plain POST and
-       FormSubmit sends the visitor back to #sample-sent, which :target shows in style.css.
-       The addresses come from SAMPLE_TO in build_homepage.py. -->
-  <section class="sec sample-sec" id="sample" aria-labelledby="sample-title">
-    <div class="wrap split">
-      <div class="split-text grow">
-        <!-- DRAFT-COPY --><p class="label">Try it first</p>
-        <h2 id="sample-title"><span>Request a</span> <span><span class="hl-k">free</span> sample</span></h2>
-        <p>On me, while supplies last. Dropped off near Lincoln, or mailed anywhere in the US.</p><!-- /DRAFT-COPY -->
-      </div>
-      <form class="c-card nc grow" id="sample-form" action="{{SAMPLE_ACTION}}" method="POST" data-endpoint="{{SAMPLE_ENDPOINT}}" style="--d:1">
-        <input type="hidden" name="_subject" value="Sample request · Aspire Health">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="{{SAMPLE_NEXT}}">
-        <!-- the honeypot: people never see or reach it, bots fill it, FormSubmit drops those -->
-        <div class="vh" aria-hidden="true"><label for="s-honey">Leave this empty</label><input id="s-honey" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
-        <!-- Two short steps with script: step 1 is who you are and what you'd like, step 2 is where
-             it goes and the send. Without script nothing here is hidden, so it is one form and a
-             plain POST, as before. The count, Next, Back and the recap are [hidden] until the script
-             takes over. The form reads as a note to Peter, a fill-in-the-blank sentence: .s-say is
-             the sentence, aria-hidden, since every field keeps its own real (visually hidden) label. -->
-        <p class="s-prog" id="s-prog" hidden><span id="s-prog-t">1 of 2</span></p>
-        <!-- DRAFT-COPY -->
-        <div class="s-step" id="s-step1" role="group" tabindex="-1" aria-label="Your details">
-          <span class="s-say" aria-hidden="true">Hey Peter, I’m</span>
-          <div class="c-field"><label for="s-name">Your name</label>
-            <input id="s-name" name="name" type="text" autocomplete="name" required aria-describedby="s-name-err">
-            <p class="s-err" id="s-name-err"></p></div><span class="s-say" aria-hidden="true">.</span>
-          <fieldset class="c-q s-by">
-            <legend>Text or email?</legend>
-            <div class="chips">
-              <label class="chip"><input type="radio" name="contact_by" value="Text" checked><span>Text me</span></label>
-              <label class="chip"><input type="radio" name="contact_by" value="Email"><span>Email me</span></label>
-            </div>
-          </fieldset>
-          <span class="s-say" aria-hidden="true">at</span>
-          <div class="c-field" data-by="Text"><label for="s-phone">Your phone number</label>
-            <input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="s-phone-err">
-            <p class="s-err" id="s-phone-err"></p></div>
-          <div class="c-field" data-by="Email"><label for="s-email">Your email</label>
-            <input id="s-email" name="email" type="email" autocomplete="email" aria-describedby="s-email-err">
-            <p class="s-err" id="s-email-err"></p></div><span class="s-say" aria-hidden="true">.</span>
-          <span class="s-say" aria-hidden="true">I’ve had my eye on</span>
-          <!-- a textarea, not an input, so a long product name wraps inside its blank instead of
-               scrolling out of sight. One line, and Enter means Next (the script sees to both). -->
-          <div class="c-field s-f-item"><label for="s-product">What would you like to try?</label>
-            <textarea id="s-product" name="product" rows="1" autocomplete="off" required
-                   aria-describedby="s-product-hint s-product-err"></textarea>
-            <p class="s-err" id="s-product-err"></p></div><span class="s-say" aria-hidden="true">.</span>
-          <!-- the product names, for the script's suggestions under the blank -->
-          <ul class="s-sugg" id="s-sugg" role="listbox" aria-label="Products that match" hidden></ul>
-          {{SAMPLE_PICKER}}
-          <!-- "Ask for a free sample" on a product card, over words the visitor typed here: the script keeps
-               them, puts the product in the P.S. and says so on this line -->
-          <p class="s-hint s-kept" id="s-kept" hidden></p>
-          <p class="s-hint" id="s-product-hint">Not sure? Say so and I’ll suggest something.</p>
-          <datalist id="sample-products">
-{{SAMPLE_PRODUCTS}}
-          </datalist>
-          <button class="btn s-next-btn" type="button" id="s-next" hidden>Next<svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button>
-        </div>
-        <div class="s-step" id="s-step2">
-          <!-- step 1, folded to a line once Next has checked it: filled in by the script -->
-          <div class="s-recap" id="s-recap" hidden>
-            <p class="s-recap-t"><b id="s-r-name"></b> · <span id="s-r-how"></span> · <span id="s-r-item"></span></p>
-            <button class="s-edit" type="button" id="s-edit">Edit<span class="vh"> your name, number or email, and pick</span></button>
-          </div>
-          <span class="s-say" aria-hidden="true">You can</span>
-          <fieldset class="c-q s-deliv" id="s-where" aria-describedby="s-where-err">
-            <legend>Where should it go?</legend>
-            <div class="chips">
-              <label class="chip"><input type="radio" name="delivery" value="Drop it off near Lincoln" required><span>drop it off, I’m near Lincoln</span></label>
-              <label class="chip"><input type="radio" name="delivery" value="Mail it (US)" aria-describedby="s-mail-note"><span>mail it, I’m in the US</span></label>
-            </div>
-            <p class="s-hint s-mail-note" id="s-mail-note">No need for your address yet. I’ll ask for it if it’s one I can mail.</p>
-            <p class="s-err" id="s-where-err"></p>
-          </fieldset>
-          <div class="s-ps"><span class="s-say" aria-hidden="true">P.S.</span>
-          <div class="c-field s-f-note"><label for="s-note">Anything else? <span>Optional</span></label>
-            <input id="s-note" name="note" type="text" autocomplete="off" maxlength="300" placeholder="A flavor you like, a good time to text…"></div></div>
-          <div class="s-checks">
-            <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="s-consent-err"><span>Peter can text or email me about this.</span></label>
-            <p class="s-err" id="s-consent-err"></p>
-            <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and the odd update after that is fine too. <em>Optional</em></span></label>
-          </div>
-          <div class="s-acts">
-            <button class="btn btn-line s-back" type="button" id="s-back" hidden><svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-back"/></svg>Back</button>
-            <button class="btn" type="submit" id="sample-go">Send it to Peter</button>
-          </div>
-          <p class="s-err" id="sample-fail" tabindex="-1"></p>
-          <ol class="s-next" aria-label="What happens next">
-            <li>You hear from me directly, by text or email, whichever you chose.</li>
-            <li>If it’s one I can send, we pick a drop-off near Lincoln, or I ask for your address to mail it.</li>
-            <li>Give it a real try, then give me your honest take. You don’t owe me an order.</li>
-          </ol>
-          <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
-        </div>
-        <!-- /DRAFT-COPY -->
-      </form>
-      <!-- the thank-you takes the form's place: shown by the script after a send, or by
-           :target when FormSubmit sends a no-script visitor back to #sample-sent -->
-      <div class="c-card nc s-done" id="sample-sent">
-        <!-- DRAFT-COPY --><h3 id="sample-done-title" tabindex="-1">Got it, thank you.</h3>
-        <p>You’ll hear from me within a day or two about what I can send.</p><!-- /DRAFT-COPY -->
-        <!-- DRAFT-COPY -->
-        <div class="s-step3">
-          <p>If I can send it, give it a few days, then I’ll ask how you’re getting on. Be honest about what worked and what didn’t, and I’ll say what I’d add next, if anything.</p>
-        </div>
-        <div class="qc qc-done">
-          <p class="qc-ask">{{QUICK_ASK}}</p>
-          {{QUICK_CALL}}
-        </div>
-        <!-- /DRAFT-COPY -->
-      </div>
-    </div>
-  </section>
-
-  <!-- 3d. Macros: seven questions, one per screen, then the numbers and one action.
-       It follows the free sample directly, so the page's two free things come together (the game
-       plan's "or run your macros first"); it used to sit at the foot of the page, after the story,
-       where almost no phone visitor reached it. The numbers still travel to the booking form
-       (mcFill in _script.html) when the card's "Book a free call" is tapped or when the form
+  <!-- 3c. Macros: seven questions, one per screen, then the numbers and one action. Since the split
+       (2026-10-03) it follows "Understand why", whose third pillar ("Fuel it") points here, and the
+       free sample it used to sit beside is on the shop tab. The numbers still travel to the booking
+       form (mcFill in _script.html) when the card's "Book a free call" is tapped or when the form
        scrolls into view; the automatic glide down after "See my numbers" only runs while the
        consult sits directly under this section, so here the card stays put and is read. -->
   <section class="sec macros-sec" id="macros" aria-labelledby="macros-title">
@@ -491,19 +319,57 @@
         </div>
       </form>
     </div>
-  </section>{{CCRX_HOME}}
+  </section>
 
-  <!-- 4. Trending now: the week's three best sellers. It is OFF (Peter, 2026-10-01: "maybe we
-       should get rid of the trending now"), so this fills in as nothing. The whole section —
-       its comment, its markup and its three cards — is built in build_homepage.py, behind one
-       switch: set TRENDING = True there and the band comes back here, between the calculator
-       and Peter's stack, exactly as it was. -->
-{{TRENDING}}
 
-{{MYSTACK}}
+  <!-- 3d. The game plan (#how): the path through both tabs. Since the split (2026-10-03) it sits
+       between the calculator and the call; its goal and sample steps, and its button, go across to
+       the shop tab (shop.html#goals, shop.html#sample), and the rest stay on this page. Five numbered steps, each linking to where
+       it happens (#goals, #sample, #macros, #quick-call; step 03 has no section of its own, so it is
+       not a link), then the one thing to do. The sections themselves carry no step numbers: they sit
+       in a different order on the page, so this list alone is the map. Step 05's words switch with
+       CONSULT_QUICK_URL in build_homepage.py, as the quick-call button does. The sample is a request,
+       never a promise: Peter decides what he can send, so no line here or in #sample may guarantee one.
+       In the bar theme (html.t-bar) the steps hang on a steel shaft, each number on a plate (.how-pl,
+       drawn from its data-n); as the section scrolls through, the shaft lights and each plate slides
+       on (_script.html). .how-sh is the stretch of shaft to the next plate. Other views hide both. -->
+  <section class="sec how-sec" id="how" aria-labelledby="how-title">
+    <div class="wrap">
+      <!-- DRAFT-COPY -->
+      <div class="how-head grow">
+        <p class="label">Where to start</p>
+        <h2 id="how-title"><span>The game</span> <span class="hl-k">plan</span></h2>
+      </div>
+      <ol class="how-steps">
+        <li class="grow" style="--d:1"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="shop.html#goals"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="01"></i>01</span>
+          <span class="how-t">Identify your goal.</span>
+          <span class="how-d">Let’s figure out what you’re chasing. Then we can build the best stack to optimize for that.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li class="grow" style="--d:2"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="shop.html#sample"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="02"></i>02</span>
+          <span class="how-t">Request a free sample.</span>
+          <span class="how-d">On me, while supplies last.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li class="grow" style="--d:3"><i class="how-sh" aria-hidden="true"><i></i></i><div class="how-step"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="03"></i>03</span>
+          <span class="how-t">Report back.</span>
+          <span class="how-d">A few days in, I’ll ask how you’re getting on. Say what worked and what didn’t, and I’ll tell you what I’d add, if anything.</span></div></li>
+        <li class="grow" style="--d:4"><i class="how-sh" aria-hidden="true"><i></i></i><a class="how-step" href="#macros"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="04"></i>04</span>
+          <span class="how-t">Get my read on it.</span>
+          <span class="how-d">Run your macros free, about a minute of typing — or bring your stack to the fifteen-minute call and I’ll say what I’d keep and what I’d drop.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+        <li class="grow" style="--d:5"><a class="how-step" href="#quick-call"><span class="how-n" aria-hidden="true"><i class="how-pl" data-n="05"></i>05</span>
+          <span class="how-t">Make it part of your week.</span>
+          <span class="how-d">{{QUICK_STEP}}, then order through my Amway link if it earns a spot.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+      </ol>
+      <!-- the plan's one trust line stands over its button, in ink, so it is read before the ask (the
+           no-break space keeps "I" off the end of a phone's first line) -->
+      <div class="how-go grow">
+        <p class="how-fine">Sixty seconds of typing. I&nbsp;answer every one myself.</p>
+        <a class="btn" id="how-go" href="shop.html#sample">Ask for a free sample</a>
+        <a class="tlink" href="#macros">or run your macros first</a>
+      </div>
+      <!-- /DRAFT-COPY -->
+    </div>
+  </section>
 
-  <!-- 6b. Consult: four answers first, then a time on my calendar. It closes the page, after
-       Peter's stack; the calculator's numbers, if there are any, ride in with the visitor in the
+  <!-- 3e. Consult: four answers first, then a time on my calendar. It closes the page, after
+       the game plan; the calculator's numbers, if there are any, ride in with the visitor in the
        strip at its top, and the calculator's "Book a free call" lands on the form below them.
        The two of them (their lines, their before and afters) are met in #story above, so
        this band is only the ask: the numbers, the offer, the disclosure, the form. -->
@@ -594,19 +460,6 @@
       </form>
       <!-- the calendar mounts here in place of the form, once someone has answered -->
       <div class="c-embed nc" id="consult-embed" hidden></div>
-    </div>
-  </section>
-
-  <!-- 7. The full shelf. It stays out of the way until you search or ask for it, and it sits
-       last, after the consult, so opening it never splits the drink or the calculator from
-       the call. -->
-  <section class="sec shop results" id="results" aria-labelledby="shop-title" hidden>
-    <div class="wrap">
-      <div class="sec-head"><h2 id="shop-title" tabindex="-1">All products</h2></div>
-      <div class="filter" id="filter" hidden><p id="filter-text"></p><button class="tlink" type="button" id="filter-clear">Close</button></div>
-      <ul class="grid" id="grid">
-{{GRID}}
-      </ul>
     </div>
   </section>
 
