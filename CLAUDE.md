@@ -76,7 +76,8 @@ Source (edit these):
   match a `share-links.csv` name or the build exits. Blank `units_this_week` just hides the count.
 
 Generated (never hand-edit; the next build overwrites them):
-- `homepage.html`
+- `homepage.html` (Tab 1, Our approach) and `shop.html` (Tab 2, Shop, from `site-src/shop.template.html`); see
+  "Two tabs" below. `bloodwork.html` is generated on both copies now.
 - `about.html` — the About us page, from `site-src/about.template.html`: their two portraits, who they
   are (`peter_text`, and the same `her_text` block the Women's Health shelf carries), the proof wall
   (`proof_wall`: his three pairs and her two), both DEXA cards, then the free sample and the call with
@@ -138,6 +139,9 @@ only ever one stylesheet. It has its own `index.html` and `site.webmanifest` so 
 installed shortcut starts inside it. **Never hand-edit or `Read` anything in `plus/`** — it is generated, and the
 pages are the same ~310k chars as the root's. Grep them; to know why one looks a certain way, read the plain source.
 
+**Superseded 2026-10-03 (see "Two tabs" → providers and guard, below, which wins wherever these two paragraphs
+disagree):** the guard now bans only `ccrx.health` on the plain site, and the bloodwork route is on both copies.
+
 **Peter's one hard constraint (2026-10-01):** peptide wording in the plain site is fine and may happen on purpose
 one day, and so is the name; *"Just the link itself."* So **the guard bans hosts and the page name, nothing else**:
 `CCRX_BANNED = CCRX_HOSTS + (CCRX_PAGE,)`. Every plain file goes through `guard()` on its way to disk and
@@ -174,7 +178,7 @@ anything added for it would move `style.css`'s content hash and so the `?v=` on 
 `plus/site.webmanifest` have their own two lines. Renaming `PLUS_DIR` is two edits: the constant and those lines.
 Publishing is unchanged: run the build, commit the root pages **and** the `plus/` folder, then RAW 0 pushes.
 
-(`.gitattributes` also carries `bloodwork.html merge=ours`: it is generated but no other pattern matched it, and it
+(`.gitattributes` also carries `shop.html merge=ours`, which matches `plus/shop.html` too, and `bloodwork.html merge=ours`: it is generated but no other pattern matched it, and it
 conflicted on the 2026-10-02 merge.)
 
 `index.html` is a hand-written redirect to `homepage.html` and is not generated.
@@ -208,7 +212,9 @@ x 0-1080 and y 226-1576, clear of the screenshot's black band on rows 0-6, with 
 the top and the baby's feet whole; converted P3 to sRGB so the colours hold once the profile is
 gone; then a uniform Lanczos resize. No retouching, no exposure or white-balance change, and no
 metadata: each file is a bare VP8 chunk (no EXIF, XMP or ICC). Peter chose to make them public; the repo is public because Pages
-requires it. `hero-pair-240.webp` / `hero-pair-480.webp` (240x300 and 480x600, 4:5, q90, bare VP8) are the homepage hero's
+requires it. **Since 2026-10-03 the homepage hero is Tab 1's `.hh` (see "Two tabs"), where `hero-pair-240.webp` is a small
+signature at the hero's foot; the paragraph below describes the old film hero's `.hero-me`, which no page uses now and
+whose CSS is gone.** `hero-pair-240.webp` / `hero-pair-480.webp` (240x300 and 480x600, 4:5, q90, bare VP8) are the homepage hero's
 portrait (`.hero-me`): **the whole 960x1200 frame of `with-daughter-960.webp`, no crop at all**, one uniform Lanczos
 resize each, drawn as a 14px-radius rounded rectangle. Peter asked for it bigger and with their daughter in it
 (2026-10-01: "I think I want it bigger. I think I want the whole body shot"). It renders 161x201 at 390 and 204x255
@@ -322,9 +328,58 @@ baseline and pack area; the whey measured on the pouch, with its scoop in front)
 `data-*` attributes and `.st-shade` carry over unchanged. Only the story uses them; the product cards,
 shelf pages and podium still use the catalogue images.
 
+## Two tabs: Our approach and Shop (2026-10-03)
+
+Peter, 2026-10-03: "this just feels too busy. Maybe we split the tabs. 1 tab is for products, 1 tab is to bring people
+through the story and book a call". This section wins over anything older below that disagrees with it.
+
+- **`homepage.html` (Our approach):** curtain → `.hh` hero → `#story` → `#why` → `#macros` → `#how` → `#consult`.
+  7,237px at 390, 5,781 at 1440 (it was 8,456 at 390 as one page).
+- **`shop.html` (Shop, `site-src/shop.template.html`):** the square film hero ("Pick your goal" → `#goals`, "Ask for a free
+  sample" → `#sample`) → `#goals` → `#sample` → `#my-stack` → `#results`. ~4,500px at 390, ~3,840 at 1440.
+- **Cross-links:** `#how` steps 01/02 and its button go to `shop.html#goals` / `shop.html#sample`; `#my-stack`'s and the
+  thank-you's call buttons and the rack guide's "free call" go to `homepage.html#consult`. Search, `?q=`, `?try=`, the
+  sample's `_next` (`shop.html?sample=sent#sample-sent`), "All products" and `data-all` all go to shop.html; shelf pages
+  call `card_dialog('shop.html')`; `quick_call(home)` takes the way home. `#quick-call`'s hand-over on the sample's
+  thank-you only happens on shop.html (it has no consult). The pinned strip (`.lbpin`) shows on both tabs once there is
+  a stack and reads names from `data-plates` where there is no rack, which keeps the call note's "Interested in:".
+- **The tab switch (`.tabs` in `_header.html`, every page, labels DRAFT):** `{{SHOP}}`, `{{TAB_HOME}}`, `{{TAB_SHOP}}` are
+  filled by `nav()`. Below 1024 it is the masthead's second row (`--tabh:40px`; `--mh = --mast + --tabh` = 100px; anchors
+  and `.lbpin` use `--mh`, `--mast` is unchanged). From 1024 it is a two-part pill, the inline nav is Macros · Products ·
+  Book a free call, and from 1024 to 1279 the wordmark shows the wave alone (else the nav hits search at 1200).
+  "Our approach" goes to `homepage.html#top`, so the curtain never replays; it never plays when a page opens at an anchor.
+- **Tab 1 hero (`.hh`):** "Feel better. Know why." (PETER-COPY, chosen 2026-10-03 over "Stop guessing. Start knowing." and
+  his first, "Feel your best. Understand why."), label "Aspire Health" above it (below 420px the masthead shows the wave
+  alone), a DRAFT sub-line, then "See how we did it" → `#story` and "Book a free call". Peter's photo and his PETER-COPY
+  line sit at the hero's **foot** as `.hh-me`, small (60px phone, 68px from 768) under a hairline (Peter: "my photo should
+  actually be more towards the bottom... lets the lake speak for itself more"). Behind it: `HOME_BG` (`assets/home/lake.webp`,
+  the lake at dawn, fal-generated, 2400x1340) and, on phones, `HOME_BG_PHONE` (`assets/home/lake-tall.webp`, its own tall
+  frame, top 30% cropped off so the horizon sits high), through a `<picture>` in `home_bg()`; `HOME_BG_FOCUS` maps each path
+  to (desktop, phone) object-position. Empty `HOME_BG` draws the palette ground `.hh-ph`. The copy carries its own scrim, so
+  readability never depends on the picture: measured on the real photos, lowest 5.43:1 (320/390/768/1440). Both files are
+  placed by hand; the build never writes them.
+- **`#why` ("Understand why", built in `build_homepage.py`):** lead, four pillars (Know your numbers, Build and keep lean mass,
+  Fuel it, Peptide protocols), the roles line ("licensed clinicians read your bloodwork… I don't read labs and I don't
+  prescribe"), then the disclosure. All DRAFT. Bloodwork is the ideal, never a gate (Peter: "I don't want them to have to get
+  bloodwork to try a product or buy a product"). The bloodwork is collected at home with a **Tasso** (`TASSO`, in both
+  providers' copy); never call it painless or FDA-cleared unless Tasso's own site says so.
+- **Providers and guard:** both copies carry the bloodwork route (`#why`, `bloodwork.html`, the "Beyond supplements" menu
+  group, the footer link, `{{FDA_SCOPE}}`). `provider()` / `bw_parts()` pick it: plain → **Avellum Health**, plus → **CCRX**
+  (copy unchanged). Peter is **not paid** through Avellum (`AVELLUM_PAID = False`, `avellum_disclosure()`: "I don't make
+  anything when you go through to Avellum Health, on the bloodwork or on anything a clinician prescribes."). He has no
+  Avellum link until about 2026-11-01, so `AVELLUM_URL`, `AVELLUM_PANEL_URL`, `AVELLUM_PROTOCOLS_URL` are empty and every
+  Avellum button reads "Coming soon"; going live is `AVELLUM_URL = '<link>'` and a rebuild (only avellumhealth.com links are
+  accepted, and a link with `AVELLUM_PAID = None` refuses to build). The plain bloodwork.html drops the CCRX storefront facts
+  not known of Avellum (pre-order, pay once, 28-day refill). `GUARD_BANNED` is `ccrx.health` plus `CCRX_URL`'s host, with
+  Peter's quote ("Avellum links can go on the regular site, crystal clear links will go on the plus site. Both still want
+  the split."); `write_plus()` refuses `avellumhealth.com`. Verified 2026-10-03 by five forced failures, all exit 1: the CCRX
+  link in a plain template, `--ccrx on`, the link in `index.html`, `AVELLUM_URL` with `PAID = None`, and an Avellum link
+  reaching plus. `#bloodwork` and `ccrx_home` are gone; `ccrx_block`, `ccrx_menu`, `ccrx_fda_scope` keep their names but
+  serve both copies.
+
 ## The story (`#story`)
 
-The homepage runs hero → `#story` → `#how` (the five-step game plan) → `#goals` (the plate rack) → `#sample` →
+**(Order superseded 2026-10-03: see "Two tabs" above.)** The homepage runs hero → `#story` → `#how` (the five-step game plan) → `#goals` (the plate rack) → `#sample` →
 `#macros` → `#my-stack` → `#consult`, and in the `plus/` copy only, `#bloodwork` sits between `#macros` and
 `#my-stack`. **The story comes straight after the hero** (Peter, 2026-10-02: "should I put the story towards the top?
 That way they know when they get to supplements it's about finding the ones that will support their
