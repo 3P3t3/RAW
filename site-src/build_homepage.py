@@ -6,8 +6,13 @@ Edit share-links.csv (product, share_link, photo) and re-run to update the site.
 One run writes the site TWICE: the plain site at the repo root, and the copy that offers Peter's
 CCRX route under PLUS_DIR/ (both are published, from one push). See "the CCRX copy" below for the
 switch, the guard that keeps the CCRX link out of the plain copy, and --ccrx / --no-plus.
+
+Each copy has two "tabs" (Peter, 2026-10-03: "1 tab is for products, 1 tab is to bring people
+through the story and book a call"): homepage.html (the curtain, the hero, the story, "Understand
+why", the calculator, the game plan, the call) and shop.html (the film hero, the rack, the free
+sample, "That's my stack" and the all-products grid). The tab switch sits in every page's masthead.
 """
-import csv, hashlib, html, inspect, os, re, shutil, sys
+import csv, hashlib, html, inspect, json, os, re, shutil, sys
 from urllib.parse import quote
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -44,27 +49,71 @@ DEMO_STYLE = 'style-demo.css'
 # every build writes the site TWICE from this one source:
 #   the plain site  ->  the repo root   https://3p3t3.github.io/RAW/homepage.html
 #   the CCRX copy   ->  PLUS_DIR/       https://3p3t3.github.io/RAW/plus/homepage.html
-# CCRX below is the switch, and the link it carries is the ONLY difference between the two.
+# CCRX below is the switch, and the provider link each copy carries is the ONLY difference between them.
 # Peter, 2026-10-01, verbatim: "It's not a big deal if some peptide verbiage leaks into the
 # regular website. In fact, at some point, I probably will do that. The only thing to avoid is
 # having the specific uh, crystal clear RX website built into the other website. ... Just the
 # link itself." So words are free in both copies; the LINK is what the switch turns on and what
 # guard() refuses to let into the plain copy, whatever anyone edits.
+# Peter, 2026-10-03, verbatim: "Avellum links can go on the regular site, crystal clear links will
+# go on the plus site. Both still want the split." So since 2026-10-03 BOTH copies carry the
+# bloodwork route (the "Understand why" section on the homepage, bloodwork.html, the menu's "Beyond
+# supplements" group and the footer link), each through its own provider: the plain site through
+# Avellum Health (AVELLUM_* below), the copy under PLUS_DIR/ through CCRX (CCRX_URL). The plain site
+# still never carries the CCRX link -- that is the split, and guard() enforces it.
 CCRX = False      # OFF for the plain site. The build's second pass turns it on; --ccrx on|off overrides it
 CCRX_URL = 'https://ccrx.health/n/HERSCHELMAN'     # Peter's referral link (his own, attribution included)
-CCRX_HOSTS = ('ccrx.health', 'avellumhealth.com')  # every host that link reaches; guard() bans all of them
-                                                   # from the plain copy. The WORDS "CCRX" and "Avellum
-                                                   # Health" are fine there (the footer already says one)
+CCRX_HOSTS = ('ccrx.health',)  # the host that link is on; guard() bans it from the plain copy. The WORDS
+                               # "CCRX" and "Avellum Health" are fine in either copy.
 CCRX_PAGE = 'bloodwork.html'   # the route's own page: the panel first, then what a clinician may decide,
                                # then the disclosures, then the one link out. Named for the panel, because
                                # that is the honest front door -- the panel is the part anyone can simply
-                               # buy. It is built ONLY by the second pass, so it exists under PLUS_DIR/ and
-                               # nowhere else, which is why guard() bans its NAME from the plain site too.
-CCRX_BANNED = CCRX_HOSTS + (CCRX_PAGE,)  # what guard() refuses to let into a file of the plain site. The
-                               # hosts are Peter's own line ("Just the link itself."); the page name is here
-                               # because the homepage block links that page rather than ccrx.health, so
-                               # without it `--ccrx on` on the plain pass would slip past the guard and
-                               # leave the plain homepage pointing at a page that is not at the root.
+                               # buy. Since 2026-10-03 it is built in BOTH copies, each with its own
+                               # provider's link (provider() below), so its name is no longer banned.
+GUARD_BANNED = tuple(sorted(set(CCRX_HOSTS) | {CCRX_URL.split('//', 1)[-1].split('/', 1)[0].lower().removeprefix('www.')}))
+                               # what guard() refuses to let into a file of the plain site: the CCRX host,
+                               # and whatever host CCRX_URL is moved to, so changing the link can never
+                               # open a hole in the guard. Nothing else: Avellum is allowed there now.
+
+# ---- the plain site's provider: Avellum Health (Peter, 2026-10-03) ----------------------------
+# "Avellum health is the primary for bloodwork and peptide protocols." Peter has not sent the links
+# yet, so they are EMPTY, and while a destination is empty every button that would go there renders
+# as a plain "Coming soon" label -- not a link, not focusable, no href="#". Fill them in and rebuild.
+AVELLUM_HOST = 'avellumhealth.com'
+AVELLUM_URL = ''             # Peter's Avellum Health link, when he sends it. The two below default to it.
+AVELLUM_PANEL_URL = ''       # the bloodwork destination, if it differs from AVELLUM_URL
+AVELLUM_PROTOCOLS_URL = ''   # the peptide-protocols destination, if it differs from AVELLUM_URL
+# Peter has no Avellum referral link yet: it goes live around 2026-11-01. TO GO LIVE, set AVELLUM_URL
+# (one line) and rebuild; set the two above only if the bloodwork and the protocols have separate links.
+# Whether Peter is paid when someone goes through his Avellum link. Peter, 2026-10-03: he is NOT, so
+# False. None means "not known", and while it is None the build REFUSES to write a live Avellum link
+# (see provider()): a link without the right disclosure is the one thing this must never ship. True
+# or False emits the matching disclosure (avellum_disclosure(), both DRAFT for Peter to approve). If
+# the comp plan ever changes, this is the line to change. His Amway disclosure is a different business
+# and is never merged with it.
+AVELLUM_PAID = False
+
+# ---- the homepage hero's photograph (Tab 1) ---------------------------------------------------
+# A full-bleed photograph behind "Feel your best. Understand why." It has NOT been chosen yet (Peter
+# wants two candidates side by side first). Put the file in assets/home/ (placed by hand, like the other
+# photographs: the build never writes or deletes it), set HOME_BG to its path and rebuild: switching
+# photographs is that one line. While HOME_BG is empty the hero stands on a ground drawn from the site's
+# own palette (.hh-ph in style.css), with no picture at all. Any photograph works: the scrim in style.css
+# (.hh-bg::after) keeps every line of the hero's text at 4.5:1 or better even over a pure-white picture.
+# One file serves every width: the desktop shows it as a wide crop and phones as a tall one, both with
+# object-fit:cover. HOME_BG_FOCUS steers each crop per photograph: path -> (desktop, phone) object-position
+# (any CSS position, e.g. '70% 40%'); a photograph not listed is centred on both. A 2400px-wide 16:9
+# WebP is plenty (the build checks the file exists and reads its size for width/height).
+HOME_BG = 'assets/home/lake.webp'   # Peter's choice, 2026-10-03: the lake at dawn ("E") with "Feel better. Know why."
+# A phone gets its own photograph when HOME_BG_PHONE names one: a wide picture on a tall screen can only be
+# cropped at the sides, and the hero's text covers its lower two thirds, so the dawn sat behind the headline.
+# lake-tall.webp is a separate tall frame of the same kind of scene, cropped (nothing drawn) so its horizon and
+# rising sun sit high, in the clear band above the text, with the calm dark water under the copy.
+HOME_BG_PHONE = 'assets/home/lake-tall.webp'
+HOME_BG_FOCUS = {
+    'assets/home/lake.webp': ('50% 62%', '50% 50%'),
+    'assets/home/lake-tall.webp': ('50% 50%', '50% 0%'),
+}
 
 # ---- the two facts on that page that EXPIRE -------------------------------------------------
 # Both are true on 2026-10-01 and both will stop being true. Each is one line here and is written
@@ -305,7 +354,7 @@ PETER_PACKS = {
 RACK_GUIDE = ('<!-- DRAFT-COPY --><ol class="rk-guide" id="rk-guide" role="list" aria-label="How the rack works">'
               '<li class="is-now" aria-current="step"><span class="rg-n" aria-hidden="true">1</span><span class="rg-t">Tap any plate to see the packs on it.</span></li>'
               '<li><span class="rg-n" aria-hidden="true">2</span><span class="rg-t">Load the ones you’d take. They ride up top.</span></li>'
-              '<li><span class="rg-n" aria-hidden="true">3</span><span class="rg-t">Bring it to a <a href="#consult">free call</a>, or ask for a <a href="#sample">sample</a>.</span></li>'
+              '<li><span class="rg-n" aria-hidden="true">3</span><span class="rg-t">Bring it to a <a href="homepage.html#consult">free call</a>, or ask for a <a href="#sample">sample</a>.</span></li>'
               '</ol><!-- /DRAFT-COPY -->')
 
 # "Trending now": the week's three best sellers, between #macros and #my-stack. It is OFF.
@@ -523,7 +572,8 @@ BASE = 'https://3p3t3.github.io/RAW/'
 
 SAMPLE_ENDPOINT = 'https://formsubmit.co/ajax/' + SAMPLE_TO
 SAMPLE_ACTION = 'https://formsubmit.co/' + SAMPLE_TO
-SAMPLE_NEXT = BASE + 'homepage.html?sample=sent#sample-sent'
+SAMPLE_NEXT = BASE + 'shop.html?sample=sent#sample-sent'   # the sample form lives on the shop tab (2026-10-03)
+HOME_PAGE, SHOP_PAGE = 'homepage.html', 'shop.html'   # the two tabs; demo_links/plus_links rename both
 
 FEATURED = [  # props-free pack shots, so the grid reads as one series
     'XS Grass-Fed Whey Protein - Chocolate',
@@ -1002,8 +1052,10 @@ def shot(p, lazy=True, cls='shot'):
     return f'<span class="ph" aria-hidden="true"><span class="ph-cap"><b>Photo</b><br>coming soon</span></span>'
 
 
-def quick_call():
-    """The quick call's words and button, switched on CONSULT_QUICK_URL. All of it is DRAFT-COPY."""
+def quick_call(home=''):
+    """The quick call's words and button, switched on CONSULT_QUICK_URL. All of it is DRAFT-COPY.
+    `home` is the way to the homepage from the page it is on: the sample's thank-you that carries it
+    is on shop.html, and the call it offers is on the homepage."""
     if CONSULT_QUICK_URL:
         return {
             '{{QUICK_ASK}}': 'Want a quick 10 min to figure out how to optimize this in your routine? Book a consult here.',
@@ -1014,7 +1066,7 @@ def quick_call():
     return {  # no 10-minute event yet: the 30-minute call on this page, and it says so
         '{{QUICK_ASK}}': 'Want to figure out how to optimize this in your routine? That’s what the free call is for.',
         '{{QUICK_STEP}}': 'A free call to find where it slots in',
-        '{{QUICK_CALL}}': '<a class="btn q-go" href="#consult">Book a free call</a>',
+        '{{QUICK_CALL}}': f'<a class="btn q-go" href="{home}#consult">Book a free call</a>',
     }
 
 
@@ -1216,10 +1268,10 @@ def main():
 
     def card_dialog(home=''):
         """The product card every pack and product tile opens (_script.html fills it from the one it opened
-        from): the case's and the rack's packs, the homepage grid, Trending, and every shelf page's tiles.
+        from): the case's and the rack's packs, the shop tab's grid, Trending, and every shelf page's tiles.
         A modal <dialog>: without script, or without dialog support, nothing opens it and it never shows.
-        "Ask for a free sample" goes to the sample form: on the homepage (home '') in place, on a shelf page
-        (home 'homepage.html') by the homepage's ?try= link, the exact product name in it."""
+        "Ask for a free sample" goes to the sample form: on the shop tab (home '') in place, on a shelf page
+        (home 'shop.html') by the shop tab's ?try= link, the exact product name in it."""
         return ('    <dialog class="pcard" id="pcard" aria-labelledby="pcard-name" aria-describedby="pcard-line">\n'
                 '      <div class="pcard-in">\n'
                 '        <button class="icon-btn pcard-x" type="button" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>\n'
@@ -1305,7 +1357,11 @@ def main():
             # the pinned bar: the visitor's own stack and nothing else, shown once the hero has gone.
             # It had a second bar and a second caption set for Peter's five until 2026-10-01, which only
             # the scrubbed story stage ever filled; the stage went and so did they.
-            '{{PIN}}': ('<div class="lbpin" id="lbpin" aria-hidden="true"><div class="wrap lbpin-in">'
+            # data-plates: every shelf's name, rank and colour, so the strip can read a stack on a page with
+            # no rack (the homepage, since the rack moved to shop.html on 2026-10-03)
+            '{{PIN}}': ('<div class="lbpin" id="lbpin" aria-hidden="true" data-plates="'
+                        + esc(json.dumps({s: [html.unescape(names[s]), PLATES[s][1], PLATES[s][0]] for s in PLATES}, ensure_ascii=False, separators=(',', ':')))
+                        + '"><div class="wrap lbpin-in">'
                         '<div class="lbpin-bars bbx">' + barbell('bb-you') + '</div>'
                         '<p class="lbpin-cap"><span class="lbc-set lbc-yset"><span class="lbc-who"><span class="lbc lbc-you"></span></span>'
                         '<span class="lbc-new"><span class="lbc lbc-ynew"></span></span></span></p></div></div>'),
@@ -1329,7 +1385,7 @@ def main():
                             '      </div><!-- /DRAFT-COPY -->\n'
                             '      <!-- DRAFT-COPY --><p class="mys-sub grow" style="--d:3">Fifteen minutes, free. Your macros, what you already take, and the smallest stack that moves your goal.</p>\n'
                             '      <div class="mys-acts grow" style="--d:3"><a class="btn" href="#goals">Load your own plates</a>'
-                            '<a class="btn btn-line" href="#consult">Book a free call</a></div>\n'
+                            '<a class="btn btn-line" href="homepage.html#consult">Book a free call</a></div>\n'
                             '    </div>\n  </section>\n'),
         })
     order = sorted(products, key=lambda pr: pr['name'].lower())
@@ -1352,7 +1408,7 @@ def main():
     # the menu sheet lists every shelf; it follows {{DIALOGS}} in this dict so it fills the menu once it is in
     menu_shelves = '\n'.join(f'        <li><a href="category-{s}.html">{n}</a></li>' for s, n, *_ in CATEGORIES)
     shared = {'{{STYLE}}': style_href, '{{FOOTER}}': footer, '{{DIALOGS}}': dialogs, '{{MENU_SHELVES}}': menu_shelves,
-              '{{CCRX}}': ccrx_block(),  # after {{FOOTER}}, which is where the placeholder sits
+              '{{CCRX}}': ccrx_block(),  # the bloodwork route, both copies; after {{FOOTER}}, where it sits
               '{{CCRX_MENU}}': ccrx_menu(),  # and after {{DIALOGS}}, which is where that one sits
               '{{FDA_SCOPE}}': '',  # in the footer too: empty on every page but CCRX_PAGE (ccrx_fda_scope)
               '{{SCRIPT}}': script,
@@ -1427,42 +1483,84 @@ def main():
   </section>
 ''') if TRENDING else '')
 
-    page_name = DEMO_PAGE if DEMO else 'homepage.html'
-    # the CCRX copy is findable on purpose (Peter wants it indexed), so it is NOT noindexed like a
-    # demo; it only needs a canonical of its own. plus_links() moves that to PLUS_DIR/ with the rest.
-    head_extra = (f'<meta name="robots" content="noindex">\n<link rel="canonical" href="{BASE}{DEMO_PAGE}">\n'
-                  if DEMO else f'<link rel="canonical" href="{BASE}homepage.html">\n' if PLUS else '')
-    out = open(SRC).read()
-    for k, v in dict(shared, **{'{{HEADER}}': header.replace('{{HOME}}', ''), '{{HOME}}': '',
-                                '{{HEAD_EXTRA}}': head_extra,
-                                '{{PAGE_URL}}': BASE + page_name, '{{INTRO}}': intro,
-                                '{{CCRX_HOME}}': ccrx_home(),
-                                '{{GOALS}}': cat_rows(),
-                                '{{SAMPLE_ENDPOINT}}': SAMPLE_ENDPOINT, '{{SAMPLE_ACTION}}': SAMPLE_ACTION,
-                                '{{SAMPLE_NEXT}}': SAMPLE_NEXT.replace('homepage.html', page_name), '{{SAMPLE_PRODUCTS}}': sample_list,
-                                '{{SAMPLE_PICKER}}': sample_picker, '{{PCARD}}': '' if SHELF_VIEW in ('bar', 'case') else card_dialog(), **quick_call(), '{{GRID}}': '\n'.join(grid), '{{TRENDING}}': trending, '{{SHELVES}}': shelves,
-                                # #story's two before/after stacks: the same pair about.html carries, with the
-                                # section's own heading over them instead of its "His and hers", less his
-                                # side view, which is out in the open above the reveal
-                                '{{STORY_PROOF}}': proof_wall(title=None, his_views=tuple(
-                                    v for v in ('front', 'side', 'back') if v != STORY_TEASER_VIEW),
-                                    his_sizes='(min-width:1280px) 760px, (min-width:760px) 60vw, calc(100vw - 40px)'),
-                                # and the one pair shown outside the reveal
-                                '{{STORY_TEASER}}': story_teaser(),
-                                **bar_bits}).items():
-        out = out.replace(k, v)
-    left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', out)))
-    if left:
-        raise SystemExit(f'unfilled placeholders in the homepage: {left}')
-    plus_pages = {}
-    if DEMO:
-        out = demo_links(out)
-        open(os.path.join(DEMO, DEMO_PAGE), 'w').write(out)
-        demo_pages = {DEMO_PAGE: out}
-    elif PLUS:
-        plus_pages['homepage.html'] = write_plus('homepage.html', out)
-    else:
-        write_plain('homepage.html', out)
+    # ---- the pages. Each copy has two tabs, homepage.html and shop.html, plus the shelves, About and the
+    # bloodwork page. nav() fills a page's masthead, menu and footer links: {{HOME}} is the way to the
+    # homepage from that page ('' on the homepage itself), {{SHOP}} the way to the shop ('' on the shop),
+    # and the tab switch marks the page it is on. Everything that moved to the shop tab on 2026-10-03
+    # (the rack, the sample, "That's my stack", the grid and search) is reached through {{SHOP}}.
+    def nav(here):
+        home = '' if here == 'home' else HOME_PAGE
+        shop = '' if here == 'shop' else SHOP_PAGE
+        cur = ' aria-current="page"'
+        sub = {'{{HOME}}': home, '{{SHOP}}': shop,
+               '{{TAB_HOME}}': cur if here == 'home' else '', '{{TAB_SHOP}}': cur if here == 'shop' else ''}
+        hdr = header
+        for k, v in sub.items():
+            hdr = hdr.replace(k, v)
+        return dict({'{{HEADER}}': hdr}, **sub)
+
+    def demo_name(name):
+        return DEMO_PAGE if name == HOME_PAGE else name[:-5] + DEMO_SUFFIX + '.html'
+
+    demo_pages, plus_pages = {}, {}
+
+    def emit(name, page, what):
+        """One finished page: refuse an unfilled placeholder, then write it to wherever this pass writes
+        (a demo export, the CCRX copy, or the plain site at the root, past the guard)."""
+        left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', page)))
+        if left:
+            raise SystemExit(f'unfilled placeholders in {what}: {left}')
+        if DEMO:
+            page = demo_links(page)
+            demo_pages[demo_name(name)] = page
+            open(os.path.join(DEMO, demo_name(name)), 'w').write(page)
+        elif PLUS:
+            plus_pages[name] = write_plus(name, page)
+        else:
+            write_plain(name, page)
+
+    def head_extra(name):
+        """noindex and its own canonical for a demo; otherwise a canonical (the CCRX copy is findable on
+        purpose, so it is NOT noindexed; plus_links() moves its canonical to PLUS_DIR/ with the rest)."""
+        if DEMO:
+            return f'<meta name="robots" content="noindex">\n<link rel="canonical" href="{BASE}{demo_name(name)}">\n'
+        return f'<link rel="canonical" href="{BASE}{name}">\n'
+
+    def fill(tpl, subs):
+        page = tpl
+        for k, v in subs.items():
+            page = page.replace(k, v)
+        return page
+
+    # homepage.html, Tab 1: the curtain, the hero, the story, "Understand why", the calculator, the game
+    # plan and the call. Its canonical is written only in the CCRX copy and demos, as before.
+    out = fill(open(SRC).read(), dict(shared, **nav('home'), **{
+        '{{HEAD_EXTRA}}': head_extra(HOME_PAGE) if DEMO or PLUS else '',
+        '{{PAGE_URL}}': BASE + HOME_PAGE, '{{INTRO}}': intro,
+        '{{HOME_BG}}': home_bg(), '{{WHY}}': why_section(), '{{PCARD}}': '',
+        **quick_call(),
+        # #story's two before/after stacks: the same pair about.html carries, with the
+        # section's own heading over them instead of its "His and hers", less his
+        # side view, which is out in the open above the reveal
+        '{{STORY_PROOF}}': proof_wall(title=None, his_views=tuple(
+            v for v in ('front', 'side', 'back') if v != STORY_TEASER_VIEW),
+            his_sizes='(min-width:1280px) 760px, (min-width:760px) 60vw, calc(100vw - 40px)'),
+        # and the one pair shown outside the reveal
+        '{{STORY_TEASER}}': story_teaser(),
+        **bar_bits}))
+    emit(HOME_PAGE, out, 'the homepage')
+
+    # shop.html, Tab 2: the film hero, the rack (#goals), the free sample, "That's my stack" and the grid.
+    shop = fill(open(os.path.join(ROOT, 'site-src', 'shop.template.html')).read(), dict(shared, **nav('shop'), **{
+        '{{HEAD_EXTRA}}': head_extra(SHOP_PAGE),
+        '{{PAGE_URL}}': BASE + SHOP_PAGE,
+        '{{SAMPLE_ENDPOINT}}': SAMPLE_ENDPOINT, '{{SAMPLE_ACTION}}': SAMPLE_ACTION,
+        '{{SAMPLE_NEXT}}': SAMPLE_NEXT.replace(SHOP_PAGE, demo_name(SHOP_PAGE)) if DEMO else SAMPLE_NEXT,
+        '{{SAMPLE_PRODUCTS}}': sample_list, '{{SAMPLE_PICKER}}': sample_picker,
+        '{{PCARD}}': '' if SHELF_VIEW in ('bar', 'case') else card_dialog(),
+        **quick_call(HOME_PAGE), '{{GRID}}': '\n'.join(grid), '{{TRENDING}}': trending, '{{SHELVES}}': shelves,
+        **bar_bits}))
+    emit(SHOP_PAGE, shop, SHOP_PAGE)
 
     cat_tpl = open(os.path.join(ROOT, 'site-src', 'category.template.html')).read()
     for slug_, name, tag, heading, fams in CATEGORIES:
@@ -1491,80 +1589,45 @@ def main():
 
 '''
         cgrid = '\n'.join(card(pr, i) for i, pr in enumerate(items))
-        page = cat_tpl
-        cat_page = f'category-{slug_}{DEMO_SUFFIX}.html' if DEMO else f'category-{slug_}.html'
-        for k, v in dict(shared, **{
-                '{{HEADER}}': header.replace('{{HOME}}', 'homepage.html'), '{{HOME}}': 'homepage.html',
-                '{{HEAD_EXTRA}}': (f'<meta name="robots" content="noindex">\n<link rel="canonical" href="{BASE}{cat_page}">\n'
-                                   if DEMO else f'<link rel="canonical" href="{BASE}category-{slug_}.html">\n' if PLUS else ''),
-                '{{PAGE_URL}}': BASE + f'category-{slug_}.html',
-                '{{SAMPLE_LINK}}': 'homepage.html?try=' + quote(html.unescape(name)) + '#sample',
-                '{{CAT_NAME}}': name, '{{CAT_TAG}}': tag, '{{CAT_HEADING}}': heading,
-                '{{CAT_COUNT}}': plural(counts[slug_], 'product', zero='No products yet'), '{{CAT_GRID}}': cgrid, '{{CAROUSEL}}': carousel,
-                '{{CAT_OTHERS}}': cat_rows(only={slug_}), **hero_media(slug_, name), '{{PCARD}}': card_dialog('homepage.html'),
-                '{{CAT_EXTRA}}': SHELF_EXTRA.get(slug_, lambda: '')()}).items():
-            page = page.replace(k, v)
-        if DEMO:  # its own links, og:url included, name the demo copies (demo_links)
-            page = demo_links(page)
-            demo_pages[cat_page] = page
-            open(os.path.join(DEMO, cat_page), 'w').write(page)
-            continue
-        if PLUS:
-            plus_pages[cat_page] = write_plus(cat_page, page)
-            continue
-        write_plain(f'category-{slug_}.html', page)
+        cat_page = f'category-{slug_}.html'
+        page = fill(cat_tpl, dict(shared, **nav(None), **{
+            '{{HEAD_EXTRA}}': head_extra(cat_page) if DEMO or PLUS else '',
+            '{{PAGE_URL}}': BASE + cat_page,
+            # the shelf's "Ask for a free sample" and its product cards' go to the sample on the shop tab
+            '{{SAMPLE_LINK}}': SHOP_PAGE + '?try=' + quote(html.unescape(name)) + '#sample',
+            '{{CAT_NAME}}': name, '{{CAT_TAG}}': tag, '{{CAT_HEADING}}': heading,
+            '{{CAT_COUNT}}': plural(counts[slug_], 'product', zero='No products yet'), '{{CAT_GRID}}': cgrid, '{{CAROUSEL}}': carousel,
+            '{{CAT_OTHERS}}': cat_rows(only={slug_}), **hero_media(slug_, name), '{{PCARD}}': card_dialog(SHOP_PAGE),
+            '{{CAT_EXTRA}}': SHELF_EXTRA.get(slug_, lambda: '')()}))
+        emit(cat_page, page, cat_page)
 
     # about.html: who we are, then what changed, then the numbers, then the way on. Its own page off the
     # menu instead of a band at the end of the homepage, because all of it there was too much in one thing
     # (Peter, 2026-09-28). Generated like the shelf pages: never hand-edit about.html. It needs no rack,
     # no story stage and no macro calculator, and the shared script leaves out what a page does not have.
-    about_page = f'about{DEMO_SUFFIX}.html' if DEMO else 'about.html'
-    page = open(os.path.join(ROOT, 'site-src', 'about.template.html')).read()
-    for k, v in dict(shared, **{
-            '{{HEADER}}': header.replace('{{HOME}}', 'homepage.html'), '{{HOME}}': 'homepage.html',
-            '{{HEAD_EXTRA}}': ((f'<meta name="robots" content="noindex">\n<link rel="canonical" href="{BASE}{about_page}">\n')
-                               if DEMO else f'<link rel="canonical" href="{BASE}about.html">\n'),
-            '{{PAGE_URL}}': BASE + 'about.html',
-            '{{ABOUT_TAG}}': ABOUT_TAG, '{{ABOUT_SUB}}': ABOUT_SUB,
-            '{{ABOUT_PORTRAITS}}': about_portraits(),
-            '{{ABOUT_HIS}}': peter_text(), '{{ABOUT_HERS}}': her_text(None, 3, 'her-title', her_says('{n}', 'My wife')),
-            '{{ABOUT_PROOF}}': proof_wall(), '{{ABOUT_DEXA}}': dexa_cards(),
-            '{{PCARD}}': ''}).items():
-        page = page.replace(k, v)
-    left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', page)))
-    if left:
-        raise SystemExit(f'unfilled placeholders in about.html: {left}')
-    if DEMO:
-        page = demo_links(page)
-        demo_pages[about_page] = page
-        open(os.path.join(DEMO, about_page), 'w').write(page)
-    elif PLUS:
-        plus_pages[about_page] = write_plus(about_page, page)
-    else:
-        write_plain('about.html', page)
+    page = fill(open(os.path.join(ROOT, 'site-src', 'about.template.html')).read(), dict(shared, **nav(None), **{
+        '{{HEAD_EXTRA}}': head_extra('about.html'),
+        '{{PAGE_URL}}': BASE + 'about.html',
+        '{{ABOUT_TAG}}': ABOUT_TAG, '{{ABOUT_SUB}}': ABOUT_SUB,
+        '{{ABOUT_PORTRAITS}}': about_portraits(),
+        '{{ABOUT_HIS}}': peter_text(), '{{ABOUT_HERS}}': her_text(None, 3, 'her-title', her_says('{n}', 'My wife')),
+        '{{ABOUT_PROOF}}': proof_wall(), '{{ABOUT_DEXA}}': dexa_cards(),
+        '{{PCARD}}': ''}))
+    emit('about.html', page, 'about.html')
 
-    # CCRX_PAGE: the CCRX route's own page, and the only page that exists in one published copy
-    # and not the other. The homepage block, the menu and the footer all send a visitor here first
-    # rather than straight out to CCRX, because this is where they find out what they are walking
-    # into: what the panel is, who decides whether anything is prescribed after it, Peter's
-    # disclosure, Avellum's own statement, and then the one link out. Written by the second pass
-    # alone (PLUS and CCRX), so the plain site never has it and neither does a demo export.
-    if PLUS and ccrx_on():
-        page = open(os.path.join(ROOT, 'site-src', 'bloodwork.template.html')).read()
-        for k, v in dict(shared, **{
-                '{{HEADER}}': header.replace('{{HOME}}', 'homepage.html'), '{{HOME}}': 'homepage.html',
-                '{{HEAD_EXTRA}}': f'<link rel="canonical" href="{BASE}{CCRX_PAGE}">\n',
-                '{{PAGE_URL}}': BASE + CCRX_PAGE,
-                '{{CCRX_URL}}': CCRX_URL,
-                '{{CCRX_PREORDER}}': ccrx_preorder(),
-                '{{CCRX_DISCLOSURE}}': ccrx_disclosure(),
-                '{{FDA_SCOPE}}': ccrx_fda_scope(),
-                '{{PCARD}}': ''}).items():
-            page = page.replace(k, v)
-        left = sorted(set(re.findall(r'\{\{[A-Z_]+\}\}', page)))
-        if left:
-            raise SystemExit(f'unfilled placeholders in {CCRX_PAGE}: {left}')
-        plus_pages[CCRX_PAGE] = write_plus(CCRX_PAGE, page)
+    # CCRX_PAGE (bloodwork.html): the bloodwork route's own page, in BOTH copies since 2026-10-03, each
+    # with its own provider (provider(): Avellum Health on the plain site, CCRX in the copy). The
+    # homepage's "Understand why", the menu and the footer all send a visitor here first rather than
+    # straight out, because this is where they find out what they are walking into: what the panel
+    # is, who decides whether anything is prescribed after it, Peter's disclosure, Avellum's own
+    # statement, and then the one link out (or "Coming soon" while there is none).
+    page = fill(open(os.path.join(ROOT, 'site-src', 'bloodwork.template.html')).read(), dict(shared, **nav(None), **{
+        '{{HEAD_EXTRA}}': head_extra(CCRX_PAGE),
+        '{{PAGE_URL}}': BASE + CCRX_PAGE,
+        **bw_parts(),
+        '{{FDA_SCOPE}}': ccrx_fda_scope(),
+        '{{PCARD}}': ''}))
+    emit(CCRX_PAGE, page, CCRX_PAGE)
 
     if DEMO:
         demo_report(demo_pages, style)
@@ -1584,34 +1647,75 @@ def main():
     print('categories', counts, 'uncategorised', [pr['product'] for pr in products if pr['product'] not in cat_of])
 
 
-def ccrx_on():
-    """Whether this pass shows the CCRX route at all.
+def provider():
+    """The bloodwork route's provider for this pass, as one dict -- the only place the two copies differ.
 
-    The switch, and never a demo export: CCRX_PAGE is written by the second pass alone, so a demo
-    built with `--ccrx on` would carry a block and a menu item linking a page that is not beside
-    them. The plain pass is stopped by guard() instead, loudly, which is where it belongs.
+    Peter, 2026-10-03: "Avellum links can go on the regular site, crystal clear links will go on the
+    plus site. Both still want the split." So the plain site's route goes to Avellum Health (AVELLUM_*)
+    and the copy under PLUS_DIR/ goes to CCRX (CCRX_URL). `--ccrx on` on the plain pass gives the plain
+    pass CCRX's provider on purpose, and guard() stops it, loudly.
+
+    panel / protocols: the two destinations, or '' while there is no link yet, in which case every
+    button that would go there renders as a non-link "Coming soon" (soon_button()).
+    It REFUSES to hand out a live Avellum link while AVELLUM_PAID is None: whether Peter is paid there
+    decides which disclosure goes beside it, and a link without the right one must never ship.
     """
-    return CCRX and not DEMO
+    if CCRX:
+        return {'kind': 'ccrx', 'name': 'CCRX', 'panel': CCRX_URL, 'protocols': CCRX_URL,
+                'disclosure': ccrx_disclosure(), 'disclosure_mark': 'PETER-COPY'}
+    panel = AVELLUM_PANEL_URL or AVELLUM_URL
+    protocols = AVELLUM_PROTOCOLS_URL or AVELLUM_URL
+    if (panel or protocols) and AVELLUM_PAID is None:
+        raise SystemExit(
+            '\n!! BUILD STOPPED: an Avellum Health link is set (AVELLUM_URL / AVELLUM_PANEL_URL /\n'
+            '!! AVELLUM_PROTOCOLS_URL) but AVELLUM_PAID is None.\n'
+            '!! A disclosure decision is needed before this link can go live: is Peter paid when someone\n'
+            '!! goes through it? Set AVELLUM_PAID = True or False in build_homepage.py (each writes its own\n'
+            '!! disclosure, avellum_disclosure()), or empty the link again, then rebuild.')
+    for u in (panel, protocols):
+        if u and AVELLUM_HOST not in u.lower():
+            raise SystemExit(f'AVELLUM_*: {u!r} is not an {AVELLUM_HOST} link')
+    return {'kind': 'avellum', 'name': 'Avellum Health', 'panel': panel, 'protocols': protocols,
+            'disclosure': avellum_disclosure(), 'disclosure_mark': 'DRAFT-COPY'}
+
+
+def avellum_disclosure():
+    """The plain site's disclosure for the Avellum route, one sentence, DRAFT for Peter to approve.
+
+    Peter, 2026-10-03: he is NOT paid when people go through Avellum (AVELLUM_PAID = False), so the
+    not-paid line is what ships, in the spirit of his CCRX one ("I don't make anything on the panel").
+    True is written too, so the day that changes it is one constant. None writes nothing: there is no
+    disclosure to make while it is unknown, and provider() refuses to emit a live link in that state.
+    His Amway disclosure is a different business and is never merged with this one.
+    """
+    if AVELLUM_PAID is True:
+        return 'I’m paid if you go through to Avellum Health from here and buy something there.'
+    if AVELLUM_PAID is False:
+        return 'I don’t make anything when you go through to Avellum Health, on the bloodwork or on anything a clinician prescribes.'
+    return ''
+
+
+def soon_button(label='Coming soon'):
+    """What a provider button is while it has no link: a plain label in a button's shape. Not a link,
+    not focusable and with no href="#", so nothing can be tapped or tabbed to that goes nowhere."""
+    return f'<p class="soon"><span class="soon-tag">{label}</span></p>'
 
 
 def ccrx_block():
-    """The CCRX route in the footer of every page of the copy: one link, to CCRX_PAGE.
+    """The bloodwork route in the footer of every page of BOTH copies: one link, to CCRX_PAGE.
 
-    It does NOT go straight out to ccrx.health. The page is where a visitor finds out what they
-    are walking into -- what the panel is, who decides about a prescription, and both disclosures
-    -- and the one link out lives at the foot of it. The footer and the menu both point there, so
-    the route is reachable from any page of the copy without a third fixed layer.
-
-    Switch off -> the empty string, so the plain pages are byte-for-byte what they were.
+    It does not go straight out to the provider. The page is where a visitor finds out what they are
+    walking into -- what the panel is, who decides about a prescription, and the disclosure -- and the
+    one link out lives at the foot of it. The footer and the menu both point there, so the route is
+    reachable from any page without a third fixed layer. (Named for the CCRX route it started as; it has
+    been in both copies since 2026-10-03.)
     """
-    if not ccrx_on():
-        return ''
     return ('\n        <!-- DRAFT-COPY -->'
             f'<a href="{CCRX_PAGE}">Bloodwork &amp; peptides</a><!-- /DRAFT-COPY -->')
 
 
 def ccrx_menu():
-    """The same route in the menu sheet, on every page of the copy: last, after the shelves.
+    """The same route in the menu sheet, on every page of BOTH copies: last, after the shelves.
 
     It sat third, under "About us" and above Goals, All products and the shelves, and a critic
     read that as a paid medical referral outranking the business the site is about (2026-10-02).
@@ -1619,15 +1723,12 @@ def ccrx_menu():
     its own label -- not an eleventh shelf, which it is not, and not in the big list's display
     type. The lone item spans both columns so its name stays on one line at 320.
 
-    A plain relative link with no {{HOME}} prefix, like About us: every page of the copy sits in
-    the one folder, so it is correct from all of them. Off -> '' and the plain site's menu is
-    untouched, to the byte.
+    A plain relative link with no {{HOME}} prefix, like About us: every page of a copy sits in
+    the one folder, so it is correct from all of them.
     """
-    if not ccrx_on():
-        return ''
-    return ('\n      <!-- The CCRX route, last in the menu, after the shelves: its own page, because none of\n'
-            '           this belongs on a shelf or in the story. This group exists in the copy under plus/\n'
-            "           only (ccrx_menu in build_homepage.py); the plain site's menu never gains it. -->\n"
+    return ('\n      <!-- The bloodwork route, last in the menu, after the shelves: its own page, because none of\n'
+            '           this belongs on a shelf or in the story. In both copies since 2026-10-03 (ccrx_menu in\n'
+            '           build_homepage.py), each page going to its own provider. -->\n'
             '      <!-- DRAFT-COPY --><p class="label menu-shelves-t" id="menu-ccrx-t">Beyond supplements</p>\n'
             '      <ul class="menu-shelves" aria-labelledby="menu-ccrx-t">\n'
             f'        <li style="grid-column:1 / -1"><a href="{CCRX_PAGE}">Bloodwork &amp; peptides</a></li>\n'
@@ -1635,68 +1736,148 @@ def ccrx_menu():
 
 
 def ccrx_fda_scope():
-    """One line under the footer's supplement disclaimer, on CCRX_PAGE and nowhere else.
+    """One line under the footer's supplement disclaimer, on CCRX_PAGE and nowhere else, in both copies.
 
     The disclaimer is the standard supplement wording and stays verbatim on every page, this one
     included. Under a page about prescription medicine it read as "either wrong or evasive" (a
     critic, 2026-10-02), so this page says what it covers: the supplements on the rest of the
     site, and not the panel (a lab test) or the peptides (prescription medications). It wears the
     disclaimer's own .foot-fda small print, so it reads as that line's footnote rather than louder
-    than it, and no CSS is added. Every other page fills {{FDA_SCOPE}} with '' and is byte-for-byte
-    what it was.
+    than it. Every other page fills {{FDA_SCOPE}} with ''.
     """
-    if not ccrx_on():
-        return ''
     return ('\n      <!-- DRAFT-COPY --><p class="foot-fda">The line above is for the supplements on the rest of this site. This page '
             'is about something different: a blood panel, which is a lab test, and peptides, which are '
             'prescription medications. Neither is a supplement.</p><!-- /DRAFT-COPY -->')
 
 
-def ccrx_home():
-    """The homepage block, directly after the macro calculator (#macros), which it echoes on purpose.
+def why_section():
+    """"Understand why" (#why), the homepage's section between #story and #macros, in BOTH copies.
 
-    Same furniture as #macros and #sample: .split-text on the left and a .c-card beside it from
-    768 (.c-card takes columns 7-13 of a .split on its own, so this needs no new CSS at all and
-    the plain site's style.css -- and therefore every plain page's ?v= hash -- is untouched).
+    Peter, 2026-10-03: "Bloodwork, biomarkers, macros and targeted nutrition. This is the value add
+    for what we're building. The end goal is selling products but with people getting bloodwork so
+    they know what works best for them. I don't want them to have to get bloodwork to try a product
+    or buy a product, but that is the feeling." And: "another focus is building and retaining lean
+    mass." It replaced the plus copy's #bloodwork block (ccrx_home, which sat after #macros).
 
-    The copy is Peter's, approved 2026-10-01: the label, heading, body and button are DRAFT-COPY,
-    and the note under the button is PETER-COPY, his own disclosure, whose first sentence is the
-    CCRX_PANEL_FREE switch at the top of this file. His Amway disclosure is a different business
-    and stays exactly where it is; the two are never merged.
-
-    The button goes to CCRX_PAGE, not out to ccrx.health.
+    A lead, four pillars, then who does what. The two pillars that belong to the provider (the panel,
+    the protocols) go to CCRX_PAGE first, never straight out, as the menu and the footer do: that page
+    is where the disclosure sits beside the one link out. Lean mass goes to about.html's DEXA cards
+    (#numbers) and names no provider, because their scans were at UC Davis, not Avellum. Fuel goes to
+    the calculator below and to the shop tab.
+    COPY RULES (all binding, as on bloodwork.html): say what a thing IS and who decides, never what a
+    test or a peptide DOES; never supports/helps/boosts/optimises/restores/balances/anti-aging; never
+    "longevity" near a product; no prices; nothing about where anything ships; never that Amway works
+    with, endorses or partners with Avellum or CCRX. All of it is DRAFT-COPY in Peter's voice.
     """
-    if not ccrx_on():
-        return ''
-    return (
-        '\n\n  <!-- 3d-bis. The bloodwork route: the calculator’s own argument, turned around. It sits\n'
-        '       directly after #macros because that is what it answers -- your macros you can work out;\n'
-        '       this you cannot. It is the one block the two published copies differ by on the homepage\n'
-        f'       (ccrx_home in build_homepage.py), and its button goes to {CCRX_PAGE} rather than\n'
-        '       straight out to CCRX, because that page is where someone finds out what they are\n'
-        '       walking into. -->\n'
-        '  <section class="sec" id="bloodwork" aria-labelledby="bw-title">\n'
-        '    <div class="wrap split">\n'
-        '      <div class="split-text grow">\n'
-        '        <!-- DRAFT-COPY --><p class="label">Your bloodwork</p>\n'
-        '        <h2 id="bw-title"><span>The numbers</span> <span>you can’t <span class="hl-k">work out</span></span></h2>\n'
-        '        <p>Your macros you can calculate. What’s going on inside you, you can’t. A blood panel,'
-        ' drawn at home — no prescription, no appointment.</p><!-- /DRAFT-COPY -->\n'
-        '      </div>\n'
-        '      <div class="c-card grow" style="--d:1">\n'
-        f'        <!-- DRAFT-COPY --><a class="btn" href="{CCRX_PAGE}">See the blood panel</a><!-- /DRAFT-COPY -->\n'
-        f'        <!-- PETER-COPY --><p class="c-fine">{ccrx_disclosure()}</p><!-- /PETER-COPY -->\n'
-        '      </div>\n'
-        '    </div>\n'
-        '  </section>')
+    pv = provider()
+    soon = lambda url: '' if url else '<span class="why-soon">Coming soon</span>'   # no link yet: says so
+    arrow = '<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg>'
+    disc = (f'\n      <!-- {pv["disclosure_mark"]} --><p class="why-fine">{pv["disclosure"]}</p><!-- /{pv["disclosure_mark"]} -->'
+            if pv['disclosure'] else '')
+    return f'''  <!-- 3b. Understand why: bloodwork, biomarkers, macros and targeted nutrition -- what this is all
+       building towards (Peter, 2026-10-03). Built by why_section() in build_homepage.py, in both copies;
+       the provider named in it is the copy's own (Avellum Health here on the plain site, CCRX in the copy
+       under plus/), and its two provider pillars go to {CCRX_PAGE} first, where the disclosure sits. -->
+  <section class="sec why" id="why" aria-labelledby="why-title">
+    <div class="wrap">
+      <!-- DRAFT-COPY -->
+      <div class="why-head grow">
+        <p class="label">Understand why</p>
+        <h2 id="why-title"><span>Find out what’s</span> <span class="hl-k">working</span></h2>
+        <p class="why-lead">Bloodwork, biomarkers, macros and targeted nutrition. That’s what we’re building here.</p>
+        <p class="why-lead">You don’t need bloodwork to try anything. It’s how you find out what’s actually working for you.</p>
+      </div>
+      <ol class="why-list">
+        <li class="why-card grow" style="--d:1">
+          <p class="why-n" aria-hidden="true">01</p>
+          <h3 class="why-t">Know your numbers</h3>
+          <p>Bloodwork is a lab test: your biomarkers, measured from your own blood, collected at home with a Tasso. It goes through {pv["name"]}, and a licensed clinician reads it, not me.{soon(pv["panel"])}</p>
+          <a class="tlink why-go" href="{CCRX_PAGE}#panel">What the bloodwork is{arrow}</a>
+        </li>
+        <li class="why-card grow" style="--d:2">
+          <p class="why-n" aria-hidden="true">02</p>
+          <h3 class="why-t">Build and keep lean mass</h3>
+          <p>It’s the number both our scans track. Lean mass is worth building at any age, and worth keeping as you get older.</p>
+          <a class="tlink why-go" href="about.html#numbers">See both our DEXA scans{arrow}</a>
+        </li>
+        <li class="why-card grow" style="--d:3">
+          <p class="why-n" aria-hidden="true">03</p>
+          <h3 class="why-t">Fuel it</h3>
+          <p>Your macros first: the calories, protein, fat and carbs your day needs. Then targeted nutrition, the few products that fit your goal and nothing you don’t need.</p>
+          <p class="why-gos"><a class="tlink why-go" href="#macros">Work out your macros{arrow}</a><a class="tlink why-go" href="{SHOP_PAGE}">See the products{arrow}</a></p>
+        </li>
+        <li class="why-card grow" style="--d:4">
+          <p class="why-n" aria-hidden="true">04</p>
+          <h3 class="why-t">Peptide protocols</h3>
+          <p>Peptides are prescription medications. Whether one is right for you is a licensed clinician’s call, through {pv["name"]}, and they can say no.{soon(pv["protocols"])}</p>
+          <a class="tlink why-go" href="{CCRX_PAGE}#protocols">Who decides, and how{arrow}</a>
+        </li>
+      </ol>
+      <p class="why-roles grow">Who does what: licensed clinicians read your bloodwork and decide on any protocol. I don’t read labs and I don’t prescribe. My part is your nutrition and the products.</p>
+      <!-- /DRAFT-COPY -->{disc}
+    </div>
+  </section>
+'''
+
+
+# DRAFT-COPY. The panel's blood is collected with a Tasso (Peter, 2026-10-03), so both providers' pages say so.
+# Never call it painless or FDA-cleared unless that is confirmed for the exact device from Tasso's own site.
+TASSO = 'It’s collected at home with a Tasso — a small device you press on your upper arm, instead of a needle draw at a lab.'
+
+
+def bw_parts():
+    """The pieces of CCRX_PAGE that differ by provider. The CCRX copy keeps every sentence it had,
+    word for word. The plain site's Avellum version drops only what was a fact about CCRX's storefront
+    and is not known of Avellum Health's own (the at-home kit, the one-off payment, the pre-order, the
+    28-day refill) and says nothing in its place; the rest is the same page. The provider buttons are
+    "Coming soon" labels while their link is empty."""
+    pv = provider()
+    ccrx = pv['kind'] == 'ccrx'
+    if ccrx:
+        panel = ('        <p>It’s bloodwork, drawn at home. A kit comes to you, you take the sample yourself, and it goes back to the lab in the mail.</p>\n'
+                 f'        <p>{TASSO}</p>\n'
+                 f'        <p>No prescription to get first. No appointment to sit through. You pay for it once — it isn’t a subscription.</p>{ccrx_preorder()}\n'
+                 '        <p>What the panel measures is listed on their site, and so is what it costs.</p>')
+        refill = '\n        <p>A prescription is refilled every 28 days.</p>'
+        desc = 'A blood panel, drawn at home — no prescription, no appointment — and what a licensed clinician may decide after it.'
+        statement = '        <p>Avellum Health, whose storefront this is, state it plainly: compounded medications are not FDA-approved drugs.</p>'
+    else:
+        panel = ('        <p>It’s bloodwork: a lab panel of your biomarkers, measured from your own blood, through Avellum Health.</p>\n'
+                 f'        <p>{TASSO}</p>\n'
+                 '        <p>What the panel measures, how the sample is taken and what it costs are all listed on their site.</p>')
+        refill = ''
+        desc = 'A blood panel through Avellum Health, and what a licensed clinician may decide after it.'
+        statement = '        <p>Avellum Health state it plainly: compounded medications are not FDA-approved drugs.</p>'
+    after = ('        <p>If you want to go further than the panel, that part is medicine, and it isn’t mine to hand out.</p>\n'
+             '        <p>You fill in an intake. A licensed clinician reads it and decides whether a prescription is appropriate for you. They can also decide it isn’t, and say no.</p>\n'
+             '        <p>What they can prescribe is compounded peptides. I’m not going to tell you what any of them is for — I’m not a clinician, and that conversation is yours to have with them.</p>'
+             + refill)
+    m = pv['disclosure_mark']
+    disclosure = f'        <!-- {m} --><p>{pv["disclosure"]}</p><!-- /{m} -->' if pv['disclosure'] else ''
+    btn = lambda url, label: (f'<a class="btn" href="{url}" target="_blank" rel="noopener">{label}'
+                              '<span class="vh"> (opens in a new tab)</span></a>')
+    if ccrx:
+        go = ('        <!-- DRAFT-COPY --><p>That’s their site, not mine. The price, what’s in the panel and where they can ship it are theirs to state, and they’re all on there.</p>\n'
+              f'        {btn(pv["panel"], "See the panel on their site")}<!-- /DRAFT-COPY -->')
+    elif pv['panel'] or pv['protocols']:
+        btns = ([btn(pv['panel'], 'See the panel on their site')] if pv['panel'] == pv['protocols'] else
+                [btn(pv['panel'], 'See the panel on their site') if pv['panel'] else soon_button(),
+                 btn(pv['protocols'], 'See peptide protocols on their site') if pv['protocols'] else soon_button()])
+        go = ('        <!-- DRAFT-COPY --><p>That’s Avellum Health’s site, not mine. The price, what’s in the panel and where they can ship it are theirs to state, and they’re all on there.</p>\n'
+              + '\n'.join('        ' + b for b in btns) + '<!-- /DRAFT-COPY -->')
+    else:
+        go = ('        <!-- DRAFT-COPY --><p>The link to Avellum Health goes here as soon as it’s ready. The price, what’s in the panel and where they can ship it will be theirs to state, on their site, not mine.</p>\n'
+              f'        {soon_button()}<!-- /DRAFT-COPY -->')
+    return {'{{BW_DESC}}': desc, '{{BW_PANEL}}': panel, '{{BW_AFTER}}': after, '{{BW_DISCLOSURE}}': disclosure,
+            '{{BW_STATEMENT}}': statement, '{{BW_GO}}': go}
 
 
 def ccrx_disclosure():
     """Peter's approved disclosure for the CCRX route, in his words, as one paragraph of text.
 
     Two clauses: what he is NOT paid on (CCRX_PANEL_FREE -- true today only, see the switch) and
-    what he IS paid on (true either way). Written once, here, and used by both the homepage block
-    and CCRX_PAGE, so retiring the first clause changes both at once.
+    what he IS paid on (true either way). Written once, here, and used by both the homepage section
+    and CCRX_PAGE in the CCRX copy, so retiring the first clause changes both at once.
     """
     return ' '.join(x for x in (
         CCRX_PANEL_FREE,
@@ -1704,7 +1885,7 @@ def ccrx_disclosure():
 
 
 def ccrx_preorder():
-    """The pre-order sentence on CCRX_PAGE, or nothing once CCRX_PREORDER is emptied.
+    """The pre-order sentence on the CCRX copy's CCRX_PAGE, or nothing once CCRX_PREORDER is emptied.
 
     One switch, one writer: the word "pre-order" appears nowhere else in the build or in the
     templates, so on the day the kits ship, emptying CCRX_PREORDER takes it off the page.
@@ -1713,6 +1894,30 @@ def ccrx_preorder():
         return ''
     return (f'\n        <!-- DRAFT-COPY --><p>Right now it’s a pre-order. The first kits ship '
             f'{CCRX_PREORDER}.</p><!-- /DRAFT-COPY -->')
+
+
+def home_bg():
+    """The homepage hero's photograph ({{HOME_BG}}): a <picture> when HOME_BG names one, otherwise the
+    palette ground. Decorative (alt="", aria-hidden), eager and high priority, since it is the first
+    screen. Each crop's focus comes from HOME_BG_FOCUS, as custom properties style.css reads."""
+    if not HOME_BG:
+        return '    <div class="hh-bg hh-ph" aria-hidden="true"></div>'
+    path = os.path.join(ROOT, HOME_BG)
+    if not os.path.isfile(path):
+        raise SystemExit(f'HOME_BG: no such file {HOME_BG!r} (put it under assets/home/)')
+    from PIL import Image
+    w, h = Image.open(path).size
+    d, m = HOME_BG_FOCUS.get(HOME_BG, ('50% 50%', '50% 50%'))
+    phone = ''
+    if HOME_BG_PHONE:  # below 768 the tall frame replaces the wide one; its own focus rides --hh-pos-m
+        pp = os.path.join(ROOT, HOME_BG_PHONE)
+        if not os.path.isfile(pp):
+            raise SystemExit(f'HOME_BG_PHONE: no such file {HOME_BG_PHONE!r} (put it under assets/home/)')
+        pw, ph = Image.open(pp).size
+        m = HOME_BG_FOCUS.get(HOME_BG_PHONE, ('50% 50%', '50% 50%'))[1]
+        phone = f'<source media="(max-width:767.98px)" srcset="{esc(HOME_BG_PHONE)}" width="{pw}" height="{ph}">'
+    return (f'    <div class="hh-bg" aria-hidden="true" style="--hh-pos:{esc(d)};--hh-pos-m:{esc(m)}"><picture>{phone}'
+            f'<img src="{esc(HOME_BG)}" alt="" width="{w}" height="{h}" fetchpriority="high" decoding="async"></picture></div>')
 
 
 def plus_path(name):
@@ -1725,8 +1930,14 @@ def plus_path(name):
 
 
 def write_plus(name, page):
-    """Write one page of the CCRX copy, with its links pointed inside the copy first."""
+    """Write one page of the CCRX copy, with its links pointed inside the copy first -- or not at all.
+
+    The split runs both ways (Peter, 2026-10-03: "Both still want the split"): the plain site's Avellum
+    link stays out of the CCRX copy, as guard() keeps the CCRX link out of the plain site."""
     page = plus_links(page)
+    if CCRX and AVELLUM_HOST in page.lower():
+        raise SystemExit(f'\n!! BUILD STOPPED: {PLUS_DIR}/{name} links {AVELLUM_HOST}, and was NOT written.\n'
+                         f'!! The CCRX copy links CCRX; only the plain site links Avellum Health.')
     open(plus_path(name), 'w').write(page)
     return page
 
@@ -1747,7 +1958,7 @@ def plus_links(page):
     front, and its pages can be diffed against the plain ones line for line.
     """
     shelves = '|'.join(re.escape(c[0]) for c in CATEGORIES)
-    pages = rf'(?:homepage|about|{re.escape(CCRX_PAGE[:-5])}|category-(?:{shelves}))\.html'
+    pages = rf'(?:homepage|shop|about|{re.escape(CCRX_PAGE[:-5])}|category-(?:{shelves}))\.html'
     page = re.sub(rf'({re.escape(BASE)})({pages})', rf'\1{PLUS_DIR}/\2', page)
     return re.sub(r'(?<![\w./-])assets/', '../assets/', page)
 
@@ -1757,35 +1968,37 @@ def guard(name, text, on_disk=False):
 
     Peter, 2026-10-01: "The only thing to avoid is having the specific uh, crystal clear RX website
     built into the other website. ... Actually, even the name crystal clear is fine. Just the link
-    itself." So this checks for the HOSTS in CCRX_HOSTS and for nothing else -- the words "CCRX",
-    "Avellum Health", "peptide" and "bloodwork" are all free to appear in either copy, and the
-    footer's ordering line already names Avellum Health.
-
-    It also bans ONE file name, CCRX_PAGE, for a mechanical reason rather than a copy one: that
-    page is written by the second pass alone, and the homepage block and the menu entry link it
-    rather than linking ccrx.health. Without it in the list, `--ccrx on` on the plain pass would
-    put a block and a menu item into the plain site carrying no banned host at all, and the plain
-    site would point at a page that is not at the root. CCRX_BANNED is the hosts plus that name.
+    itself."
+    Peter, 2026-10-03, verbatim: "Avellum links can go on the regular site, crystal clear links will
+    go on the plus site. Both still want the split."
+    So since 2026-10-03 this checks for the CCRX host and nothing else (GUARD_BANNED: ccrx.health, and
+    whatever host CCRX_URL is ever moved to). Changed deliberately, on that decision: avellumhealth.com
+    is allowed on the plain site now, because Avellum Health is the plain site's provider, and the name
+    bloodwork.html is no longer banned, because that page is built in both copies, each linking its own
+    provider (provider()). The words "CCRX", "Avellum Health", "peptide" and "bloodwork" were always
+    free to appear in either copy. What has not changed is the split itself: the CCRX LINK belongs to
+    the copy under PLUS_DIR/ and to nothing at the repo root.
 
     It runs on the way to disk, so a leaked page is never even written, and it is unconditional:
-    no flag and no switch skips it. `--ccrx on` puts the link into the plain pass on purpose and
-    this is what stops it. If Peter one day decides the plain site SHOULD carry the link, this
+    no flag and no switch skips it. `--ccrx on` puts the CCRX provider into the plain pass on purpose
+    and this is what stops it. If Peter one day decides the plain site SHOULD carry the CCRX link, this
     function is the single place that has to be changed, deliberately, by someone reading this.
     """
     hits = [(i, h, line.strip()) for i, line in enumerate(text.splitlines(), 1)
-            for h in CCRX_BANNED if h in line.lower()]
+            for h in GUARD_BANNED if h in line.lower()]
     if not hits:
         return text
     where = '\n'.join(f'!!   {name}:{i}  names {h}\n!!     {ln[:140]}' for i, h, ln in hits)
     what = (f'!! {name} already carries it at the repo root; this build did not write it.'
             if on_disk else f'!! {name} was NOT written.')
     raise SystemExit(
-        f'\n!! BUILD STOPPED: the CCRX route leaked into the plain site.\n'
+        f'\n!! BUILD STOPPED: the CCRX link leaked into the plain site.\n'
         f'{what} {len(hits)} occurrence(s):\n{where}\n'
-        f'!! Only the copy under {PLUS_DIR}/ may name {" or ".join(CCRX_BANNED)}; the pages at the\n'
-        f'!! repo root are the site Peter sends to anyone, and they must never link it\n'
-        f'!! (Peter, 2026-10-01: "Just the link itself.").\n'
-        f'!! Put it behind the CCRX switch in {os.path.basename(__file__)} (see ccrx_block), then rebuild.')
+        f'!! Only the copy under {PLUS_DIR}/ may name {" or ".join(GUARD_BANNED)}; the pages at the\n'
+        f'!! repo root are the site Peter sends to anyone, and they link Avellum Health instead\n'
+        f'!! (Peter, 2026-10-03: "Avellum links can go on the regular site, crystal clear links will go\n'
+        f'!! on the plus site. Both still want the split.").\n'
+        f'!! Put it behind the CCRX switch in {os.path.basename(__file__)} (see provider()), then rebuild.')
 
 
 def write_plain(name, text):
@@ -1804,7 +2017,7 @@ def guard_root():
                    if f.endswith(('.html', '.css', '.webmanifest')) and os.path.isfile(os.path.join(ROOT, f)))
     for f in names:
         guard(f, open(os.path.join(ROOT, f), encoding='utf-8', errors='replace').read(), on_disk=True)
-    print(f'guard: no {"/".join(CCRX_BANNED)} in the {len(names)} files of the plain site '
+    print(f'guard: no {"/".join(GUARD_BANNED)} in the {len(names)} files of the plain site '
           f'({len(PLAIN_WRITTEN)} of them written by this build)')
 
 
@@ -1823,7 +2036,7 @@ def demo_links(page):
     """A demo page's links to the homepage and to every shelf, relative or absolute (og:url, the search's
     'homepage.html?q=', a card's '?try=' link), rewritten to name the demo copies beside it."""
     page = re.sub(r'(?<![\w-])homepage\.html', DEMO_PAGE, page)
-    page = re.sub(r'(?<![\w-])about\.html', f'about{DEMO_SUFFIX}.html', page)
+    page = re.sub(r'(?<![\w-])(shop|about|' + re.escape(CCRX_PAGE[:-5]) + r')\.html', rf'\1{DEMO_SUFFIX}.html', page)
     shelves = '|'.join(re.escape(c[0]) for c in CATEGORIES)
     return re.sub(rf'(?<![\w-])category-({shelves})\.html', rf'category-\1{DEMO_SUFFIX}.html', page)
 

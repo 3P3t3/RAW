@@ -48,13 +48,16 @@
   --blue:#3340B8; /* lifted from the XS can */
   --hero:#033246; /* the dark half of the hero video, so the panel and the film share one edge */
   --pad:20px;--sec:72px;--mast:60px;
+  /* --mast is the bar's own height; --tabh the tab switch's row under it (0 from 1024, where the switch
+     stands in the bar); --mh the whole masthead, which is what anchors and the pinned strip clear */
+  --tabh:40px;--mh:calc(var(--mast) + var(--tabh));
   --ease:520ms cubic-bezier(.2,.7,.2,1);
 }
 *,*::before,*::after{box-sizing:border-box}
 /* the canvas takes its colour from html and extends the gradient's end colours into the
    overscroll areas: teal above the mast, black under the black footer. body's own chalk
    covers the document, so the gradient is only ever seen past the ends of the page. */
-html{-webkit-text-size-adjust:100%;scroll-padding-top:var(--mast);background:linear-gradient(var(--teal) 0 50%,#000 50% 100%)}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:var(--mh);background:linear-gradient(var(--teal) 0 50%,#000 50% 100%)}
 html.locked{overflow:hidden}
 body::before{content:"";position:fixed;inset:0;z-index:9;pointer-events:none;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.055'/%3E%3C/svg%3E");background-size:160px 160px}
 body{margin:0;background:var(--chalk);color:var(--text);font:16px/1.55 var(--sans);font-optical-sizing:auto;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
@@ -181,46 +184,11 @@ html:not(.js) .mtab{display:none}
    above the buttons, so "Work out your macros" still sits whole on the first screen at
    375x812 after the curtain. Measured: the button's foot at 798, not 812. */
 @media (max-width:767px){.hero-copy{padding-top:20px}.hero-actions{margin-top:0}}
-/* Peter on the first screen: Peter holding their daughter, the first line of his own introduction, and
-   the plan's two links, under the subhead (which ends on "a call"), so the call has someone attached to
-   it. Peter asked for the picture bigger again on 2026-10-01 — "I think I want it bigger. I think I want
-   the whole body shot" — so it is now the whole of with-daughter-960.webp, 4:5, instead of a square cut
-   from it. It stands beside his line AND the button, their height paid for inside its own, as the square
-   did. The block lays itself out by the width the copy has (a container query), not the viewport: where
-   the column beside the picture would be too narrow for the button (a 320 phone; the 768 tablet's narrow
-   copy column), the links drop to a full row under the picture and his line. --pic stops at 204px, which
-   is what the desktop hero can give it and still be exactly 800px tall — at 1440x900 and at the wider
-   windows where the headline reaches its 104px ceiling and takes 9px more. */
-.hero-copy{container-type:inline-size}
-/* the picture spans four rows and the line and links take the middle two, so they stand centred against
-   it. No row gap, or the empty rows would push the line down: the links' own top margin is the space
-   between them and the line. */
-.hero-me{--pic:min(46cqi,204px);display:grid;grid-template-columns:var(--pic) minmax(0,1fr);grid-template-rows:1fr auto auto 1fr;
-  grid-template-areas:"pic ." "pic line" "pic act" "pic .";align-items:start;gap:0 14px;width:100%}
-.hero-me img{grid-area:pic;display:block;width:var(--pic);height:auto;aspect-ratio:4/5;border-radius:14px;object-fit:cover;box-shadow:0 0 0 2px var(--chalk),0 0 0 3px var(--line)}
-.hero-me-line{grid-area:line;font-size:15px;line-height:1.4;color:var(--ink);text-wrap:balance}
-@media (min-width:768px){.hero-me-line{font-size:16px}}
-.hero-me-line a{font-weight:600;color:var(--teal);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px;white-space:nowrap}
-.hero-me .hero-actions{grid-area:act;margin-top:12px;column-gap:20px}
-.hero-me .btn{padding-inline:16px}
-/* phones: his line and the links sit at the picture's TOP instead, and the picture runs on below them.
-   Centred, every pixel the picture grows pushes "See the game plan" half a pixel further down the
-   screen; topped, the button lands where it landed before the picture grew, and the picture can be as
-   tall as it likes. What limits it here is his line, not the fold: under about a 165px column that line
-   takes a fourth row and the button goes down with it. */
-@media (max-width:767px){.hero-me{grid-template-rows:auto auto 1fr;grid-template-areas:"pic line" "pic act" "pic ."}}
-@container (max-width:299px){
-  .hero-me{--pic:clamp(96px,46cqi,130px);grid-template-rows:auto auto;grid-template-areas:"pic line" "act act";align-items:center}
-  .hero-me .hero-actions{margin-top:14px}
-  .hero-me .btn{padding-inline:28px}
-}
-/* phones: the label goes (the subhead already says what this is) and the headline is a step smaller.
-   With Peter's picture beside his line AND the button the copy's top padding is 8, not 12, and the
-   links sit 8 under his line. Measured after the curtain: the button's foot at 830 of 844 at 390x844
-   and 808 of 812 at 375x812 — exactly where the square picture left it. */
+/* phones: the label goes (the subhead already says what this is), the headline is a step smaller and
+   the copy's top padding is 8, not 12. (Peter's picture and line used to sit beside the button here, as
+   .hero-me; Tab 1's hero now carries them at its foot as .hh-me, below.) */
 @media (max-width:767px){
   .hero-copy{gap:12px;padding-top:8px}
-  .hero-me .hero-actions{margin-top:8px}
   .hero .label{display:none}
   .hero h1{font-size:clamp(46px,15vw,72px)}
 }
@@ -1657,8 +1625,8 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
    stage until 2026-10-01, on a second bar and a second caption set that cross-faded with theirs;
    the stage went and so did both. As slim as it can be and still be read: a 31px bar and one 10px
    caption row. */
-.t-bar{--pin:52px;scroll-padding-top:calc(var(--mast) + var(--pin))}
-.lbpin{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + var(--mast));z-index:18;background:var(--chalk);
+.t-bar{--pin:52px;scroll-padding-top:calc(var(--mh) + var(--pin))}
+.lbpin{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + var(--mh));z-index:18;background:var(--chalk);
   box-shadow:0 1px 0 var(--line),0 12px 18px -16px rgba(0,20,27,.55);
   transform:translate3d(0,-100%,0);visibility:hidden;transition:transform 280ms cubic-bezier(.2,.7,.2,1),visibility 0s linear 280ms}
 .lbpin.on{transform:none;visibility:visible;transition:transform 280ms cubic-bezier(.2,.7,.2,1),visibility 0s}
@@ -1876,8 +1844,8 @@ html:not(.js) .rk-guide{display:none}   /* without script every panel stands ope
 /* the pinned strip only counts in the anchors' offset once there is a stack to show (html.has-stack,
    set by the script); without one it is away outside the story, and the story pads for it itself.
    .snap: when it comes up its contents are set at once, so it never arrives mid-fade. */
-.t-bar{scroll-padding-top:var(--mast)}
-.t-bar.has-stack{scroll-padding-top:calc(var(--mast) + var(--pin))}
+.t-bar{scroll-padding-top:var(--mh)}
+.t-bar.has-stack{scroll-padding-top:calc(var(--mh) + var(--pin))}
 .lbpin.snap .lbpin-bars .bb,.lbpin.snap .lbc-set{transition:none}
 
 /* the product card: "Load this plate" beside "Buy on Amway", and "On your bar" once it is on */
@@ -2204,3 +2172,143 @@ body{background:transparent}
 .st-more .tlink{display:inline;min-height:0}   /* inline, so a line that wraps takes its arrow with its last word */
 .st-more .ic{margin-left:6px;vertical-align:-3px}
 .st-nw{white-space:nowrap}   /* the arrow never stands alone on a line */
+
+/* =====================================================================================================
+   Two tabs (2026-10-03). Peter: "this just feels too busy. Maybe we split the tabs. 1 tab is for
+   products, 1 tab is to bring people through the story and book a call." homepage.html is "Our
+   approach" (the curtain, the hero, the story, "Understand why", the calculator, the plan, the call)
+   and shop.html is "Shop" (the film hero, the rack, the sample, "That's my stack", the grid).
+   ===================================================================================================== */
+
+/* ---- the tab switch, in every page's masthead (_header.html). Under 1024 it is the masthead's second
+   row: two halves of the width, 40px tall (--tabh), the current page lit sand with a sand foot. From 1024
+   it stands in the bar between the wordmark and the nav as a two-part pill, the current half filled. */
+.tabs{display:grid;grid-template-columns:1fr 1fr;height:var(--tabh);margin:0 calc(-1 * var(--pad));border-top:1px solid rgba(230,211,197,.16)}
+.tab{display:flex;align-items:center;justify-content:center;min-width:0;font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(230,211,197,.78);text-decoration:none;white-space:nowrap}
+.tab[aria-current]{color:var(--sand);background:rgba(230,211,197,.07);box-shadow:inset 0 -3px 0 var(--sand)}
+.tab:active{opacity:.7}
+.tab:focus-visible{outline-offset:-4px}
+@media (hover:hover){.tab:not([aria-current]):hover{color:var(--sand);text-decoration:underline;text-underline-offset:5px}}
+@media (min-width:1024px){
+  :root{--tabh:0px}
+  .mast .wrap{grid-template-columns:minmax(auto,1fr) auto auto minmax(0,1fr) auto}
+  .mast .wordmark{order:0}
+  .mast .tabs{order:1;display:flex;height:auto;margin:0;border:0;box-shadow:inset 0 0 0 1px rgba(230,211,197,.4)}
+  .nav-inline{order:2}
+  .mast .search{order:3}
+  .tab{min-height:40px;padding:0 16px}
+  .tab[aria-current]{background:var(--sand);color:var(--teal);box-shadow:none}
+  .mast .tab:focus-visible{outline-color:var(--sand);outline-offset:2px}
+}
+/* 1024-1279: the switch costs the bar ~220px, so the wordmark keeps the wave and lets its name go, as a
+   phone's does (the name stays in the accessibility tree and the page title). Measured: with the name,
+   the nav ran 8px into the search field at 1200; from 1280 there is room for both. */
+@media (min-width:1024px) and (max-width:1279px){
+  .mast .wordmark .wm-name{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
+@media (min-width:1024px) and (max-width:1199px){.tab{padding:0 12px;letter-spacing:.12em}}
+
+/* ---- Tab 1's hero (.hh): "Feel your best. Understand why." over a full-bleed photograph (HOME_BG in
+   build_homepage.py) or, until one is chosen, a ground drawn from the palette (.hh-ph). The photograph
+   is decoration and is cropped by object-fit: a wide crop on the desktop, a tall one on phones, each
+   steered by its own object-position (HOME_BG_FOCUS -> --hh-pos, --hh-pos-m).
+   READABILITY WITH ANY PHOTOGRAPH: the text never relies on the picture. .hh-bg::after lays a light
+   tint over all of it (mood only), and the copy carries its own scrim (.hero-copy::before): rgba(0,24,32,.76)
+   under every line, fading out above the copy on phones and to its right from 768. Over a pure-white
+   picture the lowest is 6.4:1 (the sand "Understand why." at 768, where its end nears the fade), and
+   otherwise chalk 9.0:1 and sand 6.9:1 at 320, 390, 1440 and 1920 (measured 2026-10-03 on the rendered
+   page, a white test image in the slot, the text's own colour against the brightest pixel behind it);
+   any darker picture only raises them. Over the palette ground the lowest is 10.5:1. */
+.hero.hh{position:relative;isolation:isolate;overflow:hidden;display:grid;align-items:end;background:var(--teal);color:var(--chalk);
+  min-height:min(calc(100svh - var(--mh)),640px)}
+.hh-bg{position:absolute;inset:0;z-index:-2}
+.hh-bg picture{display:contents}
+.hh-bg img{display:block;width:100%;height:100%;object-fit:cover;object-position:var(--hh-pos-m,50% 50%)}
+.hh-bg::after{content:"";position:absolute;inset:0;background:rgba(0,24,32,.04)}
+.hh-ph{background:
+  radial-gradient(60% 50% at 78% 22%,rgba(230,211,197,.62),rgba(226,200,174,.18) 55%,rgba(226,200,174,0) 75%),
+  radial-gradient(45% 40% at 96% 92%,rgba(81,168,170,.42),rgba(81,168,170,0) 70%),
+  linear-gradient(165deg,#0E5466 0%,#063D4D 45%,var(--teal) 75%,#001E28 100%)}
+.hh-in{position:relative}
+.hh .hero-copy{position:relative;z-index:1;gap:14px;padding-top:28px;padding-bottom:22px}
+.hh .hero-copy::before{content:"";position:absolute;z-index:-1;left:calc(-1 * var(--pad));right:calc(-1 * var(--pad));top:-120px;bottom:0;
+  background:linear-gradient(180deg,rgba(0,24,32,0) 0,rgba(0,24,32,.64) 104px,rgba(0,24,32,.68) 220px)}
+.hh .label{display:block;color:var(--sand)}
+.hh .sub{color:var(--chalk);opacity:.92;max-width:34ch}
+.hh h1{color:var(--chalk);font-size:min(11.4vw,64px)}
+.hh h1 .hh-k{color:var(--sand)}
+.hh .tlink{color:var(--sand)}
+.hh .hero-actions{margin-top:4px}
+/* Peter at the hero's foot (Peter, 2026-10-03: "my photo should actually be more towards the bottom...
+   lets the lake speak for itself more"): small, under a hairline, like a signature, so the photograph
+   carries the top and the headline and its two links read first. On phones it runs on under the copy and
+   carries the copy's scrim down to the hero's edge (::before, the same .68); from 768 the copy's own
+   scrim already covers it, and it drops to the hero's bottom edge while the copy stays centred. */
+.hh-me{position:relative;z-index:1;display:flex;align-items:center;gap:14px;padding:14px 0 18px;border-top:1px solid rgba(244,241,234,.2)}
+.hh-me::before{content:"";position:absolute;z-index:-1;left:calc(-1 * var(--pad));right:calc(-1 * var(--pad));top:0;bottom:0;background:rgba(0,24,32,.68)}
+.hh-me img{flex:none;display:block;width:60px;height:auto;aspect-ratio:4/5;border-radius:10px;object-fit:cover;box-shadow:0 0 0 2px var(--chalk),0 12px 22px -14px rgba(0,0,0,.6)}
+.hh-me-line{max-width:30ch;font-size:15px;line-height:1.4;color:var(--chalk);text-wrap:balance}
+@media (min-width:768px){
+  .hero.hh{min-height:clamp(560px,calc(100vh - var(--mh)),760px);align-items:center}
+  .hh-bg img{object-position:var(--hh-pos,50% 50%)}
+  .hh-in{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px}
+  .hh .hero-copy{grid-column:1 / 8;padding-block:56px;gap:20px}
+  .hh .hero-copy::before{left:-100vw;right:-360px;top:-100vh;bottom:-100vh;
+    background:linear-gradient(90deg,rgba(0,24,32,.7) calc(100% - 420px),rgba(0,24,32,.34) calc(100% - 200px),rgba(0,24,32,0))}
+  .hh h1{font-size:clamp(64px,7vw,100px)}
+  .hh-in{align-self:stretch;grid-template-rows:1fr auto}
+  .hh .hero-copy{align-self:center}
+  .hh-me{grid-column:1 / 8;align-self:end;max-width:440px;padding:16px 0 28px}
+  .hh-me::before{display:none}
+  .hh-me img{width:68px}
+}
+@media (min-width:1024px){.hh .hero-copy,.hh-me{grid-column:1 / 7}}
+
+/* ---- "Understand why" (#why, why_section() in build_homepage.py): a lead, four pillars, who does what */
+.why-head{display:grid;gap:12px;justify-items:start;margin-bottom:28px}
+.why-head h2{font-size:40px}
+.why-head h2 span{display:block}
+.why-lead{max-width:44ch;font-size:17px;line-height:1.5;color:var(--ink)}
+.why-lead + .why-lead{color:var(--text)}
+.why-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.why-card{display:grid;grid-template-rows:auto auto 1fr auto;gap:8px;padding:22px 20px 14px;background:#FAF9F5;border:1px solid var(--line)}
+.why-n{font:800 28px/1 var(--display);font-stretch:72%;color:var(--blue)}
+.why-t{font:600 19px/1.25 var(--sans);color:var(--ink)}
+.why-card p:not(.why-n){font-size:15px;line-height:1.5}
+.why-gos{display:flex;flex-wrap:wrap;column-gap:22px}
+.why-go{align-self:end;justify-self:start;font-size:15px;gap:4px}
+.why-soon{display:inline-block;margin-left:8px;padding:1px 8px;border:1px dashed var(--teal);font:600 11px/1.5 var(--sans);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--teal);white-space:nowrap;vertical-align:1px}
+.why-roles{margin-top:28px;max-width:62ch;padding-left:16px;border-left:3px solid var(--blue);font-size:16px;line-height:1.5;color:var(--ink)}
+.why-fine{margin-top:12px;max-width:62ch;padding-left:19px;font-size:14px;line-height:1.5;color:var(--text)}
+@media (min-width:768px){
+  .why-head{margin-bottom:40px}
+  .why-head h2{font-size:52px}
+  .why-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .why-card{padding:26px 24px 16px}
+}
+@media (min-width:1024px){.why-list{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* ---- a provider button with no link yet (soon_button() in build_homepage.py): a button's shape, dashed,
+   and nothing to tap. Not a link and not focusable, so it can never go nowhere. */
+.soon{margin-top:4px}
+.soon-tag{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 28px;border:1px dashed var(--teal);
+  color:var(--teal);font:600 16px/1.2 var(--sans)}
+
+/* the plan follows the calculator on the homepage now (2026-10-03): the same hairline over its head
+   that it had under the story */
+.macros-sec + .how-sec{padding-top:0}
+.macros-sec + .how-sec>.wrap{border-top:1px solid var(--line);padding-top:calc(var(--sec) * .5)}
+
+/* the footer carries four links in both copies now (the bloodwork route joined the plain site on
+   2026-10-03), and up to 1199 the column had room for three: "Book a free call" broke over two or three
+   lines. There the links take their own full-width row under the brand, each on one line */
+@media (min-width:768px) and (max-width:1199px){
+  .foot-top .foot-brand{grid-column:1 / 13}
+  .foot-links{grid-column:1 / 13;justify-content:flex-start;margin-top:8px}
+  .foot-links a{white-space:nowrap}
+}
+/* phones: the plan's -40px foot was set for the rack's heading, which followed it until the split; the
+   call follows it on the homepage now, and its label sat 4px under the hairline, so it takes the 40px back */
+@media (max-width:767px){.how-sec + .consult{margin-top:40px}}
