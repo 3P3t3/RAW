@@ -873,7 +873,7 @@ if(arch){
    click or tap on it opens the same card instead; a cmd-, ctrl- or middle-click still opens its Amway
    page in a new tab, as a link does. Only "Buy on Amway" goes to Amway. "Ask for a free sample"
    closes the card and fills the sample form's blank with the product's exact name: in place on the
-   homepage (sAsk, in the sample block below), and through the homepage's ?try= link from a shelf page.
+   shop tab (sAsk, in the sample block below), and through the shop tab's ?try= link from a shelf page.
    The card is a modal <dialog>, so focus stays in it
    and the page behind is inert; Escape, the close button or a tap outside closes it, and focus goes
    back to the pack. The pack flies out of its compartment into the card, a few sparks go off as it
@@ -946,7 +946,7 @@ if(arch){
     list.forEach(function(f){var li=doc.createElement('li');li.textContent=f;facts.appendChild(li)});
     facts.hidden=!list.length;
     buy.href=d.href||b.getAttribute('href');
-    if(ask){   /* the exact listing name; a shelf page's goes by the homepage's ?try= */
+    if(ask){   /* the exact listing name; a shelf page's goes by the shop tab's ?try= */
       ask.dataset.name=d.try||d.name;
       ask.href=ask.dataset.home?ask.dataset.home+'?try='+encodeURIComponent(ask.dataset.name)+'#sample':'#sample';
     }

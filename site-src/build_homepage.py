@@ -1262,10 +1262,10 @@ def main():
 
     def card_dialog(home=''):
         """The product card every pack and product tile opens (_script.html fills it from the one it opened
-        from): the case's and the rack's packs, the homepage grid, Trending, and every shelf page's tiles.
+        from): the case's and the rack's packs, the shop tab's grid, Trending, and every shelf page's tiles.
         A modal <dialog>: without script, or without dialog support, nothing opens it and it never shows.
-        "Ask for a free sample" goes to the sample form: on the homepage (home '') in place, on a shelf page
-        (home 'homepage.html') by the homepage's ?try= link, the exact product name in it."""
+        "Ask for a free sample" goes to the sample form: on the shop tab (home '') in place, on a shelf page
+        (home 'shop.html') by the shop tab's ?try= link, the exact product name in it."""
         return ('    <dialog class="pcard" id="pcard" aria-labelledby="pcard-name" aria-describedby="pcard-line">\n'
                 '      <div class="pcard-in">\n'
                 '        <button class="icon-btn pcard-x" type="button" aria-label="Close"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>\n'
