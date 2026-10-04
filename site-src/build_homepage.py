@@ -1342,9 +1342,9 @@ def main():
     shelves = {'ring': ring_section, 'strip': strip_section, 'case': case_section, 'bar': rack_section}[SHELF_VIEW]()
     BAR = SHELF_VIEW == 'bar'
     # #story names their five shelves, in PETER's order, and those links are the only thing in the
-    # section that can drift from it: the plain-text lines are copy, the pictures are their photos.
+    # section that can drift from it: the pictures are their photos.
     story_src = open(SRC).read()
-    story_cats = re.findall(r'class="tlink st-go" href="category-([a-z-]+)\.html"', story_src)
+    story_cats = re.findall(r'class="st-go" href="category-([a-z-]+)\.html"', story_src)
     if BAR and story_cats != PETER:
         raise SystemExit(f"PETER: the story's lines link {story_cats}, not {PETER}")
     if BAR and sorted(PETER_PACKS) != sorted(PETER):
@@ -1779,6 +1779,11 @@ def why_section():
        the provider named in it is the copy's own (Avellum Health here on the plain site, CCRX in the copy
        under plus/), and its two provider pillars go to {CCRX_PAGE} first, where the disclosure sits. -->
   <section class="sec why" id="why" aria-labelledby="why-title">
+    <!-- the hero's lake again, the same shore in clear morning light (Peter, 2026-10-03: "shouldnt we keep
+         multiple of those type of backgrounds?"): dawn in the hero, morning here, dusk behind the call. A
+         picture strip with nothing written on it, so it is decoration (alt="") and the copy stays on the
+         light ground below. assets/home/lake-morning.webp, placed by hand. -->
+    <div class="why-band" aria-hidden="true"><img src="assets/home/lake-morning.webp" alt="" width="1392" height="752" loading="lazy" decoding="async"></div>
     <div class="wrap">
       <!-- DRAFT-COPY -->
       <div class="why-head grow">

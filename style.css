@@ -471,6 +471,16 @@ a.how-step:active{opacity:.7}
 .consult .split-text p:not(.label) + p:not(.label){margin-top:-4px}
 .consult .wrap.split{row-gap:24px}
 .c-fine{font-size:14px;color:var(--text)}
+/* the homepage's call over the lake at dusk (.c-dusk): the copy beside the card turns chalk, the card itself
+   is unchanged. The scrim darkens the sky behind the copy (top-left on a laptop, top on a phone) and leaves
+   the afterglow on the horizon to show. Its own full top padding: a dark band needs room above its heading. */
+.consult-dusk{background:#141A26;color:var(--chalk);padding-top:var(--sec)}
+.c-dusk{position:absolute;inset:0;z-index:-1}
+.c-dusk img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 58%}
+.c-dusk::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,14,24,.55),rgba(8,14,24,.2) 45%,rgba(8,14,24,.1) 70%,rgba(8,14,24,.45))}
+.consult-dusk .split-text,.consult-dusk .split-text h2{color:var(--chalk)}
+.consult-dusk .split-text .label{color:var(--sand)}
+.consult-dusk .split-text p:not(.label){opacity:.92}
 /* the calculator's numbers, carried into the consult after "See my numbers": the card's
    tiles and micro-labels, smaller, one row at every width. The script owns [hidden]. */
 .c-nums{display:grid;gap:8px;width:100%;max-width:40ch;margin-bottom:10px}
@@ -1097,8 +1107,16 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-mv{font:600 12px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin:0 0 2px;color:var(--text)}
 .st-line{margin:0;font:800 clamp(23px,6.6vw,31px)/1.08 var(--display);font-stretch:80%;
   letter-spacing:-.012em;text-wrap:balance;color:var(--teal)}
-.st-go .ic{margin-left:8px}
-.st-caplinks{display:flex;flex-wrap:wrap;align-items:center;gap:4px 24px;max-width:none;margin:0}
+/* what they changed: the five shelves' names, nothing else (Peter, 2026-10-03), as one list in the lines'
+   own display face, each name the link to its shelf, ruled like an index. */
+.st-shelves{list-style:none;margin:0;padding:0;width:100%;max-width:520px;border-top:1px solid var(--line)}
+.st-shelves li{border-bottom:1px solid var(--line)}
+.st-go{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px;padding:8px 0;
+  font:800 clamp(24px,6.6vw,30px)/1.1 var(--display);font-stretch:80%;letter-spacing:-.01em;color:var(--teal);text-decoration:none}
+.st-go .ic{flex:none;width:20px;height:20px;transition:transform .2s ease}
+.st-go:hover .ic,.st-go:focus-visible .ic{transform:translateX(4px)}
+.st-go:active{opacity:.7}
+@media (min-width:768px){.st-go{font-size:clamp(28px,2.8vw,36px);min-height:64px}}
 /* the third movement's label and its answer, Peter's side pair, out in the open (2026-10-02): a
    visitor who never opens the reveal below still sees one before and after. Under 1024 the heading
    stands straight over the pair, after the lines; the pair keeps proof_wall's own furniture (.c-proof,
@@ -2266,6 +2284,11 @@ body{background:transparent}
 @media (min-width:1024px){.hh .hero-copy,.hh-me{grid-column:1 / 7}}
 
 /* ---- "Understand why" (#why, why_section() in build_homepage.py): a lead, four pillars, who does what */
+/* the morning lake as a strip at the top of #why, flush under the story: nothing is written on it. Steered
+   to the horizon, so the wide desktop strip crops the sun away and a phone shows nearly the whole frame. */
+.sec.why{padding-top:0}
+.why-band{height:clamp(200px,52vw,420px);margin-bottom:clamp(36px,7vw,64px);overflow:hidden;background:#9DB9CF}
+.why-band img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 64%}
 .why-head{display:grid;gap:12px;justify-items:start;margin-bottom:28px}
 .why-head h2{font-size:40px}
 .why-head h2 span{display:block}
