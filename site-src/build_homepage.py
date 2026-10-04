@@ -12,7 +12,7 @@ through the story and book a call"): homepage.html (the curtain, the hero, the s
 why", the calculator, the game plan, the call) and shop.html (the film hero, the rack, the free
 sample, "That's my stack" and the all-products grid). The tab switch sits in every page's masthead.
 """
-import csv, hashlib, html, inspect, os, re, shutil, sys
+import csv, hashlib, html, inspect, json, os, re, shutil, sys
 from urllib.parse import quote
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -1351,7 +1351,11 @@ def main():
             # the pinned bar: the visitor's own stack and nothing else, shown once the hero has gone.
             # It had a second bar and a second caption set for Peter's five until 2026-10-01, which only
             # the scrubbed story stage ever filled; the stage went and so did they.
-            '{{PIN}}': ('<div class="lbpin" id="lbpin" aria-hidden="true"><div class="wrap lbpin-in">'
+            # data-plates: every shelf's name, rank and colour, so the strip can read a stack on a page with
+            # no rack (the homepage, since the rack moved to shop.html on 2026-10-03)
+            '{{PIN}}': ('<div class="lbpin" id="lbpin" aria-hidden="true" data-plates="'
+                        + esc(json.dumps({s: [html.unescape(names[s]), PLATES[s][1], PLATES[s][0]] for s in PLATES}, ensure_ascii=False, separators=(',', ':')))
+                        + '"><div class="wrap lbpin-in">'
                         '<div class="lbpin-bars bbx">' + barbell('bb-you') + '</div>'
                         '<p class="lbpin-cap"><span class="lbc-set lbc-yset"><span class="lbc-who"><span class="lbc lbc-you"></span></span>'
                         '<span class="lbc-new"><span class="lbc lbc-ynew"></span></span></span></p></div></div>'),

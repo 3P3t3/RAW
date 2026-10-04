@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=ec0f0e68">
+<link rel="stylesheet" href="../style.css?v=1dbdd4fe">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -476,7 +476,7 @@ function search(t){
   goShop();
 }
 $$('[data-all]').forEach(function(a){a.addEventListener('click',function(e){
-  if(!results)return;                      /* category pages just follow the link home */
+  if(!results)return;                      /* every page but the shop just follows the link there */
   e.preventDefault();if(menu&&menu.open)menu.close();showAll();
 })});
 if($('#filter-clear'))$('#filter-clear').addEventListener('click',function(){
@@ -486,7 +486,7 @@ if($('#filter-clear'))$('#filter-clear').addEventListener('click',function(){
 $('#search').addEventListener('submit',function(e){
   e.preventDefault();var t=q.value.trim().toLowerCase();
   if(!t){showAll();return}
-  if(!grid||!fbar){location.href='homepage.html?q='+encodeURIComponent(t);return}   /* search lives on the homepage */
+  if(!grid||!fbar){location.href='shop.html?q='+encodeURIComponent(t);return}   /* search lives on the shop tab (2026-10-03) */
   search(t);q.blur();
 });
 var urlQ=new URLSearchParams(location.search).get('q');
@@ -1942,6 +1942,11 @@ var LB=null;
       mys=$('#mys-you'),mysHas=mys&&$('.mys-has',mys),mysNone=mys&&$('.mys-none',mys),mysN=mys&&$('.mys-n',mys),mysKey=mys&&$('.mys-ykey',mys),
       cLoad=$('#pcard-load'),cCat='',pdlg=$('#pcard');
   plates.forEach(function(b){var c=b.getAttribute('data-cat');NAME[c]=$('.rk-name',b).textContent;RANK[c]=+b.getAttribute('data-rank');COL[c]=b.style.getPropertyValue('--c')});
+  /* the homepage has no rack since the split (2026-10-03): the strip carries every shelf's name, rank and
+     colour itself (data-plates, from build_homepage.py), so the stack built on the shop tab still reads
+     there, and the call form's note can still say "Interested in: ..." */
+  if(!plates.length){try{var pd=JSON.parse(pin.getAttribute('data-plates')||'{}'),pk;
+    for(pk in pd){NAME[pk]=pd[pk][0];RANK[pk]=pd[pk][1];COL[pk]=pd[pk][2]}}catch(e){}}
   try{var sv=JSON.parse(localStorage.getItem(KEY)||'[]');
       if(Array.isArray(sv))stack=sv.filter(function(c,i){return NAME.hasOwnProperty(c)&&sv.indexOf(c)===i})}catch(e){}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(stack))}catch(e){}}
