@@ -104,9 +104,15 @@ AVELLUM_PAID = False
 # object-fit:cover. HOME_BG_FOCUS steers each crop per photograph: path -> (desktop, phone) object-position
 # (any CSS position, e.g. '70% 40%'); a photograph not listed is centred on both. A 2400px-wide 16:9
 # WebP is plenty (the build checks the file exists and reads its size for width/height).
-HOME_BG = ''
+HOME_BG = 'assets/home/lake.webp'   # Peter's choice, 2026-10-03: the lake at dawn ("E") with "Feel better. Know why."
+# A phone gets its own photograph when HOME_BG_PHONE names one: a wide picture on a tall screen can only be
+# cropped at the sides, and the hero's text covers its lower two thirds, so the dawn sat behind the headline.
+# lake-tall.webp is a separate tall frame of the same kind of scene, cropped (nothing drawn) so its horizon and
+# rising sun sit high, in the clear band above the text, with the calm dark water under the copy.
+HOME_BG_PHONE = 'assets/home/lake-tall.webp'
 HOME_BG_FOCUS = {
-    # 'assets/home/example.webp': ('60% 50%', '72% 40%'),
+    'assets/home/lake.webp': ('50% 62%', '50% 50%'),
+    'assets/home/lake-tall.webp': ('50% 50%', '50% 0%'),
 }
 
 # ---- the two facts on that page that EXPIRE -------------------------------------------------
@@ -1785,7 +1791,7 @@ def why_section():
         <li class="why-card grow" style="--d:1">
           <p class="why-n" aria-hidden="true">01</p>
           <h3 class="why-t">Know your numbers</h3>
-          <p>Bloodwork is a lab test: your biomarkers, measured from your own blood. It goes through {pv["name"]}, and a licensed clinician reads it, not me.{soon(pv["panel"])}</p>
+          <p>Bloodwork is a lab test: your biomarkers, measured from your own blood, collected at home with a Tasso. It goes through {pv["name"]}, and a licensed clinician reads it, not me.{soon(pv["panel"])}</p>
           <a class="tlink why-go" href="{CCRX_PAGE}#panel">What the bloodwork is{arrow}</a>
         </li>
         <li class="why-card grow" style="--d:2">
@@ -1814,6 +1820,11 @@ def why_section():
 '''
 
 
+# DRAFT-COPY. The panel's blood is collected with a Tasso (Peter, 2026-10-03), so both providers' pages say so.
+# Never call it painless or FDA-cleared unless that is confirmed for the exact device from Tasso's own site.
+TASSO = 'It’s collected at home with a Tasso — a small device you press on your upper arm, instead of a needle draw at a lab.'
+
+
 def bw_parts():
     """The pieces of CCRX_PAGE that differ by provider. The CCRX copy keeps every sentence it had,
     word for word. The plain site's Avellum version drops only what was a fact about CCRX's storefront
@@ -1824,6 +1835,7 @@ def bw_parts():
     ccrx = pv['kind'] == 'ccrx'
     if ccrx:
         panel = ('        <p>It’s bloodwork, drawn at home. A kit comes to you, you take the sample yourself, and it goes back to the lab in the mail.</p>\n'
+                 f'        <p>{TASSO}</p>\n'
                  f'        <p>No prescription to get first. No appointment to sit through. You pay for it once — it isn’t a subscription.</p>{ccrx_preorder()}\n'
                  '        <p>What the panel measures is listed on their site, and so is what it costs.</p>')
         refill = '\n        <p>A prescription is refilled every 28 days.</p>'
@@ -1831,6 +1843,7 @@ def bw_parts():
         statement = '        <p>Avellum Health, whose storefront this is, state it plainly: compounded medications are not FDA-approved drugs.</p>'
     else:
         panel = ('        <p>It’s bloodwork: a lab panel of your biomarkers, measured from your own blood, through Avellum Health.</p>\n'
+                 f'        <p>{TASSO}</p>\n'
                  '        <p>What the panel measures, how the sample is taken and what it costs are all listed on their site.</p>')
         refill = ''
         desc = 'A blood panel through Avellum Health, and what a licensed clinician may decide after it.'
@@ -1895,8 +1908,16 @@ def home_bg():
     from PIL import Image
     w, h = Image.open(path).size
     d, m = HOME_BG_FOCUS.get(HOME_BG, ('50% 50%', '50% 50%'))
-    return (f'    <div class="hh-bg" aria-hidden="true" style="--hh-pos:{esc(d)};--hh-pos-m:{esc(m)}">'
-            f'<img src="{esc(HOME_BG)}" alt="" width="{w}" height="{h}" fetchpriority="high" decoding="async"></div>')
+    phone = ''
+    if HOME_BG_PHONE:  # below 768 the tall frame replaces the wide one; its own focus rides --hh-pos-m
+        pp = os.path.join(ROOT, HOME_BG_PHONE)
+        if not os.path.isfile(pp):
+            raise SystemExit(f'HOME_BG_PHONE: no such file {HOME_BG_PHONE!r} (put it under assets/home/)')
+        pw, ph = Image.open(pp).size
+        m = HOME_BG_FOCUS.get(HOME_BG_PHONE, ('50% 50%', '50% 50%'))[1]
+        phone = f'<source media="(max-width:767.98px)" srcset="{esc(HOME_BG_PHONE)}" width="{pw}" height="{ph}">'
+    return (f'    <div class="hh-bg" aria-hidden="true" style="--hh-pos:{esc(d)};--hh-pos-m:{esc(m)}"><picture>{phone}'
+            f'<img src="{esc(HOME_BG)}" alt="" width="{w}" height="{h}" fetchpriority="high" decoding="async"></picture></div>')
 
 
 def plus_path(name):
