@@ -192,6 +192,14 @@ html:not(.js) .mtab{display:none}
   .hero .label{display:none}
   .hero h1{font-size:clamp(46px,15vw,72px)}
 }
+/* the shop's hero on a phone (2026-10-04, Peter): the square film stays as it is, so the copy is what gives.
+   The headline steps down to 44px on two lines ("Picked for how" / "you train.") and the lead comes in
+   under the two ways on, so "Pick your goal" is whole on the first screen. */
+@media (max-width:480px){
+  .hero-shop h1{font-size:clamp(40px,12.5vw,44px)}
+  .hero-shop h1 span:not(.hl-3d){display:inline}
+  .hero-shop .sub{order:1;font-size:16px}   /* after the ways on: 715 -> 653 at 390x844, 662 -> 575 at 320x640 */
+}
 .glass{position:relative;margin:0 calc(-1 * var(--pad));aspect-ratio:1;overflow:hidden}
 .glass video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:linear-gradient(90deg,var(--teal) 50%,var(--beige) 50%)}
 .glass-toggle{position:absolute;z-index:3;left:14px;bottom:14px;width:40px;height:40px;border-radius:50%;background:var(--teal);color:var(--chalk)}
@@ -942,6 +950,44 @@ dialog{color:var(--text)}
 
 /* without JS nothing can reveal the shelf, so it is simply open */
 html:not(.js) #results[hidden]{display:block!important}
+/* the shop's grid, grouped by shelf (2026-10-04): an h3 over each shelf's tiles, and the shelves' names as
+   a row of links that holds under the masthead (and under the pinned bar, while it is up) for as long as
+   the grid is on screen; it is sticky inside #results' .wrap, so it goes with the grid. On a phone the row
+   is one line that scrolls sideways; from 768 it wraps. The shelf being read is lit (aria-current, set by
+   the script). The plate's colour rides on each name as the edge-on sliver the stack's key uses. */
+/* its chalk runs the full width of the window, as the pinned bar's does, by a shadow, which cannot widen
+   the page; the second shadow is its hairline, clipped to the 1px under it */
+.g-jump{position:sticky;top:calc(var(--mh) + var(--srch,0px));z-index:5;margin:-24px calc(-1 * var(--pad)) 0;background:var(--chalk);
+  box-shadow:0 0 0 100vmax var(--chalk),0 1px 0 100vmax var(--line);clip-path:inset(0 -100vmax -1px)}
+.t-bar.pin-you .g-jump{top:calc(var(--mh) + var(--srch,0px) + var(--pin))}
+/* under 1024 the search opens as a 58px row in the masthead and stays open after a search, so the
+   row of shelves (and the pinned bar, below) step down under it rather than slide behind it */
+@media (max-width:1023px){html:has(.mast.s-open){--srch:58px}}
+.g-jump ul{list-style:none;margin:0;padding:8px var(--pad);display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain}
+.g-jump ul::-webkit-scrollbar{display:none}
+.g-jump li{flex:none}
+.g-jump li[hidden],.g-jump[hidden]{display:none}
+.g-jump a{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 13px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--line);
+  background:var(--chalk);color:var(--teal);font:600 13px/1 var(--sans);text-decoration:none;white-space:nowrap}
+.g-jump a[aria-current]{background:var(--teal);color:var(--chalk);box-shadow:none}
+.g-jump a:active{opacity:.7}
+.g-jump i{flex:none;width:5px;height:14px;border-radius:2px/3px;background:linear-gradient(rgba(255,255,255,.45),rgba(255,255,255,0) 30%,rgba(0,0,0,0) 60%,rgba(0,0,0,.4)),var(--c);box-shadow:0 0 0 1px rgba(30,38,47,.18)}
+@media (hover:hover){.g-jump a:not([aria-current]):hover{box-shadow:inset 0 0 0 1.5px var(--teal)}}
+.g-shelf{scroll-margin-top:calc(var(--gj,52px) + 8px)}   /* --gj: the row's own height, kept by the script */
+.g-shelf[hidden]{display:none}
+.g-h{margin:28px 0 18px;font:800 30px/.95 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+/* a hairline between shelves, never over the first one showing (a search can hide the ones above it) */
+.g-shelf:not([hidden]) ~ .g-shelf .g-h{margin-top:40px;padding-top:14px;border-top:1px solid var(--line)}
+.g-shelf .p-name{margin-bottom:0}   /* an h4 there, under its shelf's h3 */
+.g-back{margin-top:8px}
+.g-back .ic{margin-right:8px}
+@media (min-width:768px){
+  .g-jump ul{flex-wrap:wrap;overflow:visible;padding-block:10px}
+  .g-shelf{scroll-margin-top:calc(var(--gj,98px) + 8px)}
+  .g-h{font-size:36px}
+}
+/* all ten on one line from 1200 */
+@media (min-width:1200px){.g-jump ul{gap:5px}.g-jump a{padding:0 10px;gap:6px}.g-shelf{scroll-margin-top:calc(var(--gj,56px) + 8px)}}
 
 /* ---------- 768px ---------- */
 @media (min-width:768px){
@@ -1665,7 +1711,7 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
    the stage went and so did both. As slim as it can be and still be read: a 31px bar and one 10px
    caption row. */
 .t-bar{--pin:52px;scroll-padding-top:calc(var(--mh) + var(--pin))}
-.lbpin{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + var(--mh));z-index:18;background:var(--chalk);
+.lbpin{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + var(--mh) + var(--srch,0px));z-index:18;background:var(--chalk);
   box-shadow:0 1px 0 var(--line),0 12px 18px -16px rgba(0,20,27,.55);
   transform:translate3d(0,-100%,0);visibility:hidden;transition:transform 280ms cubic-bezier(.2,.7,.2,1),visibility 0s linear 280ms}
 .lbpin.on{transform:none;visibility:visible;transition:transform 280ms cubic-bezier(.2,.7,.2,1),visibility 0s}
@@ -1681,16 +1727,26 @@ html:not(.js) .lbpin{display:none}
 .lbc{grid-area:1 / 1;overflow:hidden;text-overflow:ellipsis;opacity:0;will-change:opacity}
 .lbc-you{opacity:1}
 @media (prefers-reduced-motion:reduce){.lbpin,.lbpin.on,.lbpin-bars .bb,.lbc-set{transition:none}}
+/* "Bring it to a call" (2026-10-04): the strip's one way on, at its right end, the call button's blue
+   a size down. While the strip is away it is hidden with it (visibility), so it is never tabbed to. */
+.lbpin-in{grid-template-columns:minmax(0,1fr) auto;column-gap:16px}
+.lbpin-bars,.lbpin-cap{grid-column:1}
+.lbpin-go{grid-column:2;grid-row:1 / 3;align-self:center;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;
+  border-radius:var(--r);background:var(--blue);color:#fff;font:600 13px/1.15 var(--sans);text-decoration:none;white-space:nowrap}
+.lbpin-go .ic{flex:none;width:14px;height:14px}
+.lbpin-go:active{opacity:.8}
 /* a phone's strip is one 36px row: the caption on the left ("Your stack · 2"), the bar on the
    right, a 30px bar. "+ name" comes up over the caption for a moment, on the strip's own chalk,
    and goes. With the masthead that is 96px; while the strip is up the bottom tab steps aside
    (html.pin-you, set by the script), so the fixed chrome is never more than 96px. */
 @media (max-width:767px){
   .t-bar{--pin:36px}
-  .lbpin-in{grid-template-columns:auto minmax(0,1fr);align-items:center;gap:0 12px;padding-top:0}
+  .lbpin-in{grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:0 12px;padding-top:0}
   .lbpin-cap{grid-row:1;grid-column:1;font-size:10px;letter-spacing:.1em}
   .lbpin-bars{grid-row:1;grid-column:2}
-  .lbpin-bars .bb{font-size:3.2px}
+  .lbpin-go{grid-column:3;grid-row:1;min-height:30px;padding:0 10px;font-size:12px;gap:4px}
+  .lbpin-go .ic{width:12px;height:12px}
+  .lbpin-bars .bb{font-size:min(3.2px,calc(100cqi / 36))}   /* the bar gives way to the call link (2026-10-04) rather than run under it */
   .lbc-lg{display:none}
   .lbc-set{display:grid}
   .lbc-who,.lbc-new{grid-area:1 / 1}
@@ -1699,9 +1755,15 @@ html:not(.js) .lbpin{display:none}
   .lbc-new .lbc{background:var(--chalk)}
   html.pin-you .mtab{transform:translateY(calc(100% + 2px));visibility:hidden}
 }
+/* under 375 the link takes two lines and no arrow, so the bar keeps ~100px of the 280 (2.8px a plate step) */
+@media (max-width:374.98px){
+  .lbpin-in{column-gap:8px}
+  .lbpin-go{max-width:76px;padding:0 8px;white-space:normal;text-align:center;font-size:11px;line-height:1.1;min-height:32px}
+  .lbpin-go .ic{display:none}
+}
 @media (min-width:768px){
   .t-bar{--pin:60px}
-  .lbpin-in{max-width:780px;gap:4px}
+  .lbpin-in{max-width:780px;row-gap:4px}
   .lbpin-bars .bb{font-size:3.9px}
   .lbpin-cap{font-size:10.5px}
 }
@@ -1818,6 +1880,12 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
 .mys-th::before{content:"";position:absolute;left:12%;right:12%;bottom:4%;height:16%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),rgba(0,0,0,0))}
 .mys-th img{position:relative;display:block;width:100%;height:100%;object-fit:contain;transform:scale(1.32);transform-origin:50% 62%}
 .mys-n{display:flex;align-items:flex-start;justify-content:center;gap:6px;text-align:left;text-wrap:balance}
+/* each of his packs is its product's tile (2026-10-04): the picture, the product's name in the page's own
+   type, then the shelf as before. A tap opens the product's card (#pcard); without script it is the link */
+.mys-go{display:grid;justify-items:center;align-content:start;gap:6px;width:100%;color:inherit;text-decoration:none}
+.mys-p{font:600 12.5px/1.3 var(--sans);letter-spacing:0;text-transform:none;color:var(--chalk);text-wrap:balance}
+.mys-go:active{opacity:.7}
+@media (hover:hover){.mys-go:hover .mys-p{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}}
 .mys-key i{flex:none;width:5px;height:15px;margin-top:-1px;border-radius:2px/3px;
   background:linear-gradient(rgba(255,255,255,.45),rgba(255,255,255,0) 30%,rgba(0,0,0,0) 60%,rgba(0,0,0,.4)),var(--c);box-shadow:0 0 0 1px rgba(230,211,197,.35)}
 .mys-build{margin-top:18px;font:800 clamp(40px,11vw,72px)/.92 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--sand)}
@@ -2241,10 +2309,12 @@ body{background:transparent}
   .tab[aria-current]{background:var(--sand);color:var(--teal);box-shadow:none}
   .mast .tab:focus-visible{outline-color:var(--sand);outline-offset:2px}
 }
-/* 1024-1279: the switch costs the bar ~220px, so the wordmark keeps the wave and lets its name go, as a
-   phone's does (the name stays in the accessibility tree and the page title). Measured: with the name,
-   the nav ran 8px into the search field at 1200; from 1280 there is room for both. */
-@media (min-width:1024px) and (max-width:1279px){
+/* 1024-1099: the switch costs the bar ~220px, so the wordmark keeps the wave and lets its name go, as a
+   phone's does (the name stays in the accessibility tree and the page title). It was 1024-1279 while the
+   nav carried "Products" too (the nav ran 8px into the search field at 1200); with it gone (2026-10-04)
+   the name fits from 1080, measured, every gap 24px and the search at its 138px floor. From 1100, where
+   the search is 157px, it shows; at 1024 the search would still run 33px under the nav. */
+@media (min-width:1024px) and (max-width:1099px){
   .mast .wordmark .wm-name{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 }
 @media (min-width:1024px) and (max-width:1199px){.tab{padding:0 12px;letter-spacing:.12em}}

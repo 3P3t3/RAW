@@ -129,15 +129,46 @@ var mast=$('.mast'),st=$('#search-toggle');
 st.addEventListener('click',function(){var o=mast.classList.toggle('s-open');st.setAttribute('aria-expanded',o);if(o)$('#q').focus()});
 
 /* The full shelf: hidden until you search or ask for it. Category pages have a grid but no filter bar. */
-var grid=$('#grid'),cards=grid?$$('#grid > li'):[],fbar=$('#filter'),ftext=$('#filter-text'),
-    results=$('#results'),shopTitle=$('#shop-title'),q=$('#q');
+var grid=$('#grid'),cards=grid?$$('#grid li.card'):[],fbar=$('#filter'),ftext=$('#filter-text'),
+    results=$('#results'),shopTitle=$('#shop-title'),q=$('#q'),
+    groups=$$('#grid .g-shelf'),jumps=$$('#g-jump a');
 cards.forEach(function(li){li._s=li.textContent.toLowerCase()});
 function show(test,msg){
   var n=0;
   cards.forEach(function(li){var on=!test||test(li);li.hidden=!on;if(on)n++});
+  /* the shop's grid is grouped by shelf (2026-10-04): a shelf with no match puts away its heading and
+     its link in the row of shelves, so a search reads as its matches under the shelves they are on */
+  groups.forEach(function(g){
+    g.hidden=!$('li.card:not([hidden])',g);
+    jumps.forEach(function(a){if(a.dataset.g===g.id)a.parentNode.hidden=g.hidden});
+  });
+  if(jumps.length)$('#g-jump').hidden=n<1;   /* nothing matched: no empty row of shelves either */
   if(fbar&&msg){fbar.hidden=false;ftext.textContent=msg(n);say(ftext.textContent)}
   return n;
 }
+/* the row of shelves over the grid holds under the masthead (style.css .g-jump); the shelf you are
+   reading is lit in it (aria-current), and on a phone, where the row scrolls sideways, kept in sight */
+if(jumps.length)(function(){
+  var row=$('#g-jump ul'),bar=$('#g-jump'),at=null,ask=0;
+  function lit(){
+    ask=0;
+    if(!results||results.hidden)return;
+    var jb=bar.getBoundingClientRect(),line=jb.bottom+32,cur=null;
+    results.style.setProperty('--gj',jb.height+'px');   /* a jump lands its shelf just under the row (style.css) */
+    groups.forEach(function(g){if(!g.hidden&&g.getBoundingClientRect().top<=line)cur=g});
+    if(cur===at)return;
+    at=cur;
+    jumps.forEach(function(a){
+      var on=!!cur&&a.dataset.g===cur.id;
+      if(on){a.setAttribute('aria-current','true');
+        var r=row.getBoundingClientRect(),b=a.getBoundingClientRect();
+        if(b.left<r.left||b.right>r.right)row.scrollLeft+=b.left-r.left-(r.width-b.width)/2}
+      else a.removeAttribute('aria-current');
+    });
+  }
+  addEventListener('scroll',function(){if(!ask)ask=requestAnimationFrame(lit)},{passive:true});
+  addEventListener('resize',function(){if(!ask)ask=requestAnimationFrame(lit)});
+})();
 function goShop(){
   if(results)results.hidden=false;
   var t=results||$('#all');if(t)t.scrollIntoView();
@@ -573,7 +604,7 @@ if(arch){
       ask.href=ask.dataset.home?ask.dataset.home+'?try='+encodeURIComponent(ask.dataset.name)+'#sample':'#sample';
     }
     var shelf=b.closest('.rk-panel');   /* the bar theme: its "Load this plate" loads the shelf it came from */
-    if(LB&&LB.card)LB.card(shelf?shelf.id.replace('rk-p-',''):'');
+    if(LB&&LB.card)LB.card(shelf?shelf.id.replace('rk-p-',''):'',d.try||d.name);   /* and the product, for the forms */
     doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:d.sfx||'chime'}));
     dlg.showModal();html.classList.add('locked');
     panel.scrollTop=0;
@@ -1615,7 +1646,7 @@ var LB=null;
       youBars=$$('.bb-you'),capYou=$('.lbc-you',pin),capNew=$('.lbc-ynew',pin),
       pinYou=$('.bb-you',pin),COL={},steps=$$('#rk-guide li'),
       mys=$('#mys-you'),mysHas=mys&&$('.mys-has',mys),mysNone=mys&&$('.mys-none',mys),mysN=mys&&$('.mys-n',mys),mysKey=mys&&$('.mys-ykey',mys),
-      cLoad=$('#pcard-load'),cCat='',pdlg=$('#pcard');
+      cLoad=$('#pcard-load'),cCat='',cPick='',pdlg=$('#pcard'),PKEY='aspire-stack-picks',picks={};
   plates.forEach(function(b){var c=b.getAttribute('data-cat');NAME[c]=$('.rk-name',b).textContent;RANK[c]=+b.getAttribute('data-rank');COL[c]=b.style.getPropertyValue('--c')});
   /* the homepage has no rack since the split (2026-10-03): the strip carries every shelf's name, rank and
      colour itself (data-plates, from build_homepage.py), so the stack built on the shop tab still reads
@@ -1624,15 +1655,33 @@ var LB=null;
     for(pk in pd){NAME[pk]=pd[pk][0];RANK[pk]=pd[pk][1];COL[pk]=pd[pk][2]}}catch(e){}}
   try{var sv=JSON.parse(localStorage.getItem(KEY)||'[]');
       if(Array.isArray(sv))stack=sv.filter(function(c,i){return NAME.hasOwnProperty(c)&&sv.indexOf(c)===i})}catch(e){}
-  function save(){try{localStorage.setItem(KEY,JSON.stringify(stack))}catch(e){}}
+  /* the product a plate was loaded from, when it was loaded from a product's card (2026-10-04): shelf ->
+     that product's exact listing name, in a key of its own beside the stack, so a stack saved before this
+     (shelves only) reads exactly as it did, and a plate loaded from the rack carries no product. It only
+     fills Peter's own two forms (the call's note and the sample's blank); nothing goes to Amway. */
+  try{var pv=JSON.parse(localStorage.getItem(PKEY)||'{}'),pc;
+      if(pv&&typeof pv==='object')for(pc in pv)if(stack.indexOf(pc)>-1&&typeof pv[pc]==='string'&&pv[pc])picks[pc]=pv[pc].slice(0,120)}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(stack));localStorage.setItem(PKEY,JSON.stringify(picks))}catch(e){}}
+  function named(c){return NAME[c]+(picks[c]?' ('+picks[c]+')':'')}   /* "Protein (XS Grass-Fed Whey Protein - Chocolate)" */
   function count(n){return n?'Your stack · '+n+' plate'+(n===1?'':'s'):''}   /* no plates, no caption: the strip is away */
   function capSet(n){   /* the strip's own: a phone's one-row strip drops " plates" (style.css) */
-    capYou.textContent=n?'Your stack · '+n:'';
-    if(n){var lg=doc.createElement('span');lg.className='lbc-lg';lg.textContent=' plate'+(n===1?'':'s');capYou.appendChild(lg)}
+    capYou.textContent=n?'Your stack · ':'';
+    if(!n)return;
+    /* from 768 it names the plates, in the order they went on, when the names fit beside "+ name" and the
+       call link (2026-10-04); a phone's one row has no room for them (measured at 390), so it counts */
+    if(!phone.matches){
+      capYou.appendChild(doc.createTextNode(stack.map(function(c){return NAME[c]}).join(', ')));
+      if(capYou.scrollWidth<=capYou.clientWidth+1)return;
+      capYou.textContent='Your stack · ';
+    }
+    capYou.appendChild(doc.createTextNode(n));
+    var lg=doc.createElement('span');lg.className='lbc-lg';lg.textContent=' plate'+(n===1?'':'s');capYou.appendChild(lg);
   }
   /* the newest plate's outline and its name, up for a moment and gone. On a phone's one-row strip
      the name takes the caption's place: the count goes, the name comes, and back, never both at once */
-  var phone=matchMedia('(max-width: 767px)');
+  var phone=matchMedia('(max-width: 767px)'),capT=0;
+  phone.addEventListener('change',function(){capSet(stack.length)});
+  addEventListener('resize',function(){clearTimeout(capT);capT=setTimeout(function(){capSet(stack.length)},150)});
   function flash(els){
     els.forEach(function(el){
       if(!el||!el.animate)return;
@@ -1664,7 +1713,7 @@ var LB=null;
       b.setAttribute('aria-pressed',on?'true':'false');
       b.textContent=on?'Take it off the bar':'Load this plate';
     });
-    if(cform)cLead.line=stack.length?'Interested in: '+stack.map(function(c){return NAME[c]}).join(', ')+'.':'';
+    if(cform)cLead.line=stack.length?'Interested in: '+stack.map(named).join(', ')+'.':'';
     guide();mysYou();cardSync();
     html.classList.toggle('has-stack',stack.length>0);
     if(newest)capNew.textContent='+ '+NAME[newest];
@@ -1715,14 +1764,15 @@ var LB=null;
     cLoad.setAttribute('aria-disabled',on?'true':'false');
     cLoad.classList.toggle('is-on',on);
   }
-  function toggle(c){
+  function toggle(c,pick){
     var i=stack.indexOf(c),on=i<0;
     if(on)stack.push(c);else stack.splice(i,1);
+    if(on&&pick)picks[c]=pick;else delete picks[c];   /* the rack's own button carries no product */
     save();paint(on?c:null);noteDue=true;
     doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:on?'clank':'unclank'}));   /* the visitor's own plate, loaded by hand */
     say(NAME[c]+(on?' is on the bar. ':' is off the bar. ')+(stack.length?count(stack.length)+'.':'Nothing else is on it.'));
   }
-  if(cLoad)cLoad.addEventListener('click',function(){if(cCat&&stack.indexOf(cCat)<0)toggle(cCat)});
+  if(cLoad)cLoad.addEventListener('click',function(){if(cCat&&stack.indexOf(cCat)<0)toggle(cCat,cPick)});
   /* the rack: a plate shows its panel; the same plate again, Escape, or another plate puts it away */
   /* the open panel goes in under its own plate's row, however many the row holds (style.css .rack):
      the plates after that row step past it with `order`, so nothing is cloned or moved in the DOM and
@@ -1827,8 +1877,12 @@ var LB=null;
   function sampleFill(){
     if(!sform||sform.hidden||sStep()!==1)return;
     sDue=false;
-    var ns=stack.slice(-3).map(function(c){return NAME[c]}),v=sProd.value,
-        want=ns.length?'something from '+(ns.length>1?ns.slice(0,-1).join(', ')+' or ':'')+ns[ns.length-1]:'';
+    /* a plate loaded from a product's card names that product instead of its shelf (2026-10-04):
+       "XS Creatine+", "XS Creatine+ or Nutrilite Sleep Health", "XS Creatine+, or something from Recovery" */
+    var or=function(a){return a.length>1?a.slice(0,-1).join(', ')+' or '+a[a.length-1]:a.join('')},
+        last=stack.slice(-3),ps=last.filter(function(c){return picks[c]}).map(function(c){return picks[c]}),
+        ns=last.filter(function(c){return !picks[c]}).map(function(c){return NAME[c]}),v=sProd.value,
+        want=ns.length?(ps.length?ps.join(', ')+', or ':'')+'something from '+or(ns):or(ps);
     if(v&&v!==sLast||v===want)return;
     sProd.value=sPut=want;sFit(sProd);
     sLast=want;
@@ -1851,7 +1905,7 @@ var LB=null;
   }
   if(hero)new IntersectionObserver(function(es){heroGone=!es[0].isIntersecting;pinSet()},
     {rootMargin:'-'+($('.mast')?$('.mast').offsetHeight:60)+'px 0px 0px 0px'}).observe(hero);
-  LB={card:function(c){cCat=c;cardSync()}};
+  LB={card:function(c,pick){cCat=c;cPick=pick||'';cardSync()}};
   paint(null);
 })();
 
