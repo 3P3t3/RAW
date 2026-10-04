@@ -2332,3 +2332,6 @@ body{background:transparent}
   .foot-links{grid-column:1 / 13;justify-content:flex-start;margin-top:8px}
   .foot-links a{white-space:nowrap}
 }
+/* phones: the plan's -40px foot was set for the rack's heading, which followed it until the split; the
+   call follows it on the homepage now, and its label sat 4px under the hairline, so it takes the 40px back */
+@media (max-width:767px){.how-sec + .consult{margin-top:40px}}
