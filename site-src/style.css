@@ -184,46 +184,11 @@ html:not(.js) .mtab{display:none}
    above the buttons, so "Work out your macros" still sits whole on the first screen at
    375x812 after the curtain. Measured: the button's foot at 798, not 812. */
 @media (max-width:767px){.hero-copy{padding-top:20px}.hero-actions{margin-top:0}}
-/* Peter on the first screen: Peter holding their daughter, the first line of his own introduction, and
-   the plan's two links, under the subhead (which ends on "a call"), so the call has someone attached to
-   it. Peter asked for the picture bigger again on 2026-10-01 — "I think I want it bigger. I think I want
-   the whole body shot" — so it is now the whole of with-daughter-960.webp, 4:5, instead of a square cut
-   from it. It stands beside his line AND the button, their height paid for inside its own, as the square
-   did. The block lays itself out by the width the copy has (a container query), not the viewport: where
-   the column beside the picture would be too narrow for the button (a 320 phone; the 768 tablet's narrow
-   copy column), the links drop to a full row under the picture and his line. --pic stops at 204px, which
-   is what the desktop hero can give it and still be exactly 800px tall — at 1440x900 and at the wider
-   windows where the headline reaches its 104px ceiling and takes 9px more. */
-.hero-copy{container-type:inline-size}
-/* the picture spans four rows and the line and links take the middle two, so they stand centred against
-   it. No row gap, or the empty rows would push the line down: the links' own top margin is the space
-   between them and the line. */
-.hero-me{--pic:min(46cqi,204px);display:grid;grid-template-columns:var(--pic) minmax(0,1fr);grid-template-rows:1fr auto auto 1fr;
-  grid-template-areas:"pic ." "pic line" "pic act" "pic .";align-items:start;gap:0 14px;width:100%}
-.hero-me img{grid-area:pic;display:block;width:var(--pic);height:auto;aspect-ratio:4/5;border-radius:14px;object-fit:cover;box-shadow:0 0 0 2px var(--chalk),0 0 0 3px var(--line)}
-.hero-me-line{grid-area:line;font-size:15px;line-height:1.4;color:var(--ink);text-wrap:balance}
-@media (min-width:768px){.hero-me-line{font-size:16px}}
-.hero-me-line a{font-weight:600;color:var(--teal);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px;white-space:nowrap}
-.hero-me .hero-actions{grid-area:act;margin-top:12px;column-gap:20px}
-.hero-me .btn{padding-inline:16px}
-/* phones: his line and the links sit at the picture's TOP instead, and the picture runs on below them.
-   Centred, every pixel the picture grows pushes "See the game plan" half a pixel further down the
-   screen; topped, the button lands where it landed before the picture grew, and the picture can be as
-   tall as it likes. What limits it here is his line, not the fold: under about a 165px column that line
-   takes a fourth row and the button goes down with it. */
-@media (max-width:767px){.hero-me{grid-template-rows:auto auto 1fr;grid-template-areas:"pic line" "pic act" "pic ."}}
-@container (max-width:299px){
-  .hero-me{--pic:clamp(96px,46cqi,130px);grid-template-rows:auto auto;grid-template-areas:"pic line" "act act";align-items:center}
-  .hero-me .hero-actions{margin-top:14px}
-  .hero-me .btn{padding-inline:28px}
-}
-/* phones: the label goes (the subhead already says what this is) and the headline is a step smaller.
-   With Peter's picture beside his line AND the button the copy's top padding is 8, not 12, and the
-   links sit 8 under his line. Measured after the curtain: the button's foot at 830 of 844 at 390x844
-   and 808 of 812 at 375x812 — exactly where the square picture left it. */
+/* phones: the label goes (the subhead already says what this is), the headline is a step smaller and
+   the copy's top padding is 8, not 12. (Peter's picture and line used to sit beside the button here, as
+   .hero-me; Tab 1's hero now carries them at its foot as .hh-me, below.) */
 @media (max-width:767px){
   .hero-copy{gap:12px;padding-top:8px}
-  .hero-me .hero-actions{margin-top:8px}
   .hero .label{display:none}
   .hero h1{font-size:clamp(46px,15vw,72px)}
 }
@@ -2266,17 +2231,24 @@ body{background:transparent}
   radial-gradient(45% 40% at 96% 92%,rgba(81,168,170,.42),rgba(81,168,170,0) 70%),
   linear-gradient(165deg,#0E5466 0%,#063D4D 45%,var(--teal) 75%,#001E28 100%)}
 .hh-in{position:relative}
-.hh .hero-copy{position:relative;z-index:1;gap:14px;padding-top:28px;padding-bottom:36px}
+.hh .hero-copy{position:relative;z-index:1;gap:14px;padding-top:28px;padding-bottom:22px}
 .hh .hero-copy::before{content:"";position:absolute;z-index:-1;left:calc(-1 * var(--pad));right:calc(-1 * var(--pad));top:-120px;bottom:0;
   background:linear-gradient(180deg,rgba(0,24,32,0) 0,rgba(0,24,32,.64) 104px,rgba(0,24,32,.68) 220px)}
 .hh .label{display:block;color:var(--sand)}
 .hh .sub{color:var(--chalk);opacity:.92;max-width:34ch}
 .hh h1{color:var(--chalk);font-size:min(11.4vw,64px)}
 .hh h1 .hh-k{color:var(--sand)}
-.hh .hero-me{--pic:min(34cqi,150px);margin-top:4px}
-.hh .hero-me-line{color:var(--chalk);font-size:16px}
 .hh .tlink{color:var(--sand)}
-.hh .hero-me img{box-shadow:0 0 0 2px var(--chalk),0 18px 30px -18px rgba(0,0,0,.6)}
+.hh .hero-actions{margin-top:4px}
+/* Peter at the hero's foot (Peter, 2026-10-03: "my photo should actually be more towards the bottom...
+   lets the lake speak for itself more"): small, under a hairline, like a signature, so the photograph
+   carries the top and the headline and its two links read first. On phones it runs on under the copy and
+   carries the copy's scrim down to the hero's edge (::before, the same .68); from 768 the copy's own
+   scrim already covers it, and it drops to the hero's bottom edge while the copy stays centred. */
+.hh-me{position:relative;z-index:1;display:flex;align-items:center;gap:14px;padding:14px 0 18px;border-top:1px solid rgba(244,241,234,.2)}
+.hh-me::before{content:"";position:absolute;z-index:-1;left:calc(-1 * var(--pad));right:calc(-1 * var(--pad));top:0;bottom:0;background:rgba(0,24,32,.68)}
+.hh-me img{flex:none;display:block;width:60px;height:auto;aspect-ratio:4/5;border-radius:10px;object-fit:cover;box-shadow:0 0 0 2px var(--chalk),0 12px 22px -14px rgba(0,0,0,.6)}
+.hh-me-line{max-width:30ch;font-size:15px;line-height:1.4;color:var(--chalk);text-wrap:balance}
 @media (min-width:768px){
   .hero.hh{min-height:clamp(560px,calc(100vh - var(--mh)),760px);align-items:center}
   .hh-bg img{object-position:var(--hh-pos,50% 50%)}
@@ -2285,10 +2257,13 @@ body{background:transparent}
   .hh .hero-copy::before{left:-100vw;right:-360px;top:-100vh;bottom:-100vh;
     background:linear-gradient(90deg,rgba(0,24,32,.7) calc(100% - 420px),rgba(0,24,32,.34) calc(100% - 200px),rgba(0,24,32,0))}
   .hh h1{font-size:clamp(64px,7vw,100px)}
-  .hh .hero-me{--pic:min(30cqi,180px)}
-  .hh .hero-me-line{font-size:17px}
+  .hh-in{align-self:stretch;grid-template-rows:1fr auto}
+  .hh .hero-copy{align-self:center}
+  .hh-me{grid-column:1 / 8;align-self:end;max-width:440px;padding:16px 0 28px}
+  .hh-me::before{display:none}
+  .hh-me img{width:68px}
 }
-@media (min-width:1024px){.hh .hero-copy{grid-column:1 / 7}}
+@media (min-width:1024px){.hh .hero-copy,.hh-me{grid-column:1 / 7}}
 
 /* ---- "Understand why" (#why, why_section() in build_homepage.py): a lead, four pillars, who does what */
 .why-head{display:grid;gap:12px;justify-items:start;margin-bottom:28px}

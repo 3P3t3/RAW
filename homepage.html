@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=ffbb2f84">
+<link rel="stylesheet" href="style.css?v=e23e3cb7">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -383,8 +383,10 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
        is named, and otherwise the palette ground .hh-ph), under a scrim that keeps every line
        here at 4.5:1 or better whatever the picture is (style.css, the Tab 1 hero block). The square
        film moved to the shop tab with its copy. Then who "I" is: Peter holding their baby daughter, the
-       first line of his About introduction, verbatim, and the two ways on: his story, the next section
-       down, and the call. .hero-actions keeps its own box: the mobile tab's observer watches it. -->
+       first line of his About introduction, verbatim, at the hero's foot (.hh-me), small, so the lake
+       carries the top (Peter, 2026-10-03: "my photo should actually be more towards the bottom... lets
+       the lake speak for itself more"). The two ways on, his story and the call, stay with the headline.
+       .hero-actions keeps its own box: the mobile tab's observer watches it. -->
   <section class="hero hh" aria-labelledby="hero-title">
     <div class="hh-bg" aria-hidden="true" style="--hh-pos:50% 62%;--hh-pos-m:50% 0%"><picture><source media="(max-width:767.98px)" srcset="assets/home/lake-tall.webp" width="1100" height="1380"><img src="assets/home/lake.webp" alt="" width="2400" height="1340" fetchpriority="high" decoding="async"></picture></div>
     <div class="wrap hh-in">
@@ -393,14 +395,14 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
         <!-- PETER-COPY: his tagline, chosen 2026-10-03 over "Stop guessing. Start knowing." and his first, "Feel your best.
              Understand why." --><h1 id="hero-title"><span>Feel better.</span> <span class="hh-k">Know why.</span></h1><!-- /PETER-COPY -->
         <!-- DRAFT-COPY --><p class="sub">Bloodwork, macros and the right supplements, so you know what’s actually working for you.</p><!-- /DRAFT-COPY -->
-        <div class="hero-me">
-          <img src="assets/peter/hero-pair-240.webp" srcset="assets/peter/hero-pair-240.webp 240w, assets/peter/hero-pair-480.webp 480w" sizes="(min-width:1024px) 180px, (min-width:768px) 150px, 120px" width="240" height="300" alt="Peter holding their baby daughter" decoding="async">
-          <p class="hero-me-line"><!-- PETER-COPY -->I’m Peter — husband, dad to a baby girl, and a Lincoln local.<!-- /PETER-COPY --></p>
-          <!-- DRAFT-COPY --><div class="hero-actions">
-            <a class="btn" href="#story">See how we did it</a>
-            <a class="tlink" href="#consult">Book a free call</a>
-          </div><!-- /DRAFT-COPY -->
-        </div>
+        <!-- DRAFT-COPY --><div class="hero-actions">
+          <a class="btn" href="#story">See how we did it</a>
+          <a class="tlink" href="#consult">Book a free call</a>
+        </div><!-- /DRAFT-COPY -->
+      </div>
+      <div class="hh-me">
+        <img src="assets/peter/hero-pair-240.webp" width="240" height="300" alt="Peter holding their baby daughter" decoding="async">
+        <p class="hh-me-line"><!-- PETER-COPY -->I’m Peter — husband, dad to a baby girl, and a Lincoln local.<!-- /PETER-COPY --></p>
       </div>
     </div>
   </section>
