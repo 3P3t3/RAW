@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=e23e3cb7">
+<link rel="stylesheet" href="style.css?v=2c457ad8">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -346,7 +346,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
     </div>
     <form class="search" id="search" role="search" action="shop.html#results">
       <label class="vh" for="q">Search products</label>
-      <input id="q" name="q" type="search" placeholder="Search products" autocomplete="off" enterkeyhint="search">
+      <input id="q" name="q" type="search" placeholder="Search" autocomplete="off" enterkeyhint="search">
       <button class="icon-btn search-go" type="submit" aria-label="Search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
     </form>
     <!-- The tab switch: the site's two halves (Peter, 2026-10-03: "Maybe we split the tabs. 1 tab is
@@ -442,7 +442,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
            which cannot be put in the plural without putting words in Yenni's mouth, so they went with
            it and the photographs carry the movement instead. -->
       <!-- .st-top holds the lines and the one open pair. Under 1024 it is nothing but a box, and they
-           run one under the other: the lines, "Here's what we notice now.", his side pair. From 1024 it
+           run one under the other: the lines, "Fifteen months later.", his side pair. From 1024 it
            is two columns, the lines on the left and the heading with the pair under it on the right, so
            the half of the screen beside the lines carries the proof instead of nothing. The source
            order is the reading order at every width, and nothing here is scripted. -->
@@ -450,23 +450,23 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
       <div class="st-lines grow">
         <div class="st-bit">
           <!-- PETER-COPY --><p class="st-line">Fatigue was a constant.</p><!-- /PETER-COPY -->
+          <!-- PETER-COPY: chosen 2026-10-04, after two critics found the five shelf names alone had no "then" --><p class="st-line">New baby, no sleep, no energy. So we changed a few things.</p><!-- /PETER-COPY -->
         </div>
+        <!-- What they changed, as the five shelves' names and nothing else (Peter, 2026-10-03: "I think we
+             shouldnt explain the sections, I think we can just keep the titling protein, hydration etc").
+             The four sentences that sat over these links went whole: "We fixed our food and found someone
+             to push us.", "We focused more on hydration." (both his own wording), "And we found ways to
+             maximize our sleep, even during the newborn nights." and "We changed our mornings too, and
+             swapped our huge coffee spikes for smoother energy." -->
         <div class="st-bit">
           <!-- DRAFT-COPY --><p class="st-mv">Here’s what we changed.</p><!-- /DRAFT-COPY -->
-          <!-- PETER-COPY: his own wording, 2026-10-01 --><p class="st-line">We fixed our food and found someone to push us.</p><!-- /PETER-COPY -->
-          <a class="tlink st-go" href="category-protein.html">Protein<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        </div>
-        <div class="st-bit">
-          <!-- PETER-COPY: his own wording, 2026-10-01 --><p class="st-line">We focused more on hydration.</p><!-- /PETER-COPY -->
-          <a class="tlink st-go" href="category-hydration.html">Hydration<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        </div>
-        <div class="st-bit">
-          <!-- DRAFT-COPY --><p class="st-line">And we found ways to maximize our sleep, even during the newborn nights.</p><!-- /DRAFT-COPY -->
-          <a class="tlink st-go" href="category-recovery.html">Recovery<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        </div>
-        <div class="st-bit">
-          <!-- DRAFT-COPY --><p class="st-line">We changed our mornings too, and swapped our huge coffee spikes for smoother energy.</p><!-- /DRAFT-COPY -->
-          <p class="st-caplinks"><a class="tlink st-go" href="category-daily-foundations.html">Daily Foundations<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="tlink st-go" href="category-energy-focus.html">Energy &amp; Focus<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+          <ul class="st-shelves">
+            <li><a class="st-go" href="category-protein.html">Protein<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+            <li><a class="st-go" href="category-hydration.html">Hydration<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+            <li><a class="st-go" href="category-recovery.html">Recovery<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+            <li><a class="st-go" href="category-daily-foundations.html">Daily Foundations<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+            <li><a class="st-go" href="category-energy-focus.html">Energy &amp; Focus<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+          </ul>
         </div>
       </div>
       <!-- the third movement's own label, his phrase for it in the plural, and its answer: Peter's side
@@ -479,7 +479,7 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
            the heading sits straight over it; from 1024 the two head the right-hand column together, so
            the heading still reads as what the picture is. .grow is on the pair of them, not each. -->
       <div class="st-see grow">
-        <!-- DRAFT-COPY --><h3 class="st-line st-now" id="story-now">Here’s what we notice now.</h3><!-- /DRAFT-COPY -->
+        <!-- PETER-COPY: chosen 2026-10-04 over "Where it got us." and "Month 1 to month 15."; it was "Here’s what we notice now." --><h3 class="st-line st-now" id="story-now">Fifteen months later.</h3><!-- /PETER-COPY -->
 <figure class="c-proof pf-his">
   <p class="pf-who"><span class="pf-name">Peter</span> <span class="pf-when">Month 1 → Month 15</span></p>
   <div class="c-cols" aria-hidden="true"><span>Before</span><span>After</span></div>
@@ -550,37 +550,44 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
        the provider named in it is the copy's own (Avellum Health here on the plain site, CCRX in the copy
        under plus/), and its two provider pillars go to bloodwork.html first, where the disclosure sits. -->
   <section class="sec why" id="why" aria-labelledby="why-title">
+    <!-- the hero's lake again, the same shore in clear morning light (Peter, 2026-10-03: "shouldnt we keep
+         multiple of those type of backgrounds?"): dawn in the hero, morning here, dusk behind the call. A
+         picture strip with nothing written on it, so it is decoration (alt="") and the copy stays on the
+         light ground below. assets/home/lake-morning.webp, placed by hand. -->
+    <div class="why-band" aria-hidden="true"><img src="assets/home/lake-morning.webp" alt="" width="2400" height="1297" loading="lazy" decoding="async"></div>
     <div class="wrap">
       <!-- DRAFT-COPY -->
       <div class="why-head grow">
         <p class="label">Understand why</p>
         <h2 id="why-title"><span>Find out what’s</span> <span class="hl-k">working</span></h2>
-        <p class="why-lead">Bloodwork, biomarkers, macros and targeted nutrition. That’s what we’re building here.</p>
+        <p class="why-lead">Your macros, the right nutrition, and your bloodwork and biomarkers.</p>
         <p class="why-lead">You don’t need bloodwork to try anything. It’s how you find out what’s actually working for you.</p>
       </div>
       <ol class="why-list">
         <li class="why-card grow" style="--d:1">
           <p class="why-n" aria-hidden="true">01</p>
-          <h3 class="why-t">Know your numbers</h3>
-          <p>Bloodwork is a lab test: your biomarkers, measured from your own blood, collected at home with a Tasso. It goes through Avellum Health, and a licensed clinician reads it, not me.<span class="why-soon">Coming soon</span></p>
-          <a class="tlink why-go" href="bloodwork.html#panel">What the bloodwork is<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        </li>
-        <li class="why-card grow" style="--d:2">
-          <p class="why-n" aria-hidden="true">02</p>
           <h3 class="why-t">Build and keep lean mass</h3>
           <p>It’s the number both our scans track. Lean mass is worth building at any age, and worth keeping as you get older.</p>
           <a class="tlink why-go" href="about.html#numbers">See both our DEXA scans<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </li>
-        <li class="why-card grow" style="--d:3">
-          <p class="why-n" aria-hidden="true">03</p>
+        <li class="why-card grow" style="--d:2">
+          <p class="why-n" aria-hidden="true">02</p>
           <h3 class="why-t">Fuel it</h3>
           <p>Your macros first: the calories, protein, fat and carbs your day needs. Then targeted nutrition, the few products that fit your goal and nothing you don’t need.</p>
           <p class="why-gos"><a class="tlink why-go" href="#macros">Work out your macros<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="tlink why-go" href="shop.html">See the products<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
         </li>
+        <li class="why-card grow" style="--d:3">
+          <p class="why-n" aria-hidden="true">03</p>
+          <h3 class="why-t">Know your numbers</h3>
+          <p>Bloodwork is a lab test: your biomarkers, measured from your own blood, collected at home with a Tasso. It goes through Avellum Health, and a licensed clinician reads it, not me.</p>
+          <!-- PETER-COPY --><p class="why-status">We are currently in the early access phase only. We will go live for all clients November 2nd.</p><!-- /PETER-COPY -->
+          <a class="tlink why-go" href="bloodwork.html#panel">What the bloodwork is<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </li>
         <li class="why-card grow" style="--d:4">
           <p class="why-n" aria-hidden="true">04</p>
           <h3 class="why-t">Peptide protocols</h3>
-          <p>Peptides are prescription medications. Whether one is right for you is a licensed clinician’s call, through Avellum Health, and they can say no.<span class="why-soon">Coming soon</span></p>
+          <p>Peptides are prescription medications. Whether one is right for you is a licensed clinician’s call, through Avellum Health, and they can say no.</p>
+          <!-- PETER-COPY --><p class="why-status">We are currently in the early access phase only. We will go live for all clients November 2nd.</p><!-- /PETER-COPY -->
           <a class="tlink why-go" href="bloodwork.html#protocols">Who decides, and how<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </li>
       </ol>
@@ -776,7 +783,11 @@ if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',raise,{onc
        strip at its top, and the calculator's "Book a free call" lands on the form below them.
        The two of them (their lines, their before and afters) are met in #story above, so
        this band is only the ask: the numbers, the offer, the disclosure, the form. -->
-  <section class="sec consult" id="consult" aria-labelledby="consult-title">
+  <section class="sec consult consult-dusk" id="consult" aria-labelledby="consult-title">
+    <!-- the lake at dusk, the end of the hero's day, behind the call (Peter, 2026-10-03, "go ahead with
+         morning and dusk"). Decoration only; the copy beside the card is chalk on it under a scrim
+         (style.css, .consult-dusk). assets/home/lake-dusk.webp, placed by hand. -->
+    <div class="c-dusk" aria-hidden="true"><img src="assets/home/lake-dusk.webp" alt="" width="2400" height="1297" loading="lazy" decoding="async"></div>
     <!-- id="quick-call": the game plan's step 05 links here. The quick-call card that used to sit
          under the sample form is gone (the calculator follows the sample now, and three asks on
          one phone screen was two too many), so the free call this band offers is where it lands.
@@ -1093,7 +1104,7 @@ function goShop(){
   var t=results||$('#all');if(t)t.scrollIntoView();
   if(shopTitle)shopTitle.focus({preventScroll:true});
 }
-function showAll(){show(null,function(n){return 'All '+n+' product'+(n===1?'':'s')});goShop()}
+function showAll(){if(q)q.value='';show(null,function(n){return 'All '+n+' product'+(n===1?'':'s')});goShop()}
 function search(t){
   var words=t.split(/\s+/);
   show(function(li){return words.every(function(w){return li._s.indexOf(w)>-1})},
@@ -2727,6 +2738,16 @@ var LB=null;
     });
   });
   rove(0);
+  /* the shop never opens on ten closed plates (two critics, 2026-10-03: no products until you tap
+     something): the first plate on the visitor's bar, or else the rack's first, starts open. Quietly:
+     no scroll and no sound, which only a tap earns. Without script every panel already stands open. */
+  if(rack&&plates.length){
+    var p0=stack.length?plates.map(function(b){return b.getAttribute('data-cat')}).indexOf(stack[0]):0;
+    sel=p0<0?0:p0;rove(sel);
+    plates.forEach(function(b,j){b.setAttribute('aria-pressed',j===sel?'true':'false')});
+    panels.forEach(function(p,j){p.hidden=j!==sel});
+    place();guide();
+  }
   if(rack)rack.addEventListener('keydown',function(e){
     if(e.key!=='Escape'||sel<0)return;
     var i=sel;pick(i);plates[i].focus();
