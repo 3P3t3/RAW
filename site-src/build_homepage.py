@@ -1764,8 +1764,7 @@ def why_section():
     with, endorses or partners with Avellum or CCRX. All of it is DRAFT-COPY in Peter's voice.
     """
     pv = provider()
-    live = bool(pv['panel'])
-    soon = '' if live else '<span class="why-soon">Coming soon</span>'
+    soon = lambda url: '' if url else '<span class="why-soon">Coming soon</span>'   # no link yet: says so
     arrow = '<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg>'
     disc = (f'\n      <!-- {pv["disclosure_mark"]} --><p class="why-fine">{pv["disclosure"]}</p><!-- /{pv["disclosure_mark"]} -->'
             if pv['disclosure'] else '')
@@ -1786,7 +1785,7 @@ def why_section():
         <li class="why-card grow" style="--d:1">
           <p class="why-n" aria-hidden="true">01</p>
           <h3 class="why-t">Know your numbers</h3>
-          <p>Bloodwork is a lab test: your biomarkers, measured from your own blood. It goes through {pv["name"]}, and a licensed clinician reads it, not me.{soon}</p>
+          <p>Bloodwork is a lab test: your biomarkers, measured from your own blood. It goes through {pv["name"]}, and a licensed clinician reads it, not me.{soon(pv["panel"])}</p>
           <a class="tlink why-go" href="{CCRX_PAGE}#panel">What the bloodwork is{arrow}</a>
         </li>
         <li class="why-card grow" style="--d:2">
@@ -1804,7 +1803,7 @@ def why_section():
         <li class="why-card grow" style="--d:4">
           <p class="why-n" aria-hidden="true">04</p>
           <h3 class="why-t">Peptide protocols</h3>
-          <p>Peptides are prescription medications. Whether one is right for you is a licensed clinician’s call, through {pv["name"]}, and they can say no.{soon}</p>
+          <p>Peptides are prescription medications. Whether one is right for you is a licensed clinician’s call, through {pv["name"]}, and they can say no.{soon(pv["protocols"])}</p>
           <a class="tlink why-go" href="{CCRX_PAGE}#protocols">Who decides, and how{arrow}</a>
         </li>
       </ol>
@@ -1910,8 +1909,14 @@ def plus_path(name):
 
 
 def write_plus(name, page):
-    """Write one page of the CCRX copy, with its links pointed inside the copy first."""
+    """Write one page of the CCRX copy, with its links pointed inside the copy first -- or not at all.
+
+    The split runs both ways (Peter, 2026-10-03: "Both still want the split"): the plain site's Avellum
+    link stays out of the CCRX copy, as guard() keeps the CCRX link out of the plain site."""
     page = plus_links(page)
+    if CCRX and AVELLUM_HOST in page.lower():
+        raise SystemExit(f'\n!! BUILD STOPPED: {PLUS_DIR}/{name} links {AVELLUM_HOST}, and was NOT written.\n'
+                         f'!! The CCRX copy links CCRX; only the plain site links Avellum Health.')
     open(plus_path(name), 'w').write(page)
     return page
 
@@ -2000,11 +2005,6 @@ def plus_report(pages):
     carries = [n for n, t in pages.items() if any(h in t.lower() for h in CCRX_HOSTS)]  # the link itself
     if CCRX and not carries:
         raise SystemExit(f'{PLUS_DIR}/: CCRX is on but not one page carries the link - the switch did nothing')
-    # the split runs both ways (Peter, 2026-10-03: "Both still want the split"): the plain site's
-    # Avellum link stays out of the CCRX copy, as the CCRX link stays out of the plain site
-    avellum = [n for n, t in pages.items() if CCRX and AVELLUM_HOST in t.lower()]
-    if avellum:
-        raise SystemExit(f'{PLUS_DIR}/: the CCRX copy links {AVELLUM_HOST} in {avellum}; only the plain site may')
     out = sorted(os.listdir(os.path.join(ROOT, PLUS_DIR)))
     print(f'{PLUS_DIR}/: {len(pages)} pages + index.html + site.webmanifest ({len(out)} files), '
           f'CCRX {"on" if CCRX else "off"}, {len(carries)} of them carry the link; '
