@@ -336,7 +336,10 @@ through the story and book a call". This section wins over anything older below 
 - **`homepage.html` (Our approach):** curtain → `.hh` hero → `#story` → `#why` → `#macros` → `#how` → `#consult`.
   7,237px at 390, 5,781 at 1440 (it was 8,456 at 390 as one page).
 - **`shop.html` (Shop, `site-src/shop.template.html`):** the square film hero ("Pick your goal" → `#goals`, "Ask for a free
-  sample" → `#sample`) → `#goals` → `#sample` → `#my-stack` → `#results`. ~4,500px at 390, ~3,840 at 1440.
+  sample" → `#sample`) → `#goals` → `#sample` → `#my-stack` → `#results`. The rack never opens on ten closed plates:
+  the first plate on the visitor's bar, else the rack's first, starts open, quietly (no scroll, no sound). Under the
+  guide, "Browse all 105 products" (`.rk-all`, `data-all`). `#grid` runs in PLATES rank (Protein first), A-Z within a
+  shelf; `showAll()` clears the search box. ~4,500px at 390, ~3,840 at 1440.
 - **Cross-links:** `#how` steps 01/02 and its button go to `shop.html#goals` / `shop.html#sample`; `#my-stack`'s and the
   thank-you's call buttons and the rack guide's "free call" go to `homepage.html#consult`. Search, `?q=`, `?try=`, the
   sample's `_next` (`shop.html?sample=sent#sample-sent`), "All products" and `data-all` all go to shop.html; shelf pages
@@ -358,8 +361,18 @@ through the story and book a call". This section wins over anything older below 
   to (desktop, phone) object-position. Empty `HOME_BG` draws the palette ground `.hh-ph`. The copy carries its own scrim, so
   readability never depends on the picture: measured on the real photos, lowest 5.43:1 (320/390/768/1440). Both files are
   placed by hand; the build never writes them.
+- **The lake through the day (Peter, 2026-10-03):** the same shore three times — dawn in the hero, clear morning as a
+  strip at the top of `#why` (`.why-band`, `assets/home/lake-morning.webp`, nothing written on it), and dusk behind the
+  call (`.consult-dusk` / `.c-dusk`, `assets/home/lake-dusk.webp`). Both were made with fal kontext/max from the hero's
+  own frame (`~/Desktop/aspiree/tools/jobs-lake-tod.json`, picks `lake-morning-2` and `lake-dusk-1`), then 2x ESRGAN
+  (`jobs-lake-tod-up.json`) and exported 2400px. From 768 the dusk picture is drawn 140% wide and set 40% left so the
+  afterglow sits under the copy, not behind the card; on phones it is its own strip above the heading; and
+  `body:has(.consult-dusk) .foot` starts the footer's nightfall dark so no pale band sits between dusk and night.
+  The Shop tab has no lake, on purpose: its film is its own look.
 - **`#why` ("Understand why", built in `build_homepage.py`):** lead, four pillars (Know your numbers, Build and keep lean mass,
-  Fuel it, Peptide protocols), the roles line ("licensed clinicians read your bloodwork… I don't read labs and I don't
+  Fuel it, Peptide protocols — numbered by position: while a provider link is empty the two live cards come first and the
+  other two carry Peter's PETER-COPY line "We are currently in the early access phase only. We will go live for all
+  clients November 2nd.", which leaves with the empty link; if November 2 passes without a link, change it), the roles line ("licensed clinicians read your bloodwork… I don't read labs and I don't
   prescribe"), then the disclosure. All DRAFT. Bloodwork is the ideal, never a gate (Peter: "I don't want them to have to get
   bloodwork to try a product or buy a product"). The bloodwork is collected at home with a **Tasso** (`TASSO`, in both
   providers' copy); never call it painless or FDA-cleared unless Tasso's own site says so.
@@ -379,7 +392,11 @@ through the story and book a call". This section wins over anything older below 
 
 ## The story (`#story`)
 
-**(Order superseded 2026-10-03: see "Two tabs" above.)** The homepage runs hero → `#story` → `#how` (the five-step game plan) → `#goals` (the plate rack) → `#sample` →
+**(Order superseded 2026-10-03: see "Two tabs" above. Lines superseded 2026-10-04: "Fatigue was a constant." (PETER-COPY),
+then "New baby, no sleep, no energy. So we changed a few things." (PETER-COPY), then "Here's what we changed." over the
+five shelf names alone as a ruled list of big links (`.st-shelves` / `.st-go`; Peter: "we shouldnt explain the sections");
+the four sentences that sat over the links are kept in the template's comment. "Here's what we notice now." is now
+"Fifteen months later." (PETER-COPY).)** The homepage runs hero → `#story` → `#how` (the five-step game plan) → `#goals` (the plate rack) → `#sample` →
 `#macros` → `#my-stack` → `#consult`, and in the `plus/` copy only, `#bloodwork` sits between `#macros` and
 `#my-stack`. **The story comes straight after the hero** (Peter, 2026-10-02: "should I put the story towards the top?
 That way they know when they get to supplements it's about finding the ones that will support their
