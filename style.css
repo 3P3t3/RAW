@@ -481,6 +481,21 @@ a.how-step:active{opacity:.7}
 .consult-dusk .split-text,.consult-dusk .split-text h2{color:var(--chalk)}
 .consult-dusk .split-text .label{color:var(--sand)}
 .consult-dusk .split-text p:not(.label){opacity:.92}
+/* from 768 the copy and the card stand side by side, and the afterglow (the frame's centre) fell right behind
+   the card's left edge. The picture is drawn 140% wide and set 40% left, so the glow sits at about 30% of
+   the band, under the copy's open sky, and the treeline still reaches the right edge. */
+@media (min-width:768px){.c-dusk{overflow:hidden}.c-dusk img{width:140%;max-width:none;margin-left:-40%}}
+/* phones: the card covers most of the band, so the dusk is its own strip above the heading, fading into the
+   dark field the copy and the card sit on (a critic, 2026-10-03: "the dusk lake is invisible on a phone") */
+@media (max-width:767px){
+  .consult-dusk{padding-top:0}
+  .c-dusk{position:relative;inset:auto;z-index:auto;height:clamp(200px,58vw,300px);margin-bottom:28px}
+  .c-dusk img{object-position:50% 60%}
+  .c-dusk::after{background:linear-gradient(180deg,rgba(20,26,38,.15),rgba(20,26,38,0) 40%,rgba(20,26,38,0) 60%,#141A26)}
+}
+/* and the footer's nightfall starts from the dusk's own dark instead of fading in over the page's light
+   ground, which put a pale strip between the dusk and the night (a critic, 2026-10-03) */
+body:has(.consult-dusk) .foot{background:linear-gradient(#10141D 0,rgb(6,11,14) var(--dusk),#000 calc(var(--dusk) + 1px))}
 /* the calculator's numbers, carried into the consult after "See my numbers": the card's
    tiles and micro-labels, smaller, one row at every width. The script owns [hidden]. */
 .c-nums{display:grid;gap:8px;width:100%;max-width:40ch;margin-bottom:10px}
@@ -677,6 +692,12 @@ a.how-step:active{opacity:.7}
 #sample .c-field textarea:focus{--u:var(--blue);outline:none;background-color:rgba(51,64,184,.08)}
 #sample .c-field textarea[aria-invalid="true"]{--u:#9B2C1F;background-color:rgba(155,44,31,.07)}
 #sample .s-full + .s-say{display:none}
+/* small phones (a critic, 2026-10-03, at 320: "Text me" jumped right and "/ Email me" stood alone): the two
+   choices keep to one line together, and the sentence's face steps down to 24px so they fit it */
+#sample .s-by .chips{white-space:nowrap}
+#sample .s-keep{display:inline;white-space:nowrap}
+#sample .s-keep .s-err{white-space:normal}
+@media (max-width:359px){#sample .s-step{font-size:24px}#sample.nc,#sample .nc{--ncs:24px}}
 /* no script: both contact blanks are there at once, so each shows its label above it */
 html:not(.js) #sample .c-field[data-by]{display:flex;margin:6px 0}
 html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:auto;margin:0;overflow:visible;clip:auto;
@@ -1855,7 +1876,8 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
 .rk-guide a{color:var(--teal);font-weight:650;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px}
 .rk-guide .is-now a{color:var(--blue)}
 @media (prefers-reduced-motion:reduce){.rg-n{transition:none}}
-html:not(.js) .rk-guide{display:none}   /* without script every panel stands open and nothing loads: no steps to follow */
+html:not(.js) .rk-guide{display:none}
+.rk-all{margin:8px 0 0}   /* without script every panel stands open and nothing loads: no steps to follow */
 @media (max-width:359px){.rk-guide li{font-size:14px;align-items:flex-start}.rk-guide .rg-t{padding-top:2px}}
 @media (min-width:768px){.rk-guide{margin-top:10px;gap:8px}.rk-guide li{font-size:16px}}
 
@@ -2301,6 +2323,8 @@ body{background:transparent}
 .why-card p:not(.why-n){font-size:15px;line-height:1.5}
 .why-gos{display:flex;flex-wrap:wrap;column-gap:22px}
 .why-go{align-self:end;justify-self:start;font-size:15px;gap:4px}
+.why-status{font-size:14px!important;color:var(--text)}
+.why-status a{color:var(--teal);font-weight:600;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px}
 .why-soon{display:inline-block;margin-left:8px;padding:1px 8px;border:1px dashed var(--teal);font:600 11px/1.5 var(--sans);letter-spacing:.12em;
   text-transform:uppercase;color:var(--teal);white-space:nowrap;vertical-align:1px}
 .why-roles{margin-top:28px;max-width:62ch;padding-left:16px;border-left:3px solid var(--blue);font-size:16px;line-height:1.5;color:var(--ink)}

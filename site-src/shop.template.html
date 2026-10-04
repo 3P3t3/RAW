@@ -89,9 +89,10 @@
         <!-- DRAFT-COPY -->
         <div class="s-step" id="s-step1" role="group" tabindex="-1" aria-label="Your details">
           <span class="s-say" aria-hidden="true">Hey Peter, I’m</span>
-          <div class="c-field"><label for="s-name">Your name</label>
+          <!-- .s-keep holds the name's blank and its full stop on one line: at 320 the stop wrapped alone -->
+          <div class="s-keep"><div class="c-field"><label for="s-name">Your name</label>
             <input id="s-name" name="name" type="text" autocomplete="name" required aria-describedby="s-name-err">
-            <p class="s-err" id="s-name-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+            <p class="s-err" id="s-name-err"></p></div><span class="s-say" aria-hidden="true">.</span></div>
           <fieldset class="c-q s-by">
             <legend>Text or email?</legend>
             <div class="chips">

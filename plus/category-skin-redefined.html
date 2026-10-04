@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=71e5703b">
+<link rel="stylesheet" href="../style.css?v=2c457ad8">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -144,7 +144,7 @@
     </div>
     <form class="search" id="search" role="search" action="shop.html#results">
       <label class="vh" for="q">Search products</label>
-      <input id="q" name="q" type="search" placeholder="Search products" autocomplete="off" enterkeyhint="search">
+      <input id="q" name="q" type="search" placeholder="Search" autocomplete="off" enterkeyhint="search">
       <button class="icon-btn search-go" type="submit" aria-label="Search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
     </form>
     <!-- The tab switch: the site's two halves (Peter, 2026-10-03: "Maybe we split the tabs. 1 tab is
@@ -468,7 +468,7 @@ function goShop(){
   var t=results||$('#all');if(t)t.scrollIntoView();
   if(shopTitle)shopTitle.focus({preventScroll:true});
 }
-function showAll(){show(null,function(n){return 'All '+n+' product'+(n===1?'':'s')});goShop()}
+function showAll(){if(q)q.value='';show(null,function(n){return 'All '+n+' product'+(n===1?'':'s')});goShop()}
 function search(t){
   var words=t.split(/\s+/);
   show(function(li){return words.every(function(w){return li._s.indexOf(w)>-1})},
@@ -2102,6 +2102,16 @@ var LB=null;
     });
   });
   rove(0);
+  /* the shop never opens on ten closed plates (two critics, 2026-10-03: no products until you tap
+     something): the first plate on the visitor's bar, or else the rack's first, starts open. Quietly:
+     no scroll and no sound, which only a tap earns. Without script every panel already stands open. */
+  if(rack&&plates.length){
+    var p0=stack.length?plates.map(function(b){return b.getAttribute('data-cat')}).indexOf(stack[0]):0;
+    sel=p0<0?0:p0;rove(sel);
+    plates.forEach(function(b,j){b.setAttribute('aria-pressed',j===sel?'true':'false')});
+    panels.forEach(function(p,j){p.hidden=j!==sel});
+    place();guide();
+  }
   if(rack)rack.addEventListener('keydown',function(e){
     if(e.key!=='Escape'||sel<0)return;
     var i=sel;pick(i);plates[i].focus();

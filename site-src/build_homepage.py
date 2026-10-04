@@ -1332,7 +1332,12 @@ def main():
                 '  <section class="sec rack-sec" id="goals" aria-labelledby="goals-title">\n'
                 '    <div class="wrap">\n'
                 '      <div class="sec-head grow"><div><h2 class="hl-2" id="goals-title"><span class="hl-lead">What are we</span> <span class="hl-k">maximizing?</span></h2>'
-                + RACK_GUIDE + '</div></div>\n'
+                + RACK_GUIDE
+                # the whole range, one tap away from the rack (a critic, 2026-10-03: a visitor who taps
+                # "Shop" expecting to browse saw ten plates and a form). Same data-all as the header's link.
+                + f'<!-- DRAFT-COPY --><p class="rk-all"><a class="tlink" href="#results" data-all>Browse all {len(products)} products'
+                  '<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p><!-- /DRAFT-COPY -->'
+                + '</div></div>\n'
                 '      <div class="rack grow" id="rack">\n        <ul class="rk-plates" role="list">\n'
                 + '\n'.join(plates) +
                 '\n        </ul>\n' + '\n'.join(panels) + '\n      </div>\n    </div>\n'
@@ -1388,7 +1393,11 @@ def main():
                             '<a class="btn btn-line" href="homepage.html#consult">Book a free call</a></div>\n'
                             '    </div>\n  </section>\n'),
         })
-    order = sorted(products, key=lambda pr: pr['name'].lower())
+    # All products in the rack's own order (PLATES rank: Protein, Daily Foundations, Hydration ... Everyday
+    # Health), A-Z inside each shelf, anything on no shelf last. It was A-Z overall, which opened the shop's
+    # 'All products' on three skincare items under a hero about training (a critic, 2026-10-03).
+    rank = lambda pr: PLATES[cat_of[pr['product']]][1] if pr['product'] in cat_of else 99
+    order = sorted(products, key=lambda pr: (rank(pr), pr['name'].lower()))
     grid = [card(pr, i, shelves=True) for i, pr in enumerate(order)]
 
     part = lambda n: open(os.path.join(ROOT, 'site-src', n)).read()
@@ -1770,10 +1779,50 @@ def why_section():
     with, endorses or partners with Avellum or CCRX. All of it is DRAFT-COPY in Peter's voice.
     """
     pv = provider()
-    soon = lambda url: '' if url else '<span class="why-soon">Coming soon</span>'   # no link yet: says so
+    # A pillar whose provider link does not exist yet (the plain site until Avellum's link, ~2026-11-01)
+    # says so in one quiet line, and the cards that work
+    # today come first (two critics, 2026-10-03: two "Coming soon" chips among the first cards read as an
+    # unfinished page). Once both links exist the order is 01 numbers, 02 lean mass, 03 fuel, 04 protocols.
+    # The line is Peter's own (2026-10-03). It names a date, so it is tied to the missing link: the day
+    # AVELLUM_URL is filled it leaves with the link's absence. If November 2 passes with no link, change it.
+    soon = lambda url: ('' if url else '\n          <!-- PETER-COPY --><p class="why-status">We are currently in the early access '
+                        'phase only. We will go live for all clients November 2nd.</p><!-- /PETER-COPY -->')
     arrow = '<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg>'
     disc = (f'\n      <!-- {pv["disclosure_mark"]} --><p class="why-fine">{pv["disclosure"]}</p><!-- /{pv["disclosure_mark"]} -->'
             if pv['disclosure'] else '')
+    def card(tpl, i):
+        return tpl.replace('{n}', f'{i:02d}').replace('<li class="why-card grow"', f'<li class="why-card grow" style="--d:{i}"', 1)
+    numbers_li = f'''        <li class="why-card grow">
+          <p class="why-n" aria-hidden="true">{{n}}</p>
+          <h3 class="why-t">Know your numbers</h3>
+          <p>Bloodwork is a lab test: your biomarkers, measured from your own blood, collected at home with a Tasso. It goes through {pv["name"]}, and a licensed clinician reads it, not me.</p>{soon(pv["panel"])}
+          <a class="tlink why-go" href="{CCRX_PAGE}#panel">What the bloodwork is{arrow}</a>
+        </li>
+'''
+    lean_li = f'''        <li class="why-card grow">
+          <p class="why-n" aria-hidden="true">{{n}}</p>
+          <h3 class="why-t">Build and keep lean mass</h3>
+          <p>It’s the number both our scans track. Lean mass is worth building at any age, and worth keeping as you get older.</p>
+          <a class="tlink why-go" href="about.html#numbers">See both our DEXA scans{arrow}</a>
+        </li>
+'''
+    fuel_li = f'''        <li class="why-card grow">
+          <p class="why-n" aria-hidden="true">{{n}}</p>
+          <h3 class="why-t">Fuel it</h3>
+          <p>Your macros first: the calories, protein, fat and carbs your day needs. Then targeted nutrition, the few products that fit your goal and nothing you don’t need.</p>
+          <p class="why-gos"><a class="tlink why-go" href="#macros">Work out your macros{arrow}</a><a class="tlink why-go" href="{SHOP_PAGE}">See the products{arrow}</a></p>
+        </li>
+'''
+    protocols_li = f'''        <li class="why-card grow">
+          <p class="why-n" aria-hidden="true">{{n}}</p>
+          <h3 class="why-t">Peptide protocols</h3>
+          <p>Peptides are prescription medications. Whether one is right for you is a licensed clinician’s call, through {pv["name"]}, and they can say no.</p>{soon(pv["protocols"])}
+          <a class="tlink why-go" href="{CCRX_PAGE}#protocols">Who decides, and how{arrow}</a>
+        </li>
+'''
+    live = bool(pv['panel']) and bool(pv['protocols'])
+    order = [numbers_li, lean_li, fuel_li, protocols_li] if live else [lean_li, fuel_li, numbers_li, protocols_li]
+    items = ''.join(card(t, i) for i, t in enumerate(order, 1))
     return f'''  <!-- 3b. Understand why: bloodwork, biomarkers, macros and targeted nutrition -- what this is all
        building towards (Peter, 2026-10-03). Built by why_section() in build_homepage.py, in both copies;
        the provider named in it is the copy's own (Avellum Health here on the plain site, CCRX in the copy
@@ -1783,41 +1832,17 @@ def why_section():
          multiple of those type of backgrounds?"): dawn in the hero, morning here, dusk behind the call. A
          picture strip with nothing written on it, so it is decoration (alt="") and the copy stays on the
          light ground below. assets/home/lake-morning.webp, placed by hand. -->
-    <div class="why-band" aria-hidden="true"><img src="assets/home/lake-morning.webp" alt="" width="1392" height="752" loading="lazy" decoding="async"></div>
+    <div class="why-band" aria-hidden="true"><img src="assets/home/lake-morning.webp" alt="" width="2400" height="1297" loading="lazy" decoding="async"></div>
     <div class="wrap">
       <!-- DRAFT-COPY -->
       <div class="why-head grow">
         <p class="label">Understand why</p>
         <h2 id="why-title"><span>Find out what’s</span> <span class="hl-k">working</span></h2>
-        <p class="why-lead">Bloodwork, biomarkers, macros and targeted nutrition. That’s what we’re building here.</p>
+        <p class="why-lead">Your macros, the right nutrition, and your bloodwork and biomarkers.</p>
         <p class="why-lead">You don’t need bloodwork to try anything. It’s how you find out what’s actually working for you.</p>
       </div>
       <ol class="why-list">
-        <li class="why-card grow" style="--d:1">
-          <p class="why-n" aria-hidden="true">01</p>
-          <h3 class="why-t">Know your numbers</h3>
-          <p>Bloodwork is a lab test: your biomarkers, measured from your own blood, collected at home with a Tasso. It goes through {pv["name"]}, and a licensed clinician reads it, not me.{soon(pv["panel"])}</p>
-          <a class="tlink why-go" href="{CCRX_PAGE}#panel">What the bloodwork is{arrow}</a>
-        </li>
-        <li class="why-card grow" style="--d:2">
-          <p class="why-n" aria-hidden="true">02</p>
-          <h3 class="why-t">Build and keep lean mass</h3>
-          <p>It’s the number both our scans track. Lean mass is worth building at any age, and worth keeping as you get older.</p>
-          <a class="tlink why-go" href="about.html#numbers">See both our DEXA scans{arrow}</a>
-        </li>
-        <li class="why-card grow" style="--d:3">
-          <p class="why-n" aria-hidden="true">03</p>
-          <h3 class="why-t">Fuel it</h3>
-          <p>Your macros first: the calories, protein, fat and carbs your day needs. Then targeted nutrition, the few products that fit your goal and nothing you don’t need.</p>
-          <p class="why-gos"><a class="tlink why-go" href="#macros">Work out your macros{arrow}</a><a class="tlink why-go" href="{SHOP_PAGE}">See the products{arrow}</a></p>
-        </li>
-        <li class="why-card grow" style="--d:4">
-          <p class="why-n" aria-hidden="true">04</p>
-          <h3 class="why-t">Peptide protocols</h3>
-          <p>Peptides are prescription medications. Whether one is right for you is a licensed clinician’s call, through {pv["name"]}, and they can say no.{soon(pv["protocols"])}</p>
-          <a class="tlink why-go" href="{CCRX_PAGE}#protocols">Who decides, and how{arrow}</a>
-        </li>
-      </ol>
+{items}      </ol>
       <p class="why-roles grow">Who does what: licensed clinicians read your bloodwork and decide on any protocol. I don’t read labs and I don’t prescribe. My part is your nutrition and the products.</p>
       <!-- /DRAFT-COPY -->{disc}
     </div>
