@@ -66,8 +66,6 @@ Source (edit these):
   `FEATURED`, `GOAL_TILES`, `ISLANDS`, `CAROUSELS` tables
 - `site-src/homepage.template.html`, `site-src/category.template.html`, `site-src/about.template.html`
 - `site-src/_header.html`, `_footer.html`, `_dialogs.html`, `_icons.html`, `_script.html`, `_intro.html`
-- `site-src/mark-glow.svg` — the lit wave the opening curtain arrives on. JSON-encoded into the
-  script as `{{GLOW_SVG}}`, so it never reaches the markup and a no-JS visitor is served none of it
 - `site-src/style.css` — copied to `style.css` at the repo root at build time; every page links it via
   `{{STYLE}}`, which the build fills in with a content-hash query string. It sits at the root, not under
   `assets/`, so its `url(assets/...)` backgrounds keep resolving against the page's own folder
@@ -76,8 +74,8 @@ Source (edit these):
   match a `share-links.csv` name or the build exits. Blank `units_this_week` just hides the count.
 
 Generated (never hand-edit; the next build overwrites them):
-- `homepage.html` (Tab 1, Our approach) and `shop.html` (Tab 2, Shop, from `site-src/shop.template.html`); see
-  "Two tabs" below. `bloodwork.html` is generated on both copies now.
+- `shop.html` (Tab 1, Shop, from `site-src/shop.template.html`, the page the site opens on and where the curtain plays)
+  and `homepage.html` (Tab 2, Our approach); see "Two tabs" below. `bloodwork.html` is generated on both copies now.
 - `about.html` — the About us page, from `site-src/about.template.html`: their two portraits, who they
   are (`peter_text`, and the same `her_text` block the Women's Health shelf carries), the proof wall
   (`proof_wall`: his three pairs and her two), both DEXA cards, then the free sample and the call with
@@ -181,7 +179,8 @@ Publishing is unchanged: run the build, commit the root pages **and** the `plus/
 (`.gitattributes` also carries `shop.html merge=ours`, which matches `plus/shop.html` too, and `bloodwork.html merge=ours`: it is generated but no other pattern matched it, and it
 conflicted on the 2026-10-02 merge.)
 
-`index.html` is a hand-written redirect to `homepage.html` and is not generated.
+`index.html` is a hand-written redirect to **`shop.html`** (since 2026-10-04) and is not generated; the build copies it
+verbatim into `plus/`. It carries no hash, so the curtain plays on arrival.
 
 `assets/bg-everyday-health.webp` is the Everyday Health shelf's hero banner, and the only one of the ten
 that was generated rather than shot or licensed: fal-ai/flux-pro/v1.1-ultra, 2026-10-01, from
@@ -333,9 +332,16 @@ shelf pages and podium still use the catalogue images.
 Peter, 2026-10-03: "this just feels too busy. Maybe we split the tabs. 1 tab is for products, 1 tab is to bring people
 through the story and book a call". This section wins over anything older below that disagrees with it.
 
-- **`homepage.html` (Our approach):** curtain → `.hh` hero → `#story` → `#why` → `#macros` → `#how` → `#consult`.
+**Shop first (Peter, 2026-10-04): "Can we swap it so my shop appears first, and then the, our approach is actually the
+second tab?"** Asked how far that went, he chose the Shop as the page the site opens on, with the curtain moved onto it.
+So the tab bar reads **Shop, then Our approach**; `index.html` opens `shop.html`; the masthead and footer wordmarks and
+the About/bloodwork brand labels all point at `{{SHOP}}#top`; and `{{INTRO}}` lives in `shop.template.html`, filled at the
+shop's build block. Everything about the call still lives on the approach tab (`homepage.html#consult`, the mobile tab's
+links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat re-timed.
+
+- **`homepage.html` (Our approach, Tab 2):** `.hh` hero → `#story` → `#why` → `#macros` → `#how` → `#consult`. No curtain.
   7,237px at 390, 5,781 at 1440 (it was 8,456 at 390 as one page).
-- **`shop.html` (Shop, `site-src/shop.template.html`):** the square film hero ("Pick your goal" → `#goals`, "Ask for a free
+- **`shop.html` (Shop, Tab 1, `site-src/shop.template.html`):** the curtain → the square film hero ("Pick your goal" → `#goals`, "Ask for a free
   sample" → `#sample`) → `#goals` → `#sample` → `#my-stack` → `#results`. The rack never opens on ten closed plates:
   the first plate on the visitor's bar, else the rack's first, starts open, quietly (no scroll, no sound). Under the
   guide, "Browse all 105 products" (`.rk-all`, `data-all`). **`#results` is grouped by shelf** (2026-10-04, two critics: it
@@ -368,7 +374,9 @@ through the story and book a call". This section wins over anything older below 
   free call** ("Products" went on 2026-10-04: it and the Shop tab opened the same page; the menu and footer keep their
   "All products" links). With one item fewer the wordmark's name now shows **from 1100** (every gap 24px at 1100/1200/1279)
   and hides only at 1024, where search would still run under the nav.
-  "Our approach" goes to `homepage.html#top`, so the curtain never replays; it never plays when a page opens at an anchor.
+  Both tabs carry `#top`, so the curtain never replays on a switch; it never plays when a page opens at an anchor, and
+  only a bare arrival (`/` → `shop.html`) shows it. `<title>`/`og:title` on the shop are brand-first now that a shared
+  link resolves there: "Aspire Health · Shop" and "Aspire Health" (DRAFT).
 - **Tab 1 hero (`.hh`):** "Feel better. Know why." (PETER-COPY, chosen 2026-10-03 over "Stop guessing. Start knowing." and
   his first, "Feel your best. Understand why."), label "Aspire Health" above it (below 420px the masthead shows the wave
   alone), a DRAFT sub-line, then "See how we did it" → `#story` and "Book a free call". Peter's photo and his PETER-COPY
