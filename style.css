@@ -1492,7 +1492,8 @@ html:not(.js) .bay-note{color:var(--text)}
 }
 
 /* ── Opening curtain ───────────────────────────────────────────────────────────
-   Homepage only, every load. Nothing here paints on its own: site-src/_intro.html
+   The landing page only, every load -- shop.html since 2026-10-04, when Peter made the
+   Shop the first tab and the page the site opens on. Nothing here paints on its own: site-src/_intro.html
    inserts .intro at run time, so there is no curtain in the markup and none without
    JS. The halves are SVG so the seam can follow the wave's own centre line; only their
    transform ever changes. The guard at the bottom is a second lock on reduced motion,
@@ -2294,8 +2295,11 @@ body{background:transparent}
 /* =====================================================================================================
    Two tabs (2026-10-03). Peter: "this just feels too busy. Maybe we split the tabs. 1 tab is for
    products, 1 tab is to bring people through the story and book a call." homepage.html is "Our
-   approach" (the curtain, the hero, the story, "Understand why", the calculator, the plan, the call)
-   and shop.html is "Shop" (the film hero, the rack, the sample, "That's my stack", the grid).
+   approach" (the hero, the story, "Understand why", the calculator, the plan, the call) and shop.html
+   is "Shop" (the curtain, the film hero, the rack, the sample, "That's my stack", the grid).
+   Shop is the FIRST tab and the landing page (Peter, 2026-10-04: "Can we swap it so my shop appears
+   first, and then the, our approach is actually the second tab?"); the curtain moved to it with that,
+   so it still plays on arrival.
    ===================================================================================================== */
 
 /* ---- the tab switch, in every page's masthead (_header.html). Under 1024 it is the masthead's second

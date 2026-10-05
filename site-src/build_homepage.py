@@ -1447,7 +1447,11 @@ def main():
     part = lambda n: open(os.path.join(ROOT, 'site-src', n)).read()
     style, header, footer, dialogs, script, icons = (part('style.css'), part('_header.html'), part('_footer.html'),
                                                      part('_dialogs.html'), part('_script.html'), part('_icons.html'))
-    intro = part('_intro.html')  # the opening curtain: homepage only, so it is not in `shared`
+    # the opening curtain: the landing page only, so it is not in `shared`. That is shop.html since
+    # 2026-10-04, when Peter put the Shop first ("Can we swap it so my shop appears first, and then
+    # the, our approach is actually the second tab?") and index.html began opening it; the curtain
+    # moved with it so arriving at the site is still the curtain, unchanged in every beat.
+    intro = part('_intro.html')
     style_hash = hashlib.sha1(style.encode()).hexdigest()[:8]  # bust the cache when the css moves
     if PLUS:  # the copy links the one stylesheet at the repo root, so there can never be two of it
         style_href = '../style.css?v=' + style_hash
@@ -1541,6 +1545,8 @@ def main():
     # homepage from that page ('' on the homepage itself), {{SHOP}} the way to the shop ('' on the shop),
     # and the tab switch marks the page it is on. Everything that moved to the shop tab on 2026-10-03
     # (the rack, the sample, "That's my stack", the grid and search) is reached through {{SHOP}}.
+    # The switch reads Shop then Our approach from 2026-10-04, and the masthead's wordmark goes to
+    # {{SHOP}}#top, because the shop is the landing page now (index.html redirects to it).
     # A shelf page ('shelf') lights the Shop tab too (Peter, 2026-10-04): it is part of the shop, reached
     # from its rack. Its tab says aria-current="true" (the current section), not "page", because it is not
     # that page and its link still goes there. About and the bloodwork page (None) light neither.
@@ -1589,11 +1595,12 @@ def main():
             page = page.replace(k, v)
         return page
 
-    # homepage.html, Tab 1: the curtain, the hero, the story, "Understand why", the calculator, the game
-    # plan and the call. Its canonical is written only in the CCRX copy and demos, as before.
+    # homepage.html, Tab 2 since 2026-10-04: the hero, the story, "Understand why", the calculator, the
+    # game plan and the call. No curtain -- it went to the shop with the landing page.
+    # Its canonical is written only in the CCRX copy and demos, as before.
     out = fill(open(SRC).read(), dict(shared, **nav('home'), **{
         '{{HEAD_EXTRA}}': head_extra(HOME_PAGE) if DEMO or PLUS else '',
-        '{{PAGE_URL}}': BASE + HOME_PAGE, '{{INTRO}}': intro,
+        '{{PAGE_URL}}': BASE + HOME_PAGE,
         '{{HOME_BG}}': home_bg(), '{{WHY}}': why_section(), '{{PCARD}}': '',
         **quick_call(),
         # #story's two before/after stacks: the same pair about.html carries, with the
@@ -1607,10 +1614,13 @@ def main():
         **bar_bits, '{{PIN_CALL}}': ''}))   # after bar_bits: it is inside {{PIN}}
     emit(HOME_PAGE, out, 'the homepage')
 
-    # shop.html, Tab 2: the film hero, the rack (#goals), the free sample, "That's my stack" and the grid.
+    # shop.html, Tab 1 since 2026-10-04 (Peter: "Can we swap it so my shop appears first, and then the,
+    # our approach is actually the second tab?"): the opening curtain, the film hero, the rack (#goals),
+    # the free sample, "That's my stack" and the grid. It is the page index.html opens, so the curtain
+    # is here now -- same piece, other page.
     shop = fill(open(os.path.join(ROOT, 'site-src', 'shop.template.html')).read(), dict(shared, **nav('shop'), **{
         '{{HEAD_EXTRA}}': head_extra(SHOP_PAGE),
-        '{{PAGE_URL}}': BASE + SHOP_PAGE,
+        '{{PAGE_URL}}': BASE + SHOP_PAGE, '{{INTRO}}': intro,
         '{{SAMPLE_ENDPOINT}}': SAMPLE_ENDPOINT, '{{SAMPLE_ACTION}}': SAMPLE_ACTION,
         '{{SAMPLE_NEXT}}': SAMPLE_NEXT.replace(SHOP_PAGE, demo_name(SHOP_PAGE)) if DEMO else SAMPLE_NEXT,
         '{{SAMPLE_PRODUCTS}}': sample_list, '{{SAMPLE_PICKER}}': sample_picker,

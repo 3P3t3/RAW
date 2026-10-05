@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 {{HEAD_EXTRA}}<meta name="theme-color" content="#002E3B">
-<title>Shop · Aspire Health</title>
+<!-- DRAFT-COPY: brand first, 2026-10-04: this is the page the site opens on and what a shared
+     link resolves to --><title>Aspire Health · Shop</title><!-- /DRAFT-COPY -->
 <!-- DRAFT-COPY --><meta name="description" content="Nutrilite and XS sports nutrition, hydration and sleep support, picked for how you train. Pick your goal, build your stack, or ask for a free sample.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Shop · Aspire Health">
+<meta property="og:title" content="Aspire Health">
 <meta property="og:description" content="Nutrilite and XS sports nutrition, hydration and sleep support, picked for how you train. Pick your goal, build your stack, or ask for a free sample."><!-- /DRAFT-COPY -->
 <meta property="og:url" content="{{PAGE_URL}}">
 <meta property="og:image" content="{{BASE}}assets/logo/og-image.png">
@@ -28,6 +29,13 @@
      and grain); see the field block at the end of style.css -->
 <div class="field" aria-hidden="true"><span class="fg fg1"></span><span class="fg fg2"></span></div>
 <a class="skip" href="#main">Skip to content</a>
+
+<!-- The opening curtain (site-src/_intro.html), on this tab since 2026-10-04: the Shop is the first
+     tab and the page index.html opens, so this is where arriving at the site is (Peter: "Can we swap
+     it so my shop appears first, and then the, our approach is actually the second tab?"). Unchanged
+     in every beat; it is built at run time, returns early at any anchor -- so a tab switch, which
+     carries #top, never replays it -- and is never there without JS. -->
+{{INTRO}}
 
 {{ICONS}}
 
