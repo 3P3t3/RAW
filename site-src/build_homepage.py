@@ -8,9 +8,12 @@ CCRX route under PLUS_DIR/ (both are published, from one push). See "the CCRX co
 switch, the guard that keeps the CCRX link out of the plain copy, and --ccrx / --no-plus.
 
 Each copy has two "tabs" (Peter, 2026-10-03: "1 tab is for products, 1 tab is to bring people
-through the story and book a call"): homepage.html (the curtain, the hero, the story, "Understand
-why", the calculator, the game plan, the call) and shop.html (the film hero, the rack, the free
-sample, "That's my stack" and the all-products grid). The tab switch sits in every page's masthead.
+through the story and book a call"): shop.html (the opening curtain, the film hero, the rack, the
+free sample, "That's my stack" and the all-products grid) and homepage.html (the hero, the story,
+"Understand why", the calculator, the game plan, the call). The tab switch sits in every page's
+masthead, and reads Shop then Our approach from 2026-10-04, when Peter asked for the swap ("Can we
+swap it so my shop appears first, and then the, our approach is actually the second tab?"); the shop
+is the page index.html opens, which is why the curtain is on it.
 """
 import csv, hashlib, html, inspect, json, os, re, shutil, sys
 from urllib.parse import quote
