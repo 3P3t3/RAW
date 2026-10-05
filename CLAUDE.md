@@ -79,7 +79,11 @@ Generated (never hand-edit; the next build overwrites them):
 - `about.html` — the About us page, from `site-src/about.template.html`: their two portraits, who they
   are (`peter_text`, and the same `her_text` block the Women's Health shelf carries), the proof wall
   (`proof_wall`: his three pairs and her two), both DEXA cards, then the free sample and the call with
-  the closing block. It is where the menu's "About us" goes, from every page. The proof used to
+  the closing block. It is where the menu's "About us" goes, from every page, and — since 2026-10-05 — the footer's
+  own "About us", which leads the footer link row. The menu was its only link anywhere, and the menu button is
+  `display:none` from 1024 up, so on a laptop this page could not be reached from the site at all. The row is five links
+  now, so it keeps its own full-width line up to **1279** (it was 1199) and is a wrapping flex row in that band, not one
+  grid row: at 768 the five would have run 10px past the window's edge and scrolled the page sideways. The proof used to
   close the homepage's story; Peter moved it here (2026-09-28: it "feels like too much in one thing"),
   and the story's ask carries one link across to this page. One "Who we are" title sits over the pair, with
   "Peter" and "Yenni" as the headings, so `her_text` takes `label=None` and a `title`. Both speak in the
@@ -224,7 +228,7 @@ the top and the baby's feet whole; converted P3 to sRGB so the colours hold once
 gone; then a uniform Lanczos resize. No retouching, no exposure or white-balance change, and no
 metadata: each file is a bare VP8 chunk (no EXIF, XMP or ICC). Peter chose to make them public; the repo is public because Pages
 requires it. **Since 2026-10-03 the homepage hero is Tab 1's `.hh` (see "Two tabs"), where `hero-pair-240.webp` is a small
-signature at the hero's foot; the paragraph below describes the old film hero's `.hero-me`, which no page uses now and
+signature at the hero's foot, and since 2026-10-05 the SHOP hero's foot carries the same block (`.sh-me`); the paragraph below describes the old film hero's `.hero-me`, which no page uses now and
 whose CSS is gone.** `hero-pair-240.webp` / `hero-pair-480.webp` (240x300 and 480x600, 4:5, q90, bare VP8) are the homepage hero's
 portrait (`.hero-me`): **the whole 960x1200 frame of `with-daughter-960.webp`, no crop at all**, one uniform Lanczos
 resize each, drawn as a 14px-radius rounded rectangle. Peter asked for it bigger and with their daughter in it
@@ -365,8 +369,21 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   `#pcard`: `PETER_PICKS` maps shelf → product and the build exits on a name that is not in `share-links.csv`.
   The shop hero's headline steps down at ≤480px and its lead moves below the links (CSS `order`), so "Pick your goal" ends
   at 654 of 844 at 390 and 576 of 640 at 320 (it was 799 and 723); the square film is untouched.
-- **Cross-links:** `#how` steps 01/02 and its button go to `shop.html#goals` / `shop.html#sample`; `#my-stack`'s and the
-  thank-you's call buttons and the rack guide's "free call" go to `homepage.html#consult`. Search, `?q=`, `?try=`, the
+  **At the shop hero's FOOT, since 2026-10-05, Peter signs it**: the same `.hh-me` block Tab 1's hero carries — his 60px
+  photograph (`assets/peter/hero-pair-240.webp`) and his PETER-COPY line verbatim — with the homepage hero's own "See how
+  we did it" (→ `homepage.html#story`) beside it. Three critics found that the page the site opens on never said whose
+  shop it was: the first "Peter" and the first "Lincoln" were two thirds down, in the sample form's "Hey Peter, I'm ___".
+  Nothing is new wording and the CSS is shared; `.sh-me` only swaps the colours, because this hero stands on the chalk
+  field where Tab 1's stands on a photograph (the line 13.1:1, the link 12.8:1, measured on the rendered pixels). It sits
+  **below** `.hero-copy`, so the film does not move and "Pick your goal" keeps 654 at 390 and 576 at 320, to the pixel.
+- **Cross-links:** `#how` steps 01/02 go to `shop.html#goals` / `shop.html#sample`; its own button is **"Book a free call"
+  → `#consult`, on this tab**, since 2026-10-05 (it was "Ask for a free sample" → `shop.html#sample`, which sat ~170px
+  above the booking card and pushed a visitor who had just read the plan back to the shop they arrived from), with the
+  sample demoted to the quiet link beside the calculator's. The block is only in `homepage.template.html`, so the shop and
+  the shelf pages are untouched. `#my-stack`'s and the
+  thank-you's call buttons and the rack guide's "free call" go to `homepage.html#consult`, and `#my-stack` carries a third,
+  quiet "See how we did it" → `homepage.html#story` (2026-10-05): it opens on "From our story" and draws his five packs,
+  but since the split the story is on the other tab and nothing in the section went to it. Search, `?q=`, `?try=`, the
   sample's `_next` (`shop.html?sample=sent#sample-sent`), "All products" and `data-all` all go to shop.html; shelf pages
   call `card_dialog('shop.html')`; `quick_call(home)` takes the way home. `#quick-call`'s hand-over on the sample's
   thank-you only happens on shop.html (it has no consult). The pinned strip (`.lbpin`) shows on both tabs once there is
