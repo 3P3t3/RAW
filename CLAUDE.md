@@ -79,7 +79,7 @@ Generated (never hand-edit; the next build overwrites them):
 - `about.html` — the About us page, from `site-src/about.template.html`: their two portraits, who they
   are (`peter_text`, and the same `her_text` block the Women's Health shelf carries), the proof wall
   (`proof_wall`: his three pairs and her two), both DEXA cards, then the free sample and the call with
-  the Amway disclosure. It is where the menu's "About us" goes, from every page. The proof used to
+  the closing block. It is where the menu's "About us" goes, from every page. The proof used to
   close the homepage's story; Peter moved it here (2026-09-28: it "feels like too much in one thing"),
   and the story's ask carries one link across to this page. One "Who we are" title sits over the pair, with
   "Peter" and "Yenni" as the headings, so `her_text` takes `label=None` and a `title`. Both speak in the
@@ -166,8 +166,8 @@ too, or the unfilled-placeholder check fails the build.
 price** and **nothing about where it ships** (both change, and their site states both); and it never says Amway
 works with, endorses or partners with CCRX or Avellum. Peter is **paid on the peptides only, not on the panel**, so
 his disclosure splits the two and is PETER-COPY: "I don't make anything on the panel. If a clinician ends up
-prescribing you something after it, I'm paid on that." His Amway disclosure is a different business and is never
-merged with it. Two constants beside `CCRX` expire and are each one line: `CCRX_PREORDER` (empty it the day the
+prescribing you something after it, I'm paid on that." His Amway disclaimer was a different business, was never merged
+with it, and is **off the site** (see below). Two constants beside `CCRX` expire and are each one line: `CCRX_PREORDER` (empty it the day the
 first kits ship, October 10 2026, and every "pre-order" word leaves) and `CCRX_PANEL_FREE` (his "I don't make
 anything on the panel", true only until the comp plan pays him on it). The route needed **no new CSS** on purpose:
 anything added for it would move `style.css`'s content hash and so the `?v=` on every page of both copies.
@@ -178,6 +178,18 @@ Publishing is unchanged: run the build, commit the root pages **and** the `plus/
 
 (`.gitattributes` also carries `shop.html merge=ours`, which matches `plus/shop.html` too, and `bloodwork.html merge=ours`: it is generated but no other pattern matched it, and it
 conflicted on the 2026-10-02 merge.)
+
+**No Amway disclaimer on the site (Peter, 2026-10-04).** "Disclaimer: I'm sponsored by Amway and paid based on products
+sold." (PETER-COPY) used to sit in `#consult` on the homepage and in about.html's closing block. Asked whether to add it
+to the Shop as well — now the landing page, and the page with the product links — he said *"no get rid of it in the our
+approach area as well"*, and then chose "everywhere" from the three options. **He decided that having been told first
+what the line is for**: a paid endorsement under the FTC's endorsement rules, and that Amway's own IBO rules may require
+an IBO to identify themselves on their own site, which he was advised to check with his Amway compliance contact. So it
+is his call on his own business, recorded here, **not an oversight — do not restore it without asking him**, and do not
+write a replacement disclosure unprompted. What remains, untouched on every page of both copies: the footer's
+fulfillment line ("Checkout, fulfillment and delivery occur through our partner vendors, Amway or Avellum Health.") and
+the FDA supplement disclaimer (`.foot-fda`). Both templates keep a short comment where the line was. The Avellum/CCRX
+disclosures are a separate business and are unaffected.
 
 `index.html` is a hand-written redirect to **`shop.html`** (since 2026-10-04) and is not generated; the build copies it
 verbatim into `plus/`. It carries no hash, so the curtain plays on arrival.
