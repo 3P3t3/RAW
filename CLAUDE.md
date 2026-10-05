@@ -338,18 +338,36 @@ through the story and book a call". This section wins over anything older below 
 - **`shop.html` (Shop, `site-src/shop.template.html`):** the square film hero ("Pick your goal" → `#goals`, "Ask for a free
   sample" → `#sample`) → `#goals` → `#sample` → `#my-stack` → `#results`. The rack never opens on ten closed plates:
   the first plate on the visitor's bar, else the rack's first, starts open, quietly (no scroll, no sound). Under the
-  guide, "Browse all 105 products" (`.rk-all`, `data-all`). `#grid` runs in PLATES rank (Protein first), A-Z within a
-  shelf; `showAll()` clears the search box. ~4,500px at 390, ~3,840 at 1440.
+  guide, "Browse all 105 products" (`.rk-all`, `data-all`). **`#results` is grouped by shelf** (2026-10-04, two critics: it
+  was one flat 16,000px grid): one `h3` and list per shelf in PLATES rank (Protein first), each product once under its
+  `cat_of` home shelf, over `#g-jump` — ten shelf links, no JS needed, sticky under the masthead (and under `.lbpin`, and
+  under the phone search row via `--srch`), the shelf in view lit — and "Back to the shelves" (→ `#goals`) after the last
+  row. A search hides a shelf that has no match, heading and jump link together; `showAll()` clears the search box.
+  **Peter's five packs in `#my-stack`** are links now, each captioned with its product name and opening that product's
+  `#pcard`: `PETER_PICKS` maps shelf → product and the build exits on a name that is not in `share-links.csv`.
+  The shop hero's headline steps down at ≤480px and its lead moves below the links (CSS `order`), so "Pick your goal" ends
+  at 654 of 844 at 390 and 576 of 640 at 320 (it was 799 and 723); the square film is untouched.
 - **Cross-links:** `#how` steps 01/02 and its button go to `shop.html#goals` / `shop.html#sample`; `#my-stack`'s and the
   thank-you's call buttons and the rack guide's "free call" go to `homepage.html#consult`. Search, `?q=`, `?try=`, the
   sample's `_next` (`shop.html?sample=sent#sample-sent`), "All products" and `data-all` all go to shop.html; shelf pages
   call `card_dialog('shop.html')`; `quick_call(home)` takes the way home. `#quick-call`'s hand-over on the sample's
   thank-you only happens on shop.html (it has no consult). The pinned strip (`.lbpin`) shows on both tabs once there is
-  a stack and reads names from `data-plates` where there is no rack, which keeps the call note's "Interested in:".
+  a stack and reads names from `data-plates` where there is no rack, which keeps the call note's "Interested in:". It
+  carries **"Bring it to a call"** (`.lbpin-go` → `#consult`, or `homepage.html#consult` off the homepage) at its right end,
+  and from 768 its label names the plates when they fit, else counts them.
+- **The stack carries the product, not just the shelf (2026-10-04).** "Load this plate" inside a product's `#pcard` (the
+  rack's packs only — the grid's and `#my-stack`'s cards still don't offer it) stores that product's exact listing name in
+  `aspire-stack-picks` beside the shelves-only `aspire-stack`, which keeps its old format, so stored stacks still read.
+  Then the call note reads "Interested in: Recovery (XS Muscle Multiplier - Berry Blast), Hydration." and the sample's
+  blank prefills that name. Loading from the rack itself carries no product and reads as before; taking a plate off clears
+  its product; nothing is ever sent to Amway, and typed text is still never overwritten.
 - **The tab switch (`.tabs` in `_header.html`, every page, labels DRAFT):** `{{SHOP}}`, `{{TAB_HOME}}`, `{{TAB_SHOP}}` are
-  filled by `nav()`. Below 1024 it is the masthead's second row (`--tabh:40px`; `--mh = --mast + --tabh` = 100px; anchors
-  and `.lbpin` use `--mh`, `--mast` is unchanged). From 1024 it is a two-part pill, the inline nav is Macros · Products ·
-  Book a free call, and from 1024 to 1279 the wordmark shows the wave alone (else the nav hits search at 1200).
+  filled by `nav()`; shelf pages take `nav()`'s `'shelf'` mode and light **Shop** (`aria-current="true"`, not `"page"` —
+  the shelf is not that page), while About and bloodwork.html light neither. Below 1024 it is the masthead's second row (`--tabh:40px`; `--mh = --mast + --tabh` = 100px; anchors
+  and `.lbpin` use `--mh`, `--mast` is unchanged). From 1024 it is a two-part pill and the inline nav is **Macros · Book a
+  free call** ("Products" went on 2026-10-04: it and the Shop tab opened the same page; the menu and footer keep their
+  "All products" links). With one item fewer the wordmark's name now shows **from 1100** (every gap 24px at 1100/1200/1279)
+  and hides only at 1024, where search would still run under the nav.
   "Our approach" goes to `homepage.html#top`, so the curtain never replays; it never plays when a page opens at an anchor.
 - **Tab 1 hero (`.hh`):** "Feel better. Know why." (PETER-COPY, chosen 2026-10-03 over "Stop guessing. Start knowing." and
   his first, "Feel your best. Understand why."), label "Aspire Health" above it (below 420px the masthead shows the wave
@@ -365,14 +383,20 @@ through the story and book a call". This section wins over anything older below 
   strip at the top of `#why` (`.why-band`, `assets/home/lake-morning.webp`, nothing written on it), and dusk behind the
   call (`.consult-dusk` / `.c-dusk`, `assets/home/lake-dusk.webp`). Both were made with fal kontext/max from the hero's
   own frame (`~/Desktop/aspiree/tools/jobs-lake-tod.json`, picks `lake-morning-2` and `lake-dusk-1`), then 2x ESRGAN
-  (`jobs-lake-tod-up.json`) and exported 2400px. From 768 the dusk picture is drawn 140% wide and set 40% left so the
+  (`jobs-lake-tod-up.json`) and exported 2400px. `.why-band` is ~200px on phones and `clamp(220px,17vw,300px)` from 768
+  (it was 420, half a laptop screen of nothing). From 768 the dusk picture is drawn 140% wide and set 40% left so the
   afterglow sits under the copy, not behind the card; on phones it is its own strip above the heading; and
-  `body:has(.consult-dusk) .foot` starts the footer's nightfall dark so no pale band sits between dusk and night.
+  `.c-dusk::after` fades to the section's own `#141A26` over its last 200px and `body:has(.consult-dusk) .foot` starts
+  there too, so there is no seam and no pale band between dusk and night. On phones the strip is `clamp(140px,41vw,180px)`
+  and a negative `scroll-margin-top` on `.consult-dusk` cancels it, so arriving at `#consult` lands on the eyebrow (116px
+  at 390) with the heading and every goal chip on the first screen, instead of on 316px of lake.
   The Shop tab has no lake, on purpose: its film is its own look.
 - **`#why` ("Understand why", built in `build_homepage.py`):** lead, four pillars (Know your numbers, Build and keep lean mass,
-  Fuel it, Peptide protocols — numbered by position: while a provider link is empty the two live cards come first and the
-  other two carry Peter's PETER-COPY line "We are currently in the early access phase only. We will go live for all
-  clients November 2nd.", which leaves with the empty link; if November 2 passes without a link, change it), the roles line ("licensed clinicians read your bloodwork… I don't read labs and I don't
+  Fuel it, Peptide protocols — **always that order, on both copies**: Peter, 2026-10-04, "we should be building this as if
+  it's live. this is the beta meant to be for Nov 2nd launch when its all live", so the bloodwork content is never demoted,
+  folded or reordered for not being live yet. The only pre-launch signal is his PETER-COPY line on the two provider cards,
+  "We are currently in the early access phase only. We will go live for all clients November 2nd.", which leaves by itself
+  with the empty link; if November 2 passes without a link, change it), the roles line ("licensed clinicians read your bloodwork… I don't read labs and I don't
   prescribe"), then the disclosure. All DRAFT. Bloodwork is the ideal, never a gate (Peter: "I don't want them to have to get
   bloodwork to try a product or buy a product"). The bloodwork is collected at home with a **Tasso** (`TASSO`, in both
   providers' copy); never call it painless or FDA-cleared unless Tasso's own site says so.
