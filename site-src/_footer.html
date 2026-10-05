@@ -10,7 +10,14 @@
         <p class="foot-tag">Fuel a higher you</p>
         <p class="foot-place">Founded in Lincoln CA</p>
       </div>
+      <!-- "About us" leads the row since 2026-10-05: the menu dialog was its only link anywhere on
+           the site, and the menu button is display:none from 1024 up, so on a laptop the About page
+           could not be reached at all. A plain relative link -- the same file name in both copies,
+           one folder down in plus/ -- so it needs no {{HOME}}/{{SHOP}} of its own. The row is five
+           links now, and takes its own full-width line up to 1279 (the footer block at the end of
+           this file's stylesheet); at 1440 the five still stand on the brand's row. -->
       <nav class="foot-links" aria-label="Footer">
+        <a href="about.html">About us</a>
         <a href="{{HOME}}#macros">Macro calculator</a>
         <a href="{{HOME}}#consult">Book a free call</a>
         <a href="{{SHOP}}#results" data-all>All {{TOTAL_PRODUCTS}}</a>{{CCRX}}

@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=6f521d6d">
+<link rel="stylesheet" href="style.css?v=0c800910">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -543,8 +543,9 @@
 
 
   <!-- 3d. The game plan (#how): the path through both tabs. Since the split (2026-10-03) it sits
-       between the calculator and the call; its goal and sample steps, and its button, go across to
-       the shop tab (shop.html#goals, shop.html#sample), and the rest stay on this page. Five numbered steps, each linking to where
+       between the calculator and the call; its goal and sample steps go across to the shop tab
+       (shop.html#goals, shop.html#sample), and the rest, its button among them since 2026-10-05,
+       stay on this page. Five numbered steps, each linking to where
        it happens (#goals, #sample, #macros, #quick-call; step 03 has no section of its own, so it is
        not a link), then the one thing to do. The sections themselves carry no step numbers: they sit
        in a different order on the page, so this list alone is the map. Step 05's words switch with
@@ -578,10 +579,19 @@
           <span class="how-d">A free call to find where it slots in, then order through my Amway link if it earns a spot.</span><svg class="ic ic-sm how-ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
       </ol>
       <!-- the plan's one trust line stands over its button, in ink, so it is read before the ask (the
-           no-break space keeps "I" off the end of a phone's first line) -->
+           no-break space keeps "I" off the end of a phone's first line).
+           The filled button is the CALL since 2026-10-05, and it stays on this tab. It was "Ask for a
+           free sample" -> shop.html#sample, which sat ~170px above the booking card and sent a visitor
+           who had just read the whole plan back to the shop they arrived from (a critic, 2026-10-05).
+           The sample is a quiet link now, beside the calculator's. The copy is unchanged on both: "Book
+           a free call" is the label the hero, the masthead and the call's own card already use, and
+           "Ask for a free sample" is the hero's. Steps 01 and 02 keep their own links to the shop.
+           This block is only in this template -- the shop and the shelf pages have no game plan -- so
+           nothing else on the site moves with it. -->
       <div class="how-go grow">
         <p class="how-fine">Sixty seconds of typing. I&nbsp;answer every one myself.</p>
-        <a class="btn" id="how-go" href="shop.html#sample">Ask for a free sample</a>
+        <a class="btn" id="how-go" href="#consult">Book a free call</a>
+        <a class="tlink" href="shop.html#sample">Ask for a free sample</a>
         <a class="tlink" href="#macros">or run your macros first</a>
       </div>
       <!-- /DRAFT-COPY -->
@@ -704,7 +714,14 @@
         <p class="foot-tag">Fuel a higher you</p>
         <p class="foot-place">Founded in Lincoln CA</p>
       </div>
+      <!-- "About us" leads the row since 2026-10-05: the menu dialog was its only link anywhere on
+           the site, and the menu button is display:none from 1024 up, so on a laptop the About page
+           could not be reached at all. A plain relative link -- the same file name in both copies,
+           one folder down in plus/ -- so it needs no /shop.html of its own. The row is five
+           links now, and takes its own full-width line up to 1279 (the footer block at the end of
+           this file's stylesheet); at 1440 the five still stand on the brand's row. -->
       <nav class="foot-links" aria-label="Footer">
+        <a href="about.html">About us</a>
         <a href="#macros">Macro calculator</a>
         <a href="#consult">Book a free call</a>
         <a href="shop.html#results" data-all>All 105 products</a>
@@ -1042,8 +1059,8 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    not watched either: the tab rides over it, except while the story's own "Book a free call"
    is up (.st-book). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
-   which sit where the tab does on a phone and go to the same places, "The game plan"'s "Ask
-   for a free sample" (#how-go), the quick-call buttons (.q-go) and the sample form's Next and Send
+   which sit where the tab does on a phone and go to the same places, "The game plan"'s own
+   button (#how-go, "Book a free call" since 2026-10-05), the quick-call buttons (.q-go) and the sample form's Next and Send
    (#s-next, #sample-go), which it would cover, an open compartment of the stack case (.bay-in: a
    closed one is hidden, so has no box and never counts) or an open panel of the plate rack
    (.rk-panel, likewise), the two buttons under "That's my stack" (.mys-acts), the band that sends you

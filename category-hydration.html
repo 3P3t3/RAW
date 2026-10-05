@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=6f521d6d">
+<link rel="stylesheet" href="style.css?v=0c800910">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -251,7 +251,14 @@
         <p class="foot-tag">Fuel a higher you</p>
         <p class="foot-place">Founded in Lincoln CA</p>
       </div>
+      <!-- "About us" leads the row since 2026-10-05: the menu dialog was its only link anywhere on
+           the site, and the menu button is display:none from 1024 up, so on a laptop the About page
+           could not be reached at all. A plain relative link -- the same file name in both copies,
+           one folder down in plus/ -- so it needs no homepage.html/shop.html of its own. The row is five
+           links now, and takes its own full-width line up to 1279 (the footer block at the end of
+           this file's stylesheet); at 1440 the five still stand on the brand's row. -->
       <nav class="foot-links" aria-label="Footer">
+        <a href="about.html">About us</a>
         <a href="homepage.html#macros">Macro calculator</a>
         <a href="homepage.html#consult">Book a free call</a>
         <a href="shop.html#results" data-all>All 105 products</a>
@@ -602,8 +609,8 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    not watched either: the tab rides over it, except while the story's own "Book a free call"
    is up (.st-book). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
-   which sit where the tab does on a phone and go to the same places, "The game plan"'s "Ask
-   for a free sample" (#how-go), the quick-call buttons (.q-go) and the sample form's Next and Send
+   which sit where the tab does on a phone and go to the same places, "The game plan"'s own
+   button (#how-go, "Book a free call" since 2026-10-05), the quick-call buttons (.q-go) and the sample form's Next and Send
    (#s-next, #sample-go), which it would cover, an open compartment of the stack case (.bay-in: a
    closed one is hidden, so has no box and never counts) or an open panel of the plate rack
    (.rk-panel, likewise), the two buttons under "That's my stack" (.mys-acts), the band that sends you
