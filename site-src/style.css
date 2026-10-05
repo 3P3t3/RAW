@@ -711,6 +711,24 @@ body:has(.consult-dusk) .foot{background:linear-gradient(#141A26 0,rgb(6,11,14) 
 #sample .s-by .chips{white-space:nowrap}
 #sample .s-keep{display:inline;white-space:nowrap}
 #sample .s-keep .s-err{white-space:normal}
+/* .s-unit is .s-keep's pair for the other two blanks: the blank and the full stop that belongs to it in
+   one box, so the stop always travels with the words it ends. Inline, so the sentence reads exactly as
+   it did; the two contact blanks share one, since only one of them is ever shown. */
+#sample .s-unit{display:inline}
+html:not(.js) #sample .s-unit{display:block}   /* no script: both contact blanks stand, each on its own row */
+/* PHONES: THE SENTENCE'S BLANKS EACH TAKE THEIR OWN ROW (2026-10-05). Up to 420 the blanks are wide
+   next to words set at 28px, and the sentence broke mid-thought wherever a blank happened to land: the
+   contact blank sat on the line before "I've had my eye on", "at" was left hanging on its own, and at
+   320 the name's blank dropped to a line by itself. Each blank's box is block-level here, so it starts a
+   line and the words that introduce it finish the line above: "Hey Peter, I'm / [name]. / Text me /
+   Email me at / [contact]. / I've had my eye on / [item]." The stop stays on the blank's own row,
+   because it is inside the box. Nothing is reworded; only where the lines break changes. 420 and not 480:
+   the shop hero's own phone breakpoint is about the film, and 420 is where the 28px face stops holding a
+   blank and a word together. */
+@media (max-width:420px){
+  #sample .s-keep,#sample .s-unit{display:block;white-space:normal}
+  #sample .s-keep .c-field,#sample .s-unit .c-field{max-width:100%}
+}
 @media (max-width:359px){#sample .s-step{font-size:24px}#sample.nc,#sample .nc{--ncs:24px}}
 /* no script: both contact blanks are there at once, so each shows its label above it */
 html:not(.js) #sample .c-field[data-by]{display:flex;margin:6px 0}
@@ -1904,6 +1922,10 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
 .mys-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;width:100%;max-width:560px;margin-top:6px}
 .mys-acts .btn{flex:1 1 100%}
 .mys .btn-line{color:var(--sand);box-shadow:inset 0 0 0 1px var(--sand)}
+/* the way back to the story (2026-10-05): its own centred row under the two buttons at every width, so
+   neither of them gives up any of its box. .tlink's own teal would vanish on this teal, so it is the sand
+   the rest of the section's quiet type uses (10:1 on the teal) */
+.mys-acts .tlink{flex:1 1 100%;justify-content:center;color:var(--sand)}
 /* the plates go on as the bar comes up, collar out */
 .motion .mys-bar:not(.in) .bb-l .bb-p{opacity:0;transform:translate3d(calc((var(--n,7) + var(--off)) * -1 * var(--st)),0,0)}
 .motion .mys-bar:not(.in) .bb-r .bb-p{opacity:0;transform:translate3d(calc((var(--n,7) + var(--off)) * var(--st)),0,0)}
@@ -2388,6 +2410,33 @@ body{background:transparent}
   .hh-me img{width:68px}
 }
 @media (min-width:1024px){.hh .hero-copy,.hh-me{grid-column:1 / 7}}
+/* The same block at the SHOP hero's foot (.sh-me, 2026-10-05): the front page never said whose shop
+   it was, so Peter's photograph and his line sign it, as they sign Tab 1. Everything above borrows
+   .hh-me, so the shape, the photograph's size and the line are one piece of CSS in both places; all
+   .sh-me changes is what the colours have to be, because this hero stands on the page's chalk field
+   in dark type (see "the hero" in the field block) where Tab 1's stands on a photograph: the hairline
+   is the page's own --line, the words are ink, the photograph's ring is a teal hairline instead of a
+   chalk one (chalk on chalk is nothing), and there is no scrim, since there is no picture to read
+   over. One link beside it, in the hero's teal; it wraps to its own row when the line needs the width.
+   Measured on the rendered pixels: the line 12.4:1, the link 12.0:1.
+   It sits after .hero-copy in the markup, so it cannot move the film or the two ways on above it. */
+.hh-me.sh-me{flex-wrap:wrap;border-top-color:var(--line)}
+.hh-me.sh-me::before{display:none}
+.sh-me img{box-shadow:0 0 0 1.5px rgba(0,46,59,.35),0 12px 22px -14px rgba(0,20,27,.45)}
+/* the line gives before the photograph does, so the shape stays Tab 1's at every width: the
+   photograph and the words always share the first row, and the link takes the row under them when
+   the column is too narrow to hold it beside (every width up to 1279, as it happens) */
+.sh-me .hh-me-line{flex:1 1 160px;min-width:0;color:var(--ink)}
+.sh-me .sh-me-go{flex:0 1 auto;color:var(--teal)}
+@media (min-width:768px){
+  /* a grid item of .hero-in like the copy above it, in the copy's own columns, at the hero's foot;
+     the film is absolutely positioned on the right from here, so nothing is beside it */
+  .hero-shop .hero-in{grid-template-rows:1fr auto}   /* the copy keeps the slack and stays centred; his row is content-sized under it */
+  .hero-shop .hero-copy{align-self:center}
+  .hh-me.sh-me{grid-column:1 / 6;grid-row:2;align-self:end;max-width:560px;padding:16px 0 0}
+  .sh-me .sh-me-go{margin-left:auto}
+}
+@media (min-width:1024px){.hh-me.sh-me{grid-column:1 / 6}}
 
 /* ---- "Understand why" (#why, why_section() in build_homepage.py): a lead, four pillars, who does what */
 /* the morning lake as a strip at the top of #why, flush under the story: nothing is written on it. Steered
@@ -2441,12 +2490,20 @@ body{background:transparent}
 .macros-sec + .how-sec{padding-top:0}
 .macros-sec + .how-sec>.wrap{border-top:1px solid var(--line);padding-top:calc(var(--sec) * .5)}
 
-/* the footer carries four links in both copies now (the bloodwork route joined the plain site on
-   2026-10-03), and up to 1199 the column had room for three: "Book a free call" broke over two or three
-   lines. There the links take their own full-width row under the brand, each on one line */
-@media (min-width:768px) and (max-width:1199px){
+/* the footer carries FIVE links in both copies now ("About us" joined the row on 2026-10-05, after the
+   bloodwork route joined the plain site on 2026-10-03), and up to 1279 the column has no room for them:
+   with four, "Book a free call" broke over two or three lines up to 1199, and the fifth needs 756px of
+   row where 1200 offers 739. There the links take their own full-width row under the brand, each on one
+   line. At 1440 the five measure 756 in a 792px column, so they stay on the brand's row -- re-measure
+   this the next time a link is added or renamed. */
+@media (min-width:768px) and (max-width:1279px){
   .foot-top .foot-brand{grid-column:1 / 13}
-  .foot-links{grid-column:1 / 13;justify-content:flex-start;margin-top:8px}
+  /* a wrapping flex row, not a single grid row: at 768 the five measure 738px of a 688px column, and
+     grid-auto-flow:column cannot break, so the last link ran 10px past the window's right edge and the
+     page scrolled sideways. Flex lets it drop to a second line with every link still whole; from about
+     900 the five fit on one line again. Wrapping instead of tightening the gaps also means a link that
+     is renamed or added later finds its own room rather than pushing the row off the page. */
+  .foot-links{grid-column:1 / 13;display:flex;flex-wrap:wrap;column-gap:36px;justify-content:flex-start;margin-top:8px}
   .foot-links a{white-space:nowrap}
 }
 /* phones: the plan's -40px foot was set for the rack's heading, which followed it until the split; the

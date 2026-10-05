@@ -48,7 +48,15 @@
        until 2026-10-03, when Peter split the site in two ("I'm thinking the hero video we currently
        have could be the hero video for our product tab"). The film and its framing are unchanged;
        Peter's portrait and his line went to the homepage's hero, and the two ways on here are the
-       shop's own: the rack and the free sample, both on this page. -->
+       shop's own: the rack and the free sample, both on this page.
+       At its FOOT, since 2026-10-05, the same .hh-me block Tab 1's hero carries: his photograph and
+       the first line of his About introduction, verbatim, and one link across to the story. Three
+       critics found that the page the site opens on never says whose shop it is -- the first "Peter"
+       and the first "Lincoln" on it were two thirds down, in the sample form's "Hey Peter, I'm ___".
+       No new wording: both the line and "See how we did it" are already on the homepage's hero. It
+       shares Tab 1's CSS and only .sh-me swaps the colours, because this hero stands on the chalk
+       field where Tab 1's stands on a photograph (style.css, the Tab 1 hero block). It sits BELOW
+       .hero-copy, so nothing above it moves and "Pick your goal" keeps its place on the first screen. -->
   <section class="hero hero-shop" aria-labelledby="hero-title">
     <div class="wrap hero-in">
       <div class="glass">
@@ -63,6 +71,12 @@
           <a class="btn" href="#goals">Pick your goal</a>
           <a class="tlink" href="#sample">Ask for a free sample</a>
         </div><!-- /DRAFT-COPY -->
+      </div>
+      <div class="hh-me sh-me">
+        <img src="assets/peter/hero-pair-240.webp" width="240" height="300" alt="Peter holding their baby daughter" decoding="async">
+        <p class="hh-me-line"><!-- PETER-COPY -->I’m Peter — husband, dad to a baby girl, and a Lincoln local.<!-- /PETER-COPY --></p>
+        <!-- DRAFT-COPY: the homepage hero's own label, so this coins nothing -->
+        <a class="tlink sh-me-go" href="{{HOME}}#story">See how we did it<svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><!-- /DRAFT-COPY -->
       </div>
     </div>
   </section>
@@ -109,19 +123,22 @@
             </div>
           </fieldset>
           <span class="s-say" aria-hidden="true">at</span>
-          <div class="c-field" data-by="Text"><label for="s-phone">Your phone number</label>
+          <!-- .s-unit, like .s-keep above: a blank and the stop that belongs to it in one box, so the
+               stop can never be stranded on a line of its own. Inline, so the sentence runs on as it
+               always did; a block of its own on a phone, where each blank takes its own row. -->
+          <div class="s-unit"><div class="c-field" data-by="Text"><label for="s-phone">Your phone number</label>
             <input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="s-phone-err">
             <p class="s-err" id="s-phone-err"></p></div>
           <div class="c-field" data-by="Email"><label for="s-email">Your email</label>
             <input id="s-email" name="email" type="email" autocomplete="email" aria-describedby="s-email-err">
-            <p class="s-err" id="s-email-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+            <p class="s-err" id="s-email-err"></p></div><span class="s-say" aria-hidden="true">.</span></div>
           <span class="s-say" aria-hidden="true">I’ve had my eye on</span>
           <!-- a textarea, not an input, so a long product name wraps inside its blank instead of
                scrolling out of sight. One line, and Enter means Next (the script sees to both). -->
-          <div class="c-field s-f-item"><label for="s-product">What would you like to try?</label>
+          <div class="s-unit"><div class="c-field s-f-item"><label for="s-product">What would you like to try?</label>
             <textarea id="s-product" name="product" rows="1" autocomplete="off" required
                    aria-describedby="s-product-hint s-product-err"></textarea>
-            <p class="s-err" id="s-product-err"></p></div><span class="s-say" aria-hidden="true">.</span>
+            <p class="s-err" id="s-product-err"></p></div><span class="s-say" aria-hidden="true">.</span></div>
           <!-- the product names, for the script's suggestions under the blank -->
           <ul class="s-sugg" id="s-sugg" role="listbox" aria-label="Products that match" hidden></ul>
           {{SAMPLE_PICKER}}

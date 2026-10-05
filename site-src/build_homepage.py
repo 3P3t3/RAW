@@ -1417,8 +1417,14 @@ def main():
                             '        <p class="mys-none">Nothing on your bar yet. <a href="#goals">Load a plate or two</a> and bring them along.</p>\n'
                             '      </div><!-- /DRAFT-COPY -->\n'
                             '      <!-- DRAFT-COPY --><p class="mys-sub grow" style="--d:3">Fifteen minutes, free. Your macros, what you already take, and the smallest stack that moves your goal.</p>\n'
+                            # the third way on is the story itself (2026-10-05): this section opens on the eyebrow
+                            # "From our story" over his five packs, but since the split the story is on the other
+                            # tab and nothing here went to it -- one button stayed on this page and the other went
+                            # to the call. "See how we did it" is the homepage hero's own label, so it coins nothing.
                             '      <div class="mys-acts grow" style="--d:3"><a class="btn" href="#goals">Load your own plates</a>'
-                            '<a class="btn btn-line" href="homepage.html#consult">Book a free call</a></div>\n'
+                            '<a class="btn btn-line" href="homepage.html#consult">Book a free call</a>'
+                            '<!-- DRAFT-COPY --><a class="tlink mys-story" href="homepage.html#story">See how we did it'
+                            '<svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><!-- /DRAFT-COPY --></div>\n'
                             '    </div>\n  </section>\n'),
         })
     # All products in the rack's own order (PLATES rank: Protein, Daily Foundations, Hydration ... Everyday
