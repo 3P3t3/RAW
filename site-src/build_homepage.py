@@ -343,6 +343,17 @@ PETER_PACKS = {
     'daily-foundations': 'assets/story/nutrilite-begin-gi-primer-lit.webp',
     'energy-focus': 'assets/story/xs-elite-focus-lit.webp',
 }
+# The product each of those pictures is, by its exact share-links.csv name, so a pack in "That's my stack"
+# opens that product's card (2026-10-04, Peter: each pack named, and a tap shows the product). Read off the
+# pictures themselves: the whey pouch says "Chocolate flavored", and XS Elite + Focus has one flavour on
+# the list. The build stops if a name is not in share-links.csv. A shelf here must be in PETER.
+PETER_PICKS = {
+    'protein': 'XS Grass-Fed Whey Protein - Chocolate',
+    'hydration': 'XS Creatine+',
+    'recovery': 'Nutrilite Sleep Health',
+    'daily-foundations': 'Nutrilite Begin Daily GI Primer',
+    'energy-focus': 'XS Elite + Focus Energy Drink - Peach Mango',
+}
 
 # The rack's three-step guide, under "What are we maximizing?" (DRAFT-COPY). The script marks the
 # step the visitor is on (aria-current): 1 until a plate is open, 2 while one is, 3 once one is loaded.
@@ -1134,16 +1145,17 @@ def main():
         return (f'data-name="{esc(pr["name"])}" data-kind="{esc(pr["desc"])}" data-line="{esc(TAGLINES[fam])}" '
                 f'data-facts="{esc("|".join(facts))}" data-sfx="{CARD_SOUND.get(fam, "chime")}" data-try="{esc(pr["product"])}"')
 
-    def card(pr, i=0, extra='', shelves=False):
+    def card(pr, i=0, extra='', shelves=False, hn=3):
         """A product tile: a link to its Amway page, which _script.html turns into the way to its product
         card. The homepage grid's tiles also list every shelf they are on (data-shelves), for the sample
-        form's "Pick from the shelves"."""
+        form's "Pick from the shelves". hn is the name's heading level: 4 in the shop's grid, where each
+        shelf has its own h3 over its tiles."""
         u = esc(pr['share_link'])
         tag = names.get(cat_of.get(pr['product']), 'Wellness')
         on = (' data-shelves="' + ' '.join(c[0] for c in CATEGORIES if on_shelf(pr, c[4])) + '"') if shelves else ''
         return (f'        <li class="card grow" style="--d:{i % 4}" data-cat="{cat_of.get(pr["product"], "")}"{extra}>'
                 f'<a class="card-link" href="{u}" target="_blank" rel="noopener" {card_data(pr)}{on}>{shot(pr)}'
-                f'<p class="p-tag">{tag}</p><h3 class="p-name">{esc(pr["name"])}</h3>'
+                f'<p class="p-tag">{tag}</p><h{hn} class="p-name">{esc(pr["name"])}</h{hn}>'
                 f'<p class="p-desc">{esc(pr["desc"])}</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
 
     def cat_rows(only=None):
@@ -1354,6 +1366,8 @@ def main():
         raise SystemExit(f"PETER: the story's lines link {story_cats}, not {PETER}")
     if BAR and sorted(PETER_PACKS) != sorted(PETER):
         raise SystemExit(f"PETER: PETER_PACKS covers {sorted(PETER_PACKS)}, not each of {PETER}")
+    if BAR and (sorted(PETER_PICKS) != sorted(PETER) or any(n not in by for n in PETER_PICKS.values())):
+        raise SystemExit(f"PETER_PICKS: needs one share-links.csv product for each of {PETER}")
     bar_bits = {k: '' for k in ('{{HTML_CLASS}}', '{{PIN}}', '{{MYSTACK}}')}
     if BAR:
         pn = [(c, names[c]) for c in PETER]
@@ -1364,20 +1378,31 @@ def main():
             # the scrubbed story stage ever filled; the stage went and so did they.
             # data-plates: every shelf's name, rank and colour, so the strip can read a stack on a page with
             # no rack (the homepage, since the rack moved to shop.html on 2026-10-03)
-            '{{PIN}}': ('<div class="lbpin" id="lbpin" aria-hidden="true" data-plates="'
+            # "Bring it to a call" at its right end (2026-10-04, Peter: the strip did nothing): the one thing
+            # in it that is not decoration, so the strip itself is no longer aria-hidden, only its bar and its
+            # caption are. {{PIN_CALL}} is '#consult' on the homepage and homepage.html#consult on the shop.
+            '{{PIN}}': ('<div class="lbpin" id="lbpin" data-plates="'
                         + esc(json.dumps({s: [html.unescape(names[s]), PLATES[s][1], PLATES[s][0]] for s in PLATES}, ensure_ascii=False, separators=(',', ':')))
                         + '"><div class="wrap lbpin-in">'
-                        '<div class="lbpin-bars bbx">' + barbell('bb-you') + '</div>'
-                        '<p class="lbpin-cap"><span class="lbc-set lbc-yset"><span class="lbc-who"><span class="lbc lbc-you"></span></span>'
-                        '<span class="lbc-new"><span class="lbc lbc-ynew"></span></span></span></p></div></div>'),
+                        '<div class="lbpin-bars bbx" aria-hidden="true">' + barbell('bb-you') + '</div>'
+                        '<p class="lbpin-cap" aria-hidden="true"><span class="lbc-set lbc-yset"><span class="lbc-who"><span class="lbc lbc-you"></span></span>'
+                        '<span class="lbc-new"><span class="lbc lbc-ynew"></span></span></span></p>'
+                        '<!-- DRAFT-COPY --><a class="lbpin-go" href="{{PIN_CALL}}#consult">Bring it to a call'
+                        '<svg class="ic" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><!-- /DRAFT-COPY -->'
+                        '</div></div>'),
             '{{MYSTACK}}': ('  <!-- Peter\'s stack: the five shelves the story\'s lines name, drawn loaded, with its key, and the two ways on -->\n'
                             '  <section class="sec dark mys" id="my-stack" aria-labelledby="mys-title">\n    <div class="wrap mys-in">\n'
                             '      <!-- DRAFT-COPY --><p class="label grow">From our story</p><!-- /DRAFT-COPY -->\n'
                             '      <h2 class="grow hl-2 hl-dk" id="mys-title"><span class="hl-lead">That’s</span> <span class="hl-k">my stack.</span></h2>\n'
                             '      <div class="mys-bar bbx grow" style="--d:1">' + barbell('bb-dk bb-big', PETER) + '</div>\n'
+                            # each pack is its product's tile (2026-10-04): a link to its Amway page that the script turns
+                            # into the way to its card (#pcard, with "Buy on Amway"), named under the picture
                             '      <ul class="mys-key grow" style="--d:2" aria-label="The plates on it">'
-                            + ''.join(f'<li><span class="mys-th"><img src="{PETER_PACKS[c]}" alt="" loading="lazy" decoding="async" width="96" height="96"></span>'
-                                      f'<span class="mys-n"><i style="--c:{PLATES[c][0]}"></i>{n}</span></li>' for c, n in pn) + '</ul>\n'
+                            + ''.join(f'<li><a class="card-link mys-go" href="{esc(by[PETER_PICKS[c]]["share_link"])}" target="_blank" rel="noopener" {card_data(by[PETER_PICKS[c]])}>'
+                                      f'<span class="mys-th"><img src="{PETER_PACKS[c]}" alt="" loading="lazy" decoding="async" width="96" height="96"></span>'
+                                      f'<span class="mys-p">{esc(by[PETER_PICKS[c]]["name"])}</span><span class="vh">, on the </span>'
+                                      f'<span class="mys-n"><i style="--c:{PLATES[c][0]}"></i>{n}</span>'
+                                      f'<span class="vh"> plate, buy on Amway (opens in a new tab)</span></a></li>' for c, n in pn) + '</ul>\n'
                             '      <p class="mys-build grow hl-3d hl-dk" style="--d:2">Build yours.</p>\n'
                             # the visitor's stack beside his, from the saved stack (_script.html fills it); none yet, an
                             # invitation to the rack. Without script there is no stack to show, so none of it shows.
@@ -1398,7 +1423,26 @@ def main():
     # 'All products' on three skincare items under a hero about training (a critic, 2026-10-03).
     rank = lambda pr: PLATES[cat_of[pr['product']]][1] if pr['product'] in cat_of else 99
     order = sorted(products, key=lambda pr: (rank(pr), pr['name'].lower()))
-    grid = [card(pr, i, shelves=True) for i, pr in enumerate(order)]
+    # ...and grouped by that shelf (Peter, 2026-10-04: 105 cards in one run was 16,000px on a phone with
+    # nothing to hold on to). Each shelf is its own run of tiles under an h3, a product listed once, under
+    # its home shelf (cat_of), and the row of shelf names over them (#g-jump) jumps to each; plain links,
+    # so it works without script. A search hides a shelf's heading and its link when none of its tiles
+    # match (_script.html, show()). Anything on no shelf would close the grid as "More" (there is none today).
+    grid, jump = [], []
+    for s_ in sorted(PLATES, key=lambda k: PLATES[k][1]) + [None]:
+        items = [pr for pr in order if cat_of.get(pr['product']) == s_]
+        if not items:
+            continue
+        gid, gname = (f'all-{s_}', names[s_]) if s_ else ('all-more', 'More')
+        grid.append(f'      <div class="g-shelf" id="{gid}" data-cat="{s_ or ""}">'
+                    f'<h3 class="g-h" id="{gid}-t">{gname}</h3>\n'
+                    f'      <ul class="grid" aria-labelledby="{gid}-t">\n'
+                    + '\n'.join(card(pr, i, shelves=True, hn=4) for i, pr in enumerate(items)) +
+                    '\n      </ul></div>')
+        dot = f'<i style="--c:{PLATES[s_][0]}"></i>' if s_ else ''
+        jump.append(f'<li><a href="#{gid}" data-g="{gid}">{dot}{gname}</a></li>')
+    # DRAFT-COPY: the row's label is read, not seen
+    grid_jump = ('<nav class="g-jump" id="g-jump" aria-label="Jump to a shelf"><ul>' + ''.join(jump) + '</ul></nav>')
 
     part = lambda n: open(os.path.join(ROOT, 'site-src', n)).read()
     style, header, footer, dialogs, script, icons = (part('style.css'), part('_header.html'), part('_footer.html'),
@@ -1497,12 +1541,16 @@ def main():
     # homepage from that page ('' on the homepage itself), {{SHOP}} the way to the shop ('' on the shop),
     # and the tab switch marks the page it is on. Everything that moved to the shop tab on 2026-10-03
     # (the rack, the sample, "That's my stack", the grid and search) is reached through {{SHOP}}.
+    # A shelf page ('shelf') lights the Shop tab too (Peter, 2026-10-04): it is part of the shop, reached
+    # from its rack. Its tab says aria-current="true" (the current section), not "page", because it is not
+    # that page and its link still goes there. About and the bloodwork page (None) light neither.
     def nav(here):
         home = '' if here == 'home' else HOME_PAGE
         shop = '' if here == 'shop' else SHOP_PAGE
         cur = ' aria-current="page"'
         sub = {'{{HOME}}': home, '{{SHOP}}': shop,
-               '{{TAB_HOME}}': cur if here == 'home' else '', '{{TAB_SHOP}}': cur if here == 'shop' else ''}
+               '{{TAB_HOME}}': cur if here == 'home' else '',
+               '{{TAB_SHOP}}': cur if here == 'shop' else ' aria-current="true"' if here == 'shelf' else ''}
         hdr = header
         for k, v in sub.items():
             hdr = hdr.replace(k, v)
@@ -1556,7 +1604,7 @@ def main():
             his_sizes='(min-width:1280px) 760px, (min-width:760px) 60vw, calc(100vw - 40px)'),
         # and the one pair shown outside the reveal
         '{{STORY_TEASER}}': story_teaser(),
-        **bar_bits}))
+        **bar_bits, '{{PIN_CALL}}': ''}))   # after bar_bits: it is inside {{PIN}}
     emit(HOME_PAGE, out, 'the homepage')
 
     # shop.html, Tab 2: the film hero, the rack (#goals), the free sample, "That's my stack" and the grid.
@@ -1567,8 +1615,9 @@ def main():
         '{{SAMPLE_NEXT}}': SAMPLE_NEXT.replace(SHOP_PAGE, demo_name(SHOP_PAGE)) if DEMO else SAMPLE_NEXT,
         '{{SAMPLE_PRODUCTS}}': sample_list, '{{SAMPLE_PICKER}}': sample_picker,
         '{{PCARD}}': '' if SHELF_VIEW in ('bar', 'case') else card_dialog(),
-        **quick_call(HOME_PAGE), '{{GRID}}': '\n'.join(grid), '{{TRENDING}}': trending, '{{SHELVES}}': shelves,
-        **bar_bits}))
+        **quick_call(HOME_PAGE), '{{GRID}}': '\n'.join(grid), '{{GRID_JUMP}}': grid_jump,
+        '{{TRENDING}}': trending, '{{SHELVES}}': shelves,
+        **bar_bits, '{{PIN_CALL}}': HOME_PAGE}))
     emit(SHOP_PAGE, shop, SHOP_PAGE)
 
     cat_tpl = open(os.path.join(ROOT, 'site-src', 'category.template.html')).read()
@@ -1599,7 +1648,7 @@ def main():
 '''
         cgrid = '\n'.join(card(pr, i) for i, pr in enumerate(items))
         cat_page = f'category-{slug_}.html'
-        page = fill(cat_tpl, dict(shared, **nav(None), **{
+        page = fill(cat_tpl, dict(shared, **nav('shelf'), **{
             '{{HEAD_EXTRA}}': head_extra(cat_page) if DEMO or PLUS else '',
             '{{PAGE_URL}}': BASE + cat_page,
             # the shelf's "Ask for a free sample" and its product cards' go to the sample on the shop tab

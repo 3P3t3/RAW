@@ -41,7 +41,7 @@
        have could be the hero video for our product tab"). The film and its framing are unchanged;
        Peter's portrait and his line went to the homepage's hero, and the two ways on here are the
        shop's own: the rack and the free sample, both on this page. -->
-  <section class="hero" aria-labelledby="hero-title">
+  <section class="hero hero-shop" aria-labelledby="hero-title">
     <div class="wrap hero-in">
       <div class="glass">
         <video id="glass-video" muted loop playsinline preload="none" poster="assets/glass-poster.webp" width="1080" height="1080" aria-hidden="true"></video>
@@ -192,15 +192,20 @@
 {{MYSTACK}}
 
   <!-- The full shelf. It stays out of the way until you search or ask for it ("All products" in the
-       menu, the masthead and the footer, from any page, lands here as shop.html#results), and it
-       sits last on the shop tab, so opening it never splits the rack from the sample. -->
+       menu and the footer, from any page, lands here as shop.html#results), and it
+       sits last on the shop tab, so opening it never splits the rack from the sample.
+       Since 2026-10-04 it is grouped by shelf, in the rack's order, with the shelves' names as a row of
+       links that holds under the masthead while you are in it (.g-jump), and a way back to the rack
+       at the end. #grid is the groups' wrapper; each shelf's tiles are their own list. -->
   <section class="sec shop results" id="results" aria-labelledby="shop-title" hidden>
     <div class="wrap">
       <div class="sec-head"><h2 id="shop-title" tabindex="-1">All products</h2></div>
       <div class="filter" id="filter" hidden><p id="filter-text"></p><button class="tlink" type="button" id="filter-clear">Close</button></div>
-      <ul class="grid" id="grid">
+      {{GRID_JUMP}}
+      <div class="g-all" id="grid">
 {{GRID}}
-      </ul>
+      </div>
+      <!-- DRAFT-COPY --><p class="g-back"><a class="tlink" href="#goals"><svg class="ic ic-sm" aria-hidden="true" focusable="false"><use href="#i-back"/></svg>Back to the shelves</a></p><!-- /DRAFT-COPY -->
     </div>
   </section>
 
