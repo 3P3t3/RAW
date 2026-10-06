@@ -2452,6 +2452,11 @@ body{background:transparent}
 .why-head h2 span{display:block}
 .why-lead{max-width:44ch;font-size:17px;line-height:1.5;color:var(--ink)}
 .why-lead + .why-lead{color:var(--text)}
+/* Peter's argument (2026-10-06) leads the section, so it is sized as an argument and not as the first of three
+   paragraphs: it was indistinguishable from the two explaining lines under it. Display face, ink, its own measure. */
+.why-arg{font:800 clamp(22px,5.4vw,26px)/1.18 var(--display);font-stretch:80%;letter-spacing:-.012em;
+  color:var(--teal);max-width:22ch;margin-bottom:2px}
+@media (min-width:768px){.why-arg{font-size:clamp(26px,2.2vw,32px);max-width:26ch}}
 .why-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 /* content sits at the top of each card; the links follow their text rather than pinning to a foot that left
    90-150px of empty card above them at 1440 (2026-10-04) */

@@ -428,6 +428,22 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   and a negative `scroll-margin-top` on `.consult-dusk` cancels it, so arriving at `#consult` lands on the eyebrow (116px
   at 390) with the heading and every goal chip on the first screen, instead of on 316px of lake.
   The Shop tab has no lake, on purpose: its film is its own look.
+- **`#why` opens with Peter's argument (2026-10-06), which the site had been missing.** He described it in his own words
+  — "bloodwork will feed supplements. our bloodwork will show what people are actually deficient in, so when they get a
+  supplement they know its one that meets a real need" — and a check found nothing on the site said it: "deficien*"
+  appeared **zero** times in the whole source, and the closest copy ("the few products that fit your goal", "you don't
+  need bloodwork to try anything") was about goals and about checking afterwards, never about the panel telling you what
+  to take. It is the one argument that separates his shop from anyone else with the same Amway catalogue. It now leads
+  the section as `.why-arg`, in the display face, because at body size it read as the first of three paragraphs:
+  **"Remove the guesswork. Start with your bloodwork."** (PETER-COPY) over "A panel shows where you actually stand. Then
+  what you take is a decision, not a guess." It pays off his ask ~4,000px below, which is the same problem from the
+  inside ("testing supplement after supplement to find what worked"). **CLAIMS: it promises KNOWING, never treating.**
+  A panel shows where you stand; the site never says a product corrects what the panel found, which would be a health
+  claim and is what the FDA line on every page and his own copy rules keep away from. Never tighten it into one.
+  The third line replaced "You don't need bloodwork to try anything…" (Peter, 2026-10-06): **"Bloodwork comes first for
+  any peptide protocol — a clinician needs it before they can decide. For supplements it's recommended, not required."**
+  The requirement is the clinician's, which is why it is worded that way and matches the roles line; supplements stay
+  ungated, which is his standing rule.
 - **`#why` ("Understand why", built in `build_homepage.py`):** lead, four pillars (Know your numbers, Build and keep lean mass,
   Fuel it, Peptide protocols — **always that order, on both copies**: Peter, 2026-10-04, "we should be building this as if
   it's live. this is the beta meant to be for Nov 2nd launch when its all live", so the bloodwork content is never demoted,

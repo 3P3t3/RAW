@@ -1910,8 +1910,20 @@ def why_section():
       <div class="why-head grow">
         <p class="label">Understand why</p>
         <h2 id="why-title"><span>Find out what’s</span> <span class="hl-k">working</span></h2>
-        <p class="why-lead">Bloodwork, biomarkers, macros and targeted nutrition.</p>
-        <p class="why-lead">You don’t need bloodwork to try anything. It’s how you find out what’s actually working for you.</p>
+        <!-- PETER-COPY, 2026-10-06. His own line, and the argument the site was missing: nothing anywhere said
+             WHY the bloodwork and the products belong together ("bloodwork will feed supplements... so when they get
+             a supplement they know its one that meets a real need"). It replaced a list of nouns, "Bloodwork,
+             biomarkers, macros and targeted nutrition.", and it pays off his own ask 4,000px below, which is the same
+             problem told from the inside: "testing supplement after supplement to find what worked."
+             CLAIMS: it promises KNOWING, never treating -- a panel shows where you stand; it never says a product
+             corrects what the panel found. Keep it that way. -->
+        <p class="why-lead why-arg">Remove the guesswork. Start with your bloodwork.</p>
+        <p class="why-lead">A panel shows where you actually stand. Then what you take is a decision, not a guess.</p>
+        <!-- Replaces "You don’t need bloodwork to try anything...". Peter, 2026-10-06: bloodwork is required for any
+             peptide protocol and recommended but not required for supplements. The requirement is the CLINICIAN'S,
+             which is why it is worded that way and matches the roles line below; supplements stay ungated, which is
+             his standing rule ("I don’t want them to have to get bloodwork to try a product or buy a product"). -->
+        <p class="why-lead">Bloodwork comes first for any peptide protocol — a clinician needs it before they can decide. For supplements it’s recommended, not required.</p>
       </div>
       <ol class="why-list">
 {items}      </ol>
