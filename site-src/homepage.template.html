@@ -284,9 +284,12 @@
 
           <fieldset class="mc-step" hidden>
             <legend class="mc-q" tabindex="-1">What are you after?</legend>
-            <div class="mc-opts cols">
+            <!-- one column since Recomp went (2026-10-07): three in the two-column grid left a hole beside the
+                 third. "Where are you at with training?", the other three-option step, has always stacked. -->
+            <div class="mc-opts">
               <label class="mc-opt"><input type="radio" name="goal" value="loss"><span>Fat loss</span></label>
-              <label class="mc-opt"><input type="radio" name="goal" value="recomp"><span>Recomp</span></label>
+              <!-- "Recomp" was a fourth goal here until 2026-10-07, when Peter asked for it off. Its maths
+                   (tdee * 0.92) and its note are gone from mcCalc with it; docs/macro-calculator.md records that. -->
               <label class="mc-opt"><input type="radio" name="goal" value="maint" checked><span>Maintain</span></label>
               <label class="mc-opt"><input type="radio" name="goal" value="gain"><span>Muscle gain</span></label>
             </div>

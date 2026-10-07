@@ -110,6 +110,15 @@ Generated (never hand-edit; the next build overwrites them):
   On every shelf page "Keep looking" is rows on a phone and a tile grid from 768 (two across, three from 1024).
 - `style.css`, `assets/products/`, `assets/cutouts/`, `assets/.cut-version`
 
+**"Recomp" is no longer a goal (Peter, 2026-10-07: "can we get rid of recomp as an option on the macro calculator?").**
+The radio, its factor in `mcCalc` (`tdee * 0.92`), its place in the `noRoom` test, its note in `MCGOAL` and its row in
+`MCTOC` are all gone; `docs/macro-calculator.md` records what it did and strikes through its worked example. **mcCalc
+is 2,284 chars now, not 2,333** — that is a deliberate change, the first since the figure was pinned, and the maths for
+the three remaining goals is provably untouched (only a branch of one ternary and one `||` clause left). A returning
+visitor with `goal:'recomp'` still in `aspire-macros` falls back to **Maintain**, checked and with no console error —
+verified. The goal step dropped `cols` and stacks in one column, like "Where are you at with training?", the other
+three-option step; three in the two-column grid left a hole beside the third.
+
 `docs/macro-calculator.md` records the homepage macro calculator: where the maths came from, every
 formula and rounding in `mcCalc` in `_script.html`, and worked examples. Read it before touching them.
 

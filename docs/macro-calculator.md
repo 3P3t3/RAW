@@ -42,7 +42,7 @@ Read out of `mcCalc` itself. Names below are the code's own.
 | `basis` | `standard`, `better`, `trained` | radio, default **standard** |
 | `frame` | 0.95, 1, 1.15 (small / medium / large) | only used when `basis` is `better`, default 1 |
 | `trained` | 1, 1.2 (g per lb) | only used when `basis` is `trained`, default 1 |
-| `goal` | `loss`, `recomp`, `maint`, `gain` | radio, default **maint** |
+| `goal` | `loss`, `maint`, `gain` | radio, default **maint** |  *(`recomp` removed 2026-10-07)*
 | `loss` | 0.85, 0.8, 0.75 | only used when `goal` is `loss`, default 0.85 |
 
 ### 1. Unit conversion
@@ -74,12 +74,12 @@ Activity multipliers, to the exact decimal the form submits:
 ### 4. Target calories
 
     goal 'loss'   -> target = tdee * loss     (loss is 0.85, 0.8 or 0.75)
-    goal 'recomp' -> target = tdee * 0.92
     goal 'gain'   -> target = tdee * 1.12
     goal 'maint'  -> target = tdee
 
 Goal factors: fat loss 0.85 (moderate, 15% under), 0.8 (standard, 20% under) or 0.75
-(aggressive, 25% under); recomp **0.92**; muscle gain **1.12**; maintain **1.00**.
+(aggressive, 25% under); muscle gain **1.12**; maintain **1.00**. (A fourth goal, recomp, used **0.92** until
+Peter removed it on 2026-10-07; nothing else about the maths changed.)
 
 Then Peter's floor, which the source does not have:
 
@@ -93,12 +93,12 @@ have a TDEE under 1,100, and then every deficit setting floors to the same 1,100
 card would be showing a "target" above maintenance on a fat-loss goal. `noRoom` names that
 state:
 
-    noRoom = (goal === 'loss' || goal === 'recomp') && target >= tdee * 0.97
+    noRoom = goal === 'loss' && target >= tdee * 0.97
 
 `target` here is the floored figure. The 0.97 catches the neighbouring case as well — a
 "deficit" of under 3% of maintenance, which the floor can also produce (the widest such gap
 is 34 calories) and which is not a deficit in any useful sense. Only the floor can set
-`noRoom`: the goal factors are 0.85 at their gentlest and 0.92 for recomp, both below 0.97,
+`noRoom`: the goal factor is 0.85 at its gentlest, below 0.97,
 so an unfloored target can never reach it. **`noRoom` changes no number.** It only changes
 what the page says; see departure 5.
 
@@ -229,7 +229,7 @@ rates and the small and large `frame` settings; the Devine 5'0" clamp (7 vs 8); 
 | 1 | F | 35 | 150 lb | 5'5" | 1.55 | standard | maintain | 2,133 cal | 2,133 cal | 126 g / 504 cal | 71 g / 640 cal | 247 g / 989 cal | — | identical |
 | 2 | M | 40 | 200 lb | 6'0" | 1.375 | trained, 1 g/lb | fat loss, 20% (0.8) | 2,551 cal | 2,041 cal | 200 g / 800 cal | 68 g / 612 cal | 157 g / 629 cal | — | identical |
 | 3 | F | 28 | 135 lb | 5'2" | 1.725 | better, small (0.95) | muscle gain | 2,235 cal | 2,503 cal | 121 g / 484 cal | 83 g / 751 cal | 317 g / 1,268 cal | — | identical |
-| 4 | M | 30 | 185 lb | 5'10" | 1.55 | better, large (1.15) | recomp | 2,798 cal | 2,574 cal | 213 g / 852 cal | 86 g / 772 cal | 238 g / 950 cal | — | identical |
+| 4 | ~~M | 30 | 185 lb | 5'10" | 1.55 | better, large (1.15) | recomp | 2,798 cal | 2,574 cal | 213 g / 852 cal | 86 g / 772 cal | 238 g / 950 cal | — | identical~~ **(goal removed 2026-10-07; kept as the record of what it did)** |
 | 5 | F | 60 | 250 lb | 5'0" | 1.2 | trained, 1.2 g/lb | fat loss, 25% (0.75) | 1,951 cal | 1,463 cal | 300 g / 1,200 cal | 49 g / 439 cal | **0 g / 0 cal** | warning (`clamped`) | identical numbers; the source prints the same 0 g with no warning |
 | 6 | F | 70 | 100 lb | 5'0" | 1.2 | standard | fat loss, 25% (0.75) | 1,074 cal | **1,100 cal** | 100 g / 400 cal | 37 g / 330 cal | 93 g / 370 cal | floor (`floored`, and `noRoom`) | **differs by design** — source: 806 cal target, 27 g / 242 cal fat, 41 g / 164 cal carbs. Protein and maintenance identical. |
 | 7 | F | 30 | 120 lb | 4'11" | 1.2 | standard | maintain | 1,404 cal | 1,404 cal | 100 g / 400 cal | 47 g / 421 cal | 146 g / 583 cal | — | identical |

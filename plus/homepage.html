@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=3f6b6863">
+<link rel="stylesheet" href="../style.css?v=d0e1bb39">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -507,9 +507,12 @@
 
           <fieldset class="mc-step" hidden>
             <legend class="mc-q" tabindex="-1">What are you after?</legend>
-            <div class="mc-opts cols">
+            <!-- one column since Recomp went (2026-10-07): three in the two-column grid left a hole beside the
+                 third. "Where are you at with training?", the other three-option step, has always stacked. -->
+            <div class="mc-opts">
               <label class="mc-opt"><input type="radio" name="goal" value="loss"><span>Fat loss</span></label>
-              <label class="mc-opt"><input type="radio" name="goal" value="recomp"><span>Recomp</span></label>
+              <!-- "Recomp" was a fourth goal here until 2026-10-07, when Peter asked for it off. Its maths
+                   (tdee * 0.92) and its note are gone from mcCalc with it; docs/macro-calculator.md records that. -->
               <label class="mc-opt"><input type="radio" name="goal" value="maint" checked><span>Maintain</span></label>
               <label class="mc-opt"><input type="radio" name="goal" value="gain"><span>Muscle gain</span></label>
             </div>
@@ -2081,7 +2084,7 @@ function mcCalc(v){
       hCm=hIn*2.54,
       bmr=10*wKg+6.25*hCm-5*v.age+(v.sex==='male'?5:-161),   /* mifflin-st jeor, total bodyweight */
       tdee=bmr*v.activity,
-      target=v.goal==='loss'?tdee*v.loss:v.goal==='recomp'?tdee*0.92:v.goal==='gain'?tdee*1.12:tdee,
+      target=v.goal==='loss'?tdee*v.loss:v.goal==='gain'?tdee*1.12:tdee,
       floored=false;
   if(target<1100){target=1100;floored=true}      /* the source calculator has no floor at all */
   var over=Math.max(hIn-60,0),                   /* devine, clamped at 5'0" */
@@ -2101,7 +2104,7 @@ function mcCalc(v){
           floored:floored,clamped:spare<0,
           /* a deficit goal whose target is at, above, or within 3% of maintenance: nothing
              was cut, whatever the setting said. Only the floor can cause it. */
-          noRoom:(v.goal==='loss'||v.goal==='recomp')&&target>=tdee*0.97,
+          noRoom:v.goal==='loss'&&target>=tdee*0.97,
           /* the other end, and a different reason: above 350 lb this maths is out of its
              range whatever the goal, so the card hands over instead of coaching. Peter's
              rule, strictly greater than. Kept separate from noRoom so a later reader can
@@ -2128,7 +2131,6 @@ if(mcForm){
   };
   var MCGOAL={
     loss:'Reassess in two to three weeks. If the trend has stalled for a couple of weeks, take another 5 to 10% off.',
-    recomp:'A small deficit while you lift heavy. Expect the scale to barely move: judge it on photos and measurements. Reassess in three to four weeks.',
     gain:'Reassess in three to four weeks. Slow gain is the point; if it is coming on fast, trim 5 to 10%.',
     maint:'Reassess in three to four weeks, or whenever the goal changes.'
   };
@@ -2296,7 +2298,7 @@ if(mcForm){
      — it went true while the quiz was still up, and mcFill turned back at !mcDone — so the
      seventh answer asks the geometry itself and fills it on the spot instead. Measured rather
      than remembered: the observer's last word can still be in flight when the button is hit. */
-  var MCTOC={loss:'Lose fat',recomp:'Lose fat',gain:'Build muscle',maint:'Stay healthy day to day'},
+  var MCTOC={loss:'Lose fat',gain:'Build muscle',maint:'Stay healthy day to day'},
       mcFilled=false,mcSec=$('#consult'),MCAUTO='aspire-consult-auto',mcAuto={goal:'',note:''};
   try{var mcA=JSON.parse(localStorage.getItem(MCAUTO)||'null');
       if(mcA){mcAuto.goal=String(mcA.goal||'');mcAuto.note=String(mcA.note||'')}}catch(e){}

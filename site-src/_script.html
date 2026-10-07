@@ -1279,7 +1279,7 @@ function mcCalc(v){
       hCm=hIn*2.54,
       bmr=10*wKg+6.25*hCm-5*v.age+(v.sex==='male'?5:-161),   /* mifflin-st jeor, total bodyweight */
       tdee=bmr*v.activity,
-      target=v.goal==='loss'?tdee*v.loss:v.goal==='recomp'?tdee*0.92:v.goal==='gain'?tdee*1.12:tdee,
+      target=v.goal==='loss'?tdee*v.loss:v.goal==='gain'?tdee*1.12:tdee,
       floored=false;
   if(target<1100){target=1100;floored=true}      /* the source calculator has no floor at all */
   var over=Math.max(hIn-60,0),                   /* devine, clamped at 5'0" */
@@ -1299,7 +1299,7 @@ function mcCalc(v){
           floored:floored,clamped:spare<0,
           /* a deficit goal whose target is at, above, or within 3% of maintenance: nothing
              was cut, whatever the setting said. Only the floor can cause it. */
-          noRoom:(v.goal==='loss'||v.goal==='recomp')&&target>=tdee*0.97,
+          noRoom:v.goal==='loss'&&target>=tdee*0.97,
           /* the other end, and a different reason: above 350 lb this maths is out of its
              range whatever the goal, so the card hands over instead of coaching. Peter's
              rule, strictly greater than. Kept separate from noRoom so a later reader can
@@ -1326,7 +1326,6 @@ if(mcForm){
   };
   var MCGOAL={
     loss:'Reassess in two to three weeks. If the trend has stalled for a couple of weeks, take another 5 to 10% off.',
-    recomp:'A small deficit while you lift heavy. Expect the scale to barely move: judge it on photos and measurements. Reassess in three to four weeks.',
     gain:'Reassess in three to four weeks. Slow gain is the point; if it is coming on fast, trim 5 to 10%.',
     maint:'Reassess in three to four weeks, or whenever the goal changes.'
   };
@@ -1494,7 +1493,7 @@ if(mcForm){
      — it went true while the quiz was still up, and mcFill turned back at !mcDone — so the
      seventh answer asks the geometry itself and fills it on the spot instead. Measured rather
      than remembered: the observer's last word can still be in flight when the button is hit. */
-  var MCTOC={loss:'Lose fat',recomp:'Lose fat',gain:'Build muscle',maint:'Stay healthy day to day'},
+  var MCTOC={loss:'Lose fat',gain:'Build muscle',maint:'Stay healthy day to day'},
       mcFilled=false,mcSec=$('#consult'),MCAUTO='aspire-consult-auto',mcAuto={goal:'',note:''};
   try{var mcA=JSON.parse(localStorage.getItem(MCAUTO)||'null');
       if(mcA){mcAuto.goal=String(mcA.goal||'');mcAuto.note=String(mcA.note||'')}}catch(e){}
