@@ -470,10 +470,12 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   is ~17 drawn markers (ApoB, Lp(a), lipid panel, HbA1c, homocysteine; albumin, ALP, ALT, cystatin C; ferritin, vitamin D,
   B12, hs-CRP; TSH, free T3, total testosterone, SHBG) plus 3 calculated — and "lipid panel" is itself several, which is
   probably why they print no number. A count may only go on the site if a provider states one in writing, and then per
-  provider, since the two copies route to different ones. **Two things still unverified and flagged to Peter:** the plus
-  copy's "You pay for it once — it isn't a subscription" (Avellum's panel bundles 45 free days of a Valdura membership that
-  then bills monthly unless cancelled; CCRX's storefront could not be reached to check), and whether "a licensed clinician
-  reads it" is true of the panel at all — Avellum says the panel needs no telehealth visit, and it is the Valdura app that
+  provider, since the two copies route to different ones. **Peter settled the subscription question (2026-10-08):** "its not a
+  subscription btw, the ai agent is, but the bloodwork isnt and you dont need to do both." So the panel is a one-off and the
+  Valdura app is the optional recurring thing — the plus copy's "You pay for it once — it isn't a subscription" is correct and
+  stays, and nothing on either site may imply the panel itself recurs. Avellum's own panel page says the same ("One-time
+  payment, not a subscription"), so it is a verified fact of the plain route too. **Still unverified and flagged to Peter:**
+  whether "a licensed clinician reads it" is true of the panel at all — Avellum says the panel needs no telehealth visit, and it is the Valdura app that
   reads results, while the clinician reads the intake for a prescription. Do not change either without Peter confirming.
 - **Providers and guard:** both copies carry the bloodwork route (`#why`, `bloodwork.html`, the "Beyond supplements" menu
   group, the footer link, `{{FDA_SCOPE}}`). `provider()` / `bw_parts()` pick it: plain → **Avellum Health**, plus → **CCRX**
