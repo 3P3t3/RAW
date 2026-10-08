@@ -1981,11 +1981,19 @@ def bw_parts():
         desc = 'A blood panel, drawn at home — no prescription, no appointment — and what a licensed clinician may decide after it.'
         statement = '        <p>Avellum Health, whose storefront this is, state it plainly: compounded medications are not FDA-approved drugs.</p>'
     else:
-        panel = ('        <p>It’s bloodwork: a lab panel of your biomarkers, measured from your own blood, through Avellum Health.</p>\n'
+        # 2026-10-08: "through Avellum Health" said the panel was theirs. It is not. Their own banner reads
+        # "a blood panel from Valdura", Valdura takes the payment, Valdura's app holds the results, and the
+        # lab work is Better Human Labs'. Avellum is the route, not the provider. Checked on their site, and
+        # worth re-checking if they change partner. Still no price and nothing about shipping, as ever; "and
+        # what comes with it" is the nod to the membership bundled with the panel, whose terms are theirs to
+        # state, not ours.
+        panel = ('        <p>It’s bloodwork: a lab panel of your biomarkers, measured from your own blood. You reach it '
+                 'through Avellum Health; the panel itself is Valdura’s, and your results are read in their app.</p>\n'
                  f'        <p>{TASSO}</p>\n'
-                 '        <p>What the panel measures, how the sample is taken and what it costs are all listed on their site.</p>')
+                 '        <p>What the panel measures, how the sample is taken, what it costs and what comes with it are all '
+                 'listed on their site.</p>')
         refill = ''
-        desc = 'A blood panel through Avellum Health, and what a licensed clinician may decide after it.'
+        desc = 'A blood panel reached through Avellum Health, and what a licensed clinician may decide after it.'
         statement = '        <p>Avellum Health state it plainly: compounded medications are not FDA-approved drugs.</p>'
     after = ('        <p>If you want to go further than the panel, that part is medicine, and it isn’t mine to hand out.</p>\n'
              '        <p>You fill in an intake. A licensed clinician reads it and decides whether a prescription is appropriate for you. They can also decide it isn’t, and say no.</p>\n'
