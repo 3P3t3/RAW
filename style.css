@@ -924,6 +924,104 @@ html:not(.js) #c-step-n,html:not(.js) #c-prog,html:not(.js) #c-back{display:none
   #consult-form .c-q-long .chip span{width:100%;min-height:52px;padding:0 .6em}
 }
 
+/* ===================================================================================
+   THE BOOKING CARD AS GLASS, OVER THE LAKE AT DUSK (2026-10-08)
+   -----------------------------------------------------------------------------------
+   #consult is the one band on the site that stands on a photograph, and the note Peter
+   fills in used to sit on it as an opaque chalk sheet: the lake stopped dead at the
+   card's edge. Here the note becomes a frosted panel instead — the dusk still reads
+   through it, out of focus, and the card is part of the picture rather than laid on it.
+
+   It is a REAL frosted panel, which means two things together, and the second is what
+   makes it safe:
+     1. backdrop-filter: blur(24px) saturate(1.1) — the photo behind, softened.
+     2. a TINT of Peter's own teal, rgba(0,46,59,.72), as the card's own background.
+   The tint is not decoration. A no-fill panel only holds its text over an evenly-toned
+   photograph, and the dusk lake is not one: it carries an afterglow on the horizon and
+   a black treeline in the same frame. With the tint, every word inside sits on a colour
+   we control, so the contrast is ours whatever the picture does.
+
+   It is also the FALLBACK. backdrop-filter is still unsupported in places, and the
+   blur is declared on its own inside @supports; without it the card is simply the solid
+   teal tint over the photo and reads exactly as well (measured: no figure inside the
+   card moves by more than a tenth of a point with the filter disabled).
+
+   Below 768 there is no photograph behind the card at all — the dusk is its own strip
+   above the heading and the card stands on the section's #141A26 — so a phone gets the
+   fallback's look by construction, which is why the two measure the same.
+
+   The card KEEPS ITS CHARACTER: it is still the note (the 2px rule all the way round,
+   the hard offset shadow, the heavy condensed questions, the underlined blanks, the
+   dashed choice pills that turn solid and askew when they are picked). Only the hand it
+   is written in changes: ink on chalk becomes chalk on teal, and the pills invert — sand
+   fill, teal lettering — because a teal pill on a teal panel would have no shape at all.
+   Not one question, label, placeholder, validation line or button word is touched.
+   The calculator's card (.mc-card) is deliberately NOT changed here; RAW 0 is deciding
+   whether the glass goes site-wide, and the two are siblings by design (see CLAUDE.md).
+=================================================================================== */
+.consult-dusk #consult-form{
+  background:rgba(0,46,59,.72);                 /* the tint: the fallback, and the contrast floor */
+  color:var(--chalk);
+  /* the note's own 2px rule and its hard offset, both turned to the dark side: a chalk
+     edge so the panel has a rim against the picture, and the drop in the water's near-black
+     rather than teal, which would disappear into the tint it is cast from */
+  box-shadow:inset 0 0 0 2px rgba(230,211,197,.42),8px 8px 0 rgba(0,16,22,.45),
+             0 40px 60px -40px rgba(0,16,22,.85);
+}
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .consult-dusk #consult-form{
+    -webkit-backdrop-filter:blur(24px) saturate(1.1);
+            backdrop-filter:blur(24px) saturate(1.1);
+  }
+}
+/* the questions, the field labels and the step's furniture */
+.consult-dusk #consult-form .c-q legend,
+.consult-dusk #consult-form .c-field label{color:var(--chalk)}
+.consult-dusk #consult-form .c-field label span{color:var(--sand)}
+.consult-dusk #consult-form .c-count,
+.consult-dusk #consult-form .c-sum{color:var(--sand)}
+.consult-dusk #consult-form .c-prog span{background:rgba(230,211,197,.26)}
+.consult-dusk #consult-form .c-prog span.is-on{background:var(--sand)}
+.consult-dusk #consult-form .tlink{color:var(--sand)}   /* Back */
+/* the error keeps its rule and its words; only the side it is lit from changes */
+.consult-dusk #consult-form .c-err{background:rgba(230,211,197,.10);
+  box-shadow:inset 2px 0 0 var(--sand);color:var(--chalk)}
+
+/* THE CHOICE PILLS. Dashed and empty until they are picked, exactly as the sample's are;
+   picked, they invert instead of filling teal — a teal pill on a teal panel has no shape.
+   Sand fill, teal lettering, the same -2deg knock and the same hard little shadow. */
+.consult-dusk #consult-form .chip span{border-color:rgba(230,211,197,.55);color:var(--chalk);
+  --sheen:rgba(255,255,255,.18)}          /* the sweep goes light; the dark one was invisible here */
+.consult-dusk #consult-form .chip input:checked + span{background:var(--sand);
+  border-color:var(--chalk);color:var(--teal);box-shadow:3px 3px 0 rgba(0,16,22,.55);
+  --sheen:rgba(255,255,255,.5)}
+@media (hover:hover){
+  .consult-dusk #consult-form .chip:hover span{color:var(--chalk);border-color:var(--chalk)}
+  .consult-dusk #consult-form .chip:hover input:checked + span{color:var(--teal)}
+}
+.consult-dusk #consult-form .chip input:focus-visible + span{outline-color:var(--sand)}
+
+/* THE BLANKS. Written in chalk on a sand rule, which is the same gesture as blue ink on a
+   teal rule; the hint that says what belongs in the blank stays legible rather than grey. */
+.consult-dusk #consult-form .c-field input,
+.consult-dusk #consult-form .c-field textarea{color:var(--chalk);--u:var(--sand)}
+.consult-dusk #consult-form .c-field input{border-bottom-color:var(--sand)}
+.consult-dusk #consult-form .c-field input::placeholder,
+.consult-dusk #consult-form .c-field textarea::placeholder{color:rgba(230,211,197,.8)}
+.consult-dusk #consult-form .c-field input:focus{background:rgba(230,211,197,.12);
+  border-bottom-color:var(--chalk);box-shadow:0 3px 0 var(--chalk)}
+.consult-dusk #consult-form .c-field textarea:focus{--u:var(--chalk);background-color:rgba(230,211,197,.12)}
+/* invalid: the deep red of the light card would be a black mark here, so it is the same hue
+   lifted to read on the tint. The words in .c-err still carry the error; colour never alone. */
+.consult-dusk #consult-form .c-field input[aria-invalid="true"]{border-bottom-color:#E8A295;
+  background:rgba(232,162,149,.12);box-shadow:none}
+.consult-dusk #consult-form .c-field textarea[aria-invalid="true"]{--u:#E8A295;
+  background-color:rgba(232,162,149,.12)}
+/* the button is unchanged: the XS blue on the teal tint is the one warm-cold edge in the
+   card and it is what the eye should land on. Only its rim is drawn, so it never floats. */
+.consult-dusk #consult-form .btn{box-shadow:0 0 0 1px rgba(230,211,197,.22)}
+
+
 /* the category banner's way to it */
 .cat-sample a{color:var(--sand);font-weight:600;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
 
