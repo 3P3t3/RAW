@@ -1237,13 +1237,18 @@ html:not(.js) #results[hidden]{display:block!important}
    browser's. Closed, it is one line on the chalk in a hairline box: an offer, quieter than the
    ask's filled button below it, and plainly a thing to press. */
 .st-rev{margin-top:clamp(26px,5vw,36px)}
+/* Peter, 2026-10-07: "we need to make the 'see the rest of our pictures' pop more. Maybe an entirely different
+   colour." It was a 1px teal hairline on the page's own ground -- the quietest control on the page, holding the
+   only other proof the visitor gets. It is a filled teal block now: the page is chalk and greige, so a solid dark
+   reads at a glance, and it stays clear of the blue that every real button on the site wears (the ask's "Book a
+   free call" sits a few hundred pixels below it, and two blues would compete). */
 .st-rev>summary{display:flex;align-items:center;justify-content:space-between;gap:18px;
-  max-width:42ch;padding:14px 18px;box-shadow:inset 0 0 0 1px var(--teal);color:var(--teal);
+  max-width:42ch;padding:16px 18px;background:var(--teal);box-shadow:none;color:var(--chalk);
   font:600 16px/1.45 var(--sans);cursor:pointer;list-style:none;text-wrap:pretty}
 .st-rev>summary::-webkit-details-marker{display:none}   /* the default triangle; the chevron says it instead */
 .st-rev>summary::marker{content:""}
 .st-rev>summary:active{opacity:.7}
-@media (hover:hover){.st-rev>summary:hover{background:var(--tile)}}
+@media (hover:hover){.st-rev>summary:hover{background:#013E4F}}   /* a step lighter, not the old tile: the block is dark now */
 /* the chevron: down while it is closed, up once it is open, so the control says which way it goes */
 .st-rev-ch{flex:none;width:10px;height:10px;margin-right:4px;border:solid currentColor;
   border-width:0 2px 2px 0;transform:translateY(-3px) rotate(45deg);
@@ -1266,8 +1271,8 @@ html:not(.js) #results[hidden]{display:block!important}
    peak. */
 .st-rev>summary{position:relative;isolation:isolate}
 .st-rev>summary::before,.st-rev>summary::after{content:"";position:absolute;z-index:-1;opacity:0;pointer-events:none}
-.st-rev>summary::before{inset:1px;background:var(--sand)}
-.st-rev>summary::after{inset:-2px;box-shadow:0 0 0 2px var(--blue)}
+.st-rev>summary::before{inset:1px;background:var(--blue)}
+.st-rev>summary::after{inset:-2px;box-shadow:0 0 0 2px var(--sand)}
 #story{overflow-x:clip}
 @media (prefers-reduced-motion:no-preference){
   .motion .st-rev>summary.nudge{animation:st-lean 1000ms cubic-bezier(.3,.6,.3,1) 360ms both}
