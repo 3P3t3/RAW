@@ -1352,6 +1352,18 @@ def main():
                 # "Shop" expecting to browse saw ten plates and a form). Same data-all as the header's link.
                 + f'<!-- DRAFT-COPY --><p class="rk-all"><a class="tlink" href="#results" data-all>Browse all {len(products)} products'
                   '<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p><!-- /DRAFT-COPY -->'
+                # The one line on this tab that reaches Peter's argument (2026-10-08, four critics). The Shop is
+                # Tab 1 and the page a shared link opens, and it carried no bloodwork copy at all: a visitor could
+                # pick a goal, load a plate and ask for a sample without ever learning what separates this shop
+                # from anyone else with the same catalogue. It is a POINTER, not the argument -- the case itself
+                # stays whole on Tab 2 (why_section's .why-arg) -- and it sits at the head of the rack because
+                # this is where "Pick your goal" lands and where the choosing starts. It wears .rk-all, so it
+                # needs no CSS of its own, and unlike .rk-guide it is not hidden without script. A question,
+                # deliberately: bloodwork is never a gate on the shop (Peter's standing rule), so this invites
+                # the reason rather than telling anyone to go and get a panel first. The hero is untouched, so
+                # the film and "Pick your goal" keep their place on the first screen to the pixel.
+                + f'<!-- DRAFT-COPY --><p class="rk-all"><a class="tlink" href="{HOME_PAGE}#why">Why start with bloodwork?'
+                  '<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p><!-- /DRAFT-COPY -->'
                 + '</div></div>\n'
                 '      <div class="rack grow" id="rack">\n        <ul class="rk-plates" role="list">\n'
                 + '\n'.join(plates) +
@@ -1924,6 +1936,14 @@ def why_section():
              which is why it is worded that way and matches the roles line below; supplements stay ungated, which is
              his standing rule ("I don’t want them to have to get bloodwork to try a product or buy a product"). -->
         <p class="why-lead">Bloodwork comes first for any peptide protocol — a clinician needs it before they can decide. For supplements it’s recommended, not required.</p>
+        <!-- The argument's door (2026-10-08, four critics): the three lines above ended and the first pillar
+             card began, and the only way on from the whole case was the quiet .why-go link inside card 01.
+             So the head now carries one clear action, the site's own filled .btn, to {CCRX_PAGE}#panel -- the
+             page, never a provider, because that is where the disclosure sits beside the one link out. The
+             label is card 01's "What the bloodwork is" turned into the site's "See ..." imperative, so it is
+             not word-for-word the link 400px below it. It is a child of .why-head's grid, so its spacing is
+             that grid's own 12px gap and it needs no CSS. -->
+        <a class="btn" href="{CCRX_PAGE}#panel">See what the bloodwork is</a>
       </div>
       <ol class="why-list">
 {items}      </ol>
