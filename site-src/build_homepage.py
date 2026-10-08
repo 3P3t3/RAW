@@ -1942,8 +1942,13 @@ def why_section():
              page, never a provider, because that is where the disclosure sits beside the one link out. The
              label is card 01's "What the bloodwork is" turned into the site's "See ..." imperative, so it is
              not word-for-word the link 400px below it. It is a child of .why-head's grid, so its spacing is
-             that grid's own 12px gap and it needs no CSS. -->
-        <a class="btn" href="{CCRX_PAGE}#panel">See what the bloodwork is</a>
+             that grid's own 12px gap and it needs no CSS.
+             .why-door carries NO styling at all: it is the hook the pinned tab watches (the tab block in
+             _script.html). Without it the tab's own filled "Book a free call" rode at the foot of the window
+             for the whole 1,500px of #why, under this filled button, which is two primary asks on one phone
+             screen -- the one thing every other button on the page (#how-go, .st-book, #consult-go, .mys-acts)
+             is already in that list to prevent. Phones and tablets only; the tab does not exist from 1024. -->
+        <a class="btn why-door" href="{CCRX_PAGE}#panel">See what the bloodwork is</a>
       </div>
       <ol class="why-list">
 {items}      </ol>

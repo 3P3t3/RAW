@@ -390,8 +390,13 @@
              page, never a provider, because that is where the disclosure sits beside the one link out. The
              label is card 01's "What the bloodwork is" turned into the site's "See ..." imperative, so it is
              not word-for-word the link 400px below it. It is a child of .why-head's grid, so its spacing is
-             that grid's own 12px gap and it needs no CSS. -->
-        <a class="btn" href="bloodwork.html#panel">See what the bloodwork is</a>
+             that grid's own 12px gap and it needs no CSS.
+             .why-door carries NO styling at all: it is the hook the pinned tab watches (the tab block in
+             _script.html). Without it the tab's own filled "Book a free call" rode at the foot of the window
+             for the whole 1,500px of #why, under this filled button, which is two primary asks on one phone
+             screen -- the one thing every other button on the page (#how-go, .st-book, #consult-go, .mys-acts)
+             is already in that list to prevent. Phones and tablets only; the tab does not exist from 1024. -->
+        <a class="btn why-door" href="bloodwork.html#panel">See what the bloodwork is</a>
       </div>
       <ol class="why-list">
         <li class="why-card grow" style="--d:1">
@@ -1094,7 +1099,9 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    directly under the calculator, so watching all of it would put the tab away across the
    offer and the disclosure, which is where the visitor decides. Their story (#story) is
    not watched either: the tab rides over it, except while the story's own "Book a free call"
-   is up (.st-book). The form is hidden (no box, so no intersection) once
+   is up (.st-book) and while the argument's own door is (.why-door: added 2026-10-08, after an audit
+   at 390 found the tab's filled "Book a free call" riding under #why's filled "See what the bloodwork
+   is" for 1,500px of scrolling -- the one screen on either tab with two primary asks on it). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
    which sit where the tab does on a phone and go to the same places, "The game plan"'s own
    button (#how-go, "Book a free call" since 2026-10-05), the quick-call buttons (.q-go) and the sample form's Next and Send
@@ -1107,7 +1114,7 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#s-next,#sample-go,.bay-in,.rk-panel,.mys-acts,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.why-door,.q-go,#s-next,#sample-go,.bay-in,.rk-panel,.mys-acts,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
