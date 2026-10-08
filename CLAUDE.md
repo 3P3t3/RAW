@@ -425,6 +425,23 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   to (desktop, phone) object-position. Empty `HOME_BG` draws the palette ground `.hh-ph`. The copy carries its own scrim, so
   readability never depends on the picture: measured on the real photos, lowest 5.43:1 (320/390/768/1440). Both files are
   placed by hand; the build never writes them.
+- **A fact row under each hero (`.hfacts`, 2026-10-08).** Three countable facts, no claim, Peter's own wording and his
+  own middle dots (drawn in CSS between the cells, so a screen reader meets three list items, not punctuation). One row
+  per tab, because the tabs say different things: the Shop's is "100 options · 10 goals · 1 free sample", Our approach's
+  is "1 blood panel · 10 goals · 1 free call" (both DRAFT). **They are not links** — each hero already carries its two
+  ways on and "one ask per phone screen" stands, so the row is there to be read. In both templates it is the LAST row of
+  `.hero-copy`, after `.hero-actions`: that is what keeps the Shop's first screen untouched ("Pick your goal" still ends
+  at 654 of 844 at 390 and 576 of 640 at 320, measured) and what puts the homepage's row inside the hero's own scrim, so
+  it is never read straight off the photograph. Below 480 the Shop's row takes `order:2`, under the lead that the same
+  breakpoint moves below the links. It sets **no colour of its own** and inherits the hero it stands in — `--text` on the
+  Shop's chalk field (5.9–6.6:1), chalk on Tab 1's scrim (8.4–15.3:1), measured on the rendered pixels — so neither row
+  can drift from the copy above it. **The "100" is the one number on the site that is not counted**: `SHOP_OPTIONS` in
+  `build_homepage.py`, hard-coded on Peter's instruction (2026-10-08) because he is curating the catalogue to exactly
+  100 and wants a number that does not drift while he does it. It counts *listings* (flavour variants included), which
+  is why the cell says "options": the 105 rows today are 68 distinct products. While it and `share-links.csv` disagree
+  **every build prints a note** saying so — a note, never a failure, since 105 rows today would otherwise block him —
+  and the footer's "All 105 products" is still counted from the data. **That gap is Peter's decision, already taken: do
+  not reconcile them**, change the constant the day the list is trimmed. The goals are counted from `CATEGORIES`.
 - **The lake through the day (Peter, 2026-10-03):** the same shore three times — dawn in the hero, clear morning as a
   strip at the top of `#why` (`.why-band`, `assets/home/lake-morning.webp`, nothing written on it), and dusk behind the
   call (`.consult-dusk` / `.c-dusk`, `assets/home/lake-dusk.webp`). Both were made with fal kontext/max from the hero's
@@ -474,7 +491,10 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   subscription btw, the ai agent is, but the bloodwork isnt and you dont need to do both." So the panel is a one-off and the
   Valdura app is the optional recurring thing — the plus copy's "You pay for it once — it isn't a subscription" is correct and
   stays, and nothing on either site may imply the panel itself recurs. Avellum's own panel page says the same ("One-time
-  payment, not a subscription"), so it is a verified fact of the plain route too. **Still unverified and flagged to Peter:**
+  payment, not a subscription"), so it is a verified fact of the plain route too — and since 2026-10-08 the plain copy
+  carries it in its own words, scoped to the panel because the app bundled with it is the recurring thing: "The panel
+  itself is a one-time payment, not a subscription." The two CCRX sentences beside it ("No prescription to get first. No
+  appointment to sit through.") are still storefront facts not known of this route and stay out. **Still unverified and flagged to Peter:**
   whether "a licensed clinician reads it" is true of the panel at all — Avellum says the panel needs no telehealth visit, and it is the Valdura app that
   reads results, while the clinician reads the intake for a prescription. Do not change either without Peter confirming.
 - **Providers and guard:** both copies carry the bloodwork route (`#why`, `bloodwork.html`, the "Beyond supplements" menu
