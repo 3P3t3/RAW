@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=d0e1bb39">
+<link rel="stylesheet" href="../style.css?v=90ba7c62">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -604,7 +604,9 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
    directly under the calculator, so watching all of it would put the tab away across the
    offer and the disclosure, which is where the visitor decides. Their story (#story) is
    not watched either: the tab rides over it, except while the story's own "Book a free call"
-   is up (.st-book). The form is hidden (no box, so no intersection) once
+   is up (.st-book) and while the argument's own door is (.why-door: added 2026-10-08, after an audit
+   at 390 found the tab's filled "Book a free call" riding under #why's filled "See what the bloodwork
+   is" for 1,500px of scrolling -- the one screen on either tab with two primary asks on it). The form is hidden (no box, so no intersection) once
    the calendar mounts, which is why the embed is watched too. Also the hero's own two links,
    which sit where the tab does on a phone and go to the same places, "The game plan"'s own
    button (#how-go, "Book a free call" since 2026-10-05), the quick-call buttons (.q-go) and the sample form's Next and Send
@@ -617,7 +619,7 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.q-go,#s-next,#sample-go,.bay-in,.rk-panel,.mys-acts,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.why-door,.q-go,#s-next,#sample-go,.bay-in,.rk-panel,.mys-acts,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
