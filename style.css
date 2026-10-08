@@ -2541,6 +2541,27 @@ body{background:transparent}
 }
 @media (min-width:1024px){.hh-me.sh-me{grid-column:1 / 6}}
 
+/* ---- The fact row under each hero (.hfacts, 2026-10-08): three countable facts, Peter's own wording
+   on each tab ("100 options · 10 goals · 1 free sample" on the Shop, "1 blood panel · 10 goals ·
+   1 free call" on Our approach). It is a list, not a row of buttons: nothing in it is a link, because
+   the hero already carries its two ways on and one ask per screen stands. Peter's middle dots are the
+   separator, drawn by CSS between the cells rather than typed into the copy, so a screen reader meets
+   three list items and not punctuation.
+   It takes NO colour of its own: as the last row of .hero-copy it inherits whatever the hero it stands
+   in sets -- the page's own --text on the Shop's chalk field, chalk inside Tab 1's scrim -- so each row
+   suits its own ground and neither can drift from the copy above it. Quiet by size and weight next to
+   the button: 14px, 500, the numbers tabular so the three cells sit on one rhythm.
+   It wraps cell by cell, so at 320 it can take two lines rather than widen the page; each cell holds
+   its own number and word together (white-space:nowrap), which is why a cell never breaks mid-fact. */
+.hfacts{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;margin:2px 0 0;padding:0;list-style:none;
+  font:500 14px/1.5 var(--sans);font-variant-numeric:tabular-nums}
+.hfacts li{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
+.hfacts li + li::before{content:"\00B7"}   /* Peter's middle dot, between the cells and nowhere else */
+@media (min-width:768px){.hfacts{gap:4px 14px;font-size:15px}.hfacts li{gap:14px}}
+/* below 480 the Shop's lead already moves under the two ways on (order:1 on .sub), so the row takes
+   the step after it and stays the copy's last line at every width */
+@media (max-width:480px){.hero-shop .hfacts{order:2}}
+
 /* ---- "Understand why" (#why, why_section() in build_homepage.py): a lead, four pillars, who does what */
 /* the morning lake as a strip at the top of #why, flush under the story: nothing is written on it. Steered
    to the horizon, so the wide desktop strip crops the sun away and a phone shows nearly the whole frame. */

@@ -130,6 +130,21 @@ CCRX_PANEL_FREE = 'I don’t make anything on the panel.'   # PETER-COPY, and TR
                                     # words, or set it to '' to drop it. The clause that follows it ("If a
                                     # clinician ends up prescribing...") is about the prescription and holds
                                     # either way, so it lives in the copy and not up here.
+# ---- the one number on the site that is NOT counted ------------------------------------------
+# The Shop hero's fact row reads "<SHOP_OPTIONS> options · <n> goals · 1 free sample" (Peter's own
+# wording). Every other number on the site is counted from the data; this one is HARD-CODED, on
+# Peter's instruction (2026-10-08): he intends to curate the catalogue down to exactly this many and
+# wants a number that does not drift under him while he does it.
+# WHAT IT COUNTS: the listings a visitor can pick from -- what share-links.csv has a row for, flavour
+# variants included. That is why the cell says "options" and not "products": the 105 rows today are
+# really 68 distinct products, the rest being flavours of them.
+# WHEN TO CHANGE IT: the day share-links.csv is trimmed (or added to), change this one line to match.
+# Nothing else reads it and nothing derives it. While it and the row count disagree, every build
+# prints a note (the end of main()) -- a note, never a failure: Peter has 105 rows today and a hard
+# stop would block him. The footer's "All N products" is counted from the data and is untouched, so
+# until the catalogue is curated the hero says SHOP_OPTIONS and the footer says the real count. That
+# gap is Peter's decision, already taken (2026-10-08); do not try to reconcile them.
+SHOP_OPTIONS = 100
 PLUS_DIR = 'plus'  # the folder the CCRX copy builds into. Peter has not named it yet: rename it here
                    # (and in the one .gitattributes line) and the whole copy moves with it
 PLUS = False       # set for the build's second pass, the one that writes PLUS_DIR/
@@ -1492,6 +1507,8 @@ def main():
               '{{SCRIPT}}': script,
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)),
               '{{TOTAL_PRODUCTS}}': plural(len(products), 'product', zero='products'), '{{CONSULT_URL}}': CONSULT_URL,
+              # the two heroes' fact rows: the shelves are counted, the options are not (SHOP_OPTIONS)
+              '{{SHOP_OPTIONS}}': str(SHOP_OPTIONS), '{{GOAL_COUNT}}': str(len(CATEGORIES)),
               '{{BASE}}': BASE}
     # "Pick from the shelves", beside the sample form's product blank: the shelves as small plates in their
     # rack colours; the script lists the one tapped's products from the homepage grid's tiles (data-shelves,
@@ -1734,6 +1751,17 @@ def main():
     guard_root()  # belt and braces: the files at the root that this build did not write
     print(f'{len(products)} products ({sum(1 for pr in products if pr["img"])} with photos) -> {OUT}')
     print('categories', counts, 'uncategorised', [pr['product'] for pr in products if pr['product'] not in cat_of])
+    if len(products) != SHOP_OPTIONS:
+        # NOT a failure: SHOP_OPTIONS is hard-coded on purpose (see the constant) and Peter has 105
+        # rows today, so a hard stop would block him. This note is how the gap stays impossible to forget.
+        print(f'\n!! NOTE (nothing failed): the Shop\'s fact row says {SHOP_OPTIONS} options but '
+              f'share-links.csv has {len(products)} rows.\n'
+              f'!! SHOP_OPTIONS = {SHOP_OPTIONS} in site-src/{os.path.basename(__file__)} is hard-coded on '
+              f'Peter\'s instruction (he is curating\n'
+              f'!! the catalogue to exactly {SHOP_OPTIONS}); change that one line the day share-links.csv is '
+              f'trimmed to match.\n'
+              f'!! Until then the Shop hero says {SHOP_OPTIONS} and the footer says '
+              f'"All {len(products)} products" from the real count.')
 
 
 def provider():
@@ -1967,8 +1995,9 @@ TASSO = 'It’s collected at home with a Tasso — a small device you press on y
 def bw_parts():
     """The pieces of CCRX_PAGE that differ by provider. The CCRX copy keeps every sentence it had,
     word for word. The plain site's Avellum version drops only what was a fact about CCRX's storefront
-    and is not known of Avellum Health's own (the at-home kit, the one-off payment, the pre-order, the
-    28-day refill) and says nothing in its place; the rest is the same page. The provider buttons are
+    and is not known of Avellum Health's own (the at-home kit, the pre-order, the 28-day refill) and says
+    nothing in its place; the rest is the same page. The one-off payment came back on 2026-10-08, in this
+    copy's own words: Avellum's own panel page states it, so it is a verified fact of this route too. The provider buttons are
     "Coming soon" labels while their link is empty."""
     pv = provider()
     ccrx = pv['kind'] == 'ccrx'
@@ -1990,6 +2019,14 @@ def bw_parts():
         panel = ('        <p>It’s bloodwork: a lab panel of your biomarkers, measured from your own blood. You reach it '
                  'through Avellum Health; the panel itself is Valdura’s, and your results are read in their app.</p>\n'
                  f'        <p>{TASSO}</p>\n'
+                 # 2026-10-08: the one-off is now verified of this route too -- Avellum's own panel page states
+                 # "One-time payment, not a subscription", and Peter confirmed it ("its not a subscription btw, the
+                 # ai agent is, but the bloodwork isnt and you dont need to do both"). So this ONE point comes
+                 # across from the CCRX copy, in this copy's own voice and scoped to the panel, because the app
+                 # bundled with it is the recurring thing and its terms are Valdura's to state, not ours. The two
+                 # sentences beside it in the CCRX copy ("No prescription to get first. No appointment to sit
+                 # through.") are still CCRX storefront facts and stay out.
+                 '        <p>The panel itself is a one-time payment, not a subscription.</p>\n'
                  '        <p>What the panel measures, how the sample is taken, what it costs and what comes with it are all '
                  'listed on their site.</p>')
         refill = ''

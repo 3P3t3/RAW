@@ -71,6 +71,25 @@
           <a class="btn" href="#goals">Pick your goal</a>
           <a class="tlink" href="#sample">Ask for a free sample</a>
         </div><!-- /DRAFT-COPY -->
+        <!-- The fact row (2026-10-08), Peter's own wording and his own middle dots, which the
+             separator between the cells draws (style.css, .hfacts). Three countable facts and no
+             claim: a critic's point was that numbers earn trust where adjectives cannot, and unlike
+             most trust devices a counted fact cannot fall foul of Peter's copy rules.
+             NOT LINKS, deliberately: the hero already carries its two ways on and "one ask per phone
+             screen" stands, so this row is there to be read, quiet and plainly subordinate to the
+             button above it. It is the copy's LAST row, after .hero-actions, so it cannot move the
+             film or "Pick your goal" on the first screen (measured: 654 of 844 at 390, 576 of 640 at
+             320, both unchanged); below 480 it takes order:2 so it stays under the lead that the same
+             breakpoint moves below the links. The signature (.sh-me) is still the hero's last word.
+             The count of options is SHOP_OPTIONS in build_homepage.py -- the one number on the site
+             that is hard-coded rather than counted, on Peter's instruction; the goals are counted
+             from CATEGORIES. -->
+        <!-- DRAFT-COPY: Peter's row, verbatim -->
+        <ul class="hfacts">
+          <li>{{SHOP_OPTIONS}} options</li>
+          <li>{{GOAL_COUNT}} goals</li>
+          <li>1 free sample</li>
+        </ul><!-- /DRAFT-COPY -->
       </div>
       <div class="hh-me sh-me">
         <img src="assets/peter/hero-pair-240.webp" width="240" height="300" alt="Peter holding their baby daughter" decoding="async">
