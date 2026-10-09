@@ -620,6 +620,38 @@ SAMPLE_TO = '9d3394db0b2af4dec0b04a4788aa6283'
 # the repo from a subpath, so the trailing slash matters. Move to a custom domain and this
 # one line is the whole change — nothing else hardcodes the host.
 BASE = 'https://3p3t3.github.io/RAW/'
+# PostHog (2026-10-09, Peter: "can we add in posthog?"). Their wizard (`npx @posthog/wizard`) is built for
+# npm framework projects: this repo has no package.json, its whole build is one Python script, and anything
+# written straight into a generated page is gone on the next build. So analytics goes through the build like
+# everything else -- {{ANALYTICS}}, in `shared`, filled into the head of every page of BOTH published copies
+# at once. They report to the same project and are told apart by path (/RAW/ and /RAW/plus/).
+# POSTHOG_KEY is the PROJECT token (phc_...), which is public by design and belongs in the page source.
+# A PERSONAL key (phx_...) is a secret and must NEVER be put in this repo or in any page; analytics() exits
+# the build if it is given one. An empty key emits nothing anywhere and leaves the output byte for byte as
+# it was -- that is how this ships until Peter pastes his token, which is a one-line change and a rebuild.
+POSTHOG_KEY = ''                                                   # 'phc_...' from PostHog > Project settings; empty = all off
+POSTHOG_HOST = 'https://us.i.posthog.com'  # or https://eu.i.posthog.com. The loader derives the assets
+                                           # host from it by itself (.i. -> -assets.i.), so this is the
+                                           # only place a region is named.
+# Session replay records the visitor's screen. The free-sample form on the Shop is LIVE and a visitor types
+# their name and what they are after into it, so replay is OFF until Peter asks for it. The snippet says so
+# explicitly rather than leaving it to the project's own setting, so the page cannot start recording because
+# a toggle moved somewhere else.
+POSTHOG_REPLAY = False
+
+def analytics(loader):
+    """The PostHog snippet for the page head, or nothing at all. `loader` is site-src/_posthog.js, which is
+    PostHog's own current snippet copied from their docs and not edited -- replace that file wholesale when
+    they publish a new one. Never on a demo export: a preview must not report itself as the live site."""
+    if DEMO or not POSTHOG_KEY:
+        return ''
+    if not POSTHOG_KEY.startswith('phc_'):
+        raise SystemExit('POSTHOG_KEY must be a project token (phc_...). A phx_ personal key is a secret '
+                         'and must never be published in a page.')
+    return ('<script>\n' + loader.strip() + '\n'
+            + "posthog.init('%s',{api_host:'%s',defaults:'2026-05-30',disable_session_recording:%s})"
+              % (POSTHOG_KEY, POSTHOG_HOST, 'false' if POSTHOG_REPLAY else 'true')
+            + '\n</script>\n')
 
 SAMPLE_ENDPOINT = 'https://formsubmit.co/ajax/' + SAMPLE_TO
 SAMPLE_ACTION = 'https://formsubmit.co/' + SAMPLE_TO
@@ -1527,7 +1559,7 @@ def main():
               '{{CCRX}}': ccrx_block(),  # the bloodwork route, both copies; after {{FOOTER}}, where it sits
               '{{CCRX_MENU}}': ccrx_menu(),  # and after {{DIALOGS}}, which is where that one sits
               '{{FDA_SCOPE}}': '',  # in the footer too: empty on every page but CCRX_PAGE (ccrx_fda_scope)
-              '{{SCRIPT}}': script,
+              '{{SCRIPT}}': script, '{{ANALYTICS}}': analytics(part('_posthog.js')),
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)),
               '{{TOTAL_PRODUCTS}}': plural(len(products), 'product', zero='products'), '{{CONSULT_URL}}': CONSULT_URL,
               # the two heroes' fact rows: the shelves are counted, the options are not (SHOP_OPTIONS)

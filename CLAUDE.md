@@ -851,6 +851,37 @@ placeholder, `assets/bg-mens-health.webp` (the Men's Pack on a green field), is 
 fitting shelf stays out of `share-links.csv` altogether: the homepage grid, search and the sample
 form list every row, so a row on no shelf still shows up there, tagged "Wellness".
 
+## Analytics: PostHog (2026-10-09)
+
+Peter: *"can we add in posthog?"*, with `npx -y @posthog/wizard@latest`. **The wizard was not used and should
+not be**: it is built for npm framework projects, and this repo has no `package.json`, its whole build is one
+Python script, and anything it wrote into a generated page would be gone on the next build. It also needs a
+PERSONAL key (`phx_...`) or a browser login to Peter's own PostHog account, which is his to give, not mine.
+
+Analytics goes through the build like everything else: **`{{ANALYTICS}}`**, in `shared`, filled into the head of
+every page of **both** published copies at once. The two report to the same project and are told apart by path
+(`/RAW/` and `/RAW/plus/`). `index.html` is hand-written and carries nothing, which is right — it redirects at once.
+
+- **`site-src/_posthog.js`** is PostHog's own current loader, copied from their docs and **not edited**. When they
+  publish a new one, replace that file wholesale. It is read by `part()` like every other partial.
+- **`POSTHOG_KEY`** is the **project** token (`phc_...`): public by design, and it belongs in the page source. A
+  **personal** key (`phx_...`) is a secret and must never be in this repo or in a page — `analytics()` **exits the
+  build** if it is handed one (verified). **It is empty today**, which emits nothing anywhere and leaves the output
+  byte for byte as it was (verified: `shop.html` has the same md5 before and after a rebuild). Pasting the token is
+  a one-line change and a rebuild.
+- **`POSTHOG_HOST`** is the only place a region is named; the loader derives the assets host itself
+  (`.i.` → `-assets.i.`). **`POSTHOG_REPLAY = False`**: session replay records the visitor's screen, and the
+  free-sample form on the Shop is LIVE and takes a visitor's name and what they are after. The snippet writes
+  `disable_session_recording` explicitly rather than leaving it to the project's own setting, so the page cannot
+  start recording because a toggle moved somewhere else. Turning it on is Peter's call.
+- **Never on a demo export** (`if DEMO`): a preview must not report itself as the live site.
+- Verified with a throwaway `phc_` token on `shop.html`, `homepage.html` and `plus/shop.html`: the stub installs,
+  `init` queues with the right token and config, the snippet sits inside `<head>`, and the page still works. Test
+  with `*.posthog.com` mapped to 127.0.0.1 in Chrome's resolver so nothing leaves the machine.
+- **Not done, and Peter's to decide:** there is no consent banner on the site. PostHog sets a cookie and
+  autocapture records clicks and the text of what was clicked (not what is typed into a field). For US traffic
+  that is normally fine; EU visitors are a different question. Raise it with him rather than adding a banner.
+
 ## Build
 
     python3 site-src/build_homepage.py     # from the repo root
