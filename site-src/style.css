@@ -1949,6 +1949,17 @@ html:not(.js) .lbpin{display:none}
 .rk-disc::before{content:"";position:absolute;inset:8.5%;border-radius:50%;background:rgba(0,0,0,.05);
   box-shadow:inset 0 max(1.5px,1.7cqi) max(1.5px,1.5cqi) rgba(0,0,0,.36),inset 0 min(-1.5px,-1.2cqi) 0 rgba(255,255,255,.2),
     0 min(-1px,-1cqi) 0 rgba(0,0,0,.18),0 max(1.5px,1cqi) 0 rgba(255,255,255,.2)}
+/* A light plate carries its name in INK, and the rim's top shade falls exactly where the name sits, so
+   the one thing that gives a dark plate its margin takes it away from a light one. Measured under the
+   glyphs themselves (2026-10-09): hydration went 7.12:1 flat to 3.00:1 rendered, a ratio of 0.42, where
+   every white-text plate held 0.62-1.02. That is a pre-existing failure, not a new one — it is why the
+   rack could never carry a saturated light plate. On the ink plates only (.is-light, set by the build
+   from plate_ink) the top shade is halved and the face keeps a touch of its own colour; the rest of the
+   rim — the bottom highlight, the outer step — is untouched, so the plate still reads as a moulded
+   bumper. Re-measure the whole rack if this number moves. */
+.rk-plate.is-light .rk-disc::before{background:rgba(255,255,255,.04);
+  box-shadow:inset 0 max(1.5px,1.7cqi) max(1.5px,1.5cqi) rgba(0,0,0,.17),inset 0 min(-1.5px,-1.2cqi) 0 rgba(255,255,255,.22),
+    0 min(-1px,-1cqi) 0 rgba(0,0,0,.12),0 max(1.5px,1cqi) 0 rgba(255,255,255,.22)}
 /* the hub: the machined steel insert standing proud of the rubber, with its six bolt heads on a
    circle. It is the one thing a record has not got, and it is what tells the two apart at a glance;
    the bore through it is a dark steel tube now, not the bright spindle hole it used to be. */

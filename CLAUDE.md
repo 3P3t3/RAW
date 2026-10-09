@@ -694,6 +694,43 @@ of each panel, so ids and aria stay single and Tab still goes plate → its pane
 points at the plate. `show()` brings the plate and its packs into view together when they fit, otherwise the
 whole panel (Peter, 2026-09-28: tapping a plate must show "where the items actually are").
 
+**The plate colours, rebuilt (2026-10-09).** Peter: *"shouldnt we add some more distincitive plate colors? like
+yellow is a common one, but instead we have 2 versions of tan and 2 versions of brown and 2 versions of green."* He
+was right, and the audit found worse than he could see. **The palette had only ever been held to two gates** — text
+must read on a plate (`plate_ink()`, which exits the build) and no two plates may look like the same mark at chip
+size — and **nothing ever asked the ten to be far apart**, so a set of muted earth tones passed both and the rack
+came out tan. Measured on the old ten: **two pairs were under the 6 floor the code's own comment claimed** — Daily
+Foundations vs Men's green at **3.2 under a protan eye** (that is Peter's "two greens": brown and green collapse
+together) and Fat Loss vs Daily Foundations at **3.8** — six pairs were under 8, and only 2 of 10 plates carried any
+real chroma. Three plates moved, and the reasoning is in the `PLATES` comment:
+`energy-focus #E2C8AE -> #F0C505` (the yellow the rack was missing — real bumpers run red 25, blue 20, YELLOW 15,
+green 10, white 5, and the rack is pretending to be competition bumpers), `fat-loss #8A543E -> #9D2C07` (a rust, out
+of the brown cluster) and `daily-foundations #6B5646 -> #D9B081` (a warm wheat — the plate that broke the floor twice,
+and **the fix has to be LIGHTNESS, not hue**: a protan or deutan eye loses the red-green axis, which is exactly where
+brown and green differed). Result: **worst separation 3.2 -> 7.4, pairs under 6 two -> none, pairs under 8 six -> one,
+worst flat contrast 6.14 -> 7.12, chroma above 30 two of ten -> five of ten.** **A third gate is now in force —
+SPREAD** — so keep all three when a plate moves: flat contrast through `plate_ink`, >=6 (aim 8) separation under a
+normal, deutan AND protan eye, and don't let the ten drift back into one muted band.
+
+**Ink plates need a softer rim (`.is-light`, 2026-10-09).** A light plate carries its name in ink, and the rim's top
+inner shade falls **exactly where the name sits** — so the one thing that gives a dark plate its margin takes it away
+from a light one. Measured under the glyphs themselves: every white-text plate kept **0.62-1.02** of its flat ratio,
+while the ink plates kept **0.39-0.72**, and the new yellow rendered at **4.09:1, under the floor**. The build now adds
+`is-light` to a plate whose `plate_ink()` is not white, and `style.css` halves that plate's top shade (nothing else
+about the rim changes, so it still reads as a moulded bumper). With it the yellow is **6.83** and **all ten clear 4.5:1,
+worst 5.78** (Women's Health; Hydration 5.85, Everyday 5.95, Men's 6.02, Daily Foundations 6.26, Fat Loss 6.28,
+Recovery 6.50, Energy & Focus 6.83, Skin Redefined 8.21, Protein 10.79) across 390/820/1440 at 1x and 2x. **This is
+what lets the rack carry a saturated light plate at all** — do not drop it without re-measuring every plate.
+
+**How to measure a plate, and the two traps.** Screenshot the rack twice, once normally and once with
+`color:transparent` **and `text-shadow:none`** on `.rk-name`/`.rk-line`/`.rk-on` (the name is moulded with explicit
+rgba shadows, so hiding the colour alone leaves them painting and you measure the letters against their own edge),
+diff the two to get the glyph pixels, then read the hidden shot at exactly those pixels. **Trap one: never measure the
+element's box.** A plate is a circle in a square box, so `.rk-line`'s rectangle runs off the disc at the bottom corners
+and samples the page. **Trap two: scroll clear of the fixed chrome.** `--mh` plus `--pin` of masthead and pinned strip
+sit over the top row, and measuring through them reported Hydration at 3.00:1 and had me tell Peter the live site was
+broken. It was not — Hydration was 5.06 before today and is 5.85 now. The script is `scratchpad/rendered2.py`.
+
 **A plate landing on the bar (2026-10-09).** Peter asked for an animation when a plate "pops onto the bar", and
 for options 1 (slide onto the shaft) and 3 (the bar takes the weight). **Both were already built** — the find is
 worth keeping, because the instinct on seeing nothing is to write a third one. A plate parks `(--n + --off)`

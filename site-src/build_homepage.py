@@ -340,9 +340,31 @@ CASE_PICKS = 3  # packs an open compartment shows: one per family, in the shelf'
 # hidden, the face screenshotted, every pixel in its two lines' text line boxes), white's lowest is 5.89 at
 # 390, 7.68 at 820 and 5.78 at 1440 at 1x, and 5.50 / 7.55 / 5.53 at 2x; under the glyphs alone 5.84-7.80.
 # The same sweep puts Men's at 4.68 and Women's at 4.51 at their lowest (both at 2x).
+# 2026-10-09, Peter: "shouldnt we add some more distincitive plate colors? like yellow is a common one,
+# but instead we have 2 versions of tan and 2 versions of brown and 2 versions of green". He was right, and
+# the audit found worse than he could see. The palette had only ever been held to two gates — text must
+# read on a plate (plate_ink, below, which exits the build), and no two plates may look like the same mark
+# at chip size. NOTHING ever asked the ten to be far apart, so a set of muted earth tones passed both and
+# the rack came out tan. Measured on the old ten: TWO pairs were under the 6 floor the comment itself
+# claimed — Daily Foundations vs Men's green at 3.2 under a protan eye (that is Peter's "two greens": the
+# brown and the green collapse together), and Fat Loss vs Daily Foundations at 3.8 — six pairs were under
+# 8, and only 2 of 10 plates carried any real chroma. Three plates moved:
+#   Energy & Focus  #E2C8AE -> #F0C505   the yellow the rack was missing. Real bumpers run red 25, blue 20,
+#                                        YELLOW 15, green 10, white 5, and the rack is pretending to be
+#                                        competition bumpers. Ink on it reads 9.24:1 flat.
+#   Fat Loss        #8A543E -> #9D2C07   out of the brown cluster into a rust. White 7.51:1 flat.
+#   Daily Founds.   #6B5646 -> #D9B081   a warm wheat. It is the plate that broke the floor twice, and the
+#                                        fix has to be LIGHTNESS, not hue: a protan or deutan eye loses the
+#                                        red-green axis, which is exactly where brown and green differed.
+#                                        At L* 74 it is 15.2 from everything. Ink 7.63:1 flat; the old brown
+#                                        was 6.90, the weakest on the rack.
+# The third gate is new and is why this holds: SPREAD. Worst separation 3.2 -> 7.4, pairs under 6 two -> none,
+# pairs under 8 six -> one, worst flat contrast 6.14 -> 7.12, chroma above 30 two of ten -> five of ten.
+# Keep all three gates when a plate moves: flat contrast through plate_ink, >=6 (aim 8) separation under a
+# normal, deutan and protan eye, and don't let the ten drift back into one muted band.
 PLATES = {
-    'recovery': ('#3D4794', 4), 'hydration': ('#93B7C0', 2), 'energy-focus': ('#E2C8AE', 3),
-    'protein': ('#1E262F', 0), 'fat-loss': ('#8A543E', 5), 'daily-foundations': ('#6B5646', 1),
+    'recovery': ('#3D4794', 4), 'hydration': ('#93B7C0', 2), 'energy-focus': ('#F0C505', 3),
+    'protein': ('#1E262F', 0), 'fat-loss': ('#9D2C07', 5), 'daily-foundations': ('#D9B081', 1),
     'skin-redefined': ('#D6D4C9', 6), 'womens-health': ('#76485F', 7),
     'mens-health': ('#39594A', 8), 'everyday-health': ('#80222F', 9),
 }
@@ -1339,7 +1361,8 @@ def main():
         for i, (slug_, name, tag, heading, fams) in enumerate(CATEGORIES):
             col, rank = PLATES[slug_]
             plates.append(
-                f'          <li><button class="rk-plate" type="button" id="rk-{slug_}" aria-pressed="false" aria-controls="rk-p-{slug_}" '
+                f'          <li><button class="rk-plate{" is-light" if plate_ink(col) != "#FFFFFF" else ""}" type="button" '
+                f'id="rk-{slug_}" aria-pressed="false" aria-controls="rk-p-{slug_}" '
                 f'data-cat="{slug_}" data-rank="{rank}" style="--c:{col};--t:{plate_ink(col)}">'
                 f'<span class="rk-disc" aria-hidden="true"><span class="rk-hole"></span></span>'
                 f'<span class="rk-name">{name}</span><span class="rk-line" aria-hidden="true">{SHELF_LINE[slug_]}</span>'
