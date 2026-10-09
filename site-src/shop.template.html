@@ -61,8 +61,12 @@
     <div class="wrap hero-in">
       <div class="glass">
         <video id="glass-video" muted loop playsinline preload="none" poster="assets/glass-poster.webp" width="1080" height="1080" aria-hidden="true"></video>
-        <!-- no play/pause control on the hero film (Peter, 2026-10-09). What stops it is
-             prefers-reduced-motion, which _script.html reads before it ever calls play(). -->
+        <!-- The film's play/pause: out of the way until it is wanted (Peter, 2026-10-09, "do the hover
+             one"). It is always in the DOM and always in the Tab order, and style.css fades it in on a
+             hover over the film or on its own focus ring, so a keyboard reaches it the moment it is
+             focused. It is NOT display:none or visibility:hidden at rest, which would take it out of
+             the Tab order and leave nothing to reach. -->
+        <button class="icon-btn glass-toggle" id="glass-toggle" type="button" aria-label="Pause animation" hidden><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>
       </div>
       <div class="hero-copy">
         <p class="label">Sports nutrition &amp; wellness</p>

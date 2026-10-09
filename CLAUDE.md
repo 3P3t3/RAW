@@ -378,14 +378,19 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   `#pcard`: `PETER_PICKS` maps shelf → product and the build exits on a name that is not in `share-links.csv`.
   The shop hero's headline steps down at ≤480px and its lead moves below the links (CSS `order`), so "Pick your goal" ends
   at 654 of 844 at 390 and 576 of 640 at 320 (it was 799 and 723); the square film is untouched.
-  **The film has no play/pause control (Peter, 2026-10-09: "Can we remove the play and pause button for the hero
-  video?").** `.glass-toggle`, its CSS and `userPaused` are all gone. He was told first what it was for — WCAG 2.2.2
-  asks for a visible way to stop motion that starts by itself and runs over five seconds, and this film loops — and
-  it is his call on his own site, recorded here: **do not put it back without asking him.** What carries the load
-  instead, and must stay: `prefers-reduced-motion` is read **before `play()` is ever called**, so a visitor who has
-  asked their system for less motion gets the poster and the mp4 is never fetched (verified: no `src` at all); the
-  film is muted with no audio track, so it owes no captions; and it pauses itself off screen and in a background
-  tab. The `#i-play` / `#i-pause` icons stay in the sprite — the islands carousel's own toggle still uses them.
+  **The film's play/pause is out of the way, not gone** (Peter, 2026-10-09: "Can we remove the play and pause button
+  for the hero video?", then, offered a hover-only version, "do the hover one"). `.glass-toggle` is always in the DOM
+  and always in the Tab order; at rest it is `opacity:0;pointer-events:none`, and it fades in on a hover anywhere over
+  `.glass` or on its own `:focus-visible`. **Never swap that for `display:none` or `visibility:hidden`** — either takes
+  it out of the Tab order, and this is the page's one way to stop motion that starts by itself and runs over five
+  seconds (WCAG 2.2.2; the film loops). On `(hover:none)` it simply **stays visible**: there is no hover and no
+  keyboard there, and an unreachable control is worse than none. Measured: at rest `0 / none`, hovering the film
+  `1 / auto`, mouse away `0 / none` again, keyboard focus `1` with `:focus-visible` matching, and the click still
+  pauses and relabels. Three other things carry the same load and must stay: `prefers-reduced-motion` is read
+  **before `play()` is ever called**, so a visitor who has asked their system for less motion gets the poster and the
+  mp4 is never fetched (verified: no `src` at all); the film is muted with no audio track, so it owes no captions; and
+  it pauses itself off screen and in a background tab. **Testing it needs `#top` on the URL** or the curtain covers
+  the hero and every hover lands on `.intro-stage`.
   **At the shop hero's FOOT, since 2026-10-05, Peter signs it**: the same `.hh-me` block Tab 1's hero carries — his 60px
   photograph (`assets/peter/hero-pair-240.webp`) and his PETER-COPY line verbatim — with the homepage hero's own "See how
   we did it" (→ `homepage.html#story`) beside it. Three critics found that the page the site opens on never said whose
@@ -771,20 +776,28 @@ not an em, is the lesson**: anything sized off `.bb`'s font-size disappears on t
 **The plate flies to the bar (`fly()` in `_script.html`, 2026-10-09).** What Peter actually meant: *"the entire
 plate that we select moves from where we have it to our stack up above"* — the option I had argued against. He was
 right to want it. A copy of the rack plate is flown, `position:fixed` on `<body>`, from where it stands to where it
-will sit on the pinned strip, over **620ms**, shrinking and **narrowing to the strip plate's own 3-5px sliver** —
-the rack draws a plate face on and the bar draws it side on, and the flight is the turn between them. The strip's
+will sit on the pinned strip, over **620ms**, shrinking and **turning edge-on to the strip plate's own 3-5px
+sliver** — the rack draws a plate face on and the bar draws it side on, and the flight is the turn between them. The strip's
 own plate is held back (`opacity:0`, `transition:none`) while the copy is in the air and revealed at **86%**, so the
 two cross over instead of one blinking out before the other lands. Measured: **143px of travel at 390, 261px at
 1440**, both monotonic, final width 3px and 5px against strip plates of 3.89px and 4.75px.
 - **It is strictly an extra.** `fly()` returns false — and every caller falls back to the slide — when reduced
   motion is set, when the strip is not up, when the rack plate is off screen, or when the destination has no box.
   Verified: with the strip down the plate still lands, nothing is left hidden, no copy is left behind, no errors.
-- **Three things cost real time to get right, so do not undo them.** (1) The landing point carries **no scale
-  term**: `transform-origin` is the centre, so scaling does not move the centre, and multiplying it in put the copy
-  down in the wrong place. (2) The turn is **`scaleX`, not a 3D `rotateY`** — `perspective()+rotateY` decomposes to
-  a matrix between keyframes, and the copy wandered sideways and stopped shrinking; `scale3d` interpolates
-  componentwise. (3) The easing is **`cubic-bezier(.42,0,.58,1)`**; the first one tried, `cubic-bezier(.36,.02,.2,1)`,
-  put the plate at the bar by 40% of the duration and left the rest of the flight empty.
+- **It is a real 3D turn, and the way it is built is the point** (Peter: *"does the plate turn as it goes? if it
+  just floats up to the bar that may read kind of tacky"*). The first version narrowed it with `scaleX`, which held a
+  circle for the first half and then squashed flat at the end — a squash, not a turn. **The two jobs are split across
+  two elements**: `perspective` is a CSS PROPERTY on the wrapper, the wrapper animates translate + **uniform** scale
+  so the disc stays a disc, and the cloned plate inside animates `rotateY` alone. Each keeps a single, same-shaped
+  transform list and interpolates componentwise. Putting `perspective()` and `rotateY()` in ONE list with translate
+  and scale is what made the earlier attempt decompose to a matrix and send the copy wandering sideways. The turn
+  foreshortens — the hub and the lettering compress, the near edge reads larger — which `scaleX` can never do. The
+  angle is **computed, not chosen**: `acos(dr.width / (sr.width * sy))`, capped at 86°, so the copy's width lands on
+  the strip plate's own (83° at 390).
+- **Two more things cost real time, so do not undo them.** The landing point carries **no scale term**:
+  `transform-origin` is the centre, so scaling does not move the centre, and multiplying it in put the copy down in
+  the wrong place. And the travel easing is **`cubic-bezier(.42,0,.58,1)`**; the first one tried,
+  `cubic-bezier(.36,.02,.2,1)`, put the plate at the bar by 40% of the duration and left the rest of the flight empty.
 - The destination's rect is read with its **transition suppressed**, or it is read a third of the way through its
   own slide. A real-time `setTimeout` tidies the copy away if the tab is backgrounded mid-flight — **stub
   `setTimeout` before stepping the animation by hand**, or that timer removes the copy while you are looking at it

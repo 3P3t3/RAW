@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=ed29422f">
+<link rel="stylesheet" href="style.css?v=978fdefc">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -483,24 +483,29 @@ if(html.classList.contains('motion')){
 })();
 
 /* Hero glass video: plain H.264, so it plays everywhere; the poster shows until it does.
-   NO PLAY/PAUSE CONTROL (Peter, 2026-10-09: "Can we remove the play and pause button for the hero
-   video?"). He was told first what it was for — WCAG 2.2.2 asks for a visible way to stop motion that
-   starts by itself and runs over five seconds, and this film loops — and it is his call on his own site,
-   so do not put it back without asking him. What remains, and must stay: prefers-reduced-motion is read
-   BEFORE play() is ever called, so a visitor who has asked their system for less motion gets the poster
-   and the file is never even fetched; the film is muted, carries no sound and no captions to owe; and it
-   pauses itself off screen and in a background tab. `userPaused` went with the button — nothing can set
-   it any more — and the #i-play / #i-pause icons stay in the sprite because the islands carousel's own
-   toggle still uses them. */
-var v=$('#glass-video');
+   THE PLAY/PAUSE CONTROL IS OUT OF THE WAY, NOT GONE (Peter, 2026-10-09: "Can we remove the play and
+   pause button for the hero video?", then "do the hover one"). It is always in the DOM and always in the
+   Tab order; style.css fades it in on a hover over the film or on its own focus ring, and leaves it
+   showing on a device with no hover, where there would otherwise be no way to reach it. Do not swap that
+   for display:none or visibility:hidden — either takes it out of the Tab order, and this is the page's
+   one way to stop motion that starts by itself and runs over five seconds (WCAG 2.2.2; the film loops).
+   Three other things carry the same load and must stay: prefers-reduced-motion is read BEFORE play() is
+   ever called, so a visitor who has asked their system for less motion gets the poster and the file is
+   never even fetched; the film is muted, with no sound and so no captions to owe; and it pauses itself
+   off screen and in a background tab. */
+var v=$('#glass-video'),vt=$('#glass-toggle'),userPaused=false;
 if(v){
   var still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var setBtn=function(playing){vt.setAttribute('aria-label',playing?'Pause animation':'Play animation');$('use',vt).setAttribute('href',playing?'#i-pause':'#i-play')};
   var play=function(){if(!v.getAttribute('src')){v.autoplay=true;v.src=innerWidth<768?'assets/glass-720.mp4':'assets/glass-1080.mp4'}var p=v.play();if(p&&p.catch)p.catch(function(){})};
-  v.addEventListener('error',function(){v.removeAttribute('src');v.load()},true);
+  v.addEventListener('play',function(){setBtn(true)});v.addEventListener('pause',function(){setBtn(false)});
+  vt.hidden=false;setBtn(false);
+  v.addEventListener('error',function(){v.removeAttribute('src');v.load();vt.hidden=true},true);
+  vt.addEventListener('click',function(){if(v.paused){userPaused=false;play()}else{userPaused=true;v.pause()}});
   if(!still){
     if(doc.readyState==='complete')play();else window.addEventListener('load',play);
-    doc.addEventListener('visibilitychange',function(){if(!doc.hidden&&v.paused&&v.getAttribute('src'))v.play().catch(function(){})});
-    if('IntersectionObserver' in window)new IntersectionObserver(function(es){if(!v.getAttribute('src'))return;if(es[0].isIntersecting)v.play().catch(function(){});else v.pause()}).observe(v);
+    doc.addEventListener('visibilitychange',function(){if(!doc.hidden&&!userPaused&&v.paused&&v.getAttribute('src'))v.play().catch(function(){})});
+    if('IntersectionObserver' in window)new IntersectionObserver(function(es){if(userPaused||!v.getAttribute('src'))return;if(es[0].isIntersecting)v.play().catch(function(){});else v.pause()}).observe(v);
   }
 }
 /* Phone search: the icon opens the search row */
@@ -2117,20 +2122,29 @@ var LB=null;
     cl.classList.remove('is-on');
     fx.appendChild(cl);
     fx.style.cssText='position:fixed;left:0;top:0;width:'+sr.width+'px;height:'+sr.height+'px;'+
-      'container-type:inline-size;pointer-events:none;z-index:19;will-change:transform,opacity';
+      'container-type:inline-size;pointer-events:none;z-index:19;perspective:900px;will-change:transform,opacity';
+    cl.style.willChange='transform';
     fx.setAttribute('aria-hidden','true');
     doc.body.appendChild(fx);
-    /* The plate turns edge-on as it goes — the rack draws a plate face on, the bar draws it side on —
-       but that is done with scaleX, NOT a 3D rotateY. perspective()+rotateY decomposes to a matrix
-       between keyframes and the copy wandered sideways and stopped shrinking; scale3d interpolates
-       componentwise and does exactly what it says. And the landing point carries NO scale term:
-       transform-origin is the centre, so scaling does not move the centre — multiplying it in there
-       was what put the copy down in the wrong place. */
-    var sy=dr.height/sr.height, sx=dr.width/sr.width,
+    /* The plate REALLY TURNS on the way (Peter, 2026-10-09: "does the plate turn as it goes? if it just
+       floats up to the bar that may read kind of tacky"). It did not: the first version narrowed it with
+       scaleX, which held a circle for the first half and then squashed flat at the end — a squash, not a
+       turn. It is a 3D rotateY now, and what makes that behave is SPLITTING THE TWO JOBS ACROSS TWO
+       ELEMENTS: perspective is a CSS property on the wrapper, the wrapper animates translate + UNIFORM
+       scale (so the disc stays a disc), and the cloned plate inside animates rotateY alone. Each keeps a
+       single, same-shaped transform list, so each interpolates componentwise. Putting perspective() and
+       rotateY() in ONE list with translate and scale is what made the earlier attempt decompose to a
+       matrix and send the copy wandering sideways. The turn also foreshortens — the near edge reads
+       larger — which a scaleX can never do, and which is the whole difference between turning and
+       flattening. The landing point carries NO scale term: transform-origin is the centre, so scaling
+       does not move the centre; multiplying it in put the copy down in the wrong place. */
+    var sy=dr.height/sr.height,
         x0=sr.left,y0=sr.top,
         x1=dr.left+dr.width/2-sr.width/2, y1=dr.top+dr.height/2-sr.height/2,
+        /* how far it has to turn for its width to match the plate it is landing on */
+        R=Math.min(86,Math.acos(Math.max(.07,Math.min(1,dr.width/(sr.width*sy))))*180/Math.PI),
         L=function(a,b,k){return a+(b-a)*k},
-        T=function(x,y,kx,ky){return 'translate3d('+x+'px,'+y+'px,0) scale3d('+kx+','+ky+',1)'};
+        T=function(x,y,k){return 'translate3d('+x+'px,'+y+'px,0) scale('+k+')'};
     /* the strip's plate waits in the wings: no slide, nothing showing, until the copy is nearly down */
     dsts.forEach(function(d){d.style.transition='none';d.style.opacity='0'});
     /* ease-in-out, so the plate is actually SEEN crossing. The first curve tried here was
@@ -2139,11 +2153,16 @@ var LB=null;
        The copy holds full opacity until the last beat; the strip's own plate is revealed just under it
        at 86%, so the two cross over rather than one blinking out before the other arrives. */
     var a=fx.animate([
-      {transform:T(x0,y0,1,1),opacity:1},
-      {transform:T(L(x0,x1,.42),L(y0,y1,.58),L(1,sx,.46),L(1,sy,.5)),opacity:1,offset:.55},
-      {transform:T(L(x0,x1,.95),L(y0,y1,.95),sx*1.5,sy*1.08),opacity:1,offset:.86},
-      {transform:T(x1,y1,sx,sy),opacity:0}
+      {transform:T(x0,y0,1),opacity:1},
+      {transform:T(L(x0,x1,.42),L(y0,y1,.58),L(1,sy,.5)),opacity:1,offset:.55},
+      {transform:T(L(x0,x1,.95),L(y0,y1,.95),sy*1.08),opacity:1,offset:.86},
+      {transform:T(x1,y1,sy),opacity:0}
     ],{duration:FLY,easing:'cubic-bezier(.42,0,.58,1)'});
+    /* the turn runs ahead of the travel: you pick a plate up and turn it, then carry it to the bar */
+    cl.animate([{transform:'rotateY(0deg)'},
+                {transform:'rotateY('+(R*.78).toFixed(1)+'deg)',offset:.5},
+                {transform:'rotateY('+R.toFixed(1)+'deg)'}],
+               {duration:FLY,easing:'cubic-bezier(.3,.62,.36,1)'});
     var shown=false,
         show=function(){if(shown)return;shown=true;dsts.forEach(function(d){d.style.opacity='';d.style.transition=''})},
         land=function(){show();if(fx.parentNode)fx.parentNode.removeChild(fx)};
