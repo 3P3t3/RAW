@@ -472,7 +472,7 @@
         <div class="c-quiz" id="c-quiz">
           <!-- DRAFT-COPY --><p class="c-count" id="c-step-n" role="status">Step 1 of 3</p><!-- /DRAFT-COPY -->
           <div class="c-prog" id="c-prog" aria-hidden="true"><span class="is-on"></span><span></span><span></span></div>
-          <fieldset class="c-q c-step">
+          <fieldset class="c-q c-step" data-q="goal">
             <legend tabindex="-1">What are you trying to accomplish?</legend>
             <!-- the emblem lives inside the span, not beside it: the pill is styled as
                  `input:checked + span`, and anything between the input and the span would
@@ -485,7 +485,7 @@
               <label class="chip"><input type="radio" name="goal" value="Stay healthy day to day"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-shield"/></svg>Stay healthy</span></label>
             </div>
           </fieldset>
-          <fieldset class="c-q c-q-long c-step" hidden>
+          <fieldset class="c-q c-q-long c-step" data-q="training" hidden>
             <legend tabindex="-1">How do you train right now?</legend>
             <!-- Peter's own six. The visible label is the value, so what arrives in the booking
                  is the phrase the visitor actually read; _script.html's CTRAIN turns each one
@@ -499,7 +499,7 @@
               <label class="chip"><input type="radio" name="training" value="I don’t even know where to start, HELP"><span>I don’t even know where to start, HELP</span></label>
             </div>
           </fieldset>
-          <fieldset class="c-step" hidden>
+          <fieldset class="c-step" data-q="you" hidden>
             <!-- The last step. It used to hold the two blanks alone and hand off to Calendly; since
                  2026-10-09 it is where Peter gets what he needs to ring you, so the name, the number
                  and the consent live here and the card sends itself. The voice is the free sample's,

@@ -721,7 +721,7 @@ posthog.init('phc_ntNTcMoskMxcRTPJ56Gmda6PiBJ4PM2xysKiQRUhyj9P',{api_host:'https
         <div class="c-quiz" id="c-quiz">
           <!-- DRAFT-COPY --><p class="c-count" id="c-step-n" role="status">Step 1 of 3</p><!-- /DRAFT-COPY -->
           <div class="c-prog" id="c-prog" aria-hidden="true"><span class="is-on"></span><span></span><span></span></div>
-          <fieldset class="c-q c-step">
+          <fieldset class="c-q c-step" data-q="goal">
             <legend tabindex="-1">What are you trying to accomplish?</legend>
             <!-- the emblem lives inside the span, not beside it: the pill is styled as
                  `input:checked + span`, and anything between the input and the span would
@@ -734,7 +734,7 @@ posthog.init('phc_ntNTcMoskMxcRTPJ56Gmda6PiBJ4PM2xysKiQRUhyj9P',{api_host:'https
               <label class="chip"><input type="radio" name="goal" value="Stay healthy day to day"><span><svg class="em" aria-hidden="true" focusable="false"><use href="#e-shield"/></svg>Stay healthy</span></label>
             </div>
           </fieldset>
-          <fieldset class="c-q c-q-long c-step" hidden>
+          <fieldset class="c-q c-q-long c-step" data-q="training" hidden>
             <legend tabindex="-1">How do you train right now?</legend>
             <!-- Peter's own six. The visible label is the value, so what arrives in the booking
                  is the phrase the visitor actually read; _script.html's CTRAIN turns each one
@@ -748,7 +748,7 @@ posthog.init('phc_ntNTcMoskMxcRTPJ56Gmda6PiBJ4PM2xysKiQRUhyj9P',{api_host:'https
               <label class="chip"><input type="radio" name="training" value="I don’t even know where to start, HELP"><span>I don’t even know where to start, HELP</span></label>
             </div>
           </fieldset>
-          <fieldset class="c-step" hidden>
+          <fieldset class="c-step" data-q="you" hidden>
             <!-- The last step. It used to hold the two blanks alone and hand off to Calendly; since
                  2026-10-09 it is where Peter gets what he needs to ring you, so the name, the number
                  and the consent live here and the card sends itself. The voice is the free sample's,
@@ -1615,9 +1615,10 @@ if(cform){
               'Just the occasional walk':'starting from the walks you already take',
               'I don’t even know where to start, HELP':'starting from scratch'};
   var line=function(){
-    var g=val('goal'),t=val('training');
-    if(!g&&!t)return '';                        /* nothing picked: no sentence, and :empty pulls the line out of the layout */
-    return 'Fifteen minutes on '+(CGOAL[g]||'your goal')+(CTRAIN[t]?', '+CTRAIN[t]:'')+'.';
+    var g=val('goal'),t=val('training'),
+        what=CGOAL[g]||(cPicked.length?cPicked.join(' and ').toLowerCase():'');
+    if(!what&&!t)return '';                     /* nothing picked: no sentence, and :empty pulls the line out of the layout */
+    return 'Fifteen minutes on '+(what||'your goal')+(CTRAIN[t]?', '+CTRAIN[t]:'')+'.';
   };
 
   /* One question at a time, the same machine as the macro calculator's (mcStep below): three
@@ -1626,7 +1627,29 @@ if(cform){
      that the page "feels like a freaking journey" (2026-10-01).
      Not a word of a question or an answer changes — the steps are the three fieldsets the card
      already had, in the order it already asked them. */
-  var cQuiz=$('#c-quiz'),cSteps=$$('.c-step',cform),cCount=$('#c-step-n'),
+  /* THE GOAL QUESTION IS NOT ASKED TWICE (2026-10-09). Eric Elizes: "build your barbell asks you what
+     your goals are effectively, then booking flow re-asks in step 1... 1. Pick your plates (this is where
+     you would pick your goals)". The site itself calls the shelves goals — the hero's button is "Pick your
+     goal", the rack's heading is "What are we maximizing?", the fact row counts "10 goals" — so a visitor
+     who loaded plates and then met five differently-worded goal chips was being asked the same thing in a
+     second vocabulary. When there is anything on their bar, THE GOAL STEP IS NOT BUILT AT ALL and the card
+     is two steps; a cold arrival who never touched the rack still gets all three.
+     NOTHING IS INFERRED. Ten shelves do not map onto five chips, and guessing one would put a goal Peter's
+     visitor never said onto Peter's call sheet. What goes out is exactly what they did: the shelf names.
+     The stack is read straight from localStorage and #lbpin's data-plates rather than from LB, which is
+     defined further down this file and is still null when this runs. The approach tab has no rack and no
+     grid, so the stack cannot change under the form while it is open; decide once, at load. */
+  var cPicked=(function(){
+    try{
+      var raw=JSON.parse(localStorage.getItem('aspire-stack')||'[]'); if(!Array.isArray(raw)||!raw.length)return [];
+      var pin=$('#lbpin'),pd={};
+      try{pd=JSON.parse((pin&&pin.getAttribute('data-plates'))||'{}')}catch(e){}
+      return raw.map(function(c){return (pd[c]&&pd[c][0])||''}).filter(Boolean);
+    }catch(e){return []}
+  })();
+  var cQuiz=$('#c-quiz'),
+      cSteps=$$('.c-step',cform).filter(function(el){return !(el.dataset.q==='goal'&&cPicked.length)}),
+      cCount=$('#c-step-n'),
       cBars=$$('#c-prog span'),cErr=$('#c-err'),cBack=$('#c-back'),cNext=$('#consult-go'),
       CKEY='aspire-consult',CFIELDS='goal training stack note'.split(' '),
       CGOTEXT=cNext.textContent,                /* the card's own last-step wording, read off the markup */
@@ -1634,13 +1657,16 @@ if(cform){
   /* the two chip questions each need an answer; both blanks are the visitor's to leave empty,
      and the second says Optional on its face. One message per step, for what that step asks. */
   cform.noValidate=true;
+  $$('.c-step',cform).forEach(function(el){if(cSteps.indexOf(el)<0)el.hidden=true});
+  /* keyed on what the step ASKS, not where it sits: the goal step is missing whenever the bar answered it */
   function cAsk(i){
+    var q=cSteps[i]&&cSteps[i].dataset.q;
     /* DRAFT-COPY */
-    if(i===0&&!val('goal'))return 'Pick one so I know what the call is about.';
-    if(i===1&&!val('training'))return 'Pick the one that’s closest.';
+    if(q==='goal'&&!val('goal'))return 'Pick one so I know what the call is about.';
+    if(q==='training'&&!val('training'))return 'Pick the one that’s closest.';
     /* the last step since 2026-10-09: Peter rings the number himself now, so the name, the number and
        the say-so are the three things the card cannot send without */
-    if(i===2){
+    if(q==='you'){
       if(!val('name'))return 'I need a name to put to the call.';
       if(!val('phone'))return 'I need a number to reach you on.';
       if(!cform.elements.consent.checked)return 'Tick the box so I know I can call or text you.';
@@ -1657,7 +1683,7 @@ if(cform){
   function cStep(focus){
     cSteps.forEach(function(el,i){el.hidden=i!==cAt});
     cCount.textContent='Step '+(cAt+1)+' of '+cSteps.length;
-    cBars.forEach(function(b,i){b.className=i<=cAt?'is-on':''});
+    cBars.forEach(function(b,i){b.hidden=i>=cSteps.length;b.className=i<=cAt?'is-on':''});
     cBack.hidden=!cAt;
     cNext.textContent=cAt===cSteps.length-1?CGOTEXT:'Continue';   /* DRAFT-COPY: Continue */
     cErr.textContent='';cErr.hidden=true;
@@ -1775,7 +1801,8 @@ if(cform){
     var body={_subject:cEl._subject.value,_template:cEl._template.value,_captcha:cEl._captcha.value,
               _honey:cEl._honey.value,
               name:cv('name'),phone:cv('phone'),
-              goal:val('goal'),training:val('training'),stack:cv('stack'),note:cv('note'),
+              goal:val('goal')||cPicked.join(', '),   /* the chips, or the plates that answered for them */
+              training:val('training'),stack:cv('stack'),note:cv('note'),
               consent:'Yes, Peter can call or text me to set up a time',
               keep_in_touch:cEl.keep_in_touch.checked?'Yes':'No'};
     cform.setAttribute('aria-busy','true');cNext.textContent='Sending…';

@@ -839,6 +839,32 @@ two cross over instead of one blinking out before the other lands. Measured: **1
 and gives a join one full `--sec` and half the other. It applies to every page, so a new section added anywhere gets
 it. `.hero + .sec` is deliberately left out.
 
+## The goal question is not asked twice (2026-10-09)
+
+Eric Elizes: *"build your barbell asks you what your goals are effectively, then booking flow re-asks in
+step 1... I think it might be more straightforward having 1 cohesive narrative, such as 1. Pick your plates
+(this is where you would pick your goals)."* Peter: *"yeah lets kill the duplicate goal question."*
+
+**The site itself calls the shelves goals** — the hero's button is "Pick your goal", the rack's heading is
+"What are we maximizing?", the fact row counts "10 goals" — so a visitor who loaded plates and then met five
+differently-worded goal chips was being asked the same thing in a second vocabulary.
+
+- **When anything is on the bar, the goal step is not built at all**: the card is two steps, the counter and
+  the pips follow, and the first question is the training one. A cold arrival who never touched the rack
+  still gets all three. Without script every step is on screen as one form, which is right — nothing can
+  know their stack.
+- **NOTHING IS INFERRED, and that is the important part.** Ten shelves do not map onto five chips, and
+  guessing one would put a goal the visitor never said onto Peter's call sheet. What goes out is exactly
+  what they did: `goal` becomes the shelf names ("Protein, Hydration"), or the chip value if the macro
+  calculator filled it, which still takes priority. The summary line reads "Fifteen minutes on protein and
+  hydration."
+- **The steps are keyed on `data-q` (`goal` / `training` / `you`), not on their index**, because one of them
+  may not be there. `cAsk` switches on the name. Any new step needs a `data-q` and a branch.
+- The stack is read straight from `localStorage` and `#lbpin`'s `data-plates`, **not from `LB`**, which is
+  defined further down `_script.html` and is still null when the consult block runs. The approach tab has no
+  rack and no grid, so the stack cannot change under the form: it is decided once, at load.
+- A step index saved under the old three-step card clamps safely (`cGap()`), verified.
+
 ## No Calendly: the call form asks for a phone number (2026-10-09)
 
 Peter: *"let's drop the Calendly. Here's why. They can give me their phone number. I can always call them or
