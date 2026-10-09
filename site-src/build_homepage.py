@@ -1908,7 +1908,7 @@ def why_section():
     numbers_li = f'''        <li class="why-card grow">
           <p class="why-n" aria-hidden="true">{{n}}</p>
           <h3 class="why-t">Know your numbers</h3>
-          <p>Bloodwork is a lab test: your biomarkers, measured from your own blood, collected at home with a Tasso. It goes through {pv["name"]}, and a licensed clinician reads it, not me.</p>{soon(pv["panel"])}
+          <p>Bloodwork is a lab test: your biomarkers, measured from your own blood, collected at home with a Tasso. It goes through {pv["name"]}. Designed by doctors, explained in English: their assistant reads every marker back in plain words.</p>{soon(pv["panel"])}
           {go(f"{CCRX_PAGE}#panel", "What the bloodwork is")}
         </li>
 '''
@@ -1989,7 +1989,7 @@ def why_section():
     <div class="wrap">
       <ol class="why-list">
 {items}      </ol>
-      <p class="why-roles grow">Who does what: licensed clinicians read your bloodwork and decide on any protocol. I don’t read labs and I don’t prescribe. My part is your nutrition and the products.</p>
+      <p class="why-roles grow">Who does what: an assistant reads your bloodwork back to you in plain English, and anything clinical goes to a licensed clinician, who decides on any protocol and can say no. I don’t read labs and I don’t prescribe. My part is your nutrition and the products.</p>
       <!-- /DRAFT-COPY -->{disc}
     </div>
   </section>
