@@ -442,12 +442,24 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   **every build prints a note** saying so — a note, never a failure, since 105 rows today would otherwise block him —
   and the footer's "All 105 products" is still counted from the data. **That gap is Peter's decision, already taken: do
   not reconcile them**, change the constant the day the list is trimmed. The goals are counted from `CATEGORIES`.
-- **The lake through the day (Peter, 2026-10-03):** the same shore three times — dawn in the hero, clear morning as a
-  strip at the top of `#why` (`.why-band`, `assets/home/lake-morning.webp`, nothing written on it), and dusk behind the
+- **The lake through the day (Peter, 2026-10-03):** the same shore three times — dawn in the hero, clear morning at the
+  top of `#why` (`.why-band`, `assets/home/lake-morning.webp`), and dusk behind the
   call (`.consult-dusk` / `.c-dusk`, `assets/home/lake-dusk.webp`). Both were made with fal kontext/max from the hero's
   own frame (`~/Desktop/aspiree/tools/jobs-lake-tod.json`, picks `lake-morning-2` and `lake-dusk-1`), then 2x ESRGAN
-  (`jobs-lake-tod-up.json`) and exported 2400px. `.why-band` is ~200px on phones and `clamp(220px,17vw,300px)` from 768
-  (it was 420, half a laptop screen of nothing). From 768 the dusk picture is drawn 140% wide and set 40% left so the
+  (`jobs-lake-tod-up.json`) and exported 2400px. **The morning one is `#why`'s own header now (2026-10-08)**, not a strip
+  above it: Peter, "this feels too light. We should swap it for a darker photo or different option. Or we can skip it
+  altogether and go straight into it." It had been a pale picture with nothing written on it between the cream story
+  above and the cream pillars below — 420px, then `clamp(220px,17vw,300px)` after a critic called it dead space — so it
+  lightened an already light page and pushed the copy down. All three ways out were drawn and compared (cut it; swap the
+  frame for the dusk one; keep the frame and put the head on it) and the third shipped, because it is the only one that
+  turns the space into something: `.why-top` is a dark band holding the picture (`.why-band`, now `position:absolute`
+  and framed on the water, `object-position:50% 72%`, 76% from 768) under a scrim, with `.why-head` — the eyebrow, the
+  h2, Peter's argument, the two lines and `.why-door` — set on it in chalk. The pillars, the roles line and the
+  disclosure stay on the light ground in a second `.wrap`. It did NOT fix the two critics' other finding, that the h2
+  and the argument read as two stacked headings, but it contains it: the pair is now one title block over a picture with
+  the pillars clearly below, instead of two competing headings in one cream column. The accent `.hl-k` goes `--sand` on
+  the band, because the XS blue is a black mark there. Markup is `why_section()` in `build_homepage.py`.
+  From 768 the dusk picture is drawn 140% wide and set 40% left so the
   afterglow sits under the copy, not behind the card; on phones it is its own strip above the heading; and
   `.c-dusk::after` fades to the section's own `#141A26` over its last 200px and `body:has(.consult-dusk) .foot` starts
   there too, so there is no seam and no pale band between dusk and night. On phones the strip is `clamp(140px,41vw,180px)`
@@ -510,6 +522,55 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   link in a plain template, `--ccrx on`, the link in `index.html`, `AVELLUM_URL` with `PAID = None`, and an Avellum link
   reaching plus. `#bloodwork` and `ccrx_home` are gone; `ccrx_block`, `ccrx_menu`, `ccrx_fda_scope` keep their names but
   serve both copies.
+
+## The glass (2026-10-08)
+
+Peter: *"I think the glass should go site-wide."*
+
+**Glass here is a tinted panel over a picture, and both halves are load-bearing.** The tint — `rgba(0,46,59,.72)`,
+Peter's own teal — is what guarantees the contrast, because every word then sits on a colour we control whatever the
+picture does. The blur, `backdrop-filter:blur(24px) saturate(1.1)`, is declared **on its own inside `@supports`**, so
+the tint alone is the fallback and the panel reads as well with no blur at all. The card keeps its own character; only
+the hand it is written in changes, ink-on-chalk to chalk-on-teal, with pills inverting to sand-on-teal so they still
+have shape.
+
+**Glass goes where there is a picture. Nowhere else.** The site's ground is `.field` — one fixed sheet of chalk with
+two drifting glows and a grain — and there is no detail in it to refract, so a blurred panel on the chalk is an
+invisible change sitting on a backdrop that moves. **Do not put glass on a chalk section**, and do not put a texture
+behind one just to create an excuse for it: a bare heading on `tex-water`'s brightest ripple measures 1.0:1.
+Where a dark band is wanted, the recipe is a picture + a scrim deep enough to be the floor + chalk copy, measured.
+
+Where it is, and what each one stands on:
+
+| Panel / band | Stands on | Treatment |
+|---|---|---|
+| `#consult-form` (homepage) | `lake-dusk.webp` | the original: teal tint + blur, note-card shape (`.nc`) |
+| `.mc-card` (`#macros`, homepage) | `tex-water.webp` + scrim | the same tint and blur, its own plain sheet shape |
+| `.why-top` (`#why`'s header, homepage) | `lake-morning.webp` + scrim | ground only — copy direct on the band |
+| `.sec.dark.mys` (`#my-stack`, shop) | `tex-water.webp` + teal tint | ground only — no panel to glass |
+| shelf heroes (`.cat-hero`) | their own banner + scrim | already this language; left untouched |
+
+**`assets/home/tex-water.webp` (76 KB, 2000x1116)** is the brand-teal water macro, the calmest of the three textures
+that were sitting unused. It is a **CSS background**, not an `<img>`: no markup, it reaches `plus/` and the templates
+untouched, and it is fetched off the layout pass rather than blocking the first paint. `url(assets/…)` in `style.css`
+resolves against the **stylesheet**, which sits at the repo root, so `plus/`'s `../style.css` finds the same one file.
+It is the only texture in use and it is **one per page**: `#macros` on homepage.html and `#my-stack` on shop.html,
+so a visitor who crosses between the tabs pays for it once. `tex-gel.webp` and `tex-ice.webp` are still unused;
+`tex-ice` is the brightest and least even and would need a much deeper scrim. Every band keeps a **solid dark floor**
+under its picture, so a webp that never lands changes no measurement.
+
+**What is deliberately left flat, and why** — do not "finish the job" by glassing these:
+- **the Shop's square film hero, the product grid (`#results`, `.cat-shop`) and the product card dialog**: a busy
+  catalogue behind glass is noise, and the packs are the content;
+- **the rack (`#goals`)**: ten coloured plates and a sand hollow (`.bay`) that is already a crafted surface;
+- **the DEXA cards and the proof wall on about.html**: evidence, on chalk, with no picture behind them. The old
+  `.mc-card` comment had the right instinct for the wrong reason — "a backdrop that changes underneath would make
+  those measurements a guess" — and the tint is the answer to it, but these cards have nothing to look through;
+- **`bloodwork.html`**: the disclosure page, plain white cards on chalk, and it should stay plain;
+- **the free-sample card (`#sample .c-card.nc`)**: it is the same shell as `#consult-form`, light instead of dark, and
+  that is the same card in two lights rather than a clash. Darkening it would need a second dark band immediately
+  above `#my-stack` — about 3,400px of unbroken dark at 1440 on the page the site opens on — and would cost the Shop
+  its one warm, handwritten surface. A prototype exists in RAW 84's report if Peter wants to see it.
 
 ## The story (`#story`)
 

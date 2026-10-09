@@ -2577,7 +2577,7 @@ body{background:transparent}
    Contrast is the scrim's job and never the picture's. The copy is chalk over a gradient that is deepest
    where the words are; the band keeps a solid dark floor, so a webp that never lands changes no measurement. */
 .sec.why{padding-top:0}
-.why-top{position:relative;isolation:isolate;overflow:hidden;background:#0A1D28;color:var(--chalk);
+.why-top{position:relative;isolation:isolate;overflow:hidden;overflow:clip;background:#0A1D28;color:var(--chalk);
   padding:clamp(40px,9vw,72px) 0 clamp(44px,9vw,72px);margin-bottom:clamp(36px,7vw,64px)}
 .why-band{position:absolute;inset:0;z-index:-1;background:#0A1D28}
 .why-band img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 72%}
@@ -2733,7 +2733,7 @@ body{background:transparent}
 .macros-sec .mc-card{
   background:rgba(0,46,59,.72);
   color:var(--chalk);
-  box-shadow:inset 0 0 0 1px rgba(230,211,197,.34),0 40px 60px -40px rgba(0,16,22,.85);
+  box-shadow:inset 0 0 0 1px rgba(230,211,197,.42),0 40px 60px -40px rgba(0,16,22,.85);
 }
 @supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .macros-sec .mc-card{
@@ -2801,10 +2801,12 @@ body{background:transparent}
    packs and a heading, all of which stand directly on the ground. So this is the ground
    half of the recipe only — a picture under a tint of Peter's own teal, deep enough that
    the band still reads as the brand's teal and every word on it keeps the contrast it
-   had. The tint is rgba(0,38,49,.82): at that depth the brightest ripple in the frame
-   lands around #24505E, where the band's palest type (--on-dark) is still 5.7:1.
+   had. Measured on the rendered pixels at 320/390/768/1024/1440, with backdrop-filter forced
+   off as well: the band's palest type (--on-dark, the shelf names under his five packs) bottoms
+   out at 6.74:1 over the brightest ripple any letter of it sits on, and nothing in the band is
+   under that except the outlined button, which gets its own floor just below.
 =================================================================================== */
-.sec.dark.mys{position:relative;isolation:isolate;overflow:hidden}
+.sec.dark.mys{position:relative;isolation:isolate;overflow:hidden;overflow:clip}
 .sec.dark.mys::before{
   content:"";position:absolute;inset:0;z-index:-1;
   background-image:linear-gradient(rgba(0,38,49,.86),rgba(0,38,49,.8) 42%,rgba(0,38,49,.88)),
@@ -2813,3 +2815,8 @@ body{background:transparent}
   background-position:center,center 42%;
   background-repeat:no-repeat,no-repeat;
 }
+/* the outlined button is the one thing in the band with no fill, so over a picture its label
+   stood on whatever ripple was behind it: sand on a highlight measured 4.90:1 at 320, the
+   thinnest figure on the site. It takes a tint of the band's own teal, which is the same answer
+   the cards give -- a floor we control -- and keeps reading as the outlined one beside the blue. */
+.mys .btn-line{background:rgba(0,30,40,.55)}
