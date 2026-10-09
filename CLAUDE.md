@@ -383,8 +383,12 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   and always in the Tab order; at rest it is `opacity:0;pointer-events:none`, and it fades in on a hover anywhere over
   `.glass` or on its own `:focus-visible`. **Never swap that for `display:none` or `visibility:hidden`** — either takes
   it out of the Tab order, and this is the page's one way to stop motion that starts by itself and runs over five
-  seconds (WCAG 2.2.2; the film loops). On `(hover:none)` it simply **stays visible**: there is no hover and no
-  keyboard there, and an unreachable control is worse than none. Measured: at rest `0 / none`, hovering the film
+  seconds (WCAG 2.2.2; the film loops). **On a touchscreen it never appears** (Peter, 2026-10-09: *"remove the
+  paly pause button on touchscreens as well"*). A `@media (hover:none){...opacity:1}` rule used to keep it
+  visible where there is no hover; **he was told that removing it leaves a phone with no visible way to stop
+  the film, and chose it anyway. It is his call on his own site — do not restore that rule without asking
+  him.** The button stays in the DOM and in the Tab order on purpose, so a tablet with a keyboard still
+  reaches it (verified under touch emulation: `0` at rest, `1` with `:focus-visible` on a keyboard focus). Measured: at rest `0 / none`, hovering the film
   `1 / auto`, mouse away `0 / none` again, keyboard focus `1` with `:focus-visible` matching, and the click still
   pauses and relabels. Three other things carry the same load and must stay: `prefers-reduced-motion` is read
   **before `play()` is ever called**, so a visitor who has asked their system for less motion gets the poster and the
@@ -892,18 +896,21 @@ every page of **both** published copies at once. The two report to the same proj
   publish a new one, replace that file wholesale. It is read by `part()` like every other partial.
 - **`POSTHOG_KEY`** is the **project** token (`phc_...`): public by design, and it belongs in the page source. A
   **personal** key (`phx_...`) is a secret and must never be in this repo or in a page — `analytics()` **exits the
-  build** if it is handed one (verified). **It is empty today**, which emits nothing anywhere and leaves the output
-  byte for byte as it was (verified: `shop.html` has the same md5 before and after a rebuild). Pasting the token is
-  a one-line change and a rebuild.
+  build** if it is handed one (verified). **Peter's token went in on 2026-10-09 and it is LIVE**: all 28 pages (14
+  at the root, 14 under `plus/`) carry it. A public project token means anyone can post events to the project —
+  that is inherent to client-side analytics, and the answer is PostHog's own authorized-URLs setting, not hiding
+  the token. Emptying the constant switches the whole thing off again and restores the output byte for byte.
 - **`POSTHOG_HOST`** is the only place a region is named; the loader derives the assets host itself
   (`.i.` → `-assets.i.`). **`POSTHOG_REPLAY = False`**: session replay records the visitor's screen, and the
   free-sample form on the Shop is LIVE and takes a visitor's name and what they are after. The snippet writes
   `disable_session_recording` explicitly rather than leaving it to the project's own setting, so the page cannot
   start recording because a toggle moved somewhere else. Turning it on is Peter's call.
 - **Never on a demo export** (`if DEMO`): a preview must not report itself as the live site.
-- Verified with a throwaway `phc_` token on `shop.html`, `homepage.html` and `plus/shop.html`: the stub installs,
-  `init` queues with the right token and config, the snippet sits inside `<head>`, and the page still works. Test
-  with `*.posthog.com` mapped to 127.0.0.1 in Chrome's resolver so nothing leaves the machine.
+- Verified with the real token on `shop.html`, `homepage.html`, `about.html`, `bloodwork.html` and both of the
+  `plus/` copies: the loader tag is inserted, `init` queues with the right token, `api_host` and
+  `disable_session_recording:true`, the snippet sits inside `<head>`, and the page still works. **Always test with
+  `*.posthog.com` mapped to 127.0.0.1 in Chrome's resolver** — otherwise every local run posts localhost events
+  into Peter's real project. The first genuine events are the ones from the live site after a push.
 - **Not done, and Peter's to decide:** there is no consent banner on the site. PostHog sets a cookie and
   autocapture records clicks and the text of what was clicked (not what is typed into a field). For US traffic
   that is normally fine; EU visitors are a different question. Raise it with him rather than adding a banner.

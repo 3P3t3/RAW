@@ -206,14 +206,18 @@ html:not(.js) .mtab{display:none}
    opacity:0 and pointer-events:none — NOT display:none or visibility:hidden, either of which would
    take it out of the Tab order, and this is the page's one way to stop motion that starts by itself
    (WCAG 2.2.2). It fades in on a hover anywhere over the film and on its own focus ring, so a mouse
-   finds it by going to the film and a keyboard finds it by tabbing to it. On a device with no hover
-   there is neither, so it simply stays visible: an unreachable control would be worse than none. */
+   finds it by going to the film and a keyboard finds it by tabbing to it.
+   ON A TOUCHSCREEN IT NEVER APPEARS (Peter, 2026-10-09: "remove the paly pause button on touchscreens as
+   well"). There was a `@media (hover:none){...opacity:1}` rule here keeping it visible where there is no
+   hover; he was told that removing it leaves a phone with no visible way to stop the film, and chose it
+   anyway. It is HIS CALL ON HIS OWN SITE and it is recorded here — do not restore that rule without asking
+   him. The button stays in the DOM and in the Tab order on purpose, so a tablet with a keyboard can still
+   reach it, and prefers-reduced-motion still stops the film before it is ever fetched. */
 .glass-toggle{position:absolute;z-index:3;left:14px;bottom:14px;width:40px;height:40px;border-radius:50%;
   background:var(--teal);color:var(--chalk);opacity:0;pointer-events:none;transition:opacity 180ms linear}
 .glass:hover .glass-toggle,.glass-toggle:focus-visible,.glass-toggle:hover{opacity:1;pointer-events:auto}
 .glass-toggle:active{background:var(--teal);opacity:.8}
 .glass-toggle .ic{width:18px;height:18px}
-@media (hover:none){.glass-toggle{opacity:1;pointer-events:auto}}
 @media (prefers-reduced-motion:reduce){.glass-toggle{transition:none}}
 
 /* Sections */

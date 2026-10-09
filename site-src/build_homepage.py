@@ -629,7 +629,7 @@ BASE = 'https://3p3t3.github.io/RAW/'
 # A PERSONAL key (phx_...) is a secret and must NEVER be put in this repo or in any page; analytics() exits
 # the build if it is given one. An empty key emits nothing anywhere and leaves the output byte for byte as
 # it was -- that is how this ships until Peter pastes his token, which is a one-line change and a rebuild.
-POSTHOG_KEY = ''                                                   # 'phc_...' from PostHog > Project settings; empty = all off
+POSTHOG_KEY = 'phc_ntNTcMoskMxcRTPJ56Gmda6PiBJ4PM2xysKiQRUhyj9P'   # Peter's project token, 2026-10-09. PUBLIC by design (it ships in every page); a phx_ personal key is not and is refused below.
 POSTHOG_HOST = 'https://us.i.posthog.com'  # or https://eu.i.posthog.com. The loader derives the assets
                                            # host from it by itself (.i. -> -assets.i.), so this is the
                                            # only place a region is named.
