@@ -839,6 +839,49 @@ two cross over instead of one blinking out before the other lands. Measured: **1
 and gives a join one full `--sec` and half the other. It applies to every page, so a new section added anywhere gets
 it. `.hero + .sec` is deliberately left out.
 
+## No Calendly: the call form asks for a phone number (2026-10-09)
+
+Peter: *"let's drop the Calendly. Here's why. They can give me their phone number. I can always call them or
+text them to book a time manually. And that's fine... And if I want to build back in the Calendly later, I
+totally can."* It came out of Eric Elizes' note that a number is less friction than a booking flow and lets
+Peter text. He also chose the shape: **"one form one voice fewer steps"** — so the call card did not merely
+bolt a phone field on, it took the free sample's own posture, which already had this right.
+
+- **`#consult-form` posts to FormSubmit now**, exactly as `#sample-form` does: same service, same JSON shape,
+  same failure wording, same honeypot. `CONSULT_TO = SAMPLE_TO` — **one hash is one email address**, and the
+  two forms are told apart by `_subject` ("Call request · Aspire Health"). A second hash would mean a second
+  confirmation email for Peter to click and nothing gained. `CONSULT_ACTION` / `CONSULT_ENDPOINT` /
+  `CONSULT_NEXT` sit beside the sample's four.
+- **Still three steps** (Eric's "minimize clicks"): the five goals, Peter's six training answers, then the last
+  one, which gained **name and phone, both required**, above the two blanks it already had.
+- **The consent tick is required and is not decoration.** Peter is going to ring or text a number somebody
+  typed in. It is worded and shaped like the sample's, with the same optional "keep in touch" beside it, and
+  the same privacy line under the button. **Do not quietly drop it.**
+- **`cform.noValidate = true` is load-bearing.** The last step's required fields sit in a HIDDEN fieldset until
+  the visitor reaches it, and Chrome silently refuses to submit a form with an invalid control it cannot focus
+  — with native validation left on, the card simply stopped responding to its own button (measured, and it cost
+  real time to find). No-JS keeps native validation, because without the script every step is on screen.
+- **`if(cSync)cSync()` runs right before the body is built**, and was briefly lost in this change: it writes the
+  calculator's macros and the bar's "Interested in: …" into the note. Without it Peter gets the note with
+  neither. Verified in the captured payload.
+- The thank-you is `#call-sent`, on the sample's own `.s-done` / `:target` machinery, plus
+  `.consult-dusk:has(.s-done:target) #consult-form{display:none}` for the no-script return.
+- **What the sample lent this card had to be re-lit.** The consent ticks, the "what happens next" list, the
+  privacy line and the send's error were written for the LIGHT sample card and arrived set in `--ink`/`--text`
+  — invisible on the teal glass. They are inverted in the `.consult-dusk #consult-form` block. Measured under
+  the glyphs: **worst 9.38:1** at 390 and 1440. **Measuring their BOXES gives a false failure** (1.29 and 2.11)
+  because the checkbox and the numbered badges sit inside the text's bounding box — the same trap as the plates.
+- **Gone with it:** `CONSULT_URL`, the Calendly `widget.js` loader (`withCalendly`), the `a[data-quick]` popup
+  handler, the `widget.css` link and `#consult-embed` / `.c-embed`. **That was the only third-party script the
+  site ever loaded on a tap.** `CONSULT_QUICK_URL` and `quick_call()` remain, rendering a plain link, so a
+  quick-call route can return without the widget returning with it. Putting Calendly back is those constants
+  plus the loader, which is why it was all kept in one place.
+- Verified: three steps advance; each required field reports its own message in turn; a failed send keeps every
+  typed answer and restores the button; a successful send (fetch stubbed — **never submit the live form**)
+  hides the form, shows the thank-you and clears `aspire-consult`; the no-script `:target` return shows the
+  thank-you with all three steps open; no console errors on any page of either copy; and `#how`, the pinned
+  bar and the header nav all still point at `#consult`.
+
 **The rest of the homepage.** The bottom tab (`.mtab`) is phones and tablets only: hidden whole from 1024 up,
 where the header nav already carries MACROS. The quick-call card that sat under the sample form is gone;
 `#quick-call` now marks the consult's `.wrap.split` until a sample is sent, when the script hands the id to the

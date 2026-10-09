@@ -599,7 +599,12 @@ CAT_THUMB = {  # the pack shown on the homepage row for each category
 # Calendly link for the consult section; it embeds inline on submit rather than opening a tab.
 # The four answers ride along as a1-a4, onto the event type's four custom questions in order;
 # leave it empty and the form says the calendar is not connected yet instead of embedding nothing.
-CONSULT_URL = 'https://calendly.com/3pete/explore'
+# NO CALENDLY (Peter, 2026-10-09: "let's drop the Calendly... They can give me their phone number. I can
+# always call them or text them to book a time manually. And that's fine... And if I want to build back in
+# the Calendly later, I totally can."). It came out of Eric Elizes' note that a phone number is less friction
+# than a booking flow and lets Peter text. The call form now sends to Peter's own inbox like the free sample
+# does — same service, same posture, its own subject — and he books the time himself. Putting Calendly back
+# is these four constants and the widget loader, which is why the whole thing was kept to one place.
 
 # The quick 10-minute call: the invitation under the free-sample form and in its thank-you, and
 # step 4 of "The game plan" (#how). Paste the 10-minute Calendly event's link here and rebuild;
@@ -656,6 +661,13 @@ def analytics(loader):
 SAMPLE_ENDPOINT = 'https://formsubmit.co/ajax/' + SAMPLE_TO
 SAMPLE_ACTION = 'https://formsubmit.co/' + SAMPLE_TO
 SAMPLE_NEXT = BASE + 'shop.html?sample=sent#sample-sent'   # the sample form lives on the shop tab (2026-10-03)
+# The call form, on the approach tab. It goes to the SAME FormSubmit inbox as the sample — one hash is one
+# email address — and is told apart by its own _subject. A second hash would mean a second confirmation
+# email for Peter to click and nothing gained.
+CONSULT_TO = SAMPLE_TO
+CONSULT_ENDPOINT = 'https://formsubmit.co/ajax/' + CONSULT_TO
+CONSULT_ACTION = 'https://formsubmit.co/' + CONSULT_TO
+CONSULT_NEXT = BASE + 'homepage.html?call=sent#call-sent'
 HOME_PAGE, SHOP_PAGE = 'homepage.html', 'shop.html'   # the two tabs; demo_links/plus_links rename both
 
 FEATURED = [  # props-free pack shots, so the grid reads as one series
@@ -1561,7 +1573,8 @@ def main():
               '{{FDA_SCOPE}}': '',  # in the footer too: empty on every page but CCRX_PAGE (ccrx_fda_scope)
               '{{SCRIPT}}': script, '{{ANALYTICS}}': analytics(part('_posthog.js')),
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)),
-              '{{TOTAL_PRODUCTS}}': plural(len(products), 'product', zero='products'), '{{CONSULT_URL}}': CONSULT_URL,
+              '{{TOTAL_PRODUCTS}}': plural(len(products), 'product', zero='products'), '{{CONSULT_ACTION}}': CONSULT_ACTION, '{{CONSULT_ENDPOINT}}': CONSULT_ENDPOINT,
+              '{{CONSULT_NEXT}}': CONSULT_NEXT.replace(HOME_PAGE, demo_name(HOME_PAGE)) if DEMO else CONSULT_NEXT,
               # the two heroes' fact rows: the shelves are counted, the options are not (SHOP_OPTIONS)
               '{{SHOP_OPTIONS}}': str(SHOP_OPTIONS), '{{GOAL_COUNT}}': str(len(CATEGORIES)),
               '{{BASE}}': BASE}

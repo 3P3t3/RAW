@@ -457,7 +457,13 @@
            the hard teal drop-shadow, the heavy condensed display face, underlined blanks and dashed
            choice pills. Only its questions differ: they stay visible, in that display face, because
            here they are the card rather than a sentence's hidden labels. -->
-      <form class="c-card nc grow" id="consult-form" data-consult="{{CONSULT_URL}}" style="--d:1">
+      <form class="c-card nc grow" id="consult-form" action="{{CONSULT_ACTION}}" method="POST" data-endpoint="{{CONSULT_ENDPOINT}}" style="--d:1">
+        <input type="hidden" name="_subject" value="Call request · Aspire Health">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="{{CONSULT_NEXT}}">
+        <!-- the honeypot: people never see or reach it, bots fill it, FormSubmit drops those -->
+        <div class="vh" aria-hidden="true"><label for="c-honey">Leave this empty</label><input id="c-honey" type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
         <!-- One question at a time, the macro calculator's furniture in this card's hand: the
              counter, the pips, Back, and Continue that reads "Pick a time" on the last step.
              The script (cStep in _script.html) owns [hidden] on the steps; the markup hides
@@ -494,9 +500,21 @@
             </div>
           </fieldset>
           <fieldset class="c-step" hidden>
-            <!-- the last step holds both blanks. Its legend is furniture and visually hidden:
-                 the two labels below are the questions and they are unchanged. -->
-            <!-- DRAFT-COPY --><legend class="vh">Last two questions</legend><!-- /DRAFT-COPY -->
+            <!-- The last step. It used to hold the two blanks alone and hand off to Calendly; since
+                 2026-10-09 it is where Peter gets what he needs to ring you, so the name, the number
+                 and the consent live here and the card sends itself. The voice is the free sample's,
+                 deliberately — it is the same note to the same person, and Eric's whole point was that
+                 the funnel should stop asking the same thing in two different shapes. Its legend is
+                 furniture and visually hidden: the labels below are the questions. -->
+            <!-- DRAFT-COPY --><legend class="vh">How Peter reaches you</legend><!-- /DRAFT-COPY -->
+            <!-- DRAFT-COPY -->
+            <div class="c-field"><label for="c-name">Your name</label>
+              <input id="c-name" name="name" type="text" autocomplete="name" required aria-describedby="c-name-err">
+              <p class="s-err" id="c-name-err"></p></div>
+            <div class="c-field"><label for="c-phone">Your phone number</label>
+              <input id="c-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required aria-describedby="c-phone-err">
+              <p class="s-err" id="c-phone-err"></p></div>
+            <!-- /DRAFT-COPY -->
             <div class="c-field"><label for="c-stack">What are you taking at the moment?</label>
               <input id="c-stack" name="stack" type="text" autocomplete="off" placeholder="Whey, creatine, a multivitamin…"></div>
             <!-- the note is a textarea, as the sample's product blank is, so a long line the site writes into
@@ -504,20 +522,44 @@
                  than running out of its box (2026-10-04: 636px of text in a 516px blank at 1440, cut mid-number) -->
             <div class="c-field"><label for="c-note">Anything you want covered? <span>Optional</span></label>
               <textarea id="c-note" name="note" rows="1" autocomplete="off" placeholder="Eating around shift work…"></textarea></div>
+            <!-- The consent tick is REQUIRED and is not decoration: Peter is going to ring or text a
+                 number somebody typed in, and in the US that wants their say-so first. It is worded and
+                 shaped exactly like the free sample's, which already had it right. DRAFT-COPY. -->
+            <div class="s-checks">
+              <label class="s-check"><input type="checkbox" name="consent" value="Yes" required aria-describedby="c-consent-err"><span>Peter can call or text me to set up a time.</span></label>
+              <p class="s-err" id="c-consent-err"></p>
+              <label class="s-check"><input type="checkbox" name="keep_in_touch" value="Yes"><span>…and the odd update after that is fine too. <em>Optional</em></span></label>
+            </div>
           </fieldset>
 
           <p class="c-err" id="c-err" role="alert" hidden></p>
           <div class="c-nav">
             <!-- DRAFT-COPY --><button class="tlink" type="button" id="c-back" hidden>Back</button><!-- /DRAFT-COPY -->
-            <button class="btn" type="submit" id="consult-go">Pick a time</button>
+            <!-- DRAFT-COPY --><button class="btn" type="submit" id="consult-go">Ask Peter to call</button><!-- /DRAFT-COPY -->
           </div>
+          <p class="s-err" id="consult-fail" tabindex="-1"></p>
+          <!-- DRAFT-COPY -->
+          <ol class="s-next" aria-label="What happens next">
+            <li>I text you to find a time that suits you. No calendar to wrestle with.</li>
+            <li>We talk for fifteen minutes about what you are doing now and what is worth changing.</li>
+            <li>You get my honest read, and a plan you can act on whether or not you buy anything.</li>
+          </ol>
+          <p class="c-fine">Only I see what you send here. It comes to my inbox through a form service, FormSubmit. I never sell it or share it, and I only use it for what you ticked above.</p>
+          <!-- /DRAFT-COPY -->
         </div>
         <!-- empty until a chip is picked, and `:empty` in style.css takes it out of the card's
              grid entirely while it is, so nothing holds a blank row open -->
         <p class="c-sum" id="consult-sum" aria-live="polite"></p>
       </form>
-      <!-- the calendar mounts here in place of the form, once someone has answered -->
-      <div class="c-embed nc" id="consult-embed" hidden></div>
+      <!-- the thank-you takes the form's place: shown by the script after a send, or by :target when
+           FormSubmit sends a no-script visitor back to #call-sent. The calendar used to mount here. -->
+      <div class="c-card nc s-done" id="call-sent">
+        <!-- DRAFT-COPY --><h3 id="call-done-title" tabindex="-1">Got it, thank you.</h3>
+        <p>I’ll text you to set up a time, usually within a day or two.</p>
+        <div class="s-step3">
+          <p>Nothing to book in the meantime. If anything changes before we talk, just reply to my text.</p>
+        </div><!-- /DRAFT-COPY -->
+      </div>
     </div>
   </section>
 

@@ -549,7 +549,7 @@ body:has(.consult-dusk) .foot{background:linear-gradient(#141A26 0,rgb(6,11,14) 
 .c-q legend{display:block;padding:0;margin-bottom:10px;font:600 15px/1.3 var(--sans);color:var(--ink)}
 /* the macro calculator's move to the form focuses its first question (or the calendar, once it
    is up) so the reading position follows; a landing spot, not a control, so no ring, as .mc-q */
-.c-q legend:focus,.c-embed:focus{outline:none}
+.c-q legend:focus{outline:none}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 /* the label wraps a hidden radio; the span is the pill, so :checked styles a sibling.
    max-width keeps the two long training answers inside the card at 320px: the pill shrinks
@@ -612,11 +612,6 @@ body:has(.consult-dusk) .foot{background:linear-gradient(#141A26 0,rgb(6,11,14) 
 /* nothing chosen yet, nothing to say: the line leaves the card's grid entirely rather than
    holding a blank row and its 22px gap open under the button */
 .c-sum:empty{display:none}
-/* the calendly iframe takes the card's slot, so it reads as the card rather than a white box */
-.c-embed{height:700px;background:rgba(244,242,236,.7);
-  box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 40px 60px -40px rgba(0,30,39,.55)}
-/* calendly sets height="100%" as an attribute, which iframes ignore, so size it here */
-.c-embed iframe{display:block;width:100%;height:100%;border:0}
 
 /* Free sample (#sample): the consult's card, chips and fields, on the sand band. Only the
    checkboxes, the hints and the errors are its own. */
@@ -639,6 +634,7 @@ body:has(.consult-dusk) .foot{background:linear-gradient(#141A26 0,rgb(6,11,14) 
 .s-done h3{font:800 28px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
 .s-done h3:focus{outline:none}
 .sample-sec:has(.s-done:target) #sample-form{display:none}
+.consult-dusk:has(.s-done:target) #consult-form{display:none}
 /* what happens after "Request my sample": three numbered lines under the button */
 .s-next{list-style:none;margin:-8px 0 0;padding:0;display:grid;gap:8px;counter-reset:sn}
 .s-next li{position:relative;padding-left:32px;font-size:14px;line-height:1.45;color:var(--ink);counter-increment:sn}
@@ -1000,6 +996,20 @@ html:not(.js) #c-step-n,html:not(.js) #c-prog,html:not(.js) #c-back{display:none
 /* the error keeps its rule and its words; only the side it is lit from changes */
 .consult-dusk #consult-form .c-err{background:rgba(230,211,197,.10);
   box-shadow:inset 2px 0 0 var(--sand);color:var(--chalk)}
+
+/* What the free sample lent this card when Calendly came out (2026-10-09): the consent ticks, the
+   "what happens next" list, the privacy line and the send's own error. Every one of them was written
+   for the LIGHT sample card and arrived here still set in --ink or --text, which on this teal panel is
+   all but invisible — measured before the fix, the consent label was ink (30,38,47) on the glass. They
+   take the same inversion as the rest of the panel: chalk for what must be read, sand for the quiet
+   parts, and the numbered badges and the tick's accent go sand so they keep their shape. */
+.consult-dusk #consult-form .s-check{color:var(--chalk)}
+.consult-dusk #consult-form .s-check em{color:var(--sand)}
+.consult-dusk #consult-form .s-check input{accent-color:var(--sand)}
+.consult-dusk #consult-form .s-next li{color:var(--on-dark)}
+.consult-dusk #consult-form .s-next li::before{color:var(--sand);box-shadow:inset 0 0 0 1px rgba(230,211,197,.6)}
+.consult-dusk #consult-form .c-fine{color:var(--sand)}
+.consult-dusk #consult-form .s-err{color:#FFC9BE}   /* the light-card red is a black mark on teal */
 
 /* THE CHOICE PILLS. Dashed and empty until they are picked, exactly as the sample's are;
    picked, they invert instead of filling teal — a teal pill on a teal panel has no shape.

@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=4b3cd98f">
+<link rel="stylesheet" href="../style.css?v=e7e91eab">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 <script>
 !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],Object.defineProperty(u,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e}}),Object.defineProperty(u.people,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(){return u.toString(1)+".people (stub)"}}),o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
@@ -646,7 +646,7 @@ matchMedia('(min-width: 1024px)').addEventListener('change',function(m){if(m.mat
 (function(){
   var tab=$('#mtab');
   if(!tab||!('IntersectionObserver' in window))return;
-  var zones=$$('#macros,#consult-go,#consult-embed,.st-book,.hero-actions,#how-go,.why-door,.q-go,#s-next,#sample-go,.bay-in,.rk-panel,.mys-acts,.cat-macros,.foot'),inView=zones.map(function(){return false}),
+  var zones=$$('#macros,#consult-go,.st-book,.hero-actions,#how-go,.why-door,.q-go,#s-next,#sample-go,.bay-in,.rk-panel,.mys-acts,.cat-macros,.foot'),inView=zones.map(function(){return false}),
       curtain=function(){return !!$('body > .intro')},
       paint=function(){tab.classList.toggle('on',!curtain()&&inView.indexOf(true)<0)};
   var io=new IntersectionObserver(function(es){
@@ -1031,56 +1031,25 @@ if(arch){
   });
 })();
 
-/* Calendly's widget.js, shared by the consult's inline calendar and the quick call's popup.
-   It is only fetched on the first booking tap, once, so nobody who never books pays for it. */
-var wjs=0,wq=[];
-var withCalendly=function(fn,fail){
-  if(window.Calendly)return fn();
-  wq.push(fn);
-  if(wjs)return;
-  wjs=1;
-  var sc=doc.createElement('script');
-  sc.src='https://assets.calendly.com/assets/external/widget.js';
-  sc.async=true;
-  sc.onload=function(){wq.splice(0).forEach(function(f){f()})};
-  sc.onerror=function(){wjs=0;wq.length=0;fail()};
-  doc.head.appendChild(sc);
-};
-
-/* The quick 10-minute call. Only there once CONSULT_QUICK_URL is set in build_homepage.py (until
-   then the button is a plain link to #consult, and carries no data-quick). It is a real link to
-   the calendar in a new tab; with script it opens in Calendly's popup over the page instead.
-   The popup needs Calendly's widget.css as well as widget.js (the inline embed needs neither's
-   styles), so it waits for both. Cmd/ctrl/shift-clicks keep the plain link. */
-var qcss=null;
-$$('a[data-quick]').forEach(function(a){
-  a.addEventListener('click',function(e){
-    if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button)return;
-    e.preventDefault();
-    var go=function(){window.Calendly.initPopupWidget({url:a.href+(a.href.indexOf('?')>-1?'&':'?')+
-          'hide_gdpr_banner=1&background_color=f4f2ec&text_color=1e262f&primary_color=002e3b'})},
-        tab=function(){if(!window.open(a.href,'_blank','noopener'))location.href=a.href};
-    if(!qcss){
-      qcss=doc.createElement('link');qcss.rel='stylesheet';
-      qcss.href='https://assets.calendly.com/assets/external/widget.css';
-      qcss.onload=function(){qcss.done=1};
-      qcss.onerror=function(){qcss.done=1};
-      doc.head.appendChild(qcss);
-    }
-    withCalendly(function(){
-      if(qcss.done)return go();
-      qcss.addEventListener('load',go);qcss.addEventListener('error',go);
-    },tab);
-  });
-});
+/* Calendly is gone (Peter, 2026-10-09). What stood here was its widget.js loader, shared by the
+   consult's inline calendar and the quick call's popup, plus the popup handler on a[data-quick] and a
+   second <link> for widget.css. All four went with it, and with them the only third-party script the
+   site ever loaded on a tap. CONSULT_QUICK_URL is still a constant in build_homepage.py and quick_call()
+   still renders its plain link, so a quick-call route can come back without this coming back with it.
+   The code is in the commit that removed it, if the calendar is ever wanted again. */
 
 /* Consult: the calendar embeds in place of the form, the four answers prefilled as a1-a4
    (Calendly maps those positionally onto the event type's custom questions) */
 var cform=$('#consult-form');
 if(cform){
-  var csum=$('#consult-sum'),cbox=$('#consult-embed'),
+  /* the script reports errors beside each field instead, and the last step's required name, phone and
+     consent sit in a HIDDEN fieldset until the visitor gets there — Chrome refuses to submit a form with
+     an invalid control it cannot focus, and does it silently, so with native validation left on the card
+     simply stopped responding to its own button (measured 2026-10-09). No-JS keeps native validation,
+     because without the script every step is on screen at once and there is nothing hidden to trip on. */
+  var csum=$('#consult-sum'),
       val=function(n){var el=cform.elements[n];return ((el&&el.value)||'').trim()},
-      cSync=null,     /* set by the calculator below: brings its own lines up to date before a1-a4 are read */
+      cSync=null,     /* set by the calculator below: brings its own lines up to date before the note is sent */
       cTop=null,      /* and used by it: where a move to this form should land, now the form is stepped */
       /* the note ("Anything you want covered?") can carry two lines the site wrote: the bar's
          "Interested in: ..." (the bar block below sets .line) and the calculator's macros line, in
@@ -1116,10 +1085,18 @@ if(cform){
       cAt=0,cHop=0;
   /* the two chip questions each need an answer; both blanks are the visitor's to leave empty,
      and the second says Optional on its face. One message per step, for what that step asks. */
+  cform.noValidate=true;
   function cAsk(i){
     /* DRAFT-COPY */
     if(i===0&&!val('goal'))return 'Pick one so I know what the call is about.';
     if(i===1&&!val('training'))return 'Pick the one that’s closest.';
+    /* the last step since 2026-10-09: Peter rings the number himself now, so the name, the number and
+       the say-so are the three things the card cannot send without */
+    if(i===2){
+      if(!val('name'))return 'I need a name to put to the call.';
+      if(!val('phone'))return 'I need a number to reach you on.';
+      if(!cform.elements.consent.checked)return 'Tick the box so I know I can call or text you.';
+    }
     /* /DRAFT-COPY */
     return '';
   }
@@ -1236,40 +1213,42 @@ if(cform){
     /* shown first, then written: a role=alert revealed and filled in that order is announced */
     if(miss){cErr.hidden=false;cErr.textContent=miss;return}
     if(cAt<cSteps.length-1){clearTimeout(cHop);cHop=0;cAt++;cStep(true);cSave();return}
-    var url=cform.dataset.consult;
-    if(!url){                                   /* no calendar connected yet: say so rather than embed nothing */
-      csum.textContent='Your answers are ready. The booking calendar connects here shortly.';
-      return;
-    }
+    /* It used to load a Calendly here. Peter dropped Calendly on 2026-10-09 — "they can give me their
+       phone number. I can always call them or text them to book a time manually" — so the card now sends
+       itself to his inbox, exactly as the free sample does: the same service, the same JSON shape, the
+       same failure wording, and everything the visitor typed left in place if it does not go. */
+    /* the calculator's numbers and the bar's "Interested in: …" are written into the note here, the
+       last moment before it is read. This call was briefly lost when Calendly came out, which would
+       have sent Peter the note WITHOUT the macros or the stack — put it back if it ever goes again. */
     if(cSync)cSync();
-    /* a1-a4 go in the embed url itself; widget.js drops a prefill object for custom answers */
-    var qs=[];
-    [val('goal'),val('training'),val('stack'),val('note')].forEach(function(v,i){
-      if(v)qs.push('a'+(i+1)+'='+encodeURIComponent(v));
-    });
-    csum.textContent='Loading the calendar with your answers.';
-    withCalendly(function(){
-      cbox.hidden=false;
-      /* colours lifted from style.css: --chalk, --ink, --teal */
-      window.Calendly.initInlineWidget({
-        url:url+(url.indexOf('?')>-1?'&':'?')+
-            'hide_gdpr_banner=1&background_color=f4f2ec&text_color=1e262f&primary_color=002e3b'+
-            (qs.length?'&'+qs.join('&'):''),
-        parentElement:cbox
-      });
-      cform.hidden=true;
-      /* the 700px calendar takes the place of a taller form, and whoever tapped "Pick a time"
-         was at that form's foot, so the page would be left looking past the calendar. Bring
-         its top up under the masthead (html's scroll-padding-top, --mast, as the anchors do),
-         unless it is already on screen. Reduced motion jumps instead of gliding. */
-      var ct=cbox.getBoundingClientRect().top,
-          cm=parseFloat(getComputedStyle(html).scrollPaddingTop)||0;
-      if(ct<cm||ct>=innerHeight)
-        cbox.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
-      say('Calendar loaded. Pick a time.');
-    },function(){
-      csum.textContent='The calendar did not load. Try again in a moment.';
-    });
+    var cdone=$('#call-sent'),cfail=$('#consult-fail'),cEl=cform.elements,
+        cv=function(n){var e=cEl[n];return e?(e.value||'').trim():''};
+    cfail.textContent='';
+    var body={_subject:cEl._subject.value,_template:cEl._template.value,_captcha:cEl._captcha.value,
+              _honey:cEl._honey.value,
+              name:cv('name'),phone:cv('phone'),
+              goal:val('goal'),training:val('training'),stack:cv('stack'),note:cv('note'),
+              consent:'Yes, Peter can call or text me to set up a time',
+              keep_in_touch:cEl.keep_in_touch.checked?'Yes':'No'};
+    cform.setAttribute('aria-busy','true');cNext.textContent='Sending…';
+    csum.textContent='';
+    say('Sending your request.');
+    var cfailed=function(){
+      cform.removeAttribute('aria-busy');cNext.textContent=CGOTEXT;
+      cfail.textContent='That didn’t send. Check your connection and try again. Everything you typed is still here.';
+      say(cfail.textContent);
+    };
+    fetch(cform.dataset.endpoint,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify(body)})
+      .then(function(r){return r.json().catch(function(){return {}}).then(function(j){
+        if(!r.ok||!(j.success===true||j.success==='true'))throw 0;
+        cform.removeAttribute('aria-busy');
+        cform.hidden=true;cdone.classList.add('on');
+        var h=$('#call-done-title');if(h)h.focus();
+        try{localStorage.removeItem('aspire-consult')}catch(e){}
+        say('Request sent. Peter will text you to set up a time.');
+      })})
+      .catch(cfailed);
   });
 
   /* what they left last time, back where they left it. A step restored past a question that no
@@ -1941,8 +1920,8 @@ if(mcForm){
        not the first one, because the goal above has just been filled in. The form's top does
        not move when the step does, but the landing spot is taken from it, so it is settled
        before anything is measured or scrolled. */
-    var t=cform.hidden?cbox:(cTop?cTop():$('legend',cform));
-    var el=cform.hidden?cbox:cform,r=el.getBoundingClientRect(),tf=getComputedStyle(el).transform,
+    var t=cform.hidden?$('#call-sent'):(cTop?cTop():$('legend',cform));
+    var el=cform.hidden?$('#call-sent'):cform,r=el.getBoundingClientRect(),tf=getComputedStyle(el).transform,
         ty=tf&&tf!=='none'?new DOMMatrixReadOnly(tf).m42:0,
         pad=parseFloat(getComputedStyle(html).scrollPaddingTop)||0;
     scrollTo({top:Math.max(0,scrollY+r.top-ty-pad),behavior:smooth?'smooth':'auto'});
