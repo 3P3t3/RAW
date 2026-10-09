@@ -378,6 +378,14 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   `#pcard`: `PETER_PICKS` maps shelf → product and the build exits on a name that is not in `share-links.csv`.
   The shop hero's headline steps down at ≤480px and its lead moves below the links (CSS `order`), so "Pick your goal" ends
   at 654 of 844 at 390 and 576 of 640 at 320 (it was 799 and 723); the square film is untouched.
+  **The film has no play/pause control (Peter, 2026-10-09: "Can we remove the play and pause button for the hero
+  video?").** `.glass-toggle`, its CSS and `userPaused` are all gone. He was told first what it was for — WCAG 2.2.2
+  asks for a visible way to stop motion that starts by itself and runs over five seconds, and this film loops — and
+  it is his call on his own site, recorded here: **do not put it back without asking him.** What carries the load
+  instead, and must stay: `prefers-reduced-motion` is read **before `play()` is ever called**, so a visitor who has
+  asked their system for less motion gets the poster and the mp4 is never fetched (verified: no `src` at all); the
+  film is muted with no audio track, so it owes no captions; and it pauses itself off screen and in a background
+  tab. The `#i-play` / `#i-pause` icons stay in the sprite — the islands carousel's own toggle still uses them.
   **At the shop hero's FOOT, since 2026-10-05, Peter signs it**: the same `.hh-me` block Tab 1's hero carries — his 60px
   photograph (`assets/peter/hero-pair-240.webp`) and his PETER-COPY line verbatim — with the homepage hero's own "See how
   we did it" (→ `homepage.html#story`) beside it. Three critics found that the page the site opens on never said whose

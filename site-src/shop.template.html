@@ -61,7 +61,8 @@
     <div class="wrap hero-in">
       <div class="glass">
         <video id="glass-video" muted loop playsinline preload="none" poster="assets/glass-poster.webp" width="1080" height="1080" aria-hidden="true"></video>
-        <button class="icon-btn glass-toggle" id="glass-toggle" type="button" aria-label="Pause animation" hidden><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>
+        <!-- no play/pause control on the hero film (Peter, 2026-10-09). What stops it is
+             prefers-reduced-motion, which _script.html reads before it ever calls play(). -->
       </div>
       <div class="hero-copy">
         <p class="label">Sports nutrition &amp; wellness</p>

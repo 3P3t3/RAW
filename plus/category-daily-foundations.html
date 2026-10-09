@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="../assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="../style.css?v=9b5f6af9">
+<link rel="stylesheet" href="../style.css?v=ed29422f">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -462,20 +462,25 @@ if(html.classList.contains('motion')){
   if(pin&&window.MutationObserver)new MutationObserver(ask).observe(pin,{attributes:true,attributeFilter:['class']});
 })();
 
-/* Hero glass video: plain H.264, so it plays everywhere; the poster shows until it does */
-var v=$('#glass-video'),vt=$('#glass-toggle'),userPaused=false;
+/* Hero glass video: plain H.264, so it plays everywhere; the poster shows until it does.
+   NO PLAY/PAUSE CONTROL (Peter, 2026-10-09: "Can we remove the play and pause button for the hero
+   video?"). He was told first what it was for — WCAG 2.2.2 asks for a visible way to stop motion that
+   starts by itself and runs over five seconds, and this film loops — and it is his call on his own site,
+   so do not put it back without asking him. What remains, and must stay: prefers-reduced-motion is read
+   BEFORE play() is ever called, so a visitor who has asked their system for less motion gets the poster
+   and the file is never even fetched; the film is muted, carries no sound and no captions to owe; and it
+   pauses itself off screen and in a background tab. `userPaused` went with the button — nothing can set
+   it any more — and the #i-play / #i-pause icons stay in the sprite because the islands carousel's own
+   toggle still uses them. */
+var v=$('#glass-video');
 if(v){
   var still=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var setBtn=function(playing){vt.setAttribute('aria-label',playing?'Pause animation':'Play animation');$('use',vt).setAttribute('href',playing?'#i-pause':'#i-play')};
   var play=function(){if(!v.getAttribute('src')){v.autoplay=true;v.src=innerWidth<768?'../assets/glass-720.mp4':'../assets/glass-1080.mp4'}var p=v.play();if(p&&p.catch)p.catch(function(){})};
-  v.addEventListener('play',function(){setBtn(true)});v.addEventListener('pause',function(){setBtn(false)});
-  vt.hidden=false;setBtn(false);
-  v.addEventListener('error',function(){v.removeAttribute('src');v.load();vt.hidden=true},true);
-  vt.addEventListener('click',function(){if(v.paused){userPaused=false;play()}else{userPaused=true;v.pause()}});
-  if(still){setBtn(false)}else{
+  v.addEventListener('error',function(){v.removeAttribute('src');v.load()},true);
+  if(!still){
     if(doc.readyState==='complete')play();else window.addEventListener('load',play);
-    doc.addEventListener('visibilitychange',function(){if(!doc.hidden&&!userPaused&&v.paused&&v.getAttribute('src'))v.play().catch(function(){})});
-    if('IntersectionObserver' in window)new IntersectionObserver(function(es){if(userPaused||!v.getAttribute('src'))return;if(es[0].isIntersecting)v.play().catch(function(){});else v.pause()}).observe(v);
+    doc.addEventListener('visibilitychange',function(){if(!doc.hidden&&v.paused&&v.getAttribute('src'))v.play().catch(function(){})});
+    if('IntersectionObserver' in window)new IntersectionObserver(function(es){if(!v.getAttribute('src'))return;if(es[0].isIntersecting)v.play().catch(function(){});else v.pause()}).observe(v);
   }
 }
 /* Phone search: the icon opens the search row */
