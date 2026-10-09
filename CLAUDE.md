@@ -760,6 +760,29 @@ what reveals the plate, so the fade only kept it half transparent for the first 
 skips the recoil whole (`!reduce.matches`, unchanged) and kills the slide's transition, as before. **A px floor,
 not an em, is the lesson**: anything sized off `.bb`'s font-size disappears on the strip.
 
+**The plate flies to the bar (`fly()` in `_script.html`, 2026-10-09).** What Peter actually meant: *"the entire
+plate that we select moves from where we have it to our stack up above"* — the option I had argued against. He was
+right to want it. A copy of the rack plate is flown, `position:fixed` on `<body>`, from where it stands to where it
+will sit on the pinned strip, over **620ms**, shrinking and **narrowing to the strip plate's own 3-5px sliver** —
+the rack draws a plate face on and the bar draws it side on, and the flight is the turn between them. The strip's
+own plate is held back (`opacity:0`, `transition:none`) while the copy is in the air and revealed at **86%**, so the
+two cross over instead of one blinking out before the other lands. Measured: **143px of travel at 390, 261px at
+1440**, both monotonic, final width 3px and 5px against strip plates of 3.89px and 4.75px.
+- **It is strictly an extra.** `fly()` returns false — and every caller falls back to the slide — when reduced
+  motion is set, when the strip is not up, when the rack plate is off screen, or when the destination has no box.
+  Verified: with the strip down the plate still lands, nothing is left hidden, no copy is left behind, no errors.
+- **Three things cost real time to get right, so do not undo them.** (1) The landing point carries **no scale
+  term**: `transform-origin` is the centre, so scaling does not move the centre, and multiplying it in put the copy
+  down in the wrong place. (2) The turn is **`scaleX`, not a 3D `rotateY`** — `perspective()+rotateY` decomposes to
+  a matrix between keyframes, and the copy wandered sideways and stopped shrinking; `scale3d` interpolates
+  componentwise. (3) The easing is **`cubic-bezier(.42,0,.58,1)`**; the first one tried, `cubic-bezier(.36,.02,.2,1)`,
+  put the plate at the bar by 40% of the duration and left the rest of the flight empty.
+- The destination's rect is read with its **transition suppressed**, or it is read a third of the way through its
+  own slide. A real-time `setTimeout` tidies the copy away if the tab is backgrounded mid-flight — **stub
+  `setTimeout` before stepping the animation by hand**, or that timer removes the copy while you are looking at it
+  (it had me chasing a flight that appeared to vanish at 240ms). The bar's recoil and the newest-plate flash both
+  wait for the landing when the flight runs.
+
 **Section joins.** Two sections that met each laid a full `--sec` on the join, so every boundary was two of them.
 `.sec + .sec,.sec + dialog + .sec{padding-top:calc(var(--sec) * .5)}` (`#story` is a `.sec` now) sits next to `.sec{padding:var(--sec) 0}`
 and gives a join one full `--sec` and half the other. It applies to every page, so a new section added anywhere gets
