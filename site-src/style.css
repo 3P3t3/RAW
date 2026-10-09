@@ -70,7 +70,7 @@ button,input{font:inherit;color:inherit}
 button{cursor:pointer}
 a,button,summary{touch-action:manipulation}
 :focus-visible{outline:2px solid var(--teal);outline-offset:3px}
-.dark :focus-visible,.mast :focus-visible,.menu :focus-visible{outline-color:var(--sand)}
+.dark :focus-visible,.mast :focus-visible,.menu :focus-visible,.rk-panel :focus-visible{outline-color:var(--sand)}
 [hidden]{display:none!important}
 .vh{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .skip{position:absolute;left:8px;top:-200px;z-index:50;background:var(--sand);color:var(--teal);padding:12px 16px;min-height:44px;border-radius:var(--r)}
@@ -1518,6 +1518,7 @@ html:not(.js) .isle{position:static;width:auto;margin:0}
 .bay-go{display:grid;justify-items:center;align-content:start;gap:4px;width:100%;margin:0;padding:0;border:0;border-radius:12px;
   background:none;color:inherit;font:inherit;text-align:center;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .bay-go:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+.rk-panel .bay-go:focus-visible{outline-color:var(--sand)}
 /* a pack shot is its product on a square with room round it, standing at 91% down, drawn --s times
    the cell's width. It is grown by layout, not by a transform: the compartment has to clip to fold
    shut, and a scaled image paints outside its own box, so its top was cut (Peter, on his phone).
@@ -1988,8 +1989,26 @@ html:not(.js) .lbpin{display:none}
   inset 0 0 0 max(.5px,.5cqi) rgba(0,0,0,.2),0 max(3px,3.4cqi) 0 color-mix(in srgb,var(--c) 50%,#0B1115),0 0 0 calc(max(3px,3.4cqi) + 3px) var(--chalk),0 0 0 calc(max(3px,3.4cqi) + 5.5px) var(--teal),0 16px 22px -12px rgba(0,20,27,.6)}
 @media (hover:hover){.rk-plate:hover .rk-disc{transform:translate3d(0,-3px,0)}.rk-plate:hover::before{opacity:.7;transform:scale(.94)}}
 .rk-plate:active .rk-disc{transform:translate3d(0,1px,0)}
-.rk-panel{position:relative;flex:0 0 100%;min-width:0;margin:4px 0;padding:18px 18px 6px;border-radius:18px;background:color-mix(in srgb,var(--sand) 45%,var(--chalk));
-  box-shadow:inset 0 5px 0 var(--c),inset 0 0 0 1px rgba(0,20,27,.08)}
+/* The open bay is a DARK panel (Peter, 2026-10-09: "when we open a plate, I think the background should be
+   different than the surrounding areas, they're both basically tan right now" — then, shown four, "lets go b").
+   It was sand-mixed-with-chalk standing on the chalk field: two tans a few percent apart, so it read as the page
+   with a border drawn on it rather than as a surface. Deep teal separates it outright and the cut-out packs, which
+   are the content, pop hardest against it. This is NOT glass and must not become it: there is no picture behind the
+   rack to look through (see "The glass" above) — it is a flat dark fill, which is also why every figure below can
+   be computed rather than sampled. The copy inverts to chalk-on-teal, the "See all" link and the load button take
+   sand, and the plate-colour strip along the top edge and the notch above it are untouched, so the bay still
+   belongs to the plate that opened it. Measured against the lighter of the two gradient stops (#002B37): the
+   heading and the pack names 13.39:1, the line under the heading 9.65:1, "See all" 10.34:1, and the button's teal
+   on sand 9.96:1. Focus rings inside it go sand at the top of this file, with .dark and the masthead. */
+.rk-panel{position:relative;flex:0 0 100%;min-width:0;margin:4px 0;padding:18px 18px 6px;border-radius:18px;
+  background:linear-gradient(color-mix(in srgb,var(--teal) 94%,#000),color-mix(in srgb,var(--teal) 86%,#000));
+  box-shadow:inset 0 5px 0 var(--c),inset 0 0 0 1px rgba(230,211,197,.22),0 18px 30px -22px rgba(0,20,27,.6)}
+.rk-panel .rk-title{color:var(--chalk)}
+.rk-panel .rk-sub{color:var(--on-dark)}
+.rk-panel .bay-pack{color:var(--chalk)}
+.rk-panel .bay-all{color:var(--sand)}
+.rk-panel .rk-load{background:var(--sand);color:var(--teal)}
+.rk-panel .rk-load[aria-pressed="true"]{background:transparent;color:var(--sand);box-shadow:inset 0 0 0 1px var(--sand)}
 /* a notch in the plate's colour on the panel's top edge, under the plate it belongs to (--x, set by
    the script as it places the panel) */
 .rk-panel.is-at::before{content:"";position:absolute;top:-9px;left:calc(var(--x) - 10px);border:solid transparent;border-width:0 10px 10px;border-bottom-color:var(--c)}

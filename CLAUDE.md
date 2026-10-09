@@ -694,6 +694,20 @@ of each panel, so ids and aria stay single and Tab still goes plate → its pane
 points at the plate. `show()` brings the plate and its packs into view together when they fit, otherwise the
 whole panel (Peter, 2026-09-28: tapping a plate must show "where the items actually are").
 
+**The open bay is dark (2026-10-09).** Peter: *"when we open a plate, I think the background should be different
+than the surrounding areas, they're both basically tan right now"* — then, shown four treatments, *"lets go b"*. It
+was `color-mix(in srgb, var(--sand) 45%, var(--chalk))` standing on the chalk field: two tans a few percent apart, so
+it read as the page with a border drawn on it rather than as a surface. `.rk-panel` is a deep teal gradient now
+(`--teal` 94% to 86% toward black) with a sand hairline and a drop shadow; the copy inverts to chalk, the line under
+the heading to `--on-dark`, "See all" and the load button to sand. **The plate-colour strip along the top edge and
+the notch above it are untouched**, so the bay still belongs to the plate that opened it. **It is NOT glass and must
+not become it** — there is no picture behind the rack to look through (see "The glass"), it is a flat dark fill, which
+is also why its figures are computed rather than sampled: heading and pack names **13.39:1**, the line **9.65:1**,
+"See all" **10.34:1**, the button's teal on sand **9.96:1**, all against the lighter gradient stop, verified live on
+five bays at 390 and 1440. Focus rings inside it go sand, on the same line as `.dark` and the masthead — the global
+ring is teal and would have been invisible. The three options not taken were near-white, a plate-colour tint on
+near-white (the one that changes per bay) and a 28% tint on the tan, which turns every plate's colour to mud.
+
 **The plate colours, rebuilt (2026-10-09).** Peter: *"shouldnt we add some more distincitive plate colors? like
 yellow is a common one, but instead we have 2 versions of tan and 2 versions of brown and 2 versions of green."* He
 was right, and the audit found worse than he could see. **The palette had only ever been held to two gates** — text
