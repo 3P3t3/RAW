@@ -637,7 +637,7 @@ POSTHOG_HOST = 'https://us.i.posthog.com'  # or https://eu.i.posthog.com. The lo
 # their name and what they are after into it, so replay is OFF until Peter asks for it. The snippet says so
 # explicitly rather than leaving it to the project's own setting, so the page cannot start recording because
 # a toggle moved somewhere else.
-POSTHOG_REPLAY = False
+POSTHOG_REPLAY = True
 
 def analytics(loader):
     """The PostHog snippet for the page head, or nothing at all. `loader` is site-src/_posthog.js, which is

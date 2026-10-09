@@ -911,6 +911,25 @@ every page of **both** published copies at once. The two report to the same proj
   `disable_session_recording:true`, the snippet sits inside `<head>`, and the page still works. **Always test with
   `*.posthog.com` mapped to 127.0.0.1 in Chrome's resolver** — otherwise every local run posts localhost events
   into Peter's real project. The first genuine events are the ones from the live site after a push.
+- **The funnel is instrumented (2026-10-09)**, which is Eric Elizes' first recommendation and the one Peter
+  asked us to act on: *"track conversion rate in whatever your funnel is."* Autocapture only knows "a button
+  with this text was clicked"; these are the named steps of Peter's own funnel, at the end of `_script.html`:
+  `shelf_opened{shelf}` → `plate_loaded{shelf,product,plates}` → `product_viewed{product,from}` →
+  **`amway_opened{product,from}`**, plus `sample_submitted`, `call_submitted` and `page_kind{page,plus}`.
+  `from` is one of product_card / shelf_bay / all_products / my_stack / other.
+  - **`amway_opened` runs in the BUBBLE phase and skips a prevented click, on purpose.** A pack in a bay and
+    a tile in the grid are both `<a href="amway.com/share-link/…">`, but with script the site cancels those
+    clicks and opens the product card instead — the first version counted them and reported an exit to Amway
+    every time somebody merely looked at a product. Measured after the fix: one real exit, one `amway_opened`.
+    What is left is the card's own "Buy on Amway" and, with no script, the raw links. **Do not move this
+    listener to the capture phase.**
+  - **No personal data, ever.** Shelf and catalogue names only. The forms report THAT they were sent, not what
+    was in them — verified by filling a name and a phone into the sample form and checking the payload.
+  - `track()` is a no-op when PostHog is absent, so a blocked, offline or key-less build is unaffected.
+  - Names are stable: renaming one orphans the funnel already built on it in PostHog.
+- **Session replay is ON** (`POSTHOG_REPLAY = True`, 2026-10-09). It was off; Eric recommended replay and
+  heatmaps by name and Peter said to follow him. PostHog masks typed input by default — if that ever needs to
+  be certain for the live sample form, set the masking explicitly rather than trusting the default.
 - **Not done, and Peter's to decide:** there is no consent banner on the site. PostHog sets a cookie and
   autocapture records clicks and the text of what was clicked (not what is typed into a field). For US traffic
   that is normally fine; EU visitors are a different question. Raise it with him rather than adding a banner.

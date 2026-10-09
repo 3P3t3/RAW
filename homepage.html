@@ -24,7 +24,7 @@
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 <script>
 !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],Object.defineProperty(u,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e}}),Object.defineProperty(u.people,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(){return u.toString(1)+".people (stub)"}}),o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-posthog.init('phc_ntNTcMoskMxcRTPJ56Gmda6PiBJ4PM2xysKiQRUhyj9P',{api_host:'https://us.i.posthog.com',defaults:'2026-05-30',disable_session_recording:true})
+posthog.init('phc_ntNTcMoskMxcRTPJ56Gmda6PiBJ4PM2xysKiQRUhyj9P',{api_host:'https://us.i.posthog.com',defaults:'2026-05-30',disable_session_recording:false})
 </script>
 </head>
 <body>
@@ -2750,6 +2750,9 @@ var LB=null;
     if(on)stack.push(c);else stack.splice(i,1);
     if(on&&pick)picks[c]=pick;else delete picks[c];   /* the rack's own button carries no product */
     save();paint(on?c:null);noteDue=true;
+    /* the middle of the funnel: a plate actually going ON the bar, with the shelf and, when it came
+       from a product's own card, that product. Catalogue names only — nothing a visitor typed. */
+    if(on)track('plate_loaded',{shelf:c, product:pick||null, plates:stack.length});
     doc.dispatchEvent(new CustomEvent('aspire:sfx',{detail:on?'clank':'unclank'}));   /* the visitor's own plate, loaded by hand */
     say(NAME[c]+(on?' is on the bar. ':' is off the bar. ')+(stack.length?count(stack.length)+'.':'Nothing else is on it.'));
   }
@@ -3039,6 +3042,64 @@ var LB=null;
     if(!es[0].isIntersecting)return;
     o.disconnect();go();
   },{rootMargin:'400px 0px'}).observe(im.closest('footer'));
+})();
+/* ---- The funnel, in PostHog (2026-10-09) --------------------------------------------------
+   Eric Elizes' first recommendation, which Peter asked us to follow: "track conversion rate in
+   whatever your funnel is, and try to increase that rate + minimize clicks between." Autocapture
+   already records every click, but it records them as "a button with this text was clicked" — it
+   cannot tell you that someone opened a shelf, put a plate on their bar and then went to Amway.
+   These are the named steps of Peter's own funnel, so the rate is a number rather than a guess.
+
+   Rules this block keeps:
+   - It NEVER breaks the page. `track` is a no-op if PostHog is absent (blocked, offline, not yet
+     loaded, or POSTHOG_KEY empty, which is how the site ships to a preview).
+   - It sends NO personal data. Shelf names, product names and section ids only; never what anyone
+     typed into a blank, never the phone number or the note. The forms report THAT they were sent,
+     not WHAT was in them.
+   - It is all delegated or event-driven, so it adds no work to the handlers it watches and cannot
+     change what they do.
+   Names are snake_case and stable: renaming one orphans the funnel already built on it in PostHog. */
+function track(name, props){
+  try{ if(window.posthog && window.posthog.capture) window.posthog.capture(name, props||{}) }catch(e){}
+}
+window.aspireTrack = track;   /* so the blocks above can report their own steps */
+(function(){
+  /* 1. a shelf opened on the rack — the top of the funnel */
+  doc.addEventListener('click', function(e){
+    var pl = e.target.closest && e.target.closest('.rk-plate[data-cat]');
+    if(pl && pl.getAttribute('aria-expanded') !== 'true') track('shelf_opened', {shelf: pl.getAttribute('data-cat')});
+  }, true);
+  /* 2. a product looked at. Every pack and tile carries data-name, and with script the site turns
+        those links into openers for the product card (#pcard) rather than letting them leave — which
+        is why this is its own step and not an exit. */
+  doc.addEventListener('click', function(e){
+    var t = e.target.closest && e.target.closest('[data-name]');
+    if(!t) return;
+    track('product_viewed', {product: t.getAttribute('data-name') || null, from: where(t)});
+  }, true);
+  /* 3. OUT TO AMWAY — the closest thing on this site to a sale, so it is the step that matters most.
+        THIS RUNS IN THE BUBBLE PHASE AND SKIPS A PREVENTED CLICK ON PURPOSE. A pack in a bay and a
+        tile in the grid are both <a href="amway.com/share-link/...">, but with script the site cancels
+        those clicks and opens the product card instead — counting them here would have reported an
+        exit to Amway every time somebody merely looked at a product (measured: it did). What is left
+        is the card's own "Buy on Amway" button and, with no script, the raw links. */
+  doc.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href*="amway.com"]');
+    if(!a || e.defaultPrevented) return;
+    track('amway_opened', {product: a.getAttribute('data-name') || cardName() || null, from: where(a)});
+  });
+  /* the two helpers the steps above share */
+  function where(el){
+    return el.closest('#pcard') ? 'product_card' : el.closest('.rk-panel') ? 'shelf_bay'
+         : el.closest('#grid') ? 'all_products' : el.closest('#my-stack') ? 'my_stack' : 'other';
+  }
+  function cardName(){ var h = $('#pcard-name'); return h ? h.textContent.trim() : null }
+  /* 4. the two forms, reported as sent — never their contents */
+  var sf = $('#sample-form'); if(sf) sf.addEventListener('submit', function(){ track('sample_submitted') });
+  var cf = $('#consult-form'); if(cf) cf.addEventListener('submit', function(){ track('call_submitted') });
+  /* 5. which tab a visit actually lands on, so the two entry points can be told apart */
+  track('page_kind', {page: (location.pathname.split('/').pop() || 'index.html').replace('.html',''),
+                      plus: location.pathname.indexOf('/plus/') > -1});
 })();
 })();
 </script>
