@@ -1365,7 +1365,7 @@ def main():
                 + RACK_GUIDE
                 # the whole range, one tap away from the rack (a critic, 2026-10-03: a visitor who taps
                 # "Shop" expecting to browse saw ten plates and a form). Same data-all as the header's link.
-                + f'<!-- DRAFT-COPY --><p class="rk-all"><a class="tlink" href="#results" data-all>Browse all {len(products)} products'
+                + '<!-- DRAFT-COPY --><p class="rk-all"><a class="tlink" href="#results" data-all>Browse all products'
                   '<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></p><!-- /DRAFT-COPY -->'
                 # The one line on this tab that reaches Peter's argument (2026-10-08, four critics). The Shop is
                 # Tab 1 and the page a shared link opens, and it carried no bloodwork copy at all: a visitor could
