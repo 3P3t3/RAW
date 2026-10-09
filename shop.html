@@ -22,7 +22,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=939dc311">
+<link rel="stylesheet" href="style.css?v=3378fa00">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 </head>
 <body>
@@ -2782,10 +2782,19 @@ var LB=null;
     var go=function(){
       pinSet();
       if(newest){hush($$('.bb-ring',pinYou));flash([capNew].concat(rings(pinYou,newest)))}   /* the pinned one: the hero's is off screen */
-      /* the weight arriving: as the plate settles, the bar gives a hair under it and comes back */
+      /* the weight arriving: the bar gives under the plate as it lands, rebounds, and settles. The dip
+         has a FLOOR IN PIXELS on purpose. Everything on a bar is drawn from its own font-size, and the
+         pinned strip sets that to 3.2px (3.9 from 1024), where the old flat .24em came to 0.76px at 390
+         and 0.92px at 1440 — under one device pixel at 1x, so the beat was there in the code and not on
+         the screen (measured 2026-10-09). max(2.6px,.24em) holds 2.56px on the strip and still scales up
+         on "That's my stack", whose bar runs to 15px type. The small rise after the dip is what reads as
+         weight rather than as a jitter; reduced motion skips the whole thing, as before. */
       if(newest&&!reduce.matches)youBars.forEach(function(bar){
-        if(bar.animate)bar.animate([{transform:'none'},{transform:'translate3d(0,.24em,0)',offset:.3},{transform:'none'}],
-                                   {duration:320,delay:230,easing:'cubic-bezier(.3,.6,.4,1)'});
+        if(bar.animate)bar.animate([{transform:'none'},
+                                    {transform:'translate3d(0,max(2.6px,.24em),0)',offset:.34},
+                                    {transform:'translate3d(0,-0.9px,0)',offset:.68},
+                                    {transform:'none'}],
+                                   {duration:420,delay:210,easing:'cubic-bezier(.3,.6,.4,1)'});
       });
     };
     if(pdlg&&pdlg.open){if(!pdlg.dataset.due){pdlg.dataset.due='1';pdlg.addEventListener('close',function(){delete pdlg.dataset.due;setTimeout(go,60)},{once:true})}}

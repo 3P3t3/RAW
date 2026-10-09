@@ -694,6 +694,21 @@ of each panel, so ids and aria stay single and Tab still goes plate → its pane
 points at the plate. `show()` brings the plate and its packs into view together when they fit, otherwise the
 whole panel (Peter, 2026-09-28: tapping a plate must show "where the items actually are").
 
+**A plate landing on the bar (2026-10-09).** Peter asked for an animation when a plate "pops onto the bar", and
+for options 1 (slide onto the shaft) and 3 (the bar takes the weight). **Both were already built** — the find is
+worth keeping, because the instinct on seeing nothing is to write a third one. A plate parks `(--n + --off)`
+steps past the sleeve's outer end, where `.bb{overflow:clip visible}` cuts it off, and `.on` slides it in to its
+own step over 360ms on `cubic-bezier(.22,1.2,.36,1.04)`, which overshoots at the stop: **48.6px of travel at 390
+and 59.2px at 1440** — the whole visible length of the sleeve, and it reads. The bar's recoil in `paint()` did
+not. Everything on a bar is drawn from its own font-size and the pinned strip sets that to **3.2px** (3.9 from
+1024), so the flat `.24em` dip came to **0.76px at 390 and 0.92px at 1440** — under one device pixel at 1x, in
+the code and never on the screen. It is `max(2.6px,.24em)` now, with a 0.9px rise after it and 420ms instead of
+320: **measured live at 2.38px down and 0.83px up at both widths**, and it still scales up on "That's my stack",
+whose bar runs to 15px type. The plate's opacity transition went 140ms → 70ms for the same reason: the clip is
+what reveals the plate, so the fade only kept it half transparent for the first 40% of its slide. Reduced motion
+skips the recoil whole (`!reduce.matches`, unchanged) and kills the slide's transition, as before. **A px floor,
+not an em, is the lesson**: anything sized off `.bb`'s font-size disappears on the strip.
+
 **Section joins.** Two sections that met each laid a full `--sec` on the join, so every boundary was two of them.
 `.sec + .sec,.sec + dialog + .sec{padding-top:calc(var(--sec) * .5)}` (`#story` is a `.sec` now) sits next to `.sec{padding:var(--sec) 0}`
 and gives a join one full `--sec` and half the other. It applies to every page, so a new section added anywhere gets

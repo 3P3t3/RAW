@@ -1811,9 +1811,14 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
 .bb-sh::before{left:5%}
 .bb-sh::after{right:5%}
 /* a plate, edge on */
+/* a plate rides on and off the sleeve: parked, it sits (--n + --off) steps out, past the sleeve's outer
+   end, where .bb's `overflow:clip visible` cuts it off; loaded, it slides in to its own step (--o) with
+   a little overshoot at the stop. The clip is what reveals it, so the opacity is only there to stop a
+   hard edge appearing at the bar's end — it was 140ms, which left the plate half transparent for the
+   first 40% of a 360ms slide (the travel is 48.6px at 390 and 59.2px at 1440, measured 2026-10-09). */
 .bb-p{position:absolute;top:50%;width:var(--pw);height:calc(var(--s) * 10em);margin-top:calc(var(--s) * -5em);border-radius:.3em/.55em;
   opacity:0;will-change:transform,opacity;
-  transition:transform 360ms cubic-bezier(.22,1.2,.36,1.04),opacity 140ms linear}
+  transition:transform 360ms cubic-bezier(.22,1.2,.36,1.04),opacity 70ms linear}
 /* the rubber: drawn over the hub (below), so the steel shows only where it stands proud of the faces */
 .bb-p::after{content:"";position:absolute;inset:0;border-radius:inherit;
   background:var(--rubber),linear-gradient(90deg,rgba(0,0,0,.36),rgba(0,0,0,.08) 10%,rgba(0,0,0,0) 18%,rgba(0,0,0,0) 82%,rgba(0,0,0,.1) 90%,rgba(0,0,0,.42)),
