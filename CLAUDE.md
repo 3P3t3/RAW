@@ -506,7 +506,22 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   anything." Peter says **Avellum's medical director helped shape the AI**, which is his to assert — but it is ONE director,
   so "designed by doctors" overstates it where "designed by a doctor" does not, and it is a claim about a partner's product,
   so it wants to be something Avellum would repeat. **Peter is not Avellum: "our proprietary AI" is wrong on his site
-  whatever the ownership.** The corrected clinician wording is still to be written.
+  whatever the ownership.** Peter approved "doctors" plural on 2026-10-08 and gave the grounds: one medical director plus a
+  team of MDs who support him, "and we're involved in the direction of the app" — so it is not one person and the plural
+  stands. **APPROVED, TO BUILD** (held only until the site-wide glass lands, because it is in the same functions):
+  - `why_section()` card 01, replacing "…It goes through {provider}, and a licensed clinician reads it, not me.":
+    "Bloodwork is a lab test: your biomarkers, measured from your own blood, collected at home with a Tasso. It goes
+    through {provider}. Designed by doctors, explained in English: their assistant reads every marker back in plain words."
+  - the roles line, replacing "Who does what: licensed clinicians read your bloodwork and decide on any protocol…":
+    "Who does what: an assistant reads your bloodwork back to you in plain English, and anything clinical goes to a
+    licensed clinician, who decides on any protocol and can say no. I don't read labs and I don't prescribe. My part is
+    your nutrition and the products."
+  - the Our approach fact row becomes **"1 panel · 20 biomarkers · 1 free call"** (Valdura publishes 20 biomarkers + 3
+    calculations on its homepage, so the count is citable at last; it is per-provider in principle, so if the plus route's
+    panel ever differs it needs its own number).
+  **The third "clinician reads it" in `bw_parts()`'s `after` is CORRECT and must not be touched** — there "it" is the
+  intake form, not the panel: "You fill in an intake. A licensed clinician reads it and decides whether a prescription is
+  appropriate for you." Only the two above are wrong.
 - **Providers and guard:** both copies carry the bloodwork route (`#why`, `bloodwork.html`, the "Beyond supplements" menu
   group, the footer link, `{{FDA_SCOPE}}`). `provider()` / `bw_parts()` pick it: plain → **Avellum Health**, plus → **CCRX**
   (copy unchanged). Peter is **not paid** through Avellum (`AVELLUM_PAID = False`, `avellum_disclosure()`: "I don't make
