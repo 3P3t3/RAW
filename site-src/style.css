@@ -2563,14 +2563,38 @@ body{background:transparent}
 @media (max-width:480px){.hero-shop .hfacts{order:2}}
 
 /* ---- "Understand why" (#why, why_section() in build_homepage.py): a lead, four pillars, who does what */
-/* the morning lake as a strip at the top of #why, flush under the story: nothing is written on it. Steered
-   to the horizon, so the wide desktop strip crops the sun away and a phone shows nearly the whole frame. */
+/* THE SECTION'S HEADER, on the morning lake (2026-10-08). Peter: "this feels too light. We should swap it for
+   a darker photo or different option. Or we can skip it altogether and go straight into it."
+   It was a picture strip with nothing written on it, above the copy: 420px, then clamp(220px,17vw,300px) after
+   a critic called it dead space, of pale sky between the cream story above and the cream pillars below. Three
+   ways out were tried -- cut it, swap the frame for the dusk one, or keep the frame and put the head ON it --
+   and the third is what shipped, because it is the only one that turns the space into something. The morning
+   shore stays (dawn in the hero, morning here, dusk behind the call is Peter's own idea and still reads), the
+   band is framed on the water instead of the sky, and his argument now has a ground of its own instead of
+   being the third thing on a cream page. It did NOT fix the two critics' other finding -- the h2 and the
+   argument still read as two stacked headings -- but it contains it: the pair is now one title block over a
+   picture, with the four pillars clearly below it, rather than two competing headings in the same column.
+   Contrast is the scrim's job and never the picture's. The copy is chalk over a gradient that is deepest
+   where the words are; the band keeps a solid dark floor, so a webp that never lands changes no measurement. */
 .sec.why{padding-top:0}
-.why-band{height:clamp(200px,52vw,420px);margin-bottom:clamp(36px,7vw,64px);overflow:hidden;background:#9DB9CF}
-.why-band img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 64%}
-/* from 768 it was up to 420px of sky with nothing on it; about 240 at laptop widths (2026-10-04), steered so
-   the horizon (66% down the frame) sits at the strip's middle with the hills and their reflection whole */
-@media (min-width:768px){.why-band{height:clamp(220px,17vw,300px)}.why-band img{object-position:50% 73%}}
+.why-top{position:relative;isolation:isolate;overflow:hidden;background:#0A1D28;color:var(--chalk);
+  padding:clamp(40px,9vw,72px) 0 clamp(44px,9vw,72px);margin-bottom:clamp(36px,7vw,64px)}
+.why-band{position:absolute;inset:0;z-index:-1;background:#0A1D28}
+.why-band img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 72%}
+/* the scrim. The morning frame runs to 255 in the sun and chalk on that is 1.1:1, so this is structural:
+   .80 over the copy at the top, easing to .72 across the water and back to .84 at the foot. */
+.why-band::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(5,14,22,.82) 0,rgba(5,14,22,.78) 48%,rgba(5,14,22,.72) 72%,rgba(5,14,22,.86) 100%)}
+.why-top .why-head{margin-bottom:0}
+.why-top .label{color:var(--sand)}
+.why-top h2{color:var(--chalk)}
+.why-top .hl-k{color:var(--sand)}        /* the XS blue is a black mark on this band */
+.why-top .why-lead{color:var(--chalk)}
+.why-top .why-lead + .why-lead{color:rgba(244,242,236,.92)}
+.why-top .btn{box-shadow:0 0 0 1px rgba(230,211,197,.22)}
+.why-top :focus-visible{outline-color:var(--sand)}
+/* from 768 the frame is wide enough to show the far shore, so it is steered a little higher */
+@media (min-width:768px){.why-band img{object-position:50% 76%}}
 .why-head{display:grid;gap:12px;justify-items:start;margin-bottom:28px}
 .why-head h2{font-size:40px}
 .why-head h2 span{display:block}
@@ -2638,3 +2662,154 @@ body{background:transparent}
 /* phones: the plan's -40px foot was set for the rack's heading, which followed it until the split; the
    call follows it on the homepage now, and its label sat 4px under the hairline, so it takes the 40px back */
 @media (max-width:767px){.how-sec + .consult{margin-top:40px}}
+
+/* ===================================================================================
+   THE GLASS, SITE-WIDE — PART 1: THE CALCULATOR'S BAND (2026-10-08)
+   -----------------------------------------------------------------------------------
+   Peter, 2026-10-08: "I think the glass should go site-wide."
+
+   What glass actually is here, so the next person does not spread it where it does
+   nothing: it is a TINTED PANEL OVER A PICTURE. The tint is the contrast floor and the
+   blur is what makes the picture behind read as depth instead of noise. Over this
+   site's own ground — .field, one fixed sheet of chalk with two soft glows and a grain
+   — there is no detail to refract, so a blurred panel there is an invisible change with
+   a drifting backdrop underneath, which is worse than no glass at all. GLASS GOES WHERE
+   THERE IS A PICTURE. Everywhere else the page keeps its flat surfaces, on purpose.
+
+   #consult got the first one because it stands on the lake at dusk. #macros is the pair
+   Peter noticed: CLAUDE.md calls the two cards siblings (the booking card was built on
+   the calculator's own machinery, step counter, pips, Back, Continue and all), and they
+   had ended up a near-solid chalk sheet and a dark frosted panel side by side on the
+   same page. So the calculator gets a picture of its own to stand on — tex-water, the
+   brand teal, already in the repo and until now unused — and the same glass over it.
+
+   THE BAND. The water is a CSS background on ::before, not an <img>: it costs no markup,
+   it reaches the plus/ copy and the templates untouched, and a CSS background is fetched
+   off the layout pass rather than blocking the first paint. #macros starts about 4,000px
+   down the homepage, so it is never in the first screen anyway. url(assets/…) resolves
+   against the STYLESHEET, which sits at the repo root, so plus/homepage.html's ../style.css
+   finds the same one file (CLAUDE.md, "Absolute URLs").
+   The band keeps a solid dark floor under the picture, so a webp that never lands leaves
+   a dark teal band and every measurement below still holds.
+
+   THE SCRIM is not decoration either. tex-water carries specular ripples up to 202/255,
+   and chalk on one of those is 1.5:1. Over the scrim the brightest pixel in the frame
+   lands near 48/255 and the band reads from about #06 to #30 — a dark teal that still
+   visibly ripples, with every word on it measured (see the table in the commit).
+   It is deepest where the copy is (the top on a phone, the left from 768) and lightest
+   under the card, which carries its own tint: the dusk's logic exactly.
+=================================================================================== */
+.macros-sec{position:relative;isolation:isolate;background:#061C24;color:var(--chalk)}
+.macros-sec::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background-image:linear-gradient(180deg,rgba(3,16,22,.88) 0,rgba(3,16,22,.86) 30%,rgba(3,16,22,.58) 58%,rgba(3,16,22,.62) 100%),
+                   url("assets/home/tex-water.webp");
+  background-size:auto,cover;
+  background-position:center,center 38%;
+  background-repeat:no-repeat,no-repeat;
+}
+@media (min-width:768px){
+  /* the copy is columns 1-6 and the card 7-12, so the deep end of the scrim goes left */
+  .macros-sec::before{
+    background-image:linear-gradient(96deg,rgba(3,16,22,.9) 0,rgba(3,16,22,.86) 44%,rgba(3,16,22,.62) 66%,rgba(3,16,22,.68) 100%),
+                     url("assets/home/tex-water.webp");
+  }
+}
+/* the band's copy, in the dusk's hand */
+.macros-sec .split-text,.macros-sec .split-text h2{color:var(--chalk)}
+.macros-sec .split-text .label{color:var(--sand)}
+.macros-sec .split-text p:not(.label){opacity:.92}
+.macros-sec :focus-visible{outline-color:var(--sand)}
+/* the plan's hairline was a rule between two chalk sections; the band's own bottom edge
+   is the rule now, and a 1px --line drawn on a colour change reads as a mistake */
+.macros-sec + .how-sec>.wrap{border-top:0}
+
+/* THE CARD. The same two things as #consult-form, in the same order and the same values:
+   the teal tint first (the fallback, and the floor every figure below is measured on),
+   the blur second and only inside @supports. What is NOT copied is the note card's hand —
+   .mc-card is not .nc and never was: it keeps its own plain 1px rim and its soft drop, so
+   the calculator still reads as the plain sheet and the booking card as the written note.
+   Same material, same tint, different shape. That was always the intended difference. */
+.macros-sec .mc-card{
+  background:rgba(0,46,59,.72);
+  color:var(--chalk);
+  box-shadow:inset 0 0 0 1px rgba(230,211,197,.34),0 40px 60px -40px rgba(0,16,22,.85);
+}
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .macros-sec .mc-card{
+    -webkit-backdrop-filter:blur(24px) saturate(1.1);
+            backdrop-filter:blur(24px) saturate(1.1);
+  }
+}
+/* the step's furniture */
+.macros-sec .mc-count{color:var(--sand)}
+.macros-sec .mc-prog span{background:rgba(230,211,197,.26)}
+.macros-sec .mc-prog span.is-on{background:var(--sand)}
+.macros-sec .tlink{color:var(--sand)}
+.macros-sec .mc-nojs{color:var(--chalk)}
+/* the question and its help line */
+.macros-sec .mc-q{color:var(--chalk)}
+.macros-sec .mc-help,.macros-sec .mc-note{color:rgba(230,211,197,.92)}
+/* THE OPTIONS. Outlined and empty until they are picked, then they invert — sand fill,
+   teal lettering — for the reason the consult's pills invert: a teal pill on a teal panel
+   has no shape. The lift, the rim and the shadow are untouched, so selection never rests
+   on colour alone. */
+.macros-sec .mc-opt span{border-color:rgba(230,211,197,.5);background:rgba(255,255,255,.07);color:var(--chalk)}
+.macros-sec .mc-opt input:checked + span{background:var(--sand);border-color:var(--chalk);color:var(--teal)}
+.macros-sec .mc-opt input:focus-visible + span{outline-color:var(--sand)}
+@media (hover:hover){.macros-sec .mc-opt:hover span{border-color:var(--chalk)}}
+/* the follow-up fieldset's rule and its legend */
+.macros-sec .mc-sub{border-top-color:rgba(230,211,197,.3)}
+.macros-sec .mc-sub legend{color:var(--chalk)}
+/* THE BLANKS: age, weight, height. Chalk in a lit well on a sand rim, which is the dark
+   side of the same gesture as ink in a white box on a hairline. */
+.macros-sec .mc-field label{color:var(--chalk)}
+.macros-sec .mc-field input{border-color:rgba(230,211,197,.5);background:rgba(255,255,255,.1);color:var(--chalk)}
+.macros-sec .mc-field input::placeholder{color:rgba(230,211,197,.8)}
+.macros-sec .mc-field input:focus{border-color:var(--sand);box-shadow:inset 0 0 0 1px var(--sand);background:rgba(255,255,255,.14)}
+/* the error and the warning keep their rule and every word; the XS blue would be a black
+   mark on the tint, so the rule is lit instead. Colour is never what carries them. */
+.macros-sec .mc-err,.macros-sec .mc-warn{background:rgba(230,211,197,.1);box-shadow:inset 2px 0 0 var(--sand);color:var(--chalk)}
+/* THE NUMBERS. The one part of this card that is read rather than filled in, and the
+   reason the old comment here said an opaque sheet: a backdrop that changes underneath
+   makes a contrast measurement a guess. The tint is what answers that — every figure
+   below sits on rgba(0,46,59,.72) over a scrimmed band, not on the picture. */
+.macros-sec .mc-res-t{color:var(--chalk)}
+.macros-sec .mc-cals{border-top-color:rgba(230,211,197,.24)}
+.macros-sec .mc-cals > div{border-bottom-color:rgba(230,211,197,.24)}
+.macros-sec .mc-cals dt{color:rgba(230,211,197,.92)}
+.macros-sec .mc-cals dd{color:var(--chalk)}
+.macros-sec .mc-cals > div:last-child dd{color:var(--sand)}
+.macros-sec .mc-macros li{background:rgba(230,211,197,.12)}
+.macros-sec .mc-g{color:var(--sand)}
+.macros-sec .mc-lab,.macros-sec .mc-kc{color:rgba(230,211,197,.92)}
+/* the button is unchanged, for the reason it is unchanged on the booking card: the XS blue
+   on the teal tint is the one warm-cold edge in the card. Only its rim is drawn. */
+.macros-sec .mc-card .btn{box-shadow:0 0 0 1px rgba(230,211,197,.22)}
+
+/* ===================================================================================
+   THE GLASS, SITE-WIDE — PART 2: THE SHOP'S DARK BAND (2026-10-08)
+   -----------------------------------------------------------------------------------
+   #my-stack was the one band on Tab 1 with any depth and it had none: a flat sheet of
+   --teal with a barbell drawn on it, about 2,200px of it at 1440. It is also the only
+   place the Shop could carry the same material as the approach tab without touching the
+   square film or the rack, so the water goes behind it. Same one file as #macros, so the
+   Shop pays for one texture and the browser has it cached by the time a visitor crosses
+   to the other tab (and the other way round).
+
+   NO GLASS PANEL HERE, because there is no panel: the band's content is a barbell, five
+   packs and a heading, all of which stand directly on the ground. So this is the ground
+   half of the recipe only — a picture under a tint of Peter's own teal, deep enough that
+   the band still reads as the brand's teal and every word on it keeps the contrast it
+   had. The tint is rgba(0,38,49,.82): at that depth the brightest ripple in the frame
+   lands around #24505E, where the band's palest type (--on-dark) is still 5.7:1.
+=================================================================================== */
+.sec.dark.mys{position:relative;isolation:isolate;overflow:hidden}
+.sec.dark.mys::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background-image:linear-gradient(rgba(0,38,49,.86),rgba(0,38,49,.8) 42%,rgba(0,38,49,.88)),
+                   url("assets/home/tex-water.webp");
+  background-size:auto,cover;
+  background-position:center,center 42%;
+  background-repeat:no-repeat,no-repeat;
+}
