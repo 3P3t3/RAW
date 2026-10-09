@@ -479,9 +479,12 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   prescribe"), then the disclosure. All DRAFT. Bloodwork is the ideal, never a gate (Peter: "I don't want them to have to get
   bloodwork to try a product or buy a product"). The bloodwork is collected at home with a **Tasso** (`TASSO`, in both
   providers' copy); never call it painless or FDA-cleared unless Tasso's own site says so.
-- **Who actually runs the panel (checked on their site, 2026-10-08).** Avellum is the **route**, not the provider: their own
-  banner reads "a blood panel from Valdura", Valdura takes the payment and holds the results in its app, and the lab work is
-  Better Human Labs'. The plain copy said "measured from your own blood, through Avellum Health", which claimed the panel was
+- **Who actually runs the panel (checked on their site, 2026-10-08; ownership corrected by Peter the same day).**
+  **Valdura is owned by Avellum** — not a third party, which is what the first pass here assumed from their public pages.
+  So the panel, the app that reads it and the route are one company wearing two names: Avellum's banner says "a blood panel
+  from Valdura", Valdura takes the payment and holds the results in its app, and the lab work is Better Human Labs'. The
+  practical consequence is that the plain copy should not imply a hand-off to a stranger; it may name Valdura as Avellum's
+  own app, or skip the name and say "their app". The plain copy said "measured from your own blood, through Avellum Health", which claimed the panel was
   theirs; it now says you reach it through Avellum and the panel is Valdura's. **Neither site states a biomarker count and
   neither should:** Avellum, the panel page and Valdura's own "what we test" page give no figure anywhere. What Valdura lists
   is ~17 drawn markers (ApoB, Lp(a), lipid panel, HbA1c, homocysteine; albumin, ALP, ALT, cystatin C; ferritin, vitamin D,
@@ -494,9 +497,16 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   payment, not a subscription"), so it is a verified fact of the plain route too — and since 2026-10-08 the plain copy
   carries it in its own words, scoped to the panel because the app bundled with it is the recurring thing: "The panel
   itself is a one-time payment, not a subscription." The two CCRX sentences beside it ("No prescription to get first. No
-  appointment to sit through.") are still storefront facts not known of this route and stay out. **Still unverified and flagged to Peter:**
-  whether "a licensed clinician reads it" is true of the panel at all — Avellum says the panel needs no telehealth visit, and it is the Valdura app that
-  reads results, while the clinician reads the intake for a prescription. Do not change either without Peter confirming.
+  appointment to sit through.") are still storefront facts not known of this route and stay out. **"A licensed clinician reads it" is wrong and Peter has accepted that (2026-10-08).**
+  Valdura's own homepage: "Valdura is an AI health assistant that reads your bloodwork… The clinical calls go to your own
+  clinician", the panel needs no telehealth visit, and the assistant hands anything prescription-adjacent to the visitor's
+  own clinician instead of deciding. Valdura also publishes the count the rest of the sites do not: **20 biomarkers + 3
+  calculations** in the Longevity Panel, and the membership is $59.99/month, bought separately from the panel. Two of their
+  own lines are usable and strong: the plain-English read of every marker, and "The assistant is not allowed to sell you
+  anything." Peter says **Avellum's medical director helped shape the AI**, which is his to assert — but it is ONE director,
+  so "designed by doctors" overstates it where "designed by a doctor" does not, and it is a claim about a partner's product,
+  so it wants to be something Avellum would repeat. **Peter is not Avellum: "our proprietary AI" is wrong on his site
+  whatever the ownership.** The corrected clinician wording is still to be written.
 - **Providers and guard:** both copies carry the bloodwork route (`#why`, `bloodwork.html`, the "Beyond supplements" menu
   group, the footer link, `{{FDA_SCOPE}}`). `provider()` / `bw_parts()` pick it: plain → **Avellum Health**, plus → **CCRX**
   (copy unchanged). Peter is **not paid** through Avellum (`AVELLUM_PAID = False`, `avellum_disclosure()`: "I don't make
