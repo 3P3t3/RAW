@@ -1574,6 +1574,16 @@ html:not(.js) .bay-note{color:var(--text)}
   .bay-in{align-content:end;padding:0 14px 8px}
   .bay-packs{gap:10px}
   .bay-go img{--w:min(100%,124px);--s:1.42;margin-top:calc(var(--w) * (1 - var(--s)) * .91);margin-bottom:calc(var(--w) * (1 - var(--s)) * .09)}
+  /* ...and the rack's panel takes that pull-up back as headroom. The pack is drawn 1.42x and hauled up by
+     91% of the overflow so the row keeps its original height and the pack stands proud of it — but from
+     1024 that pull is 47.4px and it was landing ON the heading. Measured 2026-10-09: the highest pack
+     overlapped the line under the title by 31.4px on ALL TEN shelves at 1024, 1200, 1440 and 1920. Below
+     1024 the pull is 0 and there is a 16px gap, so phones and tablets were never affected — what Peter
+     saw ("the words are getting cut off") was the XS Energy can's silver top sitting over "BEFORE THE
+     SESSION", which the dark bay made obvious and the light one had hidden. Giving the list the 47.4px
+     back puts the desktop gap at the phone's own 16px. The numbers are the line above's; change both
+     together, and re-measure the gap on energy-focus, whose can is the tallest pack on the rack. */
+  .rk-panel .bay-packs{padding-top:calc(2px + 124px * (1.42 - 1) * .91)}
   .bay-all{margin-bottom:6px}
 }
 
@@ -2010,9 +2020,23 @@ html:not(.js) .lbpin{display:none}
    belongs to the plate that opened it. Measured against the lighter of the two gradient stops (#002B37): the
    heading and the pack names 13.39:1, the line under the heading 9.65:1, "See all" 10.34:1, and the button's teal
    on sand 9.96:1. Focus rings inside it go sand at the top of this file, with .dark and the masthead. */
+/* ...and it is TEAL GLASS, not a flat slab (Peter, 2026-10-09: "could we do a glass colored teal? it has
+   that glassy/transparent feel"). It follows the house recipe exactly: a tint of Peter's own teal that is
+   itself the contrast floor, with the blur declared on its own inside @supports so the tint alone is the
+   fallback and nothing depends on backdrop-filter landing. The alpha was chosen by measurement, not by eye
+   — composited over the chalk field, 0.90 is the lowest that keeps every piece of copy at 7:1 or better
+   (0.86 drops the line under the title to 6.26, 0.74 breaks 4.5). So ~10% of the warm field comes through,
+   which is what makes it read as glass rather than as paint. BE HONEST ABOUT WHAT THE BLUR DOES HERE: there
+   is no photograph behind the rack, only the field's grain and its two drifting glows, so the blur is a
+   faint thing and most of the glassiness is the translucency, the lit top edge and the sand rim. That is
+   also why this does not break the "glass goes where there is a picture" rule in the way a bare
+   backdrop-filter would: the tint, not the blur, is doing the work. Re-measure on rendered pixels with
+   backdrop-filter forced OFF if the alpha ever moves. */
 .rk-panel{position:relative;flex:0 0 100%;min-width:0;margin:4px 0;padding:18px 18px 6px;border-radius:18px;
-  background:linear-gradient(color-mix(in srgb,var(--teal) 94%,#000),color-mix(in srgb,var(--teal) 86%,#000));
-  box-shadow:inset 0 5px 0 var(--c),inset 0 0 0 1px rgba(230,211,197,.22),0 18px 30px -22px rgba(0,20,27,.6)}
+  background:linear-gradient(rgba(0,46,59,.93),rgba(0,46,59,.90));
+  box-shadow:inset 0 5px 0 var(--c),inset 0 1px 0 rgba(255,255,255,.20),
+    inset 0 0 0 1px rgba(230,211,197,.26),0 18px 34px -24px rgba(0,20,27,.6)}
+@supports (backdrop-filter:blur(2px)){.rk-panel{backdrop-filter:blur(20px) saturate(1.12)}}
 .rk-panel .rk-title{color:var(--chalk)}
 .rk-panel .rk-sub{color:var(--on-dark)}
 .rk-panel .bay-pack{color:var(--chalk)}

@@ -707,7 +707,33 @@ of each panel, so ids and aria stay single and Tab still goes plate → its pane
 points at the plate. `show()` brings the plate and its packs into view together when they fit, otherwise the
 whole panel (Peter, 2026-09-28: tapping a plate must show "where the items actually are").
 
-**The open bay is dark (2026-10-09).** Peter: *"when we open a plate, I think the background should be different
+**The open bay is TEAL GLASS (2026-10-09).** Peter, after the flat dark slab shipped: *"could we do a glass
+colored teal? it has that glassy/transparent feel"*. It follows the house recipe exactly — a tint of his own
+teal that is itself the contrast floor, with `backdrop-filter:blur(20px) saturate(1.12)` declared on its own
+inside `@supports`, so the tint alone is the fallback. **The alpha was measured, not eyeballed**: composited
+over the chalk field, **0.90 is the lowest that keeps every piece of copy at 7:1 or better** (0.86 drops the
+line under the title to 6.26, 0.74 breaks 4.5). It ships as a `.93 → .90` gradient with a lit top edge
+(`inset 0 1px 0 rgba(255,255,255,.20)`) and the sand rim. On rendered pixels, 56 measurements across two
+widths and four shelves: **worst 7.53:1, and identical with `backdrop-filter` forced off** — which is the
+proof that the tint is carrying it. **Be honest about the blur here**: there is no photograph behind the rack,
+only the field's grain and its two drifting glows, so the blur is faint and most of the glassiness is the
+translucency, the lit edge and the rim. That is also why this does not break "glass goes where there is a
+picture" the way a bare `backdrop-filter` would — the tint, not the blur, does the work. If the alpha moves,
+re-measure on rendered pixels with the blur forced off.
+
+**The packs were landing on the heading, from 1024 up (fixed 2026-10-09).** Peter: *"looks like the words are
+getting cut off, maybe thats the case for mobile too"* — **it was not mobile**, and nothing was clipped: the
+pack images are drawn **1.42x and hauled up by 91% of the overflow** (`.bay-go img`, in the 1024 block) so the
+row keeps its original height and the pack stands proud of it, and that pull is **47.4px**, which put the
+tallest pack's top over the line under the title. Measured: the highest pack overlapped by **31.4px on all ten
+shelves at 1024, 1200, 1440 and 1920**; below 1024 the pull computes to 0 and there was a 16px gap all along.
+What he saw was the XS Energy can's silver top sitting on "BEFORE THE SESSION" — **pre-existing, and the dark
+bay simply made it visible where the light one hid it**. `.rk-panel .bay-packs` now takes that 47.4px back as
+`padding-top`, which puts the desktop gap at the phone's own **16px, with no overlap on any shelf at any
+width**. The numbers are copied from the line above them; change both together, and re-measure on
+`energy-focus`, whose can is the tallest pack on the rack.
+
+**The open bay went dark first (2026-10-09).** Peter: *"when we open a plate, I think the background should be different
 than the surrounding areas, they're both basically tan right now"* — then, shown four treatments, *"lets go b"*. It
 was `color-mix(in srgb, var(--sand) 45%, var(--chalk))` standing on the chalk field: two tans a few percent apart, so
 it read as the page with a border drawn on it rather than as a surface. `.rk-panel` is a deep teal gradient now
