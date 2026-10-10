@@ -726,8 +726,14 @@ def funnel_name(suffix):
 # uniformity. THAT UNIFORMITY IS THE COST: the old set was all props-free studio shots "so the grid reads
 # as one series", and of these only Creatine, the protein bars, Sleep Health and the twist tubes have one
 # (product-shots/). The other four fall back to catalogue images, so the row is less even than it was.
-# The fix is more studio shots, not a different eight. One of his was ambiguous: "xs energy + focus" is
-# the 30-tablet listing, the entry size, of two. "raspberry twist tubes" was read as the XS Sports
+# The fix is more studio shots, not a different nine. One of his was ambiguous: "xs energy + focus" is
+# the 60-TABLET listing. It was the 30 at first, the entry size, until the pack was looked at to write a
+# relight prompt: product-photos/"XS Energy + Focus Dietary Supplement - 30 Tablets.webp" IS A PHOTOGRAPH
+# OF A 10-TABLET BOX -- wrong pack, wrong count, and it says "10 TABLETS" on its face while CARD_FACTS for
+# that listing says 30. The 60's photo is a bottle correctly marked "60 TABLETS", so FEATURED uses that.
+# THE 30-TABLET LISTING IS STILL WRONG EVERYWHERE ELSE ON THE SITE and only Peter can fix it, by replacing
+# that one file in product-photos/. Do not relight or otherwise bake in a photograph that states a number
+# the listing contradicts. "raspberry twist tubes" was read as the XS Sports
 # electrolyte one, on the reasoning that he wanted it beside the creatine — WRONG, and he corrected it the
 # same day: "I want the rasberry joint health twist tube not raspberry lemonade". It is Nutrilite's.
 # Every name must be in share-links.csv or the build exits.
@@ -740,7 +746,7 @@ FEATURED = [
     'Nutrilite Sleep Health',
     'Nutrilite Twist Tubes 2GO - Joint Health Raspberry',
     "Nutrilite Men's Daily Multivitamin Tablets",
-    'XS Energy + Focus Dietary Supplement - 30 Tablets',
+    'XS Energy + Focus Dietary Supplement - 60 Tablets',
 ]
 
 GOAL_NAMES = {'R': 'Recovery', 'L': 'Lean mass', 'E': 'Endurance', 'S': 'Sleep'}
