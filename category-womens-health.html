@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
-<link rel="stylesheet" href="style.css?v=6fd9bbeb">
+<link rel="stylesheet" href="style.css?v=8076a4ef">
 <script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
 <script>
 !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],Object.defineProperty(u,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e}}),Object.defineProperty(u.people,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(){return u.toString(1)+".people (stub)"}}),o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
@@ -369,6 +369,7 @@ posthog.init('phc_ntNTcMoskMxcRTPJ56Gmda6PiBJ4PM2xysKiQRUhyj9P',{api_host:'https
           <h3 class="pcard-name" id="pcard-name"></h3>
           <p class="pcard-line" id="pcard-line"></p>
           <ul class="pcard-facts" id="pcard-facts" aria-label="Quick facts"></ul>
+          <p class="pcard-with" id="pcard-with" hidden></p>
           <div class="pcard-acts"><a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Buy on Amway<span class="vh"> (opens in a new tab)</span></a><a class="btn btn-line pcard-try" id="pcard-try" href="shop.html#sample" data-home="shop.html">Ask for a free sample</a></div>
         </div>
       </div>
@@ -928,7 +929,7 @@ if(arch){
   var dlg=$('#pcard');
   if(!dlg||typeof dlg.showModal!=='function')return;   /* no dialog: the packs stay links */
   var reduce=matchMedia('(prefers-reduced-motion: reduce)'),panel=$('.pcard-in',dlg),img=$('#pcard-img'),
-      facts=$('#pcard-facts'),buy=$('#pcard-buy'),ask=$('#pcard-try'),opener=null,closing=false,
+      facts=$('#pcard-facts'),buy=$('#pcard-buy'),ask=$('#pcard-try'),withEl=$('#pcard-with'),opener=null,closing=false,
       fly=doc.createElement('img'),SPARK=['#51A8AA','#E6D3C5','#002E3B','#E2C8AE','#51A8AA','#F4F2EC','#002E3B','#E2C8AE'];
   fly.className='pcard-fly';fly.alt='';fly.hidden=true;fly.setAttribute('aria-hidden','true');
   dlg.appendChild(fly);
@@ -995,6 +996,30 @@ if(arch){
     list.forEach(function(f){var li=doc.createElement('li');li.textContent=f;facts.appendChild(li)});
     facts.hidden=!list.length;
     buy.href=d.href||b.getAttribute('href');
+    /* "Stacks well with" (2026-10-09). Peter: "maybe theres a way to autorecommend those with the
+       creatine since they stack nicely together". The pair comes from STACKS_WITH through data-with, so
+       nothing is inferred. If the partner is on this page it opens its card in place; if it is not (a
+       shelf page that does not carry it) the line links to the shop with it searched. */
+    if(withEl){
+      var wn=d.with||'';
+      withEl.hidden=!wn; withEl.textContent='';
+      if(wn){
+        var partner=$('[data-try="'+wn.replace(/"/g,'\\"')+'"]'),
+            lbl=partner?(partner.dataset.name||wn):wn,
+            lead=doc.createTextNode('Stacks well with '),
+            go=doc.createElement(partner?'button':'a');
+        /* wait for the dialog's OWN close event, not a guessed delay: close() plays a flight back to
+           the tile first, and open() refuses while dlg.open is still true — a 260ms timer lost that
+           race and the card just shut (measured). */
+        if(partner){go.type='button';go.addEventListener('click',function(){
+          dlg.addEventListener('close',function(){setTimeout(function(){open(partner)},40)},{once:true});
+          close();
+        });}
+        else go.href=(ask&&ask.dataset.home?ask.dataset.home:'shop.html')+'?q='+encodeURIComponent(wn)+'#results';
+        go.className='tlink pcard-with-go';go.textContent=lbl;
+        withEl.appendChild(lead);withEl.appendChild(go);withEl.appendChild(doc.createTextNode('.'));
+      }
+    }
     if(ask){   /* the exact listing name; a shelf page's goes by the shop tab's ?try= */
       ask.dataset.name=d.try||d.name;
       ask.href=ask.dataset.home?ask.dataset.home+'?try='+encodeURIComponent(ask.dataset.name)+'#sample':'#sample';

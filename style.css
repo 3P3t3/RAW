@@ -2985,3 +2985,9 @@ body{background:transparent}
   font:600 14px/1.2 var(--sans);color:var(--text);text-decoration:underline;text-underline-offset:4px}
 @media (hover:hover){.fn-out:hover{color:var(--teal);text-decoration-thickness:2.5px}}
 @media (min-width:1024px){.fn-lead{font-size:18px}}
+
+/* "Stacks well with" on the product card (2026-10-09, STACKS_WITH). One quiet line under the facts; it
+   is a pointer to another product, never a claim about the two together. */
+.pcard-with{margin:10px 0 0;font:500 15px/1.45 var(--sans);color:var(--text)}
+.pcard-with[hidden]{display:none}
+.pcard-with-go{font-weight:600}

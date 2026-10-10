@@ -883,6 +883,22 @@ hand-written copy would drift and then mislead somebody. Its return URL is passe
   on either copy; 2,602 local references across 36 pages with none missing; the guard still clean; and the
   funnel head measures **6.04:1** at 390 and 1440 under the glyphs.
 
+## What stacks with what (`STACKS_WITH`, 2026-10-09)
+
+Peter, choosing the Start here eight: *"raspberry twist tubes (maybe theres a way to autorecommend those
+with the creatine since they stack nicely together)"*. The product card now carries one quiet line under
+the facts: **"Stacks well with <product>"**.
+
+- **It is a CURATION, not a rule engine.** Nothing is inferred from shelves or families, because a wrong
+  pairing on a product card is Peter recommending something he did not. **Both directions are written
+  out** and the build exits if a pair does not point back, or if either name is not in `share-links.csv`.
+- It is **never called a bundle** and it **never says what the pair does together**, which would be a
+  claim. One pair today: `XS Creatine+` ↔ `XS Sports Twist Tubes - Raspberry Lemonade`.
+- With script, the line opens the partner's own card when that product is on the page, and otherwise
+  links to the shop with it searched. **The reopen waits for the dialog's own `close` event, not a timer**:
+  `close()` plays a flight back to the tile first and `open()` refuses while `dlg.open` is still true, so a
+  260ms delay lost that race and the card simply shut (measured). A product with no pair shows nothing.
+
 ## A third tab: Start here (2026-10-09)
 
 Peter, after Eric Elizes called the current home *"a normal general store"*: *"I'm wondering if that means
@@ -890,9 +906,16 @@ really we want a third tab with products demonstrated a little more cleanly. For
 this website, I only have six products up, but they look really clean."* (aspirehealth.pro.) **The Shop tab
 is still the whole catalogue and stays that way; `start.html` is the handful, with air around them.**
 
-- **It shows `FEATURED` and nothing else.** `FEATURED` already existed and was unused but for a build
-  assertion — eight props-free pack shots chosen "so the grid reads as one series", which is exactly what
-  this page needs. **One curation, one place**: do not invent a second list beside it.
+- **It shows `FEATURED` and nothing else.** **One curation, one place**: do not invent a second list
+  beside it. **Peter chose the eight himself on 2026-10-09** — Elite Peach Mango, Creatine+, GI Primer,
+  the chocolate peanut butter bars, Sleep Health, the raspberry twist tubes, the men's daily multivitamin
+  and XS Energy + Focus — replacing a set that had been picked for photographic uniformity. **That
+  uniformity is the cost**: the old eight were all props-free studio shots "so the grid reads as one
+  series", and only four of his have one in `product-shots/`; the rest fall back to catalogue images, so
+  the row is less even. **The fix is four more studio shots, not a different eight.** Two of his names
+  were ambiguous and are resolved in the table's comment. Note also that the backdrops are shelf colours,
+  so two products from one shelf sit on the same colour — correct, but it means the row is not eight
+  different colours.
 - Each card carries `card_data()` and keeps the `card-link` class, because `_script.html`'s tile selector is
   `a.card-link[data-name]` — so **the same product card opens from here as from anywhere else**, and its
   backdrop takes the same `--tint`. "Ask for a free sample" routes by the shop tab's `?try=`, as a shelf

@@ -387,6 +387,18 @@ PETER_PACKS = {
 # opens that product's card (2026-10-04, Peter: each pack named, and a tap shows the product). Read off the
 # pictures themselves: the whey pouch says "Chocolate flavored", and XS Elite + Focus has one flavour on
 # the list. The build stops if a name is not in share-links.csv. A shelf here must be in PETER.
+# WHAT STACKS WITH WHAT (2026-10-09). Peter, choosing the Start here eight: "raspberry twist tubes
+# (maybe theres a way to autorecommend those with the creatine since they stack nicely together)".
+# A pair is a pair: both directions are written out, so the card never recommends in one direction only.
+# It is a CURATION, not a rule engine — nothing is inferred from shelves or families, because a wrong
+# pairing on a product card is Peter recommending something he did not. Both names must be in
+# share-links.csv or the build exits. The card shows it as "Stacks well with"; it is never called a
+# bundle and it never says the pair does anything, which would be a claim.
+STACKS_WITH = {
+    'XS Creatine+': 'XS Sports Twist Tubes - Raspberry Lemonade',
+    'XS Sports Twist Tubes - Raspberry Lemonade': 'XS Creatine+',
+}
+
 PETER_PICKS = {
     'protein': 'XS Grass-Fed Whey Protein - Chocolate',
     'hydration': 'XS Creatine+',
@@ -706,15 +718,26 @@ FUNNEL_PAGE = 'build-your-goals.html'   # the canonical one: FUNNELS[0]
 def funnel_name(suffix):
     return FUNNEL_PAGE.replace('.html', suffix + '.html')
 
-FEATURED = [  # props-free pack shots, so the grid reads as one series
-    'XS Grass-Fed Whey Protein - Chocolate',
-    'XS Post-Workout Recovery - Fruit Punch (30 Serving Pouch)',
-    'XS Pre-Workout Boost - Blue Raspberry (30 Serving Pouch)',
+# The eight on the Start here tab. PETER CHOSE THESE (2026-10-09): "I think we should change some of the
+# main prodcuts as well. I'd go with xs elite peach tea mango energy drink, createin, gi primer, peanut
+# butter choco protein bars, sleep health, raspberry twist tubes... mens daily multivitamn, xs energy +
+# focus." They are what he actually sells and stacks, which beats the old eight, chosen for photographic
+# uniformity. THAT UNIFORMITY IS THE COST: the old set was all props-free studio shots "so the grid reads
+# as one series", and of these only Creatine, the protein bars, Sleep Health and the twist tubes have one
+# (product-shots/). The other four fall back to catalogue images, so the row is less even than it was.
+# The fix is four more studio shots, not a different eight. Two of his were ambiguous and resolved here:
+# "raspberry twist tubes" is the XS SPORTS one, not Nutrilite's Joint Health Raspberry, because he wants
+# it recommended beside the creatine and that is the electrolyte line; and "xs energy + focus" is the
+# 30-tablet listing, the entry size, of two. Every name must be in share-links.csv or the build exits.
+FEATURED = [
+    'XS Elite + Focus Energy Drink - Peach Mango',
     'XS Creatine+',
-    'XS Energy Drink 12 oz - Classic',
-    'XS Muscle Multiplier - Berry Blast',
-    'XS Sports Protein Shakes - Rich Chocolate',
-    'Nutrilite Organics Chamomile Tea',
+    'Nutrilite Begin Daily GI Primer',
+    'XS Sports Protein Bars - Chocolate Peanut Butter',
+    'Nutrilite Sleep Health',
+    'XS Sports Twist Tubes - Raspberry Lemonade',
+    "Nutrilite Men's Daily Multivitamin Tablets",
+    'XS Energy + Focus Dietary Supplement - 30 Tablets',
 ]
 
 GOAL_NAMES = {'R': 'Recovery', 'L': 'Lean mass', 'E': 'Endurance', 'S': 'Sleep'}
@@ -1246,6 +1269,11 @@ def main():
             raise SystemExit(f'CARD_FACTS[{k!r}]: needs its amway.com source and 2-4 chips')
     for n in FEATURED + [t[3] for t in GOAL_TILES]:
         assert n in by, f'Missing product in CSV: {n}'
+    for a, b in STACKS_WITH.items():
+        if a not in by or b not in by:
+            raise SystemExit(f'STACKS_WITH: {a!r} -> {b!r}, and one of them is not in share-links.csv')
+        if STACKS_WITH.get(b) != a:
+            raise SystemExit(f'STACKS_WITH: {a!r} points at {b!r}, but {b!r} does not point back')
 
     cat_of = {}  # each product's home shelf, for its tag: on two shelves, the later one wins
     for slug_, name, tag, heading, fams in CATEGORIES:
@@ -1270,7 +1298,8 @@ def main():
         tint = PLATES[cat_of[pr['product']]][0] if pr['product'] in cat_of else ''
         return (f'data-name="{esc(pr["name"])}" data-kind="{esc(pr["desc"])}" data-line="{esc(TAGLINES[fam])}" '
                 f'data-facts="{esc("|".join(facts))}" data-sfx="{CARD_SOUND.get(fam, "chime")}" '
-                f'data-try="{esc(pr["product"])}"' + (f' data-tint="{tint}"' if tint else ''))
+                f'data-try="{esc(pr["product"])}"' + (f' data-tint="{tint}"' if tint else '')
+                + (f' data-with="{esc(STACKS_WITH[pr["product"]])}"' if pr['product'] in STACKS_WITH else ''))
 
     def card(pr, i=0, extra='', shelves=False, hn=3):
         """A product tile: a link to its Amway page, which _script.html turns into the way to its product
@@ -1442,7 +1471,10 @@ def main():
                 '          <p class="pcard-kind" id="pcard-kind"></p>\n'
                 '          <h3 class="pcard-name" id="pcard-name"></h3>\n'
                 '          <p class="pcard-line" id="pcard-line"></p>\n'
-                '          <ul class="pcard-facts" id="pcard-facts" aria-label="Quick facts"></ul>\n'
+                '          <ul class="pcard-facts" id="pcard-facts" aria-label="Quick facts"></ul>\n'                # "Stacks well with" (2026-10-09, STACKS_WITH): empty and hidden unless the product has a
+                # pair. With script it opens that product's own card when it is on the page, and otherwise
+                # searches the shop for it; it is never a claim about what the two do together.
+                '          <p class="pcard-with" id="pcard-with" hidden></p>\n'
                 # DRAFT-COPY: "Buy on Amway", never "Add to cart": it opens the product's own page through Peter's
                 # share link, and the visitor puts it in the cart there (Amway has no add-to-cart link)
                 '          <div class="pcard-acts"><a class="btn pcard-buy" id="pcard-buy" href="#" target="_blank" rel="noopener">Buy on Amway'

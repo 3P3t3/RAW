@@ -550,7 +550,7 @@ if(arch){
   var dlg=$('#pcard');
   if(!dlg||typeof dlg.showModal!=='function')return;   /* no dialog: the packs stay links */
   var reduce=matchMedia('(prefers-reduced-motion: reduce)'),panel=$('.pcard-in',dlg),img=$('#pcard-img'),
-      facts=$('#pcard-facts'),buy=$('#pcard-buy'),ask=$('#pcard-try'),opener=null,closing=false,
+      facts=$('#pcard-facts'),buy=$('#pcard-buy'),ask=$('#pcard-try'),withEl=$('#pcard-with'),opener=null,closing=false,
       fly=doc.createElement('img'),SPARK=['#51A8AA','#E6D3C5','#002E3B','#E2C8AE','#51A8AA','#F4F2EC','#002E3B','#E2C8AE'];
   fly.className='pcard-fly';fly.alt='';fly.hidden=true;fly.setAttribute('aria-hidden','true');
   dlg.appendChild(fly);
@@ -617,6 +617,30 @@ if(arch){
     list.forEach(function(f){var li=doc.createElement('li');li.textContent=f;facts.appendChild(li)});
     facts.hidden=!list.length;
     buy.href=d.href||b.getAttribute('href');
+    /* "Stacks well with" (2026-10-09). Peter: "maybe theres a way to autorecommend those with the
+       creatine since they stack nicely together". The pair comes from STACKS_WITH through data-with, so
+       nothing is inferred. If the partner is on this page it opens its card in place; if it is not (a
+       shelf page that does not carry it) the line links to the shop with it searched. */
+    if(withEl){
+      var wn=d.with||'';
+      withEl.hidden=!wn; withEl.textContent='';
+      if(wn){
+        var partner=$('[data-try="'+wn.replace(/"/g,'\\"')+'"]'),
+            lbl=partner?(partner.dataset.name||wn):wn,
+            lead=doc.createTextNode('Stacks well with '),
+            go=doc.createElement(partner?'button':'a');
+        /* wait for the dialog's OWN close event, not a guessed delay: close() plays a flight back to
+           the tile first, and open() refuses while dlg.open is still true — a 260ms timer lost that
+           race and the card just shut (measured). */
+        if(partner){go.type='button';go.addEventListener('click',function(){
+          dlg.addEventListener('close',function(){setTimeout(function(){open(partner)},40)},{once:true});
+          close();
+        });}
+        else go.href=(ask&&ask.dataset.home?ask.dataset.home:'shop.html')+'?q='+encodeURIComponent(wn)+'#results';
+        go.className='tlink pcard-with-go';go.textContent=lbl;
+        withEl.appendChild(lead);withEl.appendChild(go);withEl.appendChild(doc.createTextNode('.'));
+      }
+    }
     if(ask){   /* the exact listing name; a shelf page's goes by the shop tab's ?try= */
       ask.dataset.name=d.try||d.name;
       ask.href=ask.dataset.home?ask.dataset.home+'?try='+encodeURIComponent(ask.dataset.name)+'#sample':'#sample';
