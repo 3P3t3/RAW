@@ -365,7 +365,7 @@ shop's build block. Everything about the call still lives on the approach tab (`
 links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat re-timed.
 
 - **`homepage.html` (Our approach, Tab 2):** `.hh` hero → `#story` → `#why` → `#macros` → `#how` → `#consult`. No curtain.
-  7,237px at 390, 5,781 at 1440 (it was 8,456 at 390 as one page).
+  8,304px at 390 since the typeface changed (7,237 before it; 8,456 when it was one page).
 - **`shop.html` (Shop, Tab 1, `site-src/shop.template.html`):** the curtain → the square film hero ("Pick your goal" → `#goals`, "Ask for a free
   sample" → `#sample`) → `#goals` → `#sample` → `#my-stack` → `#results`. The rack never opens on ten closed plates:
   the first plate on the visitor's bar, else the rack's first, starts open, quietly (no scroll, no sound). Under the
@@ -377,7 +377,8 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   **Peter's five packs in `#my-stack`** are links now, each captioned with its product name and opening that product's
   `#pcard`: `PETER_PICKS` maps shelf → product and the build exits on a name that is not in `share-links.csv`.
   The shop hero's headline steps down at ≤480px and its lead moves below the links (CSS `order`), so "Pick your goal" ends
-  at 654 of 844 at 390 and 576 of 640 at 320 (it was 799 and 723); the square film is untouched.
+  at 664 of 844 at 390 and 585 of 645 at 320 (654 and 576 before the typeface changed; 799 and 723 before the step-down);
+  the square film is untouched.
   **The film's play/pause is out of the way, not gone** (Peter, 2026-10-09: "Can we remove the play and pause button
   for the hero video?", then, offered a hover-only version, "do the hover one"). `.glass-toggle` is always in the DOM
   and always in the Tab order; at rest it is `opacity:0;pointer-events:none`, and it fades in on a hover anywhere over
@@ -448,7 +449,8 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   is "1 blood panel · 10 goals · 1 free call" (both DRAFT). **They are not links** — each hero already carries its two
   ways on and "one ask per phone screen" stands, so the row is there to be read. In both templates it is the LAST row of
   `.hero-copy`, after `.hero-actions`: that is what keeps the Shop's first screen untouched ("Pick your goal" still ends
-  at 654 of 844 at 390 and 576 of 640 at 320, measured) and what puts the homepage's row inside the hero's own scrim, so
+  at 654 of 844 at 390 and 576 of 640 at 320 as measured THEN; the 2026-10-10 typeface moved both to 664 and 585, which is
+  still inside the first screen) and what puts the homepage's row inside the hero's own scrim, so
   it is never read straight off the photograph. Below 480 the Shop's row takes `order:2`, under the lead that the same
   breakpoint moves below the links. It sets **no colour of its own** and inherits the hero it stands in — `--text` on the
   Shop's chalk field (5.9–6.6:1), chalk on Tab 1's scrim (8.4–15.3:1), measured on the rendered pixels — so neither row
@@ -564,6 +566,56 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   link in a plain template, `--ccrx on`, the link in `index.html`, `AVELLUM_URL` with `PAID = None`, and an Avellum link
   reaching plus. `#bloodwork` and `ccrx_home` are gone; `ccrx_block`, `ccrx_menu`, `ccrx_fda_scope` keep their names but
   serve both copies.
+
+## The typeface: Fraunces and Inter (2026-10-10)
+
+Peter: *"Can we change the font? ... I need something different because this is just not working well."* He
+was shown five settings of his own copy on his own chalk (a specimen sheet, still at
+https://claude.ai/artifact/Lzu6LkL2vUXWnDshxH8jiB) and chose **A, editorial: Fraunces + Inter**.
+
+**What was wrong, so nobody rebuilds it.** Bricolage Grotesque was doing both jobs at once: every heading at
+weight 800, **squeezed to 72% width, in capitals**, and every paragraph in the same face. Three things followed.
+Nothing announced and nothing explained, because there was no second voice. Condensed heavy capitals were
+everywhere — section heads, product names, the menu, the rack, the buttons — and squeezed capitals are the
+hardest thing to read at the sizes a phone actually shows. And a display face was doing body work at 16px.
+
+- **Fraunces is the display voice: mixed case, weight 600.** Headings, the story lines, `#why`'s argument, the
+  note card's fill-in-the-blanks, and ordinals (01/02, the podium rank, the pillar numbers). **Putting the
+  capitals back puts the old problem back** — `text-transform:uppercase` is gone from every `var(--display)`
+  rule on purpose.
+- **Inter is everything else.** Body copy, `h3`, and all the **small tracked-caps labels** — eyebrows, product
+  tags, the nav, the tab bar, the footer, the curtain's wordmark and the plates' own stamped names. Those keep
+  their capitals: small tracked caps are a label, not a shout, and Inter sets them well.
+- **Measured numbers moved to Inter with `tabular-nums`** (`.c-nums-g`, `.mc-g` — the macro grams). Ordinals
+  stayed on Fraunces. The split is deliberate: a measurement is data and lines up in a column; an ordinal is
+  typography.
+- **NEITHER FACE HAS A WIDTH AXIS.** Every `font-stretch` in the stylesheet was therefore dead, not subtle, and
+  all of them were removed. Say what you mean with weight and size. One consequence needed a real fix: the
+  plate names were squeezed to 75%, so at the same px Inter set them a quarter wider inside a disc that is
+  already tight — `.rk-name` came down to `clamp(11px,8.6cqi,12.5px)` at weight 700 with .03em tracking, and
+  Inter's larger x-height means it reads no smaller.
+- **The plates were re-measured on rendered pixels, under the glyphs**, by the site's own method (shoot twice,
+  hide the lettering with `color:transparent` AND `text-shadow:none`, diff, read the hidden shot at the glyph
+  pixels). **Worst core-pixel ratio 5.07:1 at 1440, 6.03 at 390 and 820 — every plate clears 4.5.** The script
+  is `scratchpad/plates.py` in the session that did it; it is reproduced from the method in "How to measure a
+  plate" above, which is the thing that actually matters.
+- **Self-hosted, like Bricolage was.** `assets/fonts/fraunces-v38-latin{,-ext}.woff2` and
+  `inter-v20-latin{,-ext}.woff2`, with `OFL-Fraunces.txt` and `OFL-Inter.txt` beside them (SIL OFL 1.1 — shipping
+  the licence is a condition, not a courtesy). **The two latin files together are 137 KB, within a kilobyte of
+  the single Bricolage file they replace**, and both are preloaded by all seven templates because the headline
+  and the first paragraph are both above the fold. **Nothing on this site touches a Google server**: a grep for
+  their hostnames across `site-src/` and the generated pages must stay empty.
+- **`_intro.html`'s curtain waited on `800 40px "Bricolage Grotesque"` before animating.** It now waits on
+  Inter, which is the face `.intro-word` is actually set in. A gate naming a font the page no longer loads
+  never resolves on its own; only the 250ms fallback saved it.
+- **What moved, measured.** The homepage is **8,304px at 390** (it was 7,237) — mixed case with the leading it
+  needs is taller than condensed capitals. "Pick your goal" on the Shop now ends at **664 of 844 at 390 and 585
+  of 645 at 320** (it was 654 and 576): ten pixels lower, still well inside the first screen. No page scrolls
+  sideways at 390 and no page logs a console error.
+- **Two traps when editing these rules.** A multi-line rule can carry its `text-transform:uppercase` on the
+  SECOND line, where a one-line grep misses it — `.sc-name` shipped a round in Fraunces capitals that way. And
+  replacing the head of a rule that already had a `letter-spacing` further down leaves **two** declarations with
+  the later one winning, which is how `.ab-two .her-text>h3` briefly kept its old tracking.
 
 ## The glass (2026-10-08)
 
@@ -1042,7 +1094,8 @@ added, removed or renamed:
   about what "Products" cost the nav before it went, and **at 1100 "Book a free call" ran straight over the
   search field** — measured, and plain in a screenshot. Verified afterwards: zero collisions and a clean
   24px gap at 1024-1920 (11px at 1024, where the search sits at its 138px floor, as before).
-- **The Shop's first screen did not move**: "Pick your goal" still ends at **654 of 844 at 390 and 576 of
+- **The Shop's first screen did not move** (for THIS change; the typeface on 2026-10-10 later took it to 664 and 585):
+  "Pick your goal" still ended at **654 of 844 at 390 and 576 of
   640 at 320**, to the pixel, because the bar is three columns of the same 40px row.
 
 The label "Start here" and the page's copy are **DRAFT** and Peter's to rename.

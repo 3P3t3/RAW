@@ -192,9 +192,9 @@ function raise(){
   if(done)return;
   var fired=false,go=function(){if(!fired){fired=true;start()}};
   try{
-    if(doc.fonts&&!doc.fonts.check('800 40px "Bricolage Grotesque"')){
+    if(doc.fonts&&!doc.fonts.check('800 40px "Inter"')){
       setTimeout(go,250);
-      doc.fonts.load('800 40px "Bricolage Grotesque"').then(go,go);
+      doc.fonts.load('800 40px "Inter"').then(go,go);
     }else go();
   }catch(e){go()}
 }

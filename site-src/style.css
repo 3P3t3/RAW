@@ -1,50 +1,73 @@
 
-/* Bricolage Grotesque, self-hosted. It used to come from two Google origins -- a 1451-byte
-   stylesheet from one, which then named the actual file on a second -- both in front of the
-   first paint: 2 DNS lookups + 2 TLS handshakes + 3 sequential round trips. Now it is one
-   same-origin file, preloaded by both templates, on the connection that already brought the
-   HTML. Nothing on this site touches a Google server any more; a grep for their hostnames
-   across site-src/ and the generated pages should stay empty.
+/* Fraunces and Inter, self-hosted (2026-10-10). They replaced Bricolage Grotesque, which was
+   doing both jobs at once -- every heading squeezed to 72% width in capitals, and every paragraph
+   in the same face. Peter: "I need something different because this is just not working well."
+   He chose this pairing off a specimen sheet of five: a warm serif announces, a plain sans
+   explains. The two files together are 137KB, within a kilobyte of the one Bricolage file they
+   replace, so the first paint costs what it always did.
 
-   The file is the exact latin variable woff2 Google served for this site's axis request,
-   all three axes intact: opsz 12..96, wght 200..800, wdth 75..100. Licence: assets/fonts/OFL.txt
-   (SIL OFL 1.1 — shipping it alongside the font is a condition of the licence, not a courtesy).
+   FRAUNCES is the display face: headings, the story lines, the note card's blanks, ordinals.
+   Mixed case, weight 600 -- NOT uppercase. Putting the capitals back puts the old problem back.
+   INTER is everything else: body copy, the small tracked-caps labels (eyebrows, tags, nav, the
+   tab bar, the plates' own stamped names) and measured numbers.
 
-   There is no @font-face descriptor for the optical-size axis: opsz is carried in the font's
-   own fvar table and applied by font-optical-sizing, whose initial value is auto. Google's
-   stylesheet relied on exactly the same thing and declared only the two ranges below. body
-   restates font-optical-sizing:auto so the dependency is visible rather than implied.
+   Both are the exact latin variable woff2 Google served for this site's axis request, all axes
+   intact: Fraunces opsz 9..144, wght 300..900; Inter opsz 14..32, wght 300..800. Licences:
+   assets/fonts/OFL-Fraunces.txt and OFL-Inter.txt (SIL OFL 1.1 -- shipping them alongside the
+   fonts is a condition of the licence, not a courtesy).
+
+   There is no @font-face descriptor for the optical-size axis: opsz is carried in each font's
+   own fvar table and applied by font-optical-sizing, whose initial value is auto. body restates
+   font-optical-sizing:auto so the dependency is visible rather than implied.
 
    latin-ext is declared but gated by unicode-range, so it costs nothing on the wire for the
-   current content and is fetched only if a product name ever gains a character that needs it —
-   the same behaviour Google's stylesheet gave us. */
+   current content and is fetched only if a product name ever gains a character that needs it.
+
+   Nothing on this site touches a Google server: a grep for their hostnames across site-src/ and
+   the generated pages should stay empty. Both templates preload BOTH latin files -- the headline
+   and the first paragraph are above the fold, so each one is render-critical. */
 @font-face{
-  font-family:"Bricolage Grotesque";
+  font-family:"Fraunces";
   font-style:normal;
-  font-weight:200 800;
-  font-stretch:75% 100%;
+  font-weight:300 900;
   font-display:swap;
-  src:url("assets/fonts/bricolage-grotesque-v9-latin.woff2") format("woff2");
+  src:url("assets/fonts/fraunces-v38-latin.woff2") format("woff2");
   unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
 @font-face{
-  font-family:"Bricolage Grotesque";
+  font-family:"Fraunces";
   font-style:normal;
-  font-weight:200 800;
-  font-stretch:75% 100%;
+  font-weight:300 900;
   font-display:swap;
-  src:url("assets/fonts/bricolage-grotesque-v9-latin-ext.woff2") format("woff2");
-  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+  src:url("assets/fonts/fraunces-v38-latin-ext.woff2") format("woff2");
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face{
+  font-family:"Inter";
+  font-style:normal;
+  font-weight:300 800;
+  font-display:swap;
+  src:url("assets/fonts/inter-v20-latin.woff2") format("woff2");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:"Inter";
+  font-style:normal;
+  font-weight:300 800;
+  font-display:swap;
+  src:url("assets/fonts/inter-v20-latin-ext.woff2") format("woff2");
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;
 }
 :root{
   /* Two darks, one sand, one greige ground */
   --teal:#002E3B;--pearl:#1E262F;--beige:#E2C8AE;--sand:#E6D3C5;--soft:#D6D4C9;--tile:#E2DFD7;--chalk:#F4F2EC;--mindful:#BDB6AD;
   --text:#415365;--ink:#1E262F;--line:rgba(30,38,47,.18);--on-dark:#C4D2D4;
   --r:0px;
-  /* Bricolage Grotesque, variable. Its width axis spans 75-100 only: the 72% below
-     clamps to 75% (imperceptible) and .wordmark cannot stretch past 100%. */
-  --display:"Bricolage Grotesque","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --sans:"Bricolage Grotesque","Helvetica Neue",Helvetica,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  /* NEITHER FACE HAS A WIDTH AXIS, so any font-stretch left in a rule does nothing at all --
+     it is not a squeeze that became subtle, it is dead. Say what you mean with weight and size.
+     Fraunces is set MIXED CASE at 600; see the note above the @font-face blocks. */
+  --display:Fraunces,Georgia,"Times New Roman",serif;
+  --sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --blue:#3340B8; /* lifted from the XS can */
   --hero:#033246; /* the dark half of the hero video, so the panel and the film share one edge */
   --pad:20px;--sec:72px;--mast:60px;
@@ -61,7 +84,7 @@ html{-webkit-text-size-adjust:100%;scroll-padding-top:var(--mh);background:linea
 html.locked{overflow:hidden}
 body::before{content:"";position:fixed;inset:0;z-index:9;pointer-events:none;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.055'/%3E%3C/svg%3E");background-size:160px 160px}
 body{margin:0;background:var(--chalk);color:var(--text);font:16px/1.55 var(--sans);font-optical-sizing:auto;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
-h1,h2{font-family:var(--display);font-weight:800;font-stretch:72%;text-transform:uppercase;color:var(--teal);margin:0;line-height:.92;letter-spacing:-.005em;text-wrap:balance}
+h1,h2{font-family:var(--display);font-weight:600;color:var(--teal);margin:0;line-height:1.03;letter-spacing:-.018em;text-wrap:balance}
 h3{font:600 17px/1.3 var(--sans);color:var(--ink);margin:0}
 p{margin:0}
 a{color:inherit}
@@ -104,7 +127,7 @@ a,button,summary{touch-action:manipulation}
 .mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--teal);color:var(--sand)}
 .bar{display:grid;grid-template-columns:44px 1fr auto auto;align-items:center;gap:4px;height:60px}
 .sound-toggle{color:var(--sand)}
-.wordmark{justify-self:center;display:inline-flex;align-items:center;gap:10px;min-height:44px;font-family:var(--sans);font-weight:800;font-stretch:112%;font-size:14px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;color:var(--sand);text-decoration:none}
+.wordmark{justify-self:center;display:inline-flex;align-items:center;gap:10px;min-height:44px;font-family:var(--sans);font-weight:800;font-size:14px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;color:var(--sand);text-decoration:none}
 /* the wave: 4.11:1, filled rather than stroked, so it needs a wide slot of its own */
 .wordmark .mark{width:103px;height:25px;flex:none;fill:currentColor;stroke:none}
 /* 361-479: the compact bar cannot carry the 103px wave beside the wordmark at full size.
@@ -256,7 +279,7 @@ html:not(.js) .mtab{display:none}
 .how-steps li{border-bottom:1px solid var(--line)}
 .how-step{display:grid;grid-template-columns:40px minmax(0,1fr) 18px;column-gap:14px;row-gap:4px;
   padding:16px 0;color:inherit;text-decoration:none}
-.how-n{grid-row:1 / span 2;font:800 28px/1 var(--display);font-stretch:72%;color:var(--teal)}
+.how-n{grid-row:1 / span 2;font:700 28px/1 var(--display);color:var(--teal)}
 .how-t{grid-column:2;font:600 17px/1.3 var(--sans);color:var(--ink)}
 .how-d{grid-column:2;font-size:15px;line-height:1.5;color:var(--text)}
 .how-ic{grid-column:3;grid-row:1 / span 2;align-self:center;color:var(--teal)}
@@ -296,7 +319,7 @@ a.how-step:active{opacity:.7}
 .t-bar.js .how-step{position:relative;grid-template-columns:44px minmax(0,1fr) 18px;column-gap:16px;row-gap:4px;padding:14px 0 22px}
 /* the place for a plate: an open ring, its number in the teal at .74 (5.5:1 or more) */
 .t-bar.js .how-n{position:relative;z-index:1;grid-row:1 / span 2;grid-column:1;align-self:start;display:grid;place-items:center;
-  width:44px;height:44px;margin-top:-11px;border-radius:50%;font:800 15px/1 var(--display);font-stretch:75%;letter-spacing:.03em;
+  width:44px;height:44px;margin-top:-11px;border-radius:50%;font:700 15px/1 var(--display);letter-spacing:.01em;
   color:rgba(0,46,59,.74);box-shadow:inset 0 0 0 1.5px rgba(0,46,59,.4)}
 .t-bar.js .how-t{grid-column:2}
 .t-bar.js .how-d{grid-column:2}
@@ -386,7 +409,7 @@ a.how-step:active{opacity:.7}
 .shelf-art{display:block;width:min(240px,62%);justify-self:center}
 .shelf-art img{display:block;width:100%;height:auto}
 .shelf-copy{display:grid;gap:8px;justify-items:start}
-.shelf-name{font:800 36px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.shelf-name{font:600 38px/1.06 var(--display);letter-spacing:-.018em;color:var(--teal)}
 .shelf-desc{max-width:34ch}
 .shelf-picks{font-size:14px;color:var(--text);max-width:40ch}
 .shelf-go{margin-top:4px;font:600 16px/1.2 var(--sans);color:var(--teal);text-decoration:underline;
@@ -414,7 +437,7 @@ a.how-step:active{opacity:.7}
 .goal:active{opacity:.7}
 
 @media (hover:hover){.goal:hover .goal-name{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px}.goal:hover .goal-n{text-decoration:underline;text-underline-offset:4px}.card-link:hover .p-name{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}.tlink:hover{text-decoration-thickness:2.5px}}
-.goal-name{grid-area:name;font:800 24px/1 var(--display);font-stretch:72%;text-transform:uppercase}
+.goal-name{grid-area:name;font:600 25px/1.1 var(--display);letter-spacing:-.014em}
 .goal-index{counter-reset:goal}
 
 .goal-desc{grid-area:desc;margin-top:8px;font-size:16px;line-height:1.35;color:var(--text)}
@@ -529,7 +552,7 @@ body:has(.consult-dusk) .foot{background:linear-gradient(#141A26 0,rgb(6,11,14) 
 .c-nums{display:grid;gap:8px;width:100%;max-width:40ch;margin-bottom:10px}
 .c-nums-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .c-nums-list li{display:grid;gap:4px;justify-items:center;min-width:0;padding:10px 2px;background:var(--tile);text-align:center}
-.c-nums-g{font:800 clamp(18px,5.6vw,24px)/1 var(--display);font-stretch:72%;color:var(--teal);white-space:nowrap}
+.c-nums-g{font:700 clamp(18px,5.6vw,24px)/1 var(--sans);font-variant-numeric:tabular-nums;letter-spacing:-.01em;color:var(--teal);white-space:nowrap}
 .c-nums .mc-lab{font-size:11px;letter-spacing:.06em}
 /* Peter's proof, which closes #story: the before and after, all three views stacked, nothing
    to swipe. Every img carries its width and height, so nothing jumps when the lazy files land. */
@@ -631,7 +654,7 @@ body:has(.consult-dusk) .foot{background:linear-gradient(#141A26 0,rgb(6,11,14) 
    no-script visitor back to #sample-sent, when :target shows it and :has puts the form away */
 .s-done{display:none;gap:10px;align-content:start}
 .s-done.on,.s-done:target{display:grid}
-.s-done h3{font:800 28px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.s-done h3{font:600 29px/1.08 var(--display);letter-spacing:-.016em;color:var(--teal)}
 .s-done h3:focus{outline:none}
 .sample-sec:has(.s-done:target) #sample-form{display:none}
 .consult-dusk:has(.s-done:target) #consult-form{display:none}
@@ -677,7 +700,7 @@ body:has(.consult-dusk) .foot{background:linear-gradient(#141A26 0,rgb(6,11,14) 
 #sample .btn,.nc .btn{border-radius:999px}
 #sample .s-step{display:block;min-width:0;font:400 28px/1.62 var(--display);color:var(--ink)}
 #sample .s-step:focus{outline:none}
-#sample .s-say{font-weight:800;font-stretch:75%;letter-spacing:-.005em}
+#sample .s-say{font-weight:600;letter-spacing:-.012em}
 #sample .c-q{display:contents}
 #sample .s-ps{display:block}
 #sample .c-q legend,#sample .c-field label{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
@@ -686,7 +709,7 @@ body:has(.consult-dusk) .foot{background:linear-gradient(#141A26 0,rgb(6,11,14) 
 #sample .chips{display:inline}
 #sample .chip{display:inline-flex;vertical-align:baseline}
 .nc .chip span{min-height:44px;padding:0 .3em;border:2px dashed rgba(30,38,47,.34);border-radius:999px;
-  background:transparent;font:800 var(--ncs)/1 var(--display);font-stretch:75%;color:var(--text)}
+  background:transparent;font:600 var(--ncs)/1 var(--display);color:var(--text)}
 .nc .chip input:checked + span{background:var(--teal);border:2px solid var(--ink);color:var(--chalk);
   transform:rotate(-2deg);box-shadow:3px 3px 0 var(--ink)}
 @media (hover:hover){
@@ -695,14 +718,14 @@ body:has(.consult-dusk) .foot{background:linear-gradient(#141A26 0,rgb(6,11,14) 
 }
 .nc .chip input:focus-visible + span{outline:3px solid var(--blue);outline-offset:3px}
 #sample .s-by .chip + .chip::before,#sample .s-deliv .chip + .chip::before{content:"/" / "";padding:0 .12em;
-  font:800 var(--ncs)/44px var(--display);font-stretch:75%;color:rgba(30,38,47,.35)}
+  font:600 var(--ncs)/44px var(--display);color:rgba(30,38,47,.35)}
 #sample .s-deliv .chip + .chip::before{content:"or" / "";padding:0 .22em;color:var(--ink)}
 /* the full stop rides on the last choice, so a narrow line can never strand it on its own */
-#sample .s-deliv .chip + .chip::after{content:"." / "";padding-left:.06em;font-weight:800;font-stretch:75%;line-height:44px;color:var(--ink)}
+#sample .s-deliv .chip + .chip::after{content:"." / "";padding-left:.06em;font-weight:600;line-height:44px;color:var(--ink)}
 /* the blanks: a field and its error stacked in one inline box, so the sentence runs on after it */
 #sample .c-field{display:inline-flex;flex-direction:column;vertical-align:baseline;gap:4px;max-width:100%}
 .nc .c-field input,.nc .c-field textarea{max-width:100%;border:0;border-radius:0;box-shadow:none;
-  font:800 var(--ncs)/1 var(--display);font-stretch:75%;color:var(--blue);-webkit-appearance:none;appearance:none}
+  font:600 var(--ncs)/1 var(--display);color:var(--blue);-webkit-appearance:none;appearance:none}
 .nc .c-field input{height:46px;padding:0 5px;border-bottom:3px solid var(--teal);background:transparent}
 .nc .c-field input::placeholder,.nc .c-field textarea::placeholder{color:transparent}
 /* the sentence's blanks grow with what is typed in them; a question's blank holds its row */
@@ -744,7 +767,7 @@ html:not(.js) #sample .s-unit{display:block}   /* no script: both contact blanks
 html:not(.js) #sample .c-field[data-by]{display:flex;margin:6px 0}
 html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:auto;margin:0;overflow:visible;clip:auto;
   white-space:normal;font:600 13px/1.3 var(--sans);color:var(--text)}
-.nc .c-field .s-err{contain:inline-size;font-size:14px;line-height:1.35;font-stretch:100%}
+.nc .c-field .s-err{contain:inline-size;font-size:14px;line-height:1.35}
 #sample .s-hint{font:400 14px/1.4 var(--sans)}
 #sample .s-step > .s-hint{margin-top:4px}
 #sample .s-deliv .s-hint,#sample .s-deliv .s-err{margin:4px 0 6px}
@@ -834,7 +857,7 @@ html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:
 /* "1 of 2": a sticker slapped on the card's corner, never the old outlined "Step n of 4" tag */
 .s-prog{position:absolute;z-index:1;top:-32px;right:16px;display:grid;place-items:center;width:66px;height:66px;margin:0;
   border-radius:50%;background:var(--sand);box-shadow:inset 0 0 0 2px var(--ink),3px 3px 0 var(--ink);
-  font:800 16px/1 var(--display);font-stretch:75%;color:var(--ink);transform:rotate(-12deg)}
+  font:700 16px/1 var(--display);color:var(--ink);transform:rotate(-12deg)}
 /* under 360px the note drops two pixels of type and four of margin a side, so a line holds a
    clause and a blank; it is still the heavy condensed cut, just a size down */
 @media (max-width:359px){
@@ -854,13 +877,13 @@ html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:
    steady size of their own (--ncq) and stay visible. The six training answers are whole sentences
    rather than words, so that one fieldset steps its pills right down (--ncs on .c-q-long). */
 #consult-form{--ncs:26px;--ncq:25px;--cgap:26px;gap:var(--cgap)}
-#consult-form .c-q legend{margin-bottom:14px;font:800 var(--ncq)/1.12 var(--display);font-stretch:75%;
+#consult-form .c-q legend{margin-bottom:14px;font:600 var(--ncq)/1.16 var(--display);
   letter-spacing:-.005em;color:var(--ink)}
 #consult-form .c-q-long{--ncs:18px}
 #consult-form .c-q-long .chip span{padding:0 .5em;line-height:1.15;text-align:left}
 #consult-form .chips{gap:10px 8px}
 #consult-form .c-field{gap:6px}
-#consult-form .c-field label{font:800 var(--ncq)/1.12 var(--display);font-stretch:75%;letter-spacing:-.005em;color:var(--ink)}
+#consult-form .c-field label{font:600 var(--ncq)/1.16 var(--display);letter-spacing:-.012em;color:var(--ink)}
 #consult-form .c-field label span{font:400 14px/1.3 var(--sans);letter-spacing:0;color:var(--text)}
 #consult-form .c-field input,#consult-form .c-field textarea{width:100%}
 /* the note's blank is as tall as what is in it (2026-10-04: the calculator's macros line ran out of a one-line
@@ -868,8 +891,8 @@ html:not(.js) #sample .c-field[data-by] label{position:static;width:auto;height:
 #consult-form .c-field textarea{height:auto;min-height:46px;field-sizing:content;background-clip:padding-box}   /* underlines as wide as the blank above */
 /* the hint on a blank stays readable rather than hidden as it is in the sentence: small sans,
    sitting on the underline, so the blank still says what belongs in it */
-#consult-form .c-field input::placeholder{color:rgba(65,83,101,.85);font:400 15px/46px var(--sans);font-stretch:100%}
-#consult-form .c-field textarea::placeholder{color:rgba(65,83,101,.85);font:400 15px/42px var(--sans);font-stretch:100%}
+#consult-form .c-field input::placeholder{color:rgba(65,83,101,.85);font:400 15px/46px var(--sans)}
+#consult-form .c-field textarea::placeholder{color:rgba(65,83,101,.85);font:400 15px/42px var(--sans)}
 #consult-form .c-sum{margin-top:-14px;font:400 15px/1.45 var(--sans);color:var(--text)}
 
 /* One question at a time (cStep in _script.html), the macro calculator's furniture in this
@@ -1090,7 +1113,7 @@ dialog{color:var(--text)}
 .menu-nav .label{color:var(--on-dark)}
 .menu-list{list-style:none;margin:12px 0 0;padding:0}
 .menu-list li{border-top:1px solid rgba(230,211,197,.2)}
-.menu-list a,.menu-list button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:64px;padding:0;border:0;background:transparent;color:var(--chalk);font:800 36px/1 var(--display);font-stretch:72%;text-transform:uppercase;text-align:left;text-decoration:none}
+.menu-list a,.menu-list button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:64px;padding:0;border:0;background:transparent;color:var(--chalk);font:600 34px/1.1 var(--display);letter-spacing:-.018em;text-align:left;text-decoration:none}
 .menu-cta{width:100%;margin-top:28px}
 /* the shelves: every category page, in the nav's small type, two to a row */
 .menu-shelves-t{margin-top:24px}
@@ -1125,7 +1148,7 @@ html:not(.js) #results[hidden]{display:block!important}
 @media (hover:hover){.g-jump a:not([aria-current]):hover{box-shadow:inset 0 0 0 1.5px var(--teal)}}
 .g-shelf{scroll-margin-top:calc(var(--gj,52px) + 8px)}   /* --gj: the row's own height, kept by the script */
 .g-shelf[hidden]{display:none}
-.g-h{margin:28px 0 18px;font:800 30px/.95 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.g-h{margin:28px 0 18px;font:600 31px/1.08 var(--display);letter-spacing:-.016em;color:var(--teal)}
 /* a hairline between shelves, never over the first one showing (a search can hide the ones above it) */
 .g-shelf:not([hidden]) ~ .g-shelf .g-h{margin-top:40px;padding-top:14px;border-top:1px solid var(--line)}
 .g-shelf .p-name{margin-bottom:0}   /* an h4 there, under its shelf's h3 */
@@ -1290,7 +1313,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .pod .p-desc{color:var(--on-dark)}
 .pod .p-why{margin-top:4px;font-size:14px;line-height:1.4;color:var(--on-dark);overflow-wrap:anywhere}   /* its TAGLINES line: why it's worth a look */
 .pod-count{margin-top:10px;font-size:14px;color:var(--sand);font-variant-numeric:tabular-nums}
-.pod-num{font:800 22px/1 var(--display);font-stretch:72%;display:inline-block;margin-right:4px}
+.pod-num{font:700 22px/1 var(--display);display:inline-block;margin-right:4px}
 @media (hover:hover){.pod .card-link:hover .p-name{text-decoration:underline;text-underline-offset:4px}}
 @media (prefers-reduced-motion:reduce){.pod .card-link{transition:none}}
 
@@ -1322,14 +1345,14 @@ html:not(.js) #results[hidden]{display:block!important}
 .st-bit p{max-width:34ch}
 /* the label that opens a movement, in his words for it */
 .st-mv{font:600 12px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin:0 0 2px;color:var(--text)}
-.st-line{margin:0;font:800 clamp(23px,6.6vw,31px)/1.08 var(--display);font-stretch:80%;
+.st-line{margin:0;font:600 clamp(23px,6.4vw,31px)/1.14 var(--display);
   letter-spacing:-.012em;text-wrap:balance;color:var(--teal)}
 /* what they changed: the five shelves' names, nothing else (Peter, 2026-10-03), as one list in the lines'
    own display face, each name the link to its shelf, ruled like an index. */
 .st-shelves{list-style:none;margin:0;padding:0;width:100%;max-width:520px;border-top:1px solid var(--line)}
 .st-shelves li{border-bottom:1px solid var(--line)}
 .st-go{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px;padding:8px 0;
-  font:800 clamp(24px,6.6vw,30px)/1.1 var(--display);font-stretch:80%;letter-spacing:-.01em;color:var(--teal);text-decoration:none}
+  font:600 clamp(24px,6.4vw,30px)/1.16 var(--display);letter-spacing:-.016em;color:var(--teal);text-decoration:none}
 .st-go .ic{flex:none;width:20px;height:20px;transition:transform .2s ease}
 .st-go:hover .ic,.st-go:focus-visible .ic{transform:translateX(4px)}
 .st-go:active{opacity:.7}
@@ -1442,7 +1465,7 @@ html:not(.js) #results[hidden]{display:block!important}
 }
 /* the ask closes the section in the story's own voice: the lines' display type, centred */
 .st-ask{display:grid;justify-items:center;text-align:center;gap:14px;margin-top:clamp(44px,8vw,64px)}
-.st-say{margin:0;font:800 clamp(26px,7vw,34px)/1.1 var(--display);font-stretch:80%;letter-spacing:-.012em;
+.st-say{margin:0;font:600 clamp(26px,6.8vw,34px)/1.14 var(--display);letter-spacing:-.018em;
   color:var(--teal);text-wrap:balance;max-width:28ch}
 .st-book{margin-top:2px}
 /* the proof the stage used to let go into; about.html's own proof section is this block (.ab-proof) */
@@ -1479,7 +1502,7 @@ html:not(.js) #results[hidden]{display:block!important}
 .isle-art{position:relative;display:block;width:100%}
 .isle-art img{display:block;width:100%;height:auto}
 .isle-label{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.isle-name{font:800 16px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.isle-name{font:600 17px/1.15 var(--display);letter-spacing:-.008em;color:var(--teal)}
 .isle-note{font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
 .isle a:focus-visible .isle-name{text-decoration:underline;text-underline-offset:4px}
 @media (hover:hover){.isle a:hover .isle-name{text-decoration:underline;text-underline-offset:4px}}
@@ -1623,7 +1646,7 @@ html:not(.js) .bay-note{color:var(--text)}
 .pcard-art img{display:block;width:min(56vw,220px);height:auto;filter:drop-shadow(0 10px 10px rgba(0,20,27,.22))}
 .pcard-copy{display:grid;justify-items:start;gap:10px;padding:6px 20px 20px;border-radius:0 0 16px 16px;background:var(--sand)}
 .pcard-kind{margin:0;font:600 11px/1.35 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
-.pcard-name{margin:0;font:800 32px/.95 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal);text-wrap:balance}
+.pcard-name{margin:0;font:600 32px/1.06 var(--display);letter-spacing:-.018em;color:var(--teal);text-wrap:balance}
 .pcard-line{margin:0;font:500 16px/1.4 var(--sans);color:var(--ink)}
 .pcard-facts{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 4px;padding:0}
 .pcard-facts li{display:inline-flex;align-items:center;min-height:28px;padding:0 11px;border-radius:999px;background:var(--teal);color:var(--sand);
@@ -1663,7 +1686,7 @@ html:not(.js) .bay-note{color:var(--text)}
   will-change:transform}
 .intro-stage{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;
   padding:0 var(--pad);text-align:center}
-.intro-word{display:flex;justify-content:center;margin-right:-.14em;font-weight:800;font-stretch:100%;
+.intro-word{display:flex;justify-content:center;margin-right:-.14em;font-weight:800;
   font-size:clamp(21px,7vw,58px);line-height:1;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
 .intro-l{display:block;overflow:hidden;padding:.05em 0 .1em}      /* the mask the letters rise out of */
 .intro-l > span{display:block;transform:translateY(118%)}
@@ -1762,7 +1785,7 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
 .mc-err{font-weight:600;font-size:15px}
 
 .mc-res{display:grid;gap:18px}
-.mc-res-t{font:800 30px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.mc-res-t{font:600 30px/1.08 var(--display);letter-spacing:-.016em;color:var(--teal)}
 .mc-res-t:focus{outline:none}
 .mc-cals{margin:0;border-top:1px solid var(--line)}
 .mc-cals > div{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
@@ -1772,7 +1795,7 @@ html:not(.js) .mc-quiz,html:not(.js) .mc-res{display:none}
 .mc-cals > div:last-child dd{font-size:22px;color:var(--teal)}
 .mc-macros{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .mc-macros li{display:grid;gap:3px;justify-items:center;padding:14px 6px;background:var(--tile);text-align:center}
-.mc-g{font:800 28px/1 var(--display);font-stretch:72%;color:var(--teal)}
+.mc-g{font:700 28px/1 var(--sans);font-variant-numeric:tabular-nums;letter-spacing:-.012em;color:var(--teal)}
 .mc-lab{font:600 12px/1.3 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--text)}
 .mc-kc{font-size:13px;color:var(--text)}
 .mc-notes{display:grid;gap:10px}
@@ -2011,8 +2034,8 @@ html:not(.js) .lbpin{display:none}
   box-shadow:inset 0 max(1px,1.2cqi) max(1px,1cqi) rgba(0,0,0,.8),inset 0 min(-1px,-.5cqi) 0 rgba(255,255,255,.14),
     0 0 0 max(.5px,.45cqi) rgba(255,255,255,.55),0 0 0 max(1px,.9cqi) rgba(56,64,70,.6)}
 /* the name, moulded in: a light top edge and a dark bottom edge */
-.rk-name{position:absolute;left:14%;right:14%;bottom:67.5%;text-align:center;font:800 clamp(13px,10.5cqi,15px)/1 var(--sans);font-stretch:75%;
-  letter-spacing:.05em;text-transform:uppercase;text-wrap:balance;
+.rk-name{position:absolute;left:14%;right:14%;bottom:67.5%;text-align:center;font:700 clamp(11px,8.6cqi,12.5px)/1.04 var(--sans);
+  letter-spacing:.03em;text-transform:uppercase;text-wrap:balance;
   text-shadow:0 -.75px 0 rgba(255,255,255,.3),0 .75px 0 rgba(0,0,0,.34)}
 .rk-line,.rk-on{position:absolute;left:15%;right:15%;top:69%;text-align:center;font:700 clamp(11px,7.4cqi,12px)/1.1 var(--sans);letter-spacing:.07em;
   text-transform:uppercase;text-wrap:balance;text-shadow:0 -.75px 0 rgba(255,255,255,.26),0 .75px 0 rgba(0,0,0,.3)}
@@ -2061,7 +2084,7 @@ html:not(.js) .lbpin{display:none}
    the script as it places the panel) */
 .rk-panel.is-at::before{content:"";position:absolute;top:-9px;left:calc(var(--x) - 10px);border:solid transparent;border-width:0 10px 10px;border-bottom-color:var(--c)}
 .rk-head{display:grid;gap:5px;margin:4px 0 14px}
-.rk-title{font:800 28px/.95 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.rk-title{font:600 29px/1.06 var(--display);letter-spacing:-.016em;color:var(--teal)}
 .rk-sub{font:600 12px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--text)}
 .rk-acts{display:flex;flex-wrap:wrap;align-items:center;gap:4px 24px;margin-top:14px}
 .rk-load{flex:1 1 100%}
@@ -2103,7 +2126,7 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
 @media (hover:hover){.mys-go:hover .mys-p{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}}
 .mys-key i{flex:none;width:5px;height:15px;margin-top:-1px;border-radius:2px/3px;
   background:linear-gradient(rgba(255,255,255,.45),rgba(255,255,255,0) 30%,rgba(0,0,0,0) 60%,rgba(0,0,0,.4)),var(--c);box-shadow:0 0 0 1px rgba(230,211,197,.35)}
-.mys-build{margin-top:18px;font:800 clamp(40px,11vw,72px)/.92 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--sand)}
+.mys-build{margin-top:18px;font:600 clamp(38px,10vw,66px)/1 var(--display);letter-spacing:-.022em;color:var(--sand)}
 .mys-sub{max-width:38ch;font-size:17px;line-height:1.5;color:var(--on-dark);text-wrap:balance}
 .mys-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;width:100%;max-width:560px;margin-top:6px}
 .mys-acts .btn{flex:1 1 100%}
@@ -2154,7 +2177,7 @@ html:not(.js) .rk-panel[hidden]{display:block!important}
 .rk-guide li{display:flex;align-items:center;gap:10px;min-height:22px;font:500 15px/1.3 var(--sans);color:var(--text)}
 .rk-guide li.is-now{color:var(--ink);font-weight:650}
 .rg-n{position:relative;flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;
-  font:800 11px/1 var(--sans);font-stretch:75%;color:var(--teal);box-shadow:inset 0 0 0 1.5px rgba(0,46,59,.62);
+  font:800 11px/1 var(--sans);color:var(--teal);box-shadow:inset 0 0 0 1.5px rgba(0,46,59,.62);
   transition:background-color 200ms,color 200ms,box-shadow 200ms}
 .rg-n::after{content:"";position:absolute;inset:3px;border-radius:50%;border:1px solid transparent}
 .is-done .rg-n{background:var(--teal);color:var(--chalk);box-shadow:none}
@@ -2287,7 +2310,7 @@ body{background:transparent}
 .no-pour .pod .shot::before{content:"";position:absolute;left:4%;right:4%;top:2%;bottom:6%;z-index:-2;border-radius:50%;
   background:radial-gradient(58% 52% at 50% 46%,rgba(255,255,255,.72),rgba(255,255,255,0) 78%)}
 .no-pour .pod .shot::after{left:22%;right:22%;bottom:3%;height:7%}
-.no-pour .pod-rank{position:absolute;top:0;left:0;z-index:2;margin:0;font:800 18px/1 var(--display);font-stretch:72%;letter-spacing:.01em}
+.no-pour .pod-rank{position:absolute;top:0;left:0;z-index:2;margin:0;font:700 18px/1 var(--display)}
 /* two lines' room for the shelf name, so the three product names start on the same line however
    the shelf names above them wrap (one of the three is usually "Daily Foundations") */
 .no-pour .pod .p-tag{margin-top:6px;font-size:11px;line-height:1.25;min-height:2.5em}
@@ -2351,12 +2374,12 @@ body{background:transparent}
    are the hand-placed files in assets/her/, cut to one spec like Peter's, so the same 50% line
    carries each stack's Before / After heads.
    =================================================================================== */
-.pf-title{margin:0 0 26px;font:800 clamp(36px,10vw,60px)/.92 var(--display);font-stretch:72%;text-transform:uppercase;
+.pf-title{margin:0 0 26px;font:600 clamp(34px,9vw,56px)/1 var(--display);letter-spacing:-.02em;
   color:var(--teal);text-align:center;text-wrap:balance}
 .pf-k{color:var(--blue)}
 .pf-duo{display:grid;gap:44px;max-width:680px;margin:0 auto}
 .pf-who{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;margin:0}
-.pf-name{font:800 24px/1 var(--display);font-stretch:72%;text-transform:uppercase;letter-spacing:.02em;color:var(--teal)}
+.pf-name{font:600 24px/1.1 var(--display);letter-spacing:-.012em;color:var(--teal)}
 .pf-when{font:600 13px/1.2 var(--sans);letter-spacing:.06em;color:var(--text);font-variant-numeric:tabular-nums}
 .dx-duo{display:grid;gap:20px;max-width:680px;margin:52px auto 0}   /* the gap the photos' captions keep from the DEXA cards */
 /* wide: his three pairs and her two side by side, hers a little narrower so the columns end together
@@ -2372,7 +2395,7 @@ body{background:transparent}
 .dx-card{container-type:inline-size;display:grid;gap:16px;min-width:0;padding:22px 18px 20px;background:#FAF9F5;
   box-shadow:inset 0 0 0 1px rgba(30,38,47,.12),0 30px 50px -36px rgba(0,30,39,.45)}
 .dx-head{display:grid;gap:6px}
-.dx-t{margin:0;font:800 26px/1 var(--display);font-stretch:72%;text-transform:uppercase;color:var(--teal)}
+.dx-t{margin:0;font:600 27px/1.08 var(--display);letter-spacing:-.015em;color:var(--teal)}
 .dx-span{margin:0;font:600 13px/1.3 var(--sans);letter-spacing:.04em;color:var(--text);font-variant-numeric:tabular-nums}
 .dx-nums{display:grid;margin:0}
 .dx-n{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:2px 12px;padding:10px 0;border-top:1px solid var(--line)}
@@ -2457,8 +2480,8 @@ body{background:transparent}
    the block the Women's Health shelf uses (her_text, peter_text: the names are h3, "What changed" h4) */
 .ab-who .pf-title{margin-bottom:clamp(36px,5vw,56px)}
 .ab-two{display:grid;gap:52px;align-items:start}
-.ab-two .her-text>h3{font:800 clamp(30px,8vw,46px)/.92 var(--display);font-stretch:72%;text-transform:uppercase;
-  letter-spacing:-.005em;color:var(--teal)}
+.ab-two .her-text>h3{font:600 clamp(29px,7.4vw,44px)/1.02 var(--display);letter-spacing:-.02em;
+  color:var(--teal)}
 .ab-two .her-h{margin:10px 0 0;font:600 17px/1.3 var(--sans);color:var(--ink)}
 /* the numbers, under the photos rather than after a caption, so .dx-duo's own top gap is too much */
 .ab-nums{padding-bottom:var(--sec)}
@@ -2701,14 +2724,14 @@ body{background:transparent}
 .why-lead + .why-lead{color:var(--text)}
 /* Peter's argument (2026-10-06) leads the section, so it is sized as an argument and not as the first of three
    paragraphs: it was indistinguishable from the two explaining lines under it. Display face, ink, its own measure. */
-.why-arg{font:800 clamp(22px,5.4vw,26px)/1.18 var(--display);font-stretch:80%;letter-spacing:-.012em;
+.why-arg{font:600 clamp(22px,5.4vw,27px)/1.22 var(--display);letter-spacing:-.016em;
   color:var(--teal);max-width:22ch;margin-bottom:2px}
 @media (min-width:768px){.why-arg{font-size:clamp(26px,2.2vw,32px);max-width:26ch}}
 .why-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 /* content sits at the top of each card; the links follow their text rather than pinning to a foot that left
    90-150px of empty card above them at 1440 (2026-10-04) */
 .why-card{display:grid;align-content:start;gap:8px;padding:22px 20px 14px;background:#FAF9F5;border:1px solid var(--line)}
-.why-n{font:800 28px/1 var(--display);font-stretch:72%;color:var(--blue)}
+.why-n{font:700 28px/1 var(--display);color:var(--blue)}
 .why-t{font:600 19px/1.25 var(--sans);color:var(--ink)}
 .why-card p:not(.why-n){font-size:15px;line-height:1.5}
 .why-gos{display:flex;flex-wrap:wrap;column-gap:22px}
@@ -2985,8 +3008,8 @@ body{background:transparent}
 .sc-art img{display:block;width:100%;height:100%;object-fit:contain;
   filter:drop-shadow(0 14px 14px rgba(0,20,27,.22))}
 .sc-tag{margin:18px 20px 0;font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--text)}
-.sc-name{margin:9px 20px 0;font:800 clamp(20px,2.4vw,24px)/1.05 var(--display);font-stretch:72%;
-  text-transform:uppercase;color:var(--teal)}
+.sc-name{margin:9px 20px 0;font:600 clamp(20px,2.4vw,24px)/1.14 var(--display);letter-spacing:-.014em;
+  color:var(--teal)}
 .sc-desc{margin:8px 20px 0;font:400 15px/1.45 var(--sans);color:var(--text)}
 .sc-go{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;margin:14px 20px 0;margin-top:auto;padding-top:14px;
   font:600 14px/1.2 var(--sans);color:var(--blue);text-decoration:underline;text-underline-offset:4px}
