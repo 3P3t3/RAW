@@ -907,7 +907,11 @@ one came from:
 | Twist Tubes 2GO Joint Health | the box, a stick and a red drink on wood | Peter's frame, ESRGAN 2x |
 | Double X 10 Day | the box on weathered wood with wildflowers | Peter's frame, ESRGAN 2x |
 | XS Energy + Focus 30 Tablets | **one tablet on a kitchen counter — GENERATED** | fal kontext |
-| XS Elite + Focus Peach Mango | the can relit on a counter | **the one AI relight left** |
+| XS Elite + Focus Peach Mango | the beaded can on a pitch, ball behind | Amway's own, 690px |
+
+**Nothing in the set is an AI relight any more.** Elite was the last one, and Peter asked for its real
+frame too — *"can we use the access elite picture that is on the Aspire Health Pro website? The one that
+when you click it, it switches"*. The generated tablet is the only picture here that is not a photograph.
 
 - **Only the Energy + Focus tablet is generated, and Peter asked for exactly that**: *"ill attach a picture
   of what the tablet looks like but bear in mind that its in a plastic shell in teh pciture so go for just
@@ -947,10 +951,18 @@ one came from:
   explicit button over the art, drawn only under `(hover:none)` and only where there is a second photo. Its
   click is stopped, so a tap on it never opens the product card, and **a tap anywhere else on the card
   still does** — verified both ways. Reduced motion swaps without the fade.
-- **amway.com is blocked to us, and now to Peter's terminal too** (403 on the media CDN, and its URLs carry
-  a signed `?context=` token that cannot be forged). `tools/fetch-alts.py` records that attempt. The three
-  official 690px frames came from `~/Desktop/aspiree/assets/cache/`, which an earlier project had already
-  downloaded; the rest came from Peter. **Do not plan work that assumes the CDN can be reached.**
+- **HOW TO GET ONE OF THESE, because it is not obvious and it cost an hour to work out.** Amway's media CDN
+  is `https://www.amway.com/medias/<SKU>-en-US-<size>px-<NN>?context=<token>`, where `NN` is the picture's
+  index (01 is the pack front; 02, 03, 08 are the lifestyle frames and the "Let's Compare!" panels). **The
+  token is a signature and cannot be forged or dropped**: without it the CDN answers 403 — to the Claude
+  sandbox AND to Peter's own Terminal, which is why `tools/fetch-alts.py` came back empty on every SKU.
+  **With** a valid token, Peter's Terminal fetches it fine (verified: 200, 623 KB). So the route is:
+  1. open **aspirehealth.pro** in the browser pane — it hotlinks this CDN, tokens and all;
+  2. read the full URLs out of the DOM (`[...document.querySelectorAll('img')].map(i=>i.currentSrc)`);
+  3. `curl` the one you want **in Peter's Terminal**, quoted, with the token attached.
+  That only reaches pictures his other site actually uses. For anything else, ask Peter to screenshot it.
+  `~/Desktop/aspiree/assets/cache/` also holds ~58 alternates an earlier project downloaded, by SKU, and
+  `assets/generated/_sitedata.json` beside it maps 51 product names to their SKUs.
 
 ## A product's backdrop is its OWN colour (`pack_tint`, 2026-10-09)
 
