@@ -2280,6 +2280,17 @@ window.aspireTrack = track;   /* so the blocks above can report their own steps 
   /* 4. the two forms, reported as sent — never their contents */
   var sf = $('#sample-form'); if(sf) sf.addEventListener('submit', function(){ track('sample_submitted') });
   var cf = $('#consult-form'); if(cf) cf.addEventListener('submit', function(){ track('call_submitted') });
+  /* the second photograph, on a touchscreen (2026-10-09). A pointer device does this on hover, in CSS
+     alone; there is no hover on a phone, so the button over the art toggles it. It is inside the card's
+     own link, so its click must not also open the product card. */
+  doc.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('[data-flip]');
+    if(!b) return;
+    e.preventDefault(); e.stopPropagation();
+    var card = b.closest('.sc'), on = !card.classList.contains('is-lit');
+    card.classList.toggle('is-lit', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }, true);
   /* 5. the first-time funnel. The page knows which variant it is (data-funnel, from FUNNELS); it
         records that, and that this browser has now seen the funnel, so index.html's coin flip never
         sends them through it twice. Landing here from an ad counts the same as being routed here. */

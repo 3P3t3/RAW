@@ -1375,6 +1375,30 @@ def main():
                 f'<p class="p-tag">{tag}</p><h{hn} class="p-name">{esc(pr["name"])}</h{hn}>'
                 f'<p class="p-desc">{esc(pr["desc"])}</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
 
+    def lit_shot(pr):
+        """The product's relit photograph, the one a hover or a tap swaps to, or nothing when it has none.
+
+        assets/lit/<slug>.webp (2026-10-09): the same pack, photographed on a real surface at a wide
+        aperture, from fal kontext off its own catalogue image — Peter picked this over a facts panel
+        ("lets do option 2, relight the packs like the story ones"). They are PLACED BY HAND and the build
+        never writes them, like assets/story/. Each was checked line by line against the real pack and
+        anything the model got wrong was blurred to illegible rather than left half-stating a number; the
+        job files and what each check found are in ~/Desktop/aspiree/tools/jobs-start-lit*.json and in
+        CLAUDE.md. A product with no file simply does not flip, and the card is exactly as it was.
+        """
+        if not pr['img']:
+            return ''
+        f = 'assets/lit/' + os.path.basename(pr['img'])
+        if not os.path.exists(os.path.join(ROOT, f)):
+            return ''
+        # the toggle is for a touchscreen, where there is no hover; style.css hides it on pointer devices.
+        # It sits over the art and never covers the card's own link, so a tap anywhere else still opens
+        # the product. DRAFT-COPY.
+        return (f'<img class="sc-lit" src="{f}" alt="" width="900" height="900" loading="lazy" decoding="async">'
+                f'<button class="sc-flip" type="button" aria-pressed="false" data-flip>'
+                f'<span class="vh">Show {esc(pr["name"])} photographed, or the pack</span>'
+                f'<span aria-hidden="true">Photo</span></button>')
+
     def start_cards():
         """The Start here tab's cards: FEATURED and nothing else. FEATURED was already chosen as
         props-free pack shots "so the grid reads as one series", which is exactly what this page needs
@@ -1390,7 +1414,7 @@ def main():
             out_.append(
                 f'        <li class="sc grow" style="--d:{i % 3}{f";--tint:{tint}" if tint else ""}">'
                 f'<a class="sc-link card-link" href="{esc(pr["share_link"])}" target="_blank" rel="noopener" {card_data(pr)}>'
-                f'<span class="sc-art">{shot(pr)}</span>'
+                f'<span class="sc-art">{shot(pr)}{lit_shot(pr)}</span>'
                 f'<span class="sc-tag">{names.get(slug_, "Wellness")}</span>'
                 f'<h2 class="sc-name">{esc(pr["name"])}</h2>'
                 f'<span class="sc-desc">{esc(TAGLINES[family(pr["product"])])}</span>'

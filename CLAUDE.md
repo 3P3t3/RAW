@@ -883,6 +883,42 @@ hand-written copy would drift and then mislead somebody. Its return URL is passe
   on either copy; 2,602 local references across 36 pages with none missing; the guard still clean; and the
   funnel head measures **6.04:1** at 390 and 1440 under the glyphs.
 
+## The second photograph: hover or tap to change the picture (`assets/lit/`, 2026-10-09)
+
+Peter, of aspirehealth.pro: *"add to the prodcuts on teh main page the option to hover (on desktop) or tap
+(on mobile) to change teh screen"*, then, offered three ways to fill it: *"lets do option 2, relight the
+packs like the story ones"*. Their cards swap the pack shot for a different picture; ours swaps the
+catalogue cut-out for **the same pack photographed on a real surface**.
+
+- **`assets/lit/<same basename as the product's image>.webp`**, 900x900, ~30 KB each, 296 KB for nine.
+  **Placed by hand; the build never writes them**, like `assets/story/`. A product with no file has no
+  `.sc-lit` and simply does not flip.
+- Made with **fal kontext** off each product's own catalogue image, the same technique as the story
+  relights: `~/Desktop/aspiree/tools/jobs-start-lit.json`, `-2.json` and `-ef2.json`. **Environment shots,
+  not cut-outs on a sweep** — a real counter at a wide aperture — so the flip is visibly a different
+  photograph *and* fine print goes legitimately out of focus instead of being invented.
+- **EVERY ONE WAS CHECKED LINE BY LINE AGAINST THE REAL PACK, and three came back wrong:**
+  - **Men's Daily Multivitamin said 60 TABLETS; the real bottle says 90.** Blurred to illegible.
+  - **Energy + Focus recoloured "ENERGY+FOCUS" from green to orange.** Rejected and re-run with the colour
+    named and the wrong ones forbidden (`-ef2.json`); the retry is green. Its RHODIOLA badge still crams,
+    so that badge is softened.
+  - **Creatine rendered "+HMB" and "+ELECTROLYTES" in copper**; on the real tub they are grey like the
+    rest. Desaturated back, which is a correction toward the truth, not an invention.
+  - Two more had garbled net-weight/count lines (whey, twist tubes) — blurred. The bars, Elite, Sleep
+    Health and GI Primer needed nothing: every line and number matches, including 2.0 oz (56g),
+    12 fl oz (355 mL), 30 capsules and 30 servings / 9 oz.
+  **The rule is the site's own and it held: a line the model got wrong is made illegible, never corrected
+  by inventing a replacement.** `scratchpad/relight/finish.py` carries the rects and the reasons.
+- **The flip is a true cross-fade of two stacked images**, so nothing moves and the card's height never
+  changes. Fading only the new one in is not enough: `.shot` is positioned (its contact shadow needs it)
+  and therefore paints ABOVE a static sibling, so the cut-out stayed on top of the photograph. The
+  photograph is **absolutely positioned to fill the art panel**, not a grid item with negative margins —
+  the panel is padded for the cut-out, and margins left it short on two sides and offset.
+- A pointer device does it **on hover, in CSS alone**. A touchscreen has no hover, so `[data-flip]` is an
+  explicit button over the art, drawn only under `(hover:none)` and only where there is a second photo. Its
+  click is stopped, so a tap on it never opens the product card, and **a tap anywhere else on the card
+  still does** — verified both ways. Reduced motion swaps without the fade.
+
 ## A product's backdrop is its OWN colour (`pack_tint`, 2026-10-09)
 
 Peter: *"we should make the background colors for each prodct match the style. for instance, createine is
