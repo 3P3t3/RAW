@@ -2280,16 +2280,23 @@ window.aspireTrack = track;   /* so the blocks above can report their own steps 
   /* 4. the two forms, reported as sent — never their contents */
   var sf = $('#sample-form'); if(sf) sf.addEventListener('submit', function(){ track('sample_submitted') });
   var cf = $('#consult-form'); if(cf) cf.addEventListener('submit', function(){ track('call_submitted') });
-  /* the second photograph, on a touchscreen (2026-10-09). A pointer device does this on hover, in CSS
-     alone; there is no hover on a phone, so the button over the art toggles it. It is inside the card's
-     own link, so its click must not also open the product card. */
+  /* the second photograph, on a touchscreen. A pointer device does this on hover, in CSS alone.
+     There is no hover on a phone, so A TAP ON THE PICTURE ITSELF flips it, and a tap on the words
+     below still opens the product card (Peter, 2026-10-10: "it shouldn't have like a photo button
+     on it... when you click anywhere on the side of the product, it goes there"). The button that
+     used to sit over the art is gone; what it was also doing for a keyboard is now done by
+     .sc-link:focus-visible in style.css, which is no longer inside the hover media query.
+     CAPTURE PHASE, deliberately: the picture lives inside the card's own <a>, and the tile handler
+     that opens the dialog must not also run. Only where there is a second photograph to flip to. */
+  var noHover = matchMedia('(hover:none)');
   doc.addEventListener('click', function(e){
-    var b = e.target.closest && e.target.closest('[data-flip]');
-    if(!b) return;
+    if(!noHover.matches) return;
+    var art = e.target.closest && e.target.closest('.sc-art');
+    if(!art || !art.querySelector('.sc-lit')) return;
+    var card = art.closest('.sc');
+    if(!card) return;
     e.preventDefault(); e.stopPropagation();
-    var card = b.closest('.sc'), on = !card.classList.contains('is-lit');
-    card.classList.toggle('is-lit', on);
-    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    card.classList.toggle('is-lit');
   }, true);
   /* 5. the first-time funnel. The page knows which variant it is (data-funnel, from FUNNELS); it
         records that, and that this browser has now seen the funnel, so index.html's coin flip never

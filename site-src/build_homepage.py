@@ -1401,13 +1401,14 @@ def main():
             return ''
         from PIL import Image  # the sources are not one size: say what this file actually is
         lw, lh = Image.open(full).size
-        # the toggle is for a touchscreen, where there is no hover; style.css hides it on pointer devices.
-        # It sits over the art and never covers the card's own link, so a tap anywhere else still opens
-        # the product. DRAFT-COPY.
-        return (f'<img class="sc-lit" src="{f}" alt="" width="{lw}" height="{lh}" loading="lazy" decoding="async">'
-                f'<button class="sc-flip" type="button" aria-pressed="false" data-flip>'
-                f'<span class="vh">Show {esc(pr["name"])} photographed, or the pack</span>'
-                f'<span aria-hidden="true">Photo</span></button>')
+        # There is NO button over the art any more (Peter, 2026-10-10: "it shouldn't have like a photo
+        # button on it... when you click anywhere on the side of the product, it goes there"). A pointer
+        # device flips on hover, in CSS alone; a touchscreen flips on a TAP ON THE PICTURE, caught in
+        # _script.html's capture phase so the card's own link does not also fire. The photograph is
+        # decorative — the pack it shows is named right below it — so it takes an empty alt and nothing
+        # here is announced twice.
+        return (f'<img class="sc-lit" src="{f}" alt="" width="{lw}" height="{lh}" '
+                f'loading="lazy" decoding="async">')
 
     def start_cards():
         """The Start here tab's cards: FEATURED and nothing else. FEATURED was already chosen as

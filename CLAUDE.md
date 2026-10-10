@@ -999,10 +999,22 @@ when you click it, it switches"*. The generated tablet is the only picture here 
   and therefore paints ABOVE a static sibling, so the cut-out stayed on top of the photograph. The
   photograph is **absolutely positioned to fill the art panel**, not a grid item with negative margins —
   the panel is padded for the cut-out, and margins left it short on two sides and offset.
-- A pointer device does it **on hover, in CSS alone**. A touchscreen has no hover, so `[data-flip]` is an
-  explicit button over the art, drawn only under `(hover:none)` and only where there is a second photo. Its
-  click is stopped, so a tap on it never opens the product card, and **a tap anywhere else on the card
-  still does** — verified both ways. Reduced motion swaps without the fade.
+- A pointer device does it **on hover, in CSS alone**. **A touchscreen flips it by TAPPING THE PICTURE,
+  and there is no button** (Peter, 2026-10-10: *"it shouldn't have like a photo button on it... when you
+  click anywhere on the side of the product, it goes there"*). The `.sc-flip` chip that used to sit over
+  the art is gone, markup, CSS and handler. A tap inside `.sc-art` toggles `.is-lit` from a listener in
+  **the capture phase** — the picture is inside the card's own `<a>`, so the tile handler that opens the
+  dialog must not also run — and it bails unless `(hover:none)` matches and that card actually has a
+  second photograph. **A tap on the words below still opens the product card**, which is the only way in
+  to buying, so never let the flip target grow past the art panel. Verified under touch emulation: tap
+  the picture flips and opens nothing, tap again flips back, tap the name opens the card; and on a
+  pointer device clicking the picture still opens the card with no `.is-lit` left behind.
+- **`:focus-visible` is deliberately OUTSIDE the hover media query.** The button was also the keyboard's
+  way to the second picture on a touch device; now focusing the card flips it at any pointer type
+  (verified: Tab onto a card, `:focus-visible` matches, the photograph is at opacity 1). The photograph
+  is decorative (`alt=""`) and the pack is named right below it, so dropping the button costs nothing an
+  assistive technology needed. **What it does cost is discoverability**: nothing on a phone now says the
+  picture can be tapped. Peter was told and chose it. Reduced motion swaps without the fade.
 - **HOW TO GET ONE OF THESE, because it is not obvious and it cost an hour to work out.** Amway's media CDN
   is `https://www.amway.com/medias/<SKU>-en-US-<size>px-<NN>?context=<token>`, where `NN` is the picture's
   index (01 is the pack front; 02, 03, 08 are the lifestyle frames and the "Let's Compare!" panels). **The

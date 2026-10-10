@@ -2979,9 +2979,14 @@ body{background:transparent}
    surface (assets/lit/, see lit_shot()). It is a cross-fade of two stacked images, so nothing moves and
    the card's height never changes. A product with no relit photograph has no .sc-lit and simply does not
    flip — which is why the toggle below is only drawn when there is one.
-   On a pointer device the whole card does it on hover. On a touchscreen there is no hover, so .sc-flip is
-   an explicit button over the art; it never covers the card's own link, so a tap anywhere else still
-   opens the product. Reduced motion swaps without the fade. */
+   On a pointer device the whole card does it on hover. ON A TOUCHSCREEN THERE IS NO BUTTON (Peter,
+   2026-10-10: "it shouldn't have like a photo button on it... when you click anywhere on the side of the
+   product, it goes there"): a tap on the PICTURE flips it, handled in _script.html's capture phase, and a
+   tap on the words below still opens the product card. The .sc-flip chip that used to sit over the art is
+   gone, markup and all. KEYBOARD FOCUS FLIPS IT AT ANY POINTER TYPE -- the :focus-visible rules below are
+   deliberately OUTSIDE the hover media query, which is what the button was also doing for a keyboard on a
+   touch device. The cost of dropping the chip is discoverability: nothing on a phone now says the picture
+   can be tapped. That is Peter's call, made knowing it. Reduced motion swaps without the fade. */
 .sc-art{position:relative}
 .sc-art .shot{grid-area:1 / 1}
 /* a TRUE cross-fade: the cut-out fades out as the photograph fades in. Fading only the photograph in is
@@ -2993,17 +2998,14 @@ body{background:transparent}
 .sc-lit{position:absolute;z-index:1;inset:0;display:block;width:100%;height:100%;object-fit:cover;
   opacity:0;transition:opacity 320ms cubic-bezier(.3,.7,.2,1)}
 .sc-art .shot{transition:opacity 320ms cubic-bezier(.3,.7,.2,1)}
-@media (hover:hover){.sc-link:hover .sc-art .shot,.sc-link:focus-visible .sc-art .shot{opacity:0}}
+@media (hover:hover){.sc-link:hover .sc-art .shot{opacity:0}}
+.sc-link:focus-visible .sc-art .shot{opacity:0}
 .sc.is-lit .sc-art .shot{opacity:0}
 .sc-art{display:grid;place-items:stretch}
 .sc-art .shot{place-self:center}
-@media (hover:hover){.sc-link:hover .sc-lit,.sc-link:focus-visible .sc-lit{opacity:1}}
+@media (hover:hover){.sc-link:hover .sc-lit{opacity:1}}
+.sc-link:focus-visible .sc-lit{opacity:1}
 .sc.is-lit .sc-lit{opacity:1}
-.sc-flip{position:absolute;z-index:2;right:10px;bottom:10px;display:none;align-items:center;gap:6px;
-  min-height:36px;padding:0 12px;border:0;border-radius:999px;background:rgba(0,46,59,.82);color:var(--chalk);
-  font:600 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase}
-.sc-flip:focus-visible{outline:2px solid var(--sand);outline-offset:2px}
-@media (hover:none){.sc-art:has(.sc-lit) .sc-flip{display:inline-flex}}
 @media (prefers-reduced-motion:reduce){.sc-lit{transition:none}}
 .sc-art img{display:block;width:100%;height:100%;object-fit:contain;
   filter:drop-shadow(0 14px 14px rgba(0,20,27,.22))}
