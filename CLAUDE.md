@@ -1028,6 +1028,46 @@ when you click it, it switches"*. The generated tablet is the only picture here 
   `~/Desktop/aspiree/assets/cache/` also holds ~58 alternates an earlier project downloaded, by SKU, and
   `assets/generated/_sitedata.json` beside it maps 51 product names to their SKUs.
 
+## Top 9: the tab's name, its prices and its button (2026-10-10)
+
+Peter: *"Start here should be adjusted to Top 9"*, *"can we make the strawberry grass-fed whey bigger in
+the picture?"*, and *"lets add the price and the option to view product. Like this one"* (a card from his
+other site: the price bottom-left, a dark "View product" pill bottom-right).
+
+- **The label is COUNTED, not typed.** `start_tab()` returns `f'Top {len(FEATURED)}'` and fills
+  `{{TAB_START_NAME}}` through `nav()`, so it reaches the tab on every page of both copies, the page's own
+  eyebrow, its `<title>` and its `og:title` from one place. That page's lead already said "Eight" once
+  while the list held nine; a tab that miscounts would be worse, because it is everywhere. **Change
+  FEATURED and the label follows.** The h1 is still "The ones I'd start you on." — different words, still
+  true, and Peter renamed the tab, not the heading.
+- **The file is still `start.html`** (`START_PAGE`). Renaming it would break every link anyone has, the
+  funnel and `?try=`, for no gain the visitor can see.
+- **`PACK_SCALE` draws one pack bigger than its mass says.** `normalize()` fits every cut-out to the same
+  VISUAL MASS — the geometric mean of width and height — which is why a tall can and a squat tub read
+  alike in a row, and it is right. But it under-draws a wide, low silhouette: the strawberry whey is a
+  flat pouch with a scoop in front, so it filled 50.8% x 61.7% of its panel beside the Elite can's 80%
+  height. `PACK_SCALE['XS Grass-Fed Whey Protein - Strawberry'] = 1.20` takes it to **61.2% x 74.0%**. The
+  width and height caps still apply, so an override can never push a pack out of its box, and the build
+  exits on a key that is not in `share-links.csv`.
+  **`cut_version()` hashes PACK_SCALE as well as `normalize()`'s own source** — the table sits outside the
+  function, so without that a changed number would leave every cached cut-out in place and the edit would
+  silently do nothing. Changing one therefore re-cuts all 105 photographs, ~50s; every other product comes
+  out byte-identical and **git saw exactly one changed file**, which is the check that it worked.
+- **PRICES ARE PETER'S TO FILL AND EVERY ROW IS BLANK.** `share-links.csv` gained a fourth column,
+  `price`. **Nothing here can look a price up** — amway.com is unreachable, Amway owns the number, and an
+  invented price is the worst kind of wrong on a page that sends people to buy. A blank cell draws no
+  element at all, so the cards look today exactly as they did. A non-blank one must match `$44.00`'s shape
+  or **the build exits**, because a typo would ship looking like a real price. This reverses the old rule
+  ("No prices: the site has never carried one, Amway owns them and they move") — **Peter asked for it; the
+  reason behind that rule has not gone away**, so a stale price is now a thing that can happen and he owns
+  it.
+- **The card's foot** is `.sc-foot`: price left, `.sc-go` right, now a teal pill reading "View product"
+  instead of an underlined "See what's in it". `margin-top:auto` moved from `.sc-go` to `.sc-foot`, which
+  is what lines every card's price and button up across a row however the name wraps. Measured on the
+  rendered pixels: the pill **12.90:1**, the price **12.90:1**; no overflow at 390 and the foot fits one
+  row with the price (310px of row, 149px of pill). **It is only on the Top 9 cards** — the Shop grid, the
+  shelf pages and the product dialog carry no price, which is Peter's to extend if he wants it.
+
 ## A product's backdrop is its OWN colour (`pack_tint`, 2026-10-09)
 
 Peter: *"we should make the background colors for each prodct match the style. for instance, createine is
@@ -1087,7 +1127,7 @@ is still the whole catalogue and stays that way; `start.html` is the handful, wi
 - Each card carries `card_data()` and keeps the `card-link` class, because `_script.html`'s tile selector is
   `a.card-link[data-name]` — so **the same product card opens from here as from anywhere else**, and its
   backdrop takes the same `--tint`. "Ask for a free sample" routes by the shop tab's `?try=`, as a shelf
-  page's does. **No prices**: the site has never carried one, Amway owns them and they move.
+  page's does. **Prices**: none until 2026-10-10, when Peter asked for them on the Top 9 cards; see that section. Amway owns them and they move, so every cell is still blank and they are his to fill.
 - **Every word sits BELOW the colour field, on the chalk**, so nothing is ever read off a colour that
   changes per product. Measured under the glyphs: worst **5.79:1** at 390, **5.88:1** at 1440.
 - `.sc-link` is a **flex column, not a grid**: cards in a row stretch to the tallest, and with a grid the

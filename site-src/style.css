@@ -3013,12 +3013,20 @@ body{background:transparent}
 .sc-name{margin:9px 20px 0;font:600 clamp(20px,2.4vw,24px)/1.14 var(--display);letter-spacing:-.014em;
   color:var(--teal)}
 .sc-desc{margin:8px 20px 0;font:400 15px/1.45 var(--sans);color:var(--text)}
-.sc-go{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;margin:14px 20px 0;margin-top:auto;padding-top:14px;
-  font:600 14px/1.2 var(--sans);color:var(--blue);text-decoration:underline;text-underline-offset:4px}
+/* the card's foot: the price on the left, the button on the right (Peter, 2026-10-10: "lets add the
+   price and the option to view product"). margin-top:auto lives HERE now, not on .sc-go -- it is what
+   pushes the foot to the bottom so every card in a row lines its price and button up, whatever the
+   name wraps to. EVERY PRICE IS BLANK TODAY and .sc-price is then not drawn at all, so the button sits
+   where the old text link did and the row does not reserve an empty gap. */
+.sc-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin:14px 20px 0;margin-top:auto;padding-top:16px}
+.sc-price{font:600 21px/1 var(--display);letter-spacing:-.01em;color:var(--teal);font-variant-numeric:tabular-nums}
+.sc-go{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 17px;border-radius:999px;
+  background:var(--teal);color:var(--chalk);font:600 13.5px/1 var(--sans);letter-spacing:.01em;text-decoration:none}
 .sc-link:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
 @media (hover:hover){
   .sc-link:hover{transform:translate3d(0,-3px,0);box-shadow:0 0 0 1px var(--line),0 24px 34px -24px rgba(0,20,27,.55)}
-  .sc-link:hover .sc-go{text-decoration-thickness:2.5px}
+  .sc-link:hover .sc-go{background:var(--blue)}
 }
 .sc-link:active{transform:translate3d(0,1px,0)}
 @media (prefers-reduced-motion:reduce){.sc-link{transition:none}}

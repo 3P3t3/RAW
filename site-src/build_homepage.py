@@ -752,6 +752,14 @@ FEATURED = [
     'XS Energy + Focus Dietary Supplement - 30 Tablets',
 ]
 
+def start_tab():
+    """The label on the Start here tab, everywhere it appears: the tab itself, the page's own eyebrow,
+    its <title> and its og:title. Peter renamed it on 2026-10-10 — "Start here should be adjusted to
+    Top 9" — and THE NUMBER IS COUNTED FROM FEATURED, never typed. That page's lead already said
+    "Eight" once while the list held nine, and a tab is worse to get wrong than a lead, because it
+    rides on every page of both copies. Change FEATURED and the label follows."""
+    return f'Top {len(FEATURED)}'
+
 GOAL_NAMES = {'R': 'Recovery', 'L': 'Lean mass', 'E': 'Endurance', 'S': 'Sleep'}
 
 GOAL_TILES = [  # goal, name, line, product shown in the goal index
@@ -1091,9 +1099,26 @@ ABOUT_SUB = her_says('Peter and {n} Herschelman. Who we are, what changed, and t
                      'Peter and his wife. Who we are, what changed, and the scans behind it.')
 
 
-def normalize(src, dst, size=600):
+# A PACK THAT NEEDS TO BE DRAWN BIGGER THAN ITS MASS SAYS (2026-10-10). normalize() below fits every
+# cut-out to the same VISUAL MASS — the geometric mean of its width and height — so a tall can and a
+# squat tub read at the same scale in a row. That rule is right, and it is why the grid looks even, but
+# it under-draws a pack whose silhouette is wide and low: the strawberry whey is a flat pouch with a
+# scoop in front of it, so its mass is spread sideways and it reads small beside the Elite can. Peter,
+# 2026-10-10: "can we make the strawberry grass-fed whey bigger in the picture?"
+#
+# A number here multiplies that mass term for ONE product and nothing else. The width and height caps
+# below it still apply, so an override can never push a pack out of its box. Keys are the listing name
+# from share-links.csv; the build exits on a name that is not in it. CHANGING A NUMBER HERE re-cuts all
+# 105 photographs, about 50 seconds, because cut_version() hashes this table as well as normalize()'s own
+# source. Every other product comes out byte-identical, so git sees one file change. Expected, not a hang.
+PACK_SCALE = {
+    'XS Grass-Fed Whey Protein - Strawberry': 1.20,
+}
+
+def normalize(src, dst, size=600, scale=1.0):
     """Trim each cut-out to the product, fit it to one box and stand it on a shared baseline,
-    so every photo in the grid reads at the same scale. Falls back to a plain copy without Pillow."""
+    so every photo in the grid reads at the same scale. Falls back to a plain copy without Pillow.
+    `scale` is PACK_SCALE's override for the one product that needs drawing larger than its mass says."""
     # the cache keys on the source photo's mtime and on the text of this function: edit the trimming or
     # scaling below and the fingerprint stops matching assets/.cut-version, which re-cuts everything.
     if not RECUT and os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src):
@@ -1118,7 +1143,7 @@ def normalize(src, dst, size=600):
     box = im.getchannel('A').point(lambda a: 255 if a > 60 else 0).getbbox() or (0, 0, w, h)
     im = im.crop(box)
     w, h = im.size
-    k = min(size * .56 / (w * h) ** .5, size * .9 / w, size * .8 / h)  # equal visual mass, capped to the box
+    k = min(size * .56 * scale / (w * h) ** .5, size * .9 / w, size * .8 / h)  # equal visual mass, capped to the box
     im = im.resize((max(1, round(w * k)), max(1, round(h * k))), Image.LANCZOS)
     out = Image.new('RGBA', (size, size), (0, 0, 0, 0))
     out.paste(im, ((size - im.width) // 2, round(size * .91) - im.height), im)
@@ -1126,7 +1151,10 @@ def normalize(src, dst, size=600):
 
 
 def cut_version():
-    return hashlib.sha1(inspect.getsource(normalize).encode()).hexdigest()[:12]
+    # PACK_SCALE goes in deliberately: it is OUTSIDE normalize()'s own source, so without it a changed
+    # override would leave every cached cut-out in place and the edit would silently do nothing.
+    return hashlib.sha1((inspect.getsource(normalize)
+                         + repr(sorted(PACK_SCALE.items()))).encode()).hexdigest()[:12]
 
 
 def slug(s):
@@ -1305,6 +1333,15 @@ def main():
     products = []
     for r in rows:
         p = describe(r)
+        # PRICES (2026-10-10). The site carried none until Peter asked for them -- "lets add the price
+        # and the option to view product" -- so share-links.csv gained a `price` column and HE FILLS IT:
+        # amway.com is unreachable from here, Amway owns the number, and an invented price is the worst
+        # kind of wrong. A blank cell simply draws no price, which is what every row holds today. The
+        # shape is checked because a typo would ship as a real-looking price.
+        p['price'] = (r.get('price') or '').strip()
+        if p['price'] and not re.fullmatch(r'\$\d{1,3}(,\d{3})*\.\d{2}', p['price']):
+            raise SystemExit(f"share-links.csv: {r['product']!r} has price {p['price']!r}; "
+                             'it must look like $44.00')
         src = os.path.join(PHOTOS, r['photo']) if r['photo'] else ''
         studio = os.path.join(STUDIO, slug(r['product']) + '.webp')
         if os.path.exists(studio):
@@ -1318,7 +1355,7 @@ def main():
         if src and os.path.exists(src):
             fn = slug(r['product']) + os.path.splitext(src)[1].lower()
             if not export:
-                normalize(src, os.path.join(ASSETS, fn))
+                normalize(src, os.path.join(ASSETS, fn), scale=PACK_SCALE.get(r['product'], 1.0))
             p['img'] = 'assets/products/' + fn
         else:
             p['img'] = ''
@@ -1334,6 +1371,9 @@ def main():
             raise SystemExit(f'CARD_FACTS[{k!r}]: needs its amway.com source and 2-4 chips')
     for n in FEATURED + [t[3] for t in GOAL_TILES]:
         assert n in by, f'Missing product in CSV: {n}'
+    for n in PACK_SCALE:
+        if n not in by:
+            raise SystemExit(f'PACK_SCALE: {n!r} is not a product in share-links.csv')
     for a, b in STACKS_WITH.items():
         if a not in by or b not in by:
             raise SystemExit(f'STACKS_WITH: {a!r} -> {b!r}, and one of them is not in share-links.csv')
@@ -1378,6 +1418,11 @@ def main():
                 f'<a class="card-link" href="{u}" target="_blank" rel="noopener" {card_data(pr)}{on}>{shot(pr)}'
                 f'<p class="p-tag">{tag}</p><h{hn} class="p-name">{esc(pr["name"])}</h{hn}>'
                 f'<p class="p-desc">{esc(pr["desc"])}</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
+
+    def price_tag(pr):
+        """The price on a card, or nothing. Every row is blank today: the column is Peter's to fill
+        (see the note where it is read). A blank draws no element at all rather than an empty box."""
+        return f'<span class="sc-price">{esc(pr["price"])}</span>' if pr.get('price') else ''
 
     def lit_shot(pr):
         """The product's second photograph, the one a hover or a tap swaps to, or nothing when it has none.
@@ -1429,7 +1474,9 @@ def main():
                 f'<span class="sc-tag">{names.get(slug_, "Wellness")}</span>'
                 f'<h2 class="sc-name">{esc(pr["name"])}</h2>'
                 f'<span class="sc-desc">{esc(TAGLINES[family(pr["product"])])}</span>'
-                f'<span class="sc-go">See what\'s in it<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></span>'
+                f'<span class="sc-foot">{price_tag(pr)}'
+                f'<span class="sc-go">View product<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></span>'
+                f'</span>'
                 f'<span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
         return '\n'.join(out_)
 
@@ -1811,7 +1858,8 @@ def main():
         if photo and os.path.exists(os.path.join(PHOTOS, photo)):  # transparent cut-out for the dark band
             fn = slug(r['product']) + '.webp'
             if not export:
-                normalize(os.path.join(PHOTOS, photo), os.path.join(CUTS, fn))
+                normalize(os.path.join(PHOTOS, photo), os.path.join(CUTS, fn),
+                          scale=PACK_SCALE.get(r['product'], 1.0))
             pr['img'] = 'assets/cutouts/' + fn
             pr['studio'] = False
         units = (r.get('units_this_week') or '').strip()
@@ -1858,6 +1906,7 @@ def main():
         start = '' if here == 'start' else START_PAGE
         cur = ' aria-current="page"'
         sub = {'{{HOME}}': home, '{{SHOP}}': shop, '{{START}}': start,
+               '{{TAB_START_NAME}}': start_tab(),
                '{{TAB_HOME}}': cur if here == 'home' else '',
                '{{TAB_START}}': cur if here == 'start' else '',
                '{{TAB_SHOP}}': cur if here == 'shop' else ' aria-current="true"' if here == 'shelf' else ''}
