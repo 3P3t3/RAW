@@ -1226,8 +1226,15 @@ def main():
         exact listing name that "Ask for a free sample" writes into the sample form's blank."""
         fam = family(pr['product'])
         facts = CARD_FACTS.get(pr['product'], ('', []))[1]
+        # data-tint is the product's own shelf plate colour, carried so the card's art panel can take it
+        # (2026-10-09, Peter on aspirehealth.pro: "when you click them, it shows like a back drop that
+        # changes. That part's pretty cool"). It is read off PLATES through cat_of, never written out by
+        # hand, so a plate that moves takes its cards with it. A product on no shelf simply has no tint
+        # and the panel keeps the plain hollow it always had.
+        tint = PLATES[cat_of[pr['product']]][0] if pr['product'] in cat_of else ''
         return (f'data-name="{esc(pr["name"])}" data-kind="{esc(pr["desc"])}" data-line="{esc(TAGLINES[fam])}" '
-                f'data-facts="{esc("|".join(facts))}" data-sfx="{CARD_SOUND.get(fam, "chime")}" data-try="{esc(pr["product"])}"')
+                f'data-facts="{esc("|".join(facts))}" data-sfx="{CARD_SOUND.get(fam, "chime")}" '
+                f'data-try="{esc(pr["product"])}"' + (f' data-tint="{tint}"' if tint else ''))
 
     def card(pr, i=0, extra='', shelves=False, hn=3):
         """A product tile: a link to its Amway page, which _script.html turns into the way to its product

@@ -604,6 +604,12 @@ if(arch){
     if(!pic)return;
     opener=b;
     img.src=pic.currentSrc||pic.src;
+    /* the art panel takes the product's own shelf colour (2026-10-09, Peter on aspirehealth.pro: "when
+       you click them, it shows like a back drop that changes"). data-tint comes off PLATES through the
+       build, so it can never drift from the rack; a product on no shelf clears it and the panel keeps
+       the plain hollow. style.css mixes it well back toward the hollow — the field is behind a cut-out
+       pack, not behind words, so there is nothing to measure, only something to look at. */
+    if(d.tint)dlg.style.setProperty('--tint',d.tint);else dlg.style.removeProperty('--tint');
     $('#pcard-kind').textContent=d.kind||'';
     $('#pcard-name').textContent=d.name;
     $('#pcard-line').textContent=d.line||'';

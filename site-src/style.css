@@ -2320,7 +2320,15 @@ body{background:transparent}
    hollow whatever the field behind the case is doing */
 .bay{background:linear-gradient(var(--hollow-hi),var(--hollow) 80%);
   box-shadow:inset 0 10px 16px -9px rgba(0,20,27,.55),inset 0 -8px 12px -10px rgba(0,20,27,.22),inset 0 0 0 1px rgba(0,20,27,.16)}
-.pcard-art{background:linear-gradient(var(--hollow-hi),var(--hollow))}
+/* The card's art panel takes the product's own shelf colour, set as --tint by _script.html from the
+   data-tint the build puts on every pack and tile (2026-10-09). The pack is a cut-out with its own drop
+   shadow, so a field of colour behind it reads as a shot rather than as a sticker on paper — which is
+   what Peter liked on aspirehealth.pro. The tint is mixed well back toward the hollow so a near-black
+   plate like Protein gives a cool grey rather than a hole, and the fallback is the hollow itself, so a
+   product on no shelf looks exactly as it always did. Nothing is written on this panel, so there is no
+   contrast to hold here — only the pack to light. */
+.pcard-art{background:linear-gradient(color-mix(in srgb,var(--tint,var(--hollow)) 16%,var(--hollow-hi)),
+  color-mix(in srgb,var(--tint,var(--hollow)) 30%,var(--hollow)))}
 
 /* cards and panels: a translucent surface with a hairline, so forms still read as forms */
 .c-card,.c-embed{background:rgba(255,255,255,.5);backdrop-filter:none;-webkit-backdrop-filter:none;

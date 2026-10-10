@@ -839,6 +839,20 @@ two cross over instead of one blinking out before the other lands. Measured: **1
 and gives a join one full `--sec` and half the other. It applies to every page, so a new section added anywhere gets
 it. `.hero + .sec` is deliberately left out.
 
+## The product card's backdrop changes with the product (2026-10-09)
+
+Peter, on aspirehealth.pro: *"one thing I really like about the products on that website as well is that
+when you click them, it shows like a back drop that changes. That part's pretty cool. And it, again, it
+reads high-end, professional, quality, good pictures, good shots. Not crammed."*
+
+`#pcard`'s art panel now takes **the product's own shelf plate colour**. The build puts `data-tint` on every
+pack and tile from `PLATES[cat_of[product]]` — read, never written by hand, **so a plate that moves takes its
+cards with it** — `_script.html` copies it onto the dialog as `--tint` on open, and `style.css` mixes it back
+toward the hollow (16% / 30%). A product on no shelf clears the tint and the panel keeps the plain hollow it
+always had. **Nothing is written on that panel**, so there is no contrast to hold here, only a pack to light.
+Protein's near-black gives a graphite field, Daily Foundations' wheat a warm sand, Energy & Focus' yellow a
+soft lemon, Recovery's indigo a pale lavender — which is the whole point: it ties the card to the rack.
+
 ## The goal question is not asked twice (2026-10-09)
 
 Eric Elizes: *"build your barbell asks you what your goals are effectively, then booking flow re-asks in
