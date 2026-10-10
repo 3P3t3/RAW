@@ -886,29 +886,58 @@ hand-written copy would drift and then mislead somebody. Its return URL is passe
 ## The second photograph: hover or tap to change the picture (`assets/lit/`, 2026-10-09)
 
 Peter, of aspirehealth.pro: *"add to the prodcuts on teh main page the option to hover (on desktop) or tap
-(on mobile) to change teh screen"*, then, offered three ways to fill it: *"lets do option 2, relight the
-packs like the story ones"*. Their cards swap the pack shot for a different picture; ours swaps the
-catalogue cut-out for **the same pack photographed on a real surface**.
+(on mobile) to change teh screen"*. Their cards swap the pack shot for a different picture; ours does the
+same, and since the second pass the same day the picture is **a real photograph**.
 
-- **`assets/lit/<same basename as the product's image>.webp`**, 900x900, ~30 KB each, 296 KB for nine.
-  **Placed by hand; the build never writes them**, like `assets/story/`. A product with no file has no
-  `.sc-lit` and simply does not flip.
-- Made with **fal kontext** off each product's own catalogue image, the same technique as the story
-  relights: `~/Desktop/aspiree/tools/jobs-start-lit.json`, `-2.json` and `-ef2.json`. **Environment shots,
-  not cut-outs on a sweep** — a real counter at a wide aperture — so the flip is visibly a different
-  photograph *and* fine print goes legitimately out of focus instead of being invented.
-- **EVERY ONE WAS CHECKED LINE BY LINE AGAINST THE REAL PACK, and three came back wrong:**
-  - **Men's Daily Multivitamin said 60 TABLETS; the real bottle says 90.** Blurred to illegible.
-  - **Energy + Focus recoloured "ENERGY+FOCUS" from green to orange.** Rejected and re-run with the colour
-    named and the wrong ones forbidden (`-ef2.json`); the retry is green. Its RHODIOLA badge still crams,
-    so that badge is softened.
-  - **Creatine rendered "+HMB" and "+ELECTROLYTES" in copper**; on the real tub they are grey like the
-    rest. Desaturated back, which is a correction toward the truth, not an invention.
-  - Two more had garbled net-weight/count lines (whey, twist tubes) — blurred. The bars, Elite, Sleep
-    Health and GI Primer needed nothing: every line and number matches, including 2.0 oz (56g),
-    12 fl oz (355 mL), 30 capsules and 30 servings / 9 oz.
-  **The rule is the site's own and it held: a line the model got wrong is made illegible, never corrected
-  by inventing a replacement.** `scratchpad/relight/finish.py` carries the rects and the reasons.
+**THE SET IS AMWAY'S OWN PHOTOGRAPHY NOW, NOT AN AI RELIGHT.** The first pass relit each catalogue cut-out
+with fal kontext, and three of the nine came back with the label text wrong — 60 TABLETS on a 90-tablet
+bottle, green lettering recoloured orange, grey lettering rendered in copper — each of which had to be
+blurred to illegible under the site's own rule. Then Peter looked at his other site: *"I like the dynamic
+feel of hte one from the aspirehealth.pro website. can we use those ones?"*, and named a picture per
+product. **A real photograph cannot get a label wrong**, so that rule now has nothing to catch. Where each
+one came from:
+
+| card | second picture | source |
+|---|---|---|
+| Grass-Fed Whey Strawberry | a man scooping into a shaker | Amway's own, 690px |
+| XS Sports Protein Bars | Amway's **"Let's Compare!"** panel | Amway's own, 690px |
+| XS Creatine+ | the tub on a marble counter | Amway's own, 690px |
+| Nutrilite Begin Daily GI Primer | a woman holding the tub by a lake | Peter's frame, ESRGAN 2x |
+| Nutrilite Magnesium | the bottle on a sea rock | Peter's frame, ESRGAN 2x |
+| Twist Tubes 2GO Joint Health | the box, a stick and a red drink on wood | Peter's frame, ESRGAN 2x |
+| Double X 10 Day | the box on weathered wood with wildflowers | Peter's frame, ESRGAN 2x |
+| XS Energy + Focus 30 Tablets | **one tablet on a kitchen counter — GENERATED** | fal kontext |
+| XS Elite + Focus Peach Mango | the can relit on a counter | **the one AI relight left** |
+
+- **Only the Energy + Focus tablet is generated, and Peter asked for exactly that**: *"ill attach a picture
+  of what the tablet looks like but bear in mind that its in a plastic shell in teh pciture so go for just
+  the tablet on the table"*. There is no photograph of the loose tablet anywhere — Amway's own alternate is
+  the tablet sealed under its blister dome. **The tablet carries no lettering, so there is no number to get
+  wrong**, and the prompt forbids any mark on it. Attempt one came back a ROUND, PALE CREAM disc with a few
+  specks; the real tablet is an OVAL densely mottled golden brown, like pressed plant material. Attempt two
+  (`jobs-start-lit-real-2.json`, a square crop of the real tablet as input, with the shape and the colour
+  named and the wrong ones forbidden) is what shipped. **Check any replacement against the blister crop.**
+- **ESRGAN only enlarges, it redraws nothing.** Peter's four frames arrived at ~445px, short of a 2x screen
+  at the card's 381 CSS px, so they went through `fal-ai/esrgan` at scale 2. Small print that was already
+  unreadable at 445 is still unreadable at 880 — that is correct and must not be "fixed": the Double X box
+  really does say "1 PACKET, 2X A DAY / 60 Tablets" (20 packets, two a day, ten days, which is the listing),
+  and the upscale softens that line rather than stating it. **Verified against our own catalogue photo.**
+- **The whey's powder was tinted pink by hand, and nothing else in that frame was touched.** Peter: *"use
+  the attached picture of the guy scooping (but see if you can make the powder pink)"*. It is a masked
+  recolour of **the falling stream only** — about 180 weighted pixels, feathered, stopping above the
+  shaker's steel rim — done in PIL, not by a model, **so the photograph of a real person is not regenerated**.
+  The white plastic scoop stays white, because the scoop is white. A first attempt with a looser mask put
+  pink on the steel rim and a fingernail; if the tint is ever redone, magnify the result before shipping it.
+- **The "Let's Compare!" panel is Amway's own claim, with Amway's own footnotes, and goes on WHOLE.** It
+  names competitor products and prints the basis and the trademark notices underneath. Peter chose it —
+  *"the pb bars we can keep the compare emblem when we hover, thats cool"* — having seen it on his other
+  site. **Never crop it, never redraw it and never lift the numbers out of it into our own copy**: cropped,
+  it becomes a comparative claim with its own disclaimers cut off. The card's art panel is square and the
+  file is square, so nothing is cropped today.
+- **The files are NOT all one size any more** (690, 880 and one 900), so `lit_shot()` reads each file's real
+  dimensions instead of writing 900x900. A wrong intrinsic size is a layout shift waiting to happen.
+- `assets/lit/<same basename as the product's image>.webp`, square, 397 KB for nine. **Placed by hand; the
+  build never writes them**, like `assets/story/`. A product with no file has no `.sc-lit` and does not flip.
 - **The flip is a true cross-fade of two stacked images**, so nothing moves and the card's height never
   changes. Fading only the new one in is not enough: `.shot` is positioned (its contact shadow needs it)
   and therefore paints ABOVE a static sibling, so the cut-out stayed on top of the photograph. The
@@ -918,6 +947,10 @@ catalogue cut-out for **the same pack photographed on a real surface**.
   explicit button over the art, drawn only under `(hover:none)` and only where there is a second photo. Its
   click is stopped, so a tap on it never opens the product card, and **a tap anywhere else on the card
   still does** — verified both ways. Reduced motion swaps without the fade.
+- **amway.com is blocked to us, and now to Peter's terminal too** (403 on the media CDN, and its URLs carry
+  a signed `?context=` token that cannot be forged). `tools/fetch-alts.py` records that attempt. The three
+  official 690px frames came from `~/Desktop/aspiree/assets/cache/`, which an earlier project had already
+  downloaded; the rest came from Peter. **Do not plan work that assumes the CDN can be reached.**
 
 ## A product's backdrop is its OWN colour (`pack_tint`, 2026-10-09)
 
@@ -963,15 +996,18 @@ this website, I only have six products up, but they look really clean."* (aspire
 is still the whole catalogue and stays that way; `start.html` is the handful, with air around them.**
 
 - **It shows `FEATURED` and nothing else.** **One curation, one place**: do not invent a second list
-  beside it. **Peter chose the eight himself on 2026-10-09** — Elite Peach Mango, Creatine+, GI Primer,
-  the chocolate peanut butter bars, Sleep Health, the raspberry twist tubes, the men's daily multivitamin
-  and XS Energy + Focus — replacing a set that had been picked for photographic uniformity. **That
-  uniformity is the cost**: the old eight were all props-free studio shots "so the grid reads as one
-  series", and only four of his have one in `product-shots/`; the rest fall back to catalogue images, so
-  the row is less even. **The fix is four more studio shots, not a different eight.** Two of his names
-  were ambiguous and are resolved in the table's comment. Note also that the backdrops are shelf colours,
-  so two products from one shelf sit on the same colour — correct, but it means the row is not eight
-  different colours.
+  beside it. **Peter chose the nine himself on 2026-10-09** — strawberry whey, Elite Peach Mango,
+  Creatine+, GI Primer, the chocolate peanut butter bars, **Magnesium**, the Joint Health raspberry twist
+  tubes, **Double X 10 Day** and XS Energy + Focus — replacing a set that had been picked for photographic
+  uniformity. **Magnesium and Double X replaced Sleep Health and the men's daily multivitamin later the
+  same day**, in the message that gave the row its real photographs: *"swap sleep health with magnesium"*
+  and *"mens daily multivitamins swap for 10 day double x supply"*. **Sleep Health is not gone from the
+  site** — it is still the Sleep & Longevity goal tile and still one of Peter's own five — only off this
+  row. **That uniformity is the cost**: the old eight were all props-free studio shots "so the grid reads
+  as one series", and only three of these have one in `product-shots/`; the rest fall back to catalogue
+  images, so the row is less even. **The fix is more studio shots, not a different nine.** Two of his names
+  were ambiguous and are resolved in the table's comment. The backdrops are each product's own colour now
+  (`pack_tint`), not the shelf's.
 - Each card carries `card_data()` and keeps the `card-link` class, because `_script.html`'s tile selector is
   `a.card-link[data-name]` — so **the same product card opens from here as from anywhere else**, and its
   backdrop takes the same `--tint`. "Ask for a free sample" routes by the shop tab's `?try=`, as a shelf

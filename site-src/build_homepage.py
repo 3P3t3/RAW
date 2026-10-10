@@ -735,6 +735,10 @@ def funnel_name(suffix):
 # Focus Dietary Supplement - 30 Tablets.webp" alone. "raspberry twist tubes" was read as the XS Sports
 # electrolyte one, on the reasoning that he wanted it beside the creatine — WRONG, and he corrected it the
 # same day: "I want the rasberry joint health twist tube not raspberry lemonade". It is Nutrilite's.
+# TWO OF HIS NINE CHANGED ON 2026-10-09, in the same message that gave the set its real photographs:
+# "swap sleep health with magnesium" and "mens daily multivitamins swap for 10 day double x supply". Sleep
+# Health is NOT gone from the site — it is still the Sleep & Longevity goal tile below, and still one of
+# the five in Peter's own stack; it is only off this row.
 # Every name must be in share-links.csv or the build exits.
 FEATURED = [
     'XS Grass-Fed Whey Protein - Strawberry',
@@ -742,9 +746,9 @@ FEATURED = [
     'XS Creatine+',
     'Nutrilite Begin Daily GI Primer',
     'XS Sports Protein Bars - Chocolate Peanut Butter',
-    'Nutrilite Sleep Health',
+    'Nutrilite Magnesium',
     'Nutrilite Twist Tubes 2GO - Joint Health Raspberry',
-    "Nutrilite Men's Daily Multivitamin Tablets",
+    'Nutrilite Double X Multivitamin - 10 Day Supply',
     'XS Energy + Focus Dietary Supplement - 30 Tablets',
 ]
 
@@ -1376,25 +1380,31 @@ def main():
                 f'<p class="p-desc">{esc(pr["desc"])}</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
 
     def lit_shot(pr):
-        """The product's relit photograph, the one a hover or a tap swaps to, or nothing when it has none.
+        """The product's second photograph, the one a hover or a tap swaps to, or nothing when it has none.
 
-        assets/lit/<slug>.webp (2026-10-09): the same pack, photographed on a real surface at a wide
-        aperture, from fal kontext off its own catalogue image — Peter picked this over a facts panel
-        ("lets do option 2, relight the packs like the story ones"). They are PLACED BY HAND and the build
-        never writes them, like assets/story/. Each was checked line by line against the real pack and
-        anything the model got wrong was blurred to illegible rather than left half-stating a number; the
-        job files and what each check found are in ~/Desktop/aspiree/tools/jobs-start-lit*.json and in
-        CLAUDE.md. A product with no file simply does not flip, and the card is exactly as it was.
+        assets/lit/<slug>.webp. THEY ARE REAL PHOTOGRAPHS NOW (2026-10-09, the second pass): Amway's own
+        alternate photography for that product — the lifestyle frame or its "Let's Compare!" panel — which
+        Peter picked one by one off aspirehealth.pro ("I like the dynamic feel... can we use those ones?").
+        The first pass relit the catalogue cut-out with fal kontext, and three of the nine came back with
+        label text the model had got wrong; a real photograph cannot. The one exception is the XS Energy +
+        Focus tablet, which has no loose-tablet photograph anywhere, so Peter asked for one ("the single
+        tablet on a kitchen counter") and it is generated — of a blank tablet with no lettering on it.
+        PLACED BY HAND and the build never writes them, like assets/story/. Where each came from is in
+        ~/Desktop/aspiree/tools/jobs-start-lit-real.json and in CLAUDE.md. A product with no file simply
+        does not flip, and the card is exactly as it was.
         """
         if not pr['img']:
             return ''
         f = 'assets/lit/' + os.path.basename(pr['img'])
-        if not os.path.exists(os.path.join(ROOT, f)):
+        full = os.path.join(ROOT, f)
+        if not os.path.exists(full):
             return ''
+        from PIL import Image  # the sources are not one size: say what this file actually is
+        lw, lh = Image.open(full).size
         # the toggle is for a touchscreen, where there is no hover; style.css hides it on pointer devices.
         # It sits over the art and never covers the card's own link, so a tap anywhere else still opens
         # the product. DRAFT-COPY.
-        return (f'<img class="sc-lit" src="{f}" alt="" width="900" height="900" loading="lazy" decoding="async">'
+        return (f'<img class="sc-lit" src="{f}" alt="" width="{lw}" height="{lh}" loading="lazy" decoding="async">'
                 f'<button class="sc-flip" type="button" aria-pressed="false" data-flip>'
                 f'<span class="vh">Show {esc(pr["name"])} photographed, or the pack</span>'
                 f'<span aria-hidden="true">Photo</span></button>')
