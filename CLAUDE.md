@@ -883,6 +883,26 @@ hand-written copy would drift and then mislead somebody. Its return URL is passe
   on either copy; 2,602 local references across 36 pages with none missing; the guard still clean; and the
   funnel head measures **6.04:1** at 390 and 1440 under the glyphs.
 
+## A product's backdrop is its OWN colour (`pack_tint`, 2026-10-09)
+
+Peter: *"we should make the background colors for each prodct match the style. for instance, createine is
+whtie and black so the background is more white, strawberry grass few whey is more pink, choco pb bars is
+more browns etc."* It **replaced the shelf's plate colour**, which tied a card to the rack but meant two
+products from one shelf sat on the same field and said nothing about the pack.
+
+- The colour is **read off the product's own photograph**. `assets/products/*.webp` are real cut-outs with
+  an alpha channel, so only pixels at **alpha > 200** are read and the background cannot pollute it.
+- The mean is **weighted by saturation** (`0.18 + s`), because a pack is mostly white card and its brand
+  colour has to win *without* dragging a genuinely neutral pack off grey. Creatine comes out `#A6A4A4`,
+  the raspberry twist tubes `#EE989B`, Energy + Focus `#47BF82` — exactly the three cases Peter named.
+  Lightness is clamped to .36–.84 so nothing is a hole or a blank, and `style.css` mixes it well back
+  toward the hollow: **this is a direction, not the colour the field ends up.**
+- **Cached in `assets/.tints.json`** against each file's mtime and `TINT_VERSION`, or the build would turn
+  from 0.05s into seconds of reading 105 photographs (measured: 0.81s cold, 0.32s warm). **Bump
+  `TINT_VERSION` when the maths changes.**
+- The Start here lead counts `FEATURED` rather than naming a number: it said "Eight" while the list had
+  nine.
+
 ## What stacks with what (`STACKS_WITH`, 2026-10-09)
 
 Peter, choosing the Start here eight: *"raspberry twist tubes (maybe theres a way to autorecommend those

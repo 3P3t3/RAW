@@ -26,6 +26,7 @@ STUDIO = os.path.join(ROOT, 'product-shots')  # re-lit studio versions, already 
 ASSETS = os.path.join(ROOT, 'assets', 'products')
 CUTS = os.path.join(ROOT, 'assets', 'cutouts')  # transparent versions, for products shown on dark bands
 STAMP = os.path.join(ROOT, 'assets', '.cut-version')  # fingerprint of normalize(), written once a build finishes
+TINTS = os.path.join(ROOT, 'assets', '.tints.json')   # a product's own colour, read off its photograph
 # one shared stylesheet, linked by every page; it sits beside the pages rather than under assets/ so its
 # url(assets/...) backgrounds resolve against the same folder they did when the css was inlined
 STYLE_OUT = os.path.join(ROOT, 'style.css')
@@ -395,8 +396,8 @@ PETER_PACKS = {
 # share-links.csv or the build exits. The card shows it as "Stacks well with"; it is never called a
 # bundle and it never says the pair does anything, which would be a claim.
 STACKS_WITH = {
-    'XS Creatine+': 'XS Sports Twist Tubes - Raspberry Lemonade',
-    'XS Sports Twist Tubes - Raspberry Lemonade': 'XS Creatine+',
+    'XS Creatine+': 'Nutrilite Twist Tubes 2GO - Joint Health Raspberry',
+    'Nutrilite Twist Tubes 2GO - Joint Health Raspberry': 'XS Creatine+',
 }
 
 PETER_PICKS = {
@@ -725,17 +726,19 @@ def funnel_name(suffix):
 # uniformity. THAT UNIFORMITY IS THE COST: the old set was all props-free studio shots "so the grid reads
 # as one series", and of these only Creatine, the protein bars, Sleep Health and the twist tubes have one
 # (product-shots/). The other four fall back to catalogue images, so the row is less even than it was.
-# The fix is four more studio shots, not a different eight. Two of his were ambiguous and resolved here:
-# "raspberry twist tubes" is the XS SPORTS one, not Nutrilite's Joint Health Raspberry, because he wants
-# it recommended beside the creatine and that is the electrolyte line; and "xs energy + focus" is the
-# 30-tablet listing, the entry size, of two. Every name must be in share-links.csv or the build exits.
+# The fix is more studio shots, not a different eight. One of his was ambiguous: "xs energy + focus" is
+# the 30-tablet listing, the entry size, of two. "raspberry twist tubes" was read as the XS Sports
+# electrolyte one, on the reasoning that he wanted it beside the creatine — WRONG, and he corrected it the
+# same day: "I want the rasberry joint health twist tube not raspberry lemonade". It is Nutrilite's.
+# Every name must be in share-links.csv or the build exits.
 FEATURED = [
+    'XS Grass-Fed Whey Protein - Strawberry',
     'XS Elite + Focus Energy Drink - Peach Mango',
     'XS Creatine+',
     'Nutrilite Begin Daily GI Primer',
     'XS Sports Protein Bars - Chocolate Peanut Butter',
     'Nutrilite Sleep Health',
-    'XS Sports Twist Tubes - Raspberry Lemonade',
+    'Nutrilite Twist Tubes 2GO - Joint Health Raspberry',
     "Nutrilite Men's Daily Multivitamin Tablets",
     'XS Energy + Focus Dietary Supplement - 30 Tablets',
 ]
@@ -1162,6 +1165,59 @@ def contrast(a, b):
     return (la + .05) / (lb + .05)
 
 
+# A PRODUCT'S OWN COLOUR, read off its own photograph (2026-10-09). Peter: "we should make the background
+# colors for each prodct match the style. for instance, createine is whtie and black so the background is
+# more white, strawberry grass few whey is more pink, choco pb bars is more browns etc". It replaced the
+# shelf's plate colour, which was right for tying a card to the rack but meant two products from one shelf
+# sat on the same field — and said nothing about the pack itself.
+# The images in assets/products/ are real cut-outs with an alpha channel, so the pack is separated from its
+# background exactly; only pixels at alpha > 200 are read. The mean is weighted by SATURATION, because a
+# pack is mostly white card and its brand colour has to win without a neutral pack being dragged off grey:
+# creatine comes out #A6A4A4, the raspberry twist tubes #EE989B, Energy + Focus #47BF82. Lightness is
+# clamped so nothing comes out as a hole or a blank, and style.css mixes the result well back toward the
+# hollow, so this is a direction, not the colour the field ends up.
+# CACHED in assets/.tints.json against each file's mtime and TINT_VERSION, or a 0.05s build would turn into
+# seconds of reading 105 photographs. Bump TINT_VERSION when the maths below changes.
+TINT_VERSION = 1
+_tint_cache = None
+
+
+def pack_tint(path):
+    """The characteristic colour of one product's photograph, '' if it has none."""
+    global _tint_cache
+    if _tint_cache is None:
+        try:
+            _tint_cache = json.load(open(TINTS))
+            if _tint_cache.get('v') != TINT_VERSION:
+                _tint_cache = {'v': TINT_VERSION}
+        except Exception:
+            _tint_cache = {'v': TINT_VERSION}
+    if not path or not os.path.exists(path):
+        return ''
+    key = os.path.relpath(path, ROOT)
+    stamp = int(os.path.getmtime(path))
+    hit = _tint_cache.get(key)
+    if hit and hit[0] == stamp:
+        return hit[1]
+    from PIL import Image
+    import colorsys
+    im = Image.open(path).convert('RGBA')
+    im.thumbnail((110, 110))
+    px = [q for q in im.getdata() if q[3] > 200]
+    out = ''
+    if px:
+        tw = r = g = b = 0.0
+        for q in px:
+            R, G, B = q[0] / 255, q[1] / 255, q[2] / 255
+            w = 0.18 + colorsys.rgb_to_hls(R, G, B)[2]
+            tw += w; r += R * w; g += G * w; b += B * w
+        h, l, sat = colorsys.rgb_to_hls(r / tw, g / tw, b / tw)
+        r, g, b = colorsys.hls_to_rgb(h, min(.84, max(.36, l)), min(1.0, sat * 1.5))
+        out = '#%02X%02X%02X' % (round(r * 255), round(g * 255), round(b * 255))
+    _tint_cache[key] = [stamp, out]
+    return out
+
+
 def plate_ink(colour):
     """White or ink on a plate: whichever clears 4.5:1, white first (it is the one the dark plates want)."""
     for ink in ('#FFFFFF', '#1E262F'):
@@ -1295,7 +1351,7 @@ def main():
         # changes. That part's pretty cool"). It is read off PLATES through cat_of, never written out by
         # hand, so a plate that moves takes its cards with it. A product on no shelf simply has no tint
         # and the panel keeps the plain hollow it always had.
-        tint = PLATES[cat_of[pr['product']]][0] if pr['product'] in cat_of else ''
+        tint = pack_tint(os.path.join(ROOT, pr['img'])) if pr['img'] else ''
         return (f'data-name="{esc(pr["name"])}" data-kind="{esc(pr["desc"])}" data-line="{esc(TAGLINES[fam])}" '
                 f'data-facts="{esc("|".join(facts))}" data-sfx="{CARD_SOUND.get(fam, "chime")}" '
                 f'data-try="{esc(pr["product"])}"' + (f' data-tint="{tint}"' if tint else '')
@@ -1325,7 +1381,7 @@ def main():
         for i, name in enumerate(FEATURED):
             pr = by[name]
             slug_ = cat_of.get(pr['product'], '')
-            tint = PLATES[slug_][0] if slug_ else ''
+            tint = pack_tint(os.path.join(ROOT, pr['img'])) if pr['img'] else ''
             out_.append(
                 f'        <li class="sc grow" style="--d:{i % 3}{f";--tint:{tint}" if tint else ""}">'
                 f'<a class="sc-link card-link" href="{esc(pr["share_link"])}" target="_blank" rel="noopener" {card_data(pr)}>'
@@ -1952,6 +2008,9 @@ def main():
         '{{PAGE_URL}}': BASE + START_PAGE,
         '{{START_DESC}}': ('A handful of the supplements Peter reaches for most, with what is in each one '
                            'and what it is for. Browse the rest, or book a free call.'),
+        # the lead says how many there are, counted — it said "Eight" while FEATURED had nine
+        '{{START_COUNT}}': ('One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve'.split()
+                            [len(FEATURED) - 1] if 1 <= len(FEATURED) <= 12 else str(len(FEATURED))),
         '{{START_CARDS}}': start_cards(),
         '{{PCARD}}': card_dialog(SHOP_PAGE)}))
     emit(START_PAGE, page, START_PAGE)
@@ -1968,6 +2027,8 @@ def main():
         open(plus_path('site.webmanifest'), 'w').write(man)
         plus_report(plus_pages)
         return
+    if _tint_cache is not None:
+        json.dump(_tint_cache, open(TINTS, 'w'))   # the per-product colours, keyed by each photo's mtime
     open(STAMP, 'w').write(cut_version())  # last, so a crash leaves the old stamp and the next run re-cuts
     guard_root()  # belt and braces: the files at the root that this build did not write
     print(f'{len(products)} products ({sum(1 for pr in products if pr["img"])} with photos) -> {OUT}')
