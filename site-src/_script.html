@@ -2210,7 +2210,16 @@ var LB=null;
      change what they do.
    Names are snake_case and stable: renaming one orphans the funnel already built on it in PostHog. */
 function track(name, props){
-  try{ if(window.posthog && window.posthog.capture) window.posthog.capture(name, props||{}) }catch(e){}
+  try{
+    if(!(window.posthog && window.posthog.capture))return;
+    var p = props || {}, f = null;
+    try{ f = localStorage.getItem('aspire-funnel') }catch(e){}
+    /* EVERY event carries which funnel variant the visitor was shown, so the whole funnel can be read
+       per variant in PostHog without a second set of event names. It is set once, by the funnel page
+       itself, and then rides along for the rest of that browser's life. */
+    if(f && p.funnel === undefined) p.funnel = f;
+    window.posthog.capture(name, p);
+  }catch(e){}
 }
 window.aspireTrack = track;   /* so the blocks above can report their own steps */
 (function(){
@@ -2229,7 +2238,7 @@ window.aspireTrack = track;   /* so the blocks above can report their own steps 
   }, true);
   /* 3. OUT TO AMWAY — the closest thing on this site to a sale, so it is the step that matters most.
         THIS RUNS IN THE BUBBLE PHASE AND SKIPS A PREVENTED CLICK ON PURPOSE. A pack in a bay and a
-        tile in the grid are both <a href="amway.com/share-link/...">, but with script the site cancels
+        tile in the grid are both anchors to an amway.com share link, but with script the site cancels
         those clicks and opens the product card instead — counting them here would have reported an
         exit to Amway every time somebody merely looked at a product (measured: it did). What is left
         is the card's own "Buy on Amway" button and, with no script, the raw links. */
@@ -2247,7 +2256,24 @@ window.aspireTrack = track;   /* so the blocks above can report their own steps 
   /* 4. the two forms, reported as sent — never their contents */
   var sf = $('#sample-form'); if(sf) sf.addEventListener('submit', function(){ track('sample_submitted') });
   var cf = $('#consult-form'); if(cf) cf.addEventListener('submit', function(){ track('call_submitted') });
-  /* 5. which tab a visit actually lands on, so the two entry points can be told apart */
+  /* 5. the first-time funnel. The page knows which variant it is (data-funnel, from FUNNELS); it
+        records that, and that this browser has now seen the funnel, so index.html's coin flip never
+        sends them through it twice. Landing here from an ad counts the same as being routed here. */
+  var fn = $('[data-funnel]');
+  if(fn){
+    var fk = fn.getAttribute('data-funnel');
+    try{ localStorage.setItem('aspire-seen','1'); localStorage.setItem('aspire-funnel', fk) }catch(e){}
+    track('ftue_shown', {funnel: fk});
+  }
+  /* the way out, for somebody who is not new and did not ask for this. It marks them seen on the way
+     past, so the link does what it says and they are not routed back next time. */
+  $$('[data-funnel-out]').forEach(function(a){
+    a.addEventListener('click', function(){
+      try{ localStorage.setItem('aspire-seen','1') }catch(e){}
+      track('ftue_skipped');
+    });
+  });
+  /* 6. which tab a visit actually lands on, so the two entry points can be told apart */
   track('page_kind', {page: (location.pathname.split('/').pop() || 'index.html').replace('.html',''),
                       plus: location.pathname.indexOf('/plus/') > -1});
 })();

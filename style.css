@@ -2975,3 +2975,13 @@ body{background:transparent}
   .start-grid{grid-template-columns:repeat(3,1fr);gap:28px;margin-top:38px}
   .start-lead{font-size:18px}
 }
+
+/* ---- BUILD YOUR GOALS: the first-time funnel's own head (2026-10-09). The two halves below it are the
+   site's own rack and its own call and bring their own styling; this is only the page's opening and the
+   way out of it. */
+.fn-top .sec-head{max-width:30ch}
+.fn-lead{margin:14px 0 0;font:400 17px/1.5 var(--sans);color:var(--text);max-width:46ch}
+.fn-out{display:inline-flex;align-items:center;gap:8px;margin:18px 0 0;min-height:44px;
+  font:600 14px/1.2 var(--sans);color:var(--text);text-decoration:underline;text-underline-offset:4px}
+@media (hover:hover){.fn-out:hover{color:var(--teal);text-decoration-thickness:2.5px}}
+@media (min-width:1024px){.fn-lead{font-size:18px}}

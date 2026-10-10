@@ -839,6 +839,50 @@ two cross over instead of one blinking out before the other lands. Measured: **1
 and gives a join one full `--sec` and half the other. It applies to every page, so a new section added anywhere gets
 it. `.hero + .sec` is deliberately left out.
 
+## Build your goals: the first-time funnel on one route (2026-10-09)
+
+Eric Elizes, relayed and approved by Peter: *"anything relevant to the first time experience would go
+here. the entire funnel would live at this route... If you are running multiple ads, then you could have
+multiple versions and A/B test per ad... Because the ENTIRE funnel is captured in this 'experience' rather
+than spread out across different pages, you can easily hotswap and test different funnels dynamically."*
+And: *"if someone isnt new also they can x out of it or smth."*
+
+**The two halves are the site's own rack and its own call — `rack_section()` and `_consult.html` — not
+copies.** The call was lifted out of `homepage.template.html` into **`site-src/_consult.html`** so one copy
+can stand on two pages: it is a live form with its own validation, consent and thank-you, and a second
+hand-written copy would drift and then mislead somebody. Its return URL is passed **per page**.
+
+- **`FUNNELS` in `build_homepage.py` is the whole experiment.** Each row is `(suffix, key, order, headline,
+  lead)`, and **the order of the two halves IS the variant**: `build-your-goals.html` is plates-then-call
+  (today's funnel) and `build-your-goals-2.html` is call-then-plates. That pair is deliberate — Peter has
+  been *"tempted to get rid of the weights / barbell altogether"* on a hunch, and this settles it with his
+  own traffic. **Adding a variant is one row** and nothing else follows by hand.
+- **`FUNNELS[0]` is canonical**: the only one indexed, the one every other variant points its canonical at,
+  and what a visitor who types the route gets. The rest are `noindex`.
+- **The coin flip lives in `index.html` and nowhere else** (hand-written, copied verbatim into `plus/`).
+  First visit → a variant; after that → the shop. **The `<meta refresh>` below it is the fallback and must
+  stay**: no script, blocked storage, or anything throwing, and the visitor goes to the shop as always
+  (verified with script disabled). `location.replace` keeps it out of the back button. **The build checks
+  the page names in `index.html` against `FUNNELS`** and stops if they have drifted.
+- **The funnel page records itself**, not `index.html`: `data-funnel` carries the key, the page writes
+  `aspire-seen` and `aspire-funnel`, and fires `ftue_shown{funnel}`. Landing from an ad counts the same as
+  being routed. **`track()` then puts `funnel` on EVERY event**, so the whole funnel reads per variant in
+  PostHog without a second set of event names. The way out (`data-funnel-out`) marks them seen and fires
+  `ftue_skipped`.
+- **`plus_links()`'s page list is now derived from the constants, not typed out.** It was a hand-kept list,
+  and both pages added this day were missing from it — so the copy's funnel form carried an absolute
+  `_next` back to the **plain** site, which would have walked a plus visitor out of the copy on a no-script
+  send. **A new page is a new constant; add it there.** Verified: every `plus/` page now returns into
+  `plus/`.
+- **Never write a placeholder's own braces in a comment inside a partial.** A partial is substituted into a
+  page and the unfilled-placeholder check then runs over the result, so a token named in prose comes back
+  as an unfilled one and stops the build. It did, in `_consult.html`'s own header.
+- Verified: a 20,000-draw flip is 10,036/9,964; a returning visitor reaches the shop; the skip link marks
+  them seen and goes to the shop; both variants carry both halves in their own order with the right
+  canonical and noindex; the call's action and return URL are right on all four pages; no console errors
+  on either copy; 2,602 local references across 36 pages with none missing; the guard still clean; and the
+  funnel head measures **6.04:1** at 390 and 1440 under the glyphs.
+
 ## A third tab: Start here (2026-10-09)
 
 Peter, after Eric Elizes called the current home *"a normal general store"*: *"I'm wondering if that means

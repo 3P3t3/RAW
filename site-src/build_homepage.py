@@ -676,6 +676,36 @@ HOME_PAGE, SHOP_PAGE = 'homepage.html', 'shop.html'   # the two tabs; demo_links
 # which is the whole catalogue and stays that way.
 START_PAGE = 'start.html'
 
+# BUILD YOUR GOALS — the first-time funnel on one route (Eric Elizes, 2026-10-09, relayed by Peter and
+# approved by him: "anything relevant to the first time experience would go here. the entire funnel would
+# live at this route... If you are running multiple ads, then you could have multiple versions and A/B
+# test per ad... Because the ENTIRE funnel is captured in this 'experience' rather than spread out across
+# different pages, you can easily hotswap and test different funnels dynamically").
+#
+# Each entry is one variant: (suffix, key, order, headline, lead). ORDER is the whole experiment — the two
+# halves are the site's own rack and its own call, in one order or the other:
+#   'plates'  pick your plates, then the call   — the funnel as it stands today
+#   'call'    the call first, then the plates   — the ask without the build in front of it
+# That pair is deliberate. Peter has been "tempted to get rid of the weights / barbell altogether" on a
+# hunch; this settles it with his own traffic instead, because every funnel event already carries which
+# variant the visitor saw (track() in _script.html reads aspire-funnel). ADDING A VARIANT IS ONE ROW HERE
+# and nothing else: the page, its canonical, its noindex and the coin flip in index.html all follow.
+# The FIRST row is the canonical one: it is the page the others point their canonical at, it is the only
+# one indexed, and it is what a visitor who types the route gets.
+FUNNELS = [
+    ('', 'plates', ('rack', 'consult'),
+     'Build your <span>goals.</span>',
+     'Put what you are working on onto the bar, then book fifteen minutes with me and we will go through it.'),
+    ('-2', 'call', ('consult', 'rack'),
+     'Fifteen minutes, <span>then the rest.</span>',
+     'Tell me what you are after and I will call you. The shelves are below if you would rather look first.'),
+]
+FUNNEL_PAGE = 'build-your-goals.html'   # the canonical one: FUNNELS[0]
+
+
+def funnel_name(suffix):
+    return FUNNEL_PAGE.replace('.html', suffix + '.html')
+
 FEATURED = [  # props-free pack shots, so the grid reads as one series
     'XS Grass-Fed Whey Protein - Chocolate',
     'XS Post-Workout Recovery - Fruit Punch (30 Serving Pouch)',
@@ -1586,6 +1616,7 @@ def main():
     part = lambda n: open(os.path.join(ROOT, 'site-src', n)).read()
     style, header, footer, dialogs, script, icons = (part('style.css'), part('_header.html'), part('_footer.html'),
                                                      part('_dialogs.html'), part('_script.html'), part('_icons.html'))
+    consult = part('_consult.html')   # one copy of the call, on the approach tab and on the funnel page
     # the opening curtain: the landing page only, so it is not in `shared`. That is shop.html since
     # 2026-10-04, when Peter put the Shop first ("Can we swap it so my shop appears first, and then
     # the, our approach is actually the second tab?") and index.html began opening it; the curtain
@@ -1608,6 +1639,7 @@ def main():
               '{{CCRX_MENU}}': ccrx_menu(),  # and after {{DIALOGS}}, which is where that one sits
               '{{FDA_SCOPE}}': '',  # in the footer too: empty on every page but CCRX_PAGE (ccrx_fda_scope)
               '{{SCRIPT}}': script, '{{ANALYTICS}}': analytics(part('_posthog.js')),
+              '{{CONSULT}}': consult,
               '{{ICONS}}': icons, '{{TOTAL}}': str(len(products)),
               '{{TOTAL_PRODUCTS}}': plural(len(products), 'product', zero='products'), '{{CONSULT_ACTION}}': CONSULT_ACTION, '{{CONSULT_ENDPOINT}}': CONSULT_ENDPOINT,
               '{{CONSULT_NEXT}}': CONSULT_NEXT.replace(HOME_PAGE, demo_name(HOME_PAGE)) if DEMO else CONSULT_NEXT,
@@ -1840,6 +1872,45 @@ def main():
         '{{FDA_SCOPE}}': ccrx_fda_scope(),
         '{{PCARD}}': ''}))
     emit(CCRX_PAGE, page, CCRX_PAGE)
+
+    # Build your goals (2026-10-09): the first-time funnel, one route, one page per variant. The two
+    # halves are the site's own rack and its own call — rack_section() and _consult.html, not copies —
+    # and the variant is the ORDER they stand in. The canonical page is FUNNELS[0]; every other variant
+    # is noindex and points its canonical at that one, so two near-identical routes cannot compete.
+    fn_tpl = open(os.path.join(ROOT, 'site-src', 'funnel.template.html')).read()
+    for suffix, key, order, head, lead in FUNNELS:
+        name = funnel_name(suffix)
+        # The two halves go in BEFORE the normal fill, not as a {{CONSULT}} value inside it: fill() walks
+        # its dict in order, `shared` comes first, and the call's own placeholders would be resolved
+        # before the slot that inserts the call had put them on the page. Structure first, tokens after.
+        blocks = {'rack': rack_section(), 'consult': consult}
+        canon = f'<link rel="canonical" href="{BASE}{funnel_name(FUNNELS[0][0])}">\n'
+        if DEMO:
+            canon = f'<meta name="robots" content="noindex">\n<link rel="canonical" href="{BASE}{demo_name(name)}">\n'
+        elif suffix:
+            canon = '<meta name="robots" content="noindex">\n' + canon
+        page = fn_tpl.replace('{{FUNNEL_TOP}}', blocks[order[0]]).replace('{{FUNNEL_BOTTOM}}', blocks[order[1]])
+        page = fill(page, dict(shared, **nav(None), **{
+            '{{HEAD_EXTRA}}': canon,
+            '{{PAGE_URL}}': BASE + name,
+            '{{FUNNEL_DESC}}': ('Pick what you are working on, then book a free fifteen minutes with Peter. '
+                                'No calendar to wrestle with.'),
+            '{{FUNNEL_HEAD}}': head, '{{FUNNEL_LEAD}}': lead, '{{FUNNEL_KEY}}': key,
+            '{{CONSULT_NEXT}}': (BASE + (demo_name(name) if DEMO else name) + '?call=sent#call-sent'),
+            '{{PCARD}}': card_dialog(SHOP_PAGE),
+            **bar_bits, '{{PIN_CALL}}': ''}))
+        emit(name, page, name)
+
+    # index.html is hand-written and carries the first-visit coin flip, so the page names in it cannot be
+    # generated from FUNNELS — this checks them instead. A variant added above and forgotten there (or a
+    # page renamed) stops the build rather than quietly never being served.
+    if not DEMO:
+        idx = open(os.path.join(ROOT, 'index.html')).read()
+        named = set(re.findall(r'build-your-goals[-\w]*\.html', idx))
+        want = {funnel_name(suf) for suf, *_ in FUNNELS}
+        if named != want:
+            raise SystemExit(f'index.html names {sorted(named)} but FUNNELS is {sorted(want)}: '
+                             'the first-visit coin flip and the built pages have drifted apart')
 
     # Start here (2026-10-09): the third tab. A handful of products with air around them, against the
     # Shop tab's whole catalogue. It carries the product card, so a tap opens the same dialog as the
@@ -2269,7 +2340,14 @@ def plus_links(page):
     front, and its pages can be diffed against the plain ones line for line.
     """
     shelves = '|'.join(re.escape(c[0]) for c in CATEGORIES)
-    pages = rf'(?:homepage|shop|about|{re.escape(CCRX_PAGE[:-5])}|category-(?:{shelves}))\.html'
+    # BUILT FROM THE PAGE CONSTANTS, not typed out. This was a hand-kept list of names, and the two
+    # pages added on 2026-10-09 (start.html and the build-your-goals variants) were not in it — so the
+    # copy's funnel form carried an absolute _next back to the PLAIN site, which would have walked a
+    # plus visitor out of the copy on a no-script send. A new page is a new constant; put it here.
+    # Longest first, so a name that is a prefix of another cannot shadow it.
+    singles = sorted(['homepage', 'shop', 'about', CCRX_PAGE[:-5], START_PAGE[:-5]]
+                     + [funnel_name(suf)[:-5] for suf, *_ in FUNNELS], key=len, reverse=True)
+    pages = rf'(?:{"|".join(re.escape(n) for n in singles)}|category-(?:{shelves}))\.html'
     page = re.sub(rf'({re.escape(BASE)})({pages})', rf'\1{PLUS_DIR}/\2', page)
     return re.sub(r'(?<![\w./-])assets/', '../assets/', page)
 
