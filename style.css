@@ -2521,10 +2521,15 @@ body{background:transparent}
 /* ---- the tab switch, in every page's masthead (_header.html). Under 1024 it is the masthead's second
    row: two halves of the width, 40px tall (--tabh), the current page lit sand with a sand foot. From 1024
    it stands in the bar between the wordmark and the nav as a two-part pill, the current half filled. */
-.tabs{display:grid;grid-template-columns:1fr 1fr;height:var(--tabh);margin:0 calc(-1 * var(--pad));border-top:1px solid rgba(230,211,197,.16)}
+/* THREE columns since the "Start here" tab (2026-10-09). It was 1fr 1fr, and the third tab simply
+   wrapped onto a second row that the fixed --tabh had no room for. Below 420 the labels are stepped
+   down a little so "Our approach" still fits its third of a 320px window on one line. */
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);height:var(--tabh);margin:0 calc(-1 * var(--pad));border-top:1px solid rgba(230,211,197,.16)}
 .tab{display:flex;align-items:center;justify-content:center;min-width:0;font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;
   color:rgba(230,211,197,.78);text-decoration:none;white-space:nowrap}
 .tab[aria-current]{color:var(--sand);background:rgba(230,211,197,.07);box-shadow:inset 0 -3px 0 var(--sand)}
+@media (max-width:479px){.tab{font-size:11px;letter-spacing:.08em}}
+@media (max-width:359px){.tab{font-size:10px;letter-spacing:.04em}}
 .tab:active{opacity:.7}
 .tab:focus-visible{outline-offset:-4px}
 @media (hover:hover){.tab:not([aria-current]):hover{color:var(--sand);text-decoration:underline;text-underline-offset:5px}}
@@ -2539,15 +2544,18 @@ body{background:transparent}
   .tab[aria-current]{background:var(--sand);color:var(--teal);box-shadow:none}
   .mast .tab:focus-visible{outline-color:var(--sand);outline-offset:2px}
 }
-/* 1024-1099: the switch costs the bar ~220px, so the wordmark keeps the wave and lets its name go, as a
+/* 1024-1279: the switch costs the bar ~220px, so the wordmark keeps the wave and lets its name go, as a
    phone's does (the name stays in the accessibility tree and the page title). It was 1024-1279 while the
-   nav carried "Products" too (the nav ran 8px into the search field at 1200); with it gone (2026-10-04)
-   the name fits from 1080, measured, every gap 24px and the search at its 138px floor. From 1100, where
-   the search is 157px, it shows; at 1024 the search would still run 33px under the nav. */
-@media (min-width:1024px) and (max-width:1099px){
+   nav carried "Products" too; with that gone (2026-10-04) the name fitted from 1080 and showed from 1100.
+   THE THIRD TAB (2026-10-09, "Start here") put it back where it was: the extra tab costs the pill about
+   what "Products" cost the nav, and at 1100 "Book a free call" ran straight over the search field —
+   measured, and visible in a screenshot. Hiding the name again through 1279 gives it back. Re-measure
+   this pair of ranges if a tab is ever added, removed or renamed; the test is the gap between
+   .nav-inline's right edge and #search's left. */
+@media (min-width:1024px) and (max-width:1279px){
   .mast .wordmark .wm-name{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .tab{padding:0 12px;letter-spacing:.12em}
 }
-@media (min-width:1024px) and (max-width:1199px){.tab{padding:0 12px;letter-spacing:.12em}}
 
 /* ---- Tab 1's hero (.hh): "Feel your best. Understand why." over a full-bleed photograph (HOME_BG in
    build_homepage.py) or, until one is chosen, a ground drawn from the palette (.hh-ph). The photograph
@@ -2911,3 +2919,59 @@ body{background:transparent}
    thinnest figure on the site. It takes a tint of the band's own teal, which is the same answer
    the cards give -- a floor we control -- and keeps reading as the outlined one beside the blue. */
 .mys .btn-line{background:rgba(0,30,40,.55)}
+
+/* ============================================================================================
+   START HERE — the third tab (2026-10-09). Peter, after Eric Elizes called the current home "a
+   normal general store": "I'm wondering if that means really we want a third tab with products
+   demonstrated a little more cleanly... I only have six products up, but they look really clean."
+   The Shop tab is the whole catalogue and stays that way; this is the handful, with air.
+   Each pack stands on a FIELD OF ITS OWN SHELF'S COLOUR — the same --tint the product card takes
+   since the same day, so the card a tap opens is lit like the tile it came from. Every word sits
+   BELOW the field, on the chalk, so nothing is ever read off a colour that changes per product and
+   there is only one thing to measure. No prices: the site has never carried one.
+   ============================================================================================ */
+.start-sec .sec-head{max-width:34ch}
+.start-lead{margin:14px 0 0;font:400 17px/1.5 var(--sans);color:var(--text);max-width:48ch}
+.start-grid{list-style:none;margin:30px 0 0;padding:0;display:grid;gap:22px}
+.sc{min-width:0}
+/* a COLUMN, not a grid: the cards in a row stretch to the tallest, and with a grid the extra height
+   landed on the art panel, so a 1:1 field became a taller one and that card's words started lower than
+   its neighbours'. As a flex column the art keeps its square and `margin-top:auto` on .sc-go pushes the
+   slack to the bottom, so the "See what's in it" line sits on one baseline across the row. */
+.sc-link{display:flex;flex-direction:column;height:100%;padding:0 0 20px;border-radius:18px;background:var(--chalk);
+  box-shadow:0 0 0 1px var(--line),0 18px 30px -26px rgba(0,20,27,.5);text-decoration:none;color:var(--ink);
+  overflow:hidden;transition:transform 200ms cubic-bezier(.2,.7,.2,1),box-shadow 200ms}
+.sc-art{flex:none;display:grid;place-items:center;padding:26px 18px;aspect-ratio:1;
+  background:linear-gradient(color-mix(in srgb,var(--tint,var(--hollow)) 14%,var(--hollow-hi)),
+    color-mix(in srgb,var(--tint,var(--hollow)) 28%,var(--hollow)))}
+/* the shot carries aspect-ratio:1 of its own (.shot-studio), and a grid item's automatic minimum size
+   refuses to go below its content — so the square shot plus the panel's padding made the panel 16px
+   taller than its own aspect-ratio asked, and only on the cards whose shot is a studio one. min-height:0
+   lets the panel keep its square and the shot fit inside it. */
+.sc-art{overflow:hidden}
+.sc-art .shot{display:block;min-width:0;min-height:0;width:100%;height:100%;aspect-ratio:auto;padding:0}
+.sc-art img{display:block;width:100%;height:100%;object-fit:contain;
+  filter:drop-shadow(0 14px 14px rgba(0,20,27,.22))}
+.sc-tag{margin:18px 20px 0;font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--text)}
+.sc-name{margin:9px 20px 0;font:800 clamp(20px,2.4vw,24px)/1.05 var(--display);font-stretch:72%;
+  text-transform:uppercase;color:var(--teal)}
+.sc-desc{margin:8px 20px 0;font:400 15px/1.45 var(--sans);color:var(--text)}
+.sc-go{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;margin:14px 20px 0;margin-top:auto;padding-top:14px;
+  font:600 14px/1.2 var(--sans);color:var(--blue);text-decoration:underline;text-underline-offset:4px}
+.sc-link:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+@media (hover:hover){
+  .sc-link:hover{transform:translate3d(0,-3px,0);box-shadow:0 0 0 1px var(--line),0 24px 34px -24px rgba(0,20,27,.55)}
+  .sc-link:hover .sc-go{text-decoration-thickness:2.5px}
+}
+.sc-link:active{transform:translate3d(0,1px,0)}
+@media (prefers-reduced-motion:reduce){.sc-link{transition:none}}
+.start-more{margin:34px 0 0;display:grid;gap:12px;justify-items:start}
+.start-more-ask{margin:0;font:600 17px/1.35 var(--sans);color:var(--ink)}
+.start-more-acts{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px}
+@media (min-width:640px){
+  .start-grid{grid-template-columns:1fr 1fr;gap:24px}
+}
+@media (min-width:1024px){
+  .start-grid{grid-template-columns:repeat(3,1fr);gap:28px;margin-top:38px}
+  .start-lead{font-size:18px}
+}

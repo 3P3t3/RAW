@@ -839,6 +839,43 @@ two cross over instead of one blinking out before the other lands. Measured: **1
 and gives a join one full `--sec` and half the other. It applies to every page, so a new section added anywhere gets
 it. `.hero + .sec` is deliberately left out.
 
+## A third tab: Start here (2026-10-09)
+
+Peter, after Eric Elizes called the current home *"a normal general store"*: *"I'm wondering if that means
+really we want a third tab with products demonstrated a little more cleanly. For example, if you look at
+this website, I only have six products up, but they look really clean."* (aspirehealth.pro.) **The Shop tab
+is still the whole catalogue and stays that way; `start.html` is the handful, with air around them.**
+
+- **It shows `FEATURED` and nothing else.** `FEATURED` already existed and was unused but for a build
+  assertion — eight props-free pack shots chosen "so the grid reads as one series", which is exactly what
+  this page needs. **One curation, one place**: do not invent a second list beside it.
+- Each card carries `card_data()` and keeps the `card-link` class, because `_script.html`'s tile selector is
+  `a.card-link[data-name]` — so **the same product card opens from here as from anywhere else**, and its
+  backdrop takes the same `--tint`. "Ask for a free sample" routes by the shop tab's `?try=`, as a shelf
+  page's does. **No prices**: the site has never carried one, Amway owns them and they move.
+- **Every word sits BELOW the colour field, on the chalk**, so nothing is ever read off a colour that
+  changes per product. Measured under the glyphs: worst **5.79:1** at 390, **5.88:1** at 1440.
+- `.sc-link` is a **flex column, not a grid**: cards in a row stretch to the tallest, and with a grid the
+  extra height landed on the art panel, so a 1:1 field became a taller one and that card's words started
+  lower than its neighbours'. `margin-top:auto` on `.sc-go` puts the slack at the bottom instead.
+- `.sc-art .shot` needs **`min-height:0`**: the shot carries `aspect-ratio:1` of its own (`.shot-studio`),
+  and a grid item's automatic minimum size refuses to go below its content, so the panel came out 16px
+  taller than its own ratio asked — and only on the cards whose shot is a studio one.
+
+**The tab bar is three wide now, and that cost two measured fixes** — re-measure both if a tab is ever
+added, removed or renamed:
+- `.tabs` is `repeat(3,1fr)`, not `1fr 1fr`. The third tab simply **wrapped onto a second row** that the
+  fixed `--tabh` had no room for. Below 480 and below 360 the labels step down so "Our approach" still fits
+  a third of a 320px window on one line. Verified one row, no clipping, no sideways scroll, 320 to 1023.
+- The wordmark's name is hidden again through **1279** (it was 1024-1099). The extra tab costs the pill
+  about what "Products" cost the nav before it went, and **at 1100 "Book a free call" ran straight over the
+  search field** — measured, and plain in a screenshot. Verified afterwards: zero collisions and a clean
+  24px gap at 1024-1920 (11px at 1024, where the search sits at its 138px floor, as before).
+- **The Shop's first screen did not move**: "Pick your goal" still ends at **654 of 844 at 390 and 576 of
+  640 at 320**, to the pixel, because the bar is three columns of the same 40px row.
+
+The label "Start here" and the page's copy are **DRAFT** and Peter's to rename.
+
 ## The product card's backdrop changes with the product (2026-10-09)
 
 Peter, on aspirehealth.pro: *"one thing I really like about the products on that website as well is that

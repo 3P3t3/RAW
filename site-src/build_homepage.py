@@ -669,6 +669,12 @@ CONSULT_ENDPOINT = 'https://formsubmit.co/ajax/' + CONSULT_TO
 CONSULT_ACTION = 'https://formsubmit.co/' + CONSULT_TO
 CONSULT_NEXT = BASE + 'homepage.html?call=sent#call-sent'
 HOME_PAGE, SHOP_PAGE = 'homepage.html', 'shop.html'   # the two tabs; demo_links/plus_links rename both
+# The third tab (2026-10-09). Peter, after Eric Elizes called the current home "a normal general store":
+# "I'm wondering if that means really we want a third tab with products demonstrated a little more
+# cleanly. For example, if you look at this website, I only have six products up, but they look really
+# clean." It shows FEATURED and nothing else — a handful, with air around them — against the Shop tab,
+# which is the whole catalogue and stays that way.
+START_PAGE = 'start.html'
 
 FEATURED = [  # props-free pack shots, so the grid reads as one series
     'XS Grass-Fed Whey Protein - Chocolate',
@@ -1249,6 +1255,29 @@ def main():
                 f'<p class="p-tag">{tag}</p><h{hn} class="p-name">{esc(pr["name"])}</h{hn}>'
                 f'<p class="p-desc">{esc(pr["desc"])}</p><span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
 
+    def start_cards():
+        """The Start here tab's cards: FEATURED and nothing else. FEATURED was already chosen as
+        props-free pack shots "so the grid reads as one series", which is exactly what this page needs
+        and why it is reused rather than a second list invented beside it — one curation, one place.
+        Each card carries card_data(), so the SAME product card opens from here as from anywhere else
+        (_script.html's TILE selector is a.card-link[data-name], which is why the class is kept), and
+        --tint is the product's shelf plate colour so the pack stands on a field of its own."""
+        out_ = []
+        for i, name in enumerate(FEATURED):
+            pr = by[name]
+            slug_ = cat_of.get(pr['product'], '')
+            tint = PLATES[slug_][0] if slug_ else ''
+            out_.append(
+                f'        <li class="sc grow" style="--d:{i % 3}{f";--tint:{tint}" if tint else ""}">'
+                f'<a class="sc-link card-link" href="{esc(pr["share_link"])}" target="_blank" rel="noopener" {card_data(pr)}>'
+                f'<span class="sc-art">{shot(pr)}</span>'
+                f'<span class="sc-tag">{names.get(slug_, "Wellness")}</span>'
+                f'<h2 class="sc-name">{esc(pr["name"])}</h2>'
+                f'<span class="sc-desc">{esc(TAGLINES[family(pr["product"])])}</span>'
+                f'<span class="sc-go">See what\'s in it<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></span>'
+                f'<span class="vh">Buy on Amway (opens in a new tab)</span></a></li>')
+        return '\n'.join(out_)
+
     def cat_rows(only=None):
         out_ = []
         for slug_, name, tag, heading, fams in CATEGORIES:
@@ -1666,9 +1695,11 @@ def main():
     def nav(here):
         home = '' if here == 'home' else HOME_PAGE
         shop = '' if here == 'shop' else SHOP_PAGE
+        start = '' if here == 'start' else START_PAGE
         cur = ' aria-current="page"'
-        sub = {'{{HOME}}': home, '{{SHOP}}': shop,
+        sub = {'{{HOME}}': home, '{{SHOP}}': shop, '{{START}}': start,
                '{{TAB_HOME}}': cur if here == 'home' else '',
+               '{{TAB_START}}': cur if here == 'start' else '',
                '{{TAB_SHOP}}': cur if here == 'shop' else ' aria-current="true"' if here == 'shelf' else ''}
         hdr = header
         for k, v in sub.items():
@@ -1809,6 +1840,18 @@ def main():
         '{{FDA_SCOPE}}': ccrx_fda_scope(),
         '{{PCARD}}': ''}))
     emit(CCRX_PAGE, page, CCRX_PAGE)
+
+    # Start here (2026-10-09): the third tab. A handful of products with air around them, against the
+    # Shop tab's whole catalogue. It carries the product card, so a tap opens the same dialog as the
+    # rest of the site; its "Ask for a free sample" goes by the shop tab's ?try=, as a shelf page's does.
+    page = fill(open(os.path.join(ROOT, 'site-src', 'start.template.html')).read(), dict(shared, **nav('start'), **{
+        '{{HEAD_EXTRA}}': head_extra(START_PAGE),
+        '{{PAGE_URL}}': BASE + START_PAGE,
+        '{{START_DESC}}': ('A handful of the supplements Peter reaches for most, with what is in each one '
+                           'and what it is for. Browse the rest, or book a free call.'),
+        '{{START_CARDS}}': start_cards(),
+        '{{PCARD}}': card_dialog(SHOP_PAGE)}))
+    emit(START_PAGE, page, START_PAGE)
 
     if DEMO:
         demo_report(demo_pages, style)

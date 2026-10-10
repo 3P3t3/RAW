@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+{{HEAD_EXTRA}}<meta name="theme-color" content="#002E3B">
+<title>Start here · Aspire Health</title>
+<meta name="description" content="{{START_DESC}}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Start here · Aspire Health">
+<meta property="og:description" content="{{START_DESC}}">
+<meta property="og:url" content="{{PAGE_URL}}">
+<meta property="og:image" content="{{BASE}}assets/logo/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{BASE}}assets/logo/og-image.png">
+<link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/logo/favicon-32.png" sizes="32x32">
+<link rel="icon" href="assets/logo/favicon-16.png" sizes="16x16">
+<link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/bricolage-grotesque-v9-latin.woff2" crossorigin>
+<link rel="stylesheet" href="{{STYLE}}">
+<script>(function(c){c.add('js');if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches)c.add('motion')})(document.documentElement.classList)</script>
+{{ANALYTICS}}</head>
+<body>
+<!-- the field: the site's one ground (the field block in style.css) -->
+<div class="field" aria-hidden="true"><span class="fg fg1"></span><span class="fg fg2"></span></div>
+<a class="skip" href="#main">Skip to content</a>
+
+{{HEADER}}
+
+<main id="main">
+  <!-- The third tab (2026-10-09). The Shop is the whole catalogue; this is the handful, with air
+       around them. Every card opens the same product card (#pcard) the rest of the site opens, and
+       since the same day that card's backdrop takes the product's own shelf colour, which is what
+       ties these cards to the rack. No prices anywhere: the site has never carried one, Amway owns
+       them and they move. -->
+  <section class="sec start-sec" aria-labelledby="start-title">
+    <div class="wrap">
+      <!-- DRAFT-COPY -->
+      <div class="sec-head grow">
+        <p class="label">Start here</p>
+        <h1 id="start-title">The ones I'd <span>start you on.</span></h1>
+        <p class="start-lead">Eight I reach for most. Tap any of them to see what's in it, what it's for, and whether it's worth your money.</p>
+      </div>
+      <!-- /DRAFT-COPY -->
+      <ul class="start-grid" role="list">
+{{START_CARDS}}
+      </ul>
+      <!-- DRAFT-COPY -->
+      <div class="start-more grow">
+        <p class="start-more-ask">Not what you're after?</p>
+        <div class="start-more-acts">
+          <a class="btn btn-line" href="{{SHOP}}#results">Browse all products</a>
+          <a class="tlink" href="{{HOME}}#consult">Or book a free call</a>
+        </div>
+      </div>
+      <!-- /DRAFT-COPY -->
+    </div>
+  </section>
+</main>
+
+{{FOOTER}}
+
+{{DIALOGS}}
+{{PCARD}}
+<p class="vh" id="live" aria-live="polite"></p>
+
+{{SCRIPT}}
+</body>
+</html>
