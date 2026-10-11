@@ -6,25 +6,16 @@
      then the, our approach is actually the second tab?" No hash, so the opening curtain -- which moved
      onto shop.html with it -- plays on arrival. site.webmanifest's start_url is "." and so comes
      through here too. -->
-<!-- FIRST VISIT GOES TO THE FUNNEL (2026-10-09). Eric Elizes: "When someone visits your page for the
-     FIRST TIME -> it can auto route them to this page, so you guarantee a new user still always gets the
-     First Time User Experience... you could like have a coinflip and auto route randomly between the
-     different versions and A/B test". The flip is here and nowhere else.
-     THE META REFRESH BELOW IS THE FALLBACK AND MUST STAY: with no script, with storage blocked, or if
-     anything in here throws, the visitor simply goes to the shop as they always did. The script runs
-     before it on purpose, and location.replace keeps the redirect out of the back button.
-     The page names are checked against FUNNELS by the build, because this file is hand-written and
-     would otherwise drift silently. The funnel page records which variant it was and that it has been
-     seen; this file only decides. -->
-<script>
-(function(){
-  try{
-    if(localStorage.getItem('aspire-seen'))return;          /* been here before: on to the shop */
-    var v=['build-your-goals.html','build-your-goals-2.html'];
-    location.replace(v[Math.random()<0.5?0:1]);
-  }catch(e){}
-})();
-</script>
+<!-- THE FIRST-VISIT COIN FLIP IS GONE (2026-10-10). From 2026-10-09 this file flipped a coin on a first
+     visit and sent that visitor to one of the two build-your-goals variants; Peter retired it -- asked
+     which page the site should always open to, he chose the Shop, "always" included. So there is no
+     script here at all now, which is the most robust this file can be: no storage read, nothing to
+     throw, and the <meta refresh> below is the whole mechanism rather than a fallback behind one.
+     THE FUNNEL PAGES ARE STILL BUILT AND STILL LIVE. FUNNELS is untouched, build-your-goals.html and
+     -2.html keep their URLs, their canonical and their noindex, and they still record which variant a
+     visitor saw -- so an ad can point straight at either one and the A/B test still reads in PostHog.
+     What changed is only that ordinary arrivals are no longer diverted into them. Putting the flip
+     back is this file plus the check in build_homepage.py that guards the two against drifting. -->
 <meta http-equiv="refresh" content="0; url=shop.html">
 <link rel="canonical" href="shop.html">
 <a href="shop.html">Aspire Health shop</a>

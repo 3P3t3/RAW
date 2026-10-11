@@ -911,11 +911,18 @@ hand-written copy would drift and then mislead somebody. Its return URL is passe
   own traffic. **Adding a variant is one row** and nothing else follows by hand.
 - **`FUNNELS[0]` is canonical**: the only one indexed, the one every other variant points its canonical at,
   and what a visitor who types the route gets. The rest are `noindex`.
-- **The coin flip lives in `index.html` and nowhere else** (hand-written, copied verbatim into `plus/`).
-  First visit → a variant; after that → the shop. **The `<meta refresh>` below it is the fallback and must
-  stay**: no script, blocked storage, or anything throwing, and the visitor goes to the shop as always
-  (verified with script disabled). `location.replace` keeps it out of the back button. **The build checks
-  the page names in `index.html` against `FUNNELS`** and stops if they have drifted.
+- **THE COIN FLIP IS GONE (2026-10-10) AND THE SITE ALWAYS OPENS ON THE SHOP.** Asked which page it
+  should always open to, Peter chose the Shop, "always" included. `index.html` now holds **no script at
+  all** — not a flip behind a fallback, nothing: just the `<meta refresh>` to `shop.html`, which is the
+  most robust this file can be, with no storage read and nothing that can throw. **THE FUNNEL PAGES ARE
+  STILL BUILT AND STILL LIVE**: `FUNNELS` is untouched, both variants keep their URLs, their canonical
+  and their noindex, each still records which variant the visitor saw, and the A/B therefore still reads
+  in PostHog — **so point an ad straight at one**. What ended is only the diversion of ordinary arrivals.
+  The build's check flipped with it: `index.html` must now name **no** funnel page and must redirect to
+  `SHOP_PAGE`, or the build exits. **That check strips HTML comments first**, because the comment in that
+  file explains the funnel pages by name and the first version of the check flagged its own documentation.
+  Restoring the flip is this file plus swapping that check back for the old one, which compared the names
+  against `FUNNELS`.
 - **The funnel page records itself**, not `index.html`: `data-funnel` carries the key, the page writes
   `aspire-seen` and `aspire-funnel`, and fires `ftue_shown{funnel}`. Landing from an ad counts the same as
   being routed. **`track()` then puts `funnel` on EVERY event**, so the whole funnel reads per variant in

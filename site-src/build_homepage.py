@@ -2078,16 +2078,22 @@ def main():
             **bar_bits, '{{PIN_CALL}}': ''}))
         emit(name, page, name)
 
-    # index.html is hand-written and carries the first-visit coin flip, so the page names in it cannot be
-    # generated from FUNNELS — this checks them instead. A variant added above and forgotten there (or a
-    # page renamed) stops the build rather than quietly never being served.
+    # index.html is hand-written, so the build checks it rather than generating it. SINCE 2026-10-10 IT
+    # MUST NOT DIVERT ANYONE: Peter retired the first-visit coin flip and the site always opens on the
+    # Shop. The funnel pages are still built and still live for ads — what is banned is this file sending
+    # ordinary arrivals into one. If the flip is ever restored, put the names back and swap these two
+    # checks for the old one, which compared the names against FUNNELS.
     if not DEMO:
         idx = open(os.path.join(ROOT, 'index.html')).read()
-        named = set(re.findall(r'build-your-goals[-\w]*\.html', idx))
-        want = {funnel_name(suf) for suf, *_ in FUNNELS}
-        if named != want:
-            raise SystemExit(f'index.html names {sorted(named)} but FUNNELS is {sorted(want)}: '
-                             'the first-visit coin flip and the built pages have drifted apart')
+        # comments out first: this tests what the file DOES, and the comment in it explains the funnel
+        # pages by name, which the old check happily flagged as a diversion
+        live = re.sub(r'<!--.*?-->', '', idx, flags=re.S)
+        named = set(re.findall(r'build-your-goals[-\w]*\.html', live))
+        if named:
+            raise SystemExit(f'index.html sends arrivals to {sorted(named)}: the first-visit coin flip '
+                             'was retired on 2026-10-10 and the site always opens on the Shop')
+        if f'url={SHOP_PAGE}' not in live:
+            raise SystemExit(f'index.html does not redirect to {SHOP_PAGE}')
 
     # Start here (2026-10-09): the third tab. A handful of products with air around them, against the
     # Shop tab's whole catalogue. It carries the product card, so a tap opens the same dialog as the
