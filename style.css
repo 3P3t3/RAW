@@ -2722,11 +2722,20 @@ body{background:transparent}
 .why-head h2 span{display:block}
 .why-lead{max-width:44ch;font-size:17px;line-height:1.5;color:var(--ink)}
 .why-lead + .why-lead{color:var(--text)}
-/* Peter's argument (2026-10-06) leads the section, so it is sized as an argument and not as the first of three
-   paragraphs: it was indistinguishable from the two explaining lines under it. Display face, ink, its own measure. */
-.why-arg{font:600 clamp(22px,5.4vw,27px)/1.22 var(--display);letter-spacing:-.016em;
-  color:var(--teal);max-width:22ch;margin-bottom:2px}
-@media (min-width:768px){.why-arg{font-size:clamp(26px,2.2vw,32px);max-width:26ch}}
+/* Peter's argument (2026-10-06) leads the section and still has to stand out from the two explaining lines
+   under it — but NOT in the display face. It was set in display type from 2026-10-06, which read correctly
+   while ONE family did both jobs and differed only by weight, width and case. The moment Fraunces arrived
+   (2026-10-10) it became a second heading: an h2 and an argument, same face, stacked, told apart only by
+   size. Two critics had called that pair out on the old type and the new pairing made it plain, so Peter:
+   "fix the two stacked headings on #why".
+   IT IS A LEAD PARAGRAPH NOW — the body face, one clear step up in size and weight from the paragraphs it
+   leads — so the section has ONE heading and one speaking voice beneath it. Do not put it back on
+   var(--display); that is the bug, not the style. Its measure widened with the smaller type (22ch was set
+   for 32px display and strands two or three words a line at 21px). On the band .why-top's own rule paints
+   it chalk; the teal here is what it would take anywhere else. */
+.why-arg{font:500 clamp(18.5px,4.6vw,21px)/1.45 var(--sans);letter-spacing:-.008em;
+  color:var(--teal);max-width:38ch;margin-bottom:2px}
+@media (min-width:768px){.why-arg{font-size:clamp(20px,1.5vw,22px);max-width:40ch}}
 .why-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 /* content sits at the top of each card; the links follow their text rather than pinning to a foot that left
    90-150px of empty card above them at 1440 (2026-10-04) */

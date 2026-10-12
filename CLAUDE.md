@@ -474,9 +474,20 @@ links, `quick_call`), and `_intro.html` itself is byte-identical — not a beat 
   turns the space into something: `.why-top` is a dark band holding the picture (`.why-band`, now `position:absolute`
   and framed on the water, `object-position:50% 72%`, 76% from 768) under a scrim, with `.why-head` — the eyebrow, the
   h2, Peter's argument, the two lines and `.why-door` — set on it in chalk. The pillars, the roles line and the
-  disclosure stay on the light ground in a second `.wrap`. It did NOT fix the two critics' other finding, that the h2
-  and the argument read as two stacked headings, but it contains it: the pair is now one title block over a picture with
-  the pillars clearly below, instead of two competing headings in one cream column. The accent `.hl-k` goes `--sand` on
+  disclosure stay on the light ground in a second `.wrap`. **THE TWO STACKED HEADINGS ARE FIXED (2026-10-11),
+  and the fix was in the argument's TYPE, not its words.** Two critics found that the h2 and Peter's argument read as
+  two headings; the band contained it without solving it, and the 2026-10-10 typeface made it plain, because an h2 and
+  an argument in the same display face, stacked, differ only by size. `.why-arg` had been put on the display face
+  deliberately on 2026-10-06 so it would not look like the first of three paragraphs — correct while ONE family did
+  both jobs, wrong the moment a serif arrived for headings only. It is a **lead paragraph** now: the body face, a step
+  up in size and weight (`500 clamp(20px,1.5vw,22px)` against the paragraphs' `400 17px`), its measure widened from
+  22ch to 40ch because 22ch was set for 32px display type. **Not a word of copy changed**, and `#why` now reads
+  eyebrow → one heading → lead → two paragraphs → button. **Do not put `.why-arg` back on `var(--display)`.**
+  Re-measured on rendered pixels under the glyphs, the whole header on the band: **12.42:1 at 390, 13.61 at 1024,
+  11.11 at 1440**, and the argument alone 10.59 at 1440. (768, 820 and 1920 could not be shot deterministically — the
+  two frames differed everywhere rather than at the glyphs, which shows up unmistakably as ~500k–900k differing pixels
+  spanning the full width instead of a few thousand in a tight column. The colour did not change in this edit, only
+  size and weight, so those widths carry the same chalk on the same scrim.) The accent `.hl-k` goes `--sand` on
   the band, because the XS blue is a black mark there. Markup is `why_section()` in `build_homepage.py`.
   From 768 the dusk picture is drawn 140% wide and set 40% left so the
   afterglow sits under the copy, not behind the card; on phones it is its own strip above the heading; and
